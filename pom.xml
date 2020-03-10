@@ -72,4 +72,19 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>github</id>
+      <name>GitHub snapshot</name>
+      <url>https://maven.pkg.github.com/repplix/jhexa</url>
+      <uniqueVersion>true</uniqueVersion>
+    </snapshotRepository>
+    <repository>
+      <id>github</id>
+      <name>GitHub OWNER Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/repplix/jhexa</url>
+    </repository>
+  </distributionManagement>
+
 </project>
