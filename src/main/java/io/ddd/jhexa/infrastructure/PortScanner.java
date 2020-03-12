@@ -14,11 +14,20 @@ public class PortScanner
 
     public List<Class<?>> findAnnotation(final Class<? extends Annotation> annotation)
     {
-        ScanResult scanResult = new ClassGraph()
-                //.verbose()
-                .enableAllInfo()
-                .whitelistPackages(packageName)
-                .scan();
+        ScanResult scanResult;
+
+        if (packageName != null) {
+            scanResult = new ClassGraph()
+                    //.verbose()
+                    .enableAllInfo()
+                    .whitelistPackages(packageName)
+                    .scan();
+        } else {
+            scanResult = new ClassGraph()
+                    //.verbose()
+                    .enableAllInfo()
+                    .scan();
+        }
 
         return scanResult.getClassesWithAnnotation(annotation.getName()).loadClasses();
     }
@@ -28,5 +37,9 @@ public class PortScanner
     {
         this.packageName = packageName;
     }
-    
+
+    public PortScanner()
+    {
+    }
+
 }

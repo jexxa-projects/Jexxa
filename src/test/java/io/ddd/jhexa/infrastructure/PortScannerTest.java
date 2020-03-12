@@ -19,9 +19,18 @@ import org.junit.Test;
 public class PortScannerTest
 {
     @Test
-    public void findApplicationService() {
+    public void findApplicationServiceWithPacakgeName() {
         PortScanner portScanner = new PortScanner("io.ddd.jhexa.applicationcore");
+        findApplicationService(portScanner);
+    }
 
+    @Test
+    public void findApplicationServiceWithoutPacakgeName() {
+        PortScanner portScanner = new PortScanner();
+        findApplicationService(portScanner);
+    }
+
+    public void findApplicationService(PortScanner portScanner) {
         List<Class<?>> applicationServiceList = portScanner.findAnnotation(ApplicationService.class);
 
         assertFalse(applicationServiceList.isEmpty());
