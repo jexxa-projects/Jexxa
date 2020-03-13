@@ -24,7 +24,6 @@ public class JavalinREST implements IDrivingAdapter
     {
 
         app = Javalin.create().start(7000);
-        RESTPfade restPfade = new RESTPfade();
         PortScanner portScanner = new PortScanner();
 
         List<Class<?>> applicationServiceList = portScanner.findAnnotation(ApplicationService.class);
