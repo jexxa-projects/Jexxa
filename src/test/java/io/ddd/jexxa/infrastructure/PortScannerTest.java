@@ -1,11 +1,11 @@
-package io.ddd.Jexxa.infrastructure;
+package io.ddd.jexxa.infrastructure;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import io.ddd.Jexxa.applicationservice.SimpleApplicationService;
+import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class PortScannerTest
 {
     @Test
     public void findApplicationServiceWithPacakgeName() {
-        PortScanner portScanner = new PortScanner("io.ddd.Jexxa.applicationservice");
+        PortScanner portScanner = new PortScanner("io.ddd.jexxa.applicationservice");
         findApplicationService(portScanner);
     }
 

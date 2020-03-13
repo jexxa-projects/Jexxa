@@ -1,4 +1,4 @@
-package io.ddd.Jexxa.infrastructure.drivingadapter;
+package io.ddd.jexxa.infrastructure.drivingadapter;
 
 import java.util.ArrayList;
 import java.util.List;

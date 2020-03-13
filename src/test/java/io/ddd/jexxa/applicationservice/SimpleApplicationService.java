@@ -1,4 +1,4 @@
-package io.ddd.Jexxa.applicationservice;
+package io.ddd.jexxa.applicationservice;
 
 
 import io.ddd.stereotype.applicationcore.ApplicationService;
@@ -12,7 +12,7 @@ public class SimpleApplicationService
         this.simpleValue = simpleValue;
     }
     
-    int getSimpleValue()
+    public int getSimpleValue()
     {
       return  simpleValue;
     }

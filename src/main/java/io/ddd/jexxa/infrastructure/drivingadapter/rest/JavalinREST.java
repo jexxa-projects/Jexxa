@@ -1,11 +1,11 @@
-package io.ddd.Jexxa.infrastructure.drivingadapter.rest;
+package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
 import com.google.gson.Gson;
-import io.ddd.Jexxa.infrastructure.PortScanner;
-import io.ddd.Jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.ddd.jexxa.infrastructure.PortScanner;
+import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.ddd.stereotype.infrastructure.DrivingAdapter;
 import io.javalin.Javalin;
 

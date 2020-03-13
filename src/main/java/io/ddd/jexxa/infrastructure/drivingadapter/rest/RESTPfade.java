@@ -1,4 +1,4 @@
-package io.ddd.Jexxa.infrastructure.drivingadapter.rest;
+package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -7,18 +7,38 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import io.ddd.Jexxa.infrastructure.PortScanner;
+import io.ddd.jexxa.infrastructure.PortScanner;
 import io.ddd.stereotype.applicationcore.ApplicationService;
 
 
 public class RESTPfade
 {
+    public static class RestURL {
+        private String restPath;
+        private Method method;
+
+        RestURL(String restURL, Method method) {
+            this.restPath = restURL;
+            this.method = method;
+        }
+
+        String getRestURL()
+        {
+            return restPath;
+        }
+
+        Method getMethod()
+        {
+            return method;
+        }
+    }
+
     HashMap<String, Method> pfade;
     List<String> keys = new ArrayList<>();
 
     private String path = this.getClass().getPackage().getName();
-    String startPath = path.substring(0, path.indexOf("kanal.") + 6);
-    String modulePath = path.substring(path.indexOf("kanal.") + 6, path.indexOf("infra"));
+    String startPath = path.substring(0, path.indexOf("applicationservice.") + 6);
+    String modulePath = path.substring(path.indexOf("applicationservice.") + 6, path.indexOf("infra"));
 
     public RESTPfade()
     {
@@ -37,6 +57,8 @@ public class RESTPfade
         pfade = new HashMap<String, Method>();
         for (Method method : getRESTMethods())
         {
+
+            System.out.println("add Methods");
             keys.add(buildRESTPath(method));
             pfade.put(buildRESTPath(method), method);
         } //todo : same method different parameters?
@@ -44,7 +66,8 @@ public class RESTPfade
 
     private String buildRESTPath(Method method)
     {
-        return "/" + modulePath.substring(0, modulePath.length() - 1) + "/" + method.getName(); //+ checkAndBuildForParameters(method);
+        //return "/" + modulePath.substring(0, modulePath.length() - 1) + "/" + method.getName(); //+ checkAndBuildForParameters(method);
+        return "/" + method.getName(); //+ checkAndBuildForParameters(method);
     }
 
     private String checkAndBuildForParameters(Method method)
@@ -72,9 +95,31 @@ public class RESTPfade
         List<Method> methods = new ArrayList<>();
         for (Class cls : classes)
         {
+            System.out.println("HERE " + cls.getName());
             methods.addAll(Arrays.asList(cls.getMethods()));
         }
         methods.removeAll(Arrays.asList(Object.class.getMethods()));
         return methods;
+    }
+
+    static private String getRestURL(Method method) {
+        return "/" + method.getDeclaringClass().getSimpleName() + "/" + method.getName();
+    }
+
+    static private List<Method> getPublicMethods(Class<?> clazz)
+    {
+        List<Method> result = new ArrayList<>(Arrays.asList(clazz.getMethods()));
+        result.removeAll(Arrays.asList(Object.class.getMethods()));
+
+        return result;
+    }
+
+    static public List<RestURL> getRestURLs(Class<?> clazz)
+    {
+        List<RestURL> result = new ArrayList<>();
+
+        getPublicMethods(clazz)
+                .forEach(element -> result.add(new RestURL(getRestURL(element), element)));
+        return result;
     }
 }
