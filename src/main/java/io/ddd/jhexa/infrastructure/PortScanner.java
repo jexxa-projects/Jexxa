@@ -1,4 +1,4 @@
-package io.ddd.jhexa.infrastructure;
+package io.ddd.Jexxa.infrastructure;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

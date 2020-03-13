@@ -1,4 +1,4 @@
-package io.ddd.jhexa.applicationcore;
+package io.ddd.Jexxa.applicationcore;
 
 
 import io.ddd.stereotype.applicationcore.ApplicationService;

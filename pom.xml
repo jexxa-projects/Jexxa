@@ -4,11 +4,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.ddd.jhexa</groupId>
-  <artifactId>jhexa</artifactId>
+  <groupId>io.ddd.Jexxa</groupId>
+  <artifactId>Jexxa</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>jhexa</name>
+  <name>Jexxa</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
@@ -99,13 +99,13 @@
     <snapshotRepository>
       <id>github</id>
       <name>GitHub snapshot</name>
-      <url>https://maven.pkg.github.com/repplix/jhexa</url>
+      <url>https://maven.pkg.github.com/repplix/Jexxa</url>
       <uniqueVersion>true</uniqueVersion>
     </snapshotRepository>
     <repository>
       <id>github</id>
       <name>GitHub OWNER Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/repplix/jhexa</url>
+      <url>https://maven.pkg.github.com/repplix/Jexxa</url>
     </repository>
   </distributionManagement>
 
