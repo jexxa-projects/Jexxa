@@ -102,11 +102,11 @@ public class RESTPfade
         return methods;
     }
 
-    static private String getRestURL(Method method) {
+    private static String getRestURL(Method method) {
         return "/" + method.getDeclaringClass().getSimpleName() + "/" + method.getName();
     }
 
-    static private List<Method> getPublicMethods(Class<?> clazz)
+    private static List<Method> getPublicMethods(Class<?> clazz)
     {
         List<Method> result = new ArrayList<>(Arrays.asList(clazz.getMethods()));
         result.removeAll(Arrays.asList(Object.class.getMethods()));
@@ -114,7 +114,7 @@ public class RESTPfade
         return result;
     }
 
-    static public List<RestURL> getRestURLs(Class<?> clazz)
+    public static List<RestURL> getRestURLs(Class<?> clazz)
     {
         List<RestURL> result = new ArrayList<>();
 
