@@ -1,7 +1,5 @@
 package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 
-import java.util.List;
-
 import com.google.gson.Gson;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.ddd.stereotype.infrastructure.DrivingAdapter;
@@ -11,43 +9,47 @@ import io.javalin.Javalin;
 @DrivingAdapter
 public class JavalinREST implements IDrivingAdapter
 {
-    private Javalin app;
-    
+    private Javalin javalin = Javalin.create();
 
     public void register(Object object)
     {
-        app = Javalin.create();
+        registerGETMethods(object);
+        registerPOSTMethods(object);
+    }
 
-        List<RESTPfade.RestURL> allMethods = RESTPfade.getRestURLs(object.getClass());
+    private void registerGETMethods(Object object)
+    {
+        var methodList = RESTPfade.getRestURLs(object.getClass());
 
-        allMethods.forEach( element -> {
-            if (!(element.getMethod().getReturnType().isInstance(void.class)))
-            {
-                app.get(element.getRestURL(), ctx -> ctx.json(element.getMethod().invoke( object)));
-            }
-            else
-            {
-                app.post(element.getRestURL(), ctx -> {
+        methodList.stream()
+                .filter( element -> !(element.getMethod().getReturnType().isInstance(void.class)))
+                .forEach( element -> javalin.get(element.getRestURL(), ctx -> ctx.json(element.getMethod().invoke(object))));
+    }
+
+    private void registerPOSTMethods(Object object)
+    {
+        var methodList = RESTPfade.getRestURLs(object.getClass());
+
+        methodList.stream()
+                .filter( element -> element.getMethod().getReturnType().isInstance(void.class))
+                .forEach( element -> javalin.post(element.getRestURL(), ctx -> {
                     String body = ctx.body();
                     Class<?>[] parameterTypes = element.getMethod().getParameterTypes();
                     Class<?> param1 = parameterTypes[0];
                     Object paramObject = new Gson().fromJson(body, param1);
                     element.getMethod().invoke( object, paramObject);
-                });
-            }
-        });
-
+                }));
     }
 
     @Override
     public void start()
     {
-        app.start(7000);
+        javalin.start(7000);
     }
 
     @Override
     public void stop()
     {
-        app = null;         
+        javalin.stop();
     }
 }
