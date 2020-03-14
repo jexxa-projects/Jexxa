@@ -1,6 +1,7 @@
 # Jexxa
 
-Jexxa is a lightweight micro-framework     to realize a port and adapter architecture. 
+Jexxa is a lightweight micro-framework     to realize a [ports and adapters](https://www.thinktocode.com/2018/07/19/ports-and-adapters-architecture/) architecture. 
+
 
 The framework provides following features:
 
