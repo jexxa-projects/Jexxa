@@ -12,22 +12,22 @@ import java.util.List;
 import io.ddd.stereotype.applicationcore.ApplicationService;
 import org.junit.Test;
 
-public class PortScannerTest
+public class AnnotationScannerTest
 {
     @Test
     public void findApplicationServiceWithPacakgeName() {
-        PortScanner portScanner = new PortScanner("io.ddd.jexxa.applicationservice");
-        findApplicationService(portScanner);
+        AnnotationScanner annotationScanner = new AnnotationScanner("io.ddd.jexxa.applicationservice");
+        findApplicationService(annotationScanner);
     }
 
     @Test
     public void findApplicationServiceWithoutPacakgeName() {
-        PortScanner portScanner = new PortScanner();
-        findApplicationService(portScanner);
+        AnnotationScanner annotationScanner = new AnnotationScanner();
+        findApplicationService(annotationScanner);
     }
 
-    public void findApplicationService(PortScanner portScanner) {
-        List<Class<?>> applicationServiceList = portScanner.findAnnotation(ApplicationService.class);
+    public void findApplicationService(AnnotationScanner annotationScanner) {
+        List<Class<?>> applicationServiceList = annotationScanner.findAnnotation(ApplicationService.class);
 
         assertFalse(applicationServiceList.isEmpty());
         assertEquals(1, applicationServiceList.size());

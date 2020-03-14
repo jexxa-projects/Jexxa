@@ -7,7 +7,7 @@ import java.util.List;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 
-public class PortScanner
+public class AnnotationScanner
 {
     private String packageName;
 
@@ -34,7 +34,7 @@ public class PortScanner
     }
 
 
-    public PortScanner(String packageName)
+    public AnnotationScanner(String packageName)
     {
         this.packageName = packageName;
     }
@@ -63,7 +63,7 @@ public class PortScanner
         return new Exception("Objekt konnte nicht erzeugt werden");
     }*/
 
-    public PortScanner()
+    public AnnotationScanner()
     {
     }
 
