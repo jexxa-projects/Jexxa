@@ -16,17 +16,34 @@ public class AnnotationScannerTest
 {
     @Test
     public void findApplicationServiceWithPacakgeName() {
-        AnnotationScanner annotationScanner = new AnnotationScanner("io.ddd.jexxa.applicationservice");
-        findApplicationService(annotationScanner);
+        String packageName = "io.ddd.jexxa.applicationservice";
+        AnnotationScanner annotationScanner = new AnnotationScanner();
+
+        List<Class<?>> applicationServiceList = annotationScanner.findClassAnnotation(ApplicationService.class, packageName);
+
+        assertFalse(applicationServiceList.isEmpty());
+        assertEquals(1, applicationServiceList.size());
+        assertTrue(applicationServiceList
+                .stream()
+                .anyMatch(SimpleApplicationService.class::isAssignableFrom));
+
+    }
+
+
+    @Test
+    public void findApplicationServiceWithInvalidPacakgeName() {
+        String invalidPackageName = "io.invalid.package";
+        AnnotationScanner annotationScanner = new AnnotationScanner();
+
+        List<Class<?>> applicationServiceList = annotationScanner.findClassAnnotation(ApplicationService.class, invalidPackageName);
+
+        assertTrue(applicationServiceList.isEmpty());
     }
 
     @Test
     public void findApplicationServiceWithoutPacakgeName() {
         AnnotationScanner annotationScanner = new AnnotationScanner();
-        findApplicationService(annotationScanner);
-    }
 
-    public void findApplicationService(AnnotationScanner annotationScanner) {
         List<Class<?>> applicationServiceList = annotationScanner.findClassAnnotation(ApplicationService.class);
 
         assertFalse(applicationServiceList.isEmpty());
@@ -34,5 +51,6 @@ public class AnnotationScannerTest
         assertTrue(applicationServiceList
                 .stream()
                 .anyMatch(SimpleApplicationService.class::isAssignableFrom));
+
     }
 }
