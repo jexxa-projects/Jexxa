@@ -10,19 +10,32 @@ import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import java.util.List;
 
 import io.ddd.stereotype.applicationcore.ApplicationService;
+import io.ddd.stereotype.applicationcore.BusinessException;
 import org.junit.Test;
 
 public class AnnotationScannerTest
 {
     @Test
-    public void findApplicationServiceWithPacakgeName() {
+    public void findAnnotatedClasses() {
+        AnnotationScanner annotationScanner = new AnnotationScanner();
+
+        List<Class<?>> applicationServiceList = annotationScanner.findClassAnnotation(ApplicationService.class);
+
+        assertFalse(applicationServiceList.isEmpty());
+        assertTrue(applicationServiceList
+                .stream()
+                .anyMatch(SimpleApplicationService.class::isAssignableFrom));
+
+    }
+
+    @Test
+    public void findAnnotatedClassesWithinPackage() {
         String packageName = "io.ddd.jexxa.applicationservice";
         AnnotationScanner annotationScanner = new AnnotationScanner();
 
         List<Class<?>> applicationServiceList = annotationScanner.findClassAnnotation(ApplicationService.class, packageName);
 
         assertFalse(applicationServiceList.isEmpty());
-        assertEquals(1, applicationServiceList.size());
         assertTrue(applicationServiceList
                 .stream()
                 .anyMatch(SimpleApplicationService.class::isAssignableFrom));
@@ -31,7 +44,17 @@ public class AnnotationScannerTest
 
 
     @Test
-    public void findApplicationServiceWithInvalidPacakgeName() {
+    public void findAnnotatedClassesFails() {
+        var unavailableAnnotationAtRuntime = BusinessException.class;
+        AnnotationScanner annotationScanner = new AnnotationScanner();
+
+        List<Class<?>> applicationServiceList = annotationScanner.findClassAnnotation(unavailableAnnotationAtRuntime);
+
+        assertTrue(applicationServiceList.isEmpty());
+    }
+
+    @Test
+    public void findAnnotatedClassesFailsWithinPackage() {
         String invalidPackageName = "io.invalid.package";
         AnnotationScanner annotationScanner = new AnnotationScanner();
 
@@ -40,17 +63,4 @@ public class AnnotationScannerTest
         assertTrue(applicationServiceList.isEmpty());
     }
 
-    @Test
-    public void findApplicationServiceWithoutPacakgeName() {
-        AnnotationScanner annotationScanner = new AnnotationScanner();
-
-        List<Class<?>> applicationServiceList = annotationScanner.findClassAnnotation(ApplicationService.class);
-
-        assertFalse(applicationServiceList.isEmpty());
-        assertEquals(1, applicationServiceList.size());
-        assertTrue(applicationServiceList
-                .stream()
-                .anyMatch(SimpleApplicationService.class::isAssignableFrom));
-
-    }
 }
