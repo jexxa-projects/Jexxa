@@ -27,7 +27,7 @@ public class AnnotationScannerTest
     }
 
     public void findApplicationService(AnnotationScanner annotationScanner) {
-        List<Class<?>> applicationServiceList = annotationScanner.findAnnotation(ApplicationService.class);
+        List<Class<?>> applicationServiceList = annotationScanner.findClassAnnotation(ApplicationService.class);
 
         assertFalse(applicationServiceList.isEmpty());
         assertEquals(1, applicationServiceList.size());

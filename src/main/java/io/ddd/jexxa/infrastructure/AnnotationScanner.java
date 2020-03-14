@@ -13,7 +13,7 @@ public class AnnotationScanner
 
 
 
-    public List<Class<?>> findAnnotation(final Class<? extends Annotation> annotation)
+    public List<Class<?>> findClassAnnotation(final Class<? extends Annotation> annotation)
     {
         ScanResult scanResult;
 
