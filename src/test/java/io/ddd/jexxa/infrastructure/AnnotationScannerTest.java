@@ -33,6 +33,6 @@ public class AnnotationScannerTest
         assertEquals(1, applicationServiceList.size());
         assertTrue(applicationServiceList
                 .stream()
-                .anyMatch(element -> element.getName().equals(SimpleApplicationService.class.getName())));
+                .anyMatch(SimpleApplicationService.class::isAssignableFrom));
     }
 }
