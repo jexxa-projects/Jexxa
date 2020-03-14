@@ -1,6 +1,7 @@
 package io.ddd.jexxa.applicationservice;
 
 
+import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
 import io.ddd.stereotype.applicationcore.ApplicationService;
 
 @ApplicationService
@@ -16,4 +17,10 @@ public class SimpleApplicationService
     {
       return  simpleValue;
     }
+
+    public SimpleValueObject getSimpleValueObject()
+    {
+        return  new SimpleValueObject(simpleValue);
+    }
+
 }

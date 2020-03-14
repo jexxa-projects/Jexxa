@@ -20,11 +20,11 @@ public class RestPfadeTest
         //Check that there are URLs included stating name of unit under test
         assertTrue(restURL
                 .stream()
-                .anyMatch(element -> element.getRestURL().contains(SimpleApplicationService.class.getSimpleName())));
+                .anyMatch(element -> element.getRestURL().contains("/"+SimpleApplicationService.class.getSimpleName()+"/")));
 
         //Check that no methods from base class are included  
         assertFalse(restURL
                 .stream()
-                .anyMatch(element -> element.getRestURL().contains(Object.class.getSimpleName())));
+                .anyMatch(element -> element.getRestURL().contains("/"+Object.class.getSimpleName()+"/")));
     }
 }
