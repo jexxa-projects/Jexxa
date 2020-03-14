@@ -7,7 +7,7 @@ import io.javalin.Javalin;
 
 
 @DrivingAdapter
-public class JavalinREST implements IDrivingAdapter
+public class JavalinRESTAdapter implements IDrivingAdapter
 {
     private Javalin javalin = Javalin.create();
 
