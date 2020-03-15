@@ -11,17 +11,17 @@ import java.net.URL;
 import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import org.junit.Test;
 
-public class JavalinRESTAdapterTest
+public class JavalinAdapterTest
 {
     @Test
     public void startRESTServer() throws IOException
     {
         SimpleApplicationService simpleApplicationService = new SimpleApplicationService(42);
 
-        JavalinRESTAdapter javalinRESTAdapter = new JavalinRESTAdapter();
-        javalinRESTAdapter.register(simpleApplicationService);
+        JavalinAdapter javalinAdapter = new JavalinAdapter();
+        javalinAdapter.register(simpleApplicationService);
 
-        javalinRESTAdapter.start();
+        javalinAdapter.start();
         
         assertTrue(sendGETCommand().contains("42"));
         
