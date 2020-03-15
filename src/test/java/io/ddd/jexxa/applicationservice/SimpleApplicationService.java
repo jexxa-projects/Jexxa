@@ -18,6 +18,11 @@ public class SimpleApplicationService
       return  simpleValue;
     }
 
+    public void setSimpleValue(int simpleValue)
+    {
+      this.simpleValue = simpleValue;
+    }
+
     public SimpleValueObject getSimpleValueObject()
     {
         return  new SimpleValueObject(simpleValue);
