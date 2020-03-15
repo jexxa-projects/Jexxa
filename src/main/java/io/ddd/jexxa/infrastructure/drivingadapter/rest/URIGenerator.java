@@ -6,10 +6,12 @@ import java.util.Arrays;
 import java.util.List;
 
 
-
-class RESTUtil
+/**
+ * This class generates uniform IDs (URIs) for resources to be offered via REST
+ */
+class URIGenerator
 {
-    private RESTUtil()
+    private URIGenerator()
     {
 
     }
