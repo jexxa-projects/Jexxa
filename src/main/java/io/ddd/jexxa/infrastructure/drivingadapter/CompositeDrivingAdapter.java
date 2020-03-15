@@ -10,20 +10,17 @@ public class CompositeDrivingAdapter implements IDrivingAdapter
     @Override
     public void start()
     {
-        for (IDrivingAdapter iterator : drivingAdapterlist ) {
-            iterator.start();
-        }
+        drivingAdapterlist.forEach(IDrivingAdapter::start);
     }
 
     @Override
     public void stop()
     {
-        for (IDrivingAdapter iterator : drivingAdapterlist ) {
-            iterator.stop();
-        }
+        drivingAdapterlist.forEach(IDrivingAdapter::stop);
     }
 
-    public void add(IDrivingAdapter drivingAdapter) {
+    public void add(IDrivingAdapter drivingAdapter)
+    {
         drivingAdapterlist.add(drivingAdapter);
     }
 }

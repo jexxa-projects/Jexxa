@@ -1,18 +1,11 @@
 package io.ddd.jexxa.infrastructure.drivingadapter;
 
 /**
- * Die SRP dieses Interfaces ist die Bereitstellung einer Schnittstelle für Subsysteme, die gestartet und gestoppt werden können.
- */
+ * Generic interface to start/stop a DrivingAdapter
+ *  */
 public interface IDrivingAdapter
 {
-    /**
-     * Starte Subsystem
-     */
     void start();
-
-    /**
-     * Stoppe Subsystem
-     */
 
     void stop();
 }
