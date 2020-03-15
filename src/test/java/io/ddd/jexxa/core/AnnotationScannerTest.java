@@ -1,4 +1,4 @@
-package io.ddd.jexxa.infrastructure;
+package io.ddd.jexxa.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -9,6 +9,7 @@ import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 
 import java.util.List;
 
+import io.ddd.jexxa.core.AnnotationScanner;
 import io.ddd.stereotype.applicationcore.ApplicationService;
 import io.ddd.stereotype.applicationcore.BusinessException;
 import org.junit.Test;

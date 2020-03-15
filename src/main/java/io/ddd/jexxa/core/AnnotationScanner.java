@@ -1,4 +1,4 @@
-package io.ddd.jexxa.infrastructure;
+package io.ddd.jexxa.core;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
