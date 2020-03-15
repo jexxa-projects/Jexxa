@@ -18,13 +18,10 @@ public class RESTfulHTTPGeneratorTest
         var objectUnderTest = new RESTfulHTTPGenerator(defaultObject);
 
         var result = objectUnderTest.getGETCommands();
-
-        result.forEach(element -> System.out.println(element.getRestURL()));
-
-        result.forEach(element -> System.out.println(element.getMethod().getReturnType()));
-
-
+        
         //Check all conventions as defined in {@link RESTfulHTTPGenerator}.
+        assertFalse(result.isEmpty());
+
         //Check that all commands are marked as GET
         result.forEach(element -> assertEquals(RESTfulHTTPGenerator.RESTfulHTTP.HTTPCommand.GET,
                 element.getHTTPCommand()));
@@ -37,4 +34,29 @@ public class RESTfulHTTPGeneratorTest
         result.forEach(element -> assertNotEquals(void.class, element.getMethod().getReturnType()));
 
     }
+
+    @Test
+    public void validatePOSTCommands()
+    {
+        var defaultObject = new SimpleApplicationService(42);
+        var objectUnderTest = new RESTfulHTTPGenerator(defaultObject);
+
+        var result = objectUnderTest.getPOSTCommands();
+
+        //Check all conventions as defined in {@link RESTfulHTTPGenerator}.
+        assertFalse(result.isEmpty());
+
+        //Check that all commands are marked as GET
+        result.forEach(element -> assertEquals(RESTfulHTTPGenerator.RESTfulHTTP.HTTPCommand.POST,
+                element.getHTTPCommand()));
+
+        //Check URIs
+        result.forEach(element -> assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.getMethod().getName(),
+                element.getRestURL()));
+
+        //Check return types are NOT void
+        result.forEach(element -> assertEquals(void.class, element.getMethod().getReturnType()));
+
+    }
+
 }
