@@ -1,5 +1,7 @@
 package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.google.gson.Gson;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.ddd.jexxa.infrastructure.stereotype.DrivingAdapter;
@@ -10,6 +12,20 @@ import io.javalin.Javalin;
 public class JavalinAdapter implements IDrivingAdapter
 {
     private Javalin javalin = Javalin.create();
+    private String hostname;
+    private int port;
+
+    public JavalinAdapter(String hostname, int port)
+    {
+        checkNotNull(hostname);
+        this.hostname = hostname;
+        this.port = port;
+    }
+
+    public JavalinAdapter(int port)
+    {
+        this("locahost", port);
+    }
 
     public void register(Object object)
     {
@@ -41,7 +57,7 @@ public class JavalinAdapter implements IDrivingAdapter
     @Override
     public void start()
     {
-        javalin.start(7000);
+        javalin.start(hostname, port);
     }
 
     @Override

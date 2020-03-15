@@ -16,23 +16,25 @@ public class JavalinAdapterTest
     @Test
     public void startRESTServer() throws IOException
     {
+        int defaultPort = 7000;
+        String defaultHost = "localhost";
         SimpleApplicationService simpleApplicationService = new SimpleApplicationService(42);
 
-        JavalinAdapter javalinAdapter = new JavalinAdapter();
-        javalinAdapter.register(simpleApplicationService);
 
-        javalinAdapter.start();
+        var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
+        objectUnderTest.register(simpleApplicationService);
+        objectUnderTest.start();
         
-        assertTrue(sendGETCommand().contains("42"));
-        
+        assertTrue(sendGETCommand(defaultHost, defaultPort).contains("42"));
+        objectUnderTest.stop();
     }
 
 
 
-    public  String sendGETCommand( ) throws IOException
+    public  String sendGETCommand(String defaultHost, int defaultPort) throws IOException
     {
 
-        URL url = new URL("http://localhost:7000/SimpleApplicationService/getSimpleValue");
+        URL url = new URL("http://" + defaultHost + ":" + defaultPort + "/SimpleApplicationService/getSimpleValue");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setDoOutput(true);
         conn.setRequestMethod("GET");
