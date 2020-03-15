@@ -7,7 +7,7 @@ import java.util.List;
 
 
 
-public class RESTPfade
+class RESTPfade
 {
     private RESTPfade()
     {
