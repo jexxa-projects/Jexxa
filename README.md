@@ -2,7 +2,7 @@
 
 Jexxa is a lightweight micro-framework to support implementing business applications based on a [ports and adapters](https://www.thinktocode.com/2018/07/19/ports-and-adapters-architecture/) architecture. 
 
-Goal of this framework is to easily connect technology stacks, so called adapters, to ports of a technology agnostic business application. 
+Goal of this framework is to easily connect and exchange technology stacks, so called adapters, to ports of a technology agnostic business application. 
 
 Up to now the framework provides following features:
 
