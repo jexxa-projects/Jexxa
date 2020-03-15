@@ -15,7 +15,7 @@ public class RestPfadeTest
     public void printPath()
     {
 
-        List<RESTPfade.RestURL> restURL = RESTPfade.getRestURLs(SimpleApplicationService.class);
+        List<RESTUtil.RestURL> restURL = RESTUtil.getRestURLs(SimpleApplicationService.class);
         
         //Check that there are URLs included stating name of unit under test
         assertTrue(restURL

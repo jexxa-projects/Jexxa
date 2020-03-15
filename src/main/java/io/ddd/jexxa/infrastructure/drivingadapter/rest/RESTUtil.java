@@ -7,9 +7,9 @@ import java.util.List;
 
 
 
-class RESTPfade
+class RESTUtil
 {
-    private RESTPfade()
+    private RESTUtil()
     {
 
     }

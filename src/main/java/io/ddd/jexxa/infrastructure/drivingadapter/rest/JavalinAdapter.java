@@ -19,7 +19,7 @@ public class JavalinAdapter implements IDrivingAdapter
 
     private void registerGETMethods(Object object)
     {
-        var methodList = RESTPfade.getRestURLs(object.getClass());
+        var methodList = RESTUtil.getRestURLs(object.getClass());
 
         methodList.stream()
                 .filter( element -> !(element.getMethod().getReturnType().isInstance(void.class)))
@@ -28,7 +28,7 @@ public class JavalinAdapter implements IDrivingAdapter
 
     private void registerPOSTMethods(Object object)
     {
-        var methodList = RESTPfade.getRestURLs(object.getClass());
+        var methodList = RESTUtil.getRestURLs(object.getClass());
 
         methodList.stream()
                 .filter( element -> element.getMethod().getReturnType().isInstance(void.class))
