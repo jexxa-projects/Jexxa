@@ -2,7 +2,7 @@ package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 
 import com.google.gson.Gson;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.ddd.stereotype.infrastructure.DrivingAdapter;
+import io.ddd.jexxa.infrastructure.stereotype.DrivingAdapter;
 import io.javalin.Javalin;
 
 
