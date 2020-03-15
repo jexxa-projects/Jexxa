@@ -43,7 +43,7 @@ public class JavalinAdapter implements IDrivingAdapter
 
     private void registerPOSTMethods(Object object)
     {
-        var methodList = new RESTfulHTTPGenerator(object).getGETCommands();
+        var methodList = new RESTfulHTTPGenerator(object).getPOSTCommands();
 
         methodList.forEach( element -> javalin.post(element.getRestURL(), ctx -> {
                     String body = ctx.body();

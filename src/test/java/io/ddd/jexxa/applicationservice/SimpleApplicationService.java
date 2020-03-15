@@ -20,7 +20,7 @@ public class SimpleApplicationService
 
     public void setSimpleValue(int simpleValue)
     {
-      this.simpleValue = simpleValue;
+        this.simpleValue = simpleValue;
     }
 
     public SimpleValueObject getSimpleValueObject()
