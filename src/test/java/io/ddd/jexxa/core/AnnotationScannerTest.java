@@ -18,10 +18,13 @@ public class AnnotationScannerTest
 {
     @Test
     public void findAnnotatedClasses() {
-        AnnotationScanner annotationScanner = new AnnotationScanner();
+        //Arrange
+        var objectUnderTest = new AnnotationScanner();
 
-        List<Class<?>> applicationServiceList = annotationScanner.findClassAnnotation(ApplicationService.class);
+        //Act
+        var applicationServiceList = objectUnderTest.findClassAnnotation(ApplicationService.class);
 
+        //Assert
         assertFalse(applicationServiceList.isEmpty());
         assertTrue(applicationServiceList
                 .stream()
@@ -31,11 +34,14 @@ public class AnnotationScannerTest
 
     @Test
     public void findAnnotatedClassesWithinPackage() {
-        String packageName = "io.ddd.jexxa.applicationservice";
-        AnnotationScanner annotationScanner = new AnnotationScanner();
+        //Arrange
+        var packageName = "io.ddd.jexxa.applicationservice";
+        var objectUnderTest = new AnnotationScanner();
 
-        List<Class<?>> applicationServiceList = annotationScanner.findClassAnnotation(ApplicationService.class, packageName);
+        //Act
+        var applicationServiceList = objectUnderTest.findClassAnnotation(ApplicationService.class, packageName);
 
+        //Assert
         assertFalse(applicationServiceList.isEmpty());
         assertTrue(applicationServiceList
                 .stream()
@@ -46,21 +52,27 @@ public class AnnotationScannerTest
 
     @Test
     public void findAnnotatedClassesFails() {
+        //Arrange
         var unavailableAnnotationAtRuntime = BusinessException.class;
-        AnnotationScanner annotationScanner = new AnnotationScanner();
+        var objectUnderTest = new AnnotationScanner();
 
-        List<Class<?>> applicationServiceList = annotationScanner.findClassAnnotation(unavailableAnnotationAtRuntime);
+        //Act
+        var applicationServiceList = objectUnderTest.findClassAnnotation(unavailableAnnotationAtRuntime);
 
+        //Assert
         assertTrue(applicationServiceList.isEmpty());
     }
 
     @Test
     public void findAnnotatedClassesFailsWithinPackage() {
-        String invalidPackageName = "io.invalid.package";
-        AnnotationScanner annotationScanner = new AnnotationScanner();
+        //Arrange
+        var invalidPackageName = "io.invalid.package";
+        var objectUnderTest = new AnnotationScanner();
 
-        List<Class<?>> applicationServiceList = annotationScanner.findClassAnnotation(ApplicationService.class, invalidPackageName);
+        //Act
+        var applicationServiceList = objectUnderTest.findClassAnnotation(ApplicationService.class, invalidPackageName);
 
+        //Assert
         assertTrue(applicationServiceList.isEmpty());
     }
 
