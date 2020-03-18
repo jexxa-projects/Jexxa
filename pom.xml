@@ -11,6 +11,14 @@
   <name>Jexxa</name>
   <url>https://github.com/repplix/Jexxa</url>
 
+  <scm>
+    <connection>scm:git:https://github.com/repplix/Jexxa.git</connection>
+    <url>http://github.com/repplix/Jexxa</url>
+    <developerConnection>scm:git:https://github.com/repplix/Jexxa.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>11</maven.compiler.release>
