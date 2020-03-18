@@ -9,8 +9,7 @@
   <version>1.0-SNAPSHOT</version>
 
   <name>Jexxa</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>https://github.com/repplix/Jexxa</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -31,6 +30,7 @@
       <groupId>io.ddd.stereotype</groupId>
       <artifactId>stereotype</artifactId>
       <version>${stereotype.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.github.classgraph</groupId>
