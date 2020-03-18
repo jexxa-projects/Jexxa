@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 /**
  * Represents a Factory that creates a port in terms of a hexagonal architecture.
  *
- * Within DDD typical ports are an ApplicationService or objects providing a {@link io.ddd.stereotype.applicationcore.DomainEventHandler}
- * (which are typically a {@link io.ddd.stereotype.applicationcore.DomainService} or {@link io.ddd.stereotype.applicationcore.DomainProcess}.
+ * Within DDD typical ports are an ApplicationService or objects providing a DomainEventHandler
+ * (which are typically a DomainService or DomainProcess.
  */
 @Target(TYPE)
 @Retention(RUNTIME)
