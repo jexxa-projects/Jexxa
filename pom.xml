@@ -119,13 +119,13 @@
 
   <distributionManagement>
     <snapshotRepository>
-      <id>github-Jexxa</id>
+      <id>github</id>
       <name>GitHub snapshot</name>
       <url>https://maven.pkg.github.com/repplix/Jexxa</url>
       <uniqueVersion>true</uniqueVersion>
     </snapshotRepository>
     <repository>
-      <id>github-Jexxa</id>
+      <id>github</id>
       <name>GitHub OWNER Apache Maven Packages</name>
       <url>https://maven.pkg.github.com/repplix/Jexxa</url>
     </repository>

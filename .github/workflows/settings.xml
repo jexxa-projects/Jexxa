@@ -26,7 +26,7 @@
                 <snapshots><enabled>true</enabled></snapshots>
             </repository>
             <repository>
-                <id>github-Jexxa</id>
+                <id>github</id>
                 <name>GitHub OWNER Apache Maven Packages</name>
                 <url>https://maven.pkg.github.com/repplix/Jexxa</url>
                 <releases><enabled>true</enabled></releases>
@@ -40,11 +40,6 @@
 <servers>
     <server>
         <id>github-stereotype</id>
-        <password>${env.GITHUB_TOKEN2}</password>
-        <username>${env.GITHUB_USERNAME2}</username>
-    </server>
-    <server>
-        <id>github-Jexxa</id>
         <password>${env.GITHUB_TOKEN2}</password>
         <username>${env.GITHUB_USERNAME2}</username>
     </server>
