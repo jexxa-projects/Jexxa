@@ -8,7 +8,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * A {@link DrivenAdapter} is an implementation of an outbound port of an application core such as {@link io.ddd.stereotype.applicationcore.Repository} or an {@link io.ddd.stereotype.applicationcore.InfrastructureService}.
+ * A {@link DrivenAdapter} is an implementation of an outbound port of an application core such as a Repository or an InfrastructureService in terms of DDD
  */
 @Target(TYPE)
 @Retention(RUNTIME)
