@@ -43,6 +43,12 @@
         <password>${env.GITHUB_TOKEN2}</password>
         <username>${env.GITHUB_USERNAME2}</username>
     </server>
+
+    <server>
+        <id>github-Jexxa</id>
+        <password>${env.GITHUB_TOKEN2}</password>
+        <username>${env.GITHUB_USERNAME2}</username>
+    </server>
 </servers>
 
 </settings>
