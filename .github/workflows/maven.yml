@@ -27,4 +27,5 @@ jobs:
       env:
         GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}  
         GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}  
+        GITHUB_TOKEN: ${{ github.token }
       run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml deploy 
