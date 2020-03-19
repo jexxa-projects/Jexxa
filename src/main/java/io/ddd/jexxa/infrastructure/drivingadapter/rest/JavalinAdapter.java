@@ -24,7 +24,7 @@ public class JavalinAdapter implements IDrivingAdapter
 
     public JavalinAdapter(int port)
     {
-        this("locahost", port);
+        this("localhost", port);
     }
 
     public void register(Object object)

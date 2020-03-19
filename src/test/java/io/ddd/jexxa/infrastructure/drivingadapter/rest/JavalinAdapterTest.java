@@ -1,7 +1,6 @@
 package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,6 +36,26 @@ public class JavalinAdapterTest
         objectUnderTest.stop();
     }
 
+    @Test
+    public void testJavalinGETCommandDefaultHostname() throws IOException
+    {
+        //Arrange
+        var defaultPort = 7000;
+        var simpleApplicationService = new SimpleApplicationService(42);
+        var objectUnderTest = new JavalinAdapter(defaultPort);
+        objectUnderTest.register(simpleApplicationService);
+        objectUnderTest.start();
+
+        //Act
+        String result =sendGETCommand(defaultPort);
+
+        //Assert
+        assertEquals(42, simpleApplicationService.getSimpleValue());
+        assertEquals(Integer.toString(simpleApplicationService.getSimpleValue()), result );
+
+        objectUnderTest.stop();
+    }
+
 
     @Test
     public void testJavalinPOSTCommand() throws IOException
@@ -59,6 +78,10 @@ public class JavalinAdapterTest
         assertEquals(Integer.toString(newValue), sendGETCommand(defaultHost, defaultPort));
 
         objectUnderTest.stop();
+    }
+
+    public  String sendGETCommand(int defaultPort) throws IOException {
+        return sendGETCommand("localhost", defaultPort);
     }
 
 
