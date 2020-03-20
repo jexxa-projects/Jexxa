@@ -84,19 +84,28 @@ public class JavalinAdapterTest
 
         //Act
         var newValue = 44;
-        sendPOSTCommand(defaultHost, defaultPort, Integer.toString(newValue));
+
+        var restPath = restfullHTTPGenerater.
+                getPOSTCommands().
+                stream().
+                filter(element -> element.getResourcePath().endsWith("setSimpleValue")).
+                findFirst();
+        assertTrue(restPath.isPresent());
+
+
+        sendPOSTCommand(defaultHost, defaultPort, restPath.get(), Integer.toString(newValue));
 
         //Assert
         var restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
-        var restPath = restfullHTTPGenerater.
+        var responsePath = restfullHTTPGenerater.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
                 findFirst();
-        assertTrue(restPath.isPresent());
+        assertTrue(responsePath.isPresent());
         
         assertEquals(newValue, simpleApplicationService.getSimpleValue());
-        assertEquals(Integer.toString(newValue), sendGETCommand(defaultHost, defaultPort, restPath.get()));
+        assertEquals(Integer.toString(newValue), sendGETCommand(defaultHost, defaultPort, responsePath.get()));
 
         objectUnderTest.stop();
     }
@@ -130,10 +139,10 @@ public class JavalinAdapterTest
         return output;
     }
 
-    public void sendPOSTCommand(String defaultHost, int defaultPort, String value) throws IOException
+    public void sendPOSTCommand(String defaultHost, int defaultPort, RESTfulHTTPGenerator.RESTfulHTTP restPath, String value) throws IOException
     {
 
-        URL url = new URL("http://" + defaultHost + ":" + defaultPort + "/SimpleApplicationService/setSimpleValue");
+        URL url = new URL("http://" + defaultHost + ":" + defaultPort + restPath.getResourcePath());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");
