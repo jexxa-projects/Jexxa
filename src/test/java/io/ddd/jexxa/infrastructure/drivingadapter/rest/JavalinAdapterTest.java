@@ -38,7 +38,7 @@ public class JavalinAdapterTest
                 findFirst();
         assertTrue(restPath.isPresent());
 
-        String result = sendGETCommand(defaultHost, defaultPort, restPath.get());
+        String result = sendGETCommand(restPath.get());
 
         //Assert
         assertEquals(42, simpleApplicationService.getSimpleValue());
@@ -64,7 +64,7 @@ public class JavalinAdapterTest
         assertTrue(restPath.isPresent());
 
         //Act
-        String result =sendGETCommand(defaultPort, restPath.get());
+        String result =sendGETCommand(restPath.get());
 
         //Assert
         assertEquals(42, simpleApplicationService.getSimpleValue());
@@ -93,7 +93,7 @@ public class JavalinAdapterTest
         assertTrue(restPath.isPresent());
 
 
-        sendPOSTCommand(defaultHost, defaultPort, restPath.get(), Integer.toString(newValue));
+        sendPOSTCommand(restPath.get(), Integer.toString(newValue));
 
         //Assert
         var restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
@@ -105,17 +105,13 @@ public class JavalinAdapterTest
         assertTrue(responsePath.isPresent());
         
         assertEquals(newValue, simpleApplicationService.getSimpleValue());
-        assertEquals(Integer.toString(newValue), sendGETCommand(defaultHost, defaultPort, responsePath.get()));
+        assertEquals(Integer.toString(newValue), sendGETCommand(responsePath.get()));
 
         objectUnderTest.stop();
     }
+    
 
-    public  String sendGETCommand(int defaultPort, RESTfulHTTPGenerator.RESTfulHTTP restPath) throws IOException {
-        return sendGETCommand("localhost", defaultPort, restPath);
-    }
-
-
-    public  String sendGETCommand(String defaultHost, int defaultPort, RESTfulHTTPGenerator.RESTfulHTTP restPath) throws IOException
+    public  String sendGETCommand(RESTfulHTTPGenerator.RESTfulHTTP restPath) throws IOException
     {
 
         URL url = new URL("http://" + defaultHost + ":" + defaultPort + restPath.getResourcePath());
@@ -139,7 +135,7 @@ public class JavalinAdapterTest
         return output;
     }
 
-    public void sendPOSTCommand(String defaultHost, int defaultPort, RESTfulHTTPGenerator.RESTfulHTTP restPath, String value) throws IOException
+    public void sendPOSTCommand(RESTfulHTTPGenerator.RESTfulHTTP restPath, String value) throws IOException
     {
 
         URL url = new URL("http://" + defaultHost + ":" + defaultPort + restPath.getResourcePath());
