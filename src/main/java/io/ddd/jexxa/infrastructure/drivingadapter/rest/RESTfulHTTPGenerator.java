@@ -17,17 +17,10 @@ import java.util.List;
 class RESTfulHTTPGenerator
 {
     Object object;
-    String context;
-
-    public RESTfulHTTPGenerator(Object object, String context)
-    {
-        this.object = object;
-        this.context = context;
-    }
 
     public RESTfulHTTPGenerator(Object object)
     {
-        this(object, null);
+        this.object = object;
     }
 
     
@@ -98,11 +91,7 @@ class RESTfulHTTPGenerator
 
 
     private String generateURI(Method method) {
-        if (context == null) {
-            return "/" + method.getDeclaringClass().getSimpleName() + "/" + method.getName();
-        }
-        
-        return "/" + context + method.getDeclaringClass().getSimpleName() + "/" + method.getName();
+        return "/" + method.getDeclaringClass().getSimpleName() + "/" + method.getName();
     }
 
     private List<Method> getPublicMethods(Class<?> clazz)

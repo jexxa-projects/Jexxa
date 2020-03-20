@@ -27,7 +27,7 @@ public class JavalinAdapterTest
         objectUnderTest.start();
 
         //Act
-        String result =sendGETCommand(defaultHost, defaultPort);
+        String result = sendGETCommand(defaultHost, defaultPort);
 
         //Assert
         assertEquals(42, simpleApplicationService.getSimpleValue());
