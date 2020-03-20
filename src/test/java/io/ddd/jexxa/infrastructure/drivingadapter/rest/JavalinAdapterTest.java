@@ -12,6 +12,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import io.ddd.jexxa.applicationservice.SimpleApplicationService;
+import io.ddd.jexxa.core.JsonConverter;
+import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
 import org.junit.Test;
 
 public class JavalinAdapterTest
@@ -109,9 +111,44 @@ public class JavalinAdapterTest
 
         objectUnderTest.stop();
     }
-    
 
-    public  String sendGETCommand(RESTfulHTTPGenerator.RESTfulHTTP restPath) throws IOException
+    @Test
+    public void testJavalinPOSTCommandValueObject() throws IOException
+    {
+        //Arrange
+        var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
+        objectUnderTest.register(simpleApplicationService);
+        objectUnderTest.start();
+
+        var newValue = new SimpleValueObject(44);
+
+        //Act
+        var restPath = restfullHTTPGenerater.
+                getPOSTCommands().
+                stream().
+                filter(element -> element.getResourcePath().endsWith("setSimpleValueObject")).
+                findFirst();
+        assertTrue(restPath.isPresent());
+
+
+        sendPOSTCommand(restPath.get(), JsonConverter.toJson(newValue));
+
+        //Assert
+        var restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
+        var responsePath = restfullHTTPGenerater.
+                getGETCommands().
+                stream().
+                filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
+                findFirst();
+        assertTrue(responsePath.isPresent());
+
+        assertEquals(newValue.getValue(), simpleApplicationService.getSimpleValueObject().getValue());
+        assertEquals(Integer.toString(newValue.getValue()), sendGETCommand(responsePath.get()));
+
+        objectUnderTest.stop();
+    }
+
+    private  String sendGETCommand(RESTfulHTTPGenerator.RESTfulHTTP restPath) throws IOException
     {
 
         URL url = new URL("http://" + defaultHost + ":" + defaultPort + restPath.getResourcePath());
@@ -135,7 +172,7 @@ public class JavalinAdapterTest
         return output;
     }
 
-    public void sendPOSTCommand(RESTfulHTTPGenerator.RESTfulHTTP restPath, String value) throws IOException
+    private void sendPOSTCommand(RESTfulHTTPGenerator.RESTfulHTTP restPath, String value) throws IOException
     {
 
         URL url = new URL("http://" + defaultHost + ":" + defaultPort + restPath.getResourcePath());
