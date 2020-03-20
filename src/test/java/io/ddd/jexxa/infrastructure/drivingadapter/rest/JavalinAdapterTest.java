@@ -16,15 +16,16 @@ import org.junit.Test;
 
 public class JavalinAdapterTest
 {
+    int defaultPort = 7000;
+    String defaultHost = "localhost";
+    SimpleApplicationService simpleApplicationService = new SimpleApplicationService(42);
+    RESTfulHTTPGenerator restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
+
     @Test
     public void testJavalinGETCommand() throws IOException
     {
         //Arrange
-        var defaultPort = 7000;
-        var defaultHost = "localhost";
-        var simpleApplicationService = new SimpleApplicationService(42);
         var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
-        var restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
 
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
@@ -33,7 +34,7 @@ public class JavalinAdapterTest
         var restPath = restfullHTTPGenerater.
                 getGETCommands().
                 stream().
-                filter(element -> element.getResourcePath().contains("getSimpleValue")).
+                filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
                 findFirst();
         assertTrue(restPath.isPresent());
 
@@ -50,10 +51,7 @@ public class JavalinAdapterTest
     public void testJavalinGETCommandDefaultHostname() throws IOException
     {
         //Arrange
-        var defaultPort = 7000;
-        var simpleApplicationService = new SimpleApplicationService(42);
         var objectUnderTest = new JavalinAdapter(defaultPort);
-        var restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
 
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
@@ -61,7 +59,7 @@ public class JavalinAdapterTest
         var restPath = restfullHTTPGenerater.
                 getGETCommands().
                 stream().
-                filter(element -> element.getResourcePath().contains("getSimpleValue")).
+                filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
                 findFirst();
         assertTrue(restPath.isPresent());
 
@@ -80,16 +78,12 @@ public class JavalinAdapterTest
     public void testJavalinPOSTCommand() throws IOException
     {
         //Arrange
-        var defaultPort = 7000;
-        var defaultHost = "localhost";
-        var defaultValue = 42;
-        var newValue = 44;
-        var simpleApplicationService = new SimpleApplicationService(defaultValue);
         var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
         //Act
+        var newValue = 44;
         sendPOSTCommand(defaultHost, defaultPort, Integer.toString(newValue));
 
         //Assert
@@ -97,7 +91,7 @@ public class JavalinAdapterTest
         var restPath = restfullHTTPGenerater.
                 getGETCommands().
                 stream().
-                filter(element -> element.getResourcePath().contains("getSimpleValue")).
+                filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
                 findFirst();
         assertTrue(restPath.isPresent());
         
