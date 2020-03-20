@@ -26,21 +26,21 @@ class RESTfulHTTPGenerator
     
     public static class RESTfulHTTP
     {
-        enum HTTPCommand {GET, PUT, POST, DELETE}
+        enum HTTPCommand {GET, POST}
         
-        private String restPath;
+        private String resourcePath;
         private Method method;
         private HTTPCommand httpCommand;
 
-        RESTfulHTTP(HTTPCommand httpCommand, String restURL, Method method) {
+        RESTfulHTTP(HTTPCommand httpCommand, String resourcePath, Method method) {
             this.httpCommand = httpCommand;
-            this.restPath = restURL;
+            this.resourcePath = resourcePath;
             this.method = method;
         }
 
-        String getRestURL()
+        String getResourcePath()
         {
-            return restPath;
+            return resourcePath;
         }
 
         Method getMethod()

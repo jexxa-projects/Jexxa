@@ -28,7 +28,7 @@ public class RESTfulHTTPGeneratorTest
 
         //Check URIs
         result.forEach(element -> assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.getMethod().getName(),
-                element.getRestURL()));
+                element.getResourcePath()));
 
         //Check return types are NOT void
         result.forEach(element -> assertNotEquals(void.class, element.getMethod().getReturnType()));
@@ -52,7 +52,7 @@ public class RESTfulHTTPGeneratorTest
 
         //Check URIs
         result.forEach(element -> assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.getMethod().getName(),
-                element.getRestURL()));
+                element.getResourcePath()));
 
         //Check return types are NOT void
         result.forEach(element -> assertEquals(void.class, element.getMethod().getReturnType()));

@@ -37,7 +37,7 @@ public class JavalinAdapter implements IDrivingAdapter
     {
         var methodList = new RESTfulHTTPGenerator(object).getGETCommands();
 
-        methodList.forEach( element -> javalin.get(element.getRestURL(),
+        methodList.forEach( element -> javalin.get(element.getResourcePath(),
                                                  ctx -> ctx.json(element.getMethod().invoke(object))));
     }
 
@@ -45,7 +45,7 @@ public class JavalinAdapter implements IDrivingAdapter
     {
         var methodList = new RESTfulHTTPGenerator(object).getPOSTCommands();
 
-        methodList.forEach( element -> javalin.post(element.getRestURL(), ctx -> {
+        methodList.forEach( element -> javalin.post(element.getResourcePath(), ctx -> {
                     String body = ctx.body();
                     Class<?>[] parameterTypes = element.getMethod().getParameterTypes();
                     Class<?> param1 = parameterTypes[0];

@@ -23,6 +23,18 @@ public class SimpleApplicationService
         this.simpleValue = simpleValue;
     }
 
+    public void setSimpleValueObject(SimpleValueObject simpleValueObject)
+    {
+        setSimpleValue(simpleValueObject.getValue());
+    }
+
+    public void setSimpleValueObjectTwice(SimpleValueObject first, SimpleValueObject second)
+    {
+        setSimpleValue(first.getValue());
+        setSimpleValue(second.getValue());
+    }
+
+
     public SimpleValueObject getSimpleValueObject()
     {
         return  new SimpleValueObject(simpleValue);

@@ -1,6 +1,7 @@
 package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,11 +24,20 @@ public class JavalinAdapterTest
         var defaultHost = "localhost";
         var simpleApplicationService = new SimpleApplicationService(42);
         var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
+        var restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
+
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
         //Act
-        String result = sendGETCommand(defaultHost, defaultPort);
+        var restPath = restfullHTTPGenerater.
+                getGETCommands().
+                stream().
+                filter(element -> element.getResourcePath().contains("getSimpleValue")).
+                findFirst();
+        assertTrue(restPath.isPresent());
+
+        String result = sendGETCommand(defaultHost, defaultPort, restPath.get());
 
         //Assert
         assertEquals(42, simpleApplicationService.getSimpleValue());
@@ -43,11 +53,20 @@ public class JavalinAdapterTest
         var defaultPort = 7000;
         var simpleApplicationService = new SimpleApplicationService(42);
         var objectUnderTest = new JavalinAdapter(defaultPort);
+        var restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
+
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
+        var restPath = restfullHTTPGenerater.
+                getGETCommands().
+                stream().
+                filter(element -> element.getResourcePath().contains("getSimpleValue")).
+                findFirst();
+        assertTrue(restPath.isPresent());
+
         //Act
-        String result =sendGETCommand(defaultPort);
+        String result =sendGETCommand(defaultPort, restPath.get());
 
         //Assert
         assertEquals(42, simpleApplicationService.getSimpleValue());
@@ -74,21 +93,29 @@ public class JavalinAdapterTest
         sendPOSTCommand(defaultHost, defaultPort, Integer.toString(newValue));
 
         //Assert
+        var restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
+        var restPath = restfullHTTPGenerater.
+                getGETCommands().
+                stream().
+                filter(element -> element.getResourcePath().contains("getSimpleValue")).
+                findFirst();
+        assertTrue(restPath.isPresent());
+        
         assertEquals(newValue, simpleApplicationService.getSimpleValue());
-        assertEquals(Integer.toString(newValue), sendGETCommand(defaultHost, defaultPort));
+        assertEquals(Integer.toString(newValue), sendGETCommand(defaultHost, defaultPort, restPath.get()));
 
         objectUnderTest.stop();
     }
 
-    public  String sendGETCommand(int defaultPort) throws IOException {
-        return sendGETCommand("localhost", defaultPort);
+    public  String sendGETCommand(int defaultPort, RESTfulHTTPGenerator.RESTfulHTTP restPath) throws IOException {
+        return sendGETCommand("localhost", defaultPort, restPath);
     }
 
 
-    public  String sendGETCommand(String defaultHost, int defaultPort) throws IOException
+    public  String sendGETCommand(String defaultHost, int defaultPort, RESTfulHTTPGenerator.RESTfulHTTP restPath) throws IOException
     {
 
-        URL url = new URL("http://" + defaultHost + ":" + defaultPort + "/SimpleApplicationService/getSimpleValue");
+        URL url = new URL("http://" + defaultHost + ":" + defaultPort + restPath.getResourcePath());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setDoOutput(true);
         conn.setRequestMethod("GET");
@@ -109,7 +136,7 @@ public class JavalinAdapterTest
         return output;
     }
 
-    public  String sendPOSTCommand(String defaultHost, int defaultPort, String value) throws IOException
+    public void sendPOSTCommand(String defaultHost, int defaultPort, String value) throws IOException
     {
 
         URL url = new URL("http://" + defaultHost + ":" + defaultPort + "/SimpleApplicationService/setSimpleValue");
@@ -128,13 +155,8 @@ public class JavalinAdapterTest
                     + conn.getResponseCode());
         }
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(
-                (conn.getInputStream())));
-
-        String output = br.readLine();
-
+     
         conn.disconnect();
 
-        return output;
     }
 }
