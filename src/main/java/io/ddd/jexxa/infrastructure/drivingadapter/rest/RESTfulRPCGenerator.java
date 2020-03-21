@@ -23,7 +23,7 @@ class RESTfulRPCGenerator
     public RESTfulRPCGenerator(Object object)
     {
         this.object = object;
-        validateUniqeURI();
+        validateUniqueURI();
     }
 
     
@@ -105,14 +105,16 @@ class RESTfulRPCGenerator
         return result;
     }
 
-    private void validateUniqeURI()
+    private void validateUniqueURI()
     {
         List<Method> publicMethods = getPublicMethods(object.getClass());
         List<String> methodNames = new ArrayList<>();
 
         publicMethods.forEach(element -> methodNames.add(generateURI(element)));
 
-        List<String> uniqueNames = new ArrayList<>( new HashSet<>(methodNames) ); // Make a unique list by converting it into a HashSet and then back to a list
+        // Make a unique list (by converting it into an HashSet) and compare its size with size of publicMethods.
+        // If it is not equal URIs are not unique
+        List<String> uniqueNames = new ArrayList<>( new HashSet<>(methodNames) );
 
         if (uniqueNames.size() != methodNames.size() ) {
             throw new IllegalArgumentException("Mehtod names are not unique of Object " + object.getClass().getSimpleName());
