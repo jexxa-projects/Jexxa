@@ -10,7 +10,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
 import org.junit.Test;
@@ -104,7 +109,7 @@ public class JavalinAdapterTest
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
                 findFirst();
         assertTrue(responsePath.isPresent());
-        
+
         assertEquals(newValue, simpleApplicationService.getSimpleValue());
         assertEquals(Integer.toString(newValue), sendGETCommand(responsePath.get()));
 
@@ -143,6 +148,42 @@ public class JavalinAdapterTest
 
         assertEquals(newValue.getValue(), simpleApplicationService.getSimpleValueObject().getValue());
         assertEquals(Integer.toString(newValue.getValue()), sendGETCommand(responsePath.get()));
+
+        objectUnderTest.stop();
+    }
+
+    @Test
+    public void testJavalinPOSTCommandMultipleValueObject() throws IOException
+    {
+        //Arrange
+        var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
+        objectUnderTest.register(simpleApplicationService);
+        objectUnderTest.start();
+
+        SimpleValueObject[] paramList = {new SimpleValueObject(44), new SimpleValueObject(88)};
+
+        //Act
+        var restPath = restfullHTTPGenerater.
+                getPOSTCommands().
+                stream().
+                filter(element -> element.getResourcePath().endsWith("setSimpleValueObjectTwice")).
+                findFirst();
+        assertTrue(restPath.isPresent());
+
+
+        sendPOSTCommand(restPath.get(), paramList);
+
+        //Assert
+        var restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
+        var responsePath = restfullHTTPGenerater.
+                getGETCommands().
+                stream().
+                filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
+                findFirst();
+        assertTrue(responsePath.isPresent());
+
+        assertEquals(paramList[1].getValue(), simpleApplicationService.getSimpleValueObject().getValue());
+        assertEquals(Integer.toString(paramList[1].getValue()), sendGETCommand(responsePath.get()));
 
         objectUnderTest.stop();
     }
@@ -194,4 +235,22 @@ public class JavalinAdapterTest
         conn.disconnect();
 
     }
+
+    private void sendPOSTCommand(RESTfulHTTPGenerator.RESTfulHTTP restPath, Object[] parameterList) throws IOException
+    {
+        final Gson gson = new Gson();
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("[");
+        stringBuilder.append(gson.toJson(parameterList[0]));
+        stringBuilder.append(",");
+        stringBuilder.append(gson.toJson(parameterList[1]));
+        stringBuilder.append("]");
+
+        System.out.println(stringBuilder.toString());
+
+        sendPOSTCommand(restPath, stringBuilder.toString());
+    }
+
 }
