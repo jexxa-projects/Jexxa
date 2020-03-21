@@ -60,13 +60,10 @@ public class RESTfulRPCGeneratorTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void invlalidApplicationService()
+    public void invalidApplicationService()
     {
-        //Arrange
-        var unsupportedApplicationService = new UnsupportedApplicationService();
-
-        //Act
-        new RESTfulRPCGenerator(unsupportedApplicationService);
+        //Act / Assert
+        new RESTfulRPCGenerator(new UnsupportedApplicationService());
 
     }
 
