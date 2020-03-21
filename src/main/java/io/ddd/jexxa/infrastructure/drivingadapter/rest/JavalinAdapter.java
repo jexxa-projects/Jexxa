@@ -40,7 +40,7 @@ public class JavalinAdapter implements IDrivingAdapter
 
     private void registerGETMethods(Object object)
     {
-        var methodList = new RESTfulHTTPGenerator(object).getGETCommands();
+        var methodList = new RESTfulRPCGenerator(object).getGETCommands();
 
         methodList.forEach( element -> javalin.get(element.getResourcePath(),
                                                  ctx -> ctx.json(element.getMethod().invoke(object))));
@@ -48,7 +48,7 @@ public class JavalinAdapter implements IDrivingAdapter
 
     private void registerPOSTMethods(Object object)
     {
-        var methodList = new RESTfulHTTPGenerator(object).getPOSTCommands();
+        var methodList = new RESTfulRPCGenerator(object).getPOSTCommands();
 
         methodList.forEach( element -> javalin.post(element.getResourcePath(),
                 ctx -> {

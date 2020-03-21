@@ -14,11 +14,11 @@ import java.util.List;
  *  * If a method has no return value 'void' then it is mapped to a POST method
  *  * If a method has a return value != 'void' then it is mapped to a GET method 
  */
-class RESTfulHTTPGenerator
+class RESTfulRPCGenerator
 {
     Object object;
 
-    public RESTfulHTTPGenerator(Object object)
+    public RESTfulRPCGenerator(Object object)
     {
         this.object = object;
     }

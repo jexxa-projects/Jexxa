@@ -10,12 +10,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
 import org.junit.Test;
@@ -25,7 +21,7 @@ public class JavalinAdapterTest
     int defaultPort = 7000;
     String defaultHost = "localhost";
     SimpleApplicationService simpleApplicationService = new SimpleApplicationService(42);
-    RESTfulHTTPGenerator restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
+    RESTfulRPCGenerator restfullHTTPGenerater = new RESTfulRPCGenerator(simpleApplicationService);
 
     @Test
     public void testJavalinGETCommand() throws IOException
@@ -100,7 +96,7 @@ public class JavalinAdapterTest
         sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
+        var restfullHTTPGenerater = new RESTfulRPCGenerator(simpleApplicationService);
         var responsePath = restfullHTTPGenerater.
                 getGETCommands().
                 stream().
@@ -136,7 +132,7 @@ public class JavalinAdapterTest
         sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
+        var restfullHTTPGenerater = new RESTfulRPCGenerator(simpleApplicationService);
         var responsePath = restfullHTTPGenerater.
                 getGETCommands().
                 stream().
@@ -172,7 +168,7 @@ public class JavalinAdapterTest
         sendPOSTCommand(restPath.get(), paramList);
 
         //Assert
-        var restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
+        var restfullHTTPGenerater = new RESTfulRPCGenerator(simpleApplicationService);
         var responsePath = restfullHTTPGenerater.
                 getGETCommands().
                 stream().
@@ -186,7 +182,7 @@ public class JavalinAdapterTest
         objectUnderTest.stop();
     }
 
-    private  String sendGETCommand(RESTfulHTTPGenerator.RESTfulHTTP restPath) throws IOException
+    private  String sendGETCommand(RESTfulRPCGenerator.RESTfulHTTP restPath) throws IOException
     {
 
         URL url = new URL("http://" + defaultHost + ":" + defaultPort + restPath.getResourcePath());
@@ -211,7 +207,7 @@ public class JavalinAdapterTest
     }
 
 
-    private void sendPOSTCommand(RESTfulHTTPGenerator.RESTfulHTTP restPath, Object parameter) throws IOException
+    private void sendPOSTCommand(RESTfulRPCGenerator.RESTfulHTTP restPath, Object parameter) throws IOException
     {
         final Gson gson = new Gson();
         System.out.println(gson.toJson(parameter));
@@ -219,7 +215,7 @@ public class JavalinAdapterTest
         sendPOSTCommand(restPath.getResourcePath(), gson.toJson(parameter));
     }
 
-    private void sendPOSTCommand(RESTfulHTTPGenerator.RESTfulHTTP restPath, Object[] parameterList) throws IOException
+    private void sendPOSTCommand(RESTfulRPCGenerator.RESTfulHTTP restPath, Object[] parameterList) throws IOException
     {
         final Gson gson = new Gson();
         System.out.println(gson.toJson(parameterList));

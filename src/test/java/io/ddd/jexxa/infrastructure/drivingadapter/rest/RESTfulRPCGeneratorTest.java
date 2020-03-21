@@ -8,14 +8,14 @@ import static org.junit.Assert.assertTrue;
 import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import org.junit.Test;
 
-public class RESTfulHTTPGeneratorTest
+public class RESTfulRPCGeneratorTest
 {
 
     @Test
     public void validateGETCommands()
     {
         var defaultObject = new SimpleApplicationService(42);
-        var objectUnderTest = new RESTfulHTTPGenerator(defaultObject);
+        var objectUnderTest = new RESTfulRPCGenerator(defaultObject);
 
         var result = objectUnderTest.getGETCommands();
         
@@ -23,7 +23,7 @@ public class RESTfulHTTPGeneratorTest
         assertFalse(result.isEmpty());
 
         //Check that all commands are marked as GET
-        result.forEach(element -> assertEquals(RESTfulHTTPGenerator.RESTfulHTTP.HTTPCommand.GET,
+        result.forEach(element -> assertEquals(RESTfulRPCGenerator.RESTfulHTTP.HTTPCommand.GET,
                 element.getHTTPCommand()));
 
         //Check URIs
@@ -39,7 +39,7 @@ public class RESTfulHTTPGeneratorTest
     public void validatePOSTCommands()
     {
         var defaultObject = new SimpleApplicationService(42);
-        var objectUnderTest = new RESTfulHTTPGenerator(defaultObject);
+        var objectUnderTest = new RESTfulRPCGenerator(defaultObject);
 
         var result = objectUnderTest.getPOSTCommands();
 
@@ -47,7 +47,7 @@ public class RESTfulHTTPGeneratorTest
         assertFalse(result.isEmpty());
 
         //Check that all commands are marked as GET
-        result.forEach(element -> assertEquals(RESTfulHTTPGenerator.RESTfulHTTP.HTTPCommand.POST,
+        result.forEach(element -> assertEquals(RESTfulRPCGenerator.RESTfulHTTP.HTTPCommand.POST,
                 element.getHTTPCommand()));
 
         //Check URIs
