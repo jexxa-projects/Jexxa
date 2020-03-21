@@ -23,7 +23,7 @@ public class RESTfulRPCGeneratorTest
         assertFalse(result.isEmpty());
 
         //Check that all commands are marked as GET
-        result.forEach(element -> assertEquals(RESTfulRPCGenerator.RESTfulHTTP.HTTPCommand.GET,
+        result.forEach(element -> assertEquals(RESTfulRPCGenerator.RESTfulRPC.HTTPCommand.GET,
                 element.getHTTPCommand()));
 
         //Check URIs
@@ -47,7 +47,7 @@ public class RESTfulRPCGeneratorTest
         assertFalse(result.isEmpty());
 
         //Check that all commands are marked as GET
-        result.forEach(element -> assertEquals(RESTfulRPCGenerator.RESTfulHTTP.HTTPCommand.POST,
+        result.forEach(element -> assertEquals(RESTfulRPCGenerator.RESTfulRPC.HTTPCommand.POST,
                 element.getHTTPCommand()));
 
         //Check URIs

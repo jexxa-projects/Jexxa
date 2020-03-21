@@ -182,7 +182,7 @@ public class JavalinAdapterTest
         objectUnderTest.stop();
     }
 
-    private  String sendGETCommand(RESTfulRPCGenerator.RESTfulHTTP restPath) throws IOException
+    private  String sendGETCommand(RESTfulRPCGenerator.RESTfulRPC restPath) throws IOException
     {
 
         URL url = new URL("http://" + defaultHost + ":" + defaultPort + restPath.getResourcePath());
@@ -207,7 +207,7 @@ public class JavalinAdapterTest
     }
 
 
-    private void sendPOSTCommand(RESTfulRPCGenerator.RESTfulHTTP restPath, Object parameter) throws IOException
+    private void sendPOSTCommand(RESTfulRPCGenerator.RESTfulRPC restPath, Object parameter) throws IOException
     {
         final Gson gson = new Gson();
         System.out.println(gson.toJson(parameter));
@@ -215,7 +215,7 @@ public class JavalinAdapterTest
         sendPOSTCommand(restPath.getResourcePath(), gson.toJson(parameter));
     }
 
-    private void sendPOSTCommand(RESTfulRPCGenerator.RESTfulHTTP restPath, Object[] parameterList) throws IOException
+    private void sendPOSTCommand(RESTfulRPCGenerator.RESTfulRPC restPath, Object[] parameterList) throws IOException
     {
         final Gson gson = new Gson();
         System.out.println(gson.toJson(parameterList));

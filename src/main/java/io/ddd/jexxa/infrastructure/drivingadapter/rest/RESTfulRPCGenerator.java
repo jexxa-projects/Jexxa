@@ -24,7 +24,7 @@ class RESTfulRPCGenerator
     }
 
     
-    public static class RESTfulHTTP
+    public static class RESTfulRPC
     {
         enum HTTPCommand {GET, POST}
         
@@ -32,7 +32,7 @@ class RESTfulRPCGenerator
         private Method method;
         private HTTPCommand httpCommand;
 
-        RESTfulHTTP(HTTPCommand httpCommand, String resourcePath, Method method) {
+        RESTfulRPC(HTTPCommand httpCommand, String resourcePath, Method method) {
             this.httpCommand = httpCommand;
             this.resourcePath = resourcePath;
             this.method = method;
@@ -54,16 +54,16 @@ class RESTfulRPCGenerator
         }
     }
 
-    List<RESTfulHTTP> getGETCommands() {
-       var result = new ArrayList<RESTfulHTTP>();
+    List<RESTfulRPC> getGETCommands() {
+       var result = new ArrayList<RESTfulRPC>();
 
        List<Method> publicMethods = getPublicMethods(object.getClass());
        publicMethods
                .stream()
                .filter( element -> !(element.getReturnType().equals(void.class)))
                .forEach( element2 -> result.add(
-                       new RESTfulHTTP(
-                               RESTfulHTTP.HTTPCommand.GET, // If return type != void => GET method
+                       new RESTfulRPC(
+                               RESTfulRPC.HTTPCommand.GET, // If return type != void => GET method
                                generateURI(element2),
                                element2)
                        ));
@@ -72,16 +72,16 @@ class RESTfulRPCGenerator
     }
 
 
-    List<RESTfulHTTP> getPOSTCommands() {
-        var result = new ArrayList<RESTfulHTTP>();
+    List<RESTfulRPC> getPOSTCommands() {
+        var result = new ArrayList<RESTfulRPC>();
 
         List<Method> publicMethods = getPublicMethods(object.getClass());
         publicMethods
                 .stream()
                 .filter( element -> element.getReturnType().equals(void.class)) // If return type == void => POST method
                 .forEach( element -> result.add(
-                        new RESTfulHTTP(
-                                RESTfulHTTP.HTTPCommand.POST,
+                        new RESTfulRPC(
+                                RESTfulRPC.HTTPCommand.POST,
                                 generateURI(element),
                                 element)
                 ));
