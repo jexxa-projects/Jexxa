@@ -61,11 +61,11 @@ class RESTfulRPCGenerator
        publicMethods
                .stream()
                .filter( element -> !(element.getReturnType().equals(void.class)))
-               .forEach( element2 -> result.add(
+               .forEach( element -> result.add(
                        new RESTfulRPC(
                                RESTfulRPC.HTTPCommand.GET, // If return type != void => GET method
-                               generateURI(element2),
-                               element2)
+                               generateURI(element),
+                               element)
                        ));
 
        return result;
