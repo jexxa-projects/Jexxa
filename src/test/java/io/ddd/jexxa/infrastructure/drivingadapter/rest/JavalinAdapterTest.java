@@ -12,7 +12,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import io.ddd.jexxa.applicationservice.SimpleApplicationService;
-import io.ddd.jexxa.core.JsonConverter;
 import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
 import org.junit.Test;
 

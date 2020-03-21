@@ -1,4 +1,4 @@
-package io.ddd.jexxa.core;
+package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 
 import java.io.Reader;
 import java.io.Writer;
