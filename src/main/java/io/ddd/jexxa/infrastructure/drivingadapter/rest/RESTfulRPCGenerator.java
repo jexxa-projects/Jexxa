@@ -3,6 +3,7 @@ package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -12,7 +13,8 @@ import java.util.List;
  * This implementation uses following convention over configuration approach:
  *  * Methods from base class Object are ignored 
  *  * If a method has no return value 'void' then it is mapped to a POST method
- *  * If a method has a return value != 'void' then it is mapped to a GET method 
+ *  * If a method has a return value != 'void' then it is mapped to a GET method
+ *  * An object must have unique method names. Any method overloading is not supported   
  */
 class RESTfulRPCGenerator
 {
@@ -21,6 +23,7 @@ class RESTfulRPCGenerator
     public RESTfulRPCGenerator(Object object)
     {
         this.object = object;
+        validateUniqeURI();
     }
 
     
@@ -102,5 +105,17 @@ class RESTfulRPCGenerator
         return result;
     }
 
+    private void validateUniqeURI()
+    {
+        List<Method> publicMethods = getPublicMethods(object.getClass());
+        List<String> methodNames = new ArrayList<>();
 
+        publicMethods.forEach(element -> methodNames.add(generateURI(element)));
+
+        List<String> uniqueNames = new ArrayList<>( new HashSet<>(methodNames) ); // Make a unique list by converting it into a HashSet and then back to a list
+
+        if (uniqueNames.size() != methodNames.size() ) {
+            throw new IllegalArgumentException("Mehtod names are not unique of Object " + object.getClass().getSimpleName());
+        }
+    }
 }

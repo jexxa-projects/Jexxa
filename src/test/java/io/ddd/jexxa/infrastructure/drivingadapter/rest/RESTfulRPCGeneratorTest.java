@@ -3,9 +3,9 @@ package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
 
 import io.ddd.jexxa.applicationservice.SimpleApplicationService;
+import io.ddd.jexxa.applicationservice.UnsupportedApplicationService;
 import org.junit.Test;
 
 public class RESTfulRPCGeneratorTest
@@ -43,7 +43,7 @@ public class RESTfulRPCGeneratorTest
 
         var result = objectUnderTest.getPOSTCommands();
 
-        //Check all conventions as defined in {@link RESTfulHTTPGenerator}.
+        //Check all conventions as defined in {@link RESTfulRPCGenerator}.
         assertFalse(result.isEmpty());
 
         //Check that all commands are marked as GET
@@ -56,6 +56,17 @@ public class RESTfulRPCGeneratorTest
 
         //Check return types are NOT void
         result.forEach(element -> assertEquals(void.class, element.getMethod().getReturnType()));
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void invlalidApplicationService()
+    {
+        //Arrange
+        var unsupportedApplicationService = new UnsupportedApplicationService();
+
+        //Act
+        new RESTfulRPCGenerator(unsupportedApplicationService);
 
     }
 

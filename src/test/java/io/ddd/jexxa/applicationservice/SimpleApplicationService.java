@@ -33,7 +33,7 @@ public class SimpleApplicationService
         setSimpleValue(first.getValue());
         setSimpleValue(second.getValue());
     }
-
+    
 
     public SimpleValueObject getSimpleValueObject()
     {
