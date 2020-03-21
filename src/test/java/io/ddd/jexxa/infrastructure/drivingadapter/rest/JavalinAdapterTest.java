@@ -32,7 +32,6 @@ public class JavalinAdapterTest
     {
         //Arrange
         var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
-
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
@@ -58,7 +57,6 @@ public class JavalinAdapterTest
     {
         //Arrange
         var objectUnderTest = new JavalinAdapter(defaultPort);
-
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
@@ -70,7 +68,7 @@ public class JavalinAdapterTest
         assertTrue(restPath.isPresent());
 
         //Act
-        String result =sendGETCommand(restPath.get());
+        String result = sendGETCommand(restPath.get());
 
         //Assert
         assertEquals(42, simpleApplicationService.getSimpleValue());
@@ -99,7 +97,7 @@ public class JavalinAdapterTest
         assertTrue(restPath.isPresent());
 
 
-        sendPOSTCommand(restPath.get(), Integer.toString(newValue));
+        sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
         var restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
@@ -135,7 +133,7 @@ public class JavalinAdapterTest
         assertTrue(restPath.isPresent());
 
 
-        sendPOSTCommand(restPath.get(), JsonConverter.toJson(newValue));
+        sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
         var restfullHTTPGenerater = new RESTfulHTTPGenerator(simpleApplicationService);
@@ -212,10 +210,28 @@ public class JavalinAdapterTest
         return output;
     }
 
-    private void sendPOSTCommand(RESTfulHTTPGenerator.RESTfulHTTP restPath, String value) throws IOException
+
+    private void sendPOSTCommand(RESTfulHTTPGenerator.RESTfulHTTP restPath, Object parameter) throws IOException
+    {
+        final Gson gson = new Gson();
+        System.out.println(gson.toJson(parameter));
+
+        sendPOSTCommand(restPath.getResourcePath(), gson.toJson(parameter));
+    }
+
+    private void sendPOSTCommand(RESTfulHTTPGenerator.RESTfulHTTP restPath, Object[] parameterList) throws IOException
+    {
+        final Gson gson = new Gson();
+        System.out.println(gson.toJson(parameterList));
+
+        sendPOSTCommand(restPath.getResourcePath(), gson.toJson(parameterList));
+    }
+
+
+    private void sendPOSTCommand(String resourcePath, String value) throws IOException
     {
 
-        URL url = new URL("http://" + defaultHost + ":" + defaultPort + restPath.getResourcePath());
+        URL url = new URL("http://" + defaultHost + ":" + defaultPort + resourcePath);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");
@@ -231,26 +247,7 @@ public class JavalinAdapterTest
                     + conn.getResponseCode());
         }
 
-     
+
         conn.disconnect();
-
     }
-
-    private void sendPOSTCommand(RESTfulHTTPGenerator.RESTfulHTTP restPath, Object[] parameterList) throws IOException
-    {
-        final Gson gson = new Gson();
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("[");
-        stringBuilder.append(gson.toJson(parameterList[0]));
-        stringBuilder.append(",");
-        stringBuilder.append(gson.toJson(parameterList[1]));
-        stringBuilder.append("]");
-
-        System.out.println(stringBuilder.toString());
-
-        sendPOSTCommand(restPath, stringBuilder.toString());
-    }
-
 }
