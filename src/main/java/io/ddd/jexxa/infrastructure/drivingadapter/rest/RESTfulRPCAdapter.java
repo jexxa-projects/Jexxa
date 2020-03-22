@@ -53,7 +53,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     
     private void registerGETMethods(Object object)
     {
-        var methodList = new RESTfulRPCConvention(object).getGETCommands();
+        var methodList = new RESTfulRPCModel(object).getGETCommands();
 
         methodList.forEach(element -> javalin.get(element.getResourcePath(),
                 ctx -> {
@@ -67,7 +67,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void registerPOSTMethods(Object object)
     {
-        var methodList = new RESTfulRPCConvention(object).getPOSTCommands();
+        var methodList = new RESTfulRPCModel(object).getPOSTCommands();
 
         methodList.forEach( element -> javalin.post(element.getResourcePath(),
                 ctx -> {

@@ -16,7 +16,6 @@ import java.nio.charset.StandardCharsets;
 import com.google.gson.Gson;
 import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
-import io.ddd.stereotype.applicationcore.ApplicationService;
 import org.junit.Test;
 
 public class RESTfulRPCAdapterTest
@@ -25,7 +24,7 @@ public class RESTfulRPCAdapterTest
     String defaultHost = "localhost";
     int defaultValue = 42;
     SimpleApplicationService simpleApplicationService = new SimpleApplicationService(defaultValue);
-    RESTfulRPCConvention resTfulRPCConvention = new RESTfulRPCConvention(simpleApplicationService);
+    RESTfulRPCModel resTfulRPCModel = new RESTfulRPCModel(simpleApplicationService);
 
 
     @Test // RPC call test: int getSimpleValue()
@@ -37,7 +36,7 @@ public class RESTfulRPCAdapterTest
         objectUnderTest.start();
 
         //Act
-        var restPath = resTfulRPCConvention.
+        var restPath = resTfulRPCModel.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -62,7 +61,7 @@ public class RESTfulRPCAdapterTest
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
-        var restPath = resTfulRPCConvention.
+        var restPath = resTfulRPCModel.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -92,7 +91,7 @@ public class RESTfulRPCAdapterTest
         //Act
         var newValue = 44;
 
-        var restPath = resTfulRPCConvention.
+        var restPath = resTfulRPCModel.
                 getPOSTCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("setSimpleValue")).
@@ -103,7 +102,7 @@ public class RESTfulRPCAdapterTest
         sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var responsePath = resTfulRPCConvention.
+        var responsePath = resTfulRPCModel.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -127,7 +126,7 @@ public class RESTfulRPCAdapterTest
         var newValue = new SimpleValueObject(44);
         
         //Act
-        var restPath = resTfulRPCConvention.
+        var restPath = resTfulRPCModel.
                 getPOSTCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("setSimpleValueObject")).
@@ -138,7 +137,7 @@ public class RESTfulRPCAdapterTest
         sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var responsePath = resTfulRPCConvention.
+        var responsePath = resTfulRPCModel.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -162,7 +161,7 @@ public class RESTfulRPCAdapterTest
         SimpleValueObject[] paramList = {new SimpleValueObject(44), new SimpleValueObject(88)};
 
         //Act
-        var restPath = resTfulRPCConvention.
+        var restPath = resTfulRPCModel.
                 getPOSTCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("setSimpleValueObjectTwice")).
@@ -173,7 +172,7 @@ public class RESTfulRPCAdapterTest
         String returnValue = sendPOSTCommand(restPath.get(), paramList);
 
         //Assert
-        var responsePath = resTfulRPCConvention.
+        var responsePath = resTfulRPCModel.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -198,7 +197,7 @@ public class RESTfulRPCAdapterTest
         var newValue = 44;
 
         //Act
-        var restPath = resTfulRPCConvention.
+        var restPath = resTfulRPCModel.
                 getPOSTCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("setGetSimpleValue")).
@@ -209,7 +208,7 @@ public class RESTfulRPCAdapterTest
         String returnValue = sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var responsePath = resTfulRPCConvention.
+        var responsePath = resTfulRPCModel.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -233,7 +232,7 @@ public class RESTfulRPCAdapterTest
         objectUnderTest.start();
 
         //Act
-        var restPath = resTfulRPCConvention.
+        var restPath = resTfulRPCModel.
                 getPOSTCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("throwExceptionTest")).
@@ -249,7 +248,7 @@ public class RESTfulRPCAdapterTest
         }
     }
 
-    private  String sendGETCommand(RESTfulRPCConvention.RESTfulRPC restPath) throws IOException
+    private  String sendGETCommand(RESTfulRPCModel.RESTfulRPC restPath) throws IOException
     {
 
         URL url = new URL("http://" + defaultHost + ":" + defaultPort + restPath.getResourcePath());
@@ -274,25 +273,25 @@ public class RESTfulRPCAdapterTest
     }
 
 
-    private String sendPOSTCommand(RESTfulRPCConvention.RESTfulRPC restPath) throws IOException, SimpleApplicationService.SimpleApplicationException
+    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPC restPath) throws IOException, SimpleApplicationService.SimpleApplicationException
     {
         return sendPOSTCommand(restPath, "");
     }
 
-    private String sendPOSTCommand(RESTfulRPCConvention.RESTfulRPC restPath, Object parameter) throws IOException, SimpleApplicationService.SimpleApplicationException
+    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPC restPath, Object parameter) throws IOException, SimpleApplicationService.SimpleApplicationException
     {
         final Gson gson = new Gson();
         return sendPOSTCommand(restPath, gson.toJson(parameter));
     }
 
-    private String sendPOSTCommand(RESTfulRPCConvention.RESTfulRPC restPath, Object[] parameterList) throws IOException, SimpleApplicationService.SimpleApplicationException
+    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPC restPath, Object[] parameterList) throws IOException, SimpleApplicationService.SimpleApplicationException
     {
         final Gson gson = new Gson();
         return sendPOSTCommand(restPath, gson.toJson(parameterList));
     }
 
 
-    private String sendPOSTCommand(RESTfulRPCConvention.RESTfulRPC restfulRPC,  String value) throws IOException, SimpleApplicationService.SimpleApplicationException
+    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPC restfulRPC, String value) throws IOException, SimpleApplicationService.SimpleApplicationException
     {
 
         URL url = new URL("http://" + defaultHost + ":" + defaultPort + restfulRPC.getResourcePath());
