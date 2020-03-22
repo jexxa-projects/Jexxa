@@ -1,17 +1,15 @@
 package io.ddd.jexxa.applicationservice;
 
 
-import javax.lang.model.util.SimpleAnnotationValueVisitor9;
-
 import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
 import io.ddd.stereotype.applicationcore.ApplicationService;
 
 @ApplicationService
 public class SimpleApplicationService
 {
-    public class SimpleApplicationExpcetion extends Exception
+    public class SimpleApplicationException extends Exception
     {
-        public SimpleApplicationExpcetion(String information)
+        public SimpleApplicationException(String information)
         {
             super(information);
         }
@@ -35,9 +33,9 @@ public class SimpleApplicationService
         return oldValue;
     }
 
-    public void throwExcptionTest() throws SimpleApplicationExpcetion
+    public void throwExceptionTest() throws SimpleApplicationException
     {
-        throw new SimpleApplicationExpcetion("TestException");
+        throw new SimpleApplicationException("TestException");
     }
 
     public void setSimpleValue(int simpleValue)
