@@ -16,6 +16,8 @@ import java.nio.charset.StandardCharsets;
 import com.google.gson.Gson;
 import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class RESTfulRPCMethodAdapterTest
@@ -26,37 +28,28 @@ public class RESTfulRPCMethodAdapterTest
     SimpleApplicationService simpleApplicationService = new SimpleApplicationService(defaultValue);
     RESTfulRPCModel resTfulRPCModel = new RESTfulRPCModel(simpleApplicationService);
 
+    RESTfulRPCAdapter objectUnderTest;
+
+    @Before
+    public void setupTests(){
+        //Setup
+        objectUnderTest = new RESTfulRPCAdapter(defaultHost, defaultPort);
+        objectUnderTest.register(simpleApplicationService);
+        objectUnderTest.start();
+    }
+
+    @After
+    public void tearDownTests(){
+        //tear down
+        objectUnderTest.stop();
+        objectUnderTest = null;
+    }
+
 
     @Test // RPC call test: int getSimpleValue()
     public void testGETCommand() throws IOException
     {
         //Arrange
-        var objectUnderTest = new RESTfulRPCAdapter(defaultHost, defaultPort);
-        objectUnderTest.register(simpleApplicationService);
-        objectUnderTest.start();
-
-        //Act
-        var restPath = resTfulRPCModel.getGETCommand("getSimpleValue");
-        assertTrue(restPath.isPresent());
-
-        String result = sendGETCommand(restPath.get());
-
-        //Assert
-        assertNotNull(result);
-        assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
-        assertEquals(Integer.toString(simpleApplicationService.getSimpleValue()), result );
-
-        objectUnderTest.stop();
-    }
-
-    @Test // RPC call test: int getSimpleValue()
-    public void testGETCommandDefaultHostname() throws IOException
-    {
-        //Arrange
-        var objectUnderTest = new RESTfulRPCAdapter(defaultPort);
-        objectUnderTest.register(simpleApplicationService);
-        objectUnderTest.start();
-
         var restPath = resTfulRPCModel.getGETCommand("getSimpleValue");
         assertTrue(restPath.isPresent());
 
@@ -67,8 +60,6 @@ public class RESTfulRPCMethodAdapterTest
         assertNotNull(result);
         assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
         assertEquals(Integer.toString(simpleApplicationService.getSimpleValue()), result );
-
-        objectUnderTest.stop();
     }
 
 
@@ -76,131 +67,86 @@ public class RESTfulRPCMethodAdapterTest
     public void testPOSTCommandWithOneAttribute() throws IOException, SimpleApplicationService.SimpleApplicationException
     {
         //Arrange
-        var objectUnderTest = new RESTfulRPCAdapter(defaultHost, defaultPort);
-        objectUnderTest.register(simpleApplicationService);
-        objectUnderTest.start();
-
-        //Act
         var newValue = 44;
-
         var restPath = resTfulRPCModel.getPOSTCommand("setSimpleValue");
+        var responsePath = resTfulRPCModel.getGETCommand("getSimpleValue");
         assertTrue(restPath.isPresent());
-
-
+        assertTrue(responsePath.isPresent());
+        
+        //Act
         sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var responsePath = resTfulRPCModel.getGETCommand("getSimpleValue");
-        assertTrue(responsePath.isPresent());
-
         assertEquals(newValue, simpleApplicationService.getSimpleValue());
         assertEquals(Integer.toString(newValue), sendGETCommand(responsePath.get()));
-
-        objectUnderTest.stop();
     }
 
     @Test // RPC call test: void setSimpleValueObject(SimpleValueObject(44))
     public void testPOSTCommandWithOneObject() throws IOException, SimpleApplicationService.SimpleApplicationException
     {
         //Arrange
-        var objectUnderTest = new RESTfulRPCAdapter(defaultHost, defaultPort);
-        objectUnderTest.register(simpleApplicationService);
-        objectUnderTest.start();
-
         var newValue = new SimpleValueObject(44);
-        
-        //Act
         var restPath = resTfulRPCModel.getPOSTCommand("setSimpleValueObject");
+        var responsePath = resTfulRPCModel.getGETCommand("getSimpleValue");
+        assertTrue(responsePath.isPresent());
         assertTrue(restPath.isPresent());
 
+        //Act
         sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var responsePath = resTfulRPCModel.getGETCommand("getSimpleValue");
-        assertTrue(responsePath.isPresent());
-
         assertEquals(newValue.getValue(), simpleApplicationService.getSimpleValueObject().getValue());
         assertEquals(Integer.toString(newValue.getValue()), sendGETCommand(responsePath.get()));
-
-        objectUnderTest.stop();
     }
 
     @Test // RPC call test: void setSimpleValueObjectTwice(SimpleValueObject(44), SimpleValueObject(88))
     public void testPOSTCommandWithTwoObjects() throws IOException, SimpleApplicationService.SimpleApplicationException
     {
         //Arrange
-        var objectUnderTest = new RESTfulRPCAdapter(defaultHost, defaultPort);
-        objectUnderTest.register(simpleApplicationService);
-        objectUnderTest.start();
-
-        SimpleValueObject[] paramList = {new SimpleValueObject(44), new SimpleValueObject(88)};
-
-        //Act
+        var paramList = new SimpleValueObject[]{new SimpleValueObject(44), new SimpleValueObject(88)};
         var restPath = resTfulRPCModel.getPOSTCommand("setSimpleValueObjectTwice");
+        var responsePath = resTfulRPCModel.getGETCommand("getSimpleValue");
+        assertTrue(responsePath.isPresent());
         assertTrue(restPath.isPresent());
 
-
+        //Act
         String returnValue = sendPOSTCommand(restPath.get(), paramList);
 
         //Assert
-        var responsePath = resTfulRPCModel.getGETCommand("getSimpleValue");
-        assertTrue(responsePath.isPresent());
-
         assertNull(returnValue);
         assertEquals(paramList[1].getValue(), simpleApplicationService.getSimpleValueObject().getValue());
         assertEquals(Integer.toString(paramList[1].getValue()), sendGETCommand(responsePath.get()));
-
-        objectUnderTest.stop();
     }
 
     @Test // RPC call test:  int setGetSimpleValue(44)
     public void testPOSTCommandWithReturnValue() throws IOException, SimpleApplicationService.SimpleApplicationException
     {
         //Arrange
-        var objectUnderTest = new RESTfulRPCAdapter(defaultHost, defaultPort);
-        objectUnderTest.register(simpleApplicationService);
-        objectUnderTest.start();
-
         var newValue = 44;
-
-        //Act
         var restPath = resTfulRPCModel.getPOSTCommand("setGetSimpleValue");
+        var responsePath = resTfulRPCModel.getGETCommand("getSimpleValue");
+        assertTrue(responsePath.isPresent());
         assertTrue(restPath.isPresent());
 
-
+        //Act
         String returnValue = sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var responsePath = resTfulRPCModel.getGETCommand("getSimpleValue");
-        assertTrue(responsePath.isPresent());
-
         assertNotNull(returnValue);
         assertEquals(Integer.toString(defaultValue), returnValue);
         assertEquals(newValue, simpleApplicationService.getSimpleValueObject().getValue());
         assertEquals(Integer.toString(newValue), sendGETCommand(responsePath.get()));
-
-        objectUnderTest.stop();
     }
 
     @Test(expected = SimpleApplicationService.SimpleApplicationException.class) // RPC call test:  void throwExceptionTest()
     public void testPOSTCommandWithException() throws IOException, SimpleApplicationService.SimpleApplicationException
     {
         //Arrange
-        var objectUnderTest = new RESTfulRPCAdapter(defaultHost, defaultPort);
-        objectUnderTest.register(simpleApplicationService);
-        objectUnderTest.start();
-
-        //Act
         var restPath = resTfulRPCModel.getPOSTCommand("throwExceptionTest");
         assertTrue(restPath.isPresent());
-        
-        try
-        {
-            sendPOSTCommand(restPath.get());
-        } catch (SimpleApplicationService.SimpleApplicationException e) {
-            objectUnderTest.stop();
-            throw e;
-        }
+
+        //Act
+        sendPOSTCommand(restPath.get());
     }
 
     private  String sendGETCommand(RESTfulRPCModel.RESTfulRPCMethod restPath) throws IOException
