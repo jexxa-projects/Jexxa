@@ -79,9 +79,10 @@ public class RESTfulRPCMethodAdapterTest
         assertTrue(responsePath.isPresent());
         
         //Act
-        sendPOSTCommand(restPath.get(), newValue);
+        var returnValue = sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
+        assertNull(returnValue);
         assertEquals(newValue, simpleApplicationService.getSimpleValue());
         assertEquals(Integer.toString(newValue), sendGETCommand(responsePath.get()));
     }
@@ -97,9 +98,10 @@ public class RESTfulRPCMethodAdapterTest
         assertTrue(restPath.isPresent());
 
         //Act
-        sendPOSTCommand(restPath.get(), newValue);
+        var returnValue = sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
+        assertNull(returnValue);
         assertEquals(newValue.getValue(), simpleApplicationService.getSimpleValueObject().getValue());
         assertEquals(Integer.toString(newValue.getValue()), sendGETCommand(responsePath.get()));
     }
@@ -151,7 +153,7 @@ public class RESTfulRPCMethodAdapterTest
         assertTrue(restPath.isPresent());
 
         //Act
-        sendPOSTCommand(restPath.get());
+        sendPOSTCommand(restPath.get(), "");
     }
 
     private  String sendGETCommand(RESTfulRPCModel.RESTfulRPCMethod restPath) throws IOException
@@ -177,12 +179,7 @@ public class RESTfulRPCMethodAdapterTest
 
         return output;
     }
-
-
-    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restPath) throws Throwable
-    {
-        return sendPOSTCommand(restPath, "");
-    }
+    
 
     private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restPath, Object parameter) throws Throwable
     {
