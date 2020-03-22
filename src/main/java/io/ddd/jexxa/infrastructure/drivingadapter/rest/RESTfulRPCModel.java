@@ -139,7 +139,7 @@ class RESTfulRPCModel
         List<String> uniqueNames = new ArrayList<>( new HashSet<>(methodNames) );
 
         if (uniqueNames.size() != methodNames.size() ) {
-            throw new IllegalArgumentException("Mehtod names are not unique of Object " + object.getClass().getSimpleName());
+            throw new IllegalArgumentException("Method names are not unique of Object " + object.getClass().getSimpleName());
         }
     }
 }
