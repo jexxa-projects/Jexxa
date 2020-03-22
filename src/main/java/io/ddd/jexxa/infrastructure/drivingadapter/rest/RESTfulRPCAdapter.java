@@ -2,6 +2,7 @@ package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import com.google.gson.Gson;
@@ -25,6 +26,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         checkNotNull(hostname);
         this.hostname = hostname;
         this.port = port;
+
+        registerExceptionHandler();
     }
 
     public RESTfulRPCAdapter(int port)
@@ -38,6 +41,16 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         registerPOSTMethods(object);
     }
 
+    private void registerExceptionHandler()
+    {
+        //Exception Handler for thrown Exception from methods
+        javalin.exception(InvocationTargetException.class, (e, ctx) -> {
+            Gson gson = new Gson();
+            ctx.result(gson.toJson(e.getCause()));
+            ctx.status(406);
+        });
+    }
+    
     private void registerGETMethods(Object object)
     {
         var methodList = new RESTfulRPCConvention(object).getGETCommands();
@@ -62,9 +75,9 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
                     Object[] methodParameters = deserializeParameters(htmlBody, element.getMethod());
 
-                    Object result = element.getMethod().invoke( object, methodParameters);
+                    Object result = element.getMethod().invoke(object, methodParameters);
 
-                    if ( result != null )
+                    if (result != null)
                     {
                         ctx.json(result);
                     }
