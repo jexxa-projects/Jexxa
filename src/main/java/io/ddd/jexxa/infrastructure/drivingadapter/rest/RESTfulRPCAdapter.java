@@ -45,9 +45,11 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     {
         //Exception Handler for thrown Exception from methods
         javalin.exception(InvocationTargetException.class, (e, ctx) -> {
+            //Exception is stated by a Json Array ["<Exception type>", "<serialized exception>"]
+            Object[] result = {e.getCause().getClass().getName(), e};
             Gson gson = new Gson();
-            ctx.result(gson.toJson(e.getCause()));
-            ctx.status(406);
+            ctx.result(gson.toJson(result));
+            ctx.status(400);
         });
     }
     

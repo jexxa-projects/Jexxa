@@ -9,11 +9,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
 import org.junit.After;
@@ -64,7 +69,7 @@ public class RESTfulRPCMethodAdapterTest
 
 
     @Test  // RPC call test: void setSimpleValue(44)
-    public void testPOSTCommandWithOneAttribute() throws IOException, SimpleApplicationService.SimpleApplicationException
+    public void testPOSTCommandWithOneAttribute() throws Throwable
     {
         //Arrange
         var newValue = 44;
@@ -82,7 +87,7 @@ public class RESTfulRPCMethodAdapterTest
     }
 
     @Test // RPC call test: void setSimpleValueObject(SimpleValueObject(44))
-    public void testPOSTCommandWithOneObject() throws IOException, SimpleApplicationService.SimpleApplicationException
+    public void testPOSTCommandWithOneObject() throws Throwable
     {
         //Arrange
         var newValue = new SimpleValueObject(44);
@@ -100,7 +105,7 @@ public class RESTfulRPCMethodAdapterTest
     }
 
     @Test // RPC call test: void setSimpleValueObjectTwice(SimpleValueObject(44), SimpleValueObject(88))
-    public void testPOSTCommandWithTwoObjects() throws IOException, SimpleApplicationService.SimpleApplicationException
+    public void testPOSTCommandWithTwoObjects() throws Throwable
     {
         //Arrange
         var paramList = new SimpleValueObject[]{new SimpleValueObject(44), new SimpleValueObject(88)};
@@ -119,7 +124,7 @@ public class RESTfulRPCMethodAdapterTest
     }
 
     @Test // RPC call test:  int setGetSimpleValue(44)
-    public void testPOSTCommandWithReturnValue() throws IOException, SimpleApplicationService.SimpleApplicationException
+    public void testPOSTCommandWithReturnValue() throws Throwable
     {
         //Arrange
         var newValue = 44;
@@ -139,7 +144,7 @@ public class RESTfulRPCMethodAdapterTest
     }
 
     @Test(expected = SimpleApplicationService.SimpleApplicationException.class) // RPC call test:  void throwExceptionTest()
-    public void testPOSTCommandWithException() throws IOException, SimpleApplicationService.SimpleApplicationException
+    public void testPOSTCommandWithException() throws Throwable
     {
         //Arrange
         var restPath = resTfulRPCModel.getPOSTCommand("throwExceptionTest");
@@ -174,25 +179,25 @@ public class RESTfulRPCMethodAdapterTest
     }
 
 
-    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restPath) throws IOException, SimpleApplicationService.SimpleApplicationException
+    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restPath) throws Throwable
     {
         return sendPOSTCommand(restPath, "");
     }
 
-    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restPath, Object parameter) throws IOException, SimpleApplicationService.SimpleApplicationException
+    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restPath, Object parameter) throws Throwable
     {
         final Gson gson = new Gson();
         return sendPOSTCommand(restPath, gson.toJson(parameter));
     }
 
-    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restPath, Object[] parameterList) throws IOException, SimpleApplicationService.SimpleApplicationException
+    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restPath, Object[] parameterList) throws Throwable
     {
         final Gson gson = new Gson();
         return sendPOSTCommand(restPath, gson.toJson(parameterList));
     }
 
 
-    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restfulRPCMethod, String value) throws IOException, SimpleApplicationService.SimpleApplicationException
+    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restfulRPCMethod, String value) throws Throwable
     {
 
         URL url = new URL("http://" + defaultHost + ":" + defaultPort + restfulRPCMethod.getResourcePath());
@@ -207,19 +212,7 @@ public class RESTfulRPCMethodAdapterTest
         }
 
         if (conn.getResponseCode() != HttpURLConnection.HTTP_OK ) {
-            // Try to recreate Exception
-            if (conn.getResponseCode() == HttpURLConnection.HTTP_NOT_ACCEPTABLE) {
-                BufferedReader br = new BufferedReader(new InputStreamReader(
-                        (conn.getErrorStream())));
-
-                String output = br.readLine();
-
-                final Gson gson = new Gson();
-                throw gson.fromJson(output, SimpleApplicationService.SimpleApplicationException.class);
-            }
-
-            throw new IOException("Failed : HTTP error code : "
-                    + conn.getResponseCode());
+            createException(restfulRPCMethod, conn);
         }
 
 
@@ -231,5 +224,32 @@ public class RESTfulRPCMethodAdapterTest
         conn.disconnect();
 
         return output;
+    }
+
+    private void createException(RESTfulRPCModel.RESTfulRPCMethod rpcMethod, HttpURLConnection conn) throws Throwable
+    {
+        // Try to recreate Exception
+        BufferedReader br = new BufferedReader(new InputStreamReader(
+                (conn.getErrorStream())));
+
+        String output = br.readLine();
+
+        Gson gson = new Gson();
+        JsonElement jsonElement = JsonParser.parseString(output);
+        if (jsonElement.isJsonArray()
+                && jsonElement.getAsJsonArray().size() == 2)
+        {
+            JsonArray jsonArray = jsonElement.getAsJsonArray();
+            //Find Exception
+            var exceptionType = Arrays.stream(rpcMethod.getMethod().getExceptionTypes()).
+                    filter(element -> element.getName().equals(jsonArray.get(0).getAsString())).
+                    findFirst();
+            if (exceptionType.isPresent()) {
+                throw (Throwable) gson.fromJson(jsonArray.get(1), exceptionType.get());
+            }
+        }
+        
+        throw new IOException("Failed : HTTP error code : "
+                + conn.getResponseCode() + output);
     }
 }
