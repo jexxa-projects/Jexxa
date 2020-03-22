@@ -18,7 +18,7 @@ import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
 import org.junit.Test;
 
-public class JavalinAdapterTest
+public class RESTfulRPCAdapterTest
 {
     int defaultPort = 7000;
     String defaultHost = "localhost";
@@ -31,7 +31,7 @@ public class JavalinAdapterTest
     public void testGETCommand() throws IOException
     {
         //Arrange
-        var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
+        var objectUnderTest = new RESTfulRPCAdapter(defaultHost, defaultPort);
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
@@ -57,7 +57,7 @@ public class JavalinAdapterTest
     public void testGETCommandDefaultHostname() throws IOException
     {
         //Arrange
-        var objectUnderTest = new JavalinAdapter(defaultPort);
+        var objectUnderTest = new RESTfulRPCAdapter(defaultPort);
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
@@ -84,7 +84,7 @@ public class JavalinAdapterTest
     public void testPOSTCommandWithOneAttribute() throws IOException
     {
         //Arrange
-        var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
+        var objectUnderTest = new RESTfulRPCAdapter(defaultHost, defaultPort);
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
@@ -119,7 +119,7 @@ public class JavalinAdapterTest
     public void testPOSTCommandWithOneObject() throws IOException
     {
         //Arrange
-        var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
+        var objectUnderTest = new RESTfulRPCAdapter(defaultHost, defaultPort);
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
@@ -154,7 +154,7 @@ public class JavalinAdapterTest
     public void testPOSTCommandWithTwoObjects() throws IOException
     {
         //Arrange
-        var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
+        var objectUnderTest = new RESTfulRPCAdapter(defaultHost, defaultPort);
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
@@ -190,7 +190,7 @@ public class JavalinAdapterTest
     public void testPOSTCommandWithReturnValue() throws IOException
     {
         //Arrange
-        var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
+        var objectUnderTest = new RESTfulRPCAdapter(defaultHost, defaultPort);
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 

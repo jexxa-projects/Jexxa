@@ -14,20 +14,20 @@ import io.javalin.Javalin;
 
 
 @DrivingAdapter
-public class JavalinAdapter implements IDrivingAdapter
+public class RESTfulRPCAdapter implements IDrivingAdapter
 {
     private Javalin javalin = Javalin.create();
     private String hostname;
     private int port;
 
-    public JavalinAdapter(String hostname, int port)
+    public RESTfulRPCAdapter(String hostname, int port)
     {
         checkNotNull(hostname);
         this.hostname = hostname;
         this.port = port;
     }
 
-    public JavalinAdapter(int port)
+    public RESTfulRPCAdapter(int port)
     {
         this("localhost", port);
     }
