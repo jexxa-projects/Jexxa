@@ -30,7 +30,7 @@ class RESTfulRPCModel
     }
 
     
-    public static class RESTfulRPC
+    public static class RESTfulRPCMethod
     {
         enum HTTPCommand {GET, POST}
         
@@ -38,7 +38,7 @@ class RESTfulRPCModel
         private Method method;
         private HTTPCommand httpCommand;
 
-        RESTfulRPC(HTTPCommand httpCommand, String resourcePath, Method method) {
+        RESTfulRPCMethod(HTTPCommand httpCommand, String resourcePath, Method method) {
             this.httpCommand = httpCommand;
             this.resourcePath = resourcePath;
             this.method = method;
@@ -60,8 +60,8 @@ class RESTfulRPCModel
         }
     }
 
-    List<RESTfulRPC> getGETCommands() {
-       var result = new ArrayList<RESTfulRPC>();
+    List<RESTfulRPCMethod> getGETCommands() {
+       var result = new ArrayList<RESTfulRPCMethod>();
 
        List<Method> publicMethods = getPublicMethods(object.getClass());
        publicMethods
@@ -69,8 +69,8 @@ class RESTfulRPCModel
                .filter( element -> !(element.getReturnType().equals(void.class)) &&
                                      element.getParameterCount() == 0) // Convention for GET method
                .forEach( element -> result.add(
-                       new RESTfulRPC(
-                               RESTfulRPC.HTTPCommand.GET,
+                       new RESTfulRPCMethod(
+                               RESTfulRPCMethod.HTTPCommand.GET,
                                generateURI(element),
                                element)
                        ));
@@ -79,8 +79,8 @@ class RESTfulRPCModel
     }
 
 
-    List<RESTfulRPC> getPOSTCommands() {
-        var result = new ArrayList<RESTfulRPC>();
+    List<RESTfulRPCMethod> getPOSTCommands() {
+        var result = new ArrayList<RESTfulRPCMethod>();
 
         List<Method> publicMethods = getPublicMethods(object.getClass());
         publicMethods
@@ -88,8 +88,8 @@ class RESTfulRPCModel
                 .filter( element -> (element.getReturnType().equals(void.class) ||
                                      element.getParameterCount() > 0)) // Convention for POST method
                 .forEach( element -> result.add(
-                        new RESTfulRPC(
-                                RESTfulRPC.HTTPCommand.POST,
+                        new RESTfulRPCMethod(
+                                RESTfulRPCMethod.HTTPCommand.POST,
                                 generateURI(element),
                                 element)
                 ));

@@ -18,7 +18,7 @@ import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
 import org.junit.Test;
 
-public class RESTfulRPCAdapterTest
+public class RESTfulRPCMethodAdapterTest
 {
     int defaultPort = 7000;
     String defaultHost = "localhost";
@@ -248,7 +248,7 @@ public class RESTfulRPCAdapterTest
         }
     }
 
-    private  String sendGETCommand(RESTfulRPCModel.RESTfulRPC restPath) throws IOException
+    private  String sendGETCommand(RESTfulRPCModel.RESTfulRPCMethod restPath) throws IOException
     {
 
         URL url = new URL("http://" + defaultHost + ":" + defaultPort + restPath.getResourcePath());
@@ -273,28 +273,28 @@ public class RESTfulRPCAdapterTest
     }
 
 
-    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPC restPath) throws IOException, SimpleApplicationService.SimpleApplicationException
+    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restPath) throws IOException, SimpleApplicationService.SimpleApplicationException
     {
         return sendPOSTCommand(restPath, "");
     }
 
-    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPC restPath, Object parameter) throws IOException, SimpleApplicationService.SimpleApplicationException
+    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restPath, Object parameter) throws IOException, SimpleApplicationService.SimpleApplicationException
     {
         final Gson gson = new Gson();
         return sendPOSTCommand(restPath, gson.toJson(parameter));
     }
 
-    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPC restPath, Object[] parameterList) throws IOException, SimpleApplicationService.SimpleApplicationException
+    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restPath, Object[] parameterList) throws IOException, SimpleApplicationService.SimpleApplicationException
     {
         final Gson gson = new Gson();
         return sendPOSTCommand(restPath, gson.toJson(parameterList));
     }
 
 
-    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPC restfulRPC, String value) throws IOException, SimpleApplicationService.SimpleApplicationException
+    private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restfulRPCMethod, String value) throws IOException, SimpleApplicationService.SimpleApplicationException
     {
 
-        URL url = new URL("http://" + defaultHost + ":" + defaultPort + restfulRPC.getResourcePath());
+        URL url = new URL("http://" + defaultHost + ":" + defaultPort + restfulRPCMethod.getResourcePath());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");

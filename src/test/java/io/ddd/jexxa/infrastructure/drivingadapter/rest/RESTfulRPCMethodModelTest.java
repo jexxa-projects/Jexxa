@@ -9,7 +9,7 @@ import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.applicationservice.UnsupportedApplicationService;
 import org.junit.Test;
 
-public class RESTfulRPCModelTest
+public class RESTfulRPCMethodModelTest
 {
 
     @Test
@@ -24,7 +24,7 @@ public class RESTfulRPCModelTest
         assertFalse(result.isEmpty());
 
         //Check that all commands are marked as GET
-        result.forEach(element -> assertEquals(RESTfulRPCModel.RESTfulRPC.HTTPCommand.GET,
+        result.forEach(element -> assertEquals(RESTfulRPCModel.RESTfulRPCMethod.HTTPCommand.GET,
                 element.getHTTPCommand()));
 
         //Check URIs
@@ -48,7 +48,7 @@ public class RESTfulRPCModelTest
         assertFalse(result.isEmpty());
 
         //Check that all commands are marked as GET
-        result.forEach(element -> assertEquals(RESTfulRPCModel.RESTfulRPC.HTTPCommand.POST,
+        result.forEach(element -> assertEquals(RESTfulRPCModel.RESTfulRPCMethod.HTTPCommand.POST,
                 element.getHTTPCommand()));
 
         //Check URIs
