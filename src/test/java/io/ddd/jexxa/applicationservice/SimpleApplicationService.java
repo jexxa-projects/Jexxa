@@ -1,26 +1,48 @@
 package io.ddd.jexxa.applicationservice;
 
 
+import javax.lang.model.util.SimpleAnnotationValueVisitor9;
+
 import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
 import io.ddd.stereotype.applicationcore.ApplicationService;
 
 @ApplicationService
 public class SimpleApplicationService
 {
-    private int simpleValue;
+    public class SimpleApplicationExpcetion extends Exception
+    {
+        public SimpleApplicationExpcetion(String information)
+        {
+            super(information);
+        }
+    }
 
-    public SimpleApplicationService(int simpleValue) {
-        this.simpleValue = simpleValue;
+    private int firstValue;
+
+    public SimpleApplicationService(int firstValue) {
+        this.firstValue = firstValue;
     }
     
     public int getSimpleValue()
     {
-      return  simpleValue;
+      return firstValue;
+    }
+
+    public int setGetSimpleValue( int newValue )
+    {
+        int oldValue = firstValue;
+        this.firstValue = newValue;
+        return oldValue;
+    }
+
+    public void throwExcptionTest() throws SimpleApplicationExpcetion
+    {
+        throw new SimpleApplicationExpcetion("TestException");
     }
 
     public void setSimpleValue(int simpleValue)
     {
-        this.simpleValue = simpleValue;
+        this.firstValue = simpleValue;
     }
 
     public void setSimpleValueObject(SimpleValueObject simpleValueObject)
@@ -37,7 +59,7 @@ public class SimpleApplicationService
 
     public SimpleValueObject getSimpleValueObject()
     {
-        return  new SimpleValueObject(simpleValue);
+        return  new SimpleValueObject(firstValue);
     }
 
 }

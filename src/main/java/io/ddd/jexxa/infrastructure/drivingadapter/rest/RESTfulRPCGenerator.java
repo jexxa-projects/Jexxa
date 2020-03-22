@@ -11,10 +11,13 @@ import java.util.List;
  * This class generates uniform IDs (URIs) for resources to be offered via REST
  *
  * This implementation uses following convention over configuration approach:
- *  * Methods from base class Object are ignored 
- *  * If a method has no return value 'void' then it is mapped to a POST method
- *  * If a method has a return value != 'void' then it is mapped to a GET method
- *  * An object must have unique method names. Any method overloading is not supported   
+ *  * An object must have unique method names. Any method overloading is not supported
+ *  * Methods from base class Object are ignored
+ *  GET:
+ *  * If a method has a return value != 'void' and no parameter then it is mapped to a GET method
+ *  POST:
+ *  * If a method has no return 'void' then it is mapped to a POST method
+ *  * If a method has at least one parameter then it is mapped to a POST method
  */
 class RESTfulRPCGenerator
 {
@@ -63,10 +66,11 @@ class RESTfulRPCGenerator
        List<Method> publicMethods = getPublicMethods(object.getClass());
        publicMethods
                .stream()
-               .filter( element -> !(element.getReturnType().equals(void.class)))
+               .filter( element -> !(element.getReturnType().equals(void.class)) &&
+                                     element.getParameterCount() == 0) // Convention for GET method
                .forEach( element -> result.add(
                        new RESTfulRPC(
-                               RESTfulRPC.HTTPCommand.GET, // If return type != void => GET method
+                               RESTfulRPC.HTTPCommand.GET,
                                generateURI(element),
                                element)
                        ));
@@ -81,7 +85,8 @@ class RESTfulRPCGenerator
         List<Method> publicMethods = getPublicMethods(object.getClass());
         publicMethods
                 .stream()
-                .filter( element -> element.getReturnType().equals(void.class)) // If return type == void => POST method
+                .filter( element -> (element.getReturnType().equals(void.class) ||
+                                     element.getParameterCount() > 0)) // Convention for POST method
                 .forEach( element -> result.add(
                         new RESTfulRPC(
                                 RESTfulRPC.HTTPCommand.POST,

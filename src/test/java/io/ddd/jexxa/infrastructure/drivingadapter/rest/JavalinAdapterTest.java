@@ -1,6 +1,8 @@
 package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
@@ -20,11 +22,13 @@ public class JavalinAdapterTest
 {
     int defaultPort = 7000;
     String defaultHost = "localhost";
-    SimpleApplicationService simpleApplicationService = new SimpleApplicationService(42);
-    RESTfulRPCGenerator restfullHTTPGenerater = new RESTfulRPCGenerator(simpleApplicationService);
+    int defaultValue = 42;
+    SimpleApplicationService simpleApplicationService = new SimpleApplicationService(defaultValue);
+    RESTfulRPCGenerator resTfulRPCGenerator = new RESTfulRPCGenerator(simpleApplicationService);
 
-    @Test
-    public void testJavalinGETCommand() throws IOException
+
+    @Test // RPC call test: int getSimpleValue()
+    public void testGETCommand() throws IOException
     {
         //Arrange
         var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
@@ -32,7 +36,7 @@ public class JavalinAdapterTest
         objectUnderTest.start();
 
         //Act
-        var restPath = restfullHTTPGenerater.
+        var restPath = resTfulRPCGenerator.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -42,21 +46,22 @@ public class JavalinAdapterTest
         String result = sendGETCommand(restPath.get());
 
         //Assert
-        assertEquals(42, simpleApplicationService.getSimpleValue());
+        assertNotNull(result);
+        assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
         assertEquals(Integer.toString(simpleApplicationService.getSimpleValue()), result );
 
         objectUnderTest.stop();
     }
 
-    @Test
-    public void testJavalinGETCommandDefaultHostname() throws IOException
+    @Test // RPC call test: int getSimpleValue()
+    public void testGETCommandDefaultHostname() throws IOException
     {
         //Arrange
         var objectUnderTest = new JavalinAdapter(defaultPort);
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
-        var restPath = restfullHTTPGenerater.
+        var restPath = resTfulRPCGenerator.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -67,15 +72,16 @@ public class JavalinAdapterTest
         String result = sendGETCommand(restPath.get());
 
         //Assert
-        assertEquals(42, simpleApplicationService.getSimpleValue());
+        assertNotNull(result);
+        assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
         assertEquals(Integer.toString(simpleApplicationService.getSimpleValue()), result );
 
         objectUnderTest.stop();
     }
 
 
-    @Test
-    public void testJavalinPOSTCommand() throws IOException
+    @Test  // RPC call test: void setSimpleValue(44)
+    public void testPOSTCommandWithOneAttribute() throws IOException
     {
         //Arrange
         var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
@@ -85,7 +91,7 @@ public class JavalinAdapterTest
         //Act
         var newValue = 44;
 
-        var restPath = restfullHTTPGenerater.
+        var restPath = resTfulRPCGenerator.
                 getPOSTCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("setSimpleValue")).
@@ -96,8 +102,7 @@ public class JavalinAdapterTest
         sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var restfullHTTPGenerater = new RESTfulRPCGenerator(simpleApplicationService);
-        var responsePath = restfullHTTPGenerater.
+        var responsePath = resTfulRPCGenerator.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -110,8 +115,8 @@ public class JavalinAdapterTest
         objectUnderTest.stop();
     }
 
-    @Test
-    public void testJavalinPOSTCommandValueObject() throws IOException
+    @Test // RPC call test: void setSimpleValueObject(SimpleValueObject(44))
+    public void testPOSTCommandWithOneObject() throws IOException
     {
         //Arrange
         var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
@@ -121,7 +126,7 @@ public class JavalinAdapterTest
         var newValue = new SimpleValueObject(44);
 
         //Act
-        var restPath = restfullHTTPGenerater.
+        var restPath = resTfulRPCGenerator.
                 getPOSTCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("setSimpleValueObject")).
@@ -132,8 +137,7 @@ public class JavalinAdapterTest
         sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var restfullHTTPGenerater = new RESTfulRPCGenerator(simpleApplicationService);
-        var responsePath = restfullHTTPGenerater.
+        var responsePath = resTfulRPCGenerator.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -146,8 +150,8 @@ public class JavalinAdapterTest
         objectUnderTest.stop();
     }
 
-    @Test
-    public void testJavalinPOSTCommandMultipleValueObject() throws IOException
+    @Test // RPC call test: void setSimpleValueObjectTwice(SimpleValueObject(44), SimpleValueObject(88))
+    public void testPOSTCommandWithTwoObjects() throws IOException
     {
         //Arrange
         var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
@@ -157,7 +161,7 @@ public class JavalinAdapterTest
         SimpleValueObject[] paramList = {new SimpleValueObject(44), new SimpleValueObject(88)};
 
         //Act
-        var restPath = restfullHTTPGenerater.
+        var restPath = resTfulRPCGenerator.
                 getPOSTCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("setSimpleValueObjectTwice")).
@@ -165,19 +169,56 @@ public class JavalinAdapterTest
         assertTrue(restPath.isPresent());
 
 
-        sendPOSTCommand(restPath.get(), paramList);
+        String returnValue = sendPOSTCommand(restPath.get(), paramList);
 
         //Assert
-        var restfullHTTPGenerater = new RESTfulRPCGenerator(simpleApplicationService);
-        var responsePath = restfullHTTPGenerater.
+        var responsePath = resTfulRPCGenerator.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
                 findFirst();
         assertTrue(responsePath.isPresent());
 
+        assertNull(returnValue);
         assertEquals(paramList[1].getValue(), simpleApplicationService.getSimpleValueObject().getValue());
         assertEquals(Integer.toString(paramList[1].getValue()), sendGETCommand(responsePath.get()));
+
+        objectUnderTest.stop();
+    }
+
+    @Test // RPC call test: void  void setGetSimpleValue(44)
+    public void testPOSTCommandWithReturnValue() throws IOException
+    {
+        //Arrange
+        var objectUnderTest = new JavalinAdapter(defaultHost, defaultPort);
+        objectUnderTest.register(simpleApplicationService);
+        objectUnderTest.start();
+
+        var newValue = 44;
+
+        //Act
+        var restPath = resTfulRPCGenerator.
+                getPOSTCommands().
+                stream().
+                filter(element -> element.getResourcePath().endsWith("setGetSimpleValue")).
+                findFirst();
+        assertTrue(restPath.isPresent());
+
+
+        String returnValue = sendPOSTCommand(restPath.get(), newValue);
+
+        //Assert
+        var responsePath = resTfulRPCGenerator.
+                getGETCommands().
+                stream().
+                filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
+                findFirst();
+        assertTrue(responsePath.isPresent());
+
+        assertNotNull(returnValue);
+        assertEquals(Integer.toString(defaultValue), returnValue);
+        assertEquals(newValue, simpleApplicationService.getSimpleValueObject().getValue());
+        assertEquals(Integer.toString(newValue), sendGETCommand(responsePath.get()));
 
         objectUnderTest.stop();
     }
@@ -207,24 +248,20 @@ public class JavalinAdapterTest
     }
 
 
-    private void sendPOSTCommand(RESTfulRPCGenerator.RESTfulRPC restPath, Object parameter) throws IOException
+    private String sendPOSTCommand(RESTfulRPCGenerator.RESTfulRPC restPath, Object parameter) throws IOException
     {
         final Gson gson = new Gson();
-        System.out.println(gson.toJson(parameter));
-
-        sendPOSTCommand(restPath.getResourcePath(), gson.toJson(parameter));
+        return sendPOSTCommand(restPath.getResourcePath(), gson.toJson(parameter));
     }
 
-    private void sendPOSTCommand(RESTfulRPCGenerator.RESTfulRPC restPath, Object[] parameterList) throws IOException
+    private String sendPOSTCommand(RESTfulRPCGenerator.RESTfulRPC restPath, Object[] parameterList) throws IOException
     {
         final Gson gson = new Gson();
-        System.out.println(gson.toJson(parameterList));
-
-        sendPOSTCommand(restPath.getResourcePath(), gson.toJson(parameterList));
+        return sendPOSTCommand(restPath.getResourcePath(), gson.toJson(parameterList));
     }
 
 
-    private void sendPOSTCommand(String resourcePath, String value) throws IOException
+    private String sendPOSTCommand(String resourcePath, String value) throws IOException
     {
 
         URL url = new URL("http://" + defaultHost + ":" + defaultPort + resourcePath);
@@ -244,6 +281,13 @@ public class JavalinAdapterTest
         }
 
 
+        BufferedReader br = new BufferedReader(new InputStreamReader(
+                (conn.getInputStream())));
+
+        String output = br.readLine();
+
         conn.disconnect();
+
+        return output;
     }
 }
