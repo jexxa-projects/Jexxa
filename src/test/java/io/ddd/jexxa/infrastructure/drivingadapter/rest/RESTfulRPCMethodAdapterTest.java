@@ -36,11 +36,7 @@ public class RESTfulRPCMethodAdapterTest
         objectUnderTest.start();
 
         //Act
-        var restPath = resTfulRPCModel.
-                getGETCommands().
-                stream().
-                filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
-                findFirst();
+        var restPath = resTfulRPCModel.getGETCommand("getSimpleValue");
         assertTrue(restPath.isPresent());
 
         String result = sendGETCommand(restPath.get());
@@ -61,11 +57,7 @@ public class RESTfulRPCMethodAdapterTest
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
-        var restPath = resTfulRPCModel.
-                getGETCommands().
-                stream().
-                filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
-                findFirst();
+        var restPath = resTfulRPCModel.getGETCommand("getSimpleValue");
         assertTrue(restPath.isPresent());
 
         //Act
@@ -91,22 +83,14 @@ public class RESTfulRPCMethodAdapterTest
         //Act
         var newValue = 44;
 
-        var restPath = resTfulRPCModel.
-                getPOSTCommands().
-                stream().
-                filter(element -> element.getResourcePath().endsWith("setSimpleValue")).
-                findFirst();
+        var restPath = resTfulRPCModel.getPOSTCommand("setSimpleValue");
         assertTrue(restPath.isPresent());
 
 
         sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var responsePath = resTfulRPCModel.
-                getGETCommands().
-                stream().
-                filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
-                findFirst();
+        var responsePath = resTfulRPCModel.getGETCommand("getSimpleValue");
         assertTrue(responsePath.isPresent());
 
         assertEquals(newValue, simpleApplicationService.getSimpleValue());
@@ -126,22 +110,13 @@ public class RESTfulRPCMethodAdapterTest
         var newValue = new SimpleValueObject(44);
         
         //Act
-        var restPath = resTfulRPCModel.
-                getPOSTCommands().
-                stream().
-                filter(element -> element.getResourcePath().endsWith("setSimpleValueObject")).
-                findFirst();
+        var restPath = resTfulRPCModel.getPOSTCommand("setSimpleValueObject");
         assertTrue(restPath.isPresent());
-
 
         sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var responsePath = resTfulRPCModel.
-                getGETCommands().
-                stream().
-                filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
-                findFirst();
+        var responsePath = resTfulRPCModel.getGETCommand("getSimpleValue");
         assertTrue(responsePath.isPresent());
 
         assertEquals(newValue.getValue(), simpleApplicationService.getSimpleValueObject().getValue());
@@ -161,22 +136,14 @@ public class RESTfulRPCMethodAdapterTest
         SimpleValueObject[] paramList = {new SimpleValueObject(44), new SimpleValueObject(88)};
 
         //Act
-        var restPath = resTfulRPCModel.
-                getPOSTCommands().
-                stream().
-                filter(element -> element.getResourcePath().endsWith("setSimpleValueObjectTwice")).
-                findFirst();
+        var restPath = resTfulRPCModel.getPOSTCommand("setSimpleValueObjectTwice");
         assertTrue(restPath.isPresent());
 
 
         String returnValue = sendPOSTCommand(restPath.get(), paramList);
 
         //Assert
-        var responsePath = resTfulRPCModel.
-                getGETCommands().
-                stream().
-                filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
-                findFirst();
+        var responsePath = resTfulRPCModel.getGETCommand("getSimpleValue");
         assertTrue(responsePath.isPresent());
 
         assertNull(returnValue);
@@ -197,22 +164,14 @@ public class RESTfulRPCMethodAdapterTest
         var newValue = 44;
 
         //Act
-        var restPath = resTfulRPCModel.
-                getPOSTCommands().
-                stream().
-                filter(element -> element.getResourcePath().endsWith("setGetSimpleValue")).
-                findFirst();
+        var restPath = resTfulRPCModel.getPOSTCommand("setGetSimpleValue");
         assertTrue(restPath.isPresent());
 
 
         String returnValue = sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var responsePath = resTfulRPCModel.
-                getGETCommands().
-                stream().
-                filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
-                findFirst();
+        var responsePath = resTfulRPCModel.getGETCommand("getSimpleValue");
         assertTrue(responsePath.isPresent());
 
         assertNotNull(returnValue);
@@ -232,11 +191,7 @@ public class RESTfulRPCMethodAdapterTest
         objectUnderTest.start();
 
         //Act
-        var restPath = resTfulRPCModel.
-                getPOSTCommands().
-                stream().
-                filter(element -> element.getResourcePath().endsWith("throwExceptionTest")).
-                findFirst();
+        var restPath = resTfulRPCModel.getPOSTCommand("throwExceptionTest");
         assertTrue(restPath.isPresent());
         
         try

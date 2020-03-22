@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -95,6 +96,22 @@ class RESTfulRPCModel
                 ));
 
         return result;
+    }
+
+    Optional<RESTfulRPCMethod> getGETCommand(String methodEndsWith)
+    {
+        return  getGETCommands().
+                stream().
+                filter(element -> element.getResourcePath().endsWith(methodEndsWith)).
+                findFirst();
+    }
+
+    Optional<RESTfulRPCMethod> getPOSTCommand(String methodEndsWith)
+    {
+        return  getPOSTCommands().
+                stream().
+                filter(element -> element.getResourcePath().endsWith(methodEndsWith)).
+                findFirst();
     }
 
 
