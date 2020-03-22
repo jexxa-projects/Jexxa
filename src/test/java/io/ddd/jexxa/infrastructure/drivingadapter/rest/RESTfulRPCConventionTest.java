@@ -9,14 +9,14 @@ import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.applicationservice.UnsupportedApplicationService;
 import org.junit.Test;
 
-public class RESTfulRPCGeneratorTest
+public class RESTfulRPCConventionTest
 {
 
     @Test
     public void validateGETCommands()
     {
         var defaultObject = new SimpleApplicationService(42);
-        var objectUnderTest = new RESTfulRPCGenerator(defaultObject);
+        var objectUnderTest = new RESTfulRPCConvention(defaultObject);
 
         var result = objectUnderTest.getGETCommands();
         
@@ -24,7 +24,7 @@ public class RESTfulRPCGeneratorTest
         assertFalse(result.isEmpty());
 
         //Check that all commands are marked as GET
-        result.forEach(element -> assertEquals(RESTfulRPCGenerator.RESTfulRPC.HTTPCommand.GET,
+        result.forEach(element -> assertEquals(RESTfulRPCConvention.RESTfulRPC.HTTPCommand.GET,
                 element.getHTTPCommand()));
 
         //Check URIs
@@ -40,7 +40,7 @@ public class RESTfulRPCGeneratorTest
     public void validatePOSTCommands()
     {
         var defaultObject = new SimpleApplicationService(42);
-        var objectUnderTest = new RESTfulRPCGenerator(defaultObject);
+        var objectUnderTest = new RESTfulRPCConvention(defaultObject);
 
         var result = objectUnderTest.getPOSTCommands();
 
@@ -48,7 +48,7 @@ public class RESTfulRPCGeneratorTest
         assertFalse(result.isEmpty());
 
         //Check that all commands are marked as GET
-        result.forEach(element -> assertEquals(RESTfulRPCGenerator.RESTfulRPC.HTTPCommand.POST,
+        result.forEach(element -> assertEquals(RESTfulRPCConvention.RESTfulRPC.HTTPCommand.POST,
                 element.getHTTPCommand()));
 
         //Check URIs
@@ -65,7 +65,7 @@ public class RESTfulRPCGeneratorTest
     public void invalidApplicationService()
     {
         //Act / Assert
-        new RESTfulRPCGenerator(new UnsupportedApplicationService());
+        new RESTfulRPCConvention(new UnsupportedApplicationService());
 
     }
 

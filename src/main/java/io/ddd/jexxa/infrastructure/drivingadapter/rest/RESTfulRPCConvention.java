@@ -19,11 +19,11 @@ import java.util.List;
  *  * If a method has no return 'void' then it is mapped to a POST method
  *  * If a method has at least one parameter then it is mapped to a POST method
  */
-class RESTfulRPCGenerator
+class RESTfulRPCConvention
 {
     Object object;
 
-    public RESTfulRPCGenerator(Object object)
+    public RESTfulRPCConvention(Object object)
     {
         this.object = object;
         validateUniqueURI();

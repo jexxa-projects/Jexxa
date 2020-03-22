@@ -24,7 +24,7 @@ public class RESTfulRPCAdapterTest
     String defaultHost = "localhost";
     int defaultValue = 42;
     SimpleApplicationService simpleApplicationService = new SimpleApplicationService(defaultValue);
-    RESTfulRPCGenerator resTfulRPCGenerator = new RESTfulRPCGenerator(simpleApplicationService);
+    RESTfulRPCConvention resTfulRPCConvention = new RESTfulRPCConvention(simpleApplicationService);
 
 
     @Test // RPC call test: int getSimpleValue()
@@ -36,7 +36,7 @@ public class RESTfulRPCAdapterTest
         objectUnderTest.start();
 
         //Act
-        var restPath = resTfulRPCGenerator.
+        var restPath = resTfulRPCConvention.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -61,7 +61,7 @@ public class RESTfulRPCAdapterTest
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
-        var restPath = resTfulRPCGenerator.
+        var restPath = resTfulRPCConvention.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -91,7 +91,7 @@ public class RESTfulRPCAdapterTest
         //Act
         var newValue = 44;
 
-        var restPath = resTfulRPCGenerator.
+        var restPath = resTfulRPCConvention.
                 getPOSTCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("setSimpleValue")).
@@ -102,7 +102,7 @@ public class RESTfulRPCAdapterTest
         sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var responsePath = resTfulRPCGenerator.
+        var responsePath = resTfulRPCConvention.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -126,7 +126,7 @@ public class RESTfulRPCAdapterTest
         var newValue = new SimpleValueObject(44);
 
         //Act
-        var restPath = resTfulRPCGenerator.
+        var restPath = resTfulRPCConvention.
                 getPOSTCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("setSimpleValueObject")).
@@ -137,7 +137,7 @@ public class RESTfulRPCAdapterTest
         sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var responsePath = resTfulRPCGenerator.
+        var responsePath = resTfulRPCConvention.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -161,7 +161,7 @@ public class RESTfulRPCAdapterTest
         SimpleValueObject[] paramList = {new SimpleValueObject(44), new SimpleValueObject(88)};
 
         //Act
-        var restPath = resTfulRPCGenerator.
+        var restPath = resTfulRPCConvention.
                 getPOSTCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("setSimpleValueObjectTwice")).
@@ -172,7 +172,7 @@ public class RESTfulRPCAdapterTest
         String returnValue = sendPOSTCommand(restPath.get(), paramList);
 
         //Assert
-        var responsePath = resTfulRPCGenerator.
+        var responsePath = resTfulRPCConvention.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -197,7 +197,7 @@ public class RESTfulRPCAdapterTest
         var newValue = 44;
 
         //Act
-        var restPath = resTfulRPCGenerator.
+        var restPath = resTfulRPCConvention.
                 getPOSTCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("setGetSimpleValue")).
@@ -208,7 +208,7 @@ public class RESTfulRPCAdapterTest
         String returnValue = sendPOSTCommand(restPath.get(), newValue);
 
         //Assert
-        var responsePath = resTfulRPCGenerator.
+        var responsePath = resTfulRPCConvention.
                 getGETCommands().
                 stream().
                 filter(element -> element.getResourcePath().endsWith("getSimpleValue")).
@@ -223,7 +223,7 @@ public class RESTfulRPCAdapterTest
         objectUnderTest.stop();
     }
 
-    private  String sendGETCommand(RESTfulRPCGenerator.RESTfulRPC restPath) throws IOException
+    private  String sendGETCommand(RESTfulRPCConvention.RESTfulRPC restPath) throws IOException
     {
 
         URL url = new URL("http://" + defaultHost + ":" + defaultPort + restPath.getResourcePath());
@@ -248,13 +248,13 @@ public class RESTfulRPCAdapterTest
     }
 
 
-    private String sendPOSTCommand(RESTfulRPCGenerator.RESTfulRPC restPath, Object parameter) throws IOException
+    private String sendPOSTCommand(RESTfulRPCConvention.RESTfulRPC restPath, Object parameter) throws IOException
     {
         final Gson gson = new Gson();
         return sendPOSTCommand(restPath.getResourcePath(), gson.toJson(parameter));
     }
 
-    private String sendPOSTCommand(RESTfulRPCGenerator.RESTfulRPC restPath, Object[] parameterList) throws IOException
+    private String sendPOSTCommand(RESTfulRPCConvention.RESTfulRPC restPath, Object[] parameterList) throws IOException
     {
         final Gson gson = new Gson();
         return sendPOSTCommand(restPath.getResourcePath(), gson.toJson(parameterList));
