@@ -9,7 +9,7 @@ import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.applicationservice.UnsupportedApplicationService;
 import org.junit.Test;
 
-public class RESTfulRPCMethodModelTest
+public class RESTfulRPCModelTest
 {
 
     @Test

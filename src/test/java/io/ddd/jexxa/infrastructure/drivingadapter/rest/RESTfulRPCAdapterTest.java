@@ -25,7 +25,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RESTfulRPCMethodAdapterTest
+public class RESTfulRPCAdapterTest
 {
     int defaultPort = 7000;
     String defaultHost = "localhost";
