@@ -14,7 +14,7 @@ import org.apache.commons.lang.Validate;
 @DrivingAdapter
 public class JMXAdapter implements IDrivingAdapter
 {
-    public void registerObject(Object object)
+    public void register(Object object)
     {
         validateJMXSettings();
 

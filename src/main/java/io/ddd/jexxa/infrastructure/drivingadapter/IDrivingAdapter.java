@@ -8,4 +8,6 @@ public interface IDrivingAdapter
     void start();
 
     void stop();
+
+    void register(Object object);
 }

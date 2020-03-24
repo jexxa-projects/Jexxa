@@ -10,23 +10,36 @@ import java.util.concurrent.locks.Condition;
 public class ClassFactory
 {
 
-    public Object createByConstructor(Class<?> clazz)
+    public <T> T createByConstructor(Class<T> clazz)
     {
         var constructorList = new ArrayList<Constructor>( Arrays.asList(clazz.getDeclaredConstructors()));
 
-        System.out.println("Constructor Size " + constructorList.size());
+        System.out.println("Constructor Size of " + clazz.getSimpleName() + " : " + constructorList.size());
 
         Object[] parameters = getParamters(constructorList.get(0));
+
+//        System.out.println("Parameter Size " + parameters.length);
+
         try {
-          return constructorList.get(0).newInstance(parameters);
+          return (T) constructorList.get(0).newInstance(parameters);
         } catch ( Exception e ) {
-          return null;
+            System.out.println(e.getMessage());
+
+            return null;
         }
     }
     
 
     Object[] getParamters(Constructor constructor) {
-        Object[] parameterList = {new Integer(43)};
-        return parameterList;
+        if ( constructor.getParameterCount() == 0) {
+            return null;
+        }
+
+        if ( constructor.getParameterCount() == 1) {
+            Object[] parameterList = {new Integer(43)};
+            return parameterList;
+        }
+
+        return null;
     }
 }

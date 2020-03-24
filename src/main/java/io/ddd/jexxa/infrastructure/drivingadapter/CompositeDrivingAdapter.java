@@ -19,8 +19,15 @@ public class CompositeDrivingAdapter implements IDrivingAdapter
         drivingAdapterlist.forEach(IDrivingAdapter::stop);
     }
 
+    @Override
+    public void register(Object object)
+    {
+        drivingAdapterlist.forEach(element -> element.register(object));
+    }
+
     public void add(IDrivingAdapter drivingAdapter)
     {
         drivingAdapterlist.add(drivingAdapter);
     }
+
 }

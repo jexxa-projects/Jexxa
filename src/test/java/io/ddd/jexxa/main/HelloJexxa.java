@@ -1,43 +1,45 @@
-package io.ddd.jexxa.infrastructure.drivingadapter.jmx;
+package io.ddd.jexxa.main;
 
-import static org.junit.Assert.assertFalse;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.management.ManagementFactory;
 import java.util.Set;
 
-import javax.management.JMX;
 import javax.management.MBeanServer;
-import javax.management.MalformedObjectNameException;
 import javax.management.ObjectInstance;
-import javax.management.ObjectName;
 
 import io.ddd.jexxa.applicationservice.SimpleApplicationService;
+import io.ddd.jexxa.core.Jexxa;
+import io.ddd.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
+import org.junit.Before;
 import org.junit.Test;
 
-public class JMXAdapterTest
+public class HelloJexxa
 {
-    @Test
-    public void registerApplicationService()
+    @Before
+    public void initTests()
     {
-        //Arrange
-        var defaultValue = 42;
-        var simpleApplicationService = new SimpleApplicationService(defaultValue);
-        var objectUnderTest = new JMXAdapter();
         System.setProperty("com.sun.management.jmxremote.host", "localhost");
         System.setProperty("com.sun.management.jmxremote.port", "62345");
         System.setProperty("com.sun.management.jmxremote.rmi.port", "62345");
         System.setProperty("com.sun.management.jmxremote.authenticate", "false");
         System.setProperty("com.sun.management.jmxremote.ssl", "false");
+    }
 
-        System.setProperty("com.sun.management.jmx.port", "62345");
+    
+    @Test
+    public void simpleHelloJexxa()
+    {
+        //Arrange
+        Jexxa jexxa = new Jexxa();
 
-        //Act
-        objectUnderTest.register(simpleApplicationService);
-        objectUnderTest.start();
 
+        //Act: Bind a concrete class to a concrete DrivingAdapter to a port
+        jexxa.bind(JMXAdapter.class, SimpleApplicationService.class);
 
+        
         //Assert
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         Set<ObjectInstance> result = mbs.queryMBeans(null , null);
@@ -47,7 +49,5 @@ public class JMXAdapterTest
                 stream().
                 anyMatch(element -> element.getClassName().endsWith(SimpleApplicationService.class.getSimpleName()))
         );
-
-        objectUnderTest.stop();
     }
 }
