@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Properties;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -12,18 +13,22 @@ import com.google.gson.JsonParser;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.ddd.jexxa.infrastructure.stereotype.DrivingAdapter;
 import io.javalin.Javalin;
+import org.apache.commons.lang.Validate;
 
 
 @DrivingAdapter
 public class RESTfulRPCAdapter implements IDrivingAdapter
 {
+    public static final String HOST_PROPERTY = "io.ddd.jexxa.rest.host";
+    public static final String PORT_PROPERTY = "io.ddd.jexxa.rest.port";
+
     private Javalin javalin = Javalin.create();
     private String hostname;
     private int port;
 
     public RESTfulRPCAdapter(String hostname, int port)
     {
-        checkNotNull(hostname);
+        Validate.notNull(hostname);
         this.hostname = hostname;
         this.port = port;
 
@@ -33,6 +38,16 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public RESTfulRPCAdapter(int port)
     {
         this("localhost", port);
+    }
+
+
+    public RESTfulRPCAdapter(Properties properties)
+    {
+        Validate.notNull(properties.getProperty(HOST_PROPERTY));
+        Validate.notNull(properties.getProperty(PORT_PROPERTY));
+
+        this.hostname = properties.getProperty(HOST_PROPERTY);
+        this.port = Integer.parseInt(properties.getProperty(PORT_PROPERTY));
     }
 
     public void register(Object object)

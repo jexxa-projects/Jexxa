@@ -1,6 +1,8 @@
 package io.ddd.jexxa.infrastructure.drivingadapter.jmx;
 
 import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.MBeanRegistrationException;
@@ -14,6 +16,8 @@ import org.apache.commons.lang.Validate;
 @DrivingAdapter
 public class JMXAdapter implements IDrivingAdapter
 {
+    List<MBeanModel> registeredMBeans = new ArrayList<>();
+
     public void register(Object object)
     {
         validateJMXSettings();
@@ -21,6 +25,13 @@ public class JMXAdapter implements IDrivingAdapter
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         MBeanModel mBeanModel = new MBeanModel(object);
 
+        //Check if service is already registered 
+        if (!mbs.queryMBeans(mBeanModel.getObjectName(), null).isEmpty())
+        {
+            throw new IllegalArgumentException(this.getClass().getSimpleName() + "> Object already registered : " + object.getClass().getSimpleName());
+        }
+
+        //register Service
         try
         {
             mbs.registerMBean(mBeanModel, mBeanModel.getObjectName());
@@ -29,18 +40,35 @@ public class JMXAdapter implements IDrivingAdapter
         {
             throw new IllegalArgumentException(e.getMessage());
         }
+
+        registeredMBeans.add(mBeanModel);
     }
 
     @Override
     public void start()
     {
-        
+        /*
+         * No special action needed because objects are already registered at registerObject
+         */
     }
 
     @Override
     public void stop()
     {
+        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
 
+        registeredMBeans.stream().
+                filter(element -> mbs.isRegistered(element.getObjectName())).
+                forEach(element -> {
+                    try
+                    {
+                        mbs.unregisterMBean(element.getObjectName());
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                });
     }
 
     private void validateJMXSettings()

@@ -14,9 +14,9 @@ public class ClassFactoryTest
     {
         //Arrange
         var annotationScanner = new AnnotationScanner();
-        var factoryResults = new ArrayList<Object>();
+        var factoryResults = new ArrayList<>();
 
-        var objectUnderTest = new ClassFactory();
+        var objectUnderTest = new ClassFactory(null);
 
         //Act
         var result = annotationScanner.findClassAnnotation(ApplicationService.class);
