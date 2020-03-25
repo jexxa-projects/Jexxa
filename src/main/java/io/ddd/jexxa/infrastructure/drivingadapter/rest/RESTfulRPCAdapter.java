@@ -48,6 +48,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
         this.hostname = properties.getProperty(HOST_PROPERTY);
         this.port = Integer.parseInt(properties.getProperty(PORT_PROPERTY));
+        registerExceptionHandler();
     }
 
     public void register(Object object)
