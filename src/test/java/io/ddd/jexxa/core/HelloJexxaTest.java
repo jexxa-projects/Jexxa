@@ -1,10 +1,18 @@
 package io.ddd.jexxa.core;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
 
@@ -78,6 +86,21 @@ public class HelloJexxaTest
         assertRESTfulRPCAdapter();
     }
 
+    @Test
+    public void simpleHelloJexxaClassAnnotatedPorts()
+    {
+        //Arrange
+        objectUnderTest = new Jexxa(properties);
+
+        //Act: Bind all DrivingAdapter to all ApplicationServices
+        objectUnderTest.bindToAnnotatedPorts(RESTfulRPCAdapter.class, ApplicationService.class);
+        objectUnderTest.startDrivingAdapters();
+
+        //Assert
+        assertRESTfulRPCAdapter();
+    }
+
+
 
     void assertJMXAdapter() {
         //Assert
@@ -92,7 +115,9 @@ public class HelloJexxaTest
     }
 
     void assertRESTfulRPCAdapter() {
-
+        String result = sendGETCommand(SimpleApplicationService.class.getSimpleName()+ "/getSimpleValue");
+        assertNotNull(result);
+        assertEquals(Integer.toString(42), result);
     }
 
     void setJMXProperties() {
@@ -110,10 +135,42 @@ public class HelloJexxaTest
 
     Properties getRESTfulRPCProperties() {
         Properties properties = new Properties();
-        properties.put("io.ddd.jexxa.rest.host", "localhost");
-        properties.put("io.ddd.jexxa.rest.port", Integer.toString(7000));
+        properties.put(RESTfulRPCAdapter.HOST_PROPERTY, "localhost");
+        properties.put(RESTfulRPCAdapter.PORT_PROPERTY, Integer.toString(7000));
         return properties;
     }
 
+    private  String sendGETCommand(String restPath) 
+    {
+        try
+        {
+            URL url = new URL("http://"
+                    + properties.get(RESTfulRPCAdapter.HOST_PROPERTY)
+                    + ":"
+                    + properties.get(RESTfulRPCAdapter.PORT_PROPERTY)
+                    + "/"
+                    + restPath);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Content-Type", "application/json");
 
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK)
+            {
+                throw new IOException("Failed : HTTP error code : "
+                        + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+                    (conn.getInputStream())));
+
+            String output = br.readLine();
+
+            conn.disconnect();
+
+            return output;
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
 }
