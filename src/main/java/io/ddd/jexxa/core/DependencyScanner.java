@@ -8,7 +8,7 @@ import io.github.classgraph.ClassGraph;
 public class DependencyScanner
 {
 
-    public List<Class<?>> getClassAnnotation(final Class<? extends Annotation> annotation)
+    public List<Class<?>> getClassesWithAnnotation(final Class<? extends Annotation> annotation)
     {
         return new ClassGraph()
                 //.verbose()
@@ -18,7 +18,7 @@ public class DependencyScanner
                 .loadClasses();
     }
 
-    public List<Class<?>> getClassAnnotation(final Class<? extends Annotation> annotation, String packageName)
+    public List<Class<?>> getClassesWithAnnotation(final Class<? extends Annotation> annotation, String packageName)
     {
         return new ClassGraph()
                 //.verbose()

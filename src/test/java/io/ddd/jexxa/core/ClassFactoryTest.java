@@ -19,7 +19,7 @@ public class ClassFactoryTest
         var objectUnderTest = new ClassFactory(null);
 
         //Act
-        var result = annotationScanner.getClassAnnotation(ApplicationService.class);
+        var result = annotationScanner.getClassesWithAnnotation(ApplicationService.class);
         result.forEach( element -> factoryResults.add( objectUnderTest.createByConstructor(element)) );
 
         //Assert

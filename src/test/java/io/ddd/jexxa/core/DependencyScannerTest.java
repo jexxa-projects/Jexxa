@@ -22,7 +22,7 @@ public class DependencyScannerTest
         var objectUnderTest = new DependencyScanner();
 
         //Act
-        var applicationServiceList = objectUnderTest.getClassAnnotation(ApplicationService.class);
+        var applicationServiceList = objectUnderTest.getClassesWithAnnotation(ApplicationService.class);
 
         //Assert
         assertFalse(applicationServiceList.isEmpty());
@@ -39,7 +39,7 @@ public class DependencyScannerTest
         var objectUnderTest = new DependencyScanner();
 
         //Act
-        var applicationServiceList = objectUnderTest.getClassAnnotation(ApplicationService.class, packageName);
+        var applicationServiceList = objectUnderTest.getClassesWithAnnotation(ApplicationService.class, packageName);
 
         //Assert
         assertFalse(applicationServiceList.isEmpty());
@@ -57,7 +57,7 @@ public class DependencyScannerTest
         var objectUnderTest = new DependencyScanner();
 
         //Act
-        var applicationServiceList = objectUnderTest.getClassAnnotation(unavailableAnnotationAtRuntime);
+        var applicationServiceList = objectUnderTest.getClassesWithAnnotation(unavailableAnnotationAtRuntime);
 
         //Assert
         assertTrue(applicationServiceList.isEmpty());
@@ -70,7 +70,7 @@ public class DependencyScannerTest
         var objectUnderTest = new DependencyScanner();
 
         //Act
-        var applicationServiceList = objectUnderTest.getClassAnnotation(ApplicationService.class, invalidPackageName);
+        var applicationServiceList = objectUnderTest.getClassesWithAnnotation(ApplicationService.class, invalidPackageName);
 
         //Assert
         assertTrue(applicationServiceList.isEmpty());
