@@ -14,12 +14,12 @@ import io.ddd.stereotype.applicationcore.ApplicationService;
 import io.ddd.stereotype.applicationcore.BusinessException;
 import org.junit.Test;
 
-public class AnnotationScannerTest
+public class DependencyScannerTest
 {
     @Test
     public void findAnnotatedClasses() {
         //Arrange
-        var objectUnderTest = new AnnotationScanner();
+        var objectUnderTest = new DependencyScanner();
 
         //Act
         var applicationServiceList = objectUnderTest.getClassAnnotation(ApplicationService.class);
@@ -36,7 +36,7 @@ public class AnnotationScannerTest
     public void findAnnotatedClassesWithinPackage() {
         //Arrange
         var packageName = "io.ddd.jexxa.applicationservice";
-        var objectUnderTest = new AnnotationScanner();
+        var objectUnderTest = new DependencyScanner();
 
         //Act
         var applicationServiceList = objectUnderTest.getClassAnnotation(ApplicationService.class, packageName);
@@ -54,7 +54,7 @@ public class AnnotationScannerTest
     public void findAnnotatedClassesFails() {
         //Arrange
         var unavailableAnnotationAtRuntime = BusinessException.class;
-        var objectUnderTest = new AnnotationScanner();
+        var objectUnderTest = new DependencyScanner();
 
         //Act
         var applicationServiceList = objectUnderTest.getClassAnnotation(unavailableAnnotationAtRuntime);
@@ -67,7 +67,7 @@ public class AnnotationScannerTest
     public void findAnnotatedClassesFailsWithinPackage() {
         //Arrange
         var invalidPackageName = "io.invalid.package";
-        var objectUnderTest = new AnnotationScanner();
+        var objectUnderTest = new DependencyScanner();
 
         //Act
         var applicationServiceList = objectUnderTest.getClassAnnotation(ApplicationService.class, invalidPackageName);
@@ -79,7 +79,7 @@ public class AnnotationScannerTest
     @Test
     public void getClassesImplementingInterface() {
         //Arrange
-        var objectUnderTest = new AnnotationScanner();
+        var objectUnderTest = new DependencyScanner();
 
         //Act
         List<Class<?>> drivingAdapters = objectUnderTest.getClassesImplementing(IDrivingAdapter.class);
@@ -92,7 +92,7 @@ public class AnnotationScannerTest
     @Test
     public void getClassesInPackageImplementingInterface() {
         //Arrange
-        var objectUnderTest = new AnnotationScanner();
+        var objectUnderTest = new DependencyScanner();
         var packageName = "io.ddd.jexxa.infrastructure.drivingadapter.rest";
 
         //Act

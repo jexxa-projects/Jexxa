@@ -13,7 +13,7 @@ public class ClassFactoryTest
     public void createApplicationService()
     {
         //Arrange
-        var annotationScanner = new AnnotationScanner();
+        var annotationScanner = new DependencyScanner();
         var factoryResults = new ArrayList<>();
 
         var objectUnderTest = new ClassFactory(null);

@@ -5,7 +5,7 @@ import java.util.List;
 
 import io.github.classgraph.ClassGraph;
 
-public class AnnotationScanner
+public class DependencyScanner
 {
 
     public List<Class<?>> getClassAnnotation(final Class<? extends Annotation> annotation)
