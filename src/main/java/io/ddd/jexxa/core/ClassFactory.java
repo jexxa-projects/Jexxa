@@ -21,7 +21,7 @@ public class ClassFactory
         if (propertyConstructor.isPresent()) {
             try
             {
-              return (T) propertyConstructor.get().newInstance(properties);
+              return clazz.cast(propertyConstructor.get().newInstance(properties));
             } catch ( Exception e) {
                 System.err.println(e.getMessage());
             }
@@ -32,7 +32,7 @@ public class ClassFactory
         if (defaultConstructor.isPresent()) {
             try
             {
-                return (T) defaultConstructor.get().newInstance();
+                return clazz.cast(defaultConstructor.get().newInstance());
             }  catch (Exception e)
             {
                 System.err.println(e.getMessage());
@@ -43,7 +43,7 @@ public class ClassFactory
     }
     
     @SuppressWarnings("squid:S1452")
-    Optional<Constructor<?>> searchPropertyConstructor(Class<?> clazz)
+    private Optional<Constructor<?>> searchPropertyConstructor(Class<?> clazz)
     {
         //Lookup constructor with properties
         return  Arrays.stream(clazz.getConstructors()).
@@ -53,7 +53,7 @@ public class ClassFactory
     }
 
     @SuppressWarnings("squid:S1452")
-    Optional<Constructor<?>> searchDefaultConstructor(Class<?> clazz)
+    private Optional<Constructor<?>> searchDefaultConstructor(Class<?> clazz)
     {
         //Lookup constructor with properties
         return Arrays.stream(clazz.getConstructors()).
