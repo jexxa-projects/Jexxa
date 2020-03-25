@@ -14,6 +14,8 @@ import javax.management.ObjectInstance;
 import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
+import io.ddd.jexxa.infrastructure.stereotype.DrivingAdapter;
+import io.ddd.stereotype.applicationcore.ApplicationService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,19 +63,20 @@ public class HelloJexxaTest
         assertRESTfulRPCAdapter();
     }
 
-   /* @Test
+    @Test
     public void simpleHelloJexxaAnnotation()
     {
         //Arrange
-        Jexxa jexxa = new Jexxa(properties);
+        objectUnderTest = new Jexxa(properties);
 
         //Act: Bind all DrivingAdapter to all ApplicationServices
-        jexxa.bind(DrivingAdapter.class, ApplicationService.class);
-
+        objectUnderTest.bindByAnnotation(DrivingAdapter.class, ApplicationService.class);
+        objectUnderTest.startDrivingAdapters();
+        
         //Assert
         assertJMXAdapter();
         assertRESTfulRPCAdapter();
-    }*/
+    }
 
 
     void assertJMXAdapter() {

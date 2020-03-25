@@ -39,7 +39,7 @@ public class ClassFactory
             }
         }
 
-        return null;
+        throw new IllegalArgumentException("Could not create class " + clazz.getSimpleName());
     }
     
     @SuppressWarnings("squid:S1452")
