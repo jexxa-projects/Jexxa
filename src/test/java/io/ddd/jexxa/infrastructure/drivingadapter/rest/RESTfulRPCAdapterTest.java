@@ -14,12 +14,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Properties;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.ddd.jexxa.applicationservice.SimpleApplicationService;
+import io.ddd.jexxa.core.ClassFactory;
 import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
 import org.junit.After;
 import org.junit.Before;
@@ -29,6 +31,8 @@ public class RESTfulRPCAdapterTest
 {
     int defaultPort = 7000;
     String defaultHost = "localhost";
+    Properties properties;
+
     int defaultValue = 42;
     SimpleApplicationService simpleApplicationService = new SimpleApplicationService(defaultValue);
     RESTfulRPCModel resTfulRPCModel = new RESTfulRPCModel(simpleApplicationService);
@@ -38,7 +42,11 @@ public class RESTfulRPCAdapterTest
     @Before
     public void setupTests(){
         //Setup
-        objectUnderTest = new RESTfulRPCAdapter(defaultHost, defaultPort);
+        properties = new Properties();
+        properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
+        properties.put(RESTfulRPCAdapter.PORT_PROPERTY, Integer.toString(defaultPort));
+
+        objectUnderTest = new RESTfulRPCAdapter(properties);
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
     }

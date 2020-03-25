@@ -47,8 +47,8 @@ public class ClassFactory
     {
         //Lookup constructor with properties
         return  Arrays.stream(clazz.getConstructors()).
-                filter( element -> element.getTypeParameters().length == 1 && element.getParameterTypes()[0] == Properties.class).
-                //filter( element -> element.getParameterTypes()[0] == Properties.class).
+                filter( element -> element.getParameterTypes().length == 1).
+                filter( element -> element.getParameterTypes()[0] == Properties.class).
                 findFirst();
     }
 
@@ -57,7 +57,7 @@ public class ClassFactory
     {
         //Lookup constructor with properties
         return Arrays.stream(clazz.getConstructors()).
-                filter( element -> element.getTypeParameters().length == 0).
+                filter( element -> element.getParameterTypes().length == 0).
                 findFirst();
     }
 

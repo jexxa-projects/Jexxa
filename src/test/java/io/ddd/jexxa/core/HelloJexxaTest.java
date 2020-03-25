@@ -13,6 +13,7 @@ import javax.management.ObjectInstance;
 
 import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
+import io.ddd.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,10 +51,9 @@ public class HelloJexxaTest
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest.bind(JMXAdapter.class, SimpleApplicationService.class);
+        objectUnderTest.bind(RESTfulRPCAdapter.class, SimpleApplicationService.class);
+
         objectUnderTest.startDrivingAdapters();
-
-
-        //jexxa.bind(RESTfulRPCAdapter.class, SimpleApplicationService.class);
 
 
         //Assert
