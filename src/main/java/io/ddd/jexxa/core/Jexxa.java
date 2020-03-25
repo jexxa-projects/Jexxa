@@ -32,8 +32,8 @@ public class Jexxa
 
     public void bindByAnnotation(Class<? extends Annotation> adapter, Class<? extends Annotation> port) {
         var annotationScanner = new AnnotationScanner();
-        var scannedDrivingAdapters = annotationScanner.findClassAnnotation(adapter);
-        var scannedInboundPorts = annotationScanner.findClassAnnotation(port);
+        var scannedDrivingAdapters = annotationScanner.getClassAnnotation(adapter);
+        var scannedInboundPorts = annotationScanner.getClassAnnotation(port);
 
         System.out.println("Found annotations " + scannedDrivingAdapters.size() + " Ports: " + scannedInboundPorts.size());
 
@@ -44,7 +44,7 @@ public class Jexxa
         scannedDrivingAdapters.forEach(element -> createdDrivingAdapters.add((IDrivingAdapter)classFactory.createByConstructor(element)));
         Validate.isTrue(scannedDrivingAdapters.size() == createdDrivingAdapters.size());
 
-        var createdInboundPorts = new ArrayList<Object>();
+        var createdInboundPorts = new ArrayList<>();
         scannedInboundPorts.forEach(element -> createdInboundPorts.add(classFactory.createByConstructor(element)));
         Validate.isTrue(scannedInboundPorts.size() == createdInboundPorts.size());
 
@@ -56,7 +56,7 @@ public class Jexxa
 
     public void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> port) {
         var annotationScanner = new AnnotationScanner();
-        var scannedInboundPorts = annotationScanner.findClassAnnotation(port);
+        var scannedInboundPorts = annotationScanner.getClassAnnotation(port);
 
         //Create ports and adapter
         var drivingAdapter = classFactory.createByConstructor(adapter);

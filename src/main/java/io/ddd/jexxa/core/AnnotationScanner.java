@@ -8,7 +8,7 @@ import io.github.classgraph.ClassGraph;
 public class AnnotationScanner
 {
 
-    public List<Class<?>> findClassAnnotation(final Class<? extends Annotation> annotation)
+    public List<Class<?>> getClassAnnotation(final Class<? extends Annotation> annotation)
     {
         return new ClassGraph()
                 //.verbose()
@@ -18,7 +18,7 @@ public class AnnotationScanner
                 .loadClasses();
     }
 
-    public List<Class<?>> findClassAnnotation(final Class<? extends Annotation> annotation, String packageName)
+    public List<Class<?>> getClassAnnotation(final Class<? extends Annotation> annotation, String packageName)
     {
         return new ClassGraph()
                 //.verbose()
@@ -27,6 +27,29 @@ public class AnnotationScanner
                 .scan()
                 .getClassesWithAnnotation(annotation.getName())
                 .loadClasses();
+    }
+
+    public List<Class<?>> getClassesImplementing(final Class<?> interfaceType)
+    {
+        return new ClassGraph()
+                //.verbose()
+                .enableAllInfo()
+                .scan()
+                .getClassesImplementing(interfaceType.getName())
+                .loadClasses();
+        
+    }
+
+    public List<Class<?>> getClassesImplementing(final Class<?> interfaceType, String packageName)
+    {
+        return new ClassGraph()
+                //.verbose()
+                .enableAllInfo()
+                .whitelistPackages(packageName)
+                .scan()
+                .getClassesImplementing(interfaceType.getName())
+                .loadClasses();
+
     }
 
 }

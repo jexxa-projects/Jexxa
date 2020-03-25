@@ -9,7 +9,7 @@ import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 
 import java.util.List;
 
-import io.ddd.jexxa.core.AnnotationScanner;
+import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.ddd.stereotype.applicationcore.ApplicationService;
 import io.ddd.stereotype.applicationcore.BusinessException;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class AnnotationScannerTest
         var objectUnderTest = new AnnotationScanner();
 
         //Act
-        var applicationServiceList = objectUnderTest.findClassAnnotation(ApplicationService.class);
+        var applicationServiceList = objectUnderTest.getClassAnnotation(ApplicationService.class);
 
         //Assert
         assertFalse(applicationServiceList.isEmpty());
@@ -39,7 +39,7 @@ public class AnnotationScannerTest
         var objectUnderTest = new AnnotationScanner();
 
         //Act
-        var applicationServiceList = objectUnderTest.findClassAnnotation(ApplicationService.class, packageName);
+        var applicationServiceList = objectUnderTest.getClassAnnotation(ApplicationService.class, packageName);
 
         //Assert
         assertFalse(applicationServiceList.isEmpty());
@@ -57,7 +57,7 @@ public class AnnotationScannerTest
         var objectUnderTest = new AnnotationScanner();
 
         //Act
-        var applicationServiceList = objectUnderTest.findClassAnnotation(unavailableAnnotationAtRuntime);
+        var applicationServiceList = objectUnderTest.getClassAnnotation(unavailableAnnotationAtRuntime);
 
         //Assert
         assertTrue(applicationServiceList.isEmpty());
@@ -70,10 +70,37 @@ public class AnnotationScannerTest
         var objectUnderTest = new AnnotationScanner();
 
         //Act
-        var applicationServiceList = objectUnderTest.findClassAnnotation(ApplicationService.class, invalidPackageName);
+        var applicationServiceList = objectUnderTest.getClassAnnotation(ApplicationService.class, invalidPackageName);
 
         //Assert
         assertTrue(applicationServiceList.isEmpty());
+    }
+
+    @Test
+    public void getClassesImplementingInterface() {
+        //Arrange
+        var objectUnderTest = new AnnotationScanner();
+
+        //Act
+        List<Class<?>> drivingAdapters = objectUnderTest.getClassesImplementing(IDrivingAdapter.class);
+
+        //Assert
+        assertFalse(drivingAdapters.isEmpty());
+    }
+
+
+    @Test
+    public void getClassesInPackageImplementingInterface() {
+        //Arrange
+        var objectUnderTest = new AnnotationScanner();
+        var packageName = "io.ddd.jexxa.infrastructure.drivingadapter.rest";
+
+        //Act
+        List<Class<?>> drivingAdapters = objectUnderTest.getClassesImplementing(IDrivingAdapter.class, packageName);
+
+        //Assert
+        assertFalse(drivingAdapters.isEmpty());
+        assertEquals(1, drivingAdapters.size());
     }
 
 }
