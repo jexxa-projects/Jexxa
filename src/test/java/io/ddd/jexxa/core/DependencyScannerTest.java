@@ -39,7 +39,9 @@ public class DependencyScannerTest
         var objectUnderTest = new DependencyScanner();
 
         //Act
-        var applicationServiceList = objectUnderTest.getClassesWithAnnotation(ApplicationService.class, packageName);
+        var applicationServiceList = objectUnderTest.
+                whiteListPackage(packageName).
+                getClassesWithAnnotation(ApplicationService.class);
 
         //Assert
         assertFalse(applicationServiceList.isEmpty());
@@ -57,7 +59,9 @@ public class DependencyScannerTest
         var objectUnderTest = new DependencyScanner();
 
         //Act
-        var applicationServiceList = objectUnderTest.getClassesWithAnnotation(ApplicationService.class, invalidPackageName);
+        var applicationServiceList = objectUnderTest.
+                whiteListPackage(invalidPackageName).
+                getClassesWithAnnotation(ApplicationService.class);
 
         //Assert
         assertTrue(applicationServiceList.isEmpty());
@@ -83,7 +87,9 @@ public class DependencyScannerTest
         var packageName = "io.ddd.jexxa.infrastructure.drivingadapter.rest";
 
         //Act
-        List<Class<?>> drivingAdapters = objectUnderTest.getClassesImplementing(IDrivingAdapter.class, packageName);
+        List<Class<?>> drivingAdapters = objectUnderTest.
+                whiteListPackage(packageName).
+                getClassesImplementing(IDrivingAdapter.class);
 
         //Assert
         assertFalse(drivingAdapters.isEmpty());

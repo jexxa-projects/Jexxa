@@ -21,10 +21,13 @@ import org.junit.Test;
  */
 public class DrivenAdapterFactoryTest
 {
+    private String packageName = "io.ddd.jexxa";
+    
     @Test
     public void createDrivenAdapter() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory();
+        var objectUnderTest = new DrivenAdapterFactory().
+                whiteListPackage(packageName);
 
         //Act
         var result = objectUnderTest.create(IDefaultConstructorService.class);
@@ -36,7 +39,9 @@ public class DrivenAdapterFactoryTest
     @Test
     public void createDrivenAdapterWithPropertiesConstructor() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory();
+        var objectUnderTest = new DrivenAdapterFactory().
+                whiteListPackage(packageName);
+
         var properties = new Properties();
 
         //Act
@@ -50,7 +55,8 @@ public class DrivenAdapterFactoryTest
     @Test 
     public void createDrivenAdapterWithFactoryMethod() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory();
+        var objectUnderTest = new DrivenAdapterFactory().
+                whiteListPackage(packageName);
 
         //Act
         var result = objectUnderTest.create(IFactroyMethodService.class);
@@ -62,8 +68,10 @@ public class DrivenAdapterFactoryTest
     @Test
     public void createDrivenAdapterWithPropertiesFactoryMethod() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory();
+        var objectUnderTest = new DrivenAdapterFactory().
+            whiteListPackage(packageName);
         var properties = new Properties();
+        
         //Act
         var result = objectUnderTest.create(IFactroyMethodService.class, properties);
 
@@ -75,7 +83,8 @@ public class DrivenAdapterFactoryTest
     @Test
     public void drivenAdapterAvailable() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory();
+        var objectUnderTest = new DrivenAdapterFactory().
+                whiteListPackage(packageName);
 
         //Act
         boolean result = objectUnderTest.adaptersAvailable(ApplicationServiceWithDrivenApdapters.class);
@@ -87,7 +96,8 @@ public class DrivenAdapterFactoryTest
     @Test
     public void drivenAdapterUnavailable() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory();
+        var objectUnderTest = new DrivenAdapterFactory().
+                whiteListPackage(packageName);
 
         //Act
         boolean result = objectUnderTest.adaptersAvailable(ApplicationServiceWithDrivenApdapters.class);
@@ -99,7 +109,8 @@ public class DrivenAdapterFactoryTest
     @Test (expected = IllegalArgumentException.class)
     public void createNoUniqueImplementation() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory();
+        var objectUnderTest = new DrivenAdapterFactory().
+                whiteListPackage(packageName);
 
         //Act
         objectUnderTest.create(INotUniqueService.class);
@@ -108,7 +119,8 @@ public class DrivenAdapterFactoryTest
     @Test (expected = IllegalArgumentException.class)
     public void createNoImplementationAvailable() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory();
+        var objectUnderTest = new DrivenAdapterFactory().
+                whiteListPackage(packageName);
 
         //Act
         objectUnderTest.create(INotImplementedService.class);

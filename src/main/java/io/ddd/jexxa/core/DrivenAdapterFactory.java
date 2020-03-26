@@ -1,6 +1,7 @@
 package io.ddd.jexxa.core;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -17,6 +18,14 @@ import org.apache.commons.lang.Validate;
  */
 public class DrivenAdapterFactory
 {
+    private List<String> whiteListPackages = new ArrayList<>();
+
+    DrivenAdapterFactory whiteListPackage(String packageName)
+    {
+        whiteListPackages.add(packageName);
+        return this;
+    }
+
     public <T> T create(Class<T> interfaceType) {
         Validate.notNull(interfaceType);
 
@@ -63,7 +72,9 @@ public class DrivenAdapterFactory
             JexxaLogger.getLogger(getClass()).warn("More than one constructor available. => Reconsider to provide only a single constructor");
         }
 
-        var dependencyScanner = new DependencyScanner();
+        var dependencyScanner = new DependencyScanner().
+                whiteListPackages(whiteListPackages);
+
         return constructorList.stream().
                 anyMatch(constructor -> validateAdaptersAvailable(Arrays.asList(constructor.getParameterTypes()), dependencyScanner) );
     }
@@ -77,7 +88,8 @@ public class DrivenAdapterFactory
 
 
     private <T> Class<?> getImplementationOf(Class<T> interfaceType) {
-        var dependencyScanner = new DependencyScanner();
+        var dependencyScanner = new DependencyScanner().whiteListPackages(whiteListPackages);
+        
         return getImplementationOf(interfaceType, dependencyScanner);
     }
 
