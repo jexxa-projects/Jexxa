@@ -3,6 +3,7 @@ package io.ddd.jexxa.core;
 
 import java.util.Properties;
 
+import io.ddd.jexxa.applicationcore.domainservice.IMulipleImplementationTest;
 import io.ddd.jexxa.applicationcore.domainservice.ITestDomainService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,10 +23,22 @@ public class DrivenAdapterFactoryTest
         var objectUnderTest = new DrivenAdapterFactory();
 
         //Act
-        ITestDomainService result = objectUnderTest.createDrivenAdapter(ITestDomainService.class);
+        var result = objectUnderTest.createDrivenAdapter(ITestDomainService.class);
 
         //Assert
         Assert.assertNotNull(result);
-        //objectUnderTest.createDrivenAdapter(ITestDomainService.class, Properties properties);
     }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void multipleInterfaceImplementation() {
+        //Arrange
+        var objectUnderTest = new DrivenAdapterFactory();
+
+        //Act
+        var result = objectUnderTest.createDrivenAdapter(IMulipleImplementationTest.class);
+
+        //Assert
+        Assert.assertNotNull(result);
+    }
+
 }
