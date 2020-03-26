@@ -14,7 +14,7 @@ import org.apache.commons.lang.Validate;
  */
 public class DrivenAdapterFactory
 {
-    public <T> T createDrivenAdapter(Class<T> interfaceType) {
+    public <T> T create(Class<T> interfaceType) {
         Validate.notNull(interfaceType);
 
         Class<?> implementation = getImplementationOf(interfaceType);
@@ -33,7 +33,7 @@ public class DrivenAdapterFactory
         return instance;
     }
 
-    public <T> T createDrivenAdapter(Class<T> interfaceType, Properties properties) {
+    public <T> T create(Class<T> interfaceType, Properties properties) {
         Validate.notNull(interfaceType);
 
         Class<?> implementation = getImplementationOf(interfaceType);

@@ -26,7 +26,7 @@ public class DrivenAdapterFactoryTest
         var objectUnderTest = new DrivenAdapterFactory();
 
         //Act
-        var result = objectUnderTest.createDrivenAdapter(IDefaultConstructorService.class);
+        var result = objectUnderTest.create(IDefaultConstructorService.class);
 
         //Assert
         Assert.assertNotNull(result);
@@ -39,7 +39,7 @@ public class DrivenAdapterFactoryTest
         var properties = new Properties();
 
         //Act
-        var result = objectUnderTest.createDrivenAdapter(IPropertiesConstructorService.class, properties);
+        var result = objectUnderTest.create(IPropertiesConstructorService.class, properties);
 
         //Assert
         Assert.assertNotNull(result);
@@ -52,7 +52,7 @@ public class DrivenAdapterFactoryTest
         var objectUnderTest = new DrivenAdapterFactory();
 
         //Act
-        var result = objectUnderTest.createDrivenAdapter(IFactroyMethodService.class);
+        var result = objectUnderTest.create(IFactroyMethodService.class);
 
         //Assert
         Assert.assertNotNull(result);
@@ -64,7 +64,7 @@ public class DrivenAdapterFactoryTest
         var objectUnderTest = new DrivenAdapterFactory();
         var properties = new Properties();
         //Act
-        var result = objectUnderTest.createDrivenAdapter(IFactroyMethodService.class, properties);
+        var result = objectUnderTest.create(IFactroyMethodService.class, properties);
 
         //Assert
         Assert.assertNotNull(result);
@@ -76,7 +76,7 @@ public class DrivenAdapterFactoryTest
         var objectUnderTest = new DrivenAdapterFactory();
 
         //Act
-        objectUnderTest.createDrivenAdapter(INotUniqueService.class);
+        objectUnderTest.create(INotUniqueService.class);
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -85,7 +85,7 @@ public class DrivenAdapterFactoryTest
         var objectUnderTest = new DrivenAdapterFactory();
 
         //Act
-        objectUnderTest.createDrivenAdapter(INotImplementedService.class);
+        objectUnderTest.create(INotImplementedService.class);
     }
 
 }
