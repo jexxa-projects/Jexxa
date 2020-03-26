@@ -1,5 +1,5 @@
 package io.ddd.jexxa.applicationcore.domainservice;
 
-public interface IPropertyFactoryMethodService
+public interface IPropertiesConstructorService
 {
 }

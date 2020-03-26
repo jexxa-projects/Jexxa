@@ -1,6 +1,8 @@
 package io.ddd.jexxa.core;
 
 
+import java.util.Properties;
+
 import org.apache.commons.lang.Validate;
 
 /*
@@ -12,14 +14,20 @@ import org.apache.commons.lang.Validate;
  */
 public class DrivenAdapterFactory
 {
-    private ClassFactory classFactory = new ClassFactory(null);
-
     public <T> T createDrivenAdapter(Class<T> interfaceType) {
         Validate.notNull(interfaceType);
 
         Class<?> implementation = getImplementationOf(interfaceType);
 
-        return interfaceType.cast(classFactory.createByConstructor(implementation));
+        return interfaceType.cast(new ClassFactory(null).createByConstructor(implementation));
+    }
+
+    public <T> T createDrivenAdapter(Class<T> interfaceType, Properties properties) {
+        Validate.notNull(interfaceType);
+
+        Class<?> implementation = getImplementationOf(interfaceType);
+
+        return interfaceType.cast(new ClassFactory(properties).createByConstructor(implementation));
     }
 
     private <T> Class<?> getImplementationOf(Class<T> interfaceType) {

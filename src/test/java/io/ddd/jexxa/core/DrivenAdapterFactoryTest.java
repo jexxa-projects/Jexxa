@@ -1,9 +1,12 @@
 package io.ddd.jexxa.core;
 
 
+import java.util.Properties;
+
 import io.ddd.jexxa.applicationcore.domainservice.IMulipleImplementationTest;
 import io.ddd.jexxa.applicationcore.domainservice.IDefaultConstructorService;
 import io.ddd.jexxa.applicationcore.domainservice.INotImplementedService;
+import io.ddd.jexxa.applicationcore.domainservice.IPropertiesConstructorService;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,6 +30,21 @@ public class DrivenAdapterFactoryTest
         //Assert
         Assert.assertNotNull(result);
     }
+
+    @Test
+    public void createDrivenAdapterWithPropertiesConstructor() {
+        //Arrange
+        var objectUnderTest = new DrivenAdapterFactory();
+        var properties = new Properties();
+
+        //Act
+        var result = objectUnderTest.createDrivenAdapter(IPropertiesConstructorService.class, properties);
+
+        //Assert
+        Assert.assertNotNull(result);
+    }
+
+
 
     @Test (expected = IllegalArgumentException.class)
     public void createNoUniqueImplementation() {
