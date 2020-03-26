@@ -1,13 +1,14 @@
 package io.ddd.jexxa.core;
 
 
+import java.util.ArrayList;
 import java.util.Properties;
 
-import io.ddd.jexxa.applicationcore.applicationservice.ApplicationServiceWithDrivenApdapters;
-import io.ddd.jexxa.applicationcore.domainservice.IFactroyMethodService;
-import io.ddd.jexxa.applicationcore.domainservice.INotUniqueService;
+import io.ddd.jexxa.applicationcore.applicationservice.ApplicationServiceWithUnavailableDrivenAdapter;
 import io.ddd.jexxa.applicationcore.domainservice.IDefaultConstructorService;
+import io.ddd.jexxa.applicationcore.domainservice.IFactroyMethodService;
 import io.ddd.jexxa.applicationcore.domainservice.INotImplementedService;
+import io.ddd.jexxa.applicationcore.domainservice.INotUniqueService;
 import io.ddd.jexxa.applicationcore.domainservice.IPropertiesConstructorService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -86,8 +87,13 @@ public class DrivenAdapterFactoryTest
         var objectUnderTest = new DrivenAdapterFactory().
                 whiteListPackage(packageName);
 
+        var adapterList = new ArrayList<Class<?>>();
+        adapterList.add(IDefaultConstructorService.class);
+        adapterList.add(IFactroyMethodService.class);
+        adapterList.add(IPropertiesConstructorService.class);
+
         //Act
-        boolean result = objectUnderTest.adaptersAvailable(ApplicationServiceWithDrivenApdapters.class);
+        boolean result = objectUnderTest.validateAdaptersAvailable(adapterList);
 
         //Assert
         Assert.assertTrue(result);
@@ -99,11 +105,14 @@ public class DrivenAdapterFactoryTest
         var objectUnderTest = new DrivenAdapterFactory().
                 whiteListPackage(packageName);
 
+        var adapterList = new ArrayList<Class<?>>();
+        adapterList.add(INotImplementedService.class);
+
         //Act
-        boolean result = objectUnderTest.adaptersAvailable(ApplicationServiceWithDrivenApdapters.class);
+        boolean result = objectUnderTest.validateAdaptersAvailable(adapterList);
 
         //Assert
-        Assert.assertTrue(result);
+        Assert.assertFalse(result);
     }
 
     @Test (expected = IllegalArgumentException.class)

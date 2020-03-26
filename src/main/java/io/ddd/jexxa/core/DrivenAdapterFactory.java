@@ -2,11 +2,9 @@ package io.ddd.jexxa.core;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 
 /*
@@ -63,42 +61,37 @@ public class DrivenAdapterFactory
         return instance;
     }
 
-    public boolean adaptersAvailable(Class<?> service)
+
+    boolean validateAdaptersAvailable(List<Class <?> > adapterList)
     {
-        var constructorList = Arrays.asList(service.getConstructors());
-
-        if ( constructorList.size() > 1)
-        {
-            JexxaLogger.getLogger(getClass()).warn("More than one constructor available. => Reconsider to provide only a single constructor");
-        }
-
         var dependencyScanner = new DependencyScanner().
                 whiteListPackages(whiteListPackages);
-
-        return constructorList.stream().
-                anyMatch(constructor -> validateAdaptersAvailable(Arrays.asList(constructor.getParameterTypes()), dependencyScanner) );
-    }
-
-    private boolean validateAdaptersAvailable(List<Class <?> > adapterList, DependencyScanner dependencyScanner)
-    {
+        
         return adapterList.
                 stream().
-                noneMatch(adapter -> getImplementationOf(adapter, dependencyScanner) == null);
+                noneMatch(adapter -> validateImplementationOf(adapter, dependencyScanner) == null);
     }
 
 
     private <T> Class<?> getImplementationOf(Class<T> interfaceType) {
         var dependencyScanner = new DependencyScanner().whiteListPackages(whiteListPackages);
-        
-        return getImplementationOf(interfaceType, dependencyScanner);
-    }
 
-
-    private <T> Class<?> getImplementationOf(Class<T> interfaceType, DependencyScanner dependencyScanner) {
         var results = dependencyScanner.getClassesImplementing(interfaceType);
+
         Validate.notNull(results);
         Validate.notEmpty(results, "No implementation of " + interfaceType.getName() + " available");
         Validate.isTrue( results.size() == 1, "Multiple implementation of " + interfaceType.getName() + " available");
+
+        return validateImplementationOf(interfaceType, dependencyScanner);
+    }
+
+
+    private <T> Class<?> validateImplementationOf(Class<T> interfaceType, DependencyScanner dependencyScanner) {
+        var results = dependencyScanner.getClassesImplementing(interfaceType);
+
+        if (results == null || results.isEmpty()) {
+            return null;
+        }
 
         return results.get(0);
     }
