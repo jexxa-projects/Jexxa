@@ -49,20 +49,7 @@ public class DependencyScannerTest
                 .anyMatch(SimpleApplicationService.class::isAssignableFrom));
 
     }
-
-
-    @Test
-    public void findAnnotatedClassesFails() {
-        //Arrange
-        var unavailableAnnotationAtRuntime = BusinessException.class;
-        var objectUnderTest = new DependencyScanner();
-
-        //Act
-        var applicationServiceList = objectUnderTest.getClassesWithAnnotation(unavailableAnnotationAtRuntime);
-
-        //Assert
-        assertTrue(applicationServiceList.isEmpty());
-    }
+    
 
     @Test
     public void findAnnotatedClassesFailsWithinPackage() {

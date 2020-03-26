@@ -60,7 +60,7 @@ public class DependencyScanner
 
     private void validateRetentionRuntime(final Class<? extends Annotation> annotation) {
         Validate.notNull(annotation.getAnnotation(Retention.class), "Annotation must be declared with '@Retention(RUNTIME)'" );
-        Validate.isTrue(annotation.getAnnotation(Retention.class).value().equals(RetentionPolicy.RUNTIME), "Annotation must be declared with '@RETENTION(\"RUNTIME\")'");
+        Validate.isTrue(annotation.getAnnotation(Retention.class).value().equals(RetentionPolicy.RUNTIME), "Annotation must be declared with '@Retention(RUNTIME)");
     }
 
 }
