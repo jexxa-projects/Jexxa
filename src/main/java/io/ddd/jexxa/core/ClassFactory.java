@@ -79,6 +79,26 @@ public class ClassFactory
         return null;
     }
 
+    public static <T> T createByFactoryMethod(Class<?> implementation, Class<T> interfaceType, Properties properties)
+    {
+        Validate.notNull(implementation);
+
+        var method = searchPropertiesFactoryMethod(implementation, interfaceType);
+        if (method.isPresent()) {
+            try
+            {
+                return interfaceType.cast(method.get().invoke(null, properties));
+            }  catch (Exception e)
+            {
+                JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
+                throw new ClassFactoryException(interfaceType);
+            }
+        }
+
+        return null;
+    }
+
+
     @SuppressWarnings("squid:S1452")
     private static Optional<Constructor<?>> searchPropertyConstructor(Class<?> clazz)
     {
@@ -105,6 +125,18 @@ public class ClassFactory
         return Arrays.stream(implementation.getMethods()).
                 filter( element -> Modifier.isStatic(element.getModifiers())).
                 filter( element -> element.getParameterTypes().length == 0).
+                filter( element -> element.getReturnType().equals(interfaceType)).
+                findFirst();
+    }
+
+    @SuppressWarnings("squid:S1452")
+    private static <T> Optional<Method> searchPropertiesFactoryMethod(Class<?> implementation, Class<T> interfaceType)
+    {
+        //Lookup factory method with no attributes and return type clazz
+        return Arrays.stream(implementation.getMethods()).
+                filter( element -> Modifier.isStatic(element.getModifiers())).
+                filter( element -> element.getParameterTypes().length == 1).
+                filter( element -> element.getParameterTypes()[0].equals(Properties.class)).
                 filter( element -> element.getReturnType().equals(interfaceType)).
                 findFirst();
     }

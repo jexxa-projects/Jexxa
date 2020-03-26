@@ -19,8 +19,11 @@ public class DrivenAdapterFactory
 
         Class<?> implementation = getImplementationOf(interfaceType);
 
+        //Apply 1. convention and try to use default constructor
         var instance = interfaceType.cast(ClassFactory.createByConstructor(implementation));
 
+
+        //Apply 2. convention and try to use a factory method 
         if (instance == null) {
             instance = interfaceType.cast(ClassFactory.createByFactoryMethod(implementation, interfaceType));
         }
@@ -35,7 +38,17 @@ public class DrivenAdapterFactory
 
         Class<?> implementation = getImplementationOf(interfaceType);
 
-        return interfaceType.cast(ClassFactory.createByConstructor(implementation, properties));
+        //Apply 1. convention and try to use a constructor accepting properties 
+        T instance = interfaceType.cast(ClassFactory.createByConstructor(implementation, properties));
+
+        //Apply 2. convention and try to use a factory method accepting properties
+        if (instance == null) {
+            instance = interfaceType.cast(ClassFactory.createByFactoryMethod(implementation, interfaceType, properties));
+        }
+
+        Validate.notNull(instance, "No suitable constructor found to create " + interfaceType.getName());
+
+        return instance;
     }
 
     private <T> Class<?> getImplementationOf(Class<T> interfaceType) {
