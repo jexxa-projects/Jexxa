@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.Properties;
 
+import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 
 public class ClassFactory
@@ -26,7 +27,7 @@ public class ClassFactory
             {
               return clazz.cast(propertyConstructor.get().newInstance(properties));
             } catch ( Exception e) {
-                System.err.println(e.getMessage());
+              JexxaLogger.getLogger(getClass()).error(e.getMessage());
             }
         }
 
@@ -38,7 +39,7 @@ public class ClassFactory
                 return clazz.cast(defaultConstructor.get().newInstance());
             }  catch (Exception e)
             {
-                System.err.println(e.getMessage());
+                JexxaLogger.getLogger(getClass()).error(e.getMessage());
             }
         }
 
