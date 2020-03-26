@@ -9,6 +9,7 @@ import io.ddd.jexxa.applicationservice.SimpleApplicationService;
 
 import java.util.List;
 
+import io.ddd.jexxa.core.annotation.UnavailableDuringRuntime;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.ddd.stereotype.applicationcore.ApplicationService;
 import io.ddd.stereotype.applicationcore.BusinessException;
@@ -101,6 +102,16 @@ public class DependencyScannerTest
         //Assert
         assertFalse(drivingAdapters.isEmpty());
         assertEquals(1, drivingAdapters.size());
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void handleAnnotationUnavailableDuringRuntime()
+    {
+        //Arrange
+        var objectUnderTest = new DependencyScanner();
+
+        //Act
+        objectUnderTest.getClassesWithAnnotation(UnavailableDuringRuntime.class);
     }
 
 }

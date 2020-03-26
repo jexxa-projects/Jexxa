@@ -1,15 +1,19 @@
 package io.ddd.jexxa.core;
 
 import java.lang.annotation.Annotation;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import io.github.classgraph.ClassGraph;
+import org.apache.commons.lang.Validate;
 
 public class DependencyScanner
 {
 
     public List<Class<?>> getClassesWithAnnotation(final Class<? extends Annotation> annotation)
     {
+        validateRetentionRuntime(annotation);
         return new ClassGraph()
                 //.verbose()
                 .enableAllInfo()
@@ -20,6 +24,7 @@ public class DependencyScanner
 
     public List<Class<?>> getClassesWithAnnotation(final Class<? extends Annotation> annotation, String packageName)
     {
+        validateRetentionRuntime(annotation);
         return new ClassGraph()
                 //.verbose()
                 .enableAllInfo()
@@ -50,6 +55,12 @@ public class DependencyScanner
                 .getClassesImplementing(interfaceType.getName())
                 .loadClasses();
 
+    }
+
+
+    private void validateRetentionRuntime(final Class<? extends Annotation> annotation) {
+        Validate.notNull(annotation.getAnnotation(Retention.class), "Annotation must be declared with '@Retention(RUNTIME)'" );
+        Validate.isTrue(annotation.getAnnotation(Retention.class).value().equals(RetentionPolicy.RUNTIME), "Annotation must be declared with '@RETENTION(\"RUNTIME\")'");
     }
 
 }
