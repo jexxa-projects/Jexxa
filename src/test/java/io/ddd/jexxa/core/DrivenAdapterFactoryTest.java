@@ -45,8 +45,18 @@ public class DrivenAdapterFactoryTest
         Assert.assertNotNull(result);
     }
 
-    
 
+    @Test 
+    public void createDrivenAdapterWithFactoryMethod() {
+        //Arrange
+        var objectUnderTest = new DrivenAdapterFactory();
+
+        //Act
+        var result = objectUnderTest.createDrivenAdapter(IFactroyMethodService.class);
+
+        //Assert
+        Assert.assertNotNull(result);
+    }
 
     @Test (expected = IllegalArgumentException.class)
     public void createNoUniqueImplementation() {

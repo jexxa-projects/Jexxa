@@ -19,7 +19,15 @@ public class DrivenAdapterFactory
 
         Class<?> implementation = getImplementationOf(interfaceType);
 
-        return interfaceType.cast(ClassFactory.createByConstructor(implementation));
+        var instance = interfaceType.cast(ClassFactory.createByConstructor(implementation));
+
+        if (instance == null) {
+            instance = interfaceType.cast(ClassFactory.createByFactoryMethod(implementation, interfaceType));
+        }
+        
+        Validate.notNull(instance, "No suitable constructor found to create " + interfaceType.getName());
+        
+        return instance;
     }
 
     public <T> T createDrivenAdapter(Class<T> interfaceType, Properties properties) {
