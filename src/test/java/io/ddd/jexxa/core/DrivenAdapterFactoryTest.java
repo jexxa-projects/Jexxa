@@ -1,10 +1,9 @@
 package io.ddd.jexxa.core;
 
 
-import java.util.Properties;
-
 import io.ddd.jexxa.applicationcore.domainservice.IMulipleImplementationTest;
-import io.ddd.jexxa.applicationcore.domainservice.ITestDomainService;
+import io.ddd.jexxa.applicationcore.domainservice.IDefaultConstructorService;
+import io.ddd.jexxa.applicationcore.domainservice.INotImplementedService;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,22 +22,28 @@ public class DrivenAdapterFactoryTest
         var objectUnderTest = new DrivenAdapterFactory();
 
         //Act
-        var result = objectUnderTest.createDrivenAdapter(ITestDomainService.class);
+        var result = objectUnderTest.createDrivenAdapter(IDefaultConstructorService.class);
 
         //Assert
         Assert.assertNotNull(result);
     }
 
     @Test (expected = IllegalArgumentException.class)
-    public void multipleInterfaceImplementation() {
+    public void createNoUniqueImplementation() {
         //Arrange
         var objectUnderTest = new DrivenAdapterFactory();
 
         //Act
-        var result = objectUnderTest.createDrivenAdapter(IMulipleImplementationTest.class);
+        objectUnderTest.createDrivenAdapter(IMulipleImplementationTest.class);
+    }
 
-        //Assert
-        Assert.assertNotNull(result);
+    @Test (expected = IllegalArgumentException.class)
+    public void createNoImplementationAvailable() {
+        //Arrange
+        var objectUnderTest = new DrivenAdapterFactory();
+
+        //Act
+        objectUnderTest.createDrivenAdapter(INotImplementedService.class);
     }
 
 }
