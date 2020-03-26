@@ -19,7 +19,7 @@ import java.util.Set;
 import javax.management.MBeanServer;
 import javax.management.ObjectInstance;
 
-import io.ddd.jexxa.applicationservice.SimpleApplicationService;
+import io.ddd.jexxa.applicationcore.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import io.ddd.jexxa.infrastructure.stereotype.DrivingAdapter;

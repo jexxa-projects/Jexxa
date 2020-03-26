@@ -9,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -20,9 +19,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import io.ddd.jexxa.applicationservice.SimpleApplicationService;
-import io.ddd.jexxa.core.ClassFactory;
-import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
+import io.ddd.jexxa.applicationcore.applicationservice.SimpleApplicationService;
+import io.ddd.jexxa.applicationcore.domain.valueobject.JexxaValueObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -99,7 +97,7 @@ public class RESTfulRPCAdapterTest
     public void testPOSTCommandWithOneObject() throws Throwable
     {
         //Arrange
-        var newValue = new SimpleValueObject(44);
+        var newValue = new JexxaValueObject(44);
         var restPath = resTfulRPCModel.getPOSTCommand("setSimpleValueObject");
         var responsePath = resTfulRPCModel.getGETCommand("getSimpleValue");
         assertTrue(responsePath.isPresent());
@@ -118,7 +116,7 @@ public class RESTfulRPCAdapterTest
     public void testPOSTCommandWithTwoObjects() throws Throwable
     {
         //Arrange
-        var paramList = new SimpleValueObject[]{new SimpleValueObject(44), new SimpleValueObject(88)};
+        var paramList = new JexxaValueObject[]{new JexxaValueObject(44), new JexxaValueObject(88)};
         var restPath = resTfulRPCModel.getPOSTCommand("setSimpleValueObjectTwice");
         var responsePath = resTfulRPCModel.getGETCommand("getSimpleValue");
         assertTrue(responsePath.isPresent());

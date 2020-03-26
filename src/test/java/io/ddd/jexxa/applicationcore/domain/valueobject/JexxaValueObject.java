@@ -1,14 +1,14 @@
-package io.ddd.jexxa.domain.valueobject;
+package io.ddd.jexxa.applicationcore.domain.valueobject;
 
 import io.ddd.stereotype.applicationcore.ValueObject;
 
 @ValueObject
-public class SimpleValueObject
+public class JexxaValueObject
 {
     private int value;
     double valueInPercent;
 
-    public SimpleValueObject(int value) {
+    public JexxaValueObject(int value) {
         this.value = value;
         this.valueInPercent = value / 100.0;
     }

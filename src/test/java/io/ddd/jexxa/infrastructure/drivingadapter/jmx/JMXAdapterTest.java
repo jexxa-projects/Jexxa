@@ -7,13 +7,10 @@ import static org.junit.Assert.assertTrue;
 import java.lang.management.ManagementFactory;
 import java.util.Set;
 
-import javax.management.JMX;
 import javax.management.MBeanServer;
-import javax.management.MalformedObjectNameException;
 import javax.management.ObjectInstance;
-import javax.management.ObjectName;
 
-import io.ddd.jexxa.applicationservice.SimpleApplicationService;
+import io.ddd.jexxa.applicationcore.applicationservice.SimpleApplicationService;
 import org.junit.Test;
 
 public class JMXAdapterTest

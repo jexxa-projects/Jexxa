@@ -1,7 +1,8 @@
-package io.ddd.jexxa.applicationservice;
+package io.ddd.jexxa.applicationcore.applicationservice;
 
 
-import io.ddd.jexxa.domain.valueobject.SimpleValueObject;
+import io.ddd.jexxa.applicationcore.domain.valueobject.JexxaValueObject;
+import io.ddd.jexxa.core.Jexxa;
 import io.ddd.stereotype.applicationcore.ApplicationService;
 
 @ApplicationService
@@ -47,21 +48,21 @@ public class SimpleApplicationService
         this.firstValue = simpleValue;
     }
 
-    public void setSimpleValueObject(SimpleValueObject simpleValueObject)
+    public void setSimpleValueObject(JexxaValueObject simpleValueObject)
     {
         setSimpleValue(simpleValueObject.getValue());
     }
 
-    public void setSimpleValueObjectTwice(SimpleValueObject first, SimpleValueObject second)
+    public void setSimpleValueObjectTwice(JexxaValueObject first, JexxaValueObject second)
     {
         setSimpleValue(first.getValue());
         setSimpleValue(second.getValue());
     }
     
 
-    public SimpleValueObject getSimpleValueObject()
+    public JexxaValueObject getSimpleValueObject()
     {
-        return  new SimpleValueObject(firstValue);
+        return  new JexxaValueObject(firstValue);
     }
 
 }
