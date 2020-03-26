@@ -4,7 +4,7 @@ package io.ddd.jexxa.core;
 import java.util.Properties;
 
 import io.ddd.jexxa.applicationcore.domainservice.IFactroyMethodService;
-import io.ddd.jexxa.applicationcore.domainservice.IMulipleImplementationTest;
+import io.ddd.jexxa.applicationcore.domainservice.INotUniqueService;
 import io.ddd.jexxa.applicationcore.domainservice.IDefaultConstructorService;
 import io.ddd.jexxa.applicationcore.domainservice.INotImplementedService;
 import io.ddd.jexxa.applicationcore.domainservice.IPropertiesConstructorService;
@@ -64,7 +64,7 @@ public class DrivenAdapterFactoryTest
         var objectUnderTest = new DrivenAdapterFactory();
 
         //Act
-        objectUnderTest.createDrivenAdapter(IMulipleImplementationTest.class);
+        objectUnderTest.createDrivenAdapter(INotUniqueService.class);
     }
 
     @Test (expected = IllegalArgumentException.class)
