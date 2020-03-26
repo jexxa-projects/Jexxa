@@ -9,5 +9,9 @@ public interface IDrivingAdapter
 
     void stop();
 
+    /*
+     * @param object: Object to be registered.
+     * @pre object: Must not be null
+     */
     void register(Object object);
 }

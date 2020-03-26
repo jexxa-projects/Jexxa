@@ -29,17 +29,13 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public RESTfulRPCAdapter(String hostname, int port)
     {
         Validate.notNull(hostname);
+        Validate.isTrue(port >= 0);
+
         this.hostname = hostname;
         this.port = port;
 
         registerExceptionHandler();
     }
-
-    public RESTfulRPCAdapter(int port)
-    {
-        this("localhost", port);
-    }
-
 
     public RESTfulRPCAdapter(Properties properties)
     {
@@ -48,11 +44,15 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
         this.hostname = properties.getProperty(HOST_PROPERTY);
         this.port = Integer.parseInt(properties.getProperty(PORT_PROPERTY));
+
+        Validate.notNull(hostname);
+        Validate.isTrue(port >= 0);
         registerExceptionHandler();
     }
 
     public void register(Object object)
     {
+        Validate.notNull(object);
         registerGETMethods(object);
         registerPOSTMethods(object);
     }

@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.Properties;
 
+import org.apache.commons.lang.Validate;
+
 public class ClassFactory
 {
     private Properties properties;
@@ -16,6 +18,7 @@ public class ClassFactory
 
     public <T> T createByConstructor(Class<T> clazz)
     {
+        Validate.notNull(clazz);
         var propertyConstructor = searchPropertyConstructor(clazz);
 
         if (propertyConstructor.isPresent()) {

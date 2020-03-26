@@ -24,6 +24,7 @@ public class DependencyScanner
 
     public List<Class<?>> getClassesWithAnnotation(final Class<? extends Annotation> annotation, String packageName)
     {
+        Validate.notNull(packageName);
         validateRetentionRuntime(annotation);
         return new ClassGraph()
                 //.verbose()
@@ -36,6 +37,7 @@ public class DependencyScanner
 
     public List<Class<?>> getClassesImplementing(final Class<?> interfaceType)
     {
+        Validate.notNull(interfaceType);
         return new ClassGraph()
                 //.verbose()
                 .enableAllInfo()
@@ -47,6 +49,8 @@ public class DependencyScanner
 
     public List<Class<?>> getClassesImplementing(final Class<?> interfaceType, String packageName)
     {
+        Validate.notNull(interfaceType);
+        Validate.notNull(packageName);
         return new ClassGraph()
                 //.verbose()
                 .enableAllInfo()

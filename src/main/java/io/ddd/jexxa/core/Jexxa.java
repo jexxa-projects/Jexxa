@@ -20,6 +20,9 @@ public class Jexxa
     }
 
     public void bind(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
+        Validate.notNull(adapter);
+        Validate.notNull(port);
+
         var drivingAdapter = classFactory.createByConstructor(adapter);
         Validate.notNull(drivingAdapter);
 
@@ -31,15 +34,15 @@ public class Jexxa
     }
 
     public void bindByAnnotation(Class<? extends Annotation> adapter, Class<? extends Annotation> port) {
+        Validate.notNull(adapter);
+        Validate.notNull(port);
+
         var annotationScanner = new DependencyScanner();
         var scannedDrivingAdapters = annotationScanner.getClassesWithAnnotation(adapter);
         var scannedInboundPorts = annotationScanner.getClassesWithAnnotation(port);
 
-        System.out.println("Found annotations " + scannedDrivingAdapters.size() + " Ports: " + scannedInboundPorts.size());
-
-        //Create ports and adapter
+        //Create ports
         var createdDrivingAdapters = new ArrayList<IDrivingAdapter>();
-        scannedDrivingAdapters.forEach(element -> System.out.println(element.getSimpleName()));
 
         scannedDrivingAdapters.forEach(element -> createdDrivingAdapters.add((IDrivingAdapter)classFactory.createByConstructor(element)));
         Validate.isTrue(scannedDrivingAdapters.size() == createdDrivingAdapters.size());
@@ -55,6 +58,9 @@ public class Jexxa
 
 
     public void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> port) {
+        Validate.notNull(adapter);
+        Validate.notNull(port);
+
         var annotationScanner = new DependencyScanner();
         var scannedInboundPorts = annotationScanner.getClassesWithAnnotation(port);
 

@@ -20,6 +20,7 @@ public class JMXAdapter implements IDrivingAdapter
 
     public void register(Object object)
     {
+        Validate.notNull(object);
         validateJMXSettings();
 
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
