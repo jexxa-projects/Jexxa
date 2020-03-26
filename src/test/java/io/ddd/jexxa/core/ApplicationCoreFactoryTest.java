@@ -1,7 +1,5 @@
 package io.ddd.jexxa.core;
 
-import static org.junit.Assert.*;
-
 import io.ddd.jexxa.applicationcore.applicationservice.ApplicationServiceWithDrivenApdapters;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +13,7 @@ public class ApplicationCoreFactoryTest {
     @Test
     public void drivenAdapterAvailable() {
         //Arrange
-        var drivenAdapterFactory = new DrivenAdapterFactory().
+        var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
         var objectUnderTest = new ApplicationCoreFactory(drivenAdapterFactory).
                 whiteListPackage(applicationCorePackageName);
@@ -30,7 +28,7 @@ public class ApplicationCoreFactoryTest {
     @Test
     public void drivenAdapterUnavailable() {
         //Arrange
-        var drivenAdapterFactory = new DrivenAdapterFactory().
+        var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
         var objectUnderTest = new ApplicationCoreFactory(drivenAdapterFactory).
                 whiteListPackage(applicationCorePackageName);

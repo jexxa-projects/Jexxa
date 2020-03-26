@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import io.ddd.jexxa.infrastructure.stereotype.DrivenAdapter;
 import io.ddd.jexxa.utils.JexxaLogger;
 
 public class ApplicationCoreFactory
 {
     private List<String> whiteListPackages = new ArrayList<>();
-    DrivenAdapterFactory drivenAdapterFactory;
+    AdapterFactory drivenAdapterFactory;
 
 
-    ApplicationCoreFactory(DrivenAdapterFactory drivenAdapterFactory)
+    ApplicationCoreFactory(AdapterFactory drivenAdapterFactory)
     {
         this.drivenAdapterFactory = drivenAdapterFactory;
     }

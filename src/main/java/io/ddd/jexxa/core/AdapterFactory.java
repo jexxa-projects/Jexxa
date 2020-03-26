@@ -14,11 +14,11 @@ import org.apache.commons.lang.Validate;
  * 3. Public static method with return type if the requested interface
  * 4. Public static method with return type if the requested interface and Properties as argument
  */
-public class DrivenAdapterFactory
+public class AdapterFactory
 {
     private List<String> whiteListPackages = new ArrayList<>();
 
-    DrivenAdapterFactory whiteListPackage(String packageName)
+    AdapterFactory whiteListPackage(String packageName)
     {
         whiteListPackages.add(packageName);
         return this;
