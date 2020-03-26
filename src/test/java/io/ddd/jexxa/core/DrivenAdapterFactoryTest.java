@@ -3,6 +3,7 @@ package io.ddd.jexxa.core;
 
 import java.util.Properties;
 
+import io.ddd.jexxa.applicationcore.domainservice.IFactroyMethodService;
 import io.ddd.jexxa.applicationcore.domainservice.IMulipleImplementationTest;
 import io.ddd.jexxa.applicationcore.domainservice.IDefaultConstructorService;
 import io.ddd.jexxa.applicationcore.domainservice.INotImplementedService;
@@ -44,6 +45,7 @@ public class DrivenAdapterFactoryTest
         Assert.assertNotNull(result);
     }
 
+    
 
 
     @Test (expected = IllegalArgumentException.class)

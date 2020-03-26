@@ -19,7 +19,7 @@ public class DrivenAdapterFactory
 
         Class<?> implementation = getImplementationOf(interfaceType);
 
-        return interfaceType.cast(new ClassFactory(null).createByConstructor(implementation));
+        return interfaceType.cast(ClassFactory.createByConstructor(implementation));
     }
 
     public <T> T createDrivenAdapter(Class<T> interfaceType, Properties properties) {
@@ -27,14 +27,15 @@ public class DrivenAdapterFactory
 
         Class<?> implementation = getImplementationOf(interfaceType);
 
-        return interfaceType.cast(new ClassFactory(properties).createByConstructor(implementation));
+        return interfaceType.cast(ClassFactory.createByConstructor(implementation, properties));
     }
 
     private <T> Class<?> getImplementationOf(Class<T> interfaceType) {
         var dependencyScanner = new DependencyScanner();
         var results = dependencyScanner.getClassesImplementing(interfaceType);
         Validate.notNull(results);
-        Validate.isTrue(results.size() == 1, "Multiple implementation of " + interfaceType.getName() + " available");
+        Validate.notEmpty(results, "No implementation of " + interfaceType.getName() + " available");
+        Validate.isTrue( results.size() == 1, "Multiple implementation of " + interfaceType.getName() + " available");
 
         return results.get(0);
     }

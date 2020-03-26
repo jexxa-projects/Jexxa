@@ -10,27 +10,9 @@ import org.apache.commons.lang.Validate;
 
 public class ClassFactory
 {
-    private Properties properties;
-
-    public ClassFactory(Properties properties)
-    {
-        this.properties = properties;
-    }
-
-    public <T> T createByConstructor(Class<T> clazz)
+    public static <T> T createByConstructor(Class<T> clazz)
     {
         Validate.notNull(clazz);
-        var propertyConstructor = searchPropertyConstructor(clazz);
-
-        if (propertyConstructor.isPresent()) {
-            try
-            {
-              return clazz.cast(propertyConstructor.get().newInstance(properties));
-            } catch ( Exception e) {
-              JexxaLogger.getLogger(getClass()).error(e.getMessage());
-            }
-        }
-
 
         var defaultConstructor = searchDefaultConstructor(clazz);
         if (defaultConstructor.isPresent()) {
@@ -39,15 +21,38 @@ public class ClassFactory
                 return clazz.cast(defaultConstructor.get().newInstance());
             }  catch (Exception e)
             {
-                JexxaLogger.getLogger(getClass()).error(e.getMessage());
+                JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
+                throw new IllegalArgumentException("Could not create class " + clazz.getSimpleName());
             }
         }
 
-        throw new IllegalArgumentException("Could not create class " + clazz.getSimpleName());
+        return null;
     }
-    
+
+
+    public static <T> T createByConstructor(Class<T> clazz, Properties properties)
+    {
+        Validate.notNull(clazz);
+        Validate.notNull(properties);
+
+        var propertyConstructor = searchPropertyConstructor(clazz);
+
+        if (propertyConstructor.isPresent()) {
+            try
+            {
+                return clazz.cast(propertyConstructor.get().newInstance(properties));
+            } catch ( Exception e) {
+                JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
+                throw new IllegalArgumentException("Could not create class " + clazz.getSimpleName());
+            }
+        }
+
+        return null;
+    }
+
+
     @SuppressWarnings("squid:S1452")
-    private Optional<Constructor<?>> searchPropertyConstructor(Class<?> clazz)
+    private static Optional<Constructor<?>> searchPropertyConstructor(Class<?> clazz)
     {
         //Lookup constructor with properties
         return  Arrays.stream(clazz.getConstructors()).
@@ -57,7 +62,7 @@ public class ClassFactory
     }
 
     @SuppressWarnings("squid:S1452")
-    private Optional<Constructor<?>> searchDefaultConstructor(Class<?> clazz)
+    private static Optional<Constructor<?>> searchDefaultConstructor(Class<?> clazz)
     {
         //Lookup constructor with properties
         return Arrays.stream(clazz.getConstructors()).
@@ -65,4 +70,8 @@ public class ClassFactory
                 findFirst();
     }
 
+    private ClassFactory()
+    {
+
+    }
 }

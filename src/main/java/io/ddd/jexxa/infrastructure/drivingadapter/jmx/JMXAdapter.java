@@ -3,6 +3,7 @@ package io.ddd.jexxa.infrastructure.drivingadapter.jmx;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.MBeanRegistrationException;
@@ -17,8 +18,18 @@ import org.apache.commons.lang.Validate;
 @DrivingAdapter
 public class JMXAdapter implements IDrivingAdapter
 {
-    List<MBeanModel> registeredMBeans = new ArrayList<>();
+    private List<MBeanModel> registeredMBeans = new ArrayList<>();
 
+    public JMXAdapter()
+    {
+
+    }
+
+    public JMXAdapter(Properties properties)
+    {
+        //TODO handle properties 
+    }
+    
     public void register(Object object)
     {
         Validate.notNull(object);

@@ -11,22 +11,23 @@ import org.apache.commons.lang.Validate;
 public class Jexxa
 {
     CompositeDrivingAdapter compositeDrivingAdapter;
-    ClassFactory classFactory;
+    Properties properties;
 
     public Jexxa(Properties properties)
     {
+        Validate.notNull(properties);
         compositeDrivingAdapter = new CompositeDrivingAdapter();
-        classFactory = new ClassFactory(properties);
+        this.properties = properties;
     }
 
     public void bind(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
         Validate.notNull(adapter);
         Validate.notNull(port);
 
-        var drivingAdapter = classFactory.createByConstructor(adapter);
+        var drivingAdapter = ClassFactory.createByConstructor(adapter, properties);
         Validate.notNull(drivingAdapter);
 
-        var inboundPort = classFactory.createByConstructor(port);
+        var inboundPort = ClassFactory.createByConstructor(port);
         Validate.notNull(inboundPort);
         drivingAdapter.register(inboundPort);
 
@@ -44,11 +45,11 @@ public class Jexxa
         //Create ports
         var createdDrivingAdapters = new ArrayList<IDrivingAdapter>();
 
-        scannedDrivingAdapters.forEach(element -> createdDrivingAdapters.add((IDrivingAdapter)classFactory.createByConstructor(element)));
+        scannedDrivingAdapters.forEach(element -> createdDrivingAdapters.add((IDrivingAdapter)ClassFactory.createByConstructor(element, properties)));
         Validate.isTrue(scannedDrivingAdapters.size() == createdDrivingAdapters.size());
 
         var createdInboundPorts = new ArrayList<>();
-        scannedInboundPorts.forEach(element -> createdInboundPorts.add(classFactory.createByConstructor(element)));
+        scannedInboundPorts.forEach(element -> createdInboundPorts.add(ClassFactory.createByConstructor(element)));
         Validate.isTrue(scannedInboundPorts.size() == createdInboundPorts.size());
 
         //register ports and adapter
@@ -65,10 +66,10 @@ public class Jexxa
         var scannedInboundPorts = annotationScanner.getClassesWithAnnotation(port);
 
         //Create ports and adapter
-        var drivingAdapter = classFactory.createByConstructor(adapter);
+        var drivingAdapter = ClassFactory.createByConstructor(adapter, properties);
         Validate.notNull(drivingAdapter);
 
-        scannedInboundPorts.forEach(element -> drivingAdapter.register(classFactory.createByConstructor(element)));
+        scannedInboundPorts.forEach(element -> drivingAdapter.register(ClassFactory.createByConstructor(element)));
 
         //register ports and adapter
         compositeDrivingAdapter.add(drivingAdapter);
