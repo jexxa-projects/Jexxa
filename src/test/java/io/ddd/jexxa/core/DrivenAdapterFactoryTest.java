@@ -3,6 +3,7 @@ package io.ddd.jexxa.core;
 
 import java.util.Properties;
 
+import io.ddd.jexxa.applicationcore.applicationservice.ApplicationServiceWithDrivenApdapters;
 import io.ddd.jexxa.applicationcore.domainservice.IFactroyMethodService;
 import io.ddd.jexxa.applicationcore.domainservice.INotUniqueService;
 import io.ddd.jexxa.applicationcore.domainservice.IDefaultConstructorService;
@@ -68,6 +69,31 @@ public class DrivenAdapterFactoryTest
 
         //Assert
         Assert.assertNotNull(result);
+    }
+
+
+    @Test
+    public void drivenAdapterAvailable() {
+        //Arrange
+        var objectUnderTest = new DrivenAdapterFactory();
+
+        //Act
+        boolean result = objectUnderTest.adaptersAvailable(ApplicationServiceWithDrivenApdapters.class);
+
+        //Assert
+        Assert.assertTrue(result);
+    }
+
+    @Test
+    public void drivenAdapterUnavailable() {
+        //Arrange
+        var objectUnderTest = new DrivenAdapterFactory();
+
+        //Act
+        boolean result = objectUnderTest.adaptersAvailable(ApplicationServiceWithDrivenApdapters.class);
+
+        //Assert
+        Assert.assertTrue(result);
     }
 
     @Test (expected = IllegalArgumentException.class)

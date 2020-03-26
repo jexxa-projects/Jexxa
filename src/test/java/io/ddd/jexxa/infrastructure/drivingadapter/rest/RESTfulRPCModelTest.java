@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import io.ddd.jexxa.applicationcore.applicationservice.SimpleApplicationService;
-import io.ddd.jexxa.applicationcore.applicationservice.UnsupportedApplicationService;
 import org.junit.Test;
 
 public class RESTfulRPCModelTest
