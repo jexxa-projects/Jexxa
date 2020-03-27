@@ -28,18 +28,17 @@ public class PortFactory
         return this;
     }
 
+    @SuppressWarnings("squid:S3655") //Sonarlint does not detect validation with Validate.isTrue( supportedConstructor.isPresent() )
     Object createByType(Class<?> inboundPort, Properties drivenAdapterProperties)
     {
         Validate.notNull(inboundPort);
         Validate.notNull(drivenAdapterProperties);
 
         var supportedConstructor = findSupportedConstructor(inboundPort);
-        Validate.isTrue(supportedConstructor.isPresent());
+        Validate.isTrue( supportedConstructor.isPresent() );
 
         var drivenAdapter = createDrivenAdapterForConstructor(supportedConstructor.get(), drivenAdapterProperties);
-
-        System.out.println("Size of driven adapter " + drivenAdapter.length);
-
+        
         var result = ClassFactory.createByConstructor(inboundPort, drivenAdapter);
         Validate.notNull(result);
         return result;
@@ -57,6 +56,7 @@ public class PortFactory
     /*
      * Check if all DrivenAdapter are available for for a given port
      */
+    
     private Optional<Constructor<?>> findSupportedConstructor(Class<?> inboundPort)
     {
         var constructorList = Arrays.asList(inboundPort.getConstructors());
@@ -93,9 +93,9 @@ public class PortFactory
         for ( int i = 0; i < portConstructor.getParameterTypes().length; ++i )
         {
             try {
-                System.out.println("Try to create " + portConstructor.getParameterTypes()[i].getName() );
                 objectList.add( drivenAdapterFactory.create(portConstructor.getParameterTypes()[i], drivenAdapterProperties) );
-            } catch ( Exception e)
+            }
+            catch ( Exception e)
             {
                 JexxaLogger.getLogger(getClass()).error("Can not create inbound port {}", portConstructor.getName());
                 return new Object[0];

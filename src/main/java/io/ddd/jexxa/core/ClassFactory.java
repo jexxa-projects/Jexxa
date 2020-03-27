@@ -3,9 +3,12 @@ package io.ddd.jexxa.core;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
@@ -49,7 +52,12 @@ public class ClassFactory
         if (parameterConstructor.isPresent()) {
             try
             {
-                return clazz.cast(parameterConstructor.get().newInstance(parameter));
+                if ( parameter.length > 0)
+                {
+                    return clazz.cast(parameterConstructor.get().newInstance(parameter));
+                } else {
+                    return clazz.cast(parameterConstructor.get().newInstance());
+                }
             } catch ( Exception e) {
                 JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
                 throw new ClassFactoryException(clazz);
@@ -58,27 +66,7 @@ public class ClassFactory
 
         return null;
     }
-
-
-    public static <T> T createByConstructor(Class<T> clazz, Properties properties)
-    {
-        Validate.notNull(clazz);
-        Validate.notNull(properties);
-
-        var propertyConstructor = searchPropertyConstructor(clazz);
-
-        if (propertyConstructor.isPresent()) {
-            try
-            {
-                return clazz.cast(propertyConstructor.get().newInstance(properties));
-            } catch ( Exception e) {
-                JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
-                throw new ClassFactoryException(clazz);
-            }
-        }
-
-        return null;
-    }
+    
 
     public static <T> T createByFactoryMethod(Class<?> implementation, Class<T> interfaceType)
     {
@@ -120,19 +108,8 @@ public class ClassFactory
 
 
     @SuppressWarnings("squid:S1452")
-    private static Optional<Constructor<?>> searchPropertyConstructor(Class<?> clazz)
-    {
-        //Lookup constructor with properties
-        return  Arrays.stream(clazz.getConstructors()).
-                filter( element -> element.getParameterTypes().length == 1).
-                filter( element -> element.getParameterTypes()[0] == Properties.class).
-                findFirst();
-    }
-
-    @SuppressWarnings("squid:S1452")
     private static Optional<Constructor<?>> searchDefaultConstructor(Class<?> clazz)
     {
-        //Lookup constructor with properties
         return Arrays.stream(clazz.getConstructors()).
                 filter( element -> element.getParameterTypes().length == 0).
                 findFirst();
@@ -140,26 +117,39 @@ public class ClassFactory
 
 
     @SuppressWarnings("squid:S1452")
-    private static Optional<Constructor<?>> searchParameterConstructor(Class<?> clazz, Object[] parameter)
+    private static <T> Optional<Constructor<?>> searchParameterConstructor(Class<T> clazz, Object[] parameter)
     {
-        //Lookup constructor with properties
-        var constructorStream =   Arrays.stream(clazz.getConstructors()).
-                filter( element -> element.getParameterTypes().length == parameter.length);
+        //var parameterTypeList = Arrays.stream(parameter).map(Object::getClass).collect(Collectors.toList());
 
-        var iterator = constructorStream.iterator();
-        while(iterator.hasNext())
-        {
-            var nextElement = iterator.next();
-            for (int i = 0; i < parameter.length; ++i)
-            {
-                if (! nextElement.getParameterTypes()[i].equals(parameter[i].getClass())) {
-                    break;
-                }
-            }
+        var constructorList = Arrays.stream(clazz.getConstructors()).
+                filter( element -> element.getParameterTypes().length == parameter.length).collect(Collectors.toList());
 
-            return Optional.of(nextElement);
+        //Handle case ifd default constructor is required 
+        if ( parameter.length == 0 && !constructorList.isEmpty()) {
+            return Optional.of(constructorList.get(0));
         }
-        return Optional.empty();
+
+        List<Constructor<?>> result = new ArrayList<>();
+        constructorList.forEach( element ->
+                {
+                    for (int i = 0; i < element.getParameterTypes().length; ++i)
+                    {
+                        if (!element.getParameterTypes()[i].isInstance(parameter[i])) {
+                            break;
+                        }
+                        result.add(element);
+                    }
+                }
+                );
+         if (result.isEmpty()) {
+             return Optional.empty();
+         }
+
+         return Optional.of(result.get(0));
+       /*return  Arrays.stream(clazz.getConstructors()).
+                filter( element -> element.getParameterTypes().length == parameter.length).
+                filter( element -> Arrays.equals(element.getParameterTypes(), parameterTypeList.toArray(new Class[0]))).
+                findFirst();*/
     }
 
     @SuppressWarnings("squid:S1452")

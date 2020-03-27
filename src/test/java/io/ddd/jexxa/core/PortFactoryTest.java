@@ -1,5 +1,7 @@
 package io.ddd.jexxa.core;
 
+import java.util.Properties;
+
 import io.ddd.jexxa.applicationcore.applicationservice.ApplicationServiceWithDrivenApdapters;
 import org.junit.Assert;
 import org.junit.Test;
@@ -39,6 +41,22 @@ public class PortFactoryTest
 
         //Assert
         Assert.assertTrue(result);
+    }
+
+
+    @Test
+    public void createPort() {
+        //Arrange
+        var drivenAdapterFactory = new AdapterFactory().
+                whiteListPackage(drivenAdapterPackageName);
+        var objectUnderTest = new PortFactory(drivenAdapterFactory).
+                whiteListPackage(applicationCorePackageName);
+
+        //Act
+        var result = objectUnderTest.createByType(ApplicationServiceWithDrivenApdapters.class, new Properties());
+
+        //Assert
+        Assert.assertNotNull(result);
     }
 
 }
