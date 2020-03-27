@@ -13,51 +13,62 @@ public class Jexxa
     CompositeDrivingAdapter compositeDrivingAdapter;
     Properties properties;
 
+    AdapterFactory drivingAdapterFactory;
+    AdapterFactory drivenAdapterFactory;
+    PortFactory portFactory;
+
+
     public Jexxa(Properties properties)
     {
         Validate.notNull(properties);
         compositeDrivingAdapter = new CompositeDrivingAdapter();
         this.properties = properties;
+
+        drivingAdapterFactory = new AdapterFactory();
+        drivenAdapterFactory = new AdapterFactory();
+        portFactory = new PortFactory(drivenAdapterFactory);
     }
+
+    public Jexxa whiteListDrivingAdapterPackage(String packageName)
+    {
+        drivingAdapterFactory.whiteListPackage(packageName);
+        return this;
+    }
+
+    public Jexxa whiteListDrivenAdapterPackage(String packageName)
+    {
+        drivenAdapterFactory.whiteListPackage(packageName);
+        return this;
+    }
+
+    public Jexxa whiteListPortPackage(String packageName)
+    {
+        portFactory.whiteListPackage(packageName);
+        return this;
+    }
+
+    public Jexxa whiteListPackage(String packageName)
+    {
+        drivingAdapterFactory.whiteListPackage(packageName);
+        drivenAdapterFactory.whiteListPackage(packageName);
+        portFactory.whiteListPackage(packageName);
+        return this;
+    }
+
 
     public void bind(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
         Validate.notNull(adapter);
         Validate.notNull(port);
 
-        var drivingAdapter = ClassFactory.createByConstructor(adapter, properties);
-        Validate.notNull(drivingAdapter);
-
-        var inboundPort = ClassFactory.createByConstructor(port);
+        var drivingAdapter = drivingAdapterFactory.createByType(adapter, properties);
+        var inboundPort    = ClassFactory.createByConstructor(port);
         Validate.notNull(inboundPort);
         drivingAdapter.register(inboundPort);
 
         compositeDrivingAdapter.add(drivingAdapter);
     }
 
-    public void bindByAnnotation(Class<? extends Annotation> adapter, Class<? extends Annotation> port) {
-        Validate.notNull(adapter);
-        Validate.notNull(port);
-
-        var annotationScanner = new DependencyScanner();
-        var scannedDrivingAdapters = annotationScanner.getClassesWithAnnotation(adapter);
-        var scannedInboundPorts = annotationScanner.getClassesWithAnnotation(port);
-
-        //Create ports
-        var createdDrivingAdapters = new ArrayList<IDrivingAdapter>();
-
-        scannedDrivingAdapters.forEach(element -> createdDrivingAdapters.add((IDrivingAdapter)ClassFactory.createByConstructor(element, properties)));
-        Validate.isTrue(scannedDrivingAdapters.size() == createdDrivingAdapters.size());
-
-        var createdInboundPorts = new ArrayList<>();
-        scannedInboundPorts.forEach(element -> createdInboundPorts.add(ClassFactory.createByConstructor(element)));
-        Validate.isTrue(scannedInboundPorts.size() == createdInboundPorts.size());
-
-        //register ports and adapter
-        createdDrivingAdapters.forEach(drivingAdapter -> createdInboundPorts.forEach(drivingAdapter::register));
-        createdDrivingAdapters.forEach(drivingAdapter -> compositeDrivingAdapter.add(drivingAdapter));
-    }
-
-
+   
     public void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> port) {
         Validate.notNull(adapter);
         Validate.notNull(port);
@@ -66,7 +77,7 @@ public class Jexxa
         var scannedInboundPorts = annotationScanner.getClassesWithAnnotation(port);
 
         //Create ports and adapter
-        var drivingAdapter = ClassFactory.createByConstructor(adapter, properties);
+        var drivingAdapter = drivingAdapterFactory.createByType(adapter, properties);
         Validate.notNull(drivingAdapter);
 
         scannedInboundPorts.forEach(element -> drivingAdapter.register(ClassFactory.createByConstructor(element)));

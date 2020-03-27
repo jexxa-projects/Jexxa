@@ -32,6 +32,7 @@ public class HelloJexxaTest
 {
     private Properties properties;
     private Jexxa objectUnderTest;
+    private String packageName = "io.ddd.jexxa";
 
     @Before
     public void initTests()
@@ -58,6 +59,8 @@ public class HelloJexxaTest
     {
         //Arrange
         objectUnderTest = new Jexxa(properties);
+        objectUnderTest.whiteListPackage(packageName);
+
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest.bind(JMXAdapter.class, SimpleApplicationService.class);
@@ -70,27 +73,15 @@ public class HelloJexxaTest
         assertJMXAdapter();
         assertRESTfulRPCAdapter();
     }
-
-    @Test
-    public void simpleHelloJexxaAnnotation()
-    {
-        //Arrange
-        objectUnderTest = new Jexxa(properties);
-
-        //Act: Bind all DrivingAdapter to all ApplicationServices
-        objectUnderTest.bindByAnnotation(DrivingAdapter.class, ApplicationService.class);
-        objectUnderTest.startDrivingAdapters();
-        
-        //Assert
-        assertJMXAdapter();
-        assertRESTfulRPCAdapter();
-    }
+    
 
     @Test
     public void simpleHelloJexxaClassAnnotatedPorts()
     {
         //Arrange
         objectUnderTest = new Jexxa(properties);
+        objectUnderTest.whiteListPackage(packageName);
+
 
         //Act: Bind all DrivingAdapter to all ApplicationServices
         objectUnderTest.bindToAnnotatedPorts(RESTfulRPCAdapter.class, ApplicationService.class);
