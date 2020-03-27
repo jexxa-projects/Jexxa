@@ -4,7 +4,8 @@ import io.ddd.jexxa.applicationcore.applicationservice.ApplicationServiceWithDri
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ApplicationCoreFactoryTest {
+public class PortFactoryTest
+{
 
     private String applicationCorePackageName = "io.ddd.jexxa.applicationcore";
     private String drivenAdapterPackageName = "io.ddd.jexxa.infrastructure";
@@ -15,7 +16,7 @@ public class ApplicationCoreFactoryTest {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
-        var objectUnderTest = new ApplicationCoreFactory(drivenAdapterFactory).
+        var objectUnderTest = new PortFactory(drivenAdapterFactory).
                 whiteListPackage(applicationCorePackageName);
 
         //Act
@@ -30,7 +31,7 @@ public class ApplicationCoreFactoryTest {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
-        var objectUnderTest = new ApplicationCoreFactory(drivenAdapterFactory).
+        var objectUnderTest = new PortFactory(drivenAdapterFactory).
                 whiteListPackage(applicationCorePackageName);
 
         //Act

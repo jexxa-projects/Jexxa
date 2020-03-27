@@ -6,18 +6,18 @@ import java.util.List;
 
 import io.ddd.jexxa.utils.JexxaLogger;
 
-public class ApplicationCoreFactory
+public class PortFactory
 {
     private List<String> whiteListPackages = new ArrayList<>();
     AdapterFactory drivenAdapterFactory;
 
 
-    ApplicationCoreFactory(AdapterFactory drivenAdapterFactory)
+    PortFactory(AdapterFactory drivenAdapterFactory)
     {
         this.drivenAdapterFactory = drivenAdapterFactory;
     }
 
-    ApplicationCoreFactory whiteListPackage(String packageName)
+    PortFactory whiteListPackage(String packageName)
     {
         whiteListPackages.add(packageName);
         return this;
