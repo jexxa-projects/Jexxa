@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import org.apache.commons.lang.Validate;
 
 /*
@@ -53,14 +52,23 @@ public class AdapterFactory
         T instance = interfaceType.cast(ClassFactory.createByConstructor(implementation, properties));
 
         //Apply 2. convention and try to use a factory method accepting properties
-        if (instance == null) {
+        if (instance == null)
+        {
             instance = interfaceType.cast(ClassFactory.createByFactoryMethod(implementation, interfaceType, properties));
+        }
+
+        //Try to use default constructor
+        if (instance == null)
+        {
+            instance = create(interfaceType);
         }
 
         Validate.notNull(instance, "No suitable constructor found to create " + interfaceType.getName());
 
         return instance;
     }
+
+    /*Most likely only for DrivingAdapter*/
 
     public <T> T createByType(Class<T> instanceType, Properties properties) {
         Validate.notNull(instanceType);

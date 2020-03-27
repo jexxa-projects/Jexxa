@@ -39,6 +39,26 @@ public class ClassFactory
         return null;
     }
 
+    public static <T> T createByConstructor(Class<T> clazz, Object[] parameter)
+    {
+        Validate.notNull(clazz);
+        Validate.notNull(parameter);
+
+        var parameterConstructor = searchParameterConstructor(clazz, parameter);
+
+        if (parameterConstructor.isPresent()) {
+            try
+            {
+                return clazz.cast(parameterConstructor.get().newInstance(parameter));
+            } catch ( Exception e) {
+                JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
+                throw new ClassFactoryException(clazz);
+            }
+        }
+
+        return null;
+    }
+
 
     public static <T> T createByConstructor(Class<T> clazz, Properties properties)
     {
@@ -118,6 +138,30 @@ public class ClassFactory
                 findFirst();
     }
 
+
+    @SuppressWarnings("squid:S1452")
+    private static Optional<Constructor<?>> searchParameterConstructor(Class<?> clazz, Object[] parameter)
+    {
+        //Lookup constructor with properties
+        var constructorStream =   Arrays.stream(clazz.getConstructors()).
+                filter( element -> element.getParameterTypes().length == parameter.length);
+
+        var iterator = constructorStream.iterator();
+        while(iterator.hasNext())
+        {
+            var nextElement = iterator.next();
+            for (int i = 0; i < parameter.length; ++i)
+            {
+                if (! nextElement.getParameterTypes()[i].equals(parameter[i].getClass())) {
+                    break;
+                }
+            }
+
+            return Optional.of(nextElement);
+        }
+        return Optional.empty();
+    }
+
     @SuppressWarnings("squid:S1452")
     private static <T> Optional<Method> searchDefaultFactoryMethod(Class<?> implementation, Class<T> interfaceType)
     {
@@ -140,6 +184,7 @@ public class ClassFactory
                 filter( element -> element.getReturnType().equals(interfaceType)).
                 findFirst();
     }
+
 
     private ClassFactory()
     {

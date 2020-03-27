@@ -19,6 +19,7 @@ import java.util.Set;
 import javax.management.MBeanServer;
 import javax.management.ObjectInstance;
 
+import io.ddd.jexxa.applicationcore.applicationservice.ApplicationServiceWithDrivenApdapters;
 import io.ddd.jexxa.applicationcore.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
@@ -70,8 +71,27 @@ public class HelloJexxaTest
 
 
         //Assert
-        assertJMXAdapter();
+        assertJMXAdapter(SimpleApplicationService.class);
         assertRESTfulRPCAdapter();
+    }
+
+    @Test
+    public void simpleHelloJexxaWithDrivenAdapter()
+    {
+        //Arrange
+        objectUnderTest = new Jexxa(properties);
+        objectUnderTest.whiteListPackage(packageName);
+
+
+        //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
+        objectUnderTest.bind(JMXAdapter.class, ApplicationServiceWithDrivenApdapters.class);
+        objectUnderTest.bind(RESTfulRPCAdapter.class, ApplicationServiceWithDrivenApdapters.class);
+
+        objectUnderTest.startDrivingAdapters();
+
+
+        //Assert
+        assertJMXAdapter(ApplicationServiceWithDrivenApdapters.class);
     }
     
 
@@ -93,7 +113,7 @@ public class HelloJexxaTest
 
 
 
-    void assertJMXAdapter() {
+    void assertJMXAdapter(Class<?> clazz) {
         //Assert
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         Set<ObjectInstance> result = mbs.queryMBeans(null , null);
@@ -101,7 +121,7 @@ public class HelloJexxaTest
         assertNotNull(result);
         assertTrue(result.
                 stream().
-                anyMatch(element -> element.getClassName().endsWith(SimpleApplicationService.class.getSimpleName()))
+                anyMatch(element -> element.getClassName().endsWith(clazz.getSimpleName()))
         );
     }
 

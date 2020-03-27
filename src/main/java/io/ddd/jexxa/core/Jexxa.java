@@ -1,7 +1,6 @@
 package io.ddd.jexxa.core;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.Properties;
 
 import io.ddd.jexxa.infrastructure.drivingadapter.CompositeDrivingAdapter;
@@ -61,7 +60,7 @@ public class Jexxa
         Validate.notNull(port);
 
         var drivingAdapter = drivingAdapterFactory.createByType(adapter, properties);
-        var inboundPort    = ClassFactory.createByConstructor(port);
+        var inboundPort    = portFactory.createByType(port, properties);
         Validate.notNull(inboundPort);
         drivingAdapter.register(inboundPort);
 
@@ -69,20 +68,16 @@ public class Jexxa
     }
 
    
-    public void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> port) {
+    public void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
         Validate.notNull(adapter);
-        Validate.notNull(port);
-
-        var annotationScanner = new DependencyScanner();
-        var scannedInboundPorts = annotationScanner.getClassesWithAnnotation(port);
+        Validate.notNull(portAnnotation);
 
         //Create ports and adapter
         var drivingAdapter = drivingAdapterFactory.createByType(adapter, properties);
-        Validate.notNull(drivingAdapter);
 
-        scannedInboundPorts.forEach(element -> drivingAdapter.register(ClassFactory.createByConstructor(element)));
-
-        //register ports and adapter
+        var portList = portFactory.createPortsBy(portAnnotation, properties);
+        portList.forEach(drivingAdapter::register);
+        
         compositeDrivingAdapter.add(drivingAdapter);
     }
 
