@@ -15,10 +15,10 @@ import org.apache.commons.lang.Validate;
 public class PortFactory
 {
     private List<String> whiteListPackages = new ArrayList<>();
-    AdapterFactory drivenAdapterFactory;
+    DrivenAdapterFactory drivenAdapterFactory;
 
 
-    public PortFactory(AdapterFactory drivenAdapterFactory)
+    public PortFactory(DrivenAdapterFactory drivenAdapterFactory)
     {
         this.drivenAdapterFactory = drivenAdapterFactory;
     }

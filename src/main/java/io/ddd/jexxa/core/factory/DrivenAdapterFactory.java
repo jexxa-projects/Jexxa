@@ -15,11 +15,11 @@ import org.apache.commons.lang.Validate;
  * 3. Public static method with return type if the requested interface
  * 4. Public static method with return type if the requested interface and Properties as argument
  */
-public class AdapterFactory
+public class DrivenAdapterFactory
 {
     private List<String> whiteListPackages = new ArrayList<>();
 
-    public AdapterFactory whiteListPackage(String packageName)
+    public DrivenAdapterFactory whiteListPackage(String packageName)
     {
         whiteListPackages.add(packageName);
         return this;
@@ -80,37 +80,6 @@ public class AdapterFactory
     }
 
     /*Most likely only for DrivingAdapter*/
-
-    public <T> T createByType(Class<T> instanceType, Properties properties) {
-        Validate.notNull(instanceType);
-
-        Object[] args = new Object[1];
-        args[0]= properties;
-
-        //Apply 1. convention and try to use a constructor accepting properties
-        var instance = ClassFactory.newInstanceOf(instanceType, args);
-
-
-        //Apply 2. convention and try to use a factory method accepting properties
-        if (instance.isEmpty())
-        {
-            instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(instanceType, instanceType, properties));
-        }
-
-        //Apply 2. convention Try to use default constructor
-        if (instance.isEmpty())
-        {
-            instance = ClassFactory.newInstanceOf(instanceType);
-        }
-
-        //Apply 4. convention Try to use default factory method 
-        if (instance.isEmpty())
-        {
-            instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(instanceType,instanceType));
-        }
-
-        return instanceType.cast(instance.orElseThrow());
-    }
 
 
     boolean validateAdaptersAvailable(List<Class <?> > adapterList)

@@ -3,10 +3,12 @@ package io.ddd.jexxa.core;
 import java.lang.annotation.Annotation;
 import java.util.Properties;
 
-import io.ddd.jexxa.core.factory.AdapterFactory;
+import io.ddd.jexxa.core.factory.DrivenAdapterFactory;
+import io.ddd.jexxa.core.factory.DrivingAdapterFactory;
 import io.ddd.jexxa.core.factory.PortFactory;
 import io.ddd.jexxa.infrastructure.drivingadapter.CompositeDrivingAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.ddd.jexxa.infrastructure.stereotype.DrivingAdapter;
 import org.apache.commons.lang.Validate;
 
 public class Jexxa
@@ -14,8 +16,8 @@ public class Jexxa
     CompositeDrivingAdapter compositeDrivingAdapter;
     Properties properties;
 
-    AdapterFactory drivingAdapterFactory;
-    AdapterFactory drivenAdapterFactory;
+    DrivingAdapterFactory drivingAdapterFactory;
+    DrivenAdapterFactory drivenAdapterFactory;
     PortFactory portFactory;
 
 
@@ -25,14 +27,14 @@ public class Jexxa
         compositeDrivingAdapter = new CompositeDrivingAdapter();
         this.properties = properties;
 
-        drivingAdapterFactory = new AdapterFactory();
-        drivenAdapterFactory = new AdapterFactory();
+        drivingAdapterFactory = new DrivingAdapterFactory();
+        drivenAdapterFactory = new DrivenAdapterFactory();
         portFactory = new PortFactory(drivenAdapterFactory);
     }
 
     public Jexxa whiteListDrivingAdapterPackage(String packageName)
     {
-        drivingAdapterFactory.whiteListPackage(packageName);
+        //drivingAdapterFactory.whiteListPackage(packageName);
         return this;
     }
 
@@ -50,7 +52,7 @@ public class Jexxa
 
     public Jexxa whiteListPackage(String packageName)
     {
-        drivingAdapterFactory.whiteListPackage(packageName);
+        //drivingAdapterFactory.whiteListPackage(packageName);
         drivenAdapterFactory.whiteListPackage(packageName);
         portFactory.whiteListPackage(packageName);
         return this;

@@ -171,6 +171,7 @@ class ClassFactory
                 filter( element -> element.getReturnType().equals(interfaceType)).
                 findFirst();
     }
+    
 
     @SuppressWarnings("squid:S1452")
     private static <T> Optional<Method> searchPropertiesFactoryMethod(Class<?> implementation, Class<T> interfaceType)
