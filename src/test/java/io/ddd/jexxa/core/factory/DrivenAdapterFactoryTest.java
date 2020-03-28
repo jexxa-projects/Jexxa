@@ -30,7 +30,7 @@ public class DrivenAdapterFactoryTest
                 whiteListPackage(packageName);
 
         //Act
-        var result = objectUnderTest.create(IDefaultConstructorService.class);
+        var result = objectUnderTest.newInstanceOfInterface(IDefaultConstructorService.class);
 
         //Assert
         Assert.assertNotNull(result);
@@ -45,7 +45,7 @@ public class DrivenAdapterFactoryTest
         var properties = new Properties();
 
         //Act
-        var result = objectUnderTest.create(IPropertiesConstructorService.class, properties);
+        var result = objectUnderTest.newInstanceOfInterface(IPropertiesConstructorService.class, properties);
 
         //Assert
         Assert.assertNotNull(result);
@@ -59,7 +59,7 @@ public class DrivenAdapterFactoryTest
                 whiteListPackage(packageName);
 
         //Act
-        var result = objectUnderTest.create(IFactroyMethodService.class);
+        var result = objectUnderTest.newInstanceOfInterface(IFactroyMethodService.class);
 
         //Assert
         Assert.assertNotNull(result);
@@ -73,7 +73,7 @@ public class DrivenAdapterFactoryTest
         var properties = new Properties();
         
         //Act
-        var result = objectUnderTest.create(IFactroyMethodService.class, properties);
+        var result = objectUnderTest.newInstanceOfInterface(IFactroyMethodService.class, properties);
 
         //Assert
         Assert.assertNotNull(result);
@@ -121,7 +121,7 @@ public class DrivenAdapterFactoryTest
                 whiteListPackage(packageName);
 
         //Act
-        objectUnderTest.create(INotUniqueService.class);
+        objectUnderTest.newInstanceOfInterface(INotUniqueService.class);
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -131,7 +131,7 @@ public class DrivenAdapterFactoryTest
                 whiteListPackage(packageName);
 
         //Act
-        objectUnderTest.create(INotImplementedService.class);
+        objectUnderTest.newInstanceOfInterface(INotImplementedService.class);
     }
 
 }

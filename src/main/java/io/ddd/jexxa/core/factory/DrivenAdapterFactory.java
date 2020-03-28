@@ -3,17 +3,16 @@ package io.ddd.jexxa.core.factory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Properties;
 
 import org.apache.commons.lang.Validate;
 
 /*
- * Rules for creating a driving/driven adapter:
+ * One of the requirements of implementation of a DrivenAdapter must be fulfilled:
  * 1. Public Default constructor available
- * 2. Public constructor with Properties as attribute
- * 3. Public static method with return type if the requested interface
- * 4. Public static method with return type if the requested interface and Properties as argument
+ * 2. Public constructor with one Properties as attribute is available
+ * 3. Public static factory method with return type if the requested interface
+ * 4. Public static factory method with return type if the requested interface and Properties as argument
  */
 public class DrivenAdapterFactory
 {
@@ -25,10 +24,9 @@ public class DrivenAdapterFactory
         return this;
     }
 
-    public <T> T create(Class<T> interfaceType) {
+    public <T> T newInstanceOfInterface(Class<T> interfaceType) {
         Validate.notNull(interfaceType);
-        //TODO: validate Interface
-        //TODO: Better method name e.g. instanceOf
+        Validate.isTrue(interfaceType.isInterface(), "Given Argument is not an interface: " + interfaceType.getName());
 
         Class<?> implementation = getImplementationOf(interfaceType);
 
@@ -44,19 +42,14 @@ public class DrivenAdapterFactory
         return interfaceType.cast(instance.orElseThrow());
     }
 
-    public <T> T create(Class<T> interfaceType, Properties properties) {
+    public <T> T newInstanceOfInterface(Class<T> interfaceType, Properties properties) {
         Validate.notNull(interfaceType);
-        //TODO: validate Interface
-        //TODO: Better method name e.g. instance
+        Validate.isTrue(interfaceType.isInterface(), "Given Argument is not an interface: " + interfaceType.getName());
 
         Class<?> implementation = getImplementationOf(interfaceType);
 
-        Object[] args = new Object[1];
-        args[0]= properties;
-
-
         //Apply 1. convention and try to use a constructor accepting properties 
-        var instance = ClassFactory.newInstanceOf(implementation, args);
+        var instance = ClassFactory.newInstanceOf(implementation, new Object[]{properties});
 
         //Apply 2. convention and try to use a factory method accepting properties
         if (instance.isEmpty())
@@ -64,23 +57,15 @@ public class DrivenAdapterFactory
             instance = ClassFactory.newInstanceOfInterface(implementation, interfaceType, properties);
         }
 
-        //Try to use default constructor
-        //Apply 3. convention and try to use default constructor
+        //Try to create without properties 
         if (instance.isEmpty())
         {
-            instance = ClassFactory.newInstanceOf(implementation);
-        }
-
-        //Apply 4. convention and try to use a factory method
-        if (instance.isEmpty()) {
-            instance = ClassFactory.newInstanceOfInterface(implementation, interfaceType);
+            return newInstanceOfInterface(interfaceType);
         }
         
         return interfaceType.cast(instance.orElseThrow());
     }
-
-    /*Most likely only for DrivingAdapter*/
-
+    
 
     boolean validateAdaptersAvailable(List<Class <?> > adapterList)
     {

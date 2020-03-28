@@ -96,7 +96,7 @@ public class PortFactory
         {
             try
             {
-                objectList.add( drivenAdapterFactory.create(portConstructor.getParameterTypes()[i], drivenAdapterProperties) );
+                objectList.add( drivenAdapterFactory.newInstanceOfInterface(portConstructor.getParameterTypes()[i], drivenAdapterProperties) );
             }
             catch ( Exception e)
             {
