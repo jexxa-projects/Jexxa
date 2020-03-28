@@ -3,6 +3,7 @@ package io.ddd.jexxa.core.factory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 import org.apache.commons.lang.Validate;
@@ -32,16 +33,15 @@ public class AdapterFactory
         Class<?> implementation = getImplementationOf(interfaceType);
 
         //Apply 1. convention and try to use default constructor
-        var instance = interfaceType.cast(ClassFactory.newInstanceOf(implementation));
+        var instance = ClassFactory.newInstanceOf(implementation);
         
         //Apply 2. convention and try to use a factory method 
-        if (instance == null) {
-            instance = interfaceType.cast(ClassFactory.createByFactoryMethod(implementation, interfaceType));
+        if (instance.isEmpty())
+        {
+            instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(implementation, interfaceType));
         }
-        
-        Validate.notNull(instance, "No suitable constructor found to create " + interfaceType.getName());
-        
-        return instance;
+
+        return interfaceType.cast(instance.orElseThrow());
     }
 
     public <T> T create(Class<T> interfaceType, Properties properties) {
@@ -56,28 +56,27 @@ public class AdapterFactory
 
 
         //Apply 1. convention and try to use a constructor accepting properties 
-        T instance = interfaceType.cast(ClassFactory.newInstanceOf(implementation, args));
+        var instance = ClassFactory.newInstanceOf(implementation, args);
 
         //Apply 2. convention and try to use a factory method accepting properties
-        if (instance == null)
+        if (instance.isEmpty())
         {
-            instance = interfaceType.cast(ClassFactory.createByFactoryMethod(implementation, interfaceType, properties));
+            instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(implementation, interfaceType, properties));
         }
 
         //Try to use default constructor
         //Apply 3. convention and try to use default constructor
-        if (instance == null) {
-            instance = interfaceType.cast(ClassFactory.newInstanceOf(implementation));
+        if (instance.isEmpty())
+        {
+            instance = ClassFactory.newInstanceOf(implementation);
         }
 
         //Apply 4. convention and try to use a factory method
-        if (instance == null) {
-            instance = interfaceType.cast(ClassFactory.createByFactoryMethod(implementation, interfaceType));
+        if (instance.isEmpty()) {
+            instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(implementation, interfaceType));
         }
         
-        Validate.notNull(instance, "No suitable constructor found to create " + interfaceType.getName());
-
-        return instance;
+        return interfaceType.cast(instance.orElseThrow());
     }
 
     /*Most likely only for DrivingAdapter*/
@@ -89,30 +88,28 @@ public class AdapterFactory
         args[0]= properties;
 
         //Apply 1. convention and try to use a constructor accepting properties
-        T instance = instanceType.cast(ClassFactory.newInstanceOf(instanceType, args));
+        var instance = ClassFactory.newInstanceOf(instanceType, args);
 
 
         //Apply 2. convention and try to use a factory method accepting properties
-        if (instance == null)
+        if (instance.isEmpty())
         {
-            instance = instanceType.cast(ClassFactory.createByFactoryMethod(instanceType, instanceType, properties));
+            instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(instanceType, instanceType, properties));
         }
 
         //Apply 2. convention Try to use default constructor
-        if (instance == null)
+        if (instance.isEmpty())
         {
             instance = ClassFactory.newInstanceOf(instanceType);
         }
 
         //Apply 4. convention Try to use default factory method 
-        if (instance == null)
+        if (instance.isEmpty())
         {
-            instance = ClassFactory.createByFactoryMethod(instanceType,instanceType);
+            instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(instanceType,instanceType));
         }
 
-        Validate.notNull(instance, "No suitable constructor found to create " + instanceType.getName());
-
-        return instance;
+        return instanceType.cast(instance.orElseThrow());
     }
 
 

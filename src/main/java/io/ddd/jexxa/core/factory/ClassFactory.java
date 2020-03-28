@@ -28,7 +28,7 @@ class ClassFactory
         }
     }
     
-    static <T> T newInstanceOf(Class<T> clazz)
+    static <T> Optional<T> newInstanceOf(Class<T> clazz)
     {
         Validate.notNull(clazz);
 
@@ -36,7 +36,7 @@ class ClassFactory
         if (defaultConstructor.isPresent()) {
             try
             {
-                return clazz.cast(defaultConstructor.get().newInstance());
+                return Optional.of(clazz.cast(defaultConstructor.get().newInstance()));
             }
             catch (Exception e)
             {
@@ -45,10 +45,10 @@ class ClassFactory
             }
         }
 
-        return null;
+        return Optional.empty();
     }
 
-    static <T> T newInstanceOf(Class<T> clazz, Object[] parameter)
+    static <T> Optional<T> newInstanceOf(Class<T> clazz, Object[] parameter)
     {
         Validate.notNull(clazz);
         Validate.notNull(parameter);
@@ -62,7 +62,7 @@ class ClassFactory
         if (parameterConstructor.isPresent()) {
             try
             {
-                return clazz.cast(parameterConstructor.get().newInstance(parameter));
+                return Optional.of(clazz.cast(parameterConstructor.get().newInstance(parameter)));
             }
             catch ( Exception e)
             {
@@ -71,7 +71,7 @@ class ClassFactory
             }
         }
 
-        return null;
+        return Optional.empty();
     }
     
 

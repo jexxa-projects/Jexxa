@@ -41,9 +41,9 @@ public class PortFactory
 
         var drivenAdapter = createDrivenAdapterForConstructor(supportedConstructor.get(), drivenAdapterProperties);
         
-        var result = ClassFactory.newInstanceOf(inboundPort, drivenAdapter);
-        Validate.notNull(result);
-        return result;
+        return ClassFactory.
+                newInstanceOf(inboundPort, drivenAdapter).
+                orElseThrow();
     }
 
 
@@ -94,7 +94,8 @@ public class PortFactory
 
         for ( int i = 0; i < portConstructor.getParameterTypes().length; ++i )
         {
-            try {
+            try
+            {
                 objectList.add( drivenAdapterFactory.create(portConstructor.getParameterTypes()[i], drivenAdapterProperties) );
             }
             catch ( Exception e)
