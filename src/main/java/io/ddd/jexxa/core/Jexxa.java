@@ -63,7 +63,7 @@ public class Jexxa
         Validate.notNull(port);
 
         var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
-        var inboundPort    = portFactory.createByType(port, properties);
+        var inboundPort    = portFactory.newInstanceOf(port, properties);
         Validate.notNull(inboundPort);
         drivingAdapter.register(inboundPort);
 

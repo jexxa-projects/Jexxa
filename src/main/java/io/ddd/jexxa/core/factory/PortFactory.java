@@ -14,7 +14,7 @@ import org.apache.commons.lang.Validate;
 public class PortFactory
 {
     private List<String> whiteListPackages = new ArrayList<>();
-    DrivenAdapterFactory drivenAdapterFactory;
+    private DrivenAdapterFactory drivenAdapterFactory;
 
 
     public PortFactory(DrivenAdapterFactory drivenAdapterFactory)
@@ -28,17 +28,15 @@ public class PortFactory
         return this;
     }
 
-    @SuppressWarnings("squid:S3655")
-    public //Sonarlint does not detect validation with Validate.isTrue( supportedConstructor.isPresent() )
-    Object createByType(Class<?> inboundPort, Properties drivenAdapterProperties)
+    public Object newInstanceOf(Class<?> inboundPort, Properties drivenAdapterProperties)
     {
         Validate.notNull(inboundPort);
         Validate.notNull(drivenAdapterProperties);
 
-        var supportedConstructor = findSupportedConstructor(inboundPort);
-        Validate.isTrue( supportedConstructor.isPresent() );
+        var supportedConstructor = findSupportedConstructor(inboundPort).
+                orElseThrow();
 
-        var drivenAdapter = createDrivenAdapterForConstructor(supportedConstructor.get(), drivenAdapterProperties);
+        var drivenAdapter = createDrivenAdapterForConstructor(supportedConstructor, drivenAdapterProperties);
         
         return ClassFactory.
                 newInstanceOf(inboundPort, drivenAdapter).
@@ -80,7 +78,7 @@ public class PortFactory
 
         var result = new ArrayList<>();
         scannedInboundPorts.
-            forEach(element -> result.add(createByType(element, drivenAdapterProperties)));
+            forEach(element -> result.add(newInstanceOf(element, drivenAdapterProperties)));
 
         return result;
     }

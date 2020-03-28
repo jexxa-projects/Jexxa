@@ -148,7 +148,8 @@ class ClassFactory
         {
             return false;
         }
-        final AtomicInteger counter = new AtomicInteger();
+
+        final AtomicInteger counter = new AtomicInteger(); // int is not possible because elements used in streams should be final
         return interfaceList.stream().allMatch( element -> element.isAssignableFrom(implementationList.get(counter.getAndIncrement())));
     }
 

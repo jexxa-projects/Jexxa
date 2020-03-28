@@ -53,7 +53,7 @@ public class PortFactoryTest
                 whiteListPackage(applicationCorePackageName);
 
         //Act
-        var result = objectUnderTest.createByType(ApplicationServiceWithDrivenApdapters.class, new Properties());
+        var result = objectUnderTest.newInstanceOf(ApplicationServiceWithDrivenApdapters.class, new Properties());
 
         //Assert
         Assert.assertNotNull(result);
