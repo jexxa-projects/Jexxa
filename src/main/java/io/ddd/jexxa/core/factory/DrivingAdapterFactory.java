@@ -7,41 +7,33 @@ import org.apache.commons.lang.Validate;
 
 public class DrivingAdapterFactory
 {
-    public <T> T createByType(Class<T> instanceType, Properties properties) {
+    public <T> T newInstanceOf(Class<T> instanceType, Properties properties) {
         Validate.notNull(instanceType);
         Validate.notNull(properties);
+        
+        var instance = ClassFactory.newInstanceOf(instanceType, new Object[] {properties});
 
-
-        Object[] args = new Object[1];
-        args[0]= properties;
-
-        //Apply 1. convention and try to use a constructor accepting properties
-        var instance = ClassFactory.newInstanceOf(instanceType, args);
-
-        //Apply 2. convention and try to use a factory method accepting properties
         if (instance.isEmpty())
         {
             instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(instanceType, instanceType, properties));
         }
 
-        //Apply 2. convention Try to use default constructor
+        //Try to use constructors without Properties
         if (instance.isEmpty())
         {
-            return createByType(instanceType);
+            return newInstanceOf(instanceType);
         }
 
         return instanceType.cast(instance.orElseThrow());
     }
 
 
-    public <T> T createByType(Class<T> instanceType) {
+    public <T> T newInstanceOf(Class<T> instanceType) {
         Validate.notNull(instanceType);
 
-        //Apply 1. convention and try to use a constructor accepting properties
         var instance = ClassFactory.newInstanceOf(instanceType);
 
 
-        //Apply 2. convention and try to use a factory method accepting properties
         if (instance.isEmpty())
         {
             instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(instanceType, instanceType));
