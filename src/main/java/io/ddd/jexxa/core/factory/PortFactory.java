@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.function.Consumer;
 
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
@@ -16,6 +17,38 @@ public class PortFactory
     private List<String> whiteListPackages = new ArrayList<>();
     private DrivenAdapterFactory drivenAdapterFactory;
 
+    static class MissingDrivenAdapterException extends RuntimeException
+    {
+        private final String internalMessage;
+        
+        public MissingDrivenAdapterException(Class<?> port, DrivenAdapterFactory drivenAdapterFactory)
+        {
+            internalMessage = getInternalMessage(port, drivenAdapterFactory);
+        }
+
+        @Override
+        public String getMessage()
+        {
+            return internalMessage;
+        }
+
+
+        private String getInternalMessage(Class<?> port, DrivenAdapterFactory drivenAdapterFactory)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Could not create port: ").
+                    append(port.getName()).append("\n").
+                    append("Missing DrivenAdapter:\n");
+
+
+            var missingAdapters = new ArrayList<Class<?>>();
+            Arrays.asList(port.getConstructors()).
+                    forEach( element -> missingAdapters.addAll(drivenAdapterFactory.getMissingAdapter(Arrays.asList(element.getParameterTypes()))));
+            missingAdapters.forEach( missingAdapter -> stringBuilder.append("    * ").append(missingAdapter.getName()).append("\n") );
+
+            return stringBuilder.toString();
+        }
+    }
 
     public PortFactory(DrivenAdapterFactory drivenAdapterFactory)
     {
@@ -34,7 +67,7 @@ public class PortFactory
         Validate.notNull(drivenAdapterProperties);
 
         var supportedConstructor = findSupportedConstructor(inboundPort).
-                orElseThrow();
+                orElseThrow(() -> new MissingDrivenAdapterException(inboundPort, drivenAdapterFactory));
 
         var drivenAdapter = createDrivenAdapterForConstructor(supportedConstructor, drivenAdapterProperties);
         
@@ -61,11 +94,13 @@ public class PortFactory
 
         if ( constructorList.size() > 1)
         {
-            JexxaLogger.getLogger(getClass()).warn("More than one constructor available. => Reconsider to provide only a single constructor");
+            JexxaLogger.getLogger(getClass()).
+                    warn("More than one constructor available for {}. => Reconsider to provide only a single constructor", inboundPort.getName());
         }
 
-        return constructorList.stream().
-                filter(constructor -> drivenAdapterFactory.validateAdaptersAvailable(Arrays.asList(constructor.getParameterTypes()))).
+        return constructorList.
+                stream().
+                filter(constructor -> drivenAdapterFactory.isAvailable(Arrays.asList(constructor.getParameterTypes()))).
                 findFirst();
     }
 
@@ -77,10 +112,32 @@ public class PortFactory
         var scannedInboundPorts = annotationScanner.getClassesWithAnnotation(portAnnotation);
 
         var result = new ArrayList<>();
+        var exceptionList = new ArrayList<RuntimeException>();
+        
         scannedInboundPorts.
-            forEach(element -> result.add(newInstanceOf(element, drivenAdapterProperties)));
+                    forEach(exceptionWrapper(
+                            element -> result.add(newInstanceOf(element, drivenAdapterProperties)),
+                            exceptionList)
+                    );
+
+        exceptionList.forEach(element -> JexxaLogger.getLogger(getClass()).warn(element.getMessage()));
 
         return result;
+    }
+
+    static <T> Consumer<T>
+    exceptionWrapper(Consumer<T> consumer,  List< RuntimeException > exceptionList) {
+        return i -> {
+            try {
+                consumer.accept(i);
+            } catch (Exception e) {
+                try {
+                    exceptionList.add((RuntimeException) e);
+                } catch (ClassCastException ccEx) {
+                    throw e;
+                }
+            }
+        };
     }
     
 

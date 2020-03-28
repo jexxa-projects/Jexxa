@@ -10,7 +10,7 @@ import java.util.Set;
 import javax.management.MBeanServer;
 import javax.management.ObjectInstance;
 
-import io.ddd.jexxa.applicationcore.applicationservice.SimpleApplicationService;
+import io.ddd.jexxa.dummyapplication.applicationservice.SimpleApplicationService;
 import org.junit.Test;
 
 public class JMXAdapterTest

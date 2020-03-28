@@ -4,7 +4,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.ArrayList;
 
-import io.ddd.jexxa.core.annotation.ApplicationService;
+import io.ddd.jexxa.dummyapplication.annotation.*;
 import org.junit.Test;
 
 public class ClassFactoryTest

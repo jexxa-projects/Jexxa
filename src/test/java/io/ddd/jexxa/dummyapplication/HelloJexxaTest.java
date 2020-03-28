@@ -1,4 +1,4 @@
-package io.ddd.jexxa.core;
+package io.ddd.jexxa.dummyapplication;
 
 
 import static org.junit.Assert.assertEquals;
@@ -17,9 +17,10 @@ import java.util.Set;
 import javax.management.MBeanServer;
 import javax.management.ObjectInstance;
 
-import io.ddd.jexxa.applicationcore.applicationservice.ApplicationServiceWithDrivenApdapters;
-import io.ddd.jexxa.applicationcore.applicationservice.SimpleApplicationService;
-import io.ddd.jexxa.core.annotation.ApplicationService;
+import io.ddd.jexxa.core.Jexxa;
+import io.ddd.jexxa.dummyapplication.applicationservice.ApplicationServiceWithDrivenApdapters;
+import io.ddd.jexxa.dummyapplication.applicationservice.SimpleApplicationService;
+import io.ddd.jexxa.dummyapplication.annotation.*;
 import io.ddd.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import org.junit.After;

@@ -2,15 +2,15 @@ package io.ddd.jexxa.core.factory;
 
 import java.util.Properties;
 
-import io.ddd.jexxa.applicationcore.applicationservice.ApplicationServiceWithDrivenApdapters;
+import io.ddd.jexxa.dummyapplication.applicationservice.ApplicationServiceWithDrivenApdapters;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class PortFactoryTest
 {
 
-    private String applicationCorePackageName = "io.ddd.jexxa.applicationcore";
-    private String drivenAdapterPackageName = "io.ddd.jexxa.infrastructure";
+    private String applicationCorePackageName = "io.ddd.jexxa.dummyapplication";
+    private String drivenAdapterPackageName = "io.ddd.jexxa.dummyapplication.infrastructure";
 
 
     @Test

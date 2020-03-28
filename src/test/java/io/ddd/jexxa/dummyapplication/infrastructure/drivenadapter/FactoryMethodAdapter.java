@@ -1,8 +1,8 @@
-package io.ddd.jexxa.infrastructure.drivenadapter;
+package io.ddd.jexxa.dummyapplication.infrastructure.drivenadapter;
 
 import java.util.Properties;
 
-import io.ddd.jexxa.applicationcore.domainservice.IFactroyMethodService;
+import io.ddd.jexxa.dummyapplication.domainservice.IFactroyMethodService;
 
 public class FactoryMethodAdapter implements IFactroyMethodService
 {

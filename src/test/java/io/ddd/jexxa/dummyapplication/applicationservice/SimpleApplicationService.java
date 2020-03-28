@@ -1,8 +1,8 @@
-package io.ddd.jexxa.applicationcore.applicationservice;
+package io.ddd.jexxa.dummyapplication.applicationservice;
 
 
-import io.ddd.jexxa.applicationcore.domain.valueobject.JexxaValueObject;
-import io.ddd.jexxa.core.annotation.ApplicationService;
+import io.ddd.jexxa.dummyapplication.domain.valueobject.JexxaValueObject;
+import io.ddd.jexxa.dummyapplication.annotation.*;
 
 @ApplicationService
 public class SimpleApplicationService

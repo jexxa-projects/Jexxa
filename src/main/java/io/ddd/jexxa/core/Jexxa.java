@@ -31,12 +31,6 @@ public class Jexxa
         portFactory = new PortFactory(drivenAdapterFactory);
     }
 
-    public Jexxa whiteListDrivingAdapterPackage(String packageName)
-    {
-        //drivingAdapterFactory.whiteListPackage(packageName);
-        return this;
-    }
-
     public Jexxa whiteListDrivenAdapterPackage(String packageName)
     {
         drivenAdapterFactory.whiteListPackage(packageName);
@@ -51,9 +45,8 @@ public class Jexxa
 
     public Jexxa whiteListPackage(String packageName)
     {
-        //drivingAdapterFactory.whiteListPackage(packageName);
-        drivenAdapterFactory.whiteListPackage(packageName);
-        portFactory.whiteListPackage(packageName);
+        whiteListDrivenAdapterPackage(packageName);
+        whiteListPortPackage(packageName);
         return this;
     }
 
@@ -85,12 +78,12 @@ public class Jexxa
     }
 
 
-    void startDrivingAdapters()
+    public void startDrivingAdapters()
     {
         compositeDrivingAdapter.start();
     }
 
-    void stopDrivingAdapters()
+    public void stopDrivingAdapters()
     {
         compositeDrivingAdapter.stop();
     }

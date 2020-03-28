@@ -4,11 +4,11 @@ package io.ddd.jexxa.core.factory;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import io.ddd.jexxa.applicationcore.domainservice.IDefaultConstructorService;
-import io.ddd.jexxa.applicationcore.domainservice.IFactroyMethodService;
-import io.ddd.jexxa.applicationcore.domainservice.INotImplementedService;
-import io.ddd.jexxa.applicationcore.domainservice.INotUniqueService;
-import io.ddd.jexxa.applicationcore.domainservice.IPropertiesConstructorService;
+import io.ddd.jexxa.dummyapplication.domainservice.IDefaultConstructorService;
+import io.ddd.jexxa.dummyapplication.domainservice.IFactroyMethodService;
+import io.ddd.jexxa.dummyapplication.domainservice.INotImplementedService;
+import io.ddd.jexxa.dummyapplication.domainservice.INotUniqueService;
+import io.ddd.jexxa.dummyapplication.domainservice.IPropertiesConstructorService;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -92,7 +92,7 @@ public class DrivenAdapterFactoryTest
         adapterList.add(IPropertiesConstructorService.class);
 
         //Act
-        boolean result = objectUnderTest.validateAdaptersAvailable(adapterList);
+        boolean result = objectUnderTest.isAvailable(adapterList);
 
         //Assert
         Assert.assertTrue(result);
@@ -108,7 +108,7 @@ public class DrivenAdapterFactoryTest
         adapterList.add(INotImplementedService.class);
 
         //Act
-        boolean result = objectUnderTest.validateAdaptersAvailable(adapterList);
+        boolean result = objectUnderTest.isAvailable(adapterList);
 
         //Assert
         Assert.assertFalse(result);

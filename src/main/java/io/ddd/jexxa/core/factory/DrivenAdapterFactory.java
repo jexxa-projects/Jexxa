@@ -3,7 +3,9 @@ package io.ddd.jexxa.core.factory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.Validate;
 
@@ -28,7 +30,8 @@ public class DrivenAdapterFactory
         Validate.notNull(interfaceType);
         Validate.isTrue(interfaceType.isInterface(), "Given Argument is not an interface: " + interfaceType.getName());
 
-        Class<?> implementation = getImplementationOf(interfaceType);
+        Class<?> implementation = getImplementationOf(interfaceType).
+                orElseThrow();
 
         //Apply 1. convention and try to use default constructor
         var instance = ClassFactory.newInstanceOf(implementation);
@@ -46,7 +49,8 @@ public class DrivenAdapterFactory
         Validate.notNull(interfaceType);
         Validate.isTrue(interfaceType.isInterface(), "Given Argument is not an interface: " + interfaceType.getName());
 
-        Class<?> implementation = getImplementationOf(interfaceType);
+        Class<?> implementation = getImplementationOf(interfaceType).
+                orElseThrow(() -> new RuntimeException("No implementation found for interface " + interfaceType.getName()));
 
         //Apply 1. convention and try to use a constructor accepting properties 
         var instance = ClassFactory.newInstanceOf(implementation, new Object[]{properties});
@@ -65,20 +69,31 @@ public class DrivenAdapterFactory
         
         return interfaceType.cast(instance.orElseThrow());
     }
-    
 
-    boolean validateAdaptersAvailable(List<Class <?> > adapterList)
+
+    List<Class<?>> getMissingAdapter(List<Class <?> > adapterList)
+    {
+        var dependencyScanner = new DependencyScanner().
+                whiteListPackages(whiteListPackages);
+
+        return adapterList.
+                stream().
+                filter(adapter -> getImplementationOf(adapter, dependencyScanner).isEmpty()).
+                collect(Collectors.toList());
+    }
+
+    boolean isAvailable(List<Class <?> > adapterList)
     {
         var dependencyScanner = new DependencyScanner().
                 whiteListPackages(whiteListPackages);
         
         return adapterList.
                 stream().
-                noneMatch(adapter -> validateImplementationOf(adapter, dependencyScanner) == null);
+                noneMatch(adapter -> getImplementationOf(adapter, dependencyScanner).isEmpty());
     }
 
 
-    private <T> Class<?> getImplementationOf(Class<T> interfaceType) {
+    private <T> Optional<Class<?>> getImplementationOf(Class<T> interfaceType) {
         var dependencyScanner = new DependencyScanner().whiteListPackages(whiteListPackages);
 
         var results = dependencyScanner.getClassesImplementing(interfaceType);
@@ -87,18 +102,18 @@ public class DrivenAdapterFactory
         Validate.notEmpty(results, "No implementation of " + interfaceType.getName() + " available");
         Validate.isTrue( results.size() == 1, "Multiple implementation of " + interfaceType.getName() + " available");
 
-        return validateImplementationOf(interfaceType, dependencyScanner);
+        return getImplementationOf(interfaceType, dependencyScanner);
     }
 
 
-    private <T> Class<?> validateImplementationOf(Class<T> interfaceType, DependencyScanner dependencyScanner) {
+    private <T> Optional<Class<?>> getImplementationOf(Class<T> interfaceType, DependencyScanner dependencyScanner) {
         var results = dependencyScanner.getClassesImplementing(interfaceType);
 
         if (results == null || results.isEmpty()) {
-            return null;
+            return Optional.empty();
         }
 
-        return results.get(0);
+        return Optional.of(results.get(0));
     }
 
 }
