@@ -129,16 +129,17 @@ class ClassFactory
     @SuppressWarnings("squid:S1452")
     private static <T> Optional<Constructor<?>> searchParameterConstructor(Class<T> clazz, Object[] parameter)
     {
+        //Use default constructor if no parameters are set.
+        if ( parameter.length == 0 ) {
+            return searchDefaultConstructor(clazz);
+        }
+
         //TODO: Refactor this method using streams => the outcommented block at the end fails due to comparisons of array
         //var parameterTypeList = Arrays.stream(parameter).map(Object::getClass).collect(Collectors.toList());
 
         var constructorList = Arrays.stream(clazz.getConstructors()).
                 filter( element -> element.getParameterTypes().length == parameter.length).collect(Collectors.toList());
 
-        //Handle case ifd default constructor is required 
-        if ( parameter.length == 0 && !constructorList.isEmpty()) {
-            return Optional.of(constructorList.get(0));
-        }
 
         List<Constructor<?>> result = new ArrayList<>();
         constructorList.forEach( element ->
