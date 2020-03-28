@@ -1,7 +1,5 @@
 package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Properties;
