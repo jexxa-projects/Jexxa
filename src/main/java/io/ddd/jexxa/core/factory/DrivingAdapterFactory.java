@@ -9,13 +9,14 @@ public class DrivingAdapterFactory
 {
     public <T> T createByType(Class<T> instanceType, Properties properties) {
         Validate.notNull(instanceType);
+        Validate.notNull(properties);
+
 
         Object[] args = new Object[1];
         args[0]= properties;
 
         //Apply 1. convention and try to use a constructor accepting properties
         var instance = ClassFactory.newInstanceOf(instanceType, args);
-
 
         //Apply 2. convention and try to use a factory method accepting properties
         if (instance.isEmpty())
@@ -26,48 +27,26 @@ public class DrivingAdapterFactory
         //Apply 2. convention Try to use default constructor
         if (instance.isEmpty())
         {
-            instance = ClassFactory.newInstanceOf(instanceType);
-        }
-
-        //Apply 4. convention Try to use default factory method
-        if (instance.isEmpty())
-        {
-            instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(instanceType,instanceType));
+            return createByType(instanceType);
         }
 
         return instanceType.cast(instance.orElseThrow());
     }
 
 
-/*    public <T> T createByType(Class<T> instanceType) {
+    public <T> T createByType(Class<T> instanceType) {
         Validate.notNull(instanceType);
 
-        Object[] args = new Object[1];
-        args[0]= properties;
-
         //Apply 1. convention and try to use a constructor accepting properties
-        var instance = ClassFactory.newInstanceOf(instanceType, args);
+        var instance = ClassFactory.newInstanceOf(instanceType);
 
 
         //Apply 2. convention and try to use a factory method accepting properties
         if (instance.isEmpty())
         {
-            instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(instanceType, instanceType, properties));
-        }
-
-        //Apply 2. convention Try to use default constructor
-        if (instance.isEmpty())
-        {
-            instance = ClassFactory.newInstanceOf(instanceType);
-        }
-
-        //Apply 4. convention Try to use default factory method
-        if (instance.isEmpty())
-        {
-            instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(instanceType,instanceType));
+            instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(instanceType, instanceType));
         }
 
         return instanceType.cast(instance.orElseThrow());
     }
-                 */
 }
