@@ -32,7 +32,7 @@ public class AdapterFactory
         Class<?> implementation = getImplementationOf(interfaceType);
 
         //Apply 1. convention and try to use default constructor
-        var instance = interfaceType.cast(ClassFactory.createByConstructor(implementation));
+        var instance = interfaceType.cast(ClassFactory.newInstanceOf(implementation));
         
         //Apply 2. convention and try to use a factory method 
         if (instance == null) {
@@ -56,7 +56,7 @@ public class AdapterFactory
 
 
         //Apply 1. convention and try to use a constructor accepting properties 
-        T instance = interfaceType.cast(ClassFactory.createByConstructor(implementation, args));
+        T instance = interfaceType.cast(ClassFactory.newInstanceOf(implementation, args));
 
         //Apply 2. convention and try to use a factory method accepting properties
         if (instance == null)
@@ -67,7 +67,7 @@ public class AdapterFactory
         //Try to use default constructor
         //Apply 3. convention and try to use default constructor
         if (instance == null) {
-            instance = interfaceType.cast(ClassFactory.createByConstructor(implementation));
+            instance = interfaceType.cast(ClassFactory.newInstanceOf(implementation));
         }
 
         //Apply 4. convention and try to use a factory method
@@ -89,7 +89,7 @@ public class AdapterFactory
         args[0]= properties;
 
         //Apply 1. convention and try to use a constructor accepting properties
-        T instance = instanceType.cast(ClassFactory.createByConstructor(instanceType, args));
+        T instance = instanceType.cast(ClassFactory.newInstanceOf(instanceType, args));
 
 
         //Apply 2. convention and try to use a factory method accepting properties
@@ -101,7 +101,7 @@ public class AdapterFactory
         //Apply 2. convention Try to use default constructor
         if (instance == null)
         {
-            instance = ClassFactory.createByConstructor(instanceType);
+            instance = ClassFactory.newInstanceOf(instanceType);
         }
 
         //Apply 4. convention Try to use default factory method 

@@ -28,7 +28,7 @@ class ClassFactory
         }
     }
     
-    static <T> T createByConstructor(Class<T> clazz)
+    static <T> T newInstanceOf(Class<T> clazz)
     {
         Validate.notNull(clazz);
 
@@ -37,7 +37,8 @@ class ClassFactory
             try
             {
                 return clazz.cast(defaultConstructor.get().newInstance());
-            }  catch (Exception e)
+            }
+            catch (Exception e)
             {
                 JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
                 throw new ClassFactoryException(clazz);
@@ -47,13 +48,13 @@ class ClassFactory
         return null;
     }
 
-    static <T> T createByConstructor(Class<T> clazz, Object[] parameter)
+    static <T> T newInstanceOf(Class<T> clazz, Object[] parameter)
     {
         Validate.notNull(clazz);
         Validate.notNull(parameter);
 
         if (parameter.length == 0) {
-            return createByConstructor(clazz);
+            return newInstanceOf(clazz);
         }
 
         var parameterConstructor = searchParameterConstructor(clazz, parameter);
@@ -62,7 +63,9 @@ class ClassFactory
             try
             {
                 return clazz.cast(parameterConstructor.get().newInstance(parameter));
-            } catch ( Exception e) {
+            }
+            catch ( Exception e)
+            {
                 JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
                 throw new ClassFactoryException(clazz);
             }
@@ -81,7 +84,8 @@ class ClassFactory
             try
             {
                 return interfaceType.cast(method.get().invoke(null, (Object[])null));
-            }  catch (Exception e)
+            }
+            catch (Exception e)
             {
                 JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
                 throw new ClassFactoryException(interfaceType);
