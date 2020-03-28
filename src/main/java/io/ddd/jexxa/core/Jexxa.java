@@ -3,6 +3,8 @@ package io.ddd.jexxa.core;
 import java.lang.annotation.Annotation;
 import java.util.Properties;
 
+import io.ddd.jexxa.core.factory.AdapterFactory;
+import io.ddd.jexxa.core.factory.PortFactory;
 import io.ddd.jexxa.infrastructure.drivingadapter.CompositeDrivingAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import org.apache.commons.lang.Validate;

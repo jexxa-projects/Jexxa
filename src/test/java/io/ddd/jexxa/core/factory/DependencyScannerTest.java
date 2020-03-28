@@ -1,4 +1,4 @@
-package io.ddd.jexxa.core;
+package io.ddd.jexxa.core.factory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -10,6 +10,7 @@ import io.ddd.jexxa.applicationcore.applicationservice.SimpleApplicationService;
 import java.util.List;
 
 import io.ddd.jexxa.core.annotation.UnavailableDuringRuntime;
+import io.ddd.jexxa.core.factory.DependencyScanner;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.ddd.stereotype.applicationcore.ApplicationService;
 import org.junit.Test;

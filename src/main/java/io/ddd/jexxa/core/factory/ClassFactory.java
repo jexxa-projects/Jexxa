@@ -1,4 +1,4 @@
-package io.ddd.jexxa.core;
+package io.ddd.jexxa.core.factory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -18,9 +18,9 @@ import org.apache.commons.lang.Validate;
 *  * all methods return an instance or null
 *  * if the creation itself does not work due to reflection exceptions a ClassFactoryException is thrown 
 */
-public class ClassFactory
+class ClassFactory
 {
-    public static class ClassFactoryException extends RuntimeException
+    static class ClassFactoryException extends RuntimeException
     {
         public ClassFactoryException(Class<?> clazz)
         {
@@ -28,7 +28,7 @@ public class ClassFactory
         }
     }
     
-    public static <T> T createByConstructor(Class<T> clazz)
+    static <T> T createByConstructor(Class<T> clazz)
     {
         Validate.notNull(clazz);
 
@@ -47,7 +47,7 @@ public class ClassFactory
         return null;
     }
 
-    public static <T> T createByConstructor(Class<T> clazz, Object[] parameter)
+    static <T> T createByConstructor(Class<T> clazz, Object[] parameter)
     {
         Validate.notNull(clazz);
         Validate.notNull(parameter);
@@ -72,7 +72,7 @@ public class ClassFactory
     }
     
 
-    public static <T> T createByFactoryMethod(Class<?> implementation, Class<T> interfaceType)
+    static <T> T createByFactoryMethod(Class<?> implementation, Class<T> interfaceType)
     {
         Validate.notNull(implementation);
 
@@ -91,7 +91,7 @@ public class ClassFactory
         return null;
     }
 
-    public static <T> T createByFactoryMethod(Class<?> implementation, Class<T> interfaceType, Properties properties)
+    static <T> T createByFactoryMethod(Class<?> implementation, Class<T> interfaceType, Properties properties)
     {
         Validate.notNull(implementation);
 

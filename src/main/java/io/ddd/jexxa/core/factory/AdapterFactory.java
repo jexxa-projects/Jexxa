@@ -1,4 +1,4 @@
-package io.ddd.jexxa.core;
+package io.ddd.jexxa.core.factory;
 
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class AdapterFactory
 {
     private List<String> whiteListPackages = new ArrayList<>();
 
-    AdapterFactory whiteListPackage(String packageName)
+    public AdapterFactory whiteListPackage(String packageName)
     {
         whiteListPackages.add(packageName);
         return this;

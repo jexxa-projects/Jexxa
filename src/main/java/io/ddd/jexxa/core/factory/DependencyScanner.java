@@ -1,4 +1,4 @@
-package io.ddd.jexxa.core;
+package io.ddd.jexxa.core.factory;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
@@ -10,7 +10,7 @@ import io.github.classgraph.ClassGraph;
 import org.apache.commons.lang.Validate;
 
 //TODO: Double check if it is a good practice to cache scan results
-public class DependencyScanner
+class DependencyScanner
 {
     private List<String> whiteListPackages = new ArrayList<>();
 
@@ -27,7 +27,7 @@ public class DependencyScanner
     }
 
 
-    public List<Class<?>> getClassesWithAnnotation(final Class<? extends Annotation> annotation)
+    List<Class<?>> getClassesWithAnnotation(final Class<? extends Annotation> annotation)
     {
         validateRetentionRuntime(annotation);
 
@@ -51,7 +51,7 @@ public class DependencyScanner
     }
 
 
-    public List<Class<?>> getClassesImplementing(final Class<?> interfaceType)
+    List<Class<?>> getClassesImplementing(final Class<?> interfaceType)
     {
         Validate.notNull(interfaceType);
 

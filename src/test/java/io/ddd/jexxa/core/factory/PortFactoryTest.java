@@ -1,8 +1,10 @@
-package io.ddd.jexxa.core;
+package io.ddd.jexxa.core.factory;
 
 import java.util.Properties;
 
 import io.ddd.jexxa.applicationcore.applicationservice.ApplicationServiceWithDrivenApdapters;
+import io.ddd.jexxa.core.factory.AdapterFactory;
+import io.ddd.jexxa.core.factory.PortFactory;
 import org.junit.Assert;
 import org.junit.Test;
 

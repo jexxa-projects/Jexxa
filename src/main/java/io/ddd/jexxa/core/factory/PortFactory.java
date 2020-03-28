@@ -1,4 +1,4 @@
-package io.ddd.jexxa.core;
+package io.ddd.jexxa.core.factory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -18,18 +18,19 @@ public class PortFactory
     AdapterFactory drivenAdapterFactory;
 
 
-    PortFactory(AdapterFactory drivenAdapterFactory)
+    public PortFactory(AdapterFactory drivenAdapterFactory)
     {
         this.drivenAdapterFactory = drivenAdapterFactory;
     }
 
-    PortFactory whiteListPackage(String packageName)
+    public PortFactory whiteListPackage(String packageName)
     {
         whiteListPackages.add(packageName);
         return this;
     }
 
-    @SuppressWarnings("squid:S3655") //Sonarlint does not detect validation with Validate.isTrue( supportedConstructor.isPresent() )
+    @SuppressWarnings("squid:S3655")
+    public //Sonarlint does not detect validation with Validate.isTrue( supportedConstructor.isPresent() )
     Object createByType(Class<?> inboundPort, Properties drivenAdapterProperties)
     {
         Validate.notNull(inboundPort);

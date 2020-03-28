@@ -1,4 +1,4 @@
-package io.ddd.jexxa.core;
+package io.ddd.jexxa.core.factory;
 
 
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import io.ddd.jexxa.applicationcore.domainservice.IFactroyMethodService;
 import io.ddd.jexxa.applicationcore.domainservice.INotImplementedService;
 import io.ddd.jexxa.applicationcore.domainservice.INotUniqueService;
 import io.ddd.jexxa.applicationcore.domainservice.IPropertiesConstructorService;
+import io.ddd.jexxa.core.factory.AdapterFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
