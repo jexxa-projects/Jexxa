@@ -3,11 +3,11 @@ package io.ddd.jexxa.core.factory;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import io.ddd.jexxa.utils.JexxaLogger;
@@ -133,35 +133,23 @@ class ClassFactory
         if ( parameter.length == 0 ) {
             return searchDefaultConstructor(clazz);
         }
+      
+       var parameterTypes = Arrays.stream(parameter).map(Object::getClass).collect(Collectors. <Class<?>> toList());
 
-        //TODO: Refactor this method using streams => the outcommented block at the end fails due to comparisons of array
-        //var parameterTypeList = Arrays.stream(parameter).map(Object::getClass).collect(Collectors.toList());
+       return  Arrays.stream(clazz.getConstructors()).
+               filter( element -> element.getParameterTypes().length == parameter.length).
+               filter (element -> isAssignableFrom(Arrays.asList(element.getParameterTypes()), parameterTypes )).
+               findFirst();
+    }
 
-        var constructorList = Arrays.stream(clazz.getConstructors()).
-                filter( element -> element.getParameterTypes().length == parameter.length).collect(Collectors.toList());
-
-
-        List<Constructor<?>> result = new ArrayList<>();
-        constructorList.forEach( element ->
-                {
-                    for (int i = 0; i < element.getParameterTypes().length; ++i)
-                    {
-                        if (!element.getParameterTypes()[i].isInstance(parameter[i])) {
-                            break;
-                        }
-                        result.add(element);
-                    }
-                }
-                );
-         if (result.isEmpty()) {
-             return Optional.empty();
-         }
-
-         return Optional.of(result.get(0));
-       /*return  Arrays.stream(clazz.getConstructors()).
-                filter( element -> element.getParameterTypes().length == parameter.length).
-                filter( element -> Arrays.equals(element.getParameterTypes(), parameterTypeList.toArray(new Class[0]))).
-                findFirst();*/
+    private static boolean isAssignableFrom( List<Class<?>> interfaceList, List<Class<?>> implementationList )
+    {
+        if (interfaceList.size() != implementationList.size())
+        {
+            return false;
+        }
+        final AtomicInteger counter = new AtomicInteger();
+        return interfaceList.stream().allMatch( element -> element.isAssignableFrom(implementationList.get(counter.getAndIncrement())));
     }
 
     @SuppressWarnings("squid:S1452")

@@ -11,7 +11,6 @@ import java.util.Properties;
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 
-//TODO: Double check if we should split this class into two classes. One for DrivenAdapter and one for DrivingAdapter since the creation rules are different (at least at the moment) 
 public class PortFactory
 {
     private List<String> whiteListPackages = new ArrayList<>();
@@ -58,7 +57,6 @@ public class PortFactory
     /*
      * Check if all DrivenAdapter are available for for a given port
      */
-    
     private Optional<Constructor<?>> findSupportedConstructor(Class<?> inboundPort)
     {
         var constructorList = Arrays.asList(inboundPort.getConstructors());
