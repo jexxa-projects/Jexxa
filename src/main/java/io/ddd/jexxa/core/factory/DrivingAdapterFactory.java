@@ -15,7 +15,7 @@ public class DrivingAdapterFactory
 
         if (instance.isEmpty())
         {
-            instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(instanceType, instanceType, properties));
+            instance = Optional.ofNullable(ClassFactory.newInstanceOfInterface(instanceType, instanceType, properties));
         }
 
         //Try to use constructors without Properties
@@ -36,7 +36,7 @@ public class DrivingAdapterFactory
 
         if (instance.isEmpty())
         {
-            instance = Optional.ofNullable(ClassFactory.createByFactoryMethod(instanceType, instanceType));
+            instance = Optional.ofNullable(ClassFactory.newInstanceOfInterface(instanceType, instanceType));
         }
 
         return instanceType.cast(instance.orElseThrow());

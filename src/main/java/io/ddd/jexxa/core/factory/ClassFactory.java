@@ -75,7 +75,7 @@ class ClassFactory
     }
     
 
-    static <T> T createByFactoryMethod(Class<?> implementation, Class<T> interfaceType)
+    static <T> T newInstanceOfInterface(Class<?> implementation, Class<T> interfaceType)
     {
         Validate.notNull(implementation);
 
@@ -95,7 +95,7 @@ class ClassFactory
         return null;
     }
 
-    static <T> T createByFactoryMethod(Class<?> implementation, Class<T> interfaceType, Properties properties)
+    static <T> T newInstanceOfInterface(Class<?> implementation, Class<T> interfaceType, Properties properties)
     {
         Validate.notNull(implementation);
 
