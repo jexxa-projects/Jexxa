@@ -8,7 +8,7 @@ import java.util.Properties;
 import org.apache.commons.lang.Validate;
 
 /*
- * Rules for creating a driving adapter:
+ * Rules for creating a driving/driven adapter:
  * 1. Public Default constructor available
  * 2. Public constructor with Properties as attribute
  * 3. Public static method with return type if the requested interface
@@ -26,13 +26,14 @@ public class AdapterFactory
 
     public <T> T create(Class<T> interfaceType) {
         Validate.notNull(interfaceType);
+        //TODO: validate Interface
+        //TODO: Better method name e.g. instanceOf
 
         Class<?> implementation = getImplementationOf(interfaceType);
 
         //Apply 1. convention and try to use default constructor
         var instance = interfaceType.cast(ClassFactory.createByConstructor(implementation));
-
-
+        
         //Apply 2. convention and try to use a factory method 
         if (instance == null) {
             instance = interfaceType.cast(ClassFactory.createByFactoryMethod(implementation, interfaceType));
@@ -45,6 +46,8 @@ public class AdapterFactory
 
     public <T> T create(Class<T> interfaceType, Properties properties) {
         Validate.notNull(interfaceType);
+        //TODO: validate Interface
+        //TODO: Better method name e.g. instance
 
         Class<?> implementation = getImplementationOf(interfaceType);
 

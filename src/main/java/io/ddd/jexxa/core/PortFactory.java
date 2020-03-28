@@ -11,6 +11,7 @@ import java.util.Properties;
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 
+//TODO: Double check if we should split this class into two classes. One for DrivenAdapter and one for DrivingAdapter since the creation rules are different (at least at the moment) 
 public class PortFactory
 {
     private List<String> whiteListPackages = new ArrayList<>();

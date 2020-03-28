@@ -13,6 +13,11 @@ import java.util.stream.Collectors;
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 
+/*
+* TODO: Document general behavior:
+*  * all methods return an instance or null
+*  * if the creation itself does not work due to reflection exceptions a ClassFactoryException is thrown 
+*/
 public class ClassFactory
 {
     public static class ClassFactoryException extends RuntimeException
@@ -47,17 +52,16 @@ public class ClassFactory
         Validate.notNull(clazz);
         Validate.notNull(parameter);
 
+        if (parameter.length == 0) {
+            return createByConstructor(clazz);
+        }
+
         var parameterConstructor = searchParameterConstructor(clazz, parameter);
 
         if (parameterConstructor.isPresent()) {
             try
             {
-                if ( parameter.length > 0)
-                {
-                    return clazz.cast(parameterConstructor.get().newInstance(parameter));
-                } else {
-                    return clazz.cast(parameterConstructor.get().newInstance());
-                }
+                return clazz.cast(parameterConstructor.get().newInstance(parameter));
             } catch ( Exception e) {
                 JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
                 throw new ClassFactoryException(clazz);
@@ -119,6 +123,7 @@ public class ClassFactory
     @SuppressWarnings("squid:S1452")
     private static <T> Optional<Constructor<?>> searchParameterConstructor(Class<T> clazz, Object[] parameter)
     {
+        //TODO: Refactor this method using streams => the outcommented block at the end fails due to comparisons of array
         //var parameterTypeList = Arrays.stream(parameter).map(Object::getClass).collect(Collectors.toList());
 
         var constructorList = Arrays.stream(clazz.getConstructors()).
