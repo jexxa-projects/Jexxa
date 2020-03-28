@@ -13,13 +13,11 @@ import java.util.stream.Collectors;
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 
-/*
-* TODO: Document general behavior:
-*  * all methods return an instance or null
-*  * if the creation itself does not work due to reflection exceptions a ClassFactoryException is thrown 
-*/
 class ClassFactory
 {
+    /*
+     * Throw a RuntimeException in case an exception related to reflection occurs   
+     */
     static class ClassFactoryException extends RuntimeException
     {
         public ClassFactoryException(Class<?> clazz)
@@ -75,7 +73,7 @@ class ClassFactory
     }
     
 
-    static <T> T newInstanceOfInterface(Class<?> implementation, Class<T> interfaceType)
+    static <T> Optional<T> newInstanceOfInterface(Class<?> implementation, Class<T> interfaceType)
     {
         Validate.notNull(implementation);
 
@@ -83,7 +81,9 @@ class ClassFactory
         if (method.isPresent()) {
             try
             {
-                return interfaceType.cast(method.get().invoke(null, (Object[])null));
+                return Optional.ofNullable(
+                        interfaceType.cast(method.get().invoke(null, (Object[])null))
+                );
             }
             catch (Exception e)
             {
@@ -92,10 +92,10 @@ class ClassFactory
             }
         }
 
-        return null;
+        return Optional.empty();
     }
 
-    static <T> T newInstanceOfInterface(Class<?> implementation, Class<T> interfaceType, Properties properties)
+    static <T> Optional<T> newInstanceOfInterface(Class<?> implementation, Class<T> interfaceType, Properties properties)
     {
         Validate.notNull(implementation);
 
@@ -103,7 +103,9 @@ class ClassFactory
         if (method.isPresent()) {
             try
             {
-                return interfaceType.cast(method.get().invoke(null, properties));
+                return Optional.ofNullable(
+                        interfaceType.cast(method.get().invoke(null, properties))
+                );
             }  catch (Exception e)
             {
                 JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
@@ -111,7 +113,7 @@ class ClassFactory
             }
         }
 
-        return null;
+        return Optional.empty();
     }
 
 

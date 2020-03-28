@@ -1,6 +1,5 @@
 package io.ddd.jexxa.core.factory;
 
-import java.util.Optional;
 import java.util.Properties;
 
 import org.apache.commons.lang.Validate;
@@ -15,7 +14,7 @@ public class DrivingAdapterFactory
 
         if (instance.isEmpty())
         {
-            instance = Optional.ofNullable(ClassFactory.newInstanceOfInterface(instanceType, instanceType, properties));
+            instance = ClassFactory.newInstanceOfInterface(instanceType, instanceType, properties);
         }
 
         //Try to use constructors without Properties
@@ -33,10 +32,9 @@ public class DrivingAdapterFactory
 
         var instance = ClassFactory.newInstanceOf(instanceType);
 
-
         if (instance.isEmpty())
         {
-            instance = Optional.ofNullable(ClassFactory.newInstanceOfInterface(instanceType, instanceType));
+            instance = ClassFactory.newInstanceOfInterface(instanceType, instanceType);
         }
 
         return instanceType.cast(instance.orElseThrow());

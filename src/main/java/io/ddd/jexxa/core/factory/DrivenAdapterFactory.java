@@ -38,7 +38,7 @@ public class DrivenAdapterFactory
         //Apply 2. convention and try to use a factory method 
         if (instance.isEmpty())
         {
-            instance = Optional.ofNullable(ClassFactory.newInstanceOfInterface(implementation, interfaceType));
+            instance = ClassFactory.newInstanceOfInterface(implementation, interfaceType);
         }
 
         return interfaceType.cast(instance.orElseThrow());
@@ -61,7 +61,7 @@ public class DrivenAdapterFactory
         //Apply 2. convention and try to use a factory method accepting properties
         if (instance.isEmpty())
         {
-            instance = Optional.ofNullable(ClassFactory.newInstanceOfInterface(implementation, interfaceType, properties));
+            instance = ClassFactory.newInstanceOfInterface(implementation, interfaceType, properties);
         }
 
         //Try to use default constructor
@@ -73,7 +73,7 @@ public class DrivenAdapterFactory
 
         //Apply 4. convention and try to use a factory method
         if (instance.isEmpty()) {
-            instance = Optional.ofNullable(ClassFactory.newInstanceOfInterface(implementation, interfaceType));
+            instance = ClassFactory.newInstanceOfInterface(implementation, interfaceType);
         }
         
         return interfaceType.cast(instance.orElseThrow());
