@@ -2,8 +2,7 @@ package io.ddd.jexxa.applicationcore.applicationservice;
 
 
 import io.ddd.jexxa.applicationcore.domain.valueobject.JexxaValueObject;
-import io.ddd.jexxa.core.Jexxa;
-import io.ddd.stereotype.applicationcore.ApplicationService;
+import io.ddd.jexxa.core.annotation.ApplicationService;
 
 @ApplicationService
 public class SimpleApplicationService

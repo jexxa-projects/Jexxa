@@ -2,9 +2,7 @@ package io.ddd.jexxa.core;
 
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
@@ -21,10 +19,9 @@ import javax.management.ObjectInstance;
 
 import io.ddd.jexxa.applicationcore.applicationservice.ApplicationServiceWithDrivenApdapters;
 import io.ddd.jexxa.applicationcore.applicationservice.SimpleApplicationService;
+import io.ddd.jexxa.core.annotation.ApplicationService;
 import io.ddd.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
-import io.ddd.jexxa.infrastructure.stereotype.DrivingAdapter;
-import io.ddd.stereotype.applicationcore.ApplicationService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

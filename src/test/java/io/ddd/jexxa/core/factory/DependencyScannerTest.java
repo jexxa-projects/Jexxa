@@ -2,17 +2,14 @@ package io.ddd.jexxa.core.factory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
-import io.ddd.jexxa.applicationcore.applicationservice.SimpleApplicationService;
 
 import java.util.List;
 
+import io.ddd.jexxa.applicationcore.applicationservice.SimpleApplicationService;
+import io.ddd.jexxa.core.annotation.ApplicationService;
 import io.ddd.jexxa.core.annotation.UnavailableDuringRuntime;
-import io.ddd.jexxa.core.factory.DependencyScanner;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.ddd.stereotype.applicationcore.ApplicationService;
 import org.junit.Test;
 
 public class DependencyScannerTest
