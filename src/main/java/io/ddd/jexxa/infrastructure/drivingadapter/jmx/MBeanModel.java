@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.management.Attribute;
 import javax.management.AttributeList;
@@ -95,8 +96,14 @@ public class MBeanModel implements DynamicMBean
     MBeanOperationInfo[] getMBeanOperation()
     {
         //find methods with no arguments in a first step
-        return Arrays.
-                stream(object.getClass().getMethods()).
+        var methodList = Arrays.stream(object.getClass().getMethods()).
+                collect(Collectors.toList());
+
+        // Exclude all methods from base class
+        methodList.removeAll(Arrays.asList(Object.class.getMethods()));
+
+        return methodList.
+                stream().
                 filter(method -> method.getParameterCount() == 0).
                 map(element -> new MBeanOperationInfo(element.getName(), element)).
                 toArray(MBeanOperationInfo[]::new);
