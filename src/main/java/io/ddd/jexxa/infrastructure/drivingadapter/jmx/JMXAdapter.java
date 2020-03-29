@@ -11,11 +11,9 @@ import javax.management.MBeanServer;
 import javax.management.NotCompliantMBeanException;
 
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.ddd.jexxa.infrastructure.stereotype.DrivingAdapter;
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 
-@DrivingAdapter
 public class JMXAdapter implements IDrivingAdapter
 {
     private List<MBeanModel> registeredMBeans = new ArrayList<>();

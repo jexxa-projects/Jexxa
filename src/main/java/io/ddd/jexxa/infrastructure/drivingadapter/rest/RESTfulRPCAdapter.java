@@ -9,12 +9,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.ddd.jexxa.infrastructure.stereotype.DrivingAdapter;
 import io.javalin.Javalin;
 import org.apache.commons.lang.Validate;
 
 
-@DrivingAdapter
 public class RESTfulRPCAdapter implements IDrivingAdapter
 {
     public static final String HOST_PROPERTY = "io.ddd.jexxa.rest.host";
