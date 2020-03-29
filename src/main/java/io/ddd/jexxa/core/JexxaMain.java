@@ -73,6 +73,15 @@ public class JexxaMain
         compositeDrivingAdapter.add(drivingAdapter);
     }
 
+    public void bind(Class<? extends IDrivingAdapter> adapter, Object port) {
+        Validate.notNull(adapter);
+        Validate.notNull(port);
+
+        var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
+        drivingAdapter.register(port);
+
+        compositeDrivingAdapter.add(drivingAdapter);
+    }
    
     public void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
         Validate.notNull(adapter);
@@ -101,6 +110,11 @@ public class JexxaMain
     public void stopDrivingAdapters()
     {
         compositeDrivingAdapter.stop();
+    }
+
+    public BoundedContext getBoundedContext()
+    {
+        return boundedContext;
     }
 
     public void run()
