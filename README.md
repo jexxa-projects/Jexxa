@@ -1,4 +1,7 @@
-# Jexxa
+![Java CI](https://github.com/repplix/Jexxa/workflows/Java%20CI/badge.svg)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+# Jexxa - A Ports and Adapters Framework or Java 
 
 Jexxa is a lightweight micro-framework to support implementing business applications based on a [ports and adapters](https://www.thinktocode.com/2018/07/19/ports-and-adapters-architecture/) architecture. 
 
@@ -12,5 +15,4 @@ Up to now the framework provides following features:
 
 
 
-![Java CI](https://github.com/repplix/Jexxa/workflows/Java%20CI/badge.svg)
 
