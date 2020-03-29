@@ -17,7 +17,7 @@ import java.util.Set;
 import javax.management.MBeanServer;
 import javax.management.ObjectInstance;
 
-import io.ddd.jexxa.core.Jexxa;
+import io.ddd.jexxa.core.JexxaMain;
 import io.ddd.jexxa.dummyapplication.applicationservice.ApplicationServiceWithDrivenApdapters;
 import io.ddd.jexxa.dummyapplication.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.dummyapplication.annotation.*;
@@ -27,10 +27,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class HelloJexxaTest
+public class HelloJexxaMainTest
 {
     private Properties properties;
-    private Jexxa objectUnderTest;
+    private JexxaMain objectUnderTest;
     private String packageName = "io.ddd.jexxa";
 
     @Before
@@ -57,7 +57,7 @@ public class HelloJexxaTest
     public void simpleHelloJexxa()
     {
         //Arrange
-        objectUnderTest = new Jexxa(properties);
+        objectUnderTest = new JexxaMain(properties);
         objectUnderTest.whiteListPackage(packageName);
 
 
@@ -77,7 +77,7 @@ public class HelloJexxaTest
     public void simpleHelloJexxaWithDrivenAdapter()
     {
         //Arrange
-        objectUnderTest = new Jexxa(properties);
+        objectUnderTest = new JexxaMain(properties);
         objectUnderTest.whiteListPackage(packageName);
 
 
@@ -97,7 +97,7 @@ public class HelloJexxaTest
     public void simpleHelloJexxaClassAnnotatedPorts()
     {
         //Arrange
-        objectUnderTest = new Jexxa(properties);
+        objectUnderTest = new JexxaMain(properties);
         objectUnderTest.whiteListPackage(packageName);
 
 

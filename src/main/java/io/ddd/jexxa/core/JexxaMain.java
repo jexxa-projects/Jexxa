@@ -10,7 +10,7 @@ import io.ddd.jexxa.infrastructure.drivingadapter.CompositeDrivingAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import org.apache.commons.lang.Validate;
 
-public class Jexxa
+public class JexxaMain
 {
     CompositeDrivingAdapter compositeDrivingAdapter;
     Properties properties;
@@ -20,7 +20,7 @@ public class Jexxa
     PortFactory portFactory;
 
 
-    public Jexxa(Properties properties)
+    public JexxaMain(Properties properties)
     {
         Validate.notNull(properties);
         compositeDrivingAdapter = new CompositeDrivingAdapter();
@@ -31,19 +31,19 @@ public class Jexxa
         portFactory = new PortFactory(drivenAdapterFactory);
     }
 
-    public Jexxa whiteListDrivenAdapterPackage(String packageName)
+    public JexxaMain whiteListDrivenAdapterPackage(String packageName)
     {
         drivenAdapterFactory.whiteListPackage(packageName);
         return this;
     }
 
-    public Jexxa whiteListPortPackage(String packageName)
+    public JexxaMain whiteListPortPackage(String packageName)
     {
         portFactory.whiteListPackage(packageName);
         return this;
     }
 
-    public Jexxa whiteListPackage(String packageName)
+    public JexxaMain whiteListPackage(String packageName)
     {
         whiteListDrivenAdapterPackage(packageName);
         whiteListPortPackage(packageName);
