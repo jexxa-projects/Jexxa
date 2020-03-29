@@ -77,6 +77,11 @@ public class JexxaMain
         compositeDrivingAdapter.add(drivingAdapter);
     }
 
+    public <T> T newInstanceOfPort(Class<T> port)
+    {
+        return port.cast(portFactory.newInstanceOf(port, properties));
+    }
+
 
     public void startDrivingAdapters()
     {
