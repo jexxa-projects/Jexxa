@@ -4,6 +4,7 @@ import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Consumer;
 
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.MBeanRegistrationException;
@@ -70,18 +71,31 @@ public class JMXAdapter implements IDrivingAdapter
 
         registeredMBeans.stream().
                 filter(element -> mbs.isRegistered(element.getObjectName())).
-                forEach(element -> {
-                    try
-                    {
-                        mbs.unregisterMBean(element.getObjectName());
-                    }
-                    catch (Exception e)
-                    {
-                        JexxaLogger.getLogger(getClass()).error(e.getMessage());
-                    }
-                });
+                forEach(exceptionWrapper(element ->  mbs.unregisterMBean(element.getObjectName())));
     }
 
+
+    @FunctionalInterface
+    public interface ThrowingConsumer<T, E extends Exception> {
+        void accept(T t) throws E;
+    }
+
+    private static <T> Consumer<T>
+    exceptionWrapper(ThrowingConsumer<T, Exception> throwingConsumer) {
+        return i -> {
+            try
+            {
+                throwingConsumer.accept(i);
+            }
+            catch (Exception e)
+            {
+                JexxaLogger.getLogger(JMXAdapter.class).warn(e.getMessage());
+            }
+        };
+    }
+
+
+    
     private void validateJMXSettings()
     {
         Validate.notNull(System.getProperty("com.sun.management.jmxremote.port"),

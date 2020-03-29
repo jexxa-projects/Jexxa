@@ -3,32 +3,42 @@ package io.ddd.jexxa.core;
 import java.lang.annotation.Annotation;
 import java.util.Properties;
 
+import io.ddd.jexxa.applicationservice.BoundedContext;
 import io.ddd.jexxa.core.factory.DrivenAdapterFactory;
 import io.ddd.jexxa.core.factory.DrivingAdapterFactory;
 import io.ddd.jexxa.core.factory.PortFactory;
 import io.ddd.jexxa.infrastructure.drivingadapter.CompositeDrivingAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 
 public class JexxaMain
 {
-    CompositeDrivingAdapter compositeDrivingAdapter;
-    Properties properties;
+    private CompositeDrivingAdapter compositeDrivingAdapter;
+    private Properties properties;
 
-    DrivingAdapterFactory drivingAdapterFactory;
-    DrivenAdapterFactory drivenAdapterFactory;
-    PortFactory portFactory;
+    private DrivingAdapterFactory drivingAdapterFactory;
+    private DrivenAdapterFactory drivenAdapterFactory;
+    private PortFactory portFactory;
 
+    private BoundedContext boundedContext;
+
+    public JexxaMain()
+    {
+        this(System.getProperties());
+    }
 
     public JexxaMain(Properties properties)
     {
         Validate.notNull(properties);
         compositeDrivingAdapter = new CompositeDrivingAdapter();
         this.properties = properties;
-
+        
         drivingAdapterFactory = new DrivingAdapterFactory();
         drivenAdapterFactory = new DrivenAdapterFactory();
         portFactory = new PortFactory(drivenAdapterFactory);
+
+        boundedContext = new BoundedContext();
     }
 
     public JexxaMain whiteListDrivenAdapterPackage(String packageName)
@@ -91,5 +101,23 @@ public class JexxaMain
     public void stopDrivingAdapters()
     {
         compositeDrivingAdapter.stop();
+    }
+
+    public void run()
+    {
+        setupSignalHandler();
+
+        startDrivingAdapters();
+
+        boundedContext.run();
+
+        stopDrivingAdapters();
+    }
+
+    private void setupSignalHandler() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            JexxaLogger.getLogger(JexxaMain.class).info("Shutdown signal received ...");
+            boundedContext.shutdown();
+        }));
     }
 }
