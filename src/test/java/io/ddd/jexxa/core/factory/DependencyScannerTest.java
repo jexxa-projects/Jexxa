@@ -17,6 +17,8 @@ public class DependencyScannerTest
     public void findAnnotatedClasses() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
+        var packageName = "io.ddd.jexxa.dummyapplication";
+        objectUnderTest.whiteListPackage(packageName);
 
         //Act
         var applicationServiceList = objectUnderTest.getClassesWithAnnotation(ApplicationService.class);
@@ -68,6 +70,9 @@ public class DependencyScannerTest
     public void getClassesImplementingInterface() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
+        var packageName = "io.ddd.jexxa.infrastructure";
+        objectUnderTest.whiteListPackage(packageName);
+
 
         //Act
         List<Class<?>> drivingAdapters = objectUnderTest.getClassesImplementing(IDrivingAdapter.class);
