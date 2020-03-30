@@ -3,7 +3,6 @@ package io.ddd.jexxa.core;
 import java.lang.annotation.Annotation;
 import java.util.Properties;
 
-import io.ddd.jexxa.applicationservice.BoundedContext;
 import io.ddd.jexxa.core.factory.DrivenAdapterFactory;
 import io.ddd.jexxa.core.factory.DrivingAdapterFactory;
 import io.ddd.jexxa.core.factory.PortFactory;

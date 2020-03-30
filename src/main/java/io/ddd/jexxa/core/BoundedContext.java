@@ -1,4 +1,4 @@
-package io.ddd.jexxa.applicationservice;
+package io.ddd.jexxa.core;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -15,16 +15,17 @@ public class BoundedContext
     @SuppressWarnings({"java:S2189", "java:S2589"})
     public void run()
     {
-        if (isRunning) {
+        lock.lock();
+        if (isRunning()) {
+            lock.unlock();
             return;
         }
 
         isRunning = true;
-
-        lock.lock();
+        
         try {
-            while (isRunning) {
-                JexxaLogger.getLogger(BoundedContext.class).info("Starting Bounded Context");
+            while (isRunning()) {
+                JexxaLogger.getLogger(BoundedContext.class).info("Starting Bounded Context " );
                 runningCondition.await();
             }
         }
@@ -41,6 +42,12 @@ public class BoundedContext
     public void shutdown()
     {
         lock.lock();
+        if ( ! isRunning() )
+        {
+            lock.unlock();
+            return;
+        }
+
         isRunning = false;
         try {
             runningCondition.signal();
@@ -51,4 +58,9 @@ public class BoundedContext
         }
     }
 
+    public synchronized boolean isRunning()
+    {
+        return isRunning;
+    }
+    
 }
