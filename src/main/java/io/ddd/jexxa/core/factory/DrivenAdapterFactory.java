@@ -19,6 +19,7 @@ import org.apache.commons.lang.Validate;
 public class DrivenAdapterFactory
 {
     private List<String> whiteListPackages = new ArrayList<>();
+    private ObjectPool objectPool = new ObjectPool();
 
     public DrivenAdapterFactory whiteListPackage(String packageName)
     {
@@ -68,6 +69,33 @@ public class DrivenAdapterFactory
         }
         
         return interfaceType.cast(instance.orElseThrow());
+    }
+
+
+    public <T> T getInstanceOfInterface(Class<T> interfaceType) 
+    {
+        var existingInstance = objectPool.getInstance(interfaceType);
+
+        if (existingInstance.isPresent()) {
+            return existingInstance.get();
+        }
+
+        T newInstance = newInstanceOfInterface(interfaceType);
+        objectPool.add(newInstance);
+        return newInstance;
+    }
+
+    public <T> T getInstanceOfInterface(Class<T> interfaceType, Properties properties)
+    {
+        var existingInstance = objectPool.getInstance(interfaceType);
+
+        if (existingInstance.isPresent()) {
+            return existingInstance.get();
+        }
+
+        T newInstance = getInstanceOfInterface(interfaceType, properties);
+        objectPool.add(newInstance);
+        return newInstance;
     }
 
 

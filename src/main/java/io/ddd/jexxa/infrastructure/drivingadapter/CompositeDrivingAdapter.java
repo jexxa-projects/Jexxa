@@ -1,13 +1,13 @@
 package io.ddd.jexxa.infrastructure.drivingadapter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.lang.Validate;
 
 public class CompositeDrivingAdapter implements IDrivingAdapter
 {
-    private final List<IDrivingAdapter> drivingAdapters = new ArrayList<>();
+    private final Set<IDrivingAdapter> drivingAdapters = new HashSet<>();
 
     @Override
     public void start()

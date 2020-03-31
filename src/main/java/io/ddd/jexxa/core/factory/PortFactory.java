@@ -15,7 +15,9 @@ import org.apache.commons.lang.Validate;
 public class PortFactory
 {
     private List<String> whiteListPackages = new ArrayList<>();
+    private ObjectPool objectPool = new ObjectPool();
     private DrivenAdapterFactory drivenAdapterFactory;
+
 
     static class MissingDrivenAdapterException extends RuntimeException
     {
@@ -76,6 +78,23 @@ public class PortFactory
                 orElseThrow();
     }
 
+    public Object getInstanceOf(Class<?> inboundPort, Properties drivenAdapterProperties)
+    {
+        Validate.notNull(inboundPort);
+        Validate.notNull(drivenAdapterProperties);
+
+
+        var existingInstance = objectPool.getInstance(inboundPort);
+
+        if (existingInstance.isPresent()) {
+            return existingInstance.get();
+        }
+
+        var newInstance = newInstanceOf(inboundPort, drivenAdapterProperties);
+        objectPool.add(newInstance);
+        return newInstance;
+    }
+
 
     /*
      * Check if all DrivenAdapter are available for for a given port
@@ -119,6 +138,26 @@ public class PortFactory
                             element -> result.add(newInstanceOf(element, drivenAdapterProperties)),
                             exceptionList)
                     );
+
+        exceptionList.forEach(element -> JexxaLogger.getLogger(getClass()).warn(element.getMessage()));
+
+        return result;
+    }
+
+    public List<Object> getPortsBy(Class <? extends Annotation> portAnnotation, Properties drivenAdapterProperties) {
+        var annotationScanner = new DependencyScanner().
+                whiteListPackages(whiteListPackages);
+
+        var scannedInboundPorts = annotationScanner.getClassesWithAnnotation(portAnnotation);
+
+        var result = new ArrayList<>();
+        var exceptionList = new ArrayList<RuntimeException>();
+
+        scannedInboundPorts.
+                forEach(exceptionWrapper(
+                        element -> result.add(getInstanceOf(element, drivenAdapterProperties)),
+                        exceptionList)
+                );
 
         exceptionList.forEach(element -> JexxaLogger.getLogger(getClass()).warn(element.getMessage()));
 

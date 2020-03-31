@@ -32,7 +32,7 @@ public class JexxaMain
         Validate.notNull(properties);
         compositeDrivingAdapter = new CompositeDrivingAdapter();
         this.properties = properties;
-        
+
         drivingAdapterFactory = new DrivingAdapterFactory();
         drivenAdapterFactory = new DrivenAdapterFactory();
         portFactory = new PortFactory(drivenAdapterFactory);
@@ -64,8 +64,8 @@ public class JexxaMain
         Validate.notNull(adapter);
         Validate.notNull(port);
 
-        var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
-        var inboundPort    = portFactory.newInstanceOf(port, properties);
+        var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
+        var inboundPort    = portFactory.getInstanceOf(port, properties);
         Validate.notNull(inboundPort);
         drivingAdapter.register(inboundPort);
 
@@ -76,7 +76,7 @@ public class JexxaMain
         Validate.notNull(adapter);
         Validate.notNull(port);
 
-        var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
+        var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
         drivingAdapter.register(port);
 
         compositeDrivingAdapter.add(drivingAdapter);
@@ -87,9 +87,9 @@ public class JexxaMain
         Validate.notNull(portAnnotation);
 
         //Create ports and adapter
-        var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
+        var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
 
-        var portList = portFactory.createPortsBy(portAnnotation, properties);
+        var portList = portFactory.getPortsBy(portAnnotation, properties);
         portList.forEach(drivingAdapter::register);
         
         compositeDrivingAdapter.add(drivingAdapter);
@@ -98,6 +98,11 @@ public class JexxaMain
     public <T> T newInstanceOfPort(Class<T> port)
     {
         return port.cast(portFactory.newInstanceOf(port, properties));
+    }
+
+    public <T> T getInstanceOfPort(Class<T> port)
+    {
+        return port.cast(portFactory.getInstanceOf(port, properties));
     }
 
 

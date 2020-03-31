@@ -36,6 +36,23 @@ public class DrivenAdapterFactoryTest
         Assert.assertNotNull(result);
     }
 
+
+    @Test
+    public void getDrivenAdapter() {
+        //Arrange
+        var objectUnderTest = new DrivenAdapterFactory().
+                whiteListPackage(packageName);
+
+        //Act
+        var first = objectUnderTest.getInstanceOfInterface(IDefaultConstructorService.class);
+        var second = objectUnderTest.getInstanceOfInterface(IDefaultConstructorService.class);
+
+        //Assert
+        Assert.assertNotNull(first);
+        Assert.assertNotNull(second);
+        Assert.assertEquals(first,second);
+    }
+
     @Test
     public void createDrivenAdapterWithPropertiesConstructor() {
         //Arrange
