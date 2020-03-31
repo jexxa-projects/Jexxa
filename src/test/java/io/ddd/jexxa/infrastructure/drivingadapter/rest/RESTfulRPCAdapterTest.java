@@ -73,6 +73,29 @@ public class RESTfulRPCAdapterTest
         assertEquals(Integer.toString(simpleApplicationService.getSimpleValue()), result );
     }
 
+    @Test
+    public void testWithRandomPort() throws IOException
+    {
+        //Setup
+        var secondAdapter = new RESTfulRPCAdapter("localhost",0);
+        secondAdapter.register(simpleApplicationService);
+        secondAdapter.start();
+
+        //Arrange
+        var restPath = resTfulRPCModel.getGETCommand("getSimpleValue");
+        assertTrue(restPath.isPresent());
+
+        //Act
+        String result = sendGETCommand(restPath.get(),"localhost", secondAdapter.getPort());
+
+        secondAdapter.stop();
+
+        //Assert
+        assertNotNull(result);
+        assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
+        assertEquals(Integer.toString(simpleApplicationService.getSimpleValue()), result );
+
+    }
 
     @Test  // RPC call test: void setSimpleValue(44)
     public void testPOSTCommandWithOneAttribute() throws Throwable
@@ -162,10 +185,16 @@ public class RESTfulRPCAdapterTest
         sendPOSTCommand(restPath.get(), "");
     }
 
+
     private  String sendGETCommand(RESTfulRPCModel.RESTfulRPCMethod restPath) throws IOException
     {
+        return sendGETCommand(restPath, defaultHost, defaultPort);
+    }
+    
+    private  String sendGETCommand(RESTfulRPCModel.RESTfulRPCMethod restPath, String hostname, int port) throws IOException
+    {
 
-        URL url = new URL("http://" + defaultHost + ":" + defaultPort + restPath.getResourcePath());
+        URL url = new URL("http://" + hostname + ":" + port + restPath.getResourcePath());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setDoOutput(true);
         conn.setRequestMethod("GET");

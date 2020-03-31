@@ -9,6 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.ddd.jexxa.utils.JexxaLogger;
 import io.javalin.Javalin;
 import org.apache.commons.lang.Validate;
 
@@ -35,11 +36,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     public RESTfulRPCAdapter(Properties properties)
     {
-        Validate.notNull(properties.getProperty(HOST_PROPERTY));
-        Validate.notNull(properties.getProperty(PORT_PROPERTY));
-
-        this.hostname = properties.getProperty(HOST_PROPERTY);
-        this.port = Integer.parseInt(properties.getProperty(PORT_PROPERTY));
+        readProperties(properties);
 
         Validate.notNull(hostname);
         Validate.isTrue(port >= 0);
@@ -53,6 +50,31 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         registerPOSTMethods(object);
     }
 
+
+    @Override
+    public void start()
+    {
+        javalin.start(hostname, port);
+    }
+
+    @Override
+    public void stop()
+    {
+        javalin.stop();
+    }
+
+    public int getPort()
+    {
+        if (port == 0)   // In this case a random port is defined and thus we mus query it from Javalin directly 
+        {
+            return javalin.port();
+        }
+        else
+        {
+            return port;
+        }
+    }
+
     private void registerExceptionHandler()
     {
         //Exception Handler for thrown Exception from methods
@@ -64,7 +86,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
             ctx.status(400);
         });
     }
-    
+
     private void registerGETMethods(Object object)
     {
         var methodList = new RESTfulRPCModel(object).getGETCommands();
@@ -83,7 +105,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     {
         var methodList = new RESTfulRPCModel(object).getPOSTCommands();
 
-        methodList.forEach( element -> javalin.post(element.getResourcePath(),
+        methodList.forEach(element -> javalin.post(element.getResourcePath(),
                 ctx -> {
                     String htmlBody = ctx.body();
 
@@ -98,10 +120,11 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                 }));
     }
 
-    private Object[] deserializeParameters(String jsonString, Method method) {
-        if ( jsonString == null ||
-             jsonString.isEmpty() ||
-             method.getParameterCount() == 0)
+    private Object[] deserializeParameters(String jsonString, Method method)
+    {
+        if (jsonString == null ||
+                jsonString.isEmpty() ||
+                method.getParameterCount() == 0)
         {
             return new Object[]{};
         }
@@ -109,7 +132,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         Gson gson = new Gson();
         JsonElement jsonElement = JsonParser.parseString(jsonString);
 
-        if (jsonElement.isJsonArray()) {
+        if (jsonElement.isJsonArray())
+        {
             return readArray(jsonElement.getAsJsonArray(), method);
         }
         else
@@ -140,17 +164,26 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         return paramArray;
     }
 
-
-
-    @Override
-    public void start()
+    private void readProperties(Properties properties)
     {
-        javalin.start(hostname, port);
-    }
+        if (properties.getProperty(HOST_PROPERTY) == null || properties.getProperty(HOST_PROPERTY).isEmpty())
+        {
+            JexxaLogger.getLogger(getClass()).warn("{} not set. Using 'localhost' ", HOST_PROPERTY);
+            this.hostname = "localhost";
+        }
+        else
+        {
+            this.hostname = properties.getProperty(HOST_PROPERTY);
+        }
 
-    @Override
-    public void stop()
-    {
-        javalin.stop();
+        if (properties.getProperty(PORT_PROPERTY) == null || properties.getProperty(PORT_PROPERTY).isEmpty())
+        {
+            JexxaLogger.getLogger(getClass()).warn("{} not set. Using random system port ", PORT_PROPERTY);
+            this.port = 0;
+        }
+        else
+        {
+            this.port = Integer.parseInt(properties.getProperty(PORT_PROPERTY));
+        }
     }
 }
