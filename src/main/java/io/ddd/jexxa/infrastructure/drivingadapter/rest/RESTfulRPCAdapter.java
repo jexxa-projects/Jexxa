@@ -30,6 +30,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
         this.hostname = hostname;
         this.port = port;
+        this.javalin.config.showJavalinBanner = false;
 
         registerExceptionHandler();
     }
@@ -40,6 +41,9 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
         Validate.notNull(hostname);
         Validate.isTrue(port >= 0);
+        
+        this.javalin.config.showJavalinBanner = false;
+        
         registerExceptionHandler();
     }
 
