@@ -21,15 +21,9 @@ public class JMXAdapterTest
         //Arrange
         var defaultValue = 42;
         var simpleApplicationService = new SimpleApplicationService(defaultValue);
+
         var objectUnderTest = new JMXAdapter();
-        System.setProperty("com.sun.management.jmxremote.host", "localhost");
-        System.setProperty("com.sun.management.jmxremote.port", "62345");
-        System.setProperty("com.sun.management.jmxremote.rmi.port", "62345");
-        System.setProperty("com.sun.management.jmxremote.authenticate", "false");
-        System.setProperty("com.sun.management.jmxremote.ssl", "false");
-
-        System.setProperty("com.sun.management.jmx.port", "62345");
-
+        
         //Act
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
@@ -47,4 +41,7 @@ public class JMXAdapterTest
 
         objectUnderTest.stop();
     }
+
+    
 }
+

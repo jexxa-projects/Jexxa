@@ -3,7 +3,6 @@ package io.ddd.jexxa.infrastructure.drivingadapter.jmx;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.function.Consumer;
 
 import javax.management.InstanceAlreadyExistsException;
@@ -19,20 +18,9 @@ public class JMXAdapter implements IDrivingAdapter
 {
     private List<MBeanModel> registeredMBeans = new ArrayList<>();
 
-    public JMXAdapter()
-    {
-
-    }
-
-    public JMXAdapter(Properties properties)
-    {
-        //TODO handle properties 
-    }
-    
     public void register(Object object)
     {
         Validate.notNull(object);
-        validateJMXSettings();
 
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         MBeanModel mBeanModel = new MBeanModel(object);
@@ -92,17 +80,5 @@ public class JMXAdapter implements IDrivingAdapter
                 JexxaLogger.getLogger(JMXAdapter.class).warn(e.getMessage());
             }
         };
-    }
-
-
-    
-    private void validateJMXSettings()
-    {
-        Validate.notNull(System.getProperty("com.sun.management.jmxremote.port"),
-                "set com.sun.management.jmxremote.port");
-        Validate.isTrue("false".equals(System.getProperty("com.sun.management.jmxremote.authenticate")),
-                "set com.sun.management.jmxremote.authenticate=false");
-        Validate.isTrue("false".equals(System.getProperty("com.sun.management.jmxremote.ssl")),
-                "set com.sun.management.jmxremote.ssl=false.");
     }
 }
