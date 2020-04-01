@@ -37,8 +37,6 @@ public class HelloJexxaMainTest
     public void initTests()
     {
         properties = new Properties();
-        setJMXProperties();
-        properties.putAll(getJMXProperties());
         properties.putAll(getRESTfulRPCProperties());
     }
 
@@ -129,18 +127,7 @@ public class HelloJexxaMainTest
         assertEquals(Integer.toString(42), result);
     }
 
-    void setJMXProperties() {
-        System.setProperty("com.sun.management.jmxremote.host", "localhost");
-        System.setProperty("com.sun.management.jmxremote.port", "62345");
-        System.setProperty("com.sun.management.jmxremote.rmi.port", "62345");
-        System.setProperty("com.sun.management.jmxremote.authenticate", "false");
-        System.setProperty("com.sun.management.jmxremote.ssl", "false");
-    }
 
-
-    Properties getJMXProperties() {
-        return System.getProperties();
-    }
 
     Properties getRESTfulRPCProperties() {
         Properties properties = new Properties();
