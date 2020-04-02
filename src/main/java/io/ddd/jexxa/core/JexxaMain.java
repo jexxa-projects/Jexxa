@@ -61,6 +61,14 @@ public class JexxaMain
     }
 
 
+    public void bindConfigAdapter(Class<? extends IDrivingAdapter> adapter) {
+        Validate.notNull(adapter);
+
+        var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
+
+        compositeDrivingAdapter.add(drivingAdapter);
+    }
+
     public void bind(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
         Validate.notNull(adapter);
         Validate.notNull(port);
