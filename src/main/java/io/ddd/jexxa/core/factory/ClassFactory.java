@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 
-class ClassFactory
+public class ClassFactory
 {
     /*
      * Throw a RuntimeException in case an exception related to reflection occurs   
@@ -46,7 +46,7 @@ class ClassFactory
         return Optional.empty();
     }
 
-    static <T> Optional<T> newInstanceOf(Class<T> clazz, Object[] parameter)
+    public static <T> Optional<T> newInstanceOf(Class<T> clazz, Object[] parameter)
     {
         Validate.notNull(clazz);
         Validate.notNull(parameter);

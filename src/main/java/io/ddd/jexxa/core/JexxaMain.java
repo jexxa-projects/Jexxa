@@ -3,6 +3,7 @@ package io.ddd.jexxa.core;
 import java.lang.annotation.Annotation;
 import java.util.Properties;
 
+import io.ddd.jexxa.core.factory.ClassFactory;
 import io.ddd.jexxa.core.factory.DrivenAdapterFactory;
 import io.ddd.jexxa.core.factory.DrivingAdapterFactory;
 import io.ddd.jexxa.core.factory.PortFactory;
@@ -72,6 +73,22 @@ public class JexxaMain
         compositeDrivingAdapter.add(drivingAdapter);
     }
 
+    public void bindToPortWrapper(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
+    {
+        var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
+
+        var requiredPort = drivingAdapterFactory.requiredPort(portWrapper);
+
+        if ( requiredPort != null ) {
+            var inboundPort  = portFactory.getInstanceOf(requiredPort, properties);
+            var newPortWrapper = ClassFactory.newInstanceOf(portWrapper, new Object[]{inboundPort});
+
+            drivingAdapter.register(newPortWrapper.get());
+            compositeDrivingAdapter.add(drivingAdapter);
+        }
+    }
+
+
     public void bind(Class<? extends IDrivingAdapter> adapter, Object port) {
         Validate.notNull(adapter);
         Validate.notNull(port);
@@ -138,4 +155,5 @@ public class JexxaMain
             boundedContext.shutdown();
         }));
     }
+
 }

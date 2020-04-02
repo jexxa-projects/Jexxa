@@ -1,5 +1,8 @@
 package io.ddd.jexxa.core.factory;
 
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.Properties;
 
 import org.apache.commons.lang.Validate;
@@ -41,6 +44,25 @@ public class DrivingAdapterFactory
 
         return instanceType.cast(instance.orElseThrow());
     }
+
+    public <T> T newInstanceOfWrapper(Class<T> instanceType, Object port) {
+        Validate.notNull(instanceType);
+
+        var instance = ClassFactory.newInstanceOf(instanceType, new Object[]{port});
+
+        return instanceType.cast(instance.orElseThrow());
+    }
+
+    public <T> Class<?> requiredPort(Class<T> portWrapper)
+    {
+        return Arrays.stream(portWrapper.getConstructors()).
+                filter(constructor -> constructor.getParameterCount() == 1 ).
+                findFirst().
+                <Class<?>>map(constructor -> constructor.getParameterTypes()[0]).
+                orElse(null);
+    }
+
+
 
     public <T> T getInstanceOf(Class<T> instanceType, Properties properties) {
         var existingInstance = objectPool.getInstance(instanceType);
