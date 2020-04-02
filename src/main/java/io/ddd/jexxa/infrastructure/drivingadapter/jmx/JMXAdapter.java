@@ -1,9 +1,10 @@
 package io.ddd.jexxa.infrastructure.drivingadapter.jmx;
 
+import static io.ddd.jexxa.utils.ThrowingConsumer.exceptionLogger;
+
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.MBeanRegistrationException;
@@ -11,7 +12,6 @@ import javax.management.MBeanServer;
 import javax.management.NotCompliantMBeanException;
 
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 
 public class JMXAdapter implements IDrivingAdapter
@@ -59,26 +59,7 @@ public class JMXAdapter implements IDrivingAdapter
 
         registeredMBeans.stream().
                 filter(element -> mbs.isRegistered(element.getObjectName())).
-                forEach(exceptionWrapper(element ->  mbs.unregisterMBean(element.getObjectName())));
+                forEach(exceptionLogger(element ->  mbs.unregisterMBean(element.getObjectName())));
     }
-
-
-    @FunctionalInterface
-    public interface ThrowingConsumer<T, E extends Exception> {
-        void accept(T t) throws E;
-    }
-
-    private static <T> Consumer<T>
-    exceptionWrapper(ThrowingConsumer<T, Exception> throwingConsumer) {
-        return i -> {
-            try
-            {
-                throwingConsumer.accept(i);
-            }
-            catch (Exception e)
-            {
-                JexxaLogger.getLogger(JMXAdapter.class).warn(e.getMessage());
-            }
-        };
-    }
+    
 }

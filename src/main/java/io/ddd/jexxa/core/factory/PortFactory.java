@@ -1,5 +1,7 @@
 package io.ddd.jexxa.core.factory;
 
+import static io.ddd.jexxa.utils.ThrowingConsumer.exceptionCollector;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -7,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.function.Consumer;
 
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
@@ -131,10 +132,10 @@ public class PortFactory
         var scannedInboundPorts = annotationScanner.getClassesWithAnnotation(portAnnotation);
 
         var result = new ArrayList<>();
-        var exceptionList = new ArrayList<RuntimeException>();
+        var exceptionList = new ArrayList<Throwable>();
         
         scannedInboundPorts.
-                    forEach(exceptionWrapper(
+                    forEach(exceptionCollector(
                             element -> result.add(newInstanceOf(element, drivenAdapterProperties)),
                             exceptionList)
                     );
@@ -151,10 +152,10 @@ public class PortFactory
         var scannedInboundPorts = annotationScanner.getClassesWithAnnotation(portAnnotation);
 
         var result = new ArrayList<>();
-        var exceptionList = new ArrayList<RuntimeException>();
+        var exceptionList = new ArrayList<Throwable>();
 
         scannedInboundPorts.
-                forEach(exceptionWrapper(
+                forEach(exceptionCollector(
                         element -> result.add(getInstanceOf(element, drivenAdapterProperties)),
                         exceptionList)
                 );
@@ -164,21 +165,6 @@ public class PortFactory
         return result;
     }
 
-    static <T> Consumer<T>
-    exceptionWrapper(Consumer<T> consumer,  List< RuntimeException > exceptionList) {
-        return i -> {
-            try {
-                consumer.accept(i);
-            } catch (Exception e) {
-                try {
-                    exceptionList.add((RuntimeException) e);
-                } catch (ClassCastException ccEx) {
-                    throw e;
-                }
-            }
-        };
-    }
-    
 
     private Object[] createDrivenAdapterForConstructor(Constructor<?> portConstructor, Properties drivenAdapterProperties)
     {
