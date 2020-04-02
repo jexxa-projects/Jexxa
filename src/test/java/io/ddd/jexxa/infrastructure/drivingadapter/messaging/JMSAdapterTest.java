@@ -6,6 +6,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
+import io.ddd.jexxa.core.JexxaMain;
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.junit.Test;
 
@@ -27,15 +28,35 @@ public class JMSAdapterTest
         objectUnderTest.start();
 
         System.out.println("Start Listening...");
-        Thread.sleep(10000);
+        //Thread.sleep(10000);
         objectUnderTest.close();
     }
+
+
+
+    @Test
+    public void startJMSAdapterJexxa() throws InterruptedException
+    {
+        //Arrange
+        var messageListener = new MyListener();
+        var properties = new Properties();
+        properties.put(JMSAdapter.JNDI_FACTORY_KEY, JMSAdapter.DEFAULT_JNDI_FACTORY);
+        properties.put(JMSAdapter.JNDI_PROVIDER_URL_KEY, JMSAdapter.DEFAULT_JNDI_PROVIDER_URL);
+        properties.put(JMSAdapter.JNDI_USER_KEY, JMSAdapter.DEFAULT_JNDI_USER);
+        properties.put(JMSAdapter.JNDI_PASSWORD_KEY, JMSAdapter.DEFAULT_JNDI_PASSWORD);
+
+        JexxaMain jexxaMain = new JexxaMain(properties);
+        jexxaMain.bind(JMSAdapter.class, MyListener.class);
+        //jexxaMain.run();
+    }
+
 
 
     static public class MyListener implements MessageListener
     {
 
         @Override
+        @JMSListener(destination = "MyListener", messagingType = JMSListener.MessagingType.Topic)
         public void onMessage(Message message)
         {
             try

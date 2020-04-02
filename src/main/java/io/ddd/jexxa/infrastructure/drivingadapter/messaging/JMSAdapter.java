@@ -10,7 +10,6 @@ import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Session;
@@ -55,7 +54,6 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
         catch (JMSException e)
         {
-            // TODO: Should we us our exception handler?!
             throw new IllegalStateException("Driving Adapter could not start receiving messages", e);
         }
 
@@ -75,6 +73,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             var messageListener = (MessageListener) (object);
 
             connection = create(properties);
+            connection.setExceptionListener(exception -> JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage()));
 
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             Destination destination = session.createTopic(messageListener.getClass().getSimpleName());
@@ -107,9 +106,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         {
             final InitialContext initialContext = new InitialContext(jndiProperties);
             final ConnectionFactory connectionFactory = (ConnectionFactory) initialContext.lookup("ConnectionFactory");
-            var connection = connectionFactory.createConnection(jndiProperties.getProperty(JNDI_USER_KEY), jndiProperties.getProperty(JNDI_PASSWORD_KEY));
-            connection.setExceptionListener(exception -> JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage()));
-            return connection;
+            return connectionFactory.createConnection(jndiProperties.getProperty(JNDI_USER_KEY), jndiProperties.getProperty(JNDI_PASSWORD_KEY));
         }
         catch (NamingException e)
         {
