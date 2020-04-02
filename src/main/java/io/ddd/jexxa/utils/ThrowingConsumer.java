@@ -25,7 +25,7 @@ public interface ThrowingConsumer<T, E extends Throwable> {
     void accept(T t) throws E;
 
 
-    @SuppressWarnings("java:S1181") //In order to catch Throwable without warning  
+    @SuppressWarnings("java:S1181") //Catch Throwable without warning
     static <T, E extends Throwable> Consumer<T>
     exceptionLogger(ThrowingConsumer<T, E> throwingConsumer) {
         return i -> {
