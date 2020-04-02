@@ -8,18 +8,17 @@ import java.util.function.Consumer;
  *
  * Example:
  * <pre>
- * <code>
+ * {@code}
  * Integer[] values = {1,2,3};
  * Arrays.stream(values).
- *        forEach(
- *          exceptionLogger(value -> { var result = value / 0;}) // Logs each exception
- *        );
- *
- * </code>
+ *   forEach(
+ *    exceptionLogger(value -> Integer.divideUnsigned(value, 0))
+ * );
+ * {@code}
  * </pre>
- *
- * @param <T>
- * @param <E>
+ * 
+ * @param <T> Lambda expression 
+ * @param <E> Type of the exception
  */
 @FunctionalInterface
 public interface ThrowingConsumer<T, E extends Throwable> {
