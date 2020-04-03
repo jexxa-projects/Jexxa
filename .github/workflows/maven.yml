@@ -10,6 +10,17 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    # Service containers to run with `runner-job`
+    services:
+      # Label used to access the service container
+      activemq:
+        # Docker Hub image
+        image: rmohr/activemq
+        #
+        ports:
+          # Opens tcp port 6379 on the host and service container
+          - 61616:61616
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.11
