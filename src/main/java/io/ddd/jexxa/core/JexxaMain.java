@@ -23,22 +23,24 @@ public class JexxaMain
 
     private BoundedContext boundedContext;
 
-    public JexxaMain()
+    public JexxaMain(String contextName)
     {
-        this(System.getProperties());
+        this(contextName, System.getProperties());
     }
 
-    public JexxaMain(Properties properties)
+    public JexxaMain(String contextName, Properties properties)
     {
         Validate.notNull(properties);
-        compositeDrivingAdapter = new CompositeDrivingAdapter();
+        Validate.notNull(contextName);
+
+        boundedContext = new BoundedContext(contextName);
         this.properties = properties;
+
+        compositeDrivingAdapter = new CompositeDrivingAdapter();
 
         drivingAdapterFactory = new DrivingAdapterFactory();
         drivenAdapterFactory = new DrivenAdapterFactory();
         portFactory = new PortFactory(drivenAdapterFactory);
-
-        boundedContext = new BoundedContext();
     }
 
     public JexxaMain whiteListDrivenAdapterPackage(String packageName)

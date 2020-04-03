@@ -13,7 +13,7 @@ import org.junit.Test;
 public class JMSAdapterTest
 {
     @Test
-    public void startJMSAdapter() throws InterruptedException
+    public void startJMSAdapter() 
     {
         //Arrange
         var messageListener = new MyListener();
@@ -45,7 +45,7 @@ public class JMSAdapterTest
         properties.put(JMSAdapter.JNDI_USER_KEY, JMSAdapter.DEFAULT_JNDI_USER);
         properties.put(JMSAdapter.JNDI_PASSWORD_KEY, JMSAdapter.DEFAULT_JNDI_PASSWORD);
 
-        JexxaMain jexxaMain = new JexxaMain(properties);
+        JexxaMain jexxaMain = new JexxaMain("JMSAdapterTest", properties);
         jexxaMain.bind(JMSAdapter.class, MyListener.class);
         //jexxaMain.run();
     }

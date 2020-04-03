@@ -1,16 +1,42 @@
 package io.ddd.jexxa.core;
 
+import java.time.Clock;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import io.ddd.jexxa.utils.JexxaLogger;
+import org.slf4j.Logger;
 
 public class BoundedContext
 {
+    private static final Logger logger = JexxaLogger.getLogger(BoundedContext.class);
+
     private final Lock lock = new ReentrantLock();
     private final Condition runningCondition  = lock.newCondition();
     private boolean isRunning = false;
+
+    private final String contextName;
+    private final Clock clock = Clock.systemUTC();
+    private final Instant startTime;
+
+    BoundedContext(final String contextName)
+    {
+        this.startTime = clock.instant();
+        this.contextName = contextName;
+    }
+
+    public Duration uptime()
+    {
+        return Duration.between(startTime, clock.instant());
+    }
+
+    public String contextName()
+    {
+        return contextName;
+    }
 
     @SuppressWarnings({"java:S2189", "java:S2589"})
     public void run()
@@ -25,7 +51,8 @@ public class BoundedContext
         
         try {
             while (isRunning()) {
-                JexxaLogger.getLogger(BoundedContext.class).info("Starting Bounded Context " );
+                Duration uptime = uptime();
+                logger.info("Bounded Context {} started in {}.{} sec", contextName, uptime.toSeconds(), uptime.toMillisPart());
                 runningCondition.await();
             }
         }

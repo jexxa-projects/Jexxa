@@ -55,7 +55,7 @@ public class HelloJexxaMainTest
     public void simpleHelloJexxa()
     {
         //Arrange
-        objectUnderTest = new JexxaMain(properties);
+        objectUnderTest = new JexxaMain("HelloJexxa", properties);
         objectUnderTest.whiteListPackage(packageName);
 
 
@@ -75,7 +75,7 @@ public class HelloJexxaMainTest
     public void simpleHelloJexxaWithDrivenAdapter()
     {
         //Arrange
-        objectUnderTest = new JexxaMain(properties);
+        objectUnderTest = new JexxaMain("HelloJexxa", properties);
         objectUnderTest.whiteListPackage(packageName);
 
 
@@ -95,7 +95,7 @@ public class HelloJexxaMainTest
     public void simpleHelloJexxaClassAnnotatedPorts()
     {
         //Arrange
-        objectUnderTest = new JexxaMain(properties);
+        objectUnderTest = new JexxaMain("HelloJexxa", properties);
         objectUnderTest.whiteListPackage(packageName);
 
 

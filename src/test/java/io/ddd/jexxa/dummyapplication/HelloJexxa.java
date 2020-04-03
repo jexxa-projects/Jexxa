@@ -13,20 +13,11 @@ public class HelloJexxa
 {
     public static void main(String[] args)
     {
-        JexxaMain jexxaMain = new JexxaMain().
+        JexxaMain jexxaMain = new JexxaMain("HelloJexxa").
                 whiteListPackage("io.ddd.jexxa");
 
         jexxaMain.bind(JMXAdapter.class, jexxaMain.getBoundedContext());
         jexxaMain.bind(RESTfulRPCAdapter.class, jexxaMain.getBoundedContext());
-
-        //        jexxaMain.bindDrivingAdapter(JMXAdapter.class);
-        //        jexxaMain.bindDrivingAdapter(JMXAdapter.class, jexxaMain.getBoundedContext());
-        //        jexxaMain.bindDrivingAdapter(JMXAdapter.class, JMXFacade.class,);
-
-
-
-       Integer[] values = {1,2,3};
-       Arrays.stream(values).forEach(exceptionLogger(value -> { var result = value / 0;}));
 
         jexxaMain.run();
     }
