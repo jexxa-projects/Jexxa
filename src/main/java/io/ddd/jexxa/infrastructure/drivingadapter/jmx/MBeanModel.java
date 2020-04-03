@@ -97,14 +97,20 @@ public class MBeanModel implements DynamicMBean
 
     public ObjectName getObjectName()
     {
-        var name = object.getClass().getSimpleName();
+
+        //Build following domainPath for jmx: <ContextName> -> <Annotation of object> -> <simple name of object>
+        var domainPath = "";
         if ( !getSubtype().isEmpty()) {
-            name = getSubtype() + "." + name;
+            domainPath = ":type=" + getSubtype() + "," + "name=" + object.getClass().getSimpleName();
+        }
+        else
+        {
+            domainPath = ":name=" + object.getClass().getSimpleName();
         }
 
         try
         {
-           return new ObjectName(contextName + ":type=" + name);
+           return new ObjectName(contextName + domainPath);
         } catch (Exception e)
         {
            throw new IllegalArgumentException(e.getMessage());
