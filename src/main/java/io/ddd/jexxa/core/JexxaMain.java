@@ -15,7 +15,7 @@ import org.apache.commons.lang.Validate;
 public class JexxaMain
 {
     private CompositeDrivingAdapter compositeDrivingAdapter;
-    private Properties properties;
+    private Properties properties = new Properties();
 
     private DrivingAdapterFactory drivingAdapterFactory;
     private DrivenAdapterFactory drivenAdapterFactory;
@@ -33,14 +33,15 @@ public class JexxaMain
         Validate.notNull(properties);
         Validate.notNull(contextName);
 
-        boundedContext = new BoundedContext(contextName);
-        this.properties = properties;
+        this.boundedContext = new BoundedContext(contextName);
+        this.properties.putAll( properties );
+        this.properties.put("io.ddd.jexxa.context.name", contextName);
 
-        compositeDrivingAdapter = new CompositeDrivingAdapter();
+        this.compositeDrivingAdapter = new CompositeDrivingAdapter();
 
-        drivingAdapterFactory = new DrivingAdapterFactory();
-        drivenAdapterFactory = new DrivenAdapterFactory();
-        portFactory = new PortFactory(drivenAdapterFactory);
+        this.drivingAdapterFactory = new DrivingAdapterFactory();
+        this.drivenAdapterFactory = new DrivenAdapterFactory();
+        this.portFactory = new PortFactory(drivenAdapterFactory);
     }
 
     public JexxaMain whiteListDrivenAdapterPackage(String packageName)
@@ -93,7 +94,7 @@ public class JexxaMain
             var inboundPort  = portFactory.getInstanceOf(requiredPort, properties);
             var newPortWrapper = ClassFactory.newInstanceOf(portWrapper, new Object[]{inboundPort});
 
-            drivingAdapter.register(newPortWrapper.get());
+            drivingAdapter.register(newPortWrapper.orElseThrow());
             compositeDrivingAdapter.add(drivingAdapter);
         }
     }

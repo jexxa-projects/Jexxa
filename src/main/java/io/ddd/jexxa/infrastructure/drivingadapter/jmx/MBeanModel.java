@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import javax.management.Attribute;
@@ -18,11 +19,23 @@ import io.ddd.jexxa.utils.JexxaLogger;
 
 public class MBeanModel implements DynamicMBean
 {
-    private Object object;
+    public static final String CONTEXT_NAME = "io.ddd.jexxa.context.name";
 
-    MBeanModel(Object object)
+    private final Object object;
+    String contextName;
+    
+    MBeanModel(Object object, Properties properties)
     {
         this.object = object;
+
+        if ( properties != null)
+        {
+            contextName = properties.getProperty(CONTEXT_NAME);
+        }
+
+        if ( contextName == null ) {
+            contextName = "UnknownContext";
+        }
     }
 
 
@@ -74,7 +87,7 @@ public class MBeanModel implements DynamicMBean
         return new MBeanInfo(
                 object.getClass().getSimpleName(),
                 "Hello Jexxa",
-                null,
+                null,                            
                 null,
                 getMBeanOperation(),
                 null
@@ -84,9 +97,14 @@ public class MBeanModel implements DynamicMBean
 
     public ObjectName getObjectName()
     {
+        var name = object.getClass().getSimpleName();
+        if ( !getSubtype().isEmpty()) {
+            name = getSubtype() + "." + name;
+        }
+
         try
         {
-           return new ObjectName("com.example:type=" + object.getClass().getSimpleName());
+           return new ObjectName(contextName + ":type=" + name);
         } catch (Exception e)
         {
            throw new IllegalArgumentException(e.getMessage());
@@ -115,6 +133,20 @@ public class MBeanModel implements DynamicMBean
                 stream(object.getClass().getMethods()).
                 filter(method -> method.getName().equals(name)).
                 findFirst();
+    }
+
+    String getSubtype()
+    {
+        var annotation = Arrays.
+                stream(object.getClass().getDeclaredAnnotations()).
+                findFirst();
+
+        if ( annotation.isPresent() )
+        {
+            return annotation.get().annotationType().getSimpleName();
+        }
+
+        return "";
     }
 
 

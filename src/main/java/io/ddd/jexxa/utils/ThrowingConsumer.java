@@ -16,7 +16,8 @@ import java.util.function.Consumer;
  * );
  * {@code}
  * </pre>
- * 
+ *
+ *
  * @param <T> Lambda expression 
  * @param <E> Type of the exception
  */

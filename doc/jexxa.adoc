@@ -1,0 +1,105 @@
+= Jexxa - A hexagonal software architecture for your application
+:source-highlighter: coderay
+:toc:
+:toc-placement: preamble
+:toclevels: 4
+
+
+//image::./images/Logo.jpg[align=center]
+
+//Verwendung von überstetzten Headern
+:toc-title: Inhaltsverzeichnis
+:caution-caption: Achtung
+:important-caption: Wichtig
+:note-caption: Hinweis
+:tip-caption: Tipp
+:warning-caption: Warnung
+:appendix-caption: Anhang
+:example-caption: Beispiel
+:figure-caption: Abbildung
+:table-caption: Tabelle
+
+// Verwende Symbole für IMPORTANT, NOTE, ...
+:icons: font
+// Aktivieren von Anchors für jede Section
+:sectanchors:
+
+//Hinweis: Die counter:local-table-number und counter:local-figure-number werden verwendet, damit im Fliesstext als Referenz die Nummer der Tabelle bzw. Abbildung angezeigt wird, also z.B. "wie in Abbildung 5 zu sehen ist"
+
+[cols="1,2,3,4", options="header"]
+[reftext="Tabelle {counter:local-table-number}"]
+.Historie
+|===
+|Version
+|Datum
+|Autor
+|Notes
+
+|0.1
+|2019-03-05
+|Michael Repplinger
+|initial version
+
+|===
+
+:numbered:
+
+
+
+== Vision
+
+
+== TODO: Describe general building blocks
+
+** Inbound Ports =>  Concrete implementation (Interfaces only required if Inbound ports change => In case of business logic this is quite unusual)
+** Outbound ports => Interfaces that are used within the application core. When creating anm inbound port we have to set/pass implementation of these interfaces inside the application core
+
+** Driving Adapter => Concrete implementation of a technology stack to receive commands/domain events and invoke methods of an inbound port. We have two kind if Driving Adapter
+*** 1 to n assignment
+*** 1 to 1 assignment
+
+** Driven Adapter => Implementing interfaces of outbound ports
+**** Direct inheritance
+**** Wrapper approach
+
+
+== TODO: Describe Interaction of  building blocks
+* Interaction of  building blocks
+** DrivingAdapter ->
+** -> PortAdapter (optional/ only for 1 to 1)
+** -> Inbound Port
+** -> Outbound Port
+** -> OutboundPort Wrapper (optional to decouple generic part of driven adapter)
+** -> Driven Adapter
+
+
+== TODO: Describe factories:
+* General idea is
+** DrivingAdapter starts the interaction => so we create them first. We can make following assumptions
+*** Concrete type information class<T> is available within main because:
+**** An application typically needs to explicitly decide how to expose a port.
+**** Alternatively we can say that we bind a specific type
+**** In case we have 1 to 1 mapping there is no other chance
+*** Driving adapter needs specific configuration => In java this is typically done by Properties
+***** Constructor needs a Properties
+***** We have a default constructor in case no configuration is required
+***** We need a special configuration interface which has to be used in main => In order to support this we have to do following steps => 1. Create an adapter => 2. register port(s) => 3. configure adapter (optional) => 4. start adapter  => From point of main application we bind an adapter to a port (step 1. , 2.) and then we call 4. (start all) from main => This ensures that main can do a special configuration   
+
+** InboundPort
+*** We can make following assumptions:
+*** Concrete type information class<T> is available within main.
+*** Constructor requires all OutboundPorts for the job of the InboundPort
+*** In case special configuration from main is required we hand in this via a Properties instance
+*** => Number of constructors is at max 2 (one with and one without properties, remaining parameters should only be interfaces (outbound ports) )
+*** => To create an inbound port we have to instantiate driven adapter first which implements the interfaces
+
+** Outbound port
+*** Concrete Type information are not available => We have to discover them based on the interfaces we have
+*** Typically we want to exchange the implementation depending on infrastructure (developing, production, ...) => We want to use some kind of factor or factory method that returns us the interface based on the properties => For simplicity we search for static factory methods which take no argument or properties and return Outbound port (interface)
+
+
+*
+
+
+
+
