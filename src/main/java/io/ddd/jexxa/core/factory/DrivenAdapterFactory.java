@@ -31,16 +31,16 @@ public class DrivenAdapterFactory
         Validate.notNull(interfaceType);
         Validate.isTrue(interfaceType.isInterface(), "Given Argument is not an interface: " + interfaceType.getName());
 
-        Class<?> implementation = getImplementationOf(interfaceType).
+        Class<?> factory = getImplementationOf(interfaceType).
                 orElseThrow();
 
         //Apply 1. convention and try to use default constructor
-        var instance = ClassFactory.newInstanceOf(implementation);
-        
-        //Apply 2. convention and try to use a factory method 
+        var instance = ClassFactory.newInstanceOf(factory);
+
+        //Apply 2. convention and try to use a factory method
         if (instance.isEmpty())
         {
-            instance = ClassFactory.newInstanceOfInterface(implementation, interfaceType);
+            instance = ClassFactory.newInstanceOfInterface(factory, interfaceType);
         }
 
         return interfaceType.cast(instance.orElseThrow());
@@ -53,13 +53,13 @@ public class DrivenAdapterFactory
         Class<?> implementation = getImplementationOf(interfaceType).
                 orElseThrow(() -> new RuntimeException("No implementation found for interface " + interfaceType.getName()));
 
-        //Apply 1. convention and try to use a constructor accepting properties 
+        //Apply 1. convention and try to use a constructor accepting properties
         var instance = ClassFactory.newInstanceOf(implementation, new Object[]{properties});
 
         //Apply 2. convention and try to use a factory method accepting properties
         if (instance.isEmpty())
         {
-            instance = ClassFactory.newInstanceOfInterface(implementation, interfaceType, properties);
+            instance = ClassFactory.newInstanceOfInterface(implementation, interfaceType, new Object[]{properties});
         }
 
         //Try to create without properties 

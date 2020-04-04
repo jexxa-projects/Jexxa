@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.ddd.jexxa.utils.JexxaLogger;
@@ -49,10 +48,6 @@ public class ClassFactory
         Validate.notNull(clazz);
         Validate.notNull(parameter);
 
-        if (parameter.length == 0) {
-            return newInstanceOf(clazz);
-        }
-
         var parameterConstructor = getConstructor(clazz, parameter);
 
         if (parameterConstructor.isPresent()) {
@@ -71,11 +66,11 @@ public class ClassFactory
     }
     
 
-    static <T> Optional<T> newInstanceOfInterface(Class<?> implementation, Class<T> interfaceType)
+    static <T> Optional<T> newInstanceOfInterface(Class<?> factory, Class<T> interfaceType)
     {
-        Validate.notNull(implementation);
+        Validate.notNull(factory);
 
-        var method = getFactoryMethod(implementation, interfaceType);
+        var method = getFactoryMethod(factory, interfaceType);
         if (method.isPresent()) {
             try
             {
@@ -93,16 +88,23 @@ public class ClassFactory
         return Optional.empty();
     }
 
-    static <T> Optional<T> newInstanceOfInterface(Class<?> implementation, Class<T> interfaceType, Properties properties)
-    {
-        Validate.notNull(implementation);
 
-        var method = getFactoryMethod(implementation, interfaceType, new Class<?>[]{Properties.class} );
+    static <T> Optional<T> newInstanceOfInterface(Class<?> factory, Class<T> interfaceType, Object[] parameters)
+    {
+        Validate.notNull(factory);
+        Validate.notNull(interfaceType);
+        Validate.notNull(parameters);
+
+        var parameterTypes = Arrays.stream(parameters).
+                map(Object::getClass).
+                toArray(Class<?>[]::new);
+
+        var method = getFactoryMethod(factory, interfaceType, parameterTypes);
         if (method.isPresent()) {
             try
             {
                 return Optional.ofNullable(
-                        interfaceType.cast(method.get().invoke(null, properties))
+                        interfaceType.cast(method.get().invoke(null, parameters))
                 );
             }  catch (Exception e)
             {
@@ -113,6 +115,7 @@ public class ClassFactory
 
         return Optional.empty();
     }
+
 
 
     private static Optional<Constructor<?>> getConstructor(Class<?> clazz)
