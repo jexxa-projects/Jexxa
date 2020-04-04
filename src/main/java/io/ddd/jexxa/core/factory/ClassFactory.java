@@ -4,11 +4,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
@@ -30,7 +28,7 @@ public class ClassFactory
     {
         Validate.notNull(clazz);
 
-        var defaultConstructor = searchDefaultConstructor(clazz);
+        var defaultConstructor = getConstructor(clazz);
         if (defaultConstructor.isPresent()) {
             try
             {
@@ -55,7 +53,7 @@ public class ClassFactory
             return newInstanceOf(clazz);
         }
 
-        var parameterConstructor = searchParameterConstructor(clazz, parameter);
+        var parameterConstructor = getConstructor(clazz, parameter);
 
         if (parameterConstructor.isPresent()) {
             try
@@ -77,7 +75,7 @@ public class ClassFactory
     {
         Validate.notNull(implementation);
 
-        var method = searchDefaultFactoryMethod(implementation, interfaceType);
+        var method = getFactoryMethod(implementation, interfaceType);
         if (method.isPresent()) {
             try
             {
@@ -99,7 +97,7 @@ public class ClassFactory
     {
         Validate.notNull(implementation);
 
-        var method = searchPropertiesFactoryMethod(implementation, interfaceType);
+        var method = getFactoryMethod(implementation, interfaceType, new Class<?>[]{Properties.class} );
         if (method.isPresent()) {
             try
             {
@@ -117,44 +115,44 @@ public class ClassFactory
     }
 
 
-    @SuppressWarnings("squid:S1452")
-    private static Optional<Constructor<?>> searchDefaultConstructor(Class<?> clazz)
+    private static Optional<Constructor<?>> getConstructor(Class<?> clazz)
     {
-        return Arrays.stream(clazz.getConstructors()).
-                filter( element -> element.getParameterTypes().length == 0).
-                findFirst();
+        try {
+            return Optional.of(clazz.getConstructor());
+        }   catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
-
-    @SuppressWarnings("squid:S1452")
-    private static <T> Optional<Constructor<?>> searchParameterConstructor(Class<T> clazz, Object[] parameter)
+    /**
+     * This method returns a constructor that can be used to create clazz with given parameters, even if constructor offers only interfaces
+     * of given parameter.
+     */
+    private static <T> Optional<Constructor<?>> getConstructor(Class<T> clazz, Object[] parameter)
     {
-        //Use default constructor if no parameters are set.
-        if ( parameter.length == 0 ) {
-            return searchDefaultConstructor(clazz);
-        }
-      
-       var parameterTypes = Arrays.stream(parameter).map(Object::getClass).collect(Collectors. <Class<?>> toList());
+       var parameterTypes = Arrays.stream(parameter).
+               map(Object::getClass).
+               toArray(Class<?>[]::new);
 
        return  Arrays.stream(clazz.getConstructors()).
                filter( element -> element.getParameterTypes().length == parameter.length).
-               filter (element -> isAssignableFrom(Arrays.asList(element.getParameterTypes()), parameterTypes )).
+               filter (element -> isAssignableFrom(element.getParameterTypes(), parameterTypes )).
                findFirst();
     }
 
-    private static boolean isAssignableFrom( List<Class<?>> interfaceList, List<Class<?>> implementationList )
+    private static boolean isAssignableFrom( Class<?>[] interfaceList, Class<?>[] implementationList )
     {
-        if (interfaceList.size() != implementationList.size())
+        if (interfaceList.length != implementationList.length)
         {
             return false;
         }
 
         final AtomicInteger counter = new AtomicInteger(); // int is not possible because elements used in streams should be final
-        return interfaceList.stream().allMatch( element -> element.isAssignableFrom(implementationList.get(counter.getAndIncrement())));
+        return Arrays.stream(interfaceList).allMatch( element -> element.isAssignableFrom(implementationList[counter.getAndIncrement()]));
     }
 
-    @SuppressWarnings("squid:S1452")
-    private static <T> Optional<Method> searchDefaultFactoryMethod(Class<?> implementation, Class<T> interfaceType)
+
+    private static <T> Optional<Method> getFactoryMethod(Class<?> implementation, Class<T> interfaceType)
     {
         //Lookup factory method with no attributes and return type clazz
         return Arrays.stream(implementation.getMethods()).
@@ -165,14 +163,13 @@ public class ClassFactory
     }
     
 
-    @SuppressWarnings("squid:S1452")
-    private static <T> Optional<Method> searchPropertiesFactoryMethod(Class<?> implementation, Class<T> interfaceType)
+    private static <T> Optional<Method> getFactoryMethod(Class<?> implementation, Class<T> interfaceType, Class<?>[] parameterTypes)
     {
         //Lookup factory method with no attributes and return type clazz
         return Arrays.stream(implementation.getMethods()).
                 filter( element -> Modifier.isStatic(element.getModifiers())).
                 filter( element -> element.getParameterTypes().length == 1).
-                filter( element -> element.getParameterTypes()[0].equals(Properties.class)).
+                filter( element -> isAssignableFrom(element.getParameterTypes(), parameterTypes )).
                 filter( element -> element.getReturnType().equals(interfaceType)).
                 findFirst();
     }
