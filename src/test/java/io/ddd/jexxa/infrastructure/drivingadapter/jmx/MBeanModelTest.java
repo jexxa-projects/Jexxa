@@ -20,6 +20,6 @@ public class MBeanModelTest
         var objectUnderTest = new MBeanModel(applicationService, properties);
 
         //Act
-        Assert.assertEquals(ApplicationService.class.getSimpleName(), objectUnderTest.getDomainPath());
+        Assert.assertEquals("MBeanModelTest:type=ApplicationService,name=SimpleApplicationService", objectUnderTest.getDomainPath());
     }
 }
