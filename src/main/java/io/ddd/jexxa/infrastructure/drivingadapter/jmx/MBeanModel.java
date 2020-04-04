@@ -1,6 +1,7 @@
 package io.ddd.jexxa.infrastructure.drivingadapter.jmx;
 
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -48,7 +49,7 @@ public class MBeanModel implements DynamicMBean
     @Override
     public void setAttribute(Attribute attribute)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();    //We don't offer access to attributes
     }
 
     @Override
@@ -60,7 +61,7 @@ public class MBeanModel implements DynamicMBean
     @Override
     public AttributeList setAttributes(AttributeList attributes)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();    //We don't offer access to attributes
     }
 
     @Override
@@ -79,7 +80,7 @@ public class MBeanModel implements DynamicMBean
             }
         }
 
-        return null; 
+        return null;
     }
 
     public MBeanInfo getMBeanInfo() {
@@ -97,20 +98,9 @@ public class MBeanModel implements DynamicMBean
 
     public ObjectName getObjectName()
     {
-
-        //Build following domainPath for jmx: <ContextName> -> <Annotation of object> -> <simple name of object>
-        var domainPath = "";
-        if ( !getSubtype().isEmpty()) {
-            domainPath = ":type=" + getSubtype() + "," + "name=" + object.getClass().getSimpleName();
-        }
-        else
-        {
-            domainPath = ":name=" + object.getClass().getSimpleName();
-        }
-
         try
         {
-           return new ObjectName(contextName + domainPath);
+           return new ObjectName(getDomainPath());
         } catch (Exception e)
         {
            throw new IllegalArgumentException(e.getMessage());
@@ -119,21 +109,42 @@ public class MBeanModel implements DynamicMBean
 
     MBeanOperationInfo[] getMBeanOperation()
     {
-        //find methods with no arguments in a first step
         var methodList = Arrays.stream(object.getClass().getMethods()).
                 collect(Collectors.toList());
 
-        // Exclude all methods from base class
+        //Get methods only from concrete type => Exclude all methods from Object
         methodList.removeAll(Arrays.asList(Object.class.getMethods()));
 
         return methodList.
                 stream().
-                filter(method -> method.getParameterCount() == 0).
                 map(element -> new MBeanOperationInfo(element.getName(), element)).
                 toArray(MBeanOperationInfo[]::new);
     }
 
-    Optional<Method> getMethod(String name)
+    String getDomainPath()
+    {
+        //Build domainPath for jmx as follows: <ContextName> -> <Annotation of object (if available) > -> <simple name of object>
+        var stringBuilder = new StringBuilder();
+
+        stringBuilder.
+                append(contextName).
+                append(":");
+
+        getFirstAnnotation().ifPresent(
+                annotation -> stringBuilder.
+                append("type=").
+                append(annotation.annotationType().getSimpleName()).
+                append(",")
+        );
+
+        stringBuilder.
+                append("name=").
+                append(object.getClass().getSimpleName());
+
+        return stringBuilder.toString();
+    }
+
+    private Optional<Method> getMethod(String name)
     {
         return Arrays.
                 stream(object.getClass().getMethods()).
@@ -141,20 +152,11 @@ public class MBeanModel implements DynamicMBean
                 findFirst();
     }
 
-    String getSubtype()
+    private Optional<Annotation> getFirstAnnotation()
     {
-        var annotation = Arrays.
+        return Arrays.
                 stream(object.getClass().getDeclaredAnnotations()).
                 findFirst();
-
-        if ( annotation.isPresent() )
-        {
-            return annotation.get().annotationType().getSimpleName();
-        }
-
-        return "";
     }
-
-
 
 }
