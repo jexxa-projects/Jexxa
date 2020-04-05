@@ -7,11 +7,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -24,9 +21,8 @@ import javax.management.MBeanOperationInfo;
 import javax.management.MBeanParameterInfo;
 import javax.management.ObjectName;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-
+import com.google.gson.JsonObject;
 import io.ddd.jexxa.utils.JexxaLogger;
 
 public class MBeanModel implements DynamicMBean
@@ -128,7 +124,6 @@ public class MBeanModel implements DynamicMBean
 
 
     public MBeanInfo getMBeanInfo() {
-        //TODO: Update info on operations
         return new MBeanInfo(
                 object.getClass().getSimpleName(),
                 "Hello Jexxa",
@@ -164,14 +159,14 @@ public class MBeanModel implements DynamicMBean
                 map(method -> new MBeanOperationInfo(
                         method.getName(),
                         method.getName(),
-                        getMBeanParamterInfo(method),
+                        getMBeanParameterInfo(method),
                         method.getReturnType().getName(),
                         UNKNOWN,
                         null)).
                 toArray(MBeanOperationInfo[]::new);
     }
 
-    private MBeanParameterInfo[] getMBeanParamterInfo(Method method)
+    private MBeanParameterInfo[] getMBeanParameterInfo(Method method)
     {
         return Arrays.
                 stream(method.getParameterTypes()).
@@ -184,41 +179,9 @@ public class MBeanModel implements DynamicMBean
         return new MBeanParameterInfo(
                 parameter.getSimpleName(),
                 String.class.getName(),
-                getJsonSchema(parameter)
+                toJsonTemplate(parameter)
         );
     }
-
-    /*private String getJsonSchema2(Class<?> clazz)
-    {
-        ObjectMapper mapper = new ObjectMapper();
-
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(objectMapper);
-        JsonNode jsonSchema = generator.generateJsonSchema(SearchResult.class);
-        String jsonSchemaAsString = objectMapper.writeValueAsString(jsonSchema);
-    } */
-
-    private String getJsonSchema(Class<?> clazz)
-    {
-        Field[] fields = clazz.getDeclaredFields();
-        List<Map<String,String>> map= new ArrayList<>();
-        for (Field field : fields) {
-            HashMap<String, String> objMap= new HashMap<>();
-            objMap.put(field.getName(), field.getType().getSimpleName());
-            map.add(objMap);
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.writeValueAsString(map);
-        }
-        catch (Exception e)
-        {
-            JexxaLogger.getLogger(e.getClass()).error(e.getMessage());
-        }
-
-        return "NO TEMPLATE AVAILABLE";
-    }
-
-
 
     String getDomainPath()
     {
@@ -232,9 +195,9 @@ public class MBeanModel implements DynamicMBean
 
         getFirstAnnotation().ifPresent(
                 annotation -> stringBuilder.
-                append("type=").
-                append(annotation.annotationType().getSimpleName()).
-                append(",")
+                        append("type=").
+                        append(annotation.annotationType().getSimpleName()).
+                        append(",")
         );
 
         stringBuilder.
@@ -243,6 +206,45 @@ public class MBeanModel implements DynamicMBean
 
         return stringBuilder.toString();
     }
+
+
+    String toJsonTemplate(Class<?> clazz )
+    {
+        JsonObject jsonObject = new JsonObject();
+
+        if ( clazz.getPackageName().startsWith("java.lang"))
+        {
+            jsonObject.addProperty(clazz.getSimpleName(), "value");
+            return jsonObject.toString();
+        }
+
+        Arrays.stream(clazz.getDeclaredFields()).
+                forEach( field -> toJsonTemplate(field,jsonObject));
+
+        return jsonObject.toString();
+    }
+
+    private void toJsonTemplate(Field field, JsonObject parent )
+    {
+        //Terminate recursion in case we find a java base type (currently defined as type of java.lang
+        if ( field.getType().getPackageName().startsWith("java.lang"))
+        {
+            parent.addProperty(field.getName(), field.getType().getSimpleName());
+            return;
+        }
+
+        // Terminate recursion if we fields with size 0 which is typically from nested Classes
+        if ( field.getType().getDeclaredFields().length == 0) {
+            return;
+        }
+
+        JsonObject child = new JsonObject();
+        parent.add(field.getName(), child);
+        Arrays.stream(field.getType().getDeclaredFields()).
+                forEach(attribute -> toJsonTemplate(attribute, child));
+
+    }
+    
 
     private Optional<Method> getMethod(String name)
     {

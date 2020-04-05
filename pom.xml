@@ -71,7 +71,10 @@
       <version>2.10.1</version>
     </dependency>
 
+    <!-- dependencies for JMXAdapter -->
 
+
+    <!-- dependencies for JMSAdapter -->
     <dependency>
       <groupId>javax.jms</groupId>
       <artifactId>javax.jms-api</artifactId>
@@ -84,6 +87,7 @@
       <artifactId>activemq-client</artifactId>
       <version>5.15.12</version>
     </dependency>
+
 
   </dependencies>
 
