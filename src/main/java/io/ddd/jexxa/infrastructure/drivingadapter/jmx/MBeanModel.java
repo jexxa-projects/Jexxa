@@ -5,9 +5,8 @@ import static javax.management.MBeanOperationInfo.UNKNOWN;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Properties;
@@ -28,6 +27,7 @@ import io.ddd.jexxa.utils.JexxaLogger;
 public class MBeanModel implements DynamicMBean
 {
     public static final String CONTEXT_NAME = "io.ddd.jexxa.context.name";
+    private static final String JAVA_LANG_PACKAGE = "java.lang";
     private Gson gson = new Gson();
 
     private final Object object;
@@ -73,41 +73,32 @@ public class MBeanModel implements DynamicMBean
     }
 
     @Override
+    @SuppressWarnings({"java:S112", "java:S2139"})
     public Object invoke(String actionName, Object[] params, String[] signature)
     {
-        var method = getMethod(actionName);
+        var method = getMethod(actionName).
+                orElseThrow(UnsupportedOperationException::new);
 
-        if ( method.isPresent() &&  method.get().getParameterCount() == 0) {
-            try
-            {
-                return method.get().invoke(object);
-            }
-            catch (IllegalAccessException | InvocationTargetException e)
-            {
-                JexxaLogger.getLogger(getClass()).error(e.getMessage());
-                return null;
-            }
+        try
+        {
+            Object [] parameter = deserializeObjects(method.getParameterTypes(), params);
+            return serializeComplexReturnValue(method.invoke(object, parameter));
+        }
+        catch (Exception e)
+        {
+            JexxaLogger.getLogger(getClass()).error(e.getMessage());
+            throw new RuntimeException(e);
         }
 
-
-        if ( method.isPresent() &&  method.get().getParameterCount() > 0) {
-            try
-            {
-                Object [] parameter = deserializeObjects(method.get().getParameterTypes(), params);
-                return method.get().invoke(object, parameter);
-            }
-            catch (IllegalAccessException | InvocationTargetException e)
-            {
-                JexxaLogger.getLogger(getClass()).error(e.getMessage());
-                return null;
-            }
-        }
-
-        return null;
     }
 
     Object[] deserializeObjects(Class<?>[] parameterTypes, Object[] parameters)
     {
+        if (parameterTypes == null || parameterTypes.length == 0)
+        {
+            return new Object[0];
+        }
+
         if ( parameters.length != parameterTypes.length) {
             throw new IllegalArgumentException("Invalid number of parameter");
         }
@@ -166,23 +157,6 @@ public class MBeanModel implements DynamicMBean
                 toArray(MBeanOperationInfo[]::new);
     }
 
-    private MBeanParameterInfo[] getMBeanParameterInfo(Method method)
-    {
-        return Arrays.
-                stream(method.getParameterTypes()).
-                map(this::getMBeanParameter).
-                toArray(MBeanParameterInfo[]::new);
-    }
-
-    private MBeanParameterInfo getMBeanParameter(Class<?> parameter)
-    {
-        return new MBeanParameterInfo(
-                parameter.getSimpleName(),
-                String.class.getName(),
-                toJsonTemplate(parameter)
-        );
-    }
-
     String getDomainPath()
     {
         //Build domainPath for jmx as follows for better grouping (e.g., in JConsole)
@@ -212,36 +186,75 @@ public class MBeanModel implements DynamicMBean
     {
         JsonObject jsonObject = new JsonObject();
 
-        if ( clazz.getPackageName().startsWith("java.lang"))
+        if ( clazz.isPrimitive())
         {
-            jsonObject.addProperty(clazz.getSimpleName(), "value");
+            jsonObject.addProperty(clazz.getSimpleName(), "<"+clazz.getSimpleName()+">");
             return jsonObject.toString();
         }
 
-        Arrays.stream(clazz.getDeclaredFields()).
+        Arrays.stream(filterFieldsForJson(clazz)).
                 forEach( field -> toJsonTemplate(field,jsonObject));
 
         return jsonObject.toString();
     }
 
+    private MBeanParameterInfo[] getMBeanParameterInfo(Method method)
+    {
+        return Arrays.
+                stream(method.getParameterTypes()).
+                map(this::getMBeanParameter).
+                toArray(MBeanParameterInfo[]::new);
+    }
+
+    private MBeanParameterInfo getMBeanParameter(Class<?> parameter)
+    {
+        return new MBeanParameterInfo(
+                parameter.getSimpleName(),
+                String.class.getName(),
+                toJsonTemplate(parameter)
+        );
+    }
+
+
+    private Object serializeComplexReturnValue(Object object)
+    {
+        if ( object == null ||
+             object.getClass().getPackageName().startsWith(JAVA_LANG_PACKAGE)
+        )
+        {
+            return object;
+        }
+
+        return gson.toJson(object);
+    }
+
+    private Field[] filterFieldsForJson(Class<?> clazz)
+    {
+        // Get fields we have to process => Ignore synthetic fields because they are generated by compiler
+        //                               => Ignore static fields which could case infinite loop if a class provide static elements of itself
+        return Arrays.stream(clazz.getDeclaredFields()).
+                filter(declaredField -> !declaredField.isSynthetic()).
+                filter(declaredField -> !Modifier.isStatic(declaredField.getModifiers())).
+                toArray(Field[]::new);
+    }
+
     private void toJsonTemplate(Field field, JsonObject parent )
     {
         //Terminate recursion in case we find a java base type (currently defined as type of java.lang
-        if ( field.getType().getPackageName().startsWith("java.lang"))
+        if ( field.getType().isPrimitive() && !Modifier.isStatic(field.getModifiers()))
         {
-            parent.addProperty(field.getName(), field.getType().getSimpleName());
+            parent.addProperty(field.getName(), "<"+field.getType().getSimpleName()+">");
             return;
         }
 
-        // Terminate recursion if we fields with size 0 which is typically from nested Classes
-        if ( field.getType().getDeclaredFields().length == 0) {
-            return;
-        }
 
-        JsonObject child = new JsonObject();
-        parent.add(field.getName(), child);
-        Arrays.stream(field.getType().getDeclaredFields()).
-                forEach(attribute -> toJsonTemplate(attribute, child));
+        if (filterFieldsForJson(field.getType()).length > 0 )
+        {
+            JsonObject child = new JsonObject();
+            parent.add(field.getName(), child);
+            Arrays.stream(filterFieldsForJson(field.getType())).
+                    forEach(attribute -> toJsonTemplate(attribute, child));
+        }
 
     }
     

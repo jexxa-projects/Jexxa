@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import io.ddd.jexxa.dummyapplication.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.dummyapplication.domain.valueobject.JexxaValueObject;
+import org.apache.commons.lang.Validate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,6 +12,8 @@ public class MBeanModelTest
 {
     static class JexxaCompoundValueObject
     {
+        public static final JexxaCompoundValueObject defaultValue = new JexxaCompoundValueObject(42);
+
         private JexxaValueObject firstValueObject;
         private JexxaValueObject secondValueObject;
 
@@ -36,10 +39,28 @@ public class MBeanModelTest
     }
 
     @Test
+    public void toJsonTemplatePrimitive()
+    {
+        //Arrange
+        String integerTemplate = "{\"int\":\"<int>\"}";
+        var applicationService = new SimpleApplicationService();
+        var properties = new Properties();
+        properties.put(MBeanModel.CONTEXT_NAME, getClass().getSimpleName());
+
+        var objectUnderTest = new MBeanModel(applicationService, properties);
+
+        //Act
+        var result = objectUnderTest.toJsonTemplate(int.class);
+
+        //Assert
+        Assert.assertEquals(integerTemplate, result);
+    }
+
+    @Test
     public void toJsonTemplate()
     {
         //Arrange
-        String jexxaValueObjectTemplate = "{\"value\":\"int\",\"valueInPercent\":\"double\"}";
+        String jexxaValueObjectTemplate = "{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"}";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
         properties.put(MBeanModel.CONTEXT_NAME, getClass().getSimpleName());
@@ -57,7 +78,7 @@ public class MBeanModelTest
     public void toJsonTemplateComplexValue()
     {
         //Arrange
-        String jexxaValueObjectTemplate = "{\"firstValueObject\":{\"value\":\"int\",\"valueInPercent\":\"double\"},\"secondValueObject\":{\"value\":\"int\",\"valueInPercent\":\"double\"}}";
+        String jexxaValueObjectTemplate = "{\"firstValueObject\":{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"},\"secondValueObject\":{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"}}";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
         properties.put(MBeanModel.CONTEXT_NAME, getClass().getSimpleName());
