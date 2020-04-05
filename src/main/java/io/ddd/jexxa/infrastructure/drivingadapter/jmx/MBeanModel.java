@@ -27,7 +27,6 @@ import io.ddd.jexxa.utils.JexxaLogger;
 public class MBeanModel implements DynamicMBean
 {
     public static final String CONTEXT_NAME = "io.ddd.jexxa.context.name";
-    private static final String JAVA_LANG_PACKAGE = "java.lang";
     private Gson gson = new Gson();
 
     private final Object object;
@@ -186,7 +185,7 @@ public class MBeanModel implements DynamicMBean
     {
         JsonObject jsonObject = new JsonObject();
 
-        if ( clazz.isPrimitive())
+        if ( clazz.isPrimitive() || clazz.isAssignableFrom(String.class))
         {
             jsonObject.addProperty(clazz.getSimpleName(), "<"+clazz.getSimpleName()+">");
             return jsonObject.toString();
@@ -219,7 +218,7 @@ public class MBeanModel implements DynamicMBean
     private Object serializeComplexReturnValue(Object object)
     {
         if ( object == null ||
-             object.getClass().getPackageName().startsWith(JAVA_LANG_PACKAGE)
+             object.getClass().isPrimitive()
         )
         {
             return object;
@@ -241,7 +240,8 @@ public class MBeanModel implements DynamicMBean
     private void toJsonTemplate(Field field, JsonObject parent )
     {
         //Terminate recursion in case we find a java base type (currently defined as type of java.lang
-        if ( field.getType().isPrimitive() && !Modifier.isStatic(field.getModifiers()))
+        if ( (field.getType().isPrimitive() || field.getType().isAssignableFrom(String.class) )
+                && !Modifier.isStatic(field.getModifiers()))
         {
             parent.addProperty(field.getName(), "<"+field.getType().getSimpleName()+">");
             return;

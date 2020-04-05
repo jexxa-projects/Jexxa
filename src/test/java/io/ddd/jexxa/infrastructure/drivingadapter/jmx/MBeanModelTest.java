@@ -57,6 +57,24 @@ public class MBeanModelTest
     }
 
     @Test
+    public void stringToJsonTemplate()
+    {
+        //Arrange
+        String stringTemplate = "{\"String\":\"<String>\"}";
+        var applicationService = new SimpleApplicationService();
+        var properties = new Properties();
+        properties.put(MBeanModel.CONTEXT_NAME, getClass().getSimpleName());
+
+        var objectUnderTest = new MBeanModel(applicationService, properties);
+
+        //Act
+        var result = objectUnderTest.toJsonTemplate(String.class);
+
+        //Assert
+        Assert.assertEquals(stringTemplate, result);
+    }
+
+    @Test
     public void toJsonTemplate()
     {
         //Arrange
