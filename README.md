@@ -3,18 +3,19 @@
 
 # Jexxa - A Ports and Adapters Framework for Java 
 
-Jexxa is a lightweight micro-framework to support implementing business applications based on a [ports and adapters](https://www.thinktocode.com/2018/07/19/ports-and-adapters-architecture/) architecture. 
+Jexxa is a lightweight framework to implement business applications based on a [ports and adapters](https://www.thinktocode.com/2018/07/19/ports-and-adapters-architecture/) architecture. 
 
-Goal of this framework is to easily connect and exchange technology stacks, so called adapters, to ports of a technology agnostic business application. At the moment this project is only used for educational purposes and not used in production ready applications.   
+Goal of this framework is to easily connect and exchange technology stacks, called adapters, to interfaces of a technology agnostic business application, called ports. 
 
 Up to now the framework provides following features:
-
-* Factories for ports of an application core and bind it to available driving adapter. 
-
-* Implementation of different driving adapters such as JMX and RESTfulRPC.
-
-
  
+
+* Binding required driving adapters to inbound ports of your application. 
+
+* Dependency injection of driven adapters into your application core without any framework specific annotations. 
+
+* Integration of different driving adapters based on available micro-frameworks. 
+
 
 
 
