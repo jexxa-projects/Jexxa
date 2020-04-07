@@ -205,15 +205,18 @@ public class RESTfulRPCAdapterTest
                     + conn.getResponseCode());
         }
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(
-                (conn.getInputStream())));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                (conn.getInputStream()))))
+        {
 
-        String output = br.readLine();
+            String output = br.readLine();
 
-        conn.disconnect();
+            conn.disconnect();
 
-        return output;
+            return output;
+        }
     }
+
     
 
     private String sendPOSTCommand(RESTfulRPCModel.RESTfulRPCMethod restPath, Object parameter) throws Throwable
@@ -248,40 +251,46 @@ public class RESTfulRPCAdapterTest
         }
 
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(
-                (conn.getInputStream())));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                (conn.getInputStream())) ) )
+        {
 
-        String output = br.readLine();
 
-        conn.disconnect();
+            String output = br.readLine();
 
-        return output;
+            conn.disconnect();
+
+            return output;
+        }
     }
 
     private void createException(RESTfulRPCModel.RESTfulRPCMethod rpcMethod, HttpURLConnection conn) throws Throwable
     {
         // Try to recreate Exception
-        BufferedReader br = new BufferedReader(new InputStreamReader(
-                (conn.getErrorStream())));
-
-        String output = br.readLine();
-
-        Gson gson = new Gson();
-        JsonElement jsonElement = JsonParser.parseString(output);
-        if (jsonElement.isJsonArray()
-                && jsonElement.getAsJsonArray().size() == 2)
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                (conn.getErrorStream()))))
         {
-            JsonArray jsonArray = jsonElement.getAsJsonArray();
-            //Find Exception
-            var exceptionType = Arrays.stream(rpcMethod.getMethod().getExceptionTypes()).
-                    filter(element -> element.getName().equals(jsonArray.get(0).getAsString())).
-                    findFirst();
-            if (exceptionType.isPresent()) {
-                throw (Throwable) gson.fromJson(jsonArray.get(1), exceptionType.get());
+
+            String output = br.readLine();
+
+            Gson gson = new Gson();
+            JsonElement jsonElement = JsonParser.parseString(output);
+            if (jsonElement.isJsonArray()
+                    && jsonElement.getAsJsonArray().size() == 2)
+            {
+                JsonArray jsonArray = jsonElement.getAsJsonArray();
+                //Find Exception
+                var exceptionType = Arrays.stream(rpcMethod.getMethod().getExceptionTypes()).
+                        filter(element -> element.getName().equals(jsonArray.get(0).getAsString())).
+                        findFirst();
+                if (exceptionType.isPresent())
+                {
+                    throw (Throwable) gson.fromJson(jsonArray.get(1), exceptionType.get());
+                }
             }
+
+            throw new IOException("Failed : HTTP error code : "
+                    + conn.getResponseCode() + output);
         }
-        
-        throw new IOException("Failed : HTTP error code : "
-                + conn.getResponseCode() + output);
     }
 }
