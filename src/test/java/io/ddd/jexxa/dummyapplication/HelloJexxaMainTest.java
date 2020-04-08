@@ -157,14 +157,16 @@ public class HelloJexxaMainTest
                         + conn.getResponseCode());
             }
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    (conn.getInputStream())));
+            try ( BufferedReader br = new BufferedReader(new InputStreamReader(
+                    (conn.getInputStream()))) )
+            {
 
-            String output = br.readLine();
+                String output = br.readLine();
 
-            conn.disconnect();
+                conn.disconnect();
 
-            return output;
+                return output;
+            }
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
