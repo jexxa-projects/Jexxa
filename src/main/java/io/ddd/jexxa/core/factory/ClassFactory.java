@@ -139,7 +139,7 @@ public class ClassFactory
 
        return  Arrays.stream(clazz.getConstructors()).
                filter( element -> element.getParameterTypes().length == parameter.length).
-               filter (element -> isAssignableFrom(element.getParameterTypes(), parameterTypes )).
+               filter( element -> isAssignableFrom(element.getParameterTypes(), parameterTypes )).
                findFirst();
     }
 
