@@ -3,6 +3,7 @@ package io.ddd.jexxa.infrastructure.drivingadapter.messaging;
 
 import static io.ddd.jexxa.utils.ThrowingConsumer.exceptionLogger;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -76,10 +77,28 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             connection.setExceptionListener(exception -> JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage()));
 
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination destination = session.createTopic(messageListener.getClass().getSimpleName());
 
-            //TODO handle MessageSelector
-            consumer = session.createConsumer(destination);
+            JMSListener jmsListener = getJMSListener(object);
+
+            Destination destination;
+            if (jmsListener.messagingType() == JMSListener.MessagingType.Topic)
+            {
+                destination = session.createTopic(jmsListener.destination());
+            }
+            else
+            {
+               destination = session.createQueue(jmsListener.destination());
+            }
+
+
+            if (jmsListener.selector().isEmpty())
+            {
+                consumer = session.createConsumer(destination);
+            }
+            else
+            {
+                consumer = session.createConsumer(destination, jmsListener.selector());
+            }
 
             consumer.setMessageListener(messageListener);
         }
@@ -116,5 +135,13 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         {
             throw new IllegalStateException("Can not connect to " + properties.get(JNDI_PROVIDER_URL_KEY), e);
         }
+    }
+
+    JMSListener getJMSListener(Object object)
+    {
+        return Arrays.
+                stream(object.getClass().getMethods()).
+                filter(method -> method.isAnnotationPresent(JMSListener.class)).
+                findFirst().orElseThrow().getDeclaredAnnotation(JMSListener.class);
     }
 }
