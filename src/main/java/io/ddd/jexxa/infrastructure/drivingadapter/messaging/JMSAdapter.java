@@ -72,7 +72,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         {
             var messageListener = (MessageListener) (object);
 
-            connection = create(properties);
+            connection = createConnection();
             connection.setExceptionListener(exception -> JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage()));
 
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -100,21 +100,21 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     }
 
     
-    private Connection create(Properties jndiProperties)
+    Connection createConnection()
     {
         try 
         {
-            final InitialContext initialContext = new InitialContext(jndiProperties);
+            final InitialContext initialContext = new InitialContext(properties);
             final ConnectionFactory connectionFactory = (ConnectionFactory) initialContext.lookup("ConnectionFactory");
-            return connectionFactory.createConnection(jndiProperties.getProperty(JNDI_USER_KEY), jndiProperties.getProperty(JNDI_PASSWORD_KEY));
+            return connectionFactory.createConnection(properties.getProperty(JNDI_USER_KEY), properties.getProperty(JNDI_PASSWORD_KEY));
         }
         catch (NamingException e)
         {
-            throw new IllegalStateException("No ConnectionFactory available via : " + jndiProperties.get(JNDI_PROVIDER_URL_KEY), e);
+            throw new IllegalStateException("No ConnectionFactory available via : " + properties.get(JNDI_PROVIDER_URL_KEY), e);
         }
         catch (JMSException e)
         {
-            throw new IllegalStateException("Can not connect to " + jndiProperties.get(JNDI_PROVIDER_URL_KEY), e);
+            throw new IllegalStateException("Can not connect to " + properties.get(JNDI_PROVIDER_URL_KEY), e);
         }
     }
 }
