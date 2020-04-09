@@ -30,7 +30,7 @@ public class DrivenAdapterFactoryTest
                 whiteListPackage(packageName);
 
         //Act
-        var result = objectUnderTest.newInstanceOfInterface(IDefaultConstructorService.class);
+        var result = objectUnderTest.newInstanceOf(IDefaultConstructorService.class);
 
         //Assert
         Assert.assertNotNull(result);
@@ -44,8 +44,8 @@ public class DrivenAdapterFactoryTest
                 whiteListPackage(packageName);
 
         //Act
-        var first = objectUnderTest.getInstanceOfInterface(IDefaultConstructorService.class);
-        var second = objectUnderTest.getInstanceOfInterface(IDefaultConstructorService.class);
+        var first = objectUnderTest.getInstanceOf(IDefaultConstructorService.class);
+        var second = objectUnderTest.getInstanceOf(IDefaultConstructorService.class);
 
         //Assert
         Assert.assertNotNull(first);
@@ -62,7 +62,7 @@ public class DrivenAdapterFactoryTest
         var properties = new Properties();
 
         //Act
-        var result = objectUnderTest.newInstanceOfInterface(IPropertiesConstructorService.class, properties);
+        var result = objectUnderTest.newInstanceOf(IPropertiesConstructorService.class, properties);
 
         //Assert
         Assert.assertNotNull(result);
@@ -76,7 +76,7 @@ public class DrivenAdapterFactoryTest
                 whiteListPackage(packageName);
 
         //Act
-        var result = objectUnderTest.newInstanceOfInterface(IFactroyMethodService.class);
+        var result = objectUnderTest.newInstanceOf(IFactroyMethodService.class);
 
         //Assert
         Assert.assertNotNull(result);
@@ -90,7 +90,7 @@ public class DrivenAdapterFactoryTest
         var properties = new Properties();
         
         //Act
-        var result = objectUnderTest.newInstanceOfInterface(IFactroyMethodService.class, properties);
+        var result = objectUnderTest.newInstanceOf(IFactroyMethodService.class, properties);
 
         //Assert
         Assert.assertNotNull(result);
@@ -138,7 +138,7 @@ public class DrivenAdapterFactoryTest
                 whiteListPackage(packageName);
 
         //Act
-        objectUnderTest.newInstanceOfInterface(INotUniqueService.class);
+        objectUnderTest.newInstanceOf(INotUniqueService.class);
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -148,7 +148,7 @@ public class DrivenAdapterFactoryTest
                 whiteListPackage(packageName);
 
         //Act
-        objectUnderTest.newInstanceOfInterface(INotImplementedService.class);
+        objectUnderTest.newInstanceOf(INotImplementedService.class);
     }
 
 }

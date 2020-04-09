@@ -27,7 +27,7 @@ public class DrivenAdapterFactory
         return this;
     }
 
-    public <T> T newInstanceOfInterface(Class<T> interfaceType) {
+    public <T> T newInstanceOf(Class<T> interfaceType) {
         Validate.notNull(interfaceType);
         Validate.isTrue(interfaceType.isInterface(), "Given Argument is not an interface: " + interfaceType.getName());
 
@@ -40,13 +40,13 @@ public class DrivenAdapterFactory
         //Apply 2. convention and try to use a factory method
         if (instance.isEmpty())
         {
-            instance = ClassFactory.newInstanceOfInterface(factory, interfaceType);
+            instance = ClassFactory.newInstanceOf(interfaceType, factory);
         }
 
         return interfaceType.cast(instance.orElseThrow());
     }
 
-    public <T> T newInstanceOfInterface(Class<T> interfaceType, Properties properties) {
+    public <T> T newInstanceOf(Class<T> interfaceType, Properties properties) {
         Validate.notNull(interfaceType);
         Validate.isTrue(interfaceType.isInterface(), "Given Argument is not an interface: " + interfaceType.getName());
 
@@ -59,20 +59,20 @@ public class DrivenAdapterFactory
         //Apply 2. convention and try to use a factory method accepting properties
         if (instance.isEmpty())
         {
-            instance = ClassFactory.newInstanceOfInterface(implementation, interfaceType, new Object[]{properties});
+            instance = ClassFactory.newInstanceOf(interfaceType, implementation, new Object[]{properties});
         }
 
         //Try to create without properties 
         if (instance.isEmpty())
         {
-            return newInstanceOfInterface(interfaceType);
+            return newInstanceOf(interfaceType);
         }
         
         return interfaceType.cast(instance.orElseThrow());
     }
 
 
-    public <T> T getInstanceOfInterface(Class<T> interfaceType) 
+    public <T> T getInstanceOf(Class<T> interfaceType)
     {
         var existingInstance = objectPool.getInstance(interfaceType);
 
@@ -80,12 +80,12 @@ public class DrivenAdapterFactory
             return existingInstance.get();
         }
 
-        T newInstance = newInstanceOfInterface(interfaceType);
+        T newInstance = newInstanceOf(interfaceType);
         objectPool.add(newInstance);
         return newInstance;
     }
 
-    public <T> T getInstanceOfInterface(Class<T> interfaceType, Properties properties)
+    public <T> T getInstanceOf(Class<T> interfaceType, Properties properties)
     {
         var existingInstance = objectPool.getInstance(interfaceType);
 
@@ -93,7 +93,7 @@ public class DrivenAdapterFactory
             return existingInstance.get();
         }
 
-        T newInstance = getInstanceOfInterface(interfaceType, properties);
+        T newInstance = getInstanceOf(interfaceType, properties);
         objectPool.add(newInstance);
         return newInstance;
     }

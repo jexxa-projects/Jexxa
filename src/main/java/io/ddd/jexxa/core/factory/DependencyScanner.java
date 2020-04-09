@@ -9,7 +9,6 @@ import java.util.List;
 import io.github.classgraph.ClassGraph;
 import org.apache.commons.lang.Validate;
 
-//TODO: Double check if it is a good practice to cache scan results
 class DependencyScanner
 {
     private List<String> whiteListPackages = new ArrayList<>();

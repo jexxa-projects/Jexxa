@@ -2,7 +2,6 @@ package io.ddd.jexxa.core.factory;
 
 import java.util.Properties;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.ddd.jexxa.dummyapplication.applicationservice.ApplicationServiceWithDrivenApdapters;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,7 +22,7 @@ public class PortFactoryTest
                 whiteListPackage(applicationCorePackageName);
 
         //Act
-        boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenApdapters.class);
+        boolean result = objectUnderTest.isCreatable(ApplicationServiceWithDrivenApdapters.class);
 
         //Assert
         Assert.assertTrue(result);
@@ -38,7 +37,7 @@ public class PortFactoryTest
                 whiteListPackage(applicationCorePackageName);
 
         //Act
-        boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenApdapters.class);
+        boolean result = objectUnderTest.isCreatable(ApplicationServiceWithDrivenApdapters.class);
 
         //Assert
         Assert.assertTrue(result);

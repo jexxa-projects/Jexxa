@@ -117,7 +117,7 @@ public class JexxaMain
         //Create ports and adapter
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
 
-        var portList = portFactory.getPortsBy(portAnnotation, properties);
+        var portList = portFactory.getInstanceOfPorts(portAnnotation, properties);
         portList.forEach(drivingAdapter::register);
         
         compositeDrivingAdapter.add(drivingAdapter);

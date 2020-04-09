@@ -12,7 +12,7 @@ import org.apache.commons.lang.Validate;
 
 public class ClassFactory
 {
-    /*
+    /***
      * Throw a RuntimeException in case an exception related to reflection occurs   
      */
     static class ClassFactoryException extends RuntimeException
@@ -66,7 +66,7 @@ public class ClassFactory
     }
     
 
-    static <T> Optional<T> newInstanceOfInterface(Class<?> factory, Class<T> interfaceType)
+    static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory)
     {
         Validate.notNull(factory);
 
@@ -89,7 +89,7 @@ public class ClassFactory
     }
 
 
-    static <T> Optional<T> newInstanceOfInterface(Class<?> factory, Class<T> interfaceType, Object[] parameters)
+    static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory, Object[] parameters)
     {
         Validate.notNull(factory);
         Validate.notNull(interfaceType);

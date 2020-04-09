@@ -5,6 +5,13 @@ import java.util.Properties;
 
 import org.apache.commons.lang.Validate;
 
+/***
+ * Creates driving adapters which fulfill following requirements:
+ * 1. Public Default constructor available
+ * 2. Public constructor with one Properties as attribute is available
+ * 3. Public static factory method with return value of requested type
+ * 4. Public static factory method with return value of requested type
+ */
 public class DrivingAdapterFactory
 {
     private ObjectPool objectPool = new ObjectPool();
@@ -17,7 +24,7 @@ public class DrivingAdapterFactory
 
         if (instance.isEmpty())
         {
-            instance = ClassFactory.newInstanceOfInterface(instanceType, instanceType, new Object[] {properties});
+            instance = ClassFactory.newInstanceOf(instanceType, instanceType, new Object[] {properties});
         }
 
         //Try to use constructors without Properties
@@ -37,20 +44,17 @@ public class DrivingAdapterFactory
 
         if (instance.isEmpty())
         {
-            instance = ClassFactory.newInstanceOfInterface(instanceType, instanceType);
+            instance = ClassFactory.newInstanceOf(instanceType, instanceType);
         }
 
         return instanceType.cast(instance.orElseThrow());
     }
 
-    public <T> T newInstanceOfWrapper(Class<T> instanceType, Object port) {
-        Validate.notNull(instanceType);
 
-        var instance = ClassFactory.newInstanceOf(instanceType, new Object[]{port});
-
-        return instanceType.cast(instance.orElseThrow());
-    }
-
+    /***
+     * This method returns the parameter required by constructor
+     * TODO refactor this method
+     */
     public <T> Class<?> requiredPort(Class<T> portWrapper)
     {
         return Arrays.stream(portWrapper.getConstructors()).

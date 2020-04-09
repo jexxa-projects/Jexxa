@@ -13,46 +13,16 @@ import java.util.Properties;
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 
+/*+
+ * This class is responsible for creating instances of ports including all required parameter.
+ */
 public class PortFactory
 {
     private List<String> whiteListPackages = new ArrayList<>();
     private ObjectPool objectPool = new ObjectPool();
     private DrivenAdapterFactory drivenAdapterFactory;
 
-
-    static class MissingDrivenAdapterException extends RuntimeException
-    {
-        private final String internalMessage;
-        
-        public MissingDrivenAdapterException(Class<?> port, DrivenAdapterFactory drivenAdapterFactory)
-        {
-            internalMessage = getInternalMessage(port, drivenAdapterFactory);
-        }
-
-        @Override
-        public String getMessage()
-        {
-            return internalMessage;
-        }
-
-
-        private String getInternalMessage(Class<?> port, DrivenAdapterFactory drivenAdapterFactory)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Could not create port: ").
-                    append(port.getName()).append("\n").
-                    append("Missing DrivenAdapter:\n");
-
-
-            var missingAdapters = new ArrayList<Class<?>>();
-            Arrays.asList(port.getConstructors()).
-                    forEach( element -> missingAdapters.addAll(drivenAdapterFactory.getMissingAdapter(Arrays.asList(element.getParameterTypes()))));
-            missingAdapters.forEach( missingAdapter -> stringBuilder.append("    * ").append(missingAdapter.getName()).append("\n") );
-
-            return stringBuilder.toString();
-        }
-    }
-
+    
     public PortFactory(DrivenAdapterFactory drivenAdapterFactory)
     {
         this.drivenAdapterFactory = drivenAdapterFactory;
@@ -64,12 +34,29 @@ public class PortFactory
         return this;
     }
 
-    public Object newInstanceOf(Class<?> inboundPort, Properties drivenAdapterProperties)
+    /*
+     * Check if an inbound port including all required driven adapter can be created
+     */
+    public boolean isCreatable(Class<?> inboundPort)
+    {
+        return findConstructor(inboundPort).isPresent();
+    }
+
+
+    /***
+     * Creates a new instance of given inbound port each time this method is called 
+     *
+     * @see #getInstanceOf(Class, Properties) 
+     * @param inboundPort type of the inbound port
+     * @param drivenAdapterProperties properties required to create and configure driven adapter
+     * @return a new instance of inbound port 
+     */
+    public <T> T newInstanceOf(Class<T> inboundPort, Properties drivenAdapterProperties)
     {
         Validate.notNull(inboundPort);
         Validate.notNull(drivenAdapterProperties);
 
-        var supportedConstructor = findSupportedConstructor(inboundPort).
+        var supportedConstructor = findConstructor(inboundPort).
                 orElseThrow(() -> new MissingDrivenAdapterException(inboundPort, drivenAdapterFactory));
 
         var drivenAdapter = createDrivenAdapterForConstructor(supportedConstructor, drivenAdapterProperties);
@@ -79,7 +66,16 @@ public class PortFactory
                 orElseThrow();
     }
 
-    public Object getInstanceOf(Class<?> inboundPort, Properties drivenAdapterProperties)
+    /***
+     * Checks if an instance of given inbound port was already created using this methods and returns this instance.
+     * Only if no instance was created so far using this method a new one is created.
+     *
+     * @see #newInstanceOf(Class, Properties) 
+     * @param inboundPort type of the inbound port
+     * @param drivenAdapterProperties properties required to create and configure driven adapter
+     * @return Either a new instance of inbound port or an instance that was previously created 
+     */
+    public <T> T getInstanceOf(Class<T> inboundPort, Properties drivenAdapterProperties)
     {
         Validate.notNull(inboundPort);
         Validate.notNull(drivenAdapterProperties);
@@ -96,56 +92,7 @@ public class PortFactory
         return newInstance;
     }
 
-
-    /*
-     * Check if all DrivenAdapter are available for for a given port
-     */
-    public boolean isAvailable(Class<?> inboundPort)
-    {
-       return findSupportedConstructor(inboundPort).isPresent();
-    }
-
-    /*
-     * Check if all DrivenAdapter are available for for a given port
-     */
-    private Optional<Constructor<?>> findSupportedConstructor(Class<?> inboundPort)
-    {
-        var constructorList = Arrays.asList(inboundPort.getConstructors());
-
-        if ( constructorList.size() > 1)
-        {
-            JexxaLogger.getLogger(getClass()).
-                    warn("More than one constructor available for {}. => Reconsider to provide only a single constructor", inboundPort.getName());
-        }
-
-        return constructorList.
-                stream().
-                filter(constructor -> drivenAdapterFactory.isAvailable(Arrays.asList(constructor.getParameterTypes()))).
-                findFirst();
-    }
-
-
-    public List<Object> createPortsBy(Class <? extends Annotation> portAnnotation, Properties drivenAdapterProperties) {
-        var annotationScanner = new DependencyScanner().
-                whiteListPackages(whiteListPackages);
-
-        var scannedInboundPorts = annotationScanner.getClassesWithAnnotation(portAnnotation);
-
-        var result = new ArrayList<>();
-        var exceptionList = new ArrayList<Throwable>();
-        
-        scannedInboundPorts.
-                    forEach(exceptionCollector(
-                            element -> result.add(newInstanceOf(element, drivenAdapterProperties)),
-                            exceptionList)
-                    );
-
-        exceptionList.forEach(element -> JexxaLogger.getLogger(getClass()).warn(element.getMessage()));
-
-        return result;
-    }
-
-    public List<Object> getPortsBy(Class <? extends Annotation> portAnnotation, Properties drivenAdapterProperties) {
+    public List<Object> getInstanceOfPorts(Class <? extends Annotation> portAnnotation, Properties drivenAdapterProperties) {
         var annotationScanner = new DependencyScanner().
                 whiteListPackages(whiteListPackages);
 
@@ -166,6 +113,27 @@ public class PortFactory
     }
 
 
+
+    /*
+     * Find a constructor whose parameter can be instantiated
+     */
+    private Optional<Constructor<?>> findConstructor(Class<?> inboundPort)
+    {
+        var constructorList = Arrays.asList(inboundPort.getConstructors());
+
+        if ( constructorList.size() > 1)
+        {
+            JexxaLogger.getLogger(getClass()).
+                    warn("More than one constructor available for {}. => Reconsider to provide only a single constructor", inboundPort.getName());
+        }
+
+        return constructorList.
+                stream().
+                filter(constructor -> drivenAdapterFactory.isAvailable(Arrays.asList(constructor.getParameterTypes()))).
+                findFirst();
+    }
+
+
     private Object[] createDrivenAdapterForConstructor(Constructor<?> portConstructor, Properties drivenAdapterProperties)
     {
         var objectList = new ArrayList<>();
@@ -174,7 +142,7 @@ public class PortFactory
         {
             try
             {
-                objectList.add( drivenAdapterFactory.newInstanceOfInterface(portConstructor.getParameterTypes()[i], drivenAdapterProperties) );
+                objectList.add( drivenAdapterFactory.newInstanceOf(portConstructor.getParameterTypes()[i], drivenAdapterProperties) );
             }
             catch ( Exception e)
             {
