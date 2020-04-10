@@ -14,7 +14,7 @@ public class PortFactoryTest
 
 
     @Test
-    public void drivenAdapterAvailable() {
+    public void adapterAvailable() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
@@ -22,14 +22,14 @@ public class PortFactoryTest
                 whiteListPackage(applicationCorePackageName);
 
         //Act
-        boolean result = objectUnderTest.isCreatable(ApplicationServiceWithDrivenApdapters.class);
+        boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenApdapters.class);
 
         //Assert
         Assert.assertTrue(result);
     }
 
     @Test
-    public void drivenAdapterUnavailable() {
+    public void adapterUnavailable() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
@@ -37,7 +37,7 @@ public class PortFactoryTest
                 whiteListPackage(applicationCorePackageName);
 
         //Act
-        boolean result = objectUnderTest.isCreatable(ApplicationServiceWithDrivenApdapters.class);
+        boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenApdapters.class);
 
         //Assert
         Assert.assertTrue(result);
@@ -45,7 +45,7 @@ public class PortFactoryTest
 
 
     @Test
-    public void createPort() {
+    public void newInstanceOfPort() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
@@ -53,14 +53,17 @@ public class PortFactoryTest
                 whiteListPackage(applicationCorePackageName);
 
         //Act
-        var result = objectUnderTest.newInstanceOf(ApplicationServiceWithDrivenApdapters.class, new Properties());
+        var first = objectUnderTest.newInstanceOf(ApplicationServiceWithDrivenApdapters.class, new Properties());
+        var second = objectUnderTest.newInstanceOf(ApplicationServiceWithDrivenApdapters.class, new Properties());
 
         //Assert
-        Assert.assertNotNull(result);
+        Assert.assertNotNull(first);
+        Assert.assertNotNull(second);
+        Assert.assertNotEquals(first, second);
     }
 
     @Test
-    public void getPort() {
+    public void getInstanceOfPort() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
@@ -71,7 +74,7 @@ public class PortFactoryTest
         var first = objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenApdapters.class, new Properties());
         var second = objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenApdapters.class, new Properties());
 
-        //Assert
+        //Assert that first and second adapter are equal 
         Assert.assertNotNull(first);
         Assert.assertNotNull(second);
         Assert.assertEquals(first,second);

@@ -37,7 +37,7 @@ public class PortFactory
     /*
      * Check if an inbound port including all required driven adapter can be created
      */
-    public boolean isCreatable(Class<?> inboundPort)
+    public boolean isAvailable(Class<?> inboundPort)
     {
         return findConstructor(inboundPort).isPresent();
     }
