@@ -9,10 +9,10 @@ public class HelloJexxa
     public static void main(String[] args)
     {
         JexxaMain jexxaMain = new JexxaMain("HelloJexxa").
-                whiteListPackage("io.ddd.jexxa");
+                whiteList("io.ddd.jexxa");
 
-        jexxaMain.bind(JMXAdapter.class, jexxaMain.getBoundedContext());
-        jexxaMain.bind(RESTfulRPCAdapter.class, jexxaMain.getBoundedContext());
+        jexxaMain.bindToPort(JMXAdapter.class, jexxaMain.getBoundedContext());
+        jexxaMain.bindToPort(RESTfulRPCAdapter.class, jexxaMain.getBoundedContext());
 
         jexxaMain.run();
     }

@@ -56,12 +56,12 @@ public class HelloJexxaMainTest
     {
         //Arrange
         objectUnderTest = new JexxaMain("HelloJexxa", properties);
-        objectUnderTest.whiteListPackage(packageName);
+        objectUnderTest.whiteList(packageName);
 
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
-        objectUnderTest.bind(JMXAdapter.class, SimpleApplicationService.class);
-        objectUnderTest.bind(RESTfulRPCAdapter.class, SimpleApplicationService.class);
+        objectUnderTest.bindToPort(JMXAdapter.class, SimpleApplicationService.class);
+        objectUnderTest.bindToPort(RESTfulRPCAdapter.class, SimpleApplicationService.class);
 
         objectUnderTest.startDrivingAdapters();
 
@@ -76,12 +76,12 @@ public class HelloJexxaMainTest
     {
         //Arrange
         objectUnderTest = new JexxaMain("HelloJexxa", properties);
-        objectUnderTest.whiteListPackage(packageName);
+        objectUnderTest.whiteList(packageName);
 
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
-        objectUnderTest.bind(JMXAdapter.class, ApplicationServiceWithDrivenApdapters.class);
-        objectUnderTest.bind(RESTfulRPCAdapter.class, ApplicationServiceWithDrivenApdapters.class);
+        objectUnderTest.bindToPort(JMXAdapter.class, ApplicationServiceWithDrivenApdapters.class);
+        objectUnderTest.bindToPort(RESTfulRPCAdapter.class, ApplicationServiceWithDrivenApdapters.class);
 
         objectUnderTest.startDrivingAdapters();
 
@@ -96,7 +96,7 @@ public class HelloJexxaMainTest
     {
         //Arrange
         objectUnderTest = new JexxaMain("HelloJexxa", properties);
-        objectUnderTest.whiteListPackage(packageName);
+        objectUnderTest.whiteList(packageName);
 
 
         //Act: Bind all DrivingAdapter to all ApplicationServices

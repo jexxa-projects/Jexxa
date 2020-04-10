@@ -15,7 +15,6 @@ import javax.jms.TextMessage;
 
 import io.ddd.jexxa.core.JexxaMain;
 import io.ddd.jexxa.utils.JexxaLogger;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class JMSAdapterTest
@@ -62,7 +61,7 @@ public class JMSAdapterTest
         properties.put(JMSAdapter.JNDI_PASSWORD_KEY, JMSAdapter.DEFAULT_JNDI_PASSWORD);
 
         JexxaMain jexxaMain = new JexxaMain("JMSAdapterTest", properties);
-        jexxaMain.bind(JMSAdapter.class, messageListener);
+        jexxaMain.bindToPort(JMSAdapter.class, messageListener);
         MyProducer myProducer = new MyProducer(properties);
 
         //Act
