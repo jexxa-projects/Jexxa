@@ -1,4 +1,4 @@
-package io.ddd.jexxa.dummyapplication.infrastructure.drivenadapter;
+package io.ddd.jexxa.dummyapplication.infrastructure.drivenadapter.factory;
 
 import java.util.Properties;
 

@@ -2,7 +2,6 @@ package io.ddd.jexxa.core.factory;
 
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import io.ddd.jexxa.dummyapplication.domainservice.IDefaultConstructorService;
@@ -10,8 +9,8 @@ import io.ddd.jexxa.dummyapplication.domainservice.IFactroyMethodService;
 import io.ddd.jexxa.dummyapplication.domainservice.INotImplementedService;
 import io.ddd.jexxa.dummyapplication.domainservice.INotUniqueService;
 import io.ddd.jexxa.dummyapplication.domainservice.IPropertiesConstructorService;
-import io.ddd.jexxa.dummyapplication.infrastructure.drivenadapter.DefaultConstructorAdapter;
-import io.ddd.jexxa.dummyapplication.infrastructure.drivenadapter.PropertiesConstructorAdapter;
+import io.ddd.jexxa.dummyapplication.infrastructure.drivenadapter.factory.DefaultConstructorAdapter;
+import io.ddd.jexxa.dummyapplication.infrastructure.drivenadapter.factory.PropertiesConstructorAdapter;
 import org.junit.Assert;
 import org.junit.Test;
 
