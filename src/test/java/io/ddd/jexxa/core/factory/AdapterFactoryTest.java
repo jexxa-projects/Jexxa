@@ -2,6 +2,7 @@ package io.ddd.jexxa.core.factory;
 
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import io.ddd.jexxa.dummyapplication.domainservice.IDefaultConstructorService;
@@ -9,6 +10,8 @@ import io.ddd.jexxa.dummyapplication.domainservice.IFactroyMethodService;
 import io.ddd.jexxa.dummyapplication.domainservice.INotImplementedService;
 import io.ddd.jexxa.dummyapplication.domainservice.INotUniqueService;
 import io.ddd.jexxa.dummyapplication.domainservice.IPropertiesConstructorService;
+import io.ddd.jexxa.dummyapplication.infrastructure.drivenadapter.DefaultConstructorAdapter;
+import io.ddd.jexxa.dummyapplication.infrastructure.drivenadapter.PropertiesConstructorAdapter;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,6 +39,21 @@ public class AdapterFactoryTest
         Assert.assertNotNull(result);
     }
 
+    @Test
+    public void createDrivenAdapterImpl() {
+        //Arrange
+        var objectUnderTest = new AdapterFactory().
+                whiteListPackage(packageName);
+
+        //Act
+        var firstResult = objectUnderTest.newInstanceOf(DefaultConstructorAdapter.class);
+        var secondResult = objectUnderTest.newInstanceOf(PropertiesConstructorAdapter.class, new Properties());
+
+        //Assert
+        Assert.assertNotNull(firstResult);
+        Assert.assertNotNull(secondResult);
+    }
+
 
     @Test
     public void getDrivenAdapter() {
@@ -47,10 +65,19 @@ public class AdapterFactoryTest
         var first = objectUnderTest.getInstanceOf(IDefaultConstructorService.class);
         var second = objectUnderTest.getInstanceOf(IDefaultConstructorService.class);
 
+
+        //Act
+        var firstProperties = objectUnderTest.getInstanceOf(IPropertiesConstructorService.class, new Properties());
+        var secondProperties = objectUnderTest.getInstanceOf(IPropertiesConstructorService.class, new Properties());
+
         //Assert
         Assert.assertNotNull(first);
         Assert.assertNotNull(second);
+        Assert.assertNotNull(firstProperties);
+        Assert.assertNotNull(secondProperties);
+
         Assert.assertEquals(first,second);
+        Assert.assertEquals(firstProperties,secondProperties);
     }
 
     @Test
