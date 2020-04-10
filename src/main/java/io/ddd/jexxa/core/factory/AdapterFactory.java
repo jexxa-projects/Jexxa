@@ -10,10 +10,12 @@ import org.apache.commons.lang.Validate;
 
 /***
  * Creates a driving or driving adapter which fulfill following requirements:
+ *
  * 1. Public Default constructor available
  * 2. Public constructor with one Properties as attribute is available
- * 3. Public static factory method with return type if the requested interface
- * 4. Public static factory method with return type if the requested interface and Properties as argument
+ * 3. Public static factory method with return type of the requested interface
+ * 4. Public static factory method with return type of the requested interface and Properties as argument
+ * 5. If an adapter is created by its interface only a single implementation must be available. This implementation must fulfill above constraints  
  */
 public class AdapterFactory
 {
@@ -30,7 +32,7 @@ public class AdapterFactory
         Validate.notNull(interfaceType);
 
         Class<?> factory = getImplementationOf(interfaceType).
-                orElseThrow(() -> new RuntimeException("No implementation found for interface " + interfaceType.getName()));
+                orElseThrow(() -> new IllegalArgumentException("No implementation found for interface " + interfaceType.getName()));
 
         //Apply 1. convention and try to use default constructor
         var instance = ClassFactory.newInstanceOf(factory);
@@ -48,7 +50,7 @@ public class AdapterFactory
         Validate.notNull(interfaceType);
 
         Class<?> implementation = getImplementationOf(interfaceType).
-                orElseThrow(() -> new RuntimeException("No implementation found for interface " + interfaceType.getName()));
+                orElseThrow(() -> new IllegalArgumentException("No implementation found for interface " + interfaceType.getName()));
 
         //Apply 1. convention and try to use a constructor accepting properties
         var instance = ClassFactory.newInstanceOf(implementation, new Object[]{properties});
@@ -100,7 +102,7 @@ public class AdapterFactory
     {
         return adapterList.
                 stream().
-                filter(adapter -> getImplementationOf(adapter, dependencyScanner).isEmpty()).
+                filter(adapter -> getImplementationOf(adapter).isEmpty()).
                 collect(Collectors.toList());
     }
 
@@ -108,7 +110,7 @@ public class AdapterFactory
     {
         return adapterList.
                 stream().
-                noneMatch(adapter -> getImplementationOf(adapter, dependencyScanner).isEmpty());
+                noneMatch(adapter -> getImplementationOf(adapter).isEmpty());
     }
 
 
@@ -125,24 +127,16 @@ public class AdapterFactory
             return Optional.of(interfaceType);
         }
 
-        var results = dependencyScanner.getClassesImplementing(interfaceType);
+        var implemenationList = dependencyScanner.getClassesImplementing(interfaceType);
 
-        Validate.notNull(results);
-        Validate.notEmpty(results, "No implementation of " + interfaceType.getName() + " available");
-        Validate.isTrue( results.size() == 1, "Multiple implementation of " + interfaceType.getName() + " available");
+        Validate.notNull(implemenationList);
+        Validate.isTrue(implemenationList.size() <= 1); // If more than one implementation is available our convention is violated
 
-        return Optional.of(results.get(0));
-    }
-
-
-    private <T> Optional<Class<?>> getImplementationOf(Class<T> interfaceType, DependencyScanner dependencyScanner) {
-        var results = dependencyScanner.getClassesImplementing(interfaceType);
-
-        if (results == null || results.isEmpty()) {
+        if ( implemenationList.isEmpty() )
+        {
             return Optional.empty();
         }
 
-        return Optional.of(results.get(0));
+        return Optional.of(implemenationList.get(0));
     }
-
 }

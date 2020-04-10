@@ -68,7 +68,7 @@ public class PortFactory
         Validate.notNull(drivenAdapterProperties);
 
         var supportedConstructor = findConstructor(inboundPort).
-                orElseThrow(() -> new MissingDrivenAdapterException(inboundPort, adapterFactory));
+                orElseThrow(() -> new MissingAdapterException(inboundPort, adapterFactory));
 
         var drivenAdapter = createAdapter(supportedConstructor, drivenAdapterProperties);
         
@@ -128,7 +128,7 @@ public class PortFactory
         var portInstance = getInstanceOf(getPort(wrapper), properties);
 
         return ClassFactory.newInstanceOf(wrapper, new Object[]{portInstance}).
-                orElseThrow(() -> new MissingDrivenAdapterException(portInstance.getClass(), adapterFactory));
+                orElseThrow(() -> new MissingAdapterException(portInstance.getClass(), adapterFactory));
     }
 
 

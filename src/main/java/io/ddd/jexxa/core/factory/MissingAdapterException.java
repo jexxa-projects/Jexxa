@@ -3,11 +3,11 @@ package io.ddd.jexxa.core.factory;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MissingDrivenAdapterException extends RuntimeException
+public class MissingAdapterException extends RuntimeException
 {
     private final String internalMessage;
 
-    public MissingDrivenAdapterException(Class<?> port, AdapterFactory drivenAdapterFactory)
+    public MissingAdapterException(Class<?> port, AdapterFactory drivenAdapterFactory)
     {
         internalMessage = getInternalMessage(port, drivenAdapterFactory);
     }

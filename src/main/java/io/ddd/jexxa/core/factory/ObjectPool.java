@@ -12,24 +12,7 @@ public class ObjectPool
     {
       objectSet.add(object);
     }
-
-    public void remove(Object object)
-    {
-        objectSet.remove(object);
-    }
-
-    public void remove(Class<?> clazz)
-    {
-        remove(
-                objectSet.
-                        stream().
-                        filter( element -> element.getClass() == clazz).
-                        findFirst().
-                        orElse(null)
-        );
-
-    }
-
+    
     public <T> Optional<T> getInstance(Class<T> clazz)
     {
         return objectSet.
