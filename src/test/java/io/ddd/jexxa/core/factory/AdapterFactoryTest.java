@@ -19,14 +19,14 @@ import org.junit.Test;
  * 3. Public static method with return type if the requested interface
  * 4. Public static method with return type if the requested interface and Properties as argument  
  */
-public class DrivenAdapterFactoryTest
+public class AdapterFactoryTest
 {
     private String packageName = "io.ddd.jexxa";
     
     @Test
     public void createDrivenAdapter() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory().
+        var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
 
         //Act
@@ -40,7 +40,7 @@ public class DrivenAdapterFactoryTest
     @Test
     public void getDrivenAdapter() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory().
+        var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
 
         //Act
@@ -56,7 +56,7 @@ public class DrivenAdapterFactoryTest
     @Test
     public void createDrivenAdapterWithPropertiesConstructor() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory().
+        var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
 
         var properties = new Properties();
@@ -72,7 +72,7 @@ public class DrivenAdapterFactoryTest
     @Test 
     public void createDrivenAdapterWithFactoryMethod() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory().
+        var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
 
         //Act
@@ -85,7 +85,7 @@ public class DrivenAdapterFactoryTest
     @Test
     public void createDrivenAdapterWithPropertiesFactoryMethod() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory().
+        var objectUnderTest = new AdapterFactory().
             whiteListPackage(packageName);
         var properties = new Properties();
         
@@ -100,7 +100,7 @@ public class DrivenAdapterFactoryTest
     @Test
     public void drivenAdapterAvailable() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory().
+        var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
 
         var adapterList = new ArrayList<Class<?>>();
@@ -118,7 +118,7 @@ public class DrivenAdapterFactoryTest
     @Test
     public void drivenAdapterUnavailable() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory().
+        var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
 
         var adapterList = new ArrayList<Class<?>>();
@@ -134,7 +134,7 @@ public class DrivenAdapterFactoryTest
     @Test (expected = IllegalArgumentException.class)
     public void createNoUniqueImplementation() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory().
+        var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
 
         //Act
@@ -144,7 +144,7 @@ public class DrivenAdapterFactoryTest
     @Test (expected = IllegalArgumentException.class)
     public void createNoImplementationAvailable() {
         //Arrange
-        var objectUnderTest = new DrivenAdapterFactory().
+        var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
 
         //Act

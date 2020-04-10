@@ -1,7 +1,7 @@
 package io.ddd.jexxa.core.factory;
 
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -9,30 +9,29 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang.Validate;
 
-/*
- * One of the requirements of implementation of a DrivenAdapter must be fulfilled:
+/***
+ * Creates a driving or driving adapter which fulfill following requirements:
  * 1. Public Default constructor available
  * 2. Public constructor with one Properties as attribute is available
  * 3. Public static factory method with return type if the requested interface
  * 4. Public static factory method with return type if the requested interface and Properties as argument
  */
-public class DrivenAdapterFactory
+public class AdapterFactory
 {
-    private List<String> whiteListPackages = new ArrayList<>();
     private ObjectPool objectPool = new ObjectPool();
+    private DependencyScanner dependencyScanner = new DependencyScanner();
 
-    public DrivenAdapterFactory whiteListPackage(String packageName)
+    public AdapterFactory whiteListPackage(String packageName)
     {
-        whiteListPackages.add(packageName);
+        dependencyScanner.whiteListPackage(packageName);
         return this;
     }
 
     public <T> T newInstanceOf(Class<T> interfaceType) {
         Validate.notNull(interfaceType);
-        Validate.isTrue(interfaceType.isInterface(), "Given Argument is not an interface: " + interfaceType.getName());
 
         Class<?> factory = getImplementationOf(interfaceType).
-                orElseThrow();
+                orElseThrow(() -> new RuntimeException("No implementation found for interface " + interfaceType.getName()));
 
         //Apply 1. convention and try to use default constructor
         var instance = ClassFactory.newInstanceOf(factory);
@@ -48,7 +47,6 @@ public class DrivenAdapterFactory
 
     public <T> T newInstanceOf(Class<T> interfaceType, Properties properties) {
         Validate.notNull(interfaceType);
-        Validate.isTrue(interfaceType.isInterface(), "Given Argument is not an interface: " + interfaceType.getName());
 
         Class<?> implementation = getImplementationOf(interfaceType).
                 orElseThrow(() -> new RuntimeException("No implementation found for interface " + interfaceType.getName()));
@@ -93,7 +91,7 @@ public class DrivenAdapterFactory
             return existingInstance.get();
         }
 
-        T newInstance = getInstanceOf(interfaceType, properties);
+        T newInstance = newInstanceOf(interfaceType, properties);
         objectPool.add(newInstance);
         return newInstance;
     }
@@ -101,9 +99,6 @@ public class DrivenAdapterFactory
 
     List<Class<?>> getMissingAdapter(List<Class <?> > adapterList)
     {
-        var dependencyScanner = new DependencyScanner().
-                whiteListPackages(whiteListPackages);
-
         return adapterList.
                 stream().
                 filter(adapter -> getImplementationOf(adapter, dependencyScanner).isEmpty()).
@@ -112,17 +107,36 @@ public class DrivenAdapterFactory
 
     boolean isAvailable(List<Class <?> > adapterList)
     {
-        var dependencyScanner = new DependencyScanner().
-                whiteListPackages(whiteListPackages);
-        
         return adapterList.
                 stream().
                 noneMatch(adapter -> getImplementationOf(adapter, dependencyScanner).isEmpty());
     }
 
 
+    /***
+     * This method returns the parameter required by constructor
+     * TODO refactor this method
+     */
+    public <T> Class<?> requiredPort(Class<T> portWrapper)
+    {
+        return Arrays.stream(portWrapper.getConstructors()).
+                filter(constructor -> constructor.getParameterCount() == 1 ).
+                findFirst().
+                <Class<?>>map(constructor -> constructor.getParameterTypes()[0]).
+                orElse(null);
+    }
+    /***
+     * Returns a class which implements given interface type. In case given type is not an interface the given type is returned
+     **
+     * @param interfaceType class of the interface for which an implementation is required
+     * @param <T> Type information of the given interface
+     * @return 1. Given interface type if interfaceType is not an interface. 2. An implementation of the interface if available 
+     */
     private <T> Optional<Class<?>> getImplementationOf(Class<T> interfaceType) {
-        var dependencyScanner = new DependencyScanner().whiteListPackages(whiteListPackages);
+        if (!interfaceType.isInterface())
+        {
+            return Optional.of(interfaceType);
+        }
 
         var results = dependencyScanner.getClassesImplementing(interfaceType);
 
@@ -130,7 +144,7 @@ public class DrivenAdapterFactory
         Validate.notEmpty(results, "No implementation of " + interfaceType.getName() + " available");
         Validate.isTrue( results.size() == 1, "Multiple implementation of " + interfaceType.getName() + " available");
 
-        return getImplementationOf(interfaceType, dependencyScanner);
+        return Optional.of(results.get(0));
     }
 
 

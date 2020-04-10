@@ -4,8 +4,7 @@ import java.lang.annotation.Annotation;
 import java.util.Properties;
 
 import io.ddd.jexxa.core.factory.ClassFactory;
-import io.ddd.jexxa.core.factory.DrivenAdapterFactory;
-import io.ddd.jexxa.core.factory.DrivingAdapterFactory;
+import io.ddd.jexxa.core.factory.AdapterFactory;
 import io.ddd.jexxa.core.factory.PortFactory;
 import io.ddd.jexxa.infrastructure.drivingadapter.CompositeDrivingAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
@@ -17,8 +16,8 @@ public class JexxaMain
     private CompositeDrivingAdapter compositeDrivingAdapter;
     private Properties properties = new Properties();
 
-    private DrivingAdapterFactory drivingAdapterFactory;
-    private DrivenAdapterFactory drivenAdapterFactory;
+    private AdapterFactory drivingAdapterFactory;
+    private AdapterFactory drivenAdapterFactory;
     private PortFactory portFactory;
 
     private BoundedContext boundedContext;
@@ -39,8 +38,8 @@ public class JexxaMain
 
         this.compositeDrivingAdapter = new CompositeDrivingAdapter();
 
-        this.drivingAdapterFactory = new DrivingAdapterFactory();
-        this.drivenAdapterFactory = new DrivenAdapterFactory();
+        this.drivingAdapterFactory = new AdapterFactory();
+        this.drivenAdapterFactory = new AdapterFactory();
         this.portFactory = new PortFactory(drivenAdapterFactory);
     }
 

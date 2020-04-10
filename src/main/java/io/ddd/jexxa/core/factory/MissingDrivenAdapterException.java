@@ -7,7 +7,7 @@ public class MissingDrivenAdapterException extends RuntimeException
 {
     private final String internalMessage;
 
-    public MissingDrivenAdapterException(Class<?> port, DrivenAdapterFactory drivenAdapterFactory)
+    public MissingDrivenAdapterException(Class<?> port, AdapterFactory drivenAdapterFactory)
     {
         internalMessage = getInternalMessage(port, drivenAdapterFactory);
     }
@@ -19,7 +19,7 @@ public class MissingDrivenAdapterException extends RuntimeException
     }
 
 
-    private String getInternalMessage(Class<?> port, DrivenAdapterFactory drivenAdapterFactory)
+    private String getInternalMessage(Class<?> port, AdapterFactory drivenAdapterFactory)
     {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Could not create port: ").

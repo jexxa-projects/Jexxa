@@ -16,7 +16,7 @@ public class PortFactoryTest
     @Test
     public void drivenAdapterAvailable() {
         //Arrange
-        var drivenAdapterFactory = new DrivenAdapterFactory().
+        var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
                 whiteListPackage(applicationCorePackageName);
@@ -31,7 +31,7 @@ public class PortFactoryTest
     @Test
     public void drivenAdapterUnavailable() {
         //Arrange
-        var drivenAdapterFactory = new DrivenAdapterFactory().
+        var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
                 whiteListPackage(applicationCorePackageName);
@@ -47,7 +47,7 @@ public class PortFactoryTest
     @Test
     public void createPort() {
         //Arrange
-        var drivenAdapterFactory = new DrivenAdapterFactory().
+        var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
                 whiteListPackage(applicationCorePackageName);
@@ -62,7 +62,7 @@ public class PortFactoryTest
     @Test
     public void getPort() {
         //Arrange
-        var drivenAdapterFactory = new DrivenAdapterFactory().
+        var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
                 whiteListPackage(applicationCorePackageName);

@@ -20,10 +20,10 @@ public class PortFactory
 {
     private List<String> whiteListPackages = new ArrayList<>();
     private ObjectPool objectPool = new ObjectPool();
-    private DrivenAdapterFactory drivenAdapterFactory;
+    private AdapterFactory drivenAdapterFactory;
 
     
-    public PortFactory(DrivenAdapterFactory drivenAdapterFactory)
+    public PortFactory(AdapterFactory drivenAdapterFactory)
     {
         this.drivenAdapterFactory = drivenAdapterFactory;
     }
