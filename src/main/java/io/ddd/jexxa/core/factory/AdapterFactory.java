@@ -1,7 +1,6 @@
 package io.ddd.jexxa.core.factory;
 
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -113,18 +112,6 @@ public class AdapterFactory
     }
 
 
-    /***
-     * This method returns the parameter required by constructor
-     * TODO refactor this method
-     */
-    public <T> Class<?> requiredPort(Class<T> portWrapper)
-    {
-        return Arrays.stream(portWrapper.getConstructors()).
-                filter(constructor -> constructor.getParameterCount() == 1 ).
-                findFirst().
-                <Class<?>>map(constructor -> constructor.getParameterTypes()[0]).
-                orElse(null);
-    }
     /***
      * Returns a class which implements given interface type. In case given type is not an interface the given type is returned
      **

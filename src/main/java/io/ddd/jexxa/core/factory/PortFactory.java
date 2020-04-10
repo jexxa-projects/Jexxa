@@ -14,7 +14,7 @@ import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 
 /*+*
- * This class is responsible for creating instances of ports including all required parameter.
+ * This class is responsible for creating instances of ports or a wrapper for a port including all required parameter.
  *
  * Conventions for ports
  * 1. A port has a single public constructor with parameters of all required driven adapters.
@@ -70,7 +70,7 @@ public class PortFactory
         var supportedConstructor = findConstructor(inboundPort).
                 orElseThrow(() -> new MissingDrivenAdapterException(inboundPort, adapterFactory));
 
-        var drivenAdapter = createDrivenAdapterForConstructor(supportedConstructor, drivenAdapterProperties);
+        var drivenAdapter = createAdapter(supportedConstructor, drivenAdapterProperties);
         
         return ClassFactory.
                 newInstanceOf(inboundPort, drivenAdapter).
@@ -133,7 +133,7 @@ public class PortFactory
 
 
 
-    /*
+    /***
      * Find a constructor whose parameter can be instantiated
      */
     private Optional<Constructor<?>> findConstructor(Class<?> inboundPort)
@@ -153,7 +153,7 @@ public class PortFactory
     }
 
 
-    private Object[] createDrivenAdapterForConstructor(Constructor<?> portConstructor, Properties drivenAdapterProperties)
+    private Object[] createAdapter(Constructor<?> portConstructor, Properties drivenAdapterProperties)
     {
         var objectList = new ArrayList<>();
 
