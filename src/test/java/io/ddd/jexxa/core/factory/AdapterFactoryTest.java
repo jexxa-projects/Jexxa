@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import io.ddd.jexxa.dummyapplication.domainservice.IDefaultConstructorService;
-import io.ddd.jexxa.dummyapplication.domainservice.IFactroyMethodService;
+import io.ddd.jexxa.dummyapplication.domainservice.IFactoryMethodService;
 import io.ddd.jexxa.dummyapplication.domainservice.INotImplementedService;
 import io.ddd.jexxa.dummyapplication.domainservice.INotUniqueService;
 import io.ddd.jexxa.dummyapplication.domainservice.IPropertiesConstructorService;
@@ -102,7 +102,7 @@ public class AdapterFactoryTest
                 whiteListPackage(packageName);
 
         //Act
-        var result = objectUnderTest.newInstanceOf(IFactroyMethodService.class);
+        var result = objectUnderTest.newInstanceOf(IFactoryMethodService.class);
 
         //Assert
         Assert.assertNotNull(result);
@@ -116,7 +116,7 @@ public class AdapterFactoryTest
         var properties = new Properties();
         
         //Act
-        var result = objectUnderTest.newInstanceOf(IFactroyMethodService.class, properties);
+        var result = objectUnderTest.newInstanceOf(IFactoryMethodService.class, properties);
 
         //Assert
         Assert.assertNotNull(result);
@@ -131,7 +131,7 @@ public class AdapterFactoryTest
 
         var adapterList = new ArrayList<Class<?>>();
         adapterList.add(IDefaultConstructorService.class);
-        adapterList.add(IFactroyMethodService.class);
+        adapterList.add(IFactoryMethodService.class);
         adapterList.add(IPropertiesConstructorService.class);
 
         //Act

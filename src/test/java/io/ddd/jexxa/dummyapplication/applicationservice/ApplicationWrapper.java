@@ -2,15 +2,15 @@ package io.ddd.jexxa.dummyapplication.applicationservice;
 
 public class ApplicationWrapper
 {
-    private final ApplicationServiceWithDrivenApdapters applicationServiceWithDrivenApdapters;
+    private final ApplicationServiceWithDrivenAdapters applicationServiceWithDrivenAdapters;
 
-    public ApplicationWrapper(ApplicationServiceWithDrivenApdapters applicationServiceWithDrivenApdapters)
+    public ApplicationWrapper(ApplicationServiceWithDrivenAdapters applicationServiceWithDrivenAdapters)
     {
-        this.applicationServiceWithDrivenApdapters = applicationServiceWithDrivenApdapters;
+        this.applicationServiceWithDrivenAdapters = applicationServiceWithDrivenAdapters;
     }
 
-    public ApplicationServiceWithDrivenApdapters getPort()
+    public ApplicationServiceWithDrivenAdapters getPort()
     {
-        return applicationServiceWithDrivenApdapters;
+        return applicationServiceWithDrivenAdapters;
     }
 }

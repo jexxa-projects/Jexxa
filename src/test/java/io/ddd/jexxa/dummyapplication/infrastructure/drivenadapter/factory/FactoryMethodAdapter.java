@@ -2,9 +2,9 @@ package io.ddd.jexxa.dummyapplication.infrastructure.drivenadapter.factory;
 
 import java.util.Properties;
 
-import io.ddd.jexxa.dummyapplication.domainservice.IFactroyMethodService;
+import io.ddd.jexxa.dummyapplication.domainservice.IFactoryMethodService;
 
-public class FactoryMethodAdapter implements IFactroyMethodService
+public class FactoryMethodAdapter implements IFactoryMethodService
 {
     private FactoryMethodAdapter()
     {
@@ -17,12 +17,12 @@ public class FactoryMethodAdapter implements IFactroyMethodService
 
     }
 
-    public static IFactroyMethodService create()
+    public static IFactoryMethodService create()
     {
         return new FactoryMethodAdapter();
     }
 
-    public static IFactroyMethodService create(Properties properties)
+    public static IFactoryMethodService create(Properties properties)
     {
         return new FactoryMethodAdapter(properties);
     }

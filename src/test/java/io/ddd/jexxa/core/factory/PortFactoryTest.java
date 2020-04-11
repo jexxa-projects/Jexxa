@@ -3,7 +3,7 @@ package io.ddd.jexxa.core.factory;
 import java.util.Properties;
 
 import io.ddd.jexxa.dummyapplication.applicationservice.ApplicationWrapper;
-import io.ddd.jexxa.dummyapplication.applicationservice.ApplicationServiceWithDrivenApdapters;
+import io.ddd.jexxa.dummyapplication.applicationservice.ApplicationServiceWithDrivenAdapters;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ public class PortFactoryTest
                 whiteListPackage(applicationCorePackageName);
 
         //Act
-        boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenApdapters.class);
+        boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenAdapters.class);
 
         //Assert
         Assert.assertTrue(result);
@@ -38,7 +38,7 @@ public class PortFactoryTest
                 whiteListPackage(applicationCorePackageName);
 
         //Act
-        boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenApdapters.class);
+        boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenAdapters.class);
 
         //Assert
         Assert.assertTrue(result);
@@ -54,8 +54,8 @@ public class PortFactoryTest
                 whiteListPackage(applicationCorePackageName);
 
         //Act
-        var first = objectUnderTest.newInstanceOf(ApplicationServiceWithDrivenApdapters.class, new Properties());
-        var second = objectUnderTest.newInstanceOf(ApplicationServiceWithDrivenApdapters.class, new Properties());
+        var first = objectUnderTest.newInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
+        var second = objectUnderTest.newInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
 
         //Assert
         Assert.assertNotNull(first);
@@ -72,8 +72,8 @@ public class PortFactoryTest
                 whiteListPackage(applicationCorePackageName);
 
         //Act
-        var first = objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenApdapters.class, new Properties());
-        var second = objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenApdapters.class, new Properties());
+        var first = objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
+        var second = objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
 
         //Assert that first and second adapter are equal 
         Assert.assertNotNull(first);

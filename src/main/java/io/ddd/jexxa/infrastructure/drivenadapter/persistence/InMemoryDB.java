@@ -7,14 +7,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class InMemroyDB<T, K>  implements IDBConnection<T>
+public class InMemoryDB<T, K>  implements IDBConnection<T>
 {
 
     final Map<K, T> aggregateMap;
     final Function<T,K> keyFunction;
 
 
-    public InMemroyDB(Function<T,K> keyFunction)
+    public InMemoryDB(Function<T,K> keyFunction)
     {
         aggregateMap = new HashMap<>();
         this.keyFunction = keyFunction;
@@ -45,6 +45,7 @@ public class InMemroyDB<T, K>  implements IDBConnection<T>
     @Override
     public <V> Optional<T> get(V primaryKey)
     {
+        //noinspection SuspiciousMethodCalls
         return Optional.ofNullable(aggregateMap.get( primaryKey));
     }
 

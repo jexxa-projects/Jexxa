@@ -1,11 +1,10 @@
 package io.ddd.jexxa.dummyapplication.infrastructure.drivenadapter.persistence;
 
-import java.util.function.Function;
+import java.util.Optional;
 
-import io.ddd.jexxa.dummyapplication.annotation.Aggregate;
 import io.ddd.jexxa.dummyapplication.domain.aggregate.JexxaAggregate;
 import io.ddd.jexxa.dummyapplication.domain.valueobject.JexxaValueObject;
-import io.ddd.jexxa.infrastructure.drivenadapter.persistence.InMemroyDB;
+import io.ddd.jexxa.infrastructure.drivenadapter.persistence.InMemoryDB;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,13 +16,13 @@ public class InMemoryDBTest
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new InMemroyDB<>(JexxaAggregate::getKey);
+        var objectUnderTest = new InMemoryDB<>(JexxaAggregate::getKey);
 
         //act
         objectUnderTest.add(aggregate);
 
         //Assert
-        Assert.assertEquals(aggregate, objectUnderTest.get(aggregate.getKey()).get());
+        Assert.assertEquals(aggregate, objectUnderTest.get(aggregate.getKey()).orElse(null));
         Assert.assertTrue(objectUnderTest.get().size() > 0);
     }
 
@@ -33,7 +32,7 @@ public class InMemoryDBTest
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new InMemroyDB<>(JexxaAggregate::getKey);
+        var objectUnderTest = new InMemoryDB<>(JexxaAggregate::getKey);
         objectUnderTest.add(aggregate);
 
         //act

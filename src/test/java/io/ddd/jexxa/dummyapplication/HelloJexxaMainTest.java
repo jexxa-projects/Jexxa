@@ -18,7 +18,7 @@ import javax.management.MBeanServer;
 import javax.management.ObjectInstance;
 
 import io.ddd.jexxa.core.JexxaMain;
-import io.ddd.jexxa.dummyapplication.applicationservice.ApplicationServiceWithDrivenApdapters;
+import io.ddd.jexxa.dummyapplication.applicationservice.ApplicationServiceWithDrivenAdapters;
 import io.ddd.jexxa.dummyapplication.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.dummyapplication.annotation.*;
 import io.ddd.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
@@ -80,14 +80,14 @@ public class HelloJexxaMainTest
 
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
-        objectUnderTest.bindToPort(JMXAdapter.class, ApplicationServiceWithDrivenApdapters.class);
-        objectUnderTest.bindToPort(RESTfulRPCAdapter.class, ApplicationServiceWithDrivenApdapters.class);
+        objectUnderTest.bindToPort(JMXAdapter.class, ApplicationServiceWithDrivenAdapters.class);
+        objectUnderTest.bindToPort(RESTfulRPCAdapter.class, ApplicationServiceWithDrivenAdapters.class);
 
         objectUnderTest.startDrivingAdapters();
 
 
         //Assert
-        assertJMXAdapter(ApplicationServiceWithDrivenApdapters.class);
+        assertJMXAdapter(ApplicationServiceWithDrivenAdapters.class);
     }
     
 

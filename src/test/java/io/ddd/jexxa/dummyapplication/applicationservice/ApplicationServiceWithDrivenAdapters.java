@@ -1,16 +1,16 @@
 package io.ddd.jexxa.dummyapplication.applicationservice;
        
 import io.ddd.jexxa.dummyapplication.domainservice.IDefaultConstructorService;
-import io.ddd.jexxa.dummyapplication.domainservice.IFactroyMethodService;
+import io.ddd.jexxa.dummyapplication.domainservice.IFactoryMethodService;
 import io.ddd.jexxa.dummyapplication.domainservice.IPropertiesConstructorService;
 import io.ddd.jexxa.dummyapplication.annotation.*;
 
 @ApplicationService
-public class ApplicationServiceWithDrivenApdapters
+public class ApplicationServiceWithDrivenAdapters
 {
-    public ApplicationServiceWithDrivenApdapters(
+    public ApplicationServiceWithDrivenAdapters(
             IDefaultConstructorService defaultConstructorService,
-            IFactroyMethodService factroyMethodService,
+            IFactoryMethodService factoryMethodService,
             IPropertiesConstructorService propertiesConstructorService
     )
     {

@@ -128,16 +128,16 @@ public class AdapterFactory
             return Optional.of(interfaceType);
         }
 
-        var implemenationList = dependencyScanner.getClassesImplementing(interfaceType);
+        var implementationList = dependencyScanner.getClassesImplementing(interfaceType);
 
-        Validate.notNull(implemenationList);
-        Validate.isTrue(implemenationList.size() <= 1); // If more than one implementation is available our convention is violated
+        Validate.notNull(implementationList);
+        Validate.isTrue(implementationList.size() <= 1); // If more than one implementation is available our convention is violated
 
-        if ( implemenationList.isEmpty() )
+        if ( implementationList.isEmpty() )
         {
             return Optional.empty();
         }
 
-        return Optional.of(implemenationList.get(0));
+        return Optional.of(implementationList.get(0));
     }
 }
