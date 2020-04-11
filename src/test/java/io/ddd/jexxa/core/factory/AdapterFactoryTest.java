@@ -23,7 +23,7 @@ import org.junit.Test;
  */
 public class AdapterFactoryTest
 {
-    private String packageName = "io.ddd.jexxa";
+    private final String packageName = "io.ddd.jexxa";
     
     @Test
     public void createDrivenAdapter() {

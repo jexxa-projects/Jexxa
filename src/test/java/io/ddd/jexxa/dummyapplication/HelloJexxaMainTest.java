@@ -31,7 +31,7 @@ public class HelloJexxaMainTest
 {
     private Properties properties;
     private JexxaMain objectUnderTest;
-    private String packageName = "io.ddd.jexxa";
+    private final String packageName = "io.ddd.jexxa";
 
     @Before
     public void initTests()

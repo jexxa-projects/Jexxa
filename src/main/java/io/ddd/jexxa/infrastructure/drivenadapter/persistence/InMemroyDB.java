@@ -10,8 +10,8 @@ import java.util.function.Function;
 public class InMemroyDB<T, K>  implements IDBConnection<T>
 {
 
-    Map<K, T> aggregateMap;
-    Function<T,K> keyFunction;
+    final Map<K, T> aggregateMap;
+    final Function<T,K> keyFunction;
 
 
     public InMemroyDB(Function<T,K> keyFunction)

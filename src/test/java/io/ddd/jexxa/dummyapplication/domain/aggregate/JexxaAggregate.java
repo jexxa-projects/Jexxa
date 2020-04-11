@@ -7,7 +7,7 @@ import io.ddd.jexxa.dummyapplication.domain.valueobject.JexxaValueObject;
 @Aggregate
 public class JexxaAggregate
 {
-    private JexxaValueObject jexxaValueObject;
+    private final JexxaValueObject jexxaValueObject;
 
     public static JexxaAggregate create(JexxaValueObject key)
     {

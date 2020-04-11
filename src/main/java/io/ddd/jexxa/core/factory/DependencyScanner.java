@@ -11,7 +11,7 @@ import org.apache.commons.lang.Validate;
 
 class DependencyScanner
 {
-    private List<String> whiteListPackages = new ArrayList<>();
+    private final List<String> whiteListPackages = new ArrayList<>();
 
     DependencyScanner whiteListPackage(String packageName)
     {

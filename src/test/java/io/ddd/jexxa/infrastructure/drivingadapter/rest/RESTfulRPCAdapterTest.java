@@ -27,13 +27,13 @@ import org.junit.Test;
 
 public class RESTfulRPCAdapterTest
 {
-    int defaultPort = 7000;
-    String defaultHost = "localhost";
+    final int defaultPort = 7000;
+    final String defaultHost = "localhost";
     Properties properties;
 
-    int defaultValue = 42;
-    SimpleApplicationService simpleApplicationService = new SimpleApplicationService(defaultValue);
-    RESTfulRPCModel resTfulRPCModel = new RESTfulRPCModel(simpleApplicationService);
+    final int defaultValue = 42;
+    final SimpleApplicationService simpleApplicationService = new SimpleApplicationService(defaultValue);
+    final RESTfulRPCModel resTfulRPCModel = new RESTfulRPCModel(simpleApplicationService);
 
     RESTfulRPCAdapter objectUnderTest;
 

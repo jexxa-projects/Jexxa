@@ -27,7 +27,7 @@ import io.ddd.jexxa.utils.JexxaLogger;
 public class MBeanModel implements DynamicMBean
 {
     public static final String CONTEXT_NAME = "io.ddd.jexxa.context.name";
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
 
     private final Object object;
     String contextName;

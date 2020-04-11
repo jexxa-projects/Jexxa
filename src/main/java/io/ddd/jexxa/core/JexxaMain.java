@@ -12,14 +12,14 @@ import org.apache.commons.lang.Validate;
 
 public class JexxaMain
 {
-    private CompositeDrivingAdapter compositeDrivingAdapter;
-    private Properties properties = new Properties();
+    private final CompositeDrivingAdapter compositeDrivingAdapter;
+    private final Properties properties = new Properties();
 
-    private AdapterFactory drivingAdapterFactory;
-    private AdapterFactory drivenAdapterFactory;
-    private PortFactory portFactory;
+    private final AdapterFactory drivingAdapterFactory;
+    private final AdapterFactory drivenAdapterFactory;
+    private final PortFactory portFactory;
 
-    private BoundedContext boundedContext;
+    private final BoundedContext boundedContext;
 
     public JexxaMain(String contextName)
     {

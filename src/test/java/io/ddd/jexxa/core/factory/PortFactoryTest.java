@@ -10,8 +10,8 @@ import org.junit.Test;
 public class PortFactoryTest
 {
 
-    private String applicationCorePackageName = "io.ddd.jexxa.dummyapplication";
-    private String drivenAdapterPackageName = "io.ddd.jexxa.dummyapplication.infrastructure";
+    private final String applicationCorePackageName = "io.ddd.jexxa.dummyapplication";
+    private final String drivenAdapterPackageName = "io.ddd.jexxa.dummyapplication.infrastructure";
 
 
     @Test

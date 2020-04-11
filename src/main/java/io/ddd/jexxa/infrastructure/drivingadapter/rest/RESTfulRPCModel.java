@@ -22,7 +22,7 @@ import java.util.Optional;
  */
 class RESTfulRPCModel
 {
-    Object object;
+    final Object object;
 
     public RESTfulRPCModel(Object object)
     {
@@ -35,9 +35,9 @@ class RESTfulRPCModel
     {
         enum HTTPCommand {GET, POST}
         
-        private String resourcePath;
-        private Method method;
-        private HTTPCommand httpCommand;
+        private final String resourcePath;
+        private final Method method;
+        private final HTTPCommand httpCommand;
 
         RESTfulRPCMethod(HTTPCommand httpCommand, String resourcePath, Method method) {
             this.httpCommand = httpCommand;

@@ -7,7 +7,7 @@ import io.ddd.jexxa.dummyapplication.annotation.*;
 @ApplicationService
 public class SimpleApplicationService
 {
-    public class SimpleApplicationException extends Exception
+    public static class SimpleApplicationException extends Exception
     {
         public SimpleApplicationException(String information)
         {

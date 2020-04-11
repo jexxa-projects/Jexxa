@@ -8,19 +8,20 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang.Validate;
 
-/***
- * Creates a driving or driving adapter which fulfill following requirements:
- *
- * 1. Public Default constructor available
- * 2. Public constructor with one Properties as attribute is available
- * 3. Public static factory method with return type of the requested interface
- * 4. Public static factory method with return type of the requested interface and Properties as argument
- * 5. If an adapter is created by its interface only a single implementation must be available. This implementation must fulfill above constraints  
+/**
+ * Creates a driving or driving adapter which fulfills one of the following requirements:
+ * <ol>
+ *   <li>Public Default constructor available</li>
+ *   <li>Public constructor with one Properties as attribute is available</li>
+ *   <li>Public static factory method with return type of the requested interface</li>
+ *   <li>Public static factory method with return type of the requested interface and Properties as argument</li>
+ *   <li>If an adapter is created by its interface only a single implementation must be available. This implementation must fulfill one of the above constraints </li>
+ * </ol>
  */
 public class AdapterFactory
 {
-    private ObjectPool objectPool = new ObjectPool();
-    private DependencyScanner dependencyScanner = new DependencyScanner();
+    private final ObjectPool objectPool = new ObjectPool();
+    private final DependencyScanner dependencyScanner = new DependencyScanner();
 
     public AdapterFactory whiteListPackage(String packageName)
     {
@@ -114,7 +115,7 @@ public class AdapterFactory
     }
 
 
-    /***
+    /**
      * Returns a class which implements given interface type. In case given type is not an interface the given type is returned
      **
      * @param interfaceType class of the interface for which an implementation is required

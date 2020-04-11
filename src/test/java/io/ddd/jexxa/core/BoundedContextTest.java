@@ -4,7 +4,7 @@ import org.junit.Test;
 
 public class BoundedContextTest
 {
-    BoundedContext objectUnderTest = new BoundedContext("BoundedContextTest");
+    final BoundedContext objectUnderTest = new BoundedContext("BoundedContextTest");
 
     @Test(timeout = 1000)
     public void runAndShutdown()

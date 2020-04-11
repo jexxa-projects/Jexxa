@@ -14,8 +14,8 @@ public class MBeanModelTest
     {
         public static final JexxaCompoundValueObject defaultValue = new JexxaCompoundValueObject(42);
 
-        private JexxaValueObject firstValueObject;
-        private JexxaValueObject secondValueObject;
+        private final JexxaValueObject firstValueObject;
+        private final JexxaValueObject secondValueObject;
 
         JexxaCompoundValueObject(int value)
         {

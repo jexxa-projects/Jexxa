@@ -17,7 +17,7 @@ import org.apache.commons.lang.Validate;
 
 public class JMXAdapter implements IDrivingAdapter
 {
-    private List<MBeanModel> registeredMBeans = new ArrayList<>();
+    private final List<MBeanModel> registeredMBeans = new ArrayList<>();
     final Properties properties;
 
 

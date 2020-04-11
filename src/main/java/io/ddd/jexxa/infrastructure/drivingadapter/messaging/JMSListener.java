@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Documented
 public @interface JMSListener
 {
-    enum MessagingType {Queue, Topic};
+    enum MessagingType {Queue, Topic}
 
     String destination() default "";
     String selector() default "";

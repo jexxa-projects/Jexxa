@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class ObjectPool
 {
-    private Set<Object> objectSet = new HashSet<>();
+    private final Set<Object> objectSet = new HashSet<>();
 
     public void add(Object object)
     {

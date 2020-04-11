@@ -29,9 +29,9 @@ import org.apache.commons.lang.Validate;
  */
 public class PortFactory
 {
-    private List<String> whiteListPackages = new ArrayList<>();
-    private ObjectPool objectPool = new ObjectPool();
-    private AdapterFactory adapterFactory;
+    private final List<String> whiteListPackages = new ArrayList<>();
+    private final ObjectPool objectPool = new ObjectPool();
+    private final AdapterFactory adapterFactory;
 
     
     public PortFactory(AdapterFactory adapterFactory)

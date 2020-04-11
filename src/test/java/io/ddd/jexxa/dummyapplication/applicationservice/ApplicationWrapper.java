@@ -2,7 +2,7 @@ package io.ddd.jexxa.dummyapplication.applicationservice;
 
 public class ApplicationWrapper
 {
-    private ApplicationServiceWithDrivenApdapters applicationServiceWithDrivenApdapters;
+    private final ApplicationServiceWithDrivenApdapters applicationServiceWithDrivenApdapters;
 
     public ApplicationWrapper(ApplicationServiceWithDrivenApdapters applicationServiceWithDrivenApdapters)
     {

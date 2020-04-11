@@ -19,7 +19,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public static final String HOST_PROPERTY = "io.ddd.jexxa.rest.host";
     public static final String PORT_PROPERTY = "io.ddd.jexxa.rest.port";
 
-    private Javalin javalin = Javalin.create();
+    private final Javalin javalin = Javalin.create();
     private String hostname;
     private int port;
 

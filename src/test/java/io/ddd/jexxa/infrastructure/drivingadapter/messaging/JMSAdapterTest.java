@@ -82,7 +82,7 @@ public class JMSAdapterTest
     static public class MyListener implements MessageListener
     {
 
-        List<Message> messageList = new ArrayList<>();
+        final List<Message> messageList = new ArrayList<>();
 
         @Override
         @JMSListener(destination = "MyListener", messagingType = JMSListener.MessagingType.Topic)
@@ -105,7 +105,7 @@ public class JMSAdapterTest
     }
 
     public static class MyProducer {
-        Connection connection;
+        final Connection connection;
         MyProducer(Properties properties)
         {
             JMSAdapter jmsAdapter = new JMSAdapter(properties);
