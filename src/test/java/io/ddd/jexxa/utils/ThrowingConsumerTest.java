@@ -14,6 +14,7 @@ import org.junit.Test;
 public class ThrowingConsumerTest
 {
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     public void exceptionLoggerTest()
     {
@@ -29,6 +30,7 @@ public class ThrowingConsumerTest
         //Assert => No assertion must occur
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     public void exceptionCollectorTest()
     {

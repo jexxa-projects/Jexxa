@@ -19,6 +19,7 @@ import org.junit.Test;
 
 public class JMSAdapterTest
 {
+    @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test(timeout = 10000)
     public void startJMSAdapter() 
     {
@@ -49,6 +50,7 @@ public class JMSAdapterTest
 
 
 
+    @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test(timeout = 10000)
     public void startJMSAdapterJexxa() 
     {

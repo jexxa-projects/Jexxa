@@ -3,8 +3,10 @@ package io.ddd.jexxa.infrastructure.drivenadapter.persistence;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 public interface IDBConnection<T>
 {
+    @SuppressWarnings("EmptyMethod")
     void update(T aggregate);
 
     void remove(T aggregate);

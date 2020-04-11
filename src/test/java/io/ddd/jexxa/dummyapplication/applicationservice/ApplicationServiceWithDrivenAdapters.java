@@ -5,6 +5,7 @@ import io.ddd.jexxa.dummyapplication.domainservice.IFactoryMethodService;
 import io.ddd.jexxa.dummyapplication.domainservice.IPropertiesConstructorService;
 import io.ddd.jexxa.dummyapplication.annotation.*;
 
+@SuppressWarnings("unused")
 @ApplicationService
 public class ApplicationServiceWithDrivenAdapters
 {

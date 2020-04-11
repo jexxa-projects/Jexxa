@@ -18,6 +18,7 @@ public class JexxaValueObject
         return value;
     }
 
+    @SuppressWarnings("unused")
     public double getValueInPercent()
     {
         return valueInPercent;

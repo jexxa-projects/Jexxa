@@ -33,6 +33,7 @@ public class BoundedContext
         return Duration.between(startTime, clock.instant());
     }
 
+    @SuppressWarnings("unused")
     public String contextName()
     {
         return contextName;

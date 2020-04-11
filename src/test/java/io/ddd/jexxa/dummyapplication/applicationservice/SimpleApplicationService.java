@@ -4,6 +4,7 @@ package io.ddd.jexxa.dummyapplication.applicationservice;
 import io.ddd.jexxa.dummyapplication.domain.valueobject.JexxaValueObject;
 import io.ddd.jexxa.dummyapplication.annotation.*;
 
+@SuppressWarnings("unused")
 @ApplicationService
 public class SimpleApplicationService
 {
@@ -30,7 +31,7 @@ public class SimpleApplicationService
       return firstValue;
     }
 
-    public int setGetSimpleValue( int newValue )
+    public int setGetSimpleValue(int newValue )
     {
         int oldValue = firstValue;
         this.firstValue = newValue;

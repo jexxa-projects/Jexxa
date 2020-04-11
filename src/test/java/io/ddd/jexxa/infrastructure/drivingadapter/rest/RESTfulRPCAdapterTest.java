@@ -25,6 +25,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+@SuppressWarnings("SameParameterValue")
 public class RESTfulRPCAdapterTest
 {
     final int defaultPort = 7000;

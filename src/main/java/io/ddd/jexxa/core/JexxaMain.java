@@ -121,6 +121,7 @@ public class JexxaMain
         return port.cast(portFactory.newInstanceOf(port, properties));
     }
 
+    @SuppressWarnings("unused")
     public <T> T getInstanceOfPort(Class<T> port)
     {
         return port.cast(portFactory.getInstanceOf(port, properties));

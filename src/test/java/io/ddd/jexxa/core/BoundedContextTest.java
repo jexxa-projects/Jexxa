@@ -19,7 +19,8 @@ public class BoundedContextTest
 
     void invokeShutdown()
     {
-       while (!objectUnderTest.isRunning())
+        //noinspection LoopConditionNotUpdatedInsideLoop
+        while (!objectUnderTest.isRunning())
        {
           Thread.onSpinWait();
        }

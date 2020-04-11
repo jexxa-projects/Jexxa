@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+@SuppressWarnings("unused")
 public class InMemoryDB<T, K>  implements IDBConnection<T>
 {
 

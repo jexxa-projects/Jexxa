@@ -98,6 +98,7 @@ class RESTfulRPCModel
         return result;
     }
 
+    @SuppressWarnings("SameParameterValue")
     Optional<RESTfulRPCMethod> getGETCommand(String methodEndsWith)
     {
         return  getGETCommands().

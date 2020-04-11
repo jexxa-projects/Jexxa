@@ -5,9 +5,11 @@ import io.ddd.jexxa.dummyapplication.domain.valueobject.JexxaValueObject;
 /*
 * This service is not available via RESTfulRPC because method setSimpleValueObject is available twice 
 */
+@SuppressWarnings("unused")
 public class UnsupportedApplicationService
 {
     private JexxaValueObject first;
+    @SuppressWarnings("FieldCanBeLocal")
     private JexxaValueObject second;
 
     public void setSimpleValueObject(JexxaValueObject simpleValueObject)

@@ -10,6 +10,7 @@ import org.junit.Test;
 
 public class MBeanModelTest
 {
+    @SuppressWarnings({"SameParameterValue", "FieldCanBeLocal", "unused"})
     static class JexxaCompoundValueObject
     {
         public static final JexxaCompoundValueObject defaultValue = new JexxaCompoundValueObject(42);
