@@ -2,9 +2,8 @@ package io.ddd.jexxa.infrastructure.drivingadapter.jmx;
 
 import java.util.Properties;
 
-import io.ddd.jexxa.dummyapplication.applicationservice.SimpleApplicationService;
-import io.ddd.jexxa.dummyapplication.domain.valueobject.JexxaValueObject;
-import org.apache.commons.lang.Validate;
+import io.ddd.jexxa.application.applicationservice.SimpleApplicationService;
+import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
 import org.junit.Assert;
 import org.junit.Test;
 

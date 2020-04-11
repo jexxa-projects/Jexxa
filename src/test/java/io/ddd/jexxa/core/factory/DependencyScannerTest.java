@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import io.ddd.jexxa.dummyapplication.annotation.*;
-import io.ddd.jexxa.dummyapplication.applicationservice.SimpleApplicationService;
+import io.ddd.jexxa.application.annotation.*;
+import io.ddd.jexxa.application.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class DependencyScannerTest
     public void findAnnotatedClasses() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
-        var packageName = "io.ddd.jexxa.dummyapplication";
+        var packageName = "io.ddd.jexxa.application";
         objectUnderTest.whiteListPackage(packageName);
 
         //Act
@@ -34,7 +34,7 @@ public class DependencyScannerTest
     @Test
     public void findAnnotatedClassesWithinPackage() {
         //Arrange
-        var packageName = "io.ddd.jexxa.dummyapplication";
+        var packageName = "io.ddd.jexxa.application";
         var objectUnderTest = new DependencyScanner();
 
         //Act

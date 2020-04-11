@@ -4,22 +4,18 @@ package io.ddd.jexxa.core.factory;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import io.ddd.jexxa.dummyapplication.domainservice.IDefaultConstructorService;
-import io.ddd.jexxa.dummyapplication.domainservice.IFactoryMethodService;
-import io.ddd.jexxa.dummyapplication.domainservice.INotImplementedService;
-import io.ddd.jexxa.dummyapplication.domainservice.INotUniqueService;
-import io.ddd.jexxa.dummyapplication.domainservice.IPropertiesConstructorService;
-import io.ddd.jexxa.dummyapplication.infrastructure.drivenadapter.factory.DefaultConstructorAdapter;
-import io.ddd.jexxa.dummyapplication.infrastructure.drivenadapter.factory.PropertiesConstructorAdapter;
+import io.ddd.jexxa.application.domainservice.IDefaultConstructorService;
+import io.ddd.jexxa.application.domainservice.IFactoryMethodService;
+import io.ddd.jexxa.application.domainservice.INotImplementedService;
+import io.ddd.jexxa.application.domainservice.INotUniqueService;
+import io.ddd.jexxa.application.domainservice.IPropertiesConstructorService;
+import io.ddd.jexxa.application.infrastructure.drivenadapter.factory.DefaultConstructorAdapter;
+import io.ddd.jexxa.application.infrastructure.drivenadapter.factory.PropertiesConstructorAdapter;
 import org.junit.Assert;
 import org.junit.Test;
 
-/*
- * Rules for creating a driving adapter:
- * 1. Public Default constructor available
- * 2. Public constructor with Properties as attribute
- * 3. Public static method with return type if the requested interface
- * 4. Public static method with return type if the requested interface and Properties as argument  
+/**
+ * @see AdapterFactory for conventions to create an adapter 
  */
 public class AdapterFactoryTest
 {
