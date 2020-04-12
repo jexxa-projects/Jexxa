@@ -7,6 +7,11 @@ public class RepositoryManager
 {
     public static <T,K> IRepositoryConnection<T,K> getConnection(Function<T,K> keyFunction, Properties properties)
     {
-        return new InMemoryRepository<T,K>(keyFunction);
+        return new InMemoryRepository<>(keyFunction);
+    }
+
+    private RepositoryManager()
+    {
+
     }
 }
