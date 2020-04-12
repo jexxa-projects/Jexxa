@@ -2,6 +2,7 @@ package io.ddd.jexxa.infrastructure.drivenadapter.persistence;
 
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,4 +30,25 @@ public class JexxaAggregateRepositoryTest
         //Assert
         Assert.assertEquals(aggregateList.size(), objectUnderTest.get().size());
     }
+
+
+    @Test
+    public void getAggregateByID()
+    {
+        //Arrange
+        var objectUnderTest = JexxaAggregateRepository.create(new Properties());
+        Supplier<Stream<Integer>> counterSupplier = () -> Stream.of(100);
+        counterSupplier.get().
+                map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) ).
+                forEach( objectUnderTest::add );
+
+        //Act
+        var aggregateList = counterSupplier.get().
+                map( key -> objectUnderTest.get(new JexxaValueObject(key))).
+                collect( Collectors.toList() );
+
+        //Assert
+        Assert.assertEquals(counterSupplier.get().count(), aggregateList.size());
+    }
+
 }
