@@ -9,9 +9,21 @@ public class JexxaAggregate
 {
     private final JexxaValueObject jexxaValueObject;
 
+    private int internalValue;
+
     public static JexxaAggregate create(JexxaValueObject key)
     {
         return new JexxaAggregate(key);
+    }
+
+    public void setInternalValue(int value)
+    {
+        internalValue = value;
+    }
+
+    public int getInternalValue()
+    {
+        return internalValue;
     }
 
 
