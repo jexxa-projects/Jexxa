@@ -1,4 +1,4 @@
-package io.ddd.jexxa.infrastructure.drivenadapter.persistence;
+package io.ddd.jexxa.infrastructure.drivenadapter.persistence.inmemory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+
+import io.ddd.jexxa.infrastructure.drivenadapter.persistence.IRepositoryConnection;
 
 @SuppressWarnings("unused")
 public class InMemoryRepository<T, K>  implements IRepositoryConnection<T, K>
@@ -28,9 +30,15 @@ public class InMemoryRepository<T, K>  implements IRepositoryConnection<T, K>
     }
 
     @Override
-    public void remove(T aggregate)
+    public void remove(K key)
     {
-        aggregateMap.remove( keyFunction.apply(aggregate)  );
+        aggregateMap.remove( key );
+    }
+
+    @Override
+    public void removeAll()
+    {
+        aggregateMap.clear();
     }
 
     @Override

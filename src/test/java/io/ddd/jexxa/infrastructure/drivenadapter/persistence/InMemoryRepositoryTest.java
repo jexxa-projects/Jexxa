@@ -2,6 +2,7 @@ package io.ddd.jexxa.infrastructure.drivenadapter.persistence;
 
 import io.ddd.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.ddd.jexxa.infrastructure.drivenadapter.persistence.inmemory.InMemoryRepository;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -33,7 +34,7 @@ public class InMemoryRepositoryTest
         objectUnderTest.add(aggregate);
 
         //act
-        objectUnderTest.remove( aggregate );
+        objectUnderTest.remove( aggregate.getKey() );
 
         //Assert
         Assert.assertTrue(objectUnderTest.get().isEmpty());

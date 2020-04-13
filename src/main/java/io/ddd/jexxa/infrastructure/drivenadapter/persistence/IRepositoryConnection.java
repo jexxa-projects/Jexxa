@@ -3,13 +3,18 @@ package io.ddd.jexxa.infrastructure.drivenadapter.persistence;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * TODO: Check if return value of get should be changed to Set<T>
+ */
 @SuppressWarnings("unused")
 public interface IRepositoryConnection<T, K>
 {
     @SuppressWarnings("EmptyMethod")
     void update(T aggregate);
 
-    void remove(T aggregate);
+    void remove(K key);
+
+    void removeAll();
 
     void add(T aggregate);
 

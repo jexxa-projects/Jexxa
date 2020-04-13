@@ -45,7 +45,7 @@ public class JexxaAggregateRepository implements IJexxaAggregateRepository
     @Override
     public void remove(JexxaAggregate aggregate)
     {
-        repositoryConnection.remove(aggregate);
+        repositoryConnection.remove(aggregate.getKey());
     }
 
     static public IJexxaAggregateRepository create(Properties properties)
