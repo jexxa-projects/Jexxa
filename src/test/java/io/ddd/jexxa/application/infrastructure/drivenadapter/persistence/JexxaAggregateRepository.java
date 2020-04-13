@@ -50,6 +50,11 @@ public class JexxaAggregateRepository implements IJexxaAggregateRepository
 
     static public IJexxaAggregateRepository create(Properties properties)
     {
-        return new JexxaAggregateRepository(RepositoryManager.getConnection(JexxaAggregate::getKey, properties));
+        return new JexxaAggregateRepository(RepositoryManager.getConnection(
+                JexxaAggregate.class,
+                JexxaValueObject.class,
+                JexxaAggregate::getKey,
+                properties)
+        );
     }
 }

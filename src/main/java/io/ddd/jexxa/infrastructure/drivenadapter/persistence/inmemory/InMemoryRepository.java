@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.function.Function;
 
 import io.ddd.jexxa.infrastructure.drivenadapter.persistence.IRepositoryConnection;
@@ -17,7 +18,7 @@ public class InMemoryRepository<T, K>  implements IRepositoryConnection<T, K>
     final Function<T,K> keyFunction;
 
 
-    public InMemoryRepository(Function<T,K> keyFunction)
+    public InMemoryRepository(Class<T> aggregateClazz, Class<K> keyClazz, Function<T,K> keyFunction, Properties properties)
     {
         aggregateMap = new HashMap<>();
         this.keyFunction = keyFunction;

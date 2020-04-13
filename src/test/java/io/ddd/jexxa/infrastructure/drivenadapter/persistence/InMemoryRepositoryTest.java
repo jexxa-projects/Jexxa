@@ -1,5 +1,7 @@
 package io.ddd.jexxa.infrastructure.drivenadapter.persistence;
 
+import java.util.Properties;
+
 import io.ddd.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.ddd.jexxa.infrastructure.drivenadapter.persistence.inmemory.InMemoryRepository;
@@ -14,7 +16,12 @@ public class InMemoryRepositoryTest
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new InMemoryRepository<>(JexxaAggregate::getKey);
+        var objectUnderTest = new InMemoryRepository<>(
+                JexxaAggregate.class,
+                JexxaValueObject.class,
+                JexxaAggregate::getKey,
+                new Properties()
+        );
 
         //act
         objectUnderTest.add(aggregate);
@@ -30,7 +37,12 @@ public class InMemoryRepositoryTest
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new InMemoryRepository<>(JexxaAggregate::getKey);
+        var objectUnderTest = new InMemoryRepository<>(
+                JexxaAggregate.class,
+                JexxaValueObject.class,
+                JexxaAggregate::getKey,
+                new Properties()
+        );
         objectUnderTest.add(aggregate);
 
         //act
