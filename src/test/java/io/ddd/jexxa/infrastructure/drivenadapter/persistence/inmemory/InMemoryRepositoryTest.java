@@ -1,4 +1,4 @@
-package io.ddd.jexxa.infrastructure.drivenadapter.persistence;
+package io.ddd.jexxa.infrastructure.drivenadapter.persistence.inmemory;
 
 import java.util.Properties;
 
