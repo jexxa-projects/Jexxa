@@ -5,6 +5,7 @@ import java.util.Optional;
 
 /**
  * TODO: Check if return value of get should be changed to Set<T>
+ * Throws IllegalArgumentException if any operations fails   
  */
 @SuppressWarnings("unused")
 public interface IRepositoryConnection<T, K>

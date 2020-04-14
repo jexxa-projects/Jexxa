@@ -42,6 +42,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
 
         if (properties.containsKey(JDBC_AUTOCREATE)) {
             createDatabase(properties);
+            createTable(properties);
         }
 
         this.connection = initJDBCConnection(properties);
@@ -216,7 +217,6 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
         }
         catch (SQLException e)
         {                              
-            logger.error(e.getMessage());
             throw new IllegalArgumentException(e.getMessage());
         }
     }
@@ -228,15 +228,10 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
         var dbName = splittedURL[splittedURL.length-1].toLowerCase(); //last part of the URL is the name of the database (Note: Some DBs such as postgres require a name in lower case!)
         var dbURL = properties.getProperty(JDBC_URL).replace(dbName,"");
 
-        System.out.println("DB NAME : " + dbName);
-        System.out.println("DB URL : " + dbURL);
-
-
         Properties creationProperties = new Properties();
         creationProperties.putAll(properties);
         creationProperties.put(JDBC_URL, dbURL);
-
-
+        
         try (var setupConnection = DriverManager.
                 getConnection(
                         creationProperties.getProperty(JDBC_URL),
@@ -245,22 +240,18 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
                 Statement statement = setupConnection.createStatement())
         {
             setupConnection.setAutoCommit(true);
-            var command = String.format("create DATABASE %s ", dbName);
+            statement.execute(String.format("create DATABASE %s ", dbName));
 
-            System.out.println("Try to create " + command );
-
-
-            statement.execute(command);
             logger.info("Database {} successfully created ", dbName);
         }
         catch (Exception e)
         {
             logger.warn("Could not create database {} => Assume that database already exists", dbName);
         }
+    }
 
-
-        System.out.println("DB NAME " + properties.getProperty(JDBC_URL));
-
+    private void createTable(final Properties properties)
+    {
         try (var setupConnection = DriverManager.
                 getConnection(
                         properties.getProperty(JDBC_URL).toLowerCase(),
@@ -275,8 +266,6 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
         {
             logger.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
         }
-
-
     }
 
 
