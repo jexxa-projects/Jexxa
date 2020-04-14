@@ -2,7 +2,7 @@ package io.ddd.jexxa.core.factory;
 
 import java.util.Properties;
 
-import io.ddd.jexxa.application.applicationservice.ApplicationWrapper;
+import io.ddd.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceWrapper;
 import io.ddd.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
 import org.junit.Assert;
 import org.junit.Test;
@@ -91,8 +91,8 @@ public class PortFactoryTest
                 whiteListPackage(applicationCorePackageName);
 
         //Act
-        var first = objectUnderTest.getWrappedInstanceOf(ApplicationWrapper.class, new Properties());
-        var second = objectUnderTest.getWrappedInstanceOf(ApplicationWrapper.class, new Properties());
+        var first = objectUnderTest.getPortAdapterOf(SimpleApplicationServiceWrapper.class, new Properties());
+        var second = objectUnderTest.getPortAdapterOf(SimpleApplicationServiceWrapper.class, new Properties());
 
         //Assert that first and second adapter are equal
         Assert.assertNotNull(first);

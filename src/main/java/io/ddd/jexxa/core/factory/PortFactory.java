@@ -130,11 +130,24 @@ public class PortFactory
         return result;
     }
 
-    public <T> T getWrappedInstanceOf(Class<T> wrapper, Properties properties)
+    /**
+     * This method creates a so called port-adapter including the managed port. A port-adapter typically
+     * performs a specific mapping from a generic driving adapter, such as JMS, to a specific type of port.
+     * <p>
+     *
+     * Note: The port is created using {@link #getInstanceOf(Class, Properties)}*
+     *
+     * @param portAdapter type of the port-adapter. Note: This method expects that the port-adapter has a single constructor
+     *                    which takes exactly one port as argument.
+     * @param properties properties required to initialize the driven adapter of the port
+     * @param <T> type of the port-adapter
+     * @return the created port-adapter including its port 
+     */
+    public <T> T getPortAdapterOf(Class<T> portAdapter, Properties properties)
     {
-        var portInstance = getInstanceOf(getPort(wrapper), properties);
+        var portInstance = getInstanceOf(getPort(portAdapter), properties);
 
-        return ClassFactory.newInstanceOf(wrapper, new Object[]{portInstance}).
+        return ClassFactory.newInstanceOf(portAdapter, new Object[]{portInstance}).
                 orElseThrow(() -> new MissingAdapterException(portInstance.getClass(), adapterFactory));
     }
 

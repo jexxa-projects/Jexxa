@@ -61,7 +61,10 @@ public class JexxaMain
         return this;
     }
 
-
+    /**
+     * @deprecated Use addBootstrapService
+     */
+    @Deprecated
     public void bindConfigAdapter(Class<? extends IDrivingAdapter> adapter) {
         Validate.notNull(adapter);
 
@@ -96,7 +99,7 @@ public class JexxaMain
     {
         var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
 
-        var portWrapperInstance = portFactory.getWrappedInstanceOf(portWrapper, properties);
+        var portWrapperInstance = portFactory.getPortAdapterOf(portWrapper, properties);
 
         drivingAdapter.register(portWrapperInstance);
 
