@@ -30,6 +30,23 @@ public class IMDBConnectionTest
         Assert.assertTrue(objectUnderTest.get().size() > 0);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void addAggregateTwice()
+    {
+        //Arrange
+        var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
+        var objectUnderTest = new IMDBConnection<>(
+                JexxaAggregate.class,
+                JexxaValueObject.class,
+                JexxaAggregate::getKey,
+                new Properties()
+        );
+
+        //act
+        objectUnderTest.add(aggregate);
+        objectUnderTest.add(aggregate);
+    }
+
 
     @Test
     public void removeAggregate()
