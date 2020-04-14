@@ -20,6 +20,13 @@ jobs:
         ports:
           # Opens tcp port 6379 on the host and service container
           - 61616:61616
+      postgres:
+        # Docker Hub image
+        image: postgres
+        #
+        ports:
+          # Opens tcp port 5432 on the host and service container
+          - 5432:5432
 
     steps:
     - uses: actions/checkout@v2
