@@ -87,7 +87,7 @@ public class JMSAdapterTest
         final List<Message> messageList = new ArrayList<>();
 
         @Override
-        @JMSListener(destination = "MyListener", messagingType = JMSListener.MessagingType.Topic)
+        @JMSListener(destination = "MyListener", messagingType = JMSListener.MessagingType.TOPIC)
         public void onMessage(Message message)
         {
             try

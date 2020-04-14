@@ -81,7 +81,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             JMSListener jmsListener = getJMSListener(object);
 
             Destination destination;
-            if (jmsListener.messagingType() == JMSListener.MessagingType.Topic)
+            if (jmsListener.messagingType() == JMSListener.MessagingType.TOPIC)
             {
                 destination = session.createTopic(jmsListener.destination());
             }
