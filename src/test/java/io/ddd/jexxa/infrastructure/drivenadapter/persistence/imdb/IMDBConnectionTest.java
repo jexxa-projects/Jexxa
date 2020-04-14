@@ -17,7 +17,6 @@ public class IMDBConnectionTest
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
         var objectUnderTest = new IMDBConnection<>(
                 JexxaAggregate.class,
-                JexxaValueObject.class,
                 JexxaAggregate::getKey,
                 new Properties()
         );
@@ -37,7 +36,6 @@ public class IMDBConnectionTest
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
         var objectUnderTest = new IMDBConnection<>(
                 JexxaAggregate.class,
-                JexxaValueObject.class,
                 JexxaAggregate::getKey,
                 new Properties()
         );
@@ -55,7 +53,6 @@ public class IMDBConnectionTest
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
         var objectUnderTest = new IMDBConnection<>(
                 JexxaAggregate.class,
-                JexxaValueObject.class,
                 JexxaAggregate::getKey,
                 new Properties()
         );

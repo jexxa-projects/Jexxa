@@ -20,7 +20,7 @@ public class IMDBConnection<T, K>  implements IRepositoryConnection<T, K>
     final Function<T,K> keyFunction;
 
 
-    public IMDBConnection(Class<T> aggregateClazz, Class<K> keyClazz, Function<T,K> keyFunction, Properties properties)
+    public IMDBConnection(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
     {
         aggregateMap = new HashMap<>();
         this.keyFunction = keyFunction;

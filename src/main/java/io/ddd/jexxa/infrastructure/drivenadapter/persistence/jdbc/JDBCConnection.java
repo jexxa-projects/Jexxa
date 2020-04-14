@@ -35,7 +35,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
     private Connection connection;
 
 
-    public JDBCConnection(Class<T> aggregateClazz, Class<K> keyClazz, Function<T,K> keyFunction, Properties properties)
+    public JDBCConnection(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
     {
         this.keyFunction = keyFunction;
         this.aggregateClazz = aggregateClazz;

@@ -52,7 +52,6 @@ public class JexxaAggregateRepository implements IJexxaAggregateRepository
     {
         return new JexxaAggregateRepository(RepositoryManager.getConnection(
                 JexxaAggregate.class,
-                JexxaValueObject.class,
                 JexxaAggregate::getKey,
                 properties)
         );

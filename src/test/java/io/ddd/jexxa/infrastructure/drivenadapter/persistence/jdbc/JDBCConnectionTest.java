@@ -22,7 +22,11 @@ public class JDBCConnectionTest
         properties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
         properties.put(JDBCConnection.JDBC_AUTOCREATE, "true");
 
-        var objectUnderTest = new JDBCConnection<>(JexxaAggregate.class, JexxaValueObject.class, JexxaAggregate::getKey, properties);
+        var objectUnderTest = new JDBCConnection<>(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                properties
+        );
         objectUnderTest.removeAll();
 
         //act
@@ -45,7 +49,11 @@ public class JDBCConnectionTest
         properties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
         properties.put(JDBCConnection.JDBC_AUTOCREATE, "true");
 
-        var objectUnderTest = new JDBCConnection<>(JexxaAggregate.class, JexxaValueObject.class, JexxaAggregate::getKey, properties);
+        var objectUnderTest = new JDBCConnection<>(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                properties
+        );
         objectUnderTest.removeAll();
 
         //act
