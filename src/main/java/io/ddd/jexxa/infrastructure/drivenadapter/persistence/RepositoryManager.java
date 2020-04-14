@@ -24,7 +24,10 @@ public class RepositoryManager
     )
     {
         try {
-            var constructor = repositoryManager.getDefaultConnection(properties).getConstructors()[0];
+            var constructor = repositoryManager.
+                    getDefaultConnection(properties).
+                    getConstructor(Class.class, Function.class, Properties.class);
+            
             return (IRepositoryConnection<T,K>)constructor.newInstance(aggregateClazz, keyFunction, properties);
         }
         catch (ReflectiveOperationException e)
