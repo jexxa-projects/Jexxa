@@ -2,11 +2,11 @@ package io.ddd.jexxa.application.infrastructure.drivingadapter.messaging;
 
 import io.ddd.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
 
-public class SimpleApplicationServiceWrapper
+public class SimpleApplicationServiceAdapter
 {
     private final ApplicationServiceWithDrivenAdapters applicationServiceWithDrivenAdapters;
 
-    public SimpleApplicationServiceWrapper(ApplicationServiceWithDrivenAdapters applicationServiceWithDrivenAdapters)
+    public SimpleApplicationServiceAdapter(ApplicationServiceWithDrivenAdapters applicationServiceWithDrivenAdapters)
     {
         this.applicationServiceWithDrivenAdapters = applicationServiceWithDrivenAdapters;
     }

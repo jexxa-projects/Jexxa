@@ -98,7 +98,10 @@
 *** Typically we want to exchange the implementation depending on infrastructure (developing, production, ...) => We want to use some kind of factor or factory method that returns us the interface based on the properties => For simplicity we search for static factory methods which take no argument or properties and return Outbound port (interface)
 
 
-*
+* Bootstrap service
+** A bootstrap service is typically a domain service which performs some initial steps before using the application core. Typical services are: Adding master data to a specific repository if required.
+Note: it is important that these steps are at least initialized via the application core
+because they are essential to an application service, even if some technology stacks such as liquibase is used     
 
 
 
