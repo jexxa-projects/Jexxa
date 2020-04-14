@@ -175,7 +175,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
         Gson gson = new Gson();
         try (
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("select daten from "+ aggregateClazz.getSimpleName())
+                ResultSet resultSet = statement.executeQuery("select value from "+ aggregateClazz.getSimpleName())
              )
         {
             while (resultSet.next())
