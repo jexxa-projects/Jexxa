@@ -12,4 +12,5 @@ public interface IJexxaAggregateRepository
     List<JexxaAggregate> get();
     void update(JexxaAggregate aggregate);
     void remove(JexxaAggregate aggregate);
+    void removeAll();
 }

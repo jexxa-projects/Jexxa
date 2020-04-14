@@ -114,7 +114,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
 
     }
 
-    @SuppressWarnings("DuplicatedCode")
+    @SuppressWarnings({"DuplicatedCode", "unused"})
     @Override
     public void update(T aggregate)
     {

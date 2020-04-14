@@ -1,20 +1,25 @@
 package io.ddd.jexxa.infrastructure.drivenadapter.persistence.jdbc;
 
 import java.util.Properties;
+import java.util.function.Function;
 
 import io.ddd.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.ddd.jexxa.infrastructure.drivenadapter.persistence.imdb.IMDBConnection;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class JDBCConnectionTest
 {
+    private JexxaAggregate aggregate;
+    private JDBCConnection<JexxaAggregate,JexxaValueObject> objectUnderTest;
 
-    @Test
-    public void addAggregate()
+    @Before
+    public void initTests()
     {
         //Arrange
-        var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
+        aggregate = JexxaAggregate.create(new JexxaValueObject(42));
         var properties = new Properties();
         properties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
         properties.put(JDBCConnection.JDBC_PASSWORD, "admin");
@@ -22,13 +27,17 @@ public class JDBCConnectionTest
         properties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
         properties.put(JDBCConnection.JDBC_AUTOCREATE, "true");
 
-        var objectUnderTest = new JDBCConnection<>(
+        objectUnderTest = new JDBCConnection<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 properties
         );
         objectUnderTest.removeAll();
+    }
 
+    @Test
+    public void addAggregate()
+    {
         //act
         objectUnderTest.add(aggregate);
 
@@ -40,24 +49,22 @@ public class JDBCConnectionTest
     @Test(expected = IllegalArgumentException.class)
     public void addAggregateTwice()
     {
-        //Arrange
-        var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var properties = new Properties();
-        properties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
-        properties.put(JDBCConnection.JDBC_PASSWORD, "admin");
-        properties.put(JDBCConnection.JDBC_USERNAME, "admin");
-        properties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
-        properties.put(JDBCConnection.JDBC_AUTOCREATE, "true");
-
-        var objectUnderTest = new JDBCConnection<>(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
-                properties
-        );
-        objectUnderTest.removeAll();
-
         //act
         objectUnderTest.add(aggregate);
         objectUnderTest.add(aggregate);
     }
+
+    @Test
+    public void removeAggregate()
+    {
+        //Arrange
+        objectUnderTest.add(aggregate);
+
+        //act
+        objectUnderTest.remove( aggregate.getKey() );
+
+        //Assert
+        Assert.assertTrue(objectUnderTest.get().isEmpty());
+    }
+
 }
