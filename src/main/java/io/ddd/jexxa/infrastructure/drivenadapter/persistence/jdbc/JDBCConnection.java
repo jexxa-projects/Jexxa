@@ -48,37 +48,6 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
         this.connection = initJDBCConnection(properties);
     }
 
-    
-    @Override
-    public void update(T aggregate)
-    {
-        Validate.notNull(aggregate);
-
-        Gson gson = new Gson();
-        String key = gson.toJson(keyFunction.apply(aggregate));
-        String value = gson.toJson(aggregate);
-
-        StringReader keyReader = new StringReader(key);
-        StringReader valueReader = new StringReader(value);
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "update " + aggregate.getClass().getSimpleName() + " set value = ? where key = ?")
-        )
-        {
-            preparedStatement.setCharacterStream(1, valueReader, value.length());
-            preparedStatement.setCharacterStream(2, keyReader, key.length());
-            int result = preparedStatement.executeUpdate();
-            if (result == 0)
-            {
-                throw new IllegalArgumentException("Could not update aggregate " + aggregate.getClass().getSimpleName());
-            }
-        }
-        catch (Exception e)
-        {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
 
     @Override
     public void remove(K key)
@@ -119,6 +88,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
 
     }
 
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public void add(T aggregate)
     {
@@ -142,6 +112,37 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
             throw new IllegalArgumentException(e);
         }
 
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    @Override
+    public void update(T aggregate)
+    {
+        Validate.notNull(aggregate);
+
+        Gson gson = new Gson();
+        String key = gson.toJson(keyFunction.apply(aggregate));
+        String value = gson.toJson(aggregate);
+
+        StringReader keyReader = new StringReader(key);
+        StringReader valueReader = new StringReader(value);
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                "update " + aggregate.getClass().getSimpleName() + " set value = ? where key = ?")
+        )
+        {
+            preparedStatement.setCharacterStream(1, valueReader, value.length());
+            preparedStatement.setCharacterStream(2, keyReader, key.length());
+            int result = preparedStatement.executeUpdate();
+            if (result == 0)
+            {
+                throw new IllegalArgumentException("Could not update aggregate " + aggregate.getClass().getSimpleName());
+            }
+        }
+        catch (Exception e)
+        {
+            throw new IllegalArgumentException(e);
+        }
     }
 
 

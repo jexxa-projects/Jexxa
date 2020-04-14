@@ -16,11 +16,16 @@ public class RepositoryManager
     private static final RepositoryManager repositoryManager = new RepositoryManager();
 
 
-    public static <T,K> IRepositoryConnection<T,K> getConnection(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
+    @SuppressWarnings("unchecked")
+    public static <T,K> IRepositoryConnection<T,K> getConnection(
+            Class<T> aggregateClazz,
+            Function<T,K> keyFunction,
+            Properties properties
+    )
     {
         try {
             var constructor = repositoryManager.getDefaultConnection(properties).getConstructors()[0];
-            return (IRepositoryConnection<T, K>) constructor.newInstance(aggregateClazz, keyFunction, properties);
+            return (IRepositoryConnection<T,K>)constructor.newInstance(aggregateClazz, keyFunction, properties);
         }
         catch (ReflectiveOperationException e)
         {
