@@ -1,14 +1,13 @@
-package io.ddd.jexxa.infrastructure.drivenadapter.persistence.inmemory;
+package io.ddd.jexxa.infrastructure.drivenadapter.persistence.imdb;
 
 import java.util.Properties;
 
 import io.ddd.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.ddd.jexxa.infrastructure.drivenadapter.persistence.inmemory.InMemoryRepository;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class InMemoryRepositoryTest
+public class IMDBConnectionTest
 {
 
     @Test
@@ -16,7 +15,7 @@ public class InMemoryRepositoryTest
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new InMemoryRepository<>(
+        var objectUnderTest = new IMDBConnection<>(
                 JexxaAggregate.class,
                 JexxaValueObject.class,
                 JexxaAggregate::getKey,
@@ -37,7 +36,7 @@ public class InMemoryRepositoryTest
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new InMemoryRepository<>(
+        var objectUnderTest = new IMDBConnection<>(
                 JexxaAggregate.class,
                 JexxaValueObject.class,
                 JexxaAggregate::getKey,

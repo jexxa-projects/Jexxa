@@ -1,4 +1,4 @@
-package io.ddd.jexxa.infrastructure.drivenadapter.persistence.inmemory;
+package io.ddd.jexxa.infrastructure.drivenadapter.persistence.imdb;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,15 +10,17 @@ import java.util.function.Function;
 
 import io.ddd.jexxa.infrastructure.drivenadapter.persistence.IRepositoryConnection;
 
+/**
+ * TODO: Add an option to serialize data on disk 
+ */
 @SuppressWarnings("unused")
-public class InMemoryRepository<T, K>  implements IRepositoryConnection<T, K>
+public class IMDBConnection<T, K>  implements IRepositoryConnection<T, K>
 {
-
     final Map<K, T> aggregateMap;
     final Function<T,K> keyFunction;
 
 
-    public InMemoryRepository(Class<T> aggregateClazz, Class<K> keyClazz, Function<T,K> keyFunction, Properties properties)
+    public IMDBConnection(Class<T> aggregateClazz, Class<K> keyClazz, Function<T,K> keyFunction, Properties properties)
     {
         aggregateMap = new HashMap<>();
         this.keyFunction = keyFunction;
