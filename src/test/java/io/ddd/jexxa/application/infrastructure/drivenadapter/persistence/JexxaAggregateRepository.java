@@ -1,6 +1,7 @@
 package io.ddd.jexxa.application.infrastructure.drivenadapter.persistence;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 import io.ddd.jexxa.application.domain.aggregate.JexxaAggregate;
@@ -28,6 +29,12 @@ public class JexxaAggregateRepository implements IJexxaAggregateRepository
     public JexxaAggregate get(JexxaValueObject aggregateID)
     {
         return repositoryConnection.get(aggregateID).orElseThrow();
+    }
+
+    @Override
+    public Optional<JexxaAggregate> find(JexxaValueObject aggregateID)
+    {
+        return repositoryConnection.get(aggregateID);
     }
 
     @Override

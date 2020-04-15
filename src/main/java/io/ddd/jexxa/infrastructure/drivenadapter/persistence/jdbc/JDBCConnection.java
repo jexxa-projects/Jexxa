@@ -160,8 +160,15 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
              ResultSet resultSet = statement.executeQuery(query)
         )
         {
-           resultSet.next();
-           return Optional.ofNullable(gson.fromJson(resultSet.getString(1), aggregateClazz));
+           if ( resultSet.next() )
+           {
+               return Optional.ofNullable(gson.fromJson(resultSet.getString(1), aggregateClazz));
+           }
+           else
+           {
+               return Optional.empty();
+           }
+
         }
         catch (Exception e)
         {

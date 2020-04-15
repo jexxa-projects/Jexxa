@@ -72,6 +72,9 @@
 ** -> OutboundPort Wrapper (optional to decouple generic part of driven adapter)
 ** -> Driven Adapter
 
+* Driving adapter and driven adapter are stateless from a Jexxa application point of view.
+* Driven adapter are stateless as well. So any repository has to manage a dataset in a way that no dedicated initialization is required.     
+
 
 == TODO: Describe factories:
 * General idea is
@@ -104,5 +107,7 @@ Note: it is important that these steps are at least initialized via the applicat
 because they are essential to an application service, even if some technology stacks such as liquibase is used     
 
 
+* General note:
+** 1 to 1 relationship between repository and aggregate
 
 

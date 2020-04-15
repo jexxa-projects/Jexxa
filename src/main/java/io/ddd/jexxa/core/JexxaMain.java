@@ -2,6 +2,8 @@ package io.ddd.jexxa.core;
 
 import java.lang.annotation.Annotation;
 import java.util.Properties;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import io.ddd.jexxa.core.factory.AdapterFactory;
 import io.ddd.jexxa.core.factory.PortFactory;
@@ -59,6 +61,18 @@ public class JexxaMain
         whiteListAdapter(packageName);
         whiteListPorts(packageName);
         return this;
+    }
+
+    public <T, K> K addBootstrapService(Class<T> bootstrapService, Function< T, K > initFunction)
+    {
+        T instance = portFactory.getInstanceOf(bootstrapService, properties);
+        return initFunction.apply(instance);
+    }
+
+    public <T> void addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
+    {
+        T instance = portFactory.getInstanceOf(bootstrapService, properties);
+        initFunction.accept(instance);
     }
 
     /**

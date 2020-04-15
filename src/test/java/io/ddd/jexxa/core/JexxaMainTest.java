@@ -18,15 +18,18 @@ import javax.management.MBeanServer;
 import javax.management.ObjectInstance;
 
 import io.ddd.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
+import io.ddd.jexxa.application.applicationservice.JexxaApplicationService;
 import io.ddd.jexxa.application.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.application.annotation.*;
+import io.ddd.jexxa.application.domainservice.InitializeJexxaAggregates;
 import io.ddd.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class HelloJexxaMainTest
+public class JexxaMainTest
 {
     private Properties properties;
     private JexxaMain objectUnderTest;
@@ -51,7 +54,7 @@ public class HelloJexxaMainTest
 
     
     @Test
-    public void simpleHelloJexxa()
+    public void bindToPort()
     {
         //Arrange
         objectUnderTest = new JexxaMain("HelloJexxa", properties);
@@ -71,7 +74,7 @@ public class HelloJexxaMainTest
     }
 
     @Test
-    public void simpleHelloJexxaWithDrivenAdapter()
+    public void bindToPortWithDrivenAdapter()
     {
         //Arrange
         objectUnderTest = new JexxaMain("HelloJexxa", properties);
@@ -91,7 +94,7 @@ public class HelloJexxaMainTest
     
 
     @Test
-    public void simpleHelloJexxaClassAnnotatedPorts()
+    public void bindToAnnotatedPorts()
     {
         //Arrange
         objectUnderTest = new JexxaMain("HelloJexxa", properties);
@@ -107,7 +110,26 @@ public class HelloJexxaMainTest
     }
 
 
+    @Test
+    public void bootstrapService()
+    {
+        //Arrange
+        objectUnderTest = new JexxaMain("HelloJexxa", properties);
+        objectUnderTest.whiteList(packageName);
 
+        //Act
+        objectUnderTest.addBootstrapService(
+                InitializeJexxaAggregates.class,
+                InitializeJexxaAggregates::initDomainData);
+
+        var jexxaApplicationService = objectUnderTest.getInstanceOfPort(JexxaApplicationService.class);
+
+        //Assert 
+        Assert.assertTrue(jexxaApplicationService.getAggregateCount() > 0);
+    }
+
+
+    /* ---------------------Util methods ------------------ */
     void assertJMXAdapter(Class<?> clazz) {
         //Assert
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();

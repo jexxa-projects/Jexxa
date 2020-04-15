@@ -20,6 +20,7 @@ public class IMDBConnectionTest
                 JexxaAggregate::getKey,
                 new Properties()
         );
+        objectUnderTest.removeAll();
 
         //act
         objectUnderTest.add(aggregate);
@@ -39,7 +40,8 @@ public class IMDBConnectionTest
                 JexxaAggregate::getKey,
                 new Properties()
         );
-
+        objectUnderTest.removeAll();
+        
         //act
         objectUnderTest.add(aggregate);
         objectUnderTest.add(aggregate);
@@ -56,6 +58,7 @@ public class IMDBConnectionTest
                 JexxaAggregate::getKey,
                 new Properties()
         );
+        objectUnderTest.removeAll();
         objectUnderTest.add(aggregate);
 
         //act
@@ -64,5 +67,61 @@ public class IMDBConnectionTest
         //Assert
         Assert.assertTrue(objectUnderTest.get().isEmpty());
     }
+
+    @Test
+    public void differentConnections()
+    {
+        //Arrange
+        var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
+        var objectUnderTest = new IMDBConnection<>(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                new Properties()
+        );
+        objectUnderTest.removeAll();
+        objectUnderTest.add(aggregate);
+
+        //act
+        var newConnection = new IMDBConnection<>(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                new Properties()
+        );
+
+        //Assert that connections are different but refer to the same repository 
+        Assert.assertNotEquals(objectUnderTest, newConnection);
+        Assert.assertFalse(objectUnderTest.get().isEmpty());
+        Assert.assertFalse(newConnection.get().isEmpty());
+    }
+
+    @Test
+    public void differentRepositories()
+    {
+        //Arrange
+        var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
+        var objectUnderTest = new IMDBConnection<>(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                new Properties()
+        );
+        objectUnderTest.removeAll();
+        objectUnderTest.add(aggregate);
+
+        //act
+        var newConnection = new IMDBConnection<>(
+                JexxaValueObject.class,
+                JexxaValueObject::getValue,
+                new Properties()
+        );
+        newConnection.removeAll();
+        newConnection.add(new JexxaValueObject(42));
+
+        //Assert that connections are different but refer to the same repository
+        Assert.assertNotEquals(objectUnderTest, newConnection);
+        Assert.assertEquals(1, objectUnderTest.get().size());
+        Assert.assertEquals(1, newConnection.get().size());
+
+    }
+
 
 }
