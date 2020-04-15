@@ -31,6 +31,7 @@ public class JexxaAggregateRepositoryTest
         properties.put(JDBCConnection.JDBC_USERNAME, "admin");
         properties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
         properties.put(JDBCConnection.JDBC_AUTOCREATE, "true");
+        properties.put(JDBCConnection.JDBC_DEFAULT_URL, "jdbc:postgresql://localhost:5432/postgres");
 
         return Arrays.asList(new Properties(), properties);
     }

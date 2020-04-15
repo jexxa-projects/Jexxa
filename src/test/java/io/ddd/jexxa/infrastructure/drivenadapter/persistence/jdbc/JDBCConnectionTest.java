@@ -25,6 +25,7 @@ public class JDBCConnectionTest
         properties.put(JDBCConnection.JDBC_PASSWORD, "admin");
         properties.put(JDBCConnection.JDBC_USERNAME, "admin");
         properties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
+        properties.put(JDBCConnection.JDBC_DEFAULT_URL, "jdbc:postgresql://localhost:5432/postgres");
         properties.put(JDBCConnection.JDBC_AUTOCREATE, "true");
 
         objectUnderTest = new JDBCConnection<>(

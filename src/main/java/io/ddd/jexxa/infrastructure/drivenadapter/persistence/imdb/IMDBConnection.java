@@ -16,6 +16,7 @@ import io.ddd.jexxa.infrastructure.drivenadapter.persistence.IRepositoryConnecti
 @SuppressWarnings("unused")
 public class IMDBConnection<T, K>  implements IRepositoryConnection<T, K>
 {
+    // Each IMDB repository is represented by a map for a specific type.
     private static final Map< Class<?>, Map<?,?> > repositoryMap = new ConcurrentHashMap<>();
 
 

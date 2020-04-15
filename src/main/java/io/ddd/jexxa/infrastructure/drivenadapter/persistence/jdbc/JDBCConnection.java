@@ -26,6 +26,8 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
     public static final String JDBC_PASSWORD = "io.ddd.jexxa.jdbc.password";
     public static final String JDBC_DRIVER = "io.ddd.jexxa.jdbc.driver";
     public static final String JDBC_AUTOCREATE = "io.ddd.jexxa.jdbc.autocreate";
+    public static final String JDBC_DEFAULT_URL = "io.ddd.jexxa.jdbc.defaulturl";
+
 
 
     private static final Logger logger = JexxaLogger.getLogger(JDBCConnection.class);
@@ -40,9 +42,17 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
         this.keyFunction = keyFunction;
         this.aggregateClazz = aggregateClazz;
 
+        initDBDriver(properties);
         if (properties.containsKey(JDBC_AUTOCREATE)) {
-            createDatabase(properties);
-            createTable(properties);
+            if (properties.containsKey(JDBC_DEFAULT_URL)) {
+                createDatabase(properties);
+                createTable(properties);
+            }
+            else
+            {
+                logger.warn("Key {} is defined but key {} ist not set => Ignore {} ", JDBC_AUTOCREATE, JDBC_DEFAULT_URL, JDBC_AUTOCREATE);
+            }
+
         }
 
         this.connection = initJDBCConnection(properties);
@@ -204,15 +214,6 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
     private Connection initJDBCConnection(final Properties properties)
     {
 
-        try
-        {
-            Class.forName(properties.getProperty(JDBC_DRIVER));
-        }
-        catch (Exception e)
-        {
-            throw new IllegalArgumentException("Specified JDBC driver is not available: " + properties.getProperty(JDBC_DRIVER));
-        }
-
         try {
             connection = DriverManager.getConnection(
                           properties.getProperty(JDBC_URL),
@@ -231,25 +232,21 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
 
     private void createDatabase(final Properties properties)
     {
-
         var splittedURL = properties.getProperty(JDBC_URL).split("/");
         var dbName = splittedURL[splittedURL.length-1].toLowerCase(); //last part of the URL is the name of the database (Note: Some DBs such as postgres require a name in lower case!)
-        var dbURL = properties.getProperty(JDBC_URL).replace(dbName,"");
 
         Properties creationProperties = new Properties();
         creationProperties.putAll(properties);
-        creationProperties.put(JDBC_URL, dbURL);
-        
+
         try (var setupConnection = DriverManager.
                 getConnection(
-                        creationProperties.getProperty(JDBC_URL),
+                        creationProperties.getProperty(JDBC_DEFAULT_URL),
                         creationProperties.getProperty(JDBC_USERNAME),
                         creationProperties.getProperty(JDBC_PASSWORD));
                 Statement statement = setupConnection.createStatement())
         {
             setupConnection.setAutoCommit(true);
             statement.execute(String.format("create DATABASE %s ", dbName));
-
             logger.info("Database {} successfully created ", dbName);
         }
         catch (Exception e)
@@ -276,6 +273,18 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
         }
     }
 
+    private void initDBDriver(Properties properties)
+    {
+        try
+        {
+            Class.forName(properties.getProperty(JDBC_DRIVER));
+        }
+        catch (Exception e)
+        {
+            throw new IllegalArgumentException("Specified JDBC driver is not available: " + properties.getProperty(JDBC_DRIVER));
+        }
+
+    }
 
     public void close()
     {

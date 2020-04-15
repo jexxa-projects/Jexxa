@@ -41,6 +41,22 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- dependencies for tests with ActiveMQ -->
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-client</artifactId>
+      <version>5.15.12</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- dependencies for tests with JDBCAdapter -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.2.12</version>
+    </dependency>
+
+
     <!-- dependencies for production -->
     <dependency>
       <groupId>io.github.classgraph</groupId>
@@ -71,13 +87,6 @@
       <version>2.10.1</version>
     </dependency>
 
-    <!-- dependencies for JDBCAdapter -->
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>42.2.12</version>
-    </dependency>
-
 
     <!-- dependencies for JMSAdapter -->
     <dependency>
@@ -86,12 +95,6 @@
       <version>2.0.1</version>
       <scope>compile</scope>
      </dependency>
-
-    <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-client</artifactId>
-      <version>5.15.12</version>
-    </dependency>
 
 
   </dependencies>
