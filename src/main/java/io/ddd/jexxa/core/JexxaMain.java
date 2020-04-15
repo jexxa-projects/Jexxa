@@ -75,17 +75,6 @@ public class JexxaMain
         initFunction.accept(instance);
     }
 
-    /**
-     * @deprecated Use addBootstrapService
-     */
-    @Deprecated
-    public void bindConfigAdapter(Class<? extends IDrivingAdapter> adapter) {
-        Validate.notNull(adapter);
-
-        var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
-
-        compositeDrivingAdapter.add(drivingAdapter);
-    }
 
     public void bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
         Validate.notNull(adapter);
@@ -138,7 +127,6 @@ public class JexxaMain
         return port.cast(portFactory.newInstanceOf(port, properties));
     }
 
-    @SuppressWarnings("unused")
     public <T> T getInstanceOfPort(Class<T> port)
     {
         return port.cast(portFactory.getInstanceOf(port, properties));
