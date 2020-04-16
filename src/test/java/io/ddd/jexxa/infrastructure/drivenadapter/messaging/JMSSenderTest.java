@@ -16,31 +16,37 @@ import io.ddd.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.messaging.JMSAdapterTest;
 import io.ddd.jexxa.infrastructure.drivingadapter.messaging.JMSListener;
 import io.ddd.jexxa.utils.JexxaLogger;
+import org.junit.Before;
 import org.junit.Test;
 
 public class JMSSenderTest
 {
+    final JexxaValueObject message = new JexxaValueObject(42);
+    final String destination = "JMSSenderTest";
+    Properties properties;
 
-    @Test (timeout = 1000)
-    public void sentMessageToTopic()
+    @Before
+    public void initTests()
     {
-        var message = new JexxaValueObject(42);
-        var topicName = "JMSSenderTest";
-        var properties = new Properties();
+        properties = new Properties();
         properties.put(JMSSender.JNDI_FACTORY_KEY, JMSSender.DEFAULT_JNDI_FACTORY);
         properties.put(JMSSender.JNDI_PROVIDER_URL_KEY, JMSSender.DEFAULT_JNDI_PROVIDER_URL);
         properties.put(JMSSender.JNDI_USER_KEY, JMSSender.DEFAULT_JNDI_USER);
         properties.put(JMSSender.JNDI_PASSWORD_KEY, JMSSender.DEFAULT_JNDI_PASSWORD);
+    }
 
+    @Test (timeout = 1000)
+    public void sentMessageToTopic()
+    {
+        //Arrange
         var messageListener = new MyTopicListener();
-        JMSSender objectUnderTest = new JMSSender(properties);
-
-        JexxaMain jexxaMain = new JexxaMain("JMSSenderTest", properties);
+        var objectUnderTest = new JMSSender(properties);
+        var jexxaMain = new JexxaMain("JMSSenderTest", properties);
         jexxaMain.bindToPort(JMSAdapter.class, messageListener);
+        jexxaMain.startDrivingAdapters();
 
         //Act
-        jexxaMain.startDrivingAdapters();
-        objectUnderTest.sendToTopic(message, topicName, null);
+        objectUnderTest.sendToTopic(message, destination, null);
 
         //Assert
         while (messageListener.getMessages().isEmpty())
@@ -49,29 +55,20 @@ public class JMSSenderTest
         }
 
         jexxaMain.stopDrivingAdapters();
-
     }
 
 
     @Test (timeout = 1000)
     public void sentMessageToQueue()
     {
-        var message = new JexxaValueObject(42);
-        var destination = "JMSSenderTest";
-        var properties = new Properties();
-        properties.put(JMSSender.JNDI_FACTORY_KEY, JMSSender.DEFAULT_JNDI_FACTORY);
-        properties.put(JMSSender.JNDI_PROVIDER_URL_KEY, JMSSender.DEFAULT_JNDI_PROVIDER_URL);
-        properties.put(JMSSender.JNDI_USER_KEY, JMSSender.DEFAULT_JNDI_USER);
-        properties.put(JMSSender.JNDI_PASSWORD_KEY, JMSSender.DEFAULT_JNDI_PASSWORD);
-
+        //Arrange
         var messageListener = new MyQueueListener();
-        JMSSender objectUnderTest = new JMSSender(properties);
-
-        JexxaMain jexxaMain = new JexxaMain("JMSSenderTest", properties);
+        var objectUnderTest = new JMSSender(properties);
+        var jexxaMain = new JexxaMain("JMSSenderTest", properties);
         jexxaMain.bindToPort(JMSAdapter.class, messageListener);
+        jexxaMain.startDrivingAdapters();
 
         //Act
-        jexxaMain.startDrivingAdapters();
         objectUnderTest.sendToQueue(message, destination, null);
 
         //Assert
@@ -81,7 +78,6 @@ public class JMSSenderTest
         }
 
         jexxaMain.stopDrivingAdapters();
-
     }
 
 
