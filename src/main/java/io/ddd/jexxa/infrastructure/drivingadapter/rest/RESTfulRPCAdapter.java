@@ -7,10 +7,12 @@ import java.util.Properties;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.ddd.jexxa.utils.JexxaLogger;
 import io.javalin.Javalin;
+
 import org.apache.commons.lang.Validate;
 
 
@@ -79,14 +81,23 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         }
     }
 
+    /**
+     * Mapping of exception is done as follows 
+     *   {
+     *     "Exception": "<exception as json>",
+     *     "ExceptionType": "<Type of the excetopn>",
+     *   }
+     */
     private void registerExceptionHandler()
     {
         //Exception Handler for thrown Exception from methods
         javalin.exception(InvocationTargetException.class, (e, ctx) -> {
-            //Exception is stated by a Json Array ["<Exception type>", "<serialized exception>"]
-            Object[] result = {e.getCause().getClass().getName(), e};
             Gson gson = new Gson();
-            ctx.result(gson.toJson(result));
+            JsonObject exceptionWrapper = new JsonObject();
+            exceptionWrapper.addProperty("ExceptionType", e.getCause().getClass().getName());
+            exceptionWrapper.addProperty("Exception", gson.toJson(e));
+
+            ctx.result(exceptionWrapper.toString());
             ctx.status(400);
         });
     }

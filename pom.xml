@@ -95,7 +95,13 @@
       <version>42.2.12</version>
       <scope>test</scope>
     </dependency>
-    
+      <dependency>
+          <groupId>com.konghq</groupId>
+          <artifactId>unirest-java</artifactId>
+          <version>3.7.02</version>
+          <scope>test</scope>
+      </dependency>
+
   </dependencies>
 
   <build>
