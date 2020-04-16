@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
+import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -42,15 +43,15 @@ public class JMSSender
     
     public void sendToTopic(Object message, final String topicName, final Properties messageProperties)
     {
-        try(final Connection connection = createConnection();
-            final Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)
+        try(Connection connection = createConnection();
+            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)
         )
         {
-            final Topic destination = session.createTopic(topicName);
-            final MessageProducer producer = session.createProducer(destination);
+            var destination = session.createTopic(topicName);
+            var producer = session.createProducer(destination);
 
-            Gson gson = new Gson();
-            final Message textMessage = session.createTextMessage(gson.toJson(message));
+            var gson = new Gson();
+            var textMessage = session.createTextMessage(gson.toJson(message));
             //TODO: check if we should add type information 
             //textMessage.setStringProperty("MessageType", message.getClass().getSimpleName());
 
@@ -76,13 +77,12 @@ public class JMSSender
         try (final Connection connection = createConnection();
              final Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
 
-            final Destination destination = session.createQueue(queueName);
-            final MessageProducer producer = session.createProducer(destination);
+            var destination = session.createQueue(queueName);
+            var producer = session.createProducer(destination);
+            producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
-
-            final Gson gson = new Gson();
-            final Message textMessage = session.createTextMessage(gson.toJson(message));
-            producer.send(textMessage);
+            var gson = new Gson();
+            var textMessage = session.createTextMessage(gson.toJson(message));
 
             if (messageProperties != null)
             {
@@ -91,6 +91,8 @@ public class JMSSender
                     textMessage.setStringProperty(entry.getKey().toString(), entry.getValue().toString());
                 }
             }
+
+            producer.send(textMessage);
         }
         catch (JMSException e)
         {
@@ -98,9 +100,10 @@ public class JMSSender
         }
     }
 
-
+    @SuppressWarnings("DuplicatedCode")
     Connection createConnection()
     {
+        //noinspection DuplicatedCode
         try
         {
             final InitialContext initialContext = new InitialContext(properties);

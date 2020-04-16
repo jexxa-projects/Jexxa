@@ -35,6 +35,7 @@ public class JMSSenderTest
         properties.put(JMSSender.JNDI_PASSWORD_KEY, JMSSender.DEFAULT_JNDI_PASSWORD);
     }
 
+    @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test (timeout = 1000)
     public void sentMessageToTopic()
     {
@@ -58,6 +59,7 @@ public class JMSSenderTest
     }
 
 
+    @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test (timeout = 1000)
     public void sentMessageToQueue()
     {

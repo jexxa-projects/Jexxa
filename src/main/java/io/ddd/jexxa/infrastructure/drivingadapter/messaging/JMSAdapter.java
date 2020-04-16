@@ -119,6 +119,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     }
 
     
+    @SuppressWarnings("DuplicatedCode")
     Connection createConnection()
     {
         try 
