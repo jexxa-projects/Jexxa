@@ -84,8 +84,7 @@ class RESTfulRPCModel
         var result = new ArrayList<RESTfulRPCMethod>();
 
         List<Method> publicMethods = getPublicMethods(object.getClass());
-        publicMethods
-                .stream()
+        publicMethods.stream()
                 .filter( element -> (element.getReturnType().equals(void.class) ||
                                      element.getParameterCount() > 0)) // Convention for POST method
                 .forEach( element -> result.add(
@@ -101,18 +100,16 @@ class RESTfulRPCModel
     @SuppressWarnings("SameParameterValue")
     Optional<RESTfulRPCMethod> getGETCommand(String methodEndsWith)
     {
-        return  getGETCommands().
-                stream().
-                filter(element -> element.getResourcePath().endsWith(methodEndsWith)).
-                findFirst();
+        return  getGETCommands().stream()
+                .filter(element -> element.getResourcePath().endsWith(methodEndsWith))
+                .findFirst();
     }
 
     Optional<RESTfulRPCMethod> getPOSTCommand(String methodEndsWith)
     {
-        return  getPOSTCommands().
-                stream().
-                filter(element -> element.getResourcePath().endsWith(methodEndsWith)).
-                findFirst();
+        return  getPOSTCommands().stream()
+                .filter(element -> element.getResourcePath().endsWith(methodEndsWith))
+                .findFirst();
     }
 
 

@@ -51,9 +51,9 @@ public class JexxaAggregateRepositoryTest
     {
         //Arrange
         var counterStream = Stream.of(100);
-        var aggregateList = counterStream.
-                map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) ).
-                collect( Collectors.toList() );
+        var aggregateList = counterStream
+                .map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) )
+                .collect( Collectors.toList() );
 
         //Act
         aggregateList.forEach(objectUnderTest::add);
@@ -68,14 +68,14 @@ public class JexxaAggregateRepositoryTest
     {
         //Arrange
         Supplier<Stream<Integer>> counterSupplier = () -> Stream.of(100);
-        counterSupplier.get().
-                map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) ).
-                forEach( objectUnderTest::add );
+        counterSupplier.get()
+                .map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) )
+                .forEach( objectUnderTest::add );
 
         //Act
-        var aggregateList = counterSupplier.get().
-                map( key -> objectUnderTest.get(new JexxaValueObject(key))).
-                collect( Collectors.toList() );
+        var aggregateList = counterSupplier.get()
+                .map( key -> objectUnderTest.get(new JexxaValueObject(key)))
+                .collect( Collectors.toList() );
 
         //Assert
         Assert.assertEquals(counterSupplier.get().count(), aggregateList.size());
@@ -86,14 +86,14 @@ public class JexxaAggregateRepositoryTest
     {
         //Arrange
         Supplier<Stream<Integer>> counterSupplier = () -> Stream.of(100);
-        counterSupplier.get().
-                map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) ).
-                forEach( objectUnderTest::add );
+        counterSupplier.get()
+                .map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) )
+                .forEach( objectUnderTest::add );
 
         //collect elements from Repository using get() which throws a runtime exception in case the element is not available   
-        var aggregateList = counterSupplier.get().
-                map( key -> objectUnderTest.get(new JexxaValueObject(key))).
-                collect( Collectors.toList() );
+        var aggregateList = counterSupplier.get()
+                .map( key -> objectUnderTest.get(new JexxaValueObject(key)))
+                .collect( Collectors.toList() );
 
         //Act
         aggregateList.forEach(objectUnderTest::remove);
@@ -109,9 +109,9 @@ public class JexxaAggregateRepositoryTest
         //Arrange
         int aggregateValue = 42;
         var counterStream = Stream.of(100);
-        var aggregateList = counterStream.
-                map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) ).
-                collect( Collectors.toList() );
+        var aggregateList = counterStream
+                .map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) )
+                .collect( Collectors.toList() );
 
         aggregateList.forEach(objectUnderTest::add);
 

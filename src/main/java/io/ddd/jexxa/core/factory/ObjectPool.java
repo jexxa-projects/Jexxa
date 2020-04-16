@@ -15,11 +15,10 @@ public class ObjectPool
     
     public <T> Optional<T> getInstance(Class<T> clazz)
     {
-        return objectSet.
-                stream().
-                filter( element -> clazz.isAssignableFrom(element.getClass())).
-                findFirst().
-                map(clazz::cast);
+        return objectSet.stream()
+                .filter( element -> clazz.isAssignableFrom(element.getClass()))
+                .findFirst()
+                .map(clazz::cast);
     }
 
 }

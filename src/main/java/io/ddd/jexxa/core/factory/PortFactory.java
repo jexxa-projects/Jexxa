@@ -80,14 +80,13 @@ public class PortFactory
         Validate.notNull(inboundPort);
         Validate.notNull(adapterProperties);
 
-        var supportedConstructor = findConstructor(inboundPort).
-                orElseThrow(() -> new MissingAdapterException(inboundPort, adapterFactory));
+        var supportedConstructor = findConstructor(inboundPort)
+                .orElseThrow(() -> new MissingAdapterException(inboundPort, adapterFactory));
 
         var drivenAdapter = createAdapter(supportedConstructor, adapterProperties);
         
-        return ClassFactory.
-                newInstanceOf(inboundPort, drivenAdapter).
-                orElseThrow();
+        return ClassFactory.newInstanceOf(inboundPort, drivenAdapter)
+                .orElseThrow();
     }
 
     /**
@@ -154,8 +153,8 @@ public class PortFactory
     {
         var portInstance = getInstanceOf(getPort(portAdapter), properties);
 
-        return ClassFactory.newInstanceOf(portAdapter, new Object[]{portInstance}).
-                orElseThrow(() -> new MissingAdapterException(portInstance.getClass(), adapterFactory));
+        return ClassFactory.newInstanceOf(portAdapter, new Object[]{portInstance})
+                .orElseThrow(() -> new MissingAdapterException(portInstance.getClass(), adapterFactory));
     }
 
 
@@ -173,10 +172,9 @@ public class PortFactory
                     warn("More than one constructor available for {}. => Reconsider to provide only a single constructor", inboundPort.getName());
         }
 
-        return constructorList.
-                stream().
-                filter(constructor -> adapterFactory.isAvailable(Arrays.asList(constructor.getParameterTypes()))).
-                findFirst();
+        return constructorList.stream()
+                .filter(constructor -> adapterFactory.isAvailable(Arrays.asList(constructor.getParameterTypes())))
+                .findFirst();
     }
 
 
@@ -212,12 +210,12 @@ public class PortFactory
      */
     private <T> Class<?> getPort(Class<T> portWrapper)
     {
-        return Arrays.stream(portWrapper.getConstructors()).
-                filter(constructor -> constructor.getParameterCount() == 1).
-                filter(constructor -> !constructor.getParameterTypes()[0].isInterface()).
-                findFirst().
-                <Class<?>>map(constructor -> constructor.getParameterTypes()[0]).
-                orElseThrow(() -> new RuntimeException("PortWrapper " + portWrapper.getSimpleName() + " requires unknown port"));
+        return Arrays.stream(portWrapper.getConstructors())
+                .filter(constructor -> constructor.getParameterCount() == 1)
+                .filter(constructor -> !constructor.getParameterTypes()[0].isInterface())
+                .findFirst()
+                .<Class<?>>map(constructor -> constructor.getParameterTypes()[0])
+                .orElseThrow(() -> new RuntimeException("PortWrapper " + portWrapper.getSimpleName() + " requires unknown port"));
     }
 
 

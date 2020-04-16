@@ -149,9 +149,9 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
     JMSListener getJMSListener(Object object)
     {
-        return Arrays.
-                stream(object.getClass().getMethods()).
-                filter(method -> method.isAnnotationPresent(JMSListener.class)).
-                findFirst().orElseThrow().getDeclaredAnnotation(JMSListener.class);
+        return Arrays.stream(object.getClass().getMethods())
+                .filter(method -> method.isAnnotationPresent(JMSListener.class))
+                .findFirst()
+                .orElseThrow().getDeclaredAnnotation(JMSListener.class);
     }
 }

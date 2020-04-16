@@ -133,14 +133,14 @@ public class ClassFactory
      */
     private static <T> Optional<Constructor<?>> getConstructor(Class<T> clazz, Object[] parameter)
     {
-       var parameterTypes = Arrays.stream(parameter).
-               map(Object::getClass).
-               toArray(Class<?>[]::new);
+       var parameterTypes = Arrays.stream(parameter)
+               .map(Object::getClass)
+               .toArray(Class<?>[]::new);
 
-       return  Arrays.stream(clazz.getConstructors()).
-               filter( element -> element.getParameterTypes().length == parameter.length).
-               filter( element -> isAssignableFrom(element.getParameterTypes(), parameterTypes )).
-               findFirst();
+       return  Arrays.stream(clazz.getConstructors())
+               .filter( element -> element.getParameterTypes().length == parameter.length)
+               .filter( element -> isAssignableFrom(element.getParameterTypes(), parameterTypes ))
+               .findFirst();
     }
 
     private static boolean isAssignableFrom( Class<?>[] interfaceList, Class<?>[] implementationList )
@@ -158,23 +158,23 @@ public class ClassFactory
     private static <T> Optional<Method> getFactoryMethod(Class<?> implementation, Class<T> interfaceType)
     {
         //Lookup factory method with no attributes and return type clazz
-        return Arrays.stream(implementation.getMethods()).
-                filter( element -> Modifier.isStatic(element.getModifiers())).
-                filter( element -> element.getParameterTypes().length == 0).
-                filter( element -> element.getReturnType().equals(interfaceType)).
-                findFirst();
+        return Arrays.stream(implementation.getMethods())
+                .filter( element -> Modifier.isStatic(element.getModifiers()))
+                .filter( element -> element.getParameterTypes().length == 0)
+                .filter( element -> element.getReturnType().equals(interfaceType))
+                .findFirst();
     }
     
 
     private static <T> Optional<Method> getFactoryMethod(Class<?> implementation, Class<T> interfaceType, Class<?>[] parameterTypes)
     {
         //Lookup factory method with no attributes and return type clazz
-        return Arrays.stream(implementation.getMethods()).
-                filter( element -> Modifier.isStatic(element.getModifiers())).
-                filter( element -> element.getParameterTypes().length == 1).
-                filter( element -> isAssignableFrom(element.getParameterTypes(), parameterTypes )).
-                filter( element -> element.getReturnType().equals(interfaceType)).
-                findFirst();
+        return Arrays.stream(implementation.getMethods())
+                .filter( element -> Modifier.isStatic(element.getModifiers()))
+                .filter( element -> element.getParameterTypes().length == 1)
+                .filter( element -> isAssignableFrom(element.getParameterTypes(), parameterTypes ))
+                .filter( element -> element.getReturnType().equals(interfaceType))
+                .findFirst();
     }
 
 

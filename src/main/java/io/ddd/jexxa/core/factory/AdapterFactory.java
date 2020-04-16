@@ -101,17 +101,15 @@ public class AdapterFactory
 
     List<Class<?>> getMissingAdapter(List<Class <?> > adapterList)
     {
-        return adapterList.
-                stream().
-                filter(adapter -> getImplementationOf(adapter).isEmpty()).
-                collect(Collectors.toList());
+        return adapterList.stream()
+                .filter(adapter -> getImplementationOf(adapter).isEmpty())
+                .collect(Collectors.toList());
     }
 
     boolean isAvailable(List<Class <?> > adapterList)
     {
-        return adapterList.
-                stream().
-                noneMatch(adapter -> getImplementationOf(adapter).isEmpty());
+        return adapterList.stream()
+                .noneMatch(adapter -> getImplementationOf(adapter).isEmpty());
     }
 
 
