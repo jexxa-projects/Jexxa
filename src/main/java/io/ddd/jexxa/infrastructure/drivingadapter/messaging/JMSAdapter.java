@@ -3,7 +3,9 @@ package io.ddd.jexxa.infrastructure.drivingadapter.messaging;
 
 import static io.ddd.jexxa.utils.ThrowingConsumer.exceptionLogger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -34,15 +36,25 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     public static final String DEFAULT_JNDI_PASSWORD = "admin";
     public static final String DEFAULT_JNDI_FACTORY = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 
-    private Connection connection = null;
-    private Session session = null;
-    private MessageConsumer consumer = null;
+    private final Connection connection;
+    private final Session session;
+    private final List<MessageConsumer> consumerList = new ArrayList<>();
 
     private final Properties properties;
 
     public JMSAdapter(final Properties properties)
     {
         this.properties = properties;
+        try
+        {
+            connection = createConnection();
+            connection.setExceptionListener(exception -> JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage()));
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        }
+        catch (Exception e)
+        {
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 
 
@@ -66,17 +78,13 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         close();
     }
 
+    @SuppressWarnings("java:S2095") // We must not close the connection
     @Override
     public void register(Object object)
     {
         try
         {
             var messageListener = (MessageListener) (object);
-
-            connection = createConnection();
-            connection.setExceptionListener(exception -> JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage()));
-
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
             JMSListener jmsListener = getJMSListener(object);
 
@@ -90,7 +98,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
                destination = session.createQueue(jmsListener.destination());
             }
 
-
+            MessageConsumer consumer;
             if (jmsListener.selector().isEmpty())
             {
                 consumer = session.createConsumer(destination);
@@ -99,8 +107,9 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             {
                 consumer = session.createConsumer(destination, jmsListener.selector());
             }
-
             consumer.setMessageListener(messageListener);
+            consumerList.add(consumer);
+
         }
         catch (JMSException e)
         {
@@ -113,7 +122,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     @Override
     public void close()
     {
-        Optional.ofNullable(consumer).ifPresent(exceptionLogger(MessageConsumer::close));
+        consumerList.forEach(consumer -> Optional.ofNullable(consumer).ifPresent(exceptionLogger(MessageConsumer::close)));
         Optional.ofNullable(session).ifPresent(exceptionLogger(Session::close));
         Optional.ofNullable(connection).ifPresent(exceptionLogger(Connection::close));
     }
