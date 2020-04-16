@@ -34,7 +34,9 @@ public class PortFactory
     private final List<String> whiteListPackages = new ArrayList<>();
     private final ObjectPool objectPool = new ObjectPool();
     private final AdapterFactory adapterFactory;
+    private CreationPolicy drivenAdapterPolicy = CreationPolicy.REUSE;
 
+    public enum CreationPolicy{REUSE,NEW_INSTANCE}
     
     public PortFactory(AdapterFactory adapterFactory)
     {
@@ -45,6 +47,11 @@ public class PortFactory
     {
         whiteListPackages.add(packageName);
         return this;
+    }
+
+    public void setDrivenAdapterPolicy(CreationPolicy creationPolicy)
+    {
+        this.drivenAdapterPolicy = creationPolicy;
     }
 
     /**
@@ -181,7 +188,14 @@ public class PortFactory
         {
             try
             {
-                objectList.add( adapterFactory.newInstanceOf(portConstructor.getParameterTypes()[i], adapterProperties) );
+                //Depending on creation policy we create a new instance or try to reuse existing instance
+                if ( drivenAdapterPolicy == CreationPolicy.NEW_INSTANCE) {
+                    objectList.add( adapterFactory.newInstanceOf(portConstructor.getParameterTypes()[i], adapterProperties) );
+                }
+                else
+                {
+                    objectList.add( adapterFactory.getInstanceOf(portConstructor.getParameterTypes()[i], adapterProperties) );
+                }
             }
             catch ( Exception e)
             {

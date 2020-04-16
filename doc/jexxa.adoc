@@ -109,5 +109,6 @@ because they are essential to an application service, even if some technology st
 
 * General note:
 ** 1 to 1 relationship between repository and aggregate
+** Allocation policy for driven adapter is that they are reused by default => can be changed in settings/properties   
 
 
