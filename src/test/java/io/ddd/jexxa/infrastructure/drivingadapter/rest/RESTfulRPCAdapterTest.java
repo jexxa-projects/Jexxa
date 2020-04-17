@@ -1,33 +1,16 @@
 package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Properties;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import io.ddd.jexxa.application.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
 import kong.unirest.Unirest;
-import kong.unirest.UnirestParsingException;
-import kong.unirest.json.JSONObject;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("SameParameterValue")
 public class RESTfulRPCAdapterTest
@@ -42,7 +25,7 @@ public class RESTfulRPCAdapterTest
 
     RESTfulRPCAdapter objectUnderTest;
 
-    @Before
+    @BeforeEach
     public void setupTests(){
         //Setup
         properties = new Properties();
@@ -54,7 +37,7 @@ public class RESTfulRPCAdapterTest
         objectUnderTest.start();
     }
 
-    @After
+    @AfterEach
     public void tearDownTests(){
         //tear down
         objectUnderTest.stop();
@@ -75,9 +58,9 @@ public class RESTfulRPCAdapterTest
 
 
         //Assert
-        assertNotNull(result);
-        assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
-        assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
+        Assertions.assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
     }
 
     @Test
@@ -97,9 +80,9 @@ public class RESTfulRPCAdapterTest
         secondAdapter.stop();
 
         //Assert
-        assertNotNull(result);
-        assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
-        assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
+        Assertions.assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
 
     }
 
@@ -120,9 +103,9 @@ public class RESTfulRPCAdapterTest
                 .header("Content-Type", "application/json")
                 .asObject(Integer.class).getBody();
 
-        assertTrue(response.isSuccess());
-        assertEquals(newValue, simpleApplicationService.getSimpleValue());
-        assertEquals(newValue, newResult.intValue());
+        Assertions.assertTrue(response.isSuccess());
+        Assertions.assertEquals(newValue, simpleApplicationService.getSimpleValue());
+        Assertions.assertEquals(newValue, newResult.intValue());
     }
 
     @Test // RPC call test: void setSimpleValueObject(SimpleValueObject(44))
@@ -142,9 +125,9 @@ public class RESTfulRPCAdapterTest
                 .header("Content-Type", "application/json")
                 .asObject(Integer.class).getBody();
 
-        assertTrue(response.isSuccess());
-        assertEquals(newValue.getValue(), simpleApplicationService.getSimpleValueObject().getValue());
-        assertEquals(newValue.getValue(), newResult.intValue());
+        Assertions.assertTrue(response.isSuccess());
+        Assertions.assertEquals(newValue.getValue(), simpleApplicationService.getSimpleValueObject().getValue());
+        Assertions.assertEquals(newValue.getValue(), newResult.intValue());
     }
 
     @Test // RPC call test: void setSimpleValueObjectTwice(SimpleValueObject(44), SimpleValueObject(88))
@@ -164,9 +147,9 @@ public class RESTfulRPCAdapterTest
                 .header("Content-Type", "application/json")
                 .asObject(Integer.class).getBody();
 
-        assertTrue(response.isSuccess());
-        assertEquals(paramList[1].getValue(), simpleApplicationService.getSimpleValueObject().getValue());
-        assertEquals(paramList[1].getValue(), newResult.intValue());
+        Assertions.assertTrue(response.isSuccess());
+        Assertions.assertEquals(paramList[1].getValue(), simpleApplicationService.getSimpleValueObject().getValue());
+        Assertions.assertEquals(paramList[1].getValue(), newResult.intValue());
     }
 
     @Test // RPC call test:  int setGetSimpleValue(44)
@@ -189,14 +172,14 @@ public class RESTfulRPCAdapterTest
                 .asObject(Integer.class).getBody();
 
         //Assert
-        assertNotNull(oldvalue);
-        assertEquals(defaultValue, oldvalue.intValue());
-        assertEquals(newValue, simpleApplicationService.getSimpleValueObject().getValue());
-        assertEquals(newValue, newResult.intValue());
+        Assertions.assertNotNull(oldvalue);
+        Assertions.assertEquals(defaultValue, oldvalue.intValue());
+        Assertions.assertEquals(newValue, simpleApplicationService.getSimpleValueObject().getValue());
+        Assertions.assertEquals(newValue, newResult.intValue());
     }
 
-    @Test(expected = SimpleApplicationService.SimpleApplicationException.class) // RPC call test:  void throwExceptionTest()
-    public void testPOSTCommandWithException() throws Throwable
+    @Test
+    public void testPOSTCommandWithException() 
     {
         //Arrange
 
@@ -207,13 +190,16 @@ public class RESTfulRPCAdapterTest
         JsonObject error = response.mapError(JsonObject.class);
 
         //Assert
-        if ( error != null )
-        {
-            if (SimpleApplicationService.SimpleApplicationException.class.getName().equals(error.get("ExceptionType").getAsString()) )
+        Assertions.assertThrows(SimpleApplicationService.SimpleApplicationException.class, () -> {
+            if ( error != null )
             {
-                throw new Gson().fromJson(error.get("Exception").getAsString(), SimpleApplicationService.SimpleApplicationException.class ) ;
+                if (SimpleApplicationService.SimpleApplicationException.class.getName().equals(error.get("ExceptionType").getAsString()) )
+                {
+                    throw new Gson().fromJson(error.get("Exception").getAsString(), SimpleApplicationService.SimpleApplicationException.class ) ;
+                }
             }
-        }
+
+        });
     }
 
 }

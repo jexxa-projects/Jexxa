@@ -1,11 +1,11 @@
 package io.ddd.jexxa.core.factory;
 
-import static org.junit.Assert.assertFalse;
 
 import java.util.ArrayList;
 
-import io.ddd.jexxa.application.annotation.*;
-import org.junit.Test;
+import io.ddd.jexxa.application.annotation.ApplicationService;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class ClassFactoryTest
 {
@@ -21,7 +21,7 @@ public class ClassFactoryTest
         result.forEach( element -> factoryResults.add( ClassFactory.newInstanceOf(element)) );
 
         //Assert
-        assertFalse(factoryResults.isEmpty());
+        Assertions.assertFalse(factoryResults.isEmpty());
 
         result.forEach( element -> System.out.println(element.getSimpleName()));
     }

@@ -4,8 +4,8 @@ import java.util.Properties;
 
 import io.ddd.jexxa.application.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class MBeanModelTest
 {
@@ -35,7 +35,7 @@ public class MBeanModelTest
         var objectUnderTest = new MBeanModel(applicationService, properties);
 
         //Act
-        Assert.assertEquals("MBeanModelTest:type=ApplicationService,name=SimpleApplicationService", objectUnderTest.getDomainPath());
+        Assertions.assertEquals("MBeanModelTest:type=ApplicationService,name=SimpleApplicationService", objectUnderTest.getDomainPath());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class MBeanModelTest
         var result = objectUnderTest.toJsonTemplate(int.class);
 
         //Assert
-        Assert.assertEquals(integerTemplate, result);
+        Assertions.assertEquals(integerTemplate, result);
     }
 
     @Test
@@ -71,7 +71,7 @@ public class MBeanModelTest
         var result = objectUnderTest.toJsonTemplate(String.class);
 
         //Assert
-        Assert.assertEquals(stringTemplate, result);
+        Assertions.assertEquals(stringTemplate, result);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class MBeanModelTest
         var result = objectUnderTest.toJsonTemplate(JexxaValueObject.class);
 
         //Assert
-        Assert.assertEquals(jexxaValueObjectTemplate, result);
+        Assertions.assertEquals(jexxaValueObjectTemplate, result);
     }
 
     @Test
@@ -107,7 +107,7 @@ public class MBeanModelTest
         var result = objectUnderTest.toJsonTemplate(JexxaCompoundValueObject.class);
 
         //Assert
-        Assert.assertEquals(jexxaValueObjectTemplate, result);
+        Assertions.assertEquals(jexxaValueObjectTemplate, result);
     }
 
 }

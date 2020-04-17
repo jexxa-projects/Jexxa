@@ -1,6 +1,5 @@
 package io.ddd.jexxa.infrastructure.drivenadapter.messaging;
 
-import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,9 @@ import io.ddd.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.messaging.JMSAdapterTest;
 import io.ddd.jexxa.infrastructure.drivingadapter.messaging.JMSListener;
 import io.ddd.jexxa.utils.JexxaLogger;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 public class JMSSenderTest
 {
@@ -25,7 +25,7 @@ public class JMSSenderTest
     final String destination = "JMSSenderTest";
     Properties properties;
 
-    @Before
+    @BeforeEach
     public void initTests()
     {
         properties = new Properties();
@@ -36,7 +36,8 @@ public class JMSSenderTest
     }
 
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
-    @Test (timeout = 1000)
+    @Test
+    @Timeout(1)
     public void sentMessageToTopic()
     {
         //Arrange
@@ -60,7 +61,8 @@ public class JMSSenderTest
 
 
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
-    @Test (timeout = 1000)
+    @Test
+    @Timeout(1)
     public void sentMessageToQueue()
     {
         //Arrange

@@ -15,12 +15,14 @@ import javax.jms.TextMessage;
 
 import io.ddd.jexxa.core.JexxaMain;
 import io.ddd.jexxa.utils.JexxaLogger;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 public class JMSAdapterTest
 {
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
-    @Test(timeout = 10000)
+    @Test
+    @Timeout(1)
     public void startJMSAdapter() 
     {
         //Arrange
@@ -51,7 +53,8 @@ public class JMSAdapterTest
 
 
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
-    @Test(timeout = 10000)
+    @Test
+    @Timeout(1)
     public void startJMSAdapterJexxa() 
     {
         //Arrange

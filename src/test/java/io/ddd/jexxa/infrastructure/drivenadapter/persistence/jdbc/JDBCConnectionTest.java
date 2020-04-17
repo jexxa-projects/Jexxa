@@ -1,21 +1,19 @@
 package io.ddd.jexxa.infrastructure.drivenadapter.persistence.jdbc;
 
 import java.util.Properties;
-import java.util.function.Function;
 
 import io.ddd.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.ddd.jexxa.infrastructure.drivenadapter.persistence.imdb.IMDBConnection;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class JDBCConnectionTest
 {
     private JexxaAggregate aggregate;
     private JDBCConnection<JexxaAggregate,JexxaValueObject> objectUnderTest;
 
-    @Before
+    @BeforeEach
     public void initTests()
     {
         //Arrange
@@ -43,16 +41,16 @@ public class JDBCConnectionTest
         objectUnderTest.add(aggregate);
 
         //Assert
-        Assert.assertEquals(aggregate.getKey(), objectUnderTest.get(aggregate.getKey()).orElseThrow().getKey());
-        Assert.assertTrue(objectUnderTest.get().size() > 0);
+        Assertions.assertEquals(aggregate.getKey(), objectUnderTest.get(aggregate.getKey()).orElseThrow().getKey());
+        Assertions.assertTrue(objectUnderTest.get().size() > 0);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void addAggregateTwice()
     {
         //act
         objectUnderTest.add(aggregate);
-        objectUnderTest.add(aggregate);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> objectUnderTest.add(aggregate));
     }
 
     @Test
@@ -65,7 +63,7 @@ public class JDBCConnectionTest
         objectUnderTest.remove( aggregate.getKey() );
 
         //Assert
-        Assert.assertTrue(objectUnderTest.get().isEmpty());
+        Assertions.assertTrue(objectUnderTest.get().isEmpty());
     }
 
 }

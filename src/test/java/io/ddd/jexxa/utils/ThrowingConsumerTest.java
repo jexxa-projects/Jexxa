@@ -2,14 +2,12 @@ package io.ddd.jexxa.utils;
 
 import static io.ddd.jexxa.utils.ThrowingConsumer.exceptionCollector;
 import static io.ddd.jexxa.utils.ThrowingConsumer.exceptionLogger;
-import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class ThrowingConsumerTest
 {
@@ -45,7 +43,7 @@ public class ThrowingConsumerTest
                 );
 
         //Assert
-        assertFalse(exceptions.isEmpty());
-        assertEquals(values.length, exceptions.size());
+        Assertions.assertFalse(exceptions.isEmpty());
+        Assertions.assertEquals(values.length, exceptions.size());
     }
 }

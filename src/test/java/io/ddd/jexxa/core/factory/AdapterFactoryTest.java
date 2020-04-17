@@ -11,8 +11,8 @@ import io.ddd.jexxa.application.domainservice.INotUniqueService;
 import io.ddd.jexxa.application.domainservice.IPropertiesConstructorService;
 import io.ddd.jexxa.application.infrastructure.drivenadapter.factory.DefaultConstructorAdapter;
 import io.ddd.jexxa.application.infrastructure.drivenadapter.factory.PropertiesConstructorAdapter;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 
 /**
  * @see AdapterFactory for conventions to create an adapter 
@@ -31,7 +31,7 @@ public class AdapterFactoryTest
         var result = objectUnderTest.newInstanceOf(IDefaultConstructorService.class);
 
         //Assert
-        Assert.assertNotNull(result);
+        Assertions.assertNotNull(result);
     }
 
     @Test
@@ -45,8 +45,8 @@ public class AdapterFactoryTest
         var secondResult = objectUnderTest.newInstanceOf(PropertiesConstructorAdapter.class, new Properties());
 
         //Assert
-        Assert.assertNotNull(firstResult);
-        Assert.assertNotNull(secondResult);
+        Assertions.assertNotNull(firstResult);
+        Assertions.assertNotNull(secondResult);
     }
 
 
@@ -66,13 +66,13 @@ public class AdapterFactoryTest
         var secondProperties = objectUnderTest.getInstanceOf(IPropertiesConstructorService.class, new Properties());
 
         //Assert
-        Assert.assertNotNull(first);
-        Assert.assertNotNull(second);
-        Assert.assertNotNull(firstProperties);
-        Assert.assertNotNull(secondProperties);
+        Assertions.assertNotNull(first);
+        Assertions.assertNotNull(second);
+        Assertions.assertNotNull(firstProperties);
+        Assertions.assertNotNull(secondProperties);
 
-        Assert.assertEquals(first,second);
-        Assert.assertEquals(firstProperties,secondProperties);
+        Assertions.assertEquals(first,second);
+        Assertions.assertEquals(firstProperties,secondProperties);
     }
 
     @Test
@@ -87,7 +87,7 @@ public class AdapterFactoryTest
         var result = objectUnderTest.newInstanceOf(IPropertiesConstructorService.class, properties);
 
         //Assert
-        Assert.assertNotNull(result);
+        Assertions.assertNotNull(result);
     }
 
 
@@ -101,7 +101,7 @@ public class AdapterFactoryTest
         var result = objectUnderTest.newInstanceOf(IFactoryMethodService.class);
 
         //Assert
-        Assert.assertNotNull(result);
+        Assertions.assertNotNull(result);
     }
 
     @Test
@@ -115,7 +115,7 @@ public class AdapterFactoryTest
         var result = objectUnderTest.newInstanceOf(IFactoryMethodService.class, properties);
 
         //Assert
-        Assert.assertNotNull(result);
+        Assertions.assertNotNull(result);
     }
 
 
@@ -134,7 +134,7 @@ public class AdapterFactoryTest
         boolean result = objectUnderTest.isAvailable(adapterList);
 
         //Assert
-        Assert.assertTrue(result);
+        Assertions.assertTrue(result);
     }
 
     @Test
@@ -150,27 +150,31 @@ public class AdapterFactoryTest
         boolean result = objectUnderTest.isAvailable(adapterList);
 
         //Assert
-        Assert.assertFalse(result);
+        Assertions.assertFalse(result);
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test 
     public void createNoUniqueImplementation() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
 
         //Act
-        objectUnderTest.newInstanceOf(INotUniqueService.class);
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                objectUnderTest.newInstanceOf(INotUniqueService.class)
+        );
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test 
     public void createNoImplementationAvailable() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
 
         //Act
-        objectUnderTest.newInstanceOf(INotImplementedService.class);
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                objectUnderTest.newInstanceOf(INotImplementedService.class)
+        );
     }
 
 }

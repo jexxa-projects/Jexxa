@@ -2,10 +2,10 @@ package io.ddd.jexxa.core.factory;
 
 import java.util.Properties;
 
-import io.ddd.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
 import io.ddd.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
-import org.junit.Assert;
-import org.junit.Test;
+import io.ddd.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class PortFactoryTest
 {
@@ -26,7 +26,7 @@ public class PortFactoryTest
         boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenAdapters.class);
 
         //Assert
-        Assert.assertTrue(result);
+        Assertions.assertTrue(result);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class PortFactoryTest
         boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenAdapters.class);
 
         //Assert
-        Assert.assertTrue(result);
+        Assertions.assertTrue(result);
     }
 
 
@@ -58,9 +58,9 @@ public class PortFactoryTest
         var second = objectUnderTest.newInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
 
         //Assert
-        Assert.assertNotNull(first);
-        Assert.assertNotNull(second);
-        Assert.assertNotEquals(first, second);
+        Assertions.assertNotNull(first);
+        Assertions.assertNotNull(second);
+        Assertions.assertNotEquals(first, second);
     }
 
     @Test
@@ -76,9 +76,9 @@ public class PortFactoryTest
         var second = objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
 
         //Assert that first and second adapter are equal 
-        Assert.assertNotNull(first);
-        Assert.assertNotNull(second);
-        Assert.assertEquals(first,second);
+        Assertions.assertNotNull(first);
+        Assertions.assertNotNull(second);
+        Assertions.assertEquals(first,second);
     }
 
 
@@ -95,9 +95,9 @@ public class PortFactoryTest
         var second = objectUnderTest.getPortAdapterOf(SimpleApplicationServiceAdapter.class, new Properties());
 
         //Assert that first and second adapter are equal
-        Assert.assertNotNull(first);
-        Assert.assertNotNull(second);
-        Assert.assertEquals(first.getPort(),second.getPort());
+        Assertions.assertNotNull(first);
+        Assertions.assertNotNull(second);
+        Assertions.assertEquals(first.getPort(),second.getPort());
     }
 
 }

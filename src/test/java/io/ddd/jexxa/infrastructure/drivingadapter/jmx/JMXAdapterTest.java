@@ -1,8 +1,5 @@
 package io.ddd.jexxa.infrastructure.drivingadapter.jmx;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.lang.management.ManagementFactory;
 import java.util.Set;
@@ -11,7 +8,8 @@ import javax.management.MBeanServer;
 import javax.management.ObjectInstance;
 
 import io.ddd.jexxa.application.applicationservice.SimpleApplicationService;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class JMXAdapterTest
 {
@@ -33,8 +31,8 @@ public class JMXAdapterTest
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         Set<ObjectInstance> result = mbs.queryMBeans(null , null);
 
-        assertNotNull(result);
-        assertTrue(result.
+        Assertions.assertNotNull(result);
+        Assertions.assertTrue(result.
                 stream().
                 anyMatch(element -> element.getClassName().endsWith(SimpleApplicationService.class.getSimpleName()))
         );

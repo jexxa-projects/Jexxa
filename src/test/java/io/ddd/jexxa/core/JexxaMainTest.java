@@ -1,10 +1,6 @@
 package io.ddd.jexxa.core;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,17 +13,17 @@ import java.util.Set;
 import javax.management.MBeanServer;
 import javax.management.ObjectInstance;
 
+import io.ddd.jexxa.application.annotation.ApplicationService;
 import io.ddd.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
 import io.ddd.jexxa.application.applicationservice.JexxaApplicationService;
 import io.ddd.jexxa.application.applicationservice.SimpleApplicationService;
-import io.ddd.jexxa.application.annotation.*;
 import io.ddd.jexxa.application.domainservice.InitializeJexxaAggregates;
 import io.ddd.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class JexxaMainTest
 {
@@ -35,14 +31,14 @@ public class JexxaMainTest
     private JexxaMain objectUnderTest;
     private final String packageName = "io.ddd.jexxa";
 
-    @Before
+    @BeforeEach
     public void initTests()
     {
         properties = new Properties();
         properties.putAll(getRESTfulRPCProperties());
     }
 
-    @After
+    @AfterEach
     public void tearDownTests()
     {
         if (objectUnderTest != null)
@@ -125,7 +121,7 @@ public class JexxaMainTest
         var jexxaApplicationService = objectUnderTest.getInstanceOfPort(JexxaApplicationService.class);
 
         //Assert 
-        Assert.assertTrue(jexxaApplicationService.getAggregateCount() > 0);
+        Assertions.assertTrue(jexxaApplicationService.getAggregateCount() > 0);
     }
 
 
@@ -135,8 +131,8 @@ public class JexxaMainTest
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         Set<ObjectInstance> result = mbs.queryMBeans(null , null);
 
-        assertNotNull(result);
-        assertTrue(result.
+        Assertions.assertNotNull(result);
+        Assertions.assertTrue(result.
                 stream().
                 anyMatch(element -> element.getClassName().endsWith(clazz.getSimpleName()))
         );
@@ -144,8 +140,8 @@ public class JexxaMainTest
 
     void assertRESTfulRPCAdapter() {
         String result = sendGETCommand(SimpleApplicationService.class.getSimpleName()+ "/getSimpleValue");
-        assertNotNull(result);
-        assertEquals(Integer.toString(42), result);
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(Integer.toString(42), result);
     }
 
 

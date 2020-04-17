@@ -1,15 +1,13 @@
 package io.ddd.jexxa.core.factory;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 
-import io.ddd.jexxa.application.annotation.*;
+import io.ddd.jexxa.application.annotation.ApplicationService;
+import io.ddd.jexxa.application.annotation.UnavailableDuringRuntime;
 import io.ddd.jexxa.application.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class DependencyScannerTest
 {
@@ -24,8 +22,8 @@ public class DependencyScannerTest
         var applicationServiceList = objectUnderTest.getClassesWithAnnotation(ApplicationService.class);
 
         //Assert
-        assertFalse(applicationServiceList.isEmpty());
-        assertTrue(applicationServiceList
+        Assertions.assertFalse(applicationServiceList.isEmpty());
+        Assertions.assertTrue(applicationServiceList
                 .stream()
                 .anyMatch(SimpleApplicationService.class::isAssignableFrom));
 
@@ -43,8 +41,8 @@ public class DependencyScannerTest
                 getClassesWithAnnotation(ApplicationService.class);
 
         //Assert
-        assertFalse(applicationServiceList.isEmpty());
-        assertTrue(applicationServiceList
+        Assertions.assertFalse(applicationServiceList.isEmpty());
+        Assertions.assertTrue(applicationServiceList
                 .stream()
                 .anyMatch(SimpleApplicationService.class::isAssignableFrom));
 
@@ -63,7 +61,7 @@ public class DependencyScannerTest
                 getClassesWithAnnotation(ApplicationService.class);
 
         //Assert
-        assertTrue(applicationServiceList.isEmpty());
+        Assertions.assertTrue(applicationServiceList.isEmpty());
     }
 
     @Test
@@ -78,7 +76,7 @@ public class DependencyScannerTest
         List<Class<?>> drivingAdapters = objectUnderTest.getClassesImplementing(IDrivingAdapter.class);
 
         //Assert
-        assertFalse(drivingAdapters.isEmpty());
+        Assertions.assertFalse(drivingAdapters.isEmpty());
     }
 
 
@@ -94,18 +92,18 @@ public class DependencyScannerTest
                 getClassesImplementing(IDrivingAdapter.class);
 
         //Assert
-        assertFalse(drivingAdapters.isEmpty());
-        assertEquals(1, drivingAdapters.size());
+        Assertions.assertFalse(drivingAdapters.isEmpty());
+        Assertions.assertEquals(1, drivingAdapters.size());
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test 
     public void handleAnnotationUnavailableDuringRuntime()
     {
         //Arrange
         var objectUnderTest = new DependencyScanner();
 
         //Act
-        objectUnderTest.getClassesWithAnnotation(UnavailableDuringRuntime.class);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> objectUnderTest.getClassesWithAnnotation(UnavailableDuringRuntime.class));
     }
 
 }

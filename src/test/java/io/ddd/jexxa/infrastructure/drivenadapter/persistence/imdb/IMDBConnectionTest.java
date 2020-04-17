@@ -4,8 +4,8 @@ import java.util.Properties;
 
 import io.ddd.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class IMDBConnectionTest
 {
@@ -26,11 +26,11 @@ public class IMDBConnectionTest
         objectUnderTest.add(aggregate);
 
         //Assert
-        Assert.assertEquals(aggregate, objectUnderTest.get(aggregate.getKey()).orElse(null));
-        Assert.assertTrue(objectUnderTest.get().size() > 0);
+        Assertions.assertEquals(aggregate, objectUnderTest.get(aggregate.getKey()).orElse(null));
+        Assertions.assertTrue(objectUnderTest.get().size() > 0);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void addAggregateTwice()
     {
         //Arrange
@@ -44,7 +44,7 @@ public class IMDBConnectionTest
         
         //act
         objectUnderTest.add(aggregate);
-        objectUnderTest.add(aggregate);
+        Assertions.assertThrows(IllegalArgumentException.class, () ->objectUnderTest.add(aggregate));
     }
 
 
@@ -65,7 +65,7 @@ public class IMDBConnectionTest
         objectUnderTest.remove( aggregate.getKey() );
 
         //Assert
-        Assert.assertTrue(objectUnderTest.get().isEmpty());
+        Assertions.assertTrue(objectUnderTest.get().isEmpty());
     }
 
     @Test
@@ -89,9 +89,9 @@ public class IMDBConnectionTest
         );
 
         //Assert that connections are different but refer to the same repository 
-        Assert.assertNotEquals(objectUnderTest, newConnection);
-        Assert.assertFalse(objectUnderTest.get().isEmpty());
-        Assert.assertFalse(newConnection.get().isEmpty());
+        Assertions.assertNotEquals(objectUnderTest, newConnection);
+        Assertions.assertFalse(objectUnderTest.get().isEmpty());
+        Assertions.assertFalse(newConnection.get().isEmpty());
     }
 
     @Test
@@ -117,9 +117,9 @@ public class IMDBConnectionTest
         newConnection.add(new JexxaValueObject(42));
 
         //Assert that connections are different but refer to the same repository
-        Assert.assertNotEquals(objectUnderTest, newConnection);
-        Assert.assertEquals(1, objectUnderTest.get().size());
-        Assert.assertEquals(1, newConnection.get().size());
+        Assertions.assertNotEquals(objectUnderTest, newConnection);
+        Assertions.assertEquals(1, objectUnderTest.get().size());
+        Assertions.assertEquals(1, newConnection.get().size());
 
     }
 

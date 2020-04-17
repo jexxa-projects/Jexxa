@@ -1,12 +1,15 @@
 package io.ddd.jexxa.core;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 public class BoundedContextTest
 {
     final BoundedContext objectUnderTest = new BoundedContext("BoundedContextTest");
 
-    @Test(timeout = 1000)
+    @Test
+    @Timeout(1)
     public void runAndShutdown()
     {
         //Arrange

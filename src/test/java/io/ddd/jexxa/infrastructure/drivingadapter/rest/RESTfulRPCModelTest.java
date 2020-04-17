@@ -1,12 +1,8 @@
 package io.ddd.jexxa.infrastructure.drivingadapter.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-
 import io.ddd.jexxa.application.applicationservice.SimpleApplicationService;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class RESTfulRPCModelTest
 {
@@ -20,18 +16,18 @@ public class RESTfulRPCModelTest
         var result = objectUnderTest.getGETCommands();
         
         //Check all conventions as defined in {@link RESTfulHTTPGenerator}.
-        assertFalse(result.isEmpty());
+        Assertions.assertFalse(result.isEmpty());
 
         //Check that all commands are marked as GET
-        result.forEach(element -> assertEquals(RESTfulRPCModel.RESTfulRPCMethod.HTTPCommand.GET,
+        result.forEach(element -> Assertions.assertEquals(RESTfulRPCModel.RESTfulRPCMethod.HTTPCommand.GET,
                 element.getHTTPCommand()));
 
         //Check URIs
-        result.forEach(element -> assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.getMethod().getName(),
+        result.forEach(element -> Assertions.assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.getMethod().getName(),
                 element.getResourcePath()));
 
         //Check return types are NOT void
-        result.forEach(element -> assertNotEquals(void.class, element.getMethod().getReturnType()));
+        result.forEach(element -> Assertions.assertNotEquals(void.class, element.getMethod().getReturnType()));
 
     }
 
@@ -44,28 +40,29 @@ public class RESTfulRPCModelTest
         var result = objectUnderTest.getPOSTCommands();
 
         //Check all conventions as defined in {@link RESTfulRPCGenerator}.
-        assertFalse(result.isEmpty());
+        Assertions.assertFalse(result.isEmpty());
 
         //Check that all commands are marked as GET
-        result.forEach(element -> assertEquals(RESTfulRPCModel.RESTfulRPCMethod.HTTPCommand.POST,
+        result.forEach(element -> Assertions.assertEquals(RESTfulRPCModel.RESTfulRPCMethod.HTTPCommand.POST,
                 element.getHTTPCommand()));
 
         //Check URIs
-        result.forEach(element -> assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.getMethod().getName(),
+        result.forEach(element -> Assertions.assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.getMethod().getName(),
                 element.getResourcePath()));
 
         //Check return types are NOT void or Parameter > 0 
-        result.forEach(element -> assertTrue( (void.class.equals(element.getMethod().getReturnType())
+        result.forEach(element -> Assertions.assertTrue( (void.class.equals(element.getMethod().getReturnType())
                                             || element.getMethod().getParameterCount() > 0 )));
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void invalidApplicationService()
     {
         //Act / Assert
-        new RESTfulRPCModel(new UnsupportedApplicationService());
-
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                new RESTfulRPCModel(new UnsupportedApplicationService())
+        );
     }
 
 }
