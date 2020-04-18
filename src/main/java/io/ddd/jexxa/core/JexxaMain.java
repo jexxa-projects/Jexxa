@@ -69,14 +69,15 @@ public class JexxaMain
         return initFunction.apply(instance);
     }
 
-    public <T> void addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
+    public <T> JexxaMain addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
     {
         T instance = portFactory.getInstanceOf(bootstrapService, properties);
         initFunction.accept(instance);
+        return this;
     }
 
 
-    public void bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
+    public JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
         Validate.notNull(adapter);
         Validate.notNull(port);
 
@@ -86,9 +87,10 @@ public class JexxaMain
         drivingAdapter.register(inboundPort);
 
         compositeDrivingAdapter.add(drivingAdapter);
+        return this;
     }
 
-    public void bindToPort(Class<? extends IDrivingAdapter> adapter, Object port) {
+    public JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Object port) {
         Validate.notNull(adapter);
         Validate.notNull(port);
 
@@ -96,9 +98,11 @@ public class JexxaMain
         drivingAdapter.register(port);
 
         compositeDrivingAdapter.add(drivingAdapter);
+
+        return this;
     }
 
-    public void bindToPortWrapper(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
+    public JexxaMain bindToPortWrapper(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
     {
         var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
 
@@ -107,9 +111,11 @@ public class JexxaMain
         drivingAdapter.register(portWrapperInstance);
 
         compositeDrivingAdapter.add(drivingAdapter);
+
+        return this;
     }
 
-    public void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
+    public JexxaMain bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
         Validate.notNull(adapter);
         Validate.notNull(portAnnotation);
 
@@ -120,6 +126,8 @@ public class JexxaMain
         portList.forEach(drivingAdapter::register);
         
         compositeDrivingAdapter.add(drivingAdapter);
+
+        return this;
     }
 
     public <T> T newInstanceOfPort(Class<T> port)
@@ -133,14 +141,16 @@ public class JexxaMain
     }
 
 
-    public void startDrivingAdapters()
+    public JexxaMain startDrivingAdapters()
     {
         compositeDrivingAdapter.start();
+        return this;
     }
 
-    public void stopDrivingAdapters()
+    public JexxaMain stopDrivingAdapters()
     {
         compositeDrivingAdapter.stop();
+        return this;
     }
 
     public BoundedContext getBoundedContext()
