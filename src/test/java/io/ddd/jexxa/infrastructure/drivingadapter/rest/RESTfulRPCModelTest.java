@@ -17,8 +17,8 @@ public class RESTfulRPCModelTest
         var objectUnderTest = new RESTfulRPCModel(defaultObject);
 
         var result = objectUnderTest.getGETCommands();
-        
-        //Check all conventions as defined in {@link RESTfulHTTPGenerator}.
+
+        // Check all conventions as defined in {@link RESTfulRPCModel}.
         Assertions.assertFalse(result.isEmpty());
 
         //Check that all commands are marked as GET
