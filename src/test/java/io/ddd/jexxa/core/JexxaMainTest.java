@@ -20,6 +20,7 @@ import io.ddd.jexxa.application.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.application.domainservice.InitializeJexxaAggregates;
 import io.ddd.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
+import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +34,7 @@ public class JexxaMainTest
     private Properties properties;
     private JexxaMain objectUnderTest;
     private final String packageName = "io.ddd.jexxa";
-
+    
     @BeforeEach
     public void initTests()
     {
@@ -48,6 +49,7 @@ public class JexxaMainTest
         {
             objectUnderTest.stopDrivingAdapters();
         }
+        Unirest.shutDown();
     }
 
 
@@ -142,9 +144,19 @@ public class JexxaMainTest
     }
 
     void assertRESTfulRPCAdapter() {
-        String result = sendGETCommand(SimpleApplicationService.class.getSimpleName()+ "/getSimpleValue");
+        //Assert
+        String restPath = "http://"
+                + properties.get(RESTfulRPCAdapter.HOST_PROPERTY) + ":"
+                + properties.get(RESTfulRPCAdapter.PORT_PROPERTY) + "/"
+                + SimpleApplicationService.class.getSimpleName() + "/"
+                + "getSimpleValue";
+        
+        Integer result = Unirest.get(restPath)
+                .header("Content-Type", "application/json")
+                .asObject(Integer.class).getBody();
+
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(Integer.toString(42), result);
+        Assertions.assertEquals(42, result);
     }
 
 
@@ -154,41 +166,5 @@ public class JexxaMainTest
         properties.put(RESTfulRPCAdapter.HOST_PROPERTY, "localhost");
         properties.put(RESTfulRPCAdapter.PORT_PROPERTY, Integer.toString(7000));
         return properties;
-    }
-
-    private  String sendGETCommand(String restPath) 
-    {
-        try
-        {
-            URL url = new URL("http://"
-                    + properties.get(RESTfulRPCAdapter.HOST_PROPERTY)
-                    + ":"
-                    + properties.get(RESTfulRPCAdapter.PORT_PROPERTY)
-                    + "/"
-                    + restPath);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Content-Type", "application/json");
-
-            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK)
-            {
-                throw new IOException("Failed : HTTP error code : "
-                        + conn.getResponseCode());
-            }
-
-            try ( BufferedReader br = new BufferedReader(new InputStreamReader(
-                    (conn.getInputStream()))) )
-            {
-
-                String output = br.readLine();
-
-                conn.disconnect();
-
-                return output;
-            }
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
     }
 }
