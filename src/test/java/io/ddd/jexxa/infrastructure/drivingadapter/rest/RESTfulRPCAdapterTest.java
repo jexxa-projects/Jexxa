@@ -69,13 +69,15 @@ public class RESTfulRPCAdapterTest
     @Test
     public void testWithRandomPort() 
     {
-        //Setup
+        //Arrange
         var secondAdapter = new RESTfulRPCAdapter("localhost",0);
         secondAdapter.register(simpleApplicationService);
         secondAdapter.start();
+        var secondRestPath = "http://localhost:" + secondAdapter.getPort() + "/SimpleApplicationService/";
 
-        //Arrange
-        Integer result = Unirest.get(restPath + "getSimpleValue")
+
+        //Act using secondAdapter 
+        Integer result = Unirest.get(secondRestPath + "getSimpleValue")
                 .header("Content-Type", "application/json")
                 .asObject(Integer.class).getBody();
 
