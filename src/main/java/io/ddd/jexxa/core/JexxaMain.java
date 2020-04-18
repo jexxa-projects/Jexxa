@@ -76,6 +76,10 @@ public class JexxaMain
         return this;
     }
 
+    public <T extends IDrivingAdapter> DrivingAdapter<T>  bind(Class<T> clazz)
+    {
+        return new DrivingAdapter<>(clazz, this);
+    }
 
     public JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
         Validate.notNull(adapter);

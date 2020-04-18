@@ -63,11 +63,11 @@ public class JexxaMainTest
 
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
-        objectUnderTest.bindToPort(JMXAdapter.class, SimpleApplicationService.class);
-        objectUnderTest.bindToPort(RESTfulRPCAdapter.class, SimpleApplicationService.class);
+        objectUnderTest
+                .bind(JMXAdapter.class).to(SimpleApplicationService.class)
+                .bind(RESTfulRPCAdapter.class).to(SimpleApplicationService.class)
 
-        objectUnderTest.startDrivingAdapters();
-
+                .startDrivingAdapters();
 
         //Assert
         assertJMXAdapter(SimpleApplicationService.class);
@@ -83,10 +83,10 @@ public class JexxaMainTest
 
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
-        objectUnderTest.bindToPort(JMXAdapter.class, ApplicationServiceWithDrivenAdapters.class);
-        objectUnderTest.bindToPort(RESTfulRPCAdapter.class, ApplicationServiceWithDrivenAdapters.class);
-
-        objectUnderTest.startDrivingAdapters();
+        objectUnderTest
+                .bind(JMXAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
+                .bind(RESTfulRPCAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
+                .startDrivingAdapters();
 
 
         //Assert
@@ -103,8 +103,9 @@ public class JexxaMainTest
 
 
         //Act: Bind all DrivingAdapter to all ApplicationServices
-        objectUnderTest.bindToAnnotatedPorts(RESTfulRPCAdapter.class, ApplicationService.class);
-        objectUnderTest.startDrivingAdapters();
+        objectUnderTest
+                .bind(RESTfulRPCAdapter.class).toAnnotation(ApplicationService.class)
+                .startDrivingAdapters();
 
         //Assert
         assertRESTfulRPCAdapter();

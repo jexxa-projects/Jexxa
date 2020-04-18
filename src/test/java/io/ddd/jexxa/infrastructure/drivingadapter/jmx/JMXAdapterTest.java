@@ -21,7 +21,8 @@ public class JMXAdapterTest
     {
         //Arrange
         var defaultValue = 42;
-        var simpleApplicationService = new SimpleApplicationService(defaultValue);
+        var simpleApplicationService = new SimpleApplicationService();
+        simpleApplicationService.setSimpleValue(defaultValue);
 
         var objectUnderTest = new JMXAdapter();
         

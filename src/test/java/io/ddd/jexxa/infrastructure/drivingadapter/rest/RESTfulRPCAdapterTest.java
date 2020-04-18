@@ -24,13 +24,15 @@ public class RESTfulRPCAdapterTest
     final String restPath = "http://localhost:7000/SimpleApplicationService/";
 
     final int defaultValue = 42;
-    final SimpleApplicationService simpleApplicationService = new SimpleApplicationService(defaultValue);
+    final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
 
     RESTfulRPCAdapter objectUnderTest;
 
     @BeforeEach
     public void setupTests(){
         //Setup
+        simpleApplicationService.setSimpleValue(42);
+
         properties = new Properties();
         properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
         properties.put(RESTfulRPCAdapter.PORT_PROPERTY, Integer.toString(defaultPort));

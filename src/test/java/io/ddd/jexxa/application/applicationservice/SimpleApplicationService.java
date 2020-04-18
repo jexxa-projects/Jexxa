@@ -18,12 +18,9 @@ public class SimpleApplicationService
 
     private int firstValue;
 
-    public SimpleApplicationService() {
-        this(42);
-    }
-
-    public SimpleApplicationService(int firstValue) {
-        this.firstValue = firstValue;
+    public SimpleApplicationService()
+    {
+        firstValue = 42;
     }
     
     public int getSimpleValue()

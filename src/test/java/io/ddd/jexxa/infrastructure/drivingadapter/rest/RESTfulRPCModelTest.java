@@ -13,7 +13,8 @@ public class RESTfulRPCModelTest
     @Test
     public void validateGETCommands()
     {
-        var defaultObject = new SimpleApplicationService(42);
+        var defaultObject = new SimpleApplicationService();
+        defaultObject.setSimpleValue(42);
         var objectUnderTest = new RESTfulRPCModel(defaultObject);
 
         var result = objectUnderTest.getGETCommands();
@@ -37,7 +38,8 @@ public class RESTfulRPCModelTest
     @Test
     public void validatePOSTCommands()
     {
-        var defaultObject = new SimpleApplicationService(42);
+        var defaultObject = new SimpleApplicationService();
+        defaultObject.setSimpleValue(42);
         var objectUnderTest = new RESTfulRPCModel(defaultObject);
 
         var result = objectUnderTest.getPOSTCommands();
