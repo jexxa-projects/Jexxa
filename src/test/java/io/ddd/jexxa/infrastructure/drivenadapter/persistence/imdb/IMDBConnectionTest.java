@@ -6,7 +6,10 @@ import io.ddd.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
+@Execution(ExecutionMode.SAME_THREAD)
 public class IMDBConnectionTest
 {
 

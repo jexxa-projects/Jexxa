@@ -13,10 +13,13 @@ import io.ddd.jexxa.infrastructure.drivenadapter.persistence.jdbc.JDBCConnection
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 
+@Execution(ExecutionMode.SAME_THREAD)
 public class JexxaAggregateRepositoryTest
 {
 

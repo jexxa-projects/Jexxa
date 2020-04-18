@@ -13,10 +13,13 @@ import io.ddd.jexxa.application.infrastructure.drivenadapter.factory.DefaultCons
 import io.ddd.jexxa.application.infrastructure.drivenadapter.factory.PropertiesConstructorAdapter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 /**
  * @see AdapterFactory for conventions to create an adapter 
  */
+@Execution(ExecutionMode.CONCURRENT)
 public class AdapterFactoryTest
 {
     private final String packageName = "io.ddd.jexxa";
