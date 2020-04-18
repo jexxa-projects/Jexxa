@@ -80,6 +80,7 @@ public class JexxaMainTest
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
+                .addToInfrastructure("io.ddd.jexxa.application.infrastructure")
                 .bind(JMXAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
                 .bind(RESTfulRPCAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
                 .startDrivingAdapters();
@@ -114,6 +115,7 @@ public class JexxaMainTest
 
         //Act
         objectUnderTest
+                .addToInfrastructure("io.ddd.jexxa.application.infrastructure")
                 .bootstrap(InitializeJexxaAggregates.class).with(InitializeJexxaAggregates::initDomainData);
 
         var jexxaApplicationService = objectUnderTest.getInstanceOfPort(JexxaApplicationService.class);
