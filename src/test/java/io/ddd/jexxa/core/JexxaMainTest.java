@@ -120,9 +120,8 @@ public class JexxaMainTest
         objectUnderTest.whiteList(packageName);
 
         //Act
-        objectUnderTest.addBootstrapService(
-                InitializeJexxaAggregates.class,
-                InitializeJexxaAggregates::initDomainData);
+        objectUnderTest
+                .bootstrap(InitializeJexxaAggregates.class).with(InitializeJexxaAggregates::initDomainData);
 
         var jexxaApplicationService = objectUnderTest.getInstanceOfPort(JexxaApplicationService.class);
 

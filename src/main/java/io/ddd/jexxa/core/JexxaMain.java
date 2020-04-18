@@ -76,6 +76,11 @@ public class JexxaMain
         return this;
     }
 
+    public <T> BootstrapService<T> bootstrap(Class<T> bootstrapService)
+    {
+        return new BootstrapService<>(bootstrapService, this);
+    }
+
     public <T extends IDrivingAdapter> DrivingAdapter<T>  bind(Class<T> clazz)
     {
         return new DrivingAdapter<>(clazz, this);

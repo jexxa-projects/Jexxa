@@ -28,6 +28,11 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
         }
     }
 
+    public JexxaMain to(Object port)
+    {
+        return jexxaMain.bindToPort(drivingAdapter, port);
+    }
+
     public <P extends Annotation> JexxaMain toAnnotation(Class<P> annotation)
     {
         return jexxaMain.bindToAnnotatedPorts(drivingAdapter, annotation);
