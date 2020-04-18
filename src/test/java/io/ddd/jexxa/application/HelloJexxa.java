@@ -8,13 +8,12 @@ public class HelloJexxa
 {
     public static void main(String[] args)
     {
-        JexxaMain jexxaMain = new JexxaMain("HelloJexxa").
-                whiteList("io.ddd.jexxa");
+        JexxaMain jexxaMain = new JexxaMain("HelloJexxa");
 
-        jexxaMain.bindToPort(JMXAdapter.class, jexxaMain.getBoundedContext());
-        jexxaMain.bindToPort(RESTfulRPCAdapter.class, jexxaMain.getBoundedContext());
-
-        jexxaMain.run();
+        jexxaMain
+                .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
+                .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
+                .run();
     }
 }
 

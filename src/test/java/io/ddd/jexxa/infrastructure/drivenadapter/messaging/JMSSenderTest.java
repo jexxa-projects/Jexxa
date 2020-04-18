@@ -47,7 +47,7 @@ public class JMSSenderTest
         var messageListener = new MyTopicListener();
         var objectUnderTest = new JMSSender(properties);
         var jexxaMain = new JexxaMain("JMSSenderTest", properties);
-        jexxaMain.bindToPort(JMSAdapter.class, messageListener);
+        jexxaMain.bind(JMSAdapter.class).to(messageListener);
         jexxaMain.startDrivingAdapters();
 
         //Act
@@ -72,7 +72,7 @@ public class JMSSenderTest
         var messageListener = new MyQueueListener();
         var objectUnderTest = new JMSSender(properties);
         var jexxaMain = new JexxaMain("JMSSenderTest", properties);
-        jexxaMain.bindToPort(JMSAdapter.class, messageListener);
+        jexxaMain.bind(JMSAdapter.class).to(messageListener);
         jexxaMain.startDrivingAdapters();
 
         //Act

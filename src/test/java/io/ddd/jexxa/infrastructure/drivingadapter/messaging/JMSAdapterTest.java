@@ -69,7 +69,8 @@ public class JMSAdapterTest
         properties.put(JMSAdapter.JNDI_PASSWORD_KEY, JMSAdapter.DEFAULT_JNDI_PASSWORD);
 
         JexxaMain jexxaMain = new JexxaMain("JMSAdapterTest", properties);
-        jexxaMain.bindToPort(JMSAdapter.class, messageListener);
+        jexxaMain.bind(JMSAdapter.class).to(messageListener);
+        
         MyProducer myProducer = new MyProducer(properties);
 
         //Act

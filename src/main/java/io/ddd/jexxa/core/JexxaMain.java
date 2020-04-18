@@ -42,24 +42,20 @@ public class JexxaMain
         this.drivingAdapterFactory = new AdapterFactory();
         this.drivenAdapterFactory = new AdapterFactory();
         this.portFactory = new PortFactory(drivenAdapterFactory);
+
+        addToInfrastructure("io.ddd.jexxa.infrastructure.drivenadapter");
+        addToApplicationCore("io.ddd.jexxa.application");
     }
 
-    public JexxaMain whiteListAdapter(String packageName)
+    public JexxaMain addToInfrastructure(String packageName)
     {
         drivenAdapterFactory.whiteListPackage(packageName);
         return this;
     }
 
-    public JexxaMain whiteListPorts(String packageName)
+    public JexxaMain addToApplicationCore(String packageName)
     {
         portFactory.whiteListPackage(packageName);
-        return this;
-    }
-
-    public JexxaMain whiteList(String packageName)
-    {
-        whiteListAdapter(packageName);
-        whiteListPorts(packageName);
         return this;
     }
 
@@ -67,13 +63,6 @@ public class JexxaMain
     {
         T instance = portFactory.getInstanceOf(bootstrapService, properties);
         return initFunction.apply(instance);
-    }
-
-    public <T> JexxaMain addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
-    {
-        T instance = portFactory.getInstanceOf(bootstrapService, properties);
-        initFunction.accept(instance);
-        return this;
     }
 
     public <T> BootstrapService<T> bootstrap(Class<T> bootstrapService)
@@ -84,59 +73,6 @@ public class JexxaMain
     public <T extends IDrivingAdapter> DrivingAdapter<T>  bind(Class<T> clazz)
     {
         return new DrivingAdapter<>(clazz, this);
-    }
-
-    public JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
-        Validate.notNull(adapter);
-        Validate.notNull(port);
-
-        var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
-        var inboundPort    = portFactory.getInstanceOf(port, properties);
-        Validate.notNull(inboundPort);
-        drivingAdapter.register(inboundPort);
-
-        compositeDrivingAdapter.add(drivingAdapter);
-        return this;
-    }
-
-    public JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Object port) {
-        Validate.notNull(adapter);
-        Validate.notNull(port);
-
-        var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
-        drivingAdapter.register(port);
-
-        compositeDrivingAdapter.add(drivingAdapter);
-
-        return this;
-    }
-
-    public JexxaMain bindToPortWrapper(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
-    {
-        var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
-
-        var portWrapperInstance = portFactory.getPortAdapterOf(portWrapper, properties);
-
-        drivingAdapter.register(portWrapperInstance);
-
-        compositeDrivingAdapter.add(drivingAdapter);
-
-        return this;
-    }
-
-    public JexxaMain bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
-        Validate.notNull(adapter);
-        Validate.notNull(portAnnotation);
-
-        //Create ports and adapter
-        var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
-
-        var portList = portFactory.getInstanceOfPorts(portAnnotation, properties);
-        portList.forEach(drivingAdapter::register);
-        
-        compositeDrivingAdapter.add(drivingAdapter);
-
-        return this;
     }
 
     public <T> T newInstanceOfPort(Class<T> port)
@@ -177,6 +113,68 @@ public class JexxaMain
 
         stopDrivingAdapters();
     }
+
+
+    JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
+        Validate.notNull(adapter);
+        Validate.notNull(port);
+
+        var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
+        var inboundPort    = portFactory.getInstanceOf(port, properties);
+        Validate.notNull(inboundPort);
+        drivingAdapter.register(inboundPort);
+
+        compositeDrivingAdapter.add(drivingAdapter);
+        return this;
+    }
+
+    JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Object port) {
+        Validate.notNull(adapter);
+        Validate.notNull(port);
+
+        var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
+        drivingAdapter.register(port);
+
+        compositeDrivingAdapter.add(drivingAdapter);
+
+        return this;
+    }
+
+    JexxaMain bindToPortWrapper(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
+    {
+        var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
+
+        var portWrapperInstance = portFactory.getPortAdapterOf(portWrapper, properties);
+
+        drivingAdapter.register(portWrapperInstance);
+
+        compositeDrivingAdapter.add(drivingAdapter);
+
+        return this;
+    }
+
+    JexxaMain bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
+        Validate.notNull(adapter);
+        Validate.notNull(portAnnotation);
+
+        //Create ports and adapter
+        var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
+
+        var portList = portFactory.getInstanceOfPorts(portAnnotation, properties);
+        portList.forEach(drivingAdapter::register);
+        
+        compositeDrivingAdapter.add(drivingAdapter);
+
+        return this;
+    }
+    <T> JexxaMain addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
+    {
+        T instance = portFactory.getInstanceOf(bootstrapService, properties);
+        initFunction.accept(instance);
+        return this;
+    }
+
+
 
     private void setupSignalHandler() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

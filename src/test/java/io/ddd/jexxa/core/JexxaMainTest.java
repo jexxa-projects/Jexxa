@@ -33,8 +33,7 @@ public class JexxaMainTest
 {
     private Properties properties;
     private JexxaMain objectUnderTest;
-    private final String packageName = "io.ddd.jexxa";
-    
+
     @BeforeEach
     public void initTests()
     {
@@ -59,7 +58,6 @@ public class JexxaMainTest
     {
         //Arrange
         objectUnderTest = new JexxaMain("HelloJexxa", properties);
-        objectUnderTest.whiteList(packageName);
 
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
@@ -79,8 +77,6 @@ public class JexxaMainTest
     {
         //Arrange
         objectUnderTest = new JexxaMain("HelloJexxa", properties);
-        objectUnderTest.whiteList(packageName);
-
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
@@ -99,8 +95,6 @@ public class JexxaMainTest
     {
         //Arrange
         objectUnderTest = new JexxaMain("HelloJexxa", properties);
-        objectUnderTest.whiteList(packageName);
-
 
         //Act: Bind all DrivingAdapter to all ApplicationServices
         objectUnderTest
@@ -117,7 +111,6 @@ public class JexxaMainTest
     {
         //Arrange
         objectUnderTest = new JexxaMain("HelloJexxa", properties);
-        objectUnderTest.whiteList(packageName);
 
         //Act
         objectUnderTest
