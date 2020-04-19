@@ -12,27 +12,28 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 public class BoundedContextTest
 {
     final JexxaMain jexxaMain = new JexxaMain("BoundedContextTest");
+    BoundedContext objectUnderTest;
 
     @Test
-    @Timeout(2)
+    @Timeout(1)
     public void runAndShutdown()
     {
         //Arrange
+        objectUnderTest = jexxaMain.start();
         var thread = new Thread(this::invokeShutdown);
         thread.start();
 
         //Act
-        jexxaMain.start().waitForShutdown();
+        objectUnderTest.waitForShutdown();
     }
 
     void invokeShutdown()
     {
-        //noinspection LoopConditionNotUpdatedInsideLoop
-        while (!jexxaMain.getBoundedContext().isRunning())
+        while (!objectUnderTest.isRunning())
         {
            Thread.onSpinWait();
         }
 
-        jexxaMain.getBoundedContext().shutdown();
+        objectUnderTest.shutdown();
     }
 }

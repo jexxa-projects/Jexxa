@@ -11,10 +11,12 @@ import io.ddd.jexxa.infrastructure.drivingadapter.CompositeDrivingAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
+import org.slf4j.Logger;
 
 public class JexxaMain
 {
-
+    private final Logger logger = JexxaLogger.getLogger(JexxaMain.class);
+    
     private final CompositeDrivingAdapter compositeDrivingAdapter;
     private final Properties properties = new Properties();
 
@@ -87,18 +89,29 @@ public class JexxaMain
     }
 
 
-    public JexxaMain start()
+    @SuppressWarnings("java:S2629")
+    public BoundedContext start()
     {
-        setupSignalHandler();
-        compositeDrivingAdapter.start();
-        boundedContext.start();
-        return this;
+        if ( !boundedContext.isRunning() )
+        {
+            compositeDrivingAdapter.start();
+            boundedContext.start();
+            logger.info("BoundedContext '{}' successfully started", getBoundedContext().contextName());
+        } else {
+            logger.warn("BoundedContext '{}' already started", getBoundedContext().contextName());
+        }
+        return boundedContext;
     }
 
+    @SuppressWarnings("java:S2629")
     public void stop()
     {
-        compositeDrivingAdapter.stop();
-        boundedContext.stop();
+        if ( boundedContext.isRunning() )
+        {
+            boundedContext.stop();
+            compositeDrivingAdapter.stop();
+            logger.error("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
+        }
     }
 
     public BoundedContext getBoundedContext()
@@ -164,35 +177,5 @@ public class JexxaMain
         initFunction.accept(instance);
         return this;
     }
-
-
-
-    private void setupSignalHandler() {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            JexxaLogger.getLogger(JexxaMain.class).info("Shutdown signal received ...");
-            boundedContext.shutdown();
-        }));
-    }
-
-    synchronized void notifyShutdown()
-    {
-        this.notifyAll();
-    }
-
-    public synchronized JexxaMain waitForShutdown()
-    {
-        try
-        {
-            while ( boundedContext.isRunning() ) {
-                this.wait();
-            }
-        }
-        catch (Exception e)
-        {
-            JexxaLogger.getLogger(this.getClass()).error(e.getMessage());
-        }
-
-        return this;
-    }
-
+    
 }

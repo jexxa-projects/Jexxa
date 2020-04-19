@@ -4,9 +4,12 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 
+import io.ddd.jexxa.utils.JexxaLogger;
+
 public class BoundedContext
 {
     private boolean isRunning = false;
+    private boolean isWaiting = false;
 
     private final String contextName;
     private final Clock clock = Clock.systemUTC();
@@ -20,6 +23,7 @@ public class BoundedContext
         this.jexxaMain = jexxaMain;
     }
 
+    @SuppressWarnings("unused")
     public Duration uptime()
     {
         return Duration.between(startTime, clock.instant());
@@ -31,20 +35,14 @@ public class BoundedContext
         return contextName;
     }
 
-    void start()
-    {
-        isRunning = true;
-    }
 
-    void stop()
+    public synchronized void shutdown()
     {
-        isRunning = false;
-    }
-
-    public void shutdown()
-    {
-        isRunning = false;
-        jexxaMain.notifyShutdown();
+        if ( isWaiting )
+        {
+            isWaiting = false;
+            notifyAll();
+        }
     }
 
     
@@ -52,5 +50,43 @@ public class BoundedContext
     {
         return isRunning;
     }
-    
+
+    public synchronized JexxaMain waitForShutdown()
+    {
+        setupSignalHandler();
+        isWaiting = true;
+
+        try
+        {
+            while ( isWaiting ) {
+                this.wait();
+            }
+        }
+        catch (Exception e)
+        {
+            JexxaLogger.getLogger(this.getClass()).error(e.getMessage());
+        }
+
+        return jexxaMain;
+    }
+
+    synchronized void start()
+    {
+        isRunning = true;
+    }
+
+    void stop()
+    {
+        isRunning = false;
+        shutdown();
+    }
+
+    private void setupSignalHandler() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            JexxaLogger.getLogger(JexxaMain.class).info("Shutdown signal received ...");
+            jexxaMain.stop();
+        }));
+    }
+
+
 }

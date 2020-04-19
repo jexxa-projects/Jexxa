@@ -1,5 +1,7 @@
 package io.ddd.jexxa.infrastructure.drivingadapter;
 
+import static io.ddd.jexxa.utils.ThrowingConsumer.exceptionLogger;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,13 +14,13 @@ public class CompositeDrivingAdapter implements IDrivingAdapter
     @Override
     public void start()
     {
-        drivingAdapters.forEach(IDrivingAdapter::start);
+        drivingAdapters.forEach(exceptionLogger(IDrivingAdapter::start));
     }
 
     @Override
     public void stop()
     {
-        drivingAdapters.forEach(IDrivingAdapter::stop);
+        drivingAdapters.forEach(exceptionLogger(IDrivingAdapter::stop));
     }
 
     @Override
