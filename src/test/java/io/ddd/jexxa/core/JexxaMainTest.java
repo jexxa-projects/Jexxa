@@ -41,7 +41,7 @@ public class JexxaMainTest
     {
         if (objectUnderTest != null)
         {
-            objectUnderTest.shutdown();
+            objectUnderTest.stop();
         }
         Unirest.shutDown();
     }

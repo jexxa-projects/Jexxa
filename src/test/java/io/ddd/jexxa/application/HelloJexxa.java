@@ -13,7 +13,11 @@ public class HelloJexxa
         jexxaMain
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
                 .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
-                .run();
+                .start()
+
+                .waitForShutdown()
+
+                .stop();
     }
 }
 

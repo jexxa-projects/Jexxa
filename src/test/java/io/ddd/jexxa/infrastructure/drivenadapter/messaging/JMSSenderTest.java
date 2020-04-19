@@ -59,7 +59,7 @@ public class JMSSenderTest
             Thread.onSpinWait();
         }
 
-        jexxaMain.shutdown();
+        jexxaMain.stop();
     }
 
 
@@ -84,7 +84,7 @@ public class JMSSenderTest
             Thread.onSpinWait();
         }
 
-        jexxaMain.shutdown();
+        jexxaMain.stop();
     }
 
 

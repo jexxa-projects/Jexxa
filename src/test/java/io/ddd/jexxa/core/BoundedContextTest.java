@@ -1,6 +1,8 @@
 package io.ddd.jexxa.core;
 
 
+import javax.sound.midi.SysexMessage;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;
@@ -9,10 +11,10 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Execution(ExecutionMode.CONCURRENT)
 public class BoundedContextTest
 {
-    final BoundedContext objectUnderTest = new BoundedContext("BoundedContextTest");
+    final JexxaMain jexxaMain = new JexxaMain("BoundedContextTest");
 
     @Test
-    @Timeout(1)
+    @Timeout(2)
     public void runAndShutdown()
     {
         //Arrange
@@ -20,17 +22,17 @@ public class BoundedContextTest
         thread.start();
 
         //Act
-        objectUnderTest.run();
+        jexxaMain.start().waitForShutdown();
     }
 
     void invokeShutdown()
     {
         //noinspection LoopConditionNotUpdatedInsideLoop
-        while (!objectUnderTest.isRunning())
-       {
-          Thread.onSpinWait();
-       }
+        while (!jexxaMain.getBoundedContext().isRunning())
+        {
+           Thread.onSpinWait();
+        }
 
-       objectUnderTest.shutdown();
+        jexxaMain.getBoundedContext().shutdown();
     }
 }

@@ -14,6 +14,7 @@ import org.apache.commons.lang.Validate;
 
 public class JexxaMain
 {
+
     private final CompositeDrivingAdapter compositeDrivingAdapter;
     private final Properties properties = new Properties();
 
@@ -33,7 +34,7 @@ public class JexxaMain
         Validate.notNull(properties);
         Validate.notNull(contextName);
 
-        this.boundedContext = new BoundedContext(contextName);
+        this.boundedContext = new BoundedContext(contextName, this);
         this.properties.putAll( properties );
         this.properties.put("io.ddd.jexxa.context.name", contextName);
 
@@ -88,33 +89,23 @@ public class JexxaMain
 
     public JexxaMain start()
     {
+        setupSignalHandler();
         compositeDrivingAdapter.start();
+        boundedContext.start();
         return this;
     }
 
-    public JexxaMain shutdown()
+    public void stop()
     {
         compositeDrivingAdapter.stop();
-        return this;
+        boundedContext.stop();
     }
 
     public BoundedContext getBoundedContext()
     {
         return boundedContext;
     }
-
-    public void run()
-    {
-        setupSignalHandler();
-
-        start();
-
-        boundedContext.run();
-
-        shutdown();
-    }
-
-
+    
     JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
         Validate.notNull(adapter);
         Validate.notNull(port);
@@ -181,6 +172,27 @@ public class JexxaMain
             JexxaLogger.getLogger(JexxaMain.class).info("Shutdown signal received ...");
             boundedContext.shutdown();
         }));
+    }
+
+    synchronized void notifyShutdown()
+    {
+        this.notifyAll();
+    }
+
+    public synchronized JexxaMain waitForShutdown()
+    {
+        try
+        {
+            while ( boundedContext.isRunning() ) {
+                this.wait();
+            }
+        }
+        catch (Exception e)
+        {
+            JexxaLogger.getLogger(this.getClass()).error(e.getMessage());
+        }
+
+        return this;
     }
 
 }

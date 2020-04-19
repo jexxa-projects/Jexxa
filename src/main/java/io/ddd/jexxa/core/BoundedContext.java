@@ -3,29 +3,21 @@ package io.ddd.jexxa.core;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import io.ddd.jexxa.utils.JexxaLogger;
-import org.slf4j.Logger;
 
 public class BoundedContext
 {
-    private static final Logger logger = JexxaLogger.getLogger(BoundedContext.class);
-
-    private final Lock lock = new ReentrantLock();
-    private final Condition runningCondition  = lock.newCondition();
     private boolean isRunning = false;
 
     private final String contextName;
     private final Clock clock = Clock.systemUTC();
     private final Instant startTime;
+    private final JexxaMain jexxaMain;
 
-    BoundedContext(final String contextName)
+    BoundedContext(final String contextName, JexxaMain jexxaMain)
     {
         this.startTime = clock.instant();
         this.contextName = contextName;
+        this.jexxaMain = jexxaMain;
     }
 
     public Duration uptime()
@@ -39,54 +31,24 @@ public class BoundedContext
         return contextName;
     }
 
-    @SuppressWarnings({"java:S2189", "java:S2589"})
-    public void run()
+    void start()
     {
-        lock.lock();
-        if (isRunning()) {
-            lock.unlock();
-            return;
-        }
-
         isRunning = true;
-        
-        try {
-            while (isRunning()) {
-                Duration uptime = uptime();
-                logger.info("Bounded Context {} started in {}.{} sec", contextName, uptime.toSeconds(), uptime.toMillisPart());
-                runningCondition.await();
-            }
-        }
-        catch (Exception e)
-        {
-            lock.unlock();
-        }
-        finally
-        {
-            lock.unlock();
-        }
+    }
+
+    void stop()
+    {
+        isRunning = false;
     }
 
     public void shutdown()
     {
-        lock.lock();
-        if ( ! isRunning() )
-        {
-            lock.unlock();
-            return;
-        }
-
         isRunning = false;
-        try {
-            runningCondition.signal();
-        }
-        finally
-        {
-            lock.unlock();
-        }
+        jexxaMain.notifyShutdown();
     }
 
-    public synchronized boolean isRunning()
+    
+    public boolean isRunning()
     {
         return isRunning;
     }
