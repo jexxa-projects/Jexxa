@@ -12,8 +12,8 @@ import org.slf4j.Logger;
 
 public class RepositoryManager
 {
-    private static final Logger logger = JexxaLogger.getLogger(RepositoryManager.class);
-    private static final RepositoryManager repositoryManager = new RepositoryManager();
+    private static final Logger LOGGER = JexxaLogger.getLogger(RepositoryManager.class);
+    private static final RepositoryManager REPOSITORY_MANAGER = new RepositoryManager();
 
 
     @SuppressWarnings("unchecked")
@@ -24,16 +24,16 @@ public class RepositoryManager
     )
     {
         try {
-            var constructor = repositoryManager.
-                    getDefaultConnection(properties).
-                    getConstructor(Class.class, Function.class, Properties.class);
+            var constructor = REPOSITORY_MANAGER
+                    .getDefaultConnection(properties)
+                    .getConstructor(Class.class, Function.class, Properties.class);
             
             return (IRepositoryConnection<T,K>)constructor.newInstance(aggregateClazz, keyFunction, properties);
         }
         catch (ReflectiveOperationException e)
         {
-            logger.error("No suitable default IRepositoryConnection available.");
-            logger.error(e.getMessage());
+            LOGGER.error("No suitable default IRepositoryConnection available.");
+            LOGGER.error(e.getMessage());
             throw new IllegalStateException("No suitable default IRepositoryConnection available");
         }
     }

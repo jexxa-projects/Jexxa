@@ -17,7 +17,7 @@ import io.ddd.jexxa.infrastructure.drivenadapter.persistence.IRepositoryConnecti
 public class IMDBConnection<T, K>  implements IRepositoryConnection<T, K>
 {
     // Each IMDB repository is represented by a map for a specific type.
-    private static final Map< Class<?>, Map<?,?> > repositoryMap = new ConcurrentHashMap<>();
+    private static final Map< Class<?>, Map<?,?> > REPOSITORY_MAP = new ConcurrentHashMap<>();
 
 
     final Map<K, T> aggregateMap;
@@ -74,13 +74,13 @@ public class IMDBConnection<T, K>  implements IRepositoryConnection<T, K>
     @SuppressWarnings("unchecked")
     private static synchronized <T, K> Map<T, K> getAggregateMap(Class<?> aggregateClazz)
     {
-        if ( repositoryMap.containsKey(aggregateClazz) )
+        if ( REPOSITORY_MAP.containsKey(aggregateClazz) )
         {
-            return (Map<T, K>) repositoryMap.get(aggregateClazz);
+            return (Map<T, K>) REPOSITORY_MAP.get(aggregateClazz);
         }
 
         var newRepository = new ConcurrentHashMap<T,K>();
-        repositoryMap.put(aggregateClazz, newRepository);
+        REPOSITORY_MAP.put(aggregateClazz, newRepository);
         return newRepository;
     }
 }

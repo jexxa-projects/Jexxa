@@ -30,7 +30,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
 
 
 
-    private static final Logger logger = JexxaLogger.getLogger(JDBCConnection.class);
+    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCConnection.class);
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
@@ -50,7 +50,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
             }
             else
             {
-                logger.warn("Key {} is defined but key {} ist not set => Ignore {} ", JDBC_AUTOCREATE, JDBC_DEFAULT_URL, JDBC_AUTOCREATE);
+                LOGGER.warn("Key {} is defined but key {} ist not set => Ignore {} ", JDBC_AUTOCREATE, JDBC_DEFAULT_URL, JDBC_AUTOCREATE);
             }
 
         }
@@ -248,11 +248,11 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
         {
             setupConnection.setAutoCommit(true);
             statement.execute(String.format("create DATABASE %s ", dbName));
-            logger.info("Database {} successfully created ", dbName);
+            LOGGER.info("Database {} successfully created ", dbName);
         }
         catch (SQLException e)
         {
-            logger.warn("Could not create database {} => Assume that database already exists", dbName);
+            LOGGER.warn("Could not create database {} => Assume that database already exists", dbName);
         }
     }
 
@@ -270,7 +270,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
         }
         catch (SQLException e)
         {
-            logger.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
+            LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
         }
     }
 
@@ -299,7 +299,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
         }
         catch (SQLException e)
         {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 }
