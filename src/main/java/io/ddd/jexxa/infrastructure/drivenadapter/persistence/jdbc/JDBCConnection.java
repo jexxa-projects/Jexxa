@@ -75,7 +75,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
                 throw new IllegalArgumentException("Could not delete aggregate " + aggregateClazz.getSimpleName());
             }
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
             throw new IllegalArgumentException(e);
         }
@@ -91,7 +91,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
             var command = "delete from " + aggregateClazz.getSimpleName();
             statement.executeUpdate(command);
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
             throw new IllegalArgumentException(e);
         }
@@ -117,7 +117,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
             preparedStatement.setCharacterStream(2, valueReader, value.length());
             preparedStatement.executeUpdate();
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
             throw new IllegalArgumentException(e);
         }
@@ -149,10 +149,11 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
                 throw new IllegalArgumentException("Could not update aggregate " + aggregate.getClass().getSimpleName());
             }
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
             throw new IllegalArgumentException(e);
         }
+
     }
 
 
@@ -180,7 +181,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
            }
 
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
             throw new IllegalArgumentException(e);
         }
@@ -203,7 +204,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
                 result.add(aggregate);
             }
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
             throw new IllegalArgumentException(e);
         }
@@ -249,7 +250,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
             statement.execute(String.format("create DATABASE %s ", dbName));
             logger.info("Database {} successfully created ", dbName);
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
             logger.warn("Could not create database {} => Assume that database already exists", dbName);
         }
@@ -267,7 +268,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
             var command = String.format("CREATE TABLE %s ( key VARCHAR(255) PRIMARY KEY, value text) ", aggregateClazz.getSimpleName());
             statement.executeUpdate(command);
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
             logger.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
         }
@@ -279,7 +280,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
         {
             Class.forName(properties.getProperty(JDBC_DRIVER));
         }
-        catch (Exception e)
+        catch (ClassNotFoundException e)
         {
             throw new IllegalArgumentException("Specified JDBC driver is not available: " + properties.getProperty(JDBC_DRIVER));
         }
