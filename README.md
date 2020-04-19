@@ -16,9 +16,9 @@ Up to now the framework is mainly used for educational purposes. Nevertheless it
 
 * Injection of driven adapters into the application core without any framework specific annotations. 
 
-* Integration of various driving adapters REST, JMX, and JDBC. 
+* Integration of various driving adapters REST, JMX, and JMS. 
 
-* Integration of various driven adapters for JDBC and messaging. 
+* Integration of various driven adapters for JDBC, in memory DB, and messaging. 
 
 
 
