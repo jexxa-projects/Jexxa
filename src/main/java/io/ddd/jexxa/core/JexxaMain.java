@@ -96,7 +96,8 @@ public class JexxaMain
         {
             compositeDrivingAdapter.start();
             boundedContext.start();
-            logger.info("BoundedContext '{}' successfully started", getBoundedContext().contextName());
+            var startTime = getBoundedContext().uptime();
+            logger.info("BoundedContext '{}' successfully started in {}.{} seconds", getBoundedContext().contextName(), startTime.toSeconds(), startTime.toMillisPart());
         } else {
             logger.warn("BoundedContext '{}' already started", getBoundedContext().contextName());
         }
@@ -110,7 +111,7 @@ public class JexxaMain
         {
             boundedContext.stop();
             compositeDrivingAdapter.stop();
-            logger.error("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
+            logger.info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
         }
     }
 
