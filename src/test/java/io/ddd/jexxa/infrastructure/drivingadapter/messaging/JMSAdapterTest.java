@@ -140,8 +140,7 @@ public class JMSAdapterTest
                 connection.close();
             }
             catch (JMSException e) {
-                System.out.println("Caught: " + e);
-                e.printStackTrace();
+                JexxaLogger.getLogger(MyProducer.class).error(e.getMessage());
             }
         }
     }

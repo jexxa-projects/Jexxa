@@ -7,12 +7,9 @@ import java.util.Properties;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.DeliveryMode;
-import javax.jms.Destination;
 import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
-import javax.jms.Topic;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
@@ -48,23 +45,10 @@ public class JMSSender
         )
         {
             var destination = session.createTopic(topicName);
-            var producer = session.createProducer(destination);
-
-            var gson = new Gson();
-            var textMessage = session.createTextMessage(gson.toJson(message));
-            //TODO: check if we should add type information 
-            //textMessage.setStringProperty("MessageType", message.getClass().getSimpleName());
-
-
-            if (messageProperties != null)
+            try (var producer = session.createProducer(destination) )
             {
-                for (Map.Entry<Object, Object> entry : messageProperties.entrySet())
-                {
-                    textMessage.setStringProperty(entry.getKey().toString(), entry.getValue().toString());
-                }
+                sendMessage(message, producer, session, messageProperties);
             }
-            
-            producer.send(textMessage);
         }
         catch (JMSException e)
         {
@@ -78,26 +62,33 @@ public class JMSSender
              final Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
 
             var destination = session.createQueue(queueName);
-            var producer = session.createProducer(destination);
-            producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-
-            var gson = new Gson();
-            var textMessage = session.createTextMessage(gson.toJson(message));
-
-            if (messageProperties != null)
+            try (var producer = session.createProducer(destination) )
             {
-                for (Map.Entry<Object, Object> entry : messageProperties.entrySet())
-                {
-                    textMessage.setStringProperty(entry.getKey().toString(), entry.getValue().toString());
-                }
+                sendMessage(message, producer, session, messageProperties);
             }
-
-            producer.send(textMessage);
         }
         catch (JMSException e)
         {
             throw new IllegalStateException("Exception beim Senden der Message", e);
         }
+    }
+
+    private void sendMessage(final Object message, final MessageProducer messageProducer, final Session session, Properties messageProperties) throws JMSException
+    {
+        messageProducer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+
+        var gson = new Gson();
+        var textMessage = session.createTextMessage(gson.toJson(message));
+
+        if (messageProperties != null)
+        {
+            for (Map.Entry<Object, Object> entry : messageProperties.entrySet())
+            {
+                textMessage.setStringProperty(entry.getKey().toString(), entry.getValue().toString());
+            }
+        }
+
+        messageProducer.send(textMessage);
     }
 
     @SuppressWarnings("DuplicatedCode")
