@@ -92,7 +92,7 @@ public class JexxaMain
         return this;
     }
 
-    public JexxaMain stop()
+    public JexxaMain shutdown()
     {
         compositeDrivingAdapter.stop();
         return this;
@@ -111,7 +111,7 @@ public class JexxaMain
 
         boundedContext.run();
 
-        stop();
+        shutdown();
     }
 
 

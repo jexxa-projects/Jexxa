@@ -83,7 +83,7 @@ public class JMSAdapterTest
             Thread.onSpinWait();
         }
 
-        jexxaMain.stop();
+        jexxaMain.shutdown();
     }
 
 
