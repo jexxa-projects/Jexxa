@@ -1,8 +1,8 @@
 package io.ddd.jexxa.application.applicationservice;
 
 
+import io.ddd.jexxa.application.annotation.ApplicationService;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.ddd.jexxa.application.annotation.*;
 
 @SuppressWarnings("unused")
 @ApplicationService

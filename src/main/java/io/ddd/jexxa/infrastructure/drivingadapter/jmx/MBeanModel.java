@@ -158,8 +158,8 @@ public class MBeanModel implements DynamicMBean
 
     String getDomainPath()
     {
-        //Build domainPath for jmx as follows for better grouping (e.g., in JConsole)
-        //   <ContextName> -> <First Annotation of object (if available) > -> <simple name of object>
+        // Build domainPath for jmx as follows for better grouping (e.g., in JConsole)
+        // The grouping is:  <ContextName> -> <First Annotation of object (if available) > -> <simple name of object>
         var stringBuilder = new StringBuilder();
 
         stringBuilder.

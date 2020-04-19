@@ -1,6 +1,7 @@
 package io.ddd.jexxa.application.domain.valueobject;
 
-import io.ddd.jexxa.application.annotation.*;
+
+import io.ddd.jexxa.application.annotation.ValueObject;
 
 @ValueObject
 public class JexxaValueObject

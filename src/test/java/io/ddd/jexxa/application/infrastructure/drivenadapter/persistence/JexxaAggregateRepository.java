@@ -61,7 +61,7 @@ public class JexxaAggregateRepository implements IJexxaAggregateRepository
         repositoryConnection.removeAll();
     }
 
-    static public IJexxaAggregateRepository create(Properties properties)
+    public static IJexxaAggregateRepository create(Properties properties)
     {
         return new JexxaAggregateRepository(RepositoryManager.getConnection(
                 JexxaAggregate.class,

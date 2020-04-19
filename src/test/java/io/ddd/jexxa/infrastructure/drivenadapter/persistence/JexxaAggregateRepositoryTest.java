@@ -7,12 +7,9 @@ import java.util.stream.Stream;
 
 import io.ddd.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.ddd.jexxa.application.domainservice.IJexxaAggregateRepository;
 import io.ddd.jexxa.application.infrastructure.drivenadapter.persistence.JexxaAggregateRepository;
 import io.ddd.jexxa.infrastructure.drivenadapter.persistence.jdbc.JDBCConnection;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -25,7 +25,5 @@ public class ClassFactoryTest
 
         //Assert
         Assertions.assertFalse(factoryResults.isEmpty());
-
-        result.forEach( element -> System.out.println(element.getSimpleName()));
     }
 }
