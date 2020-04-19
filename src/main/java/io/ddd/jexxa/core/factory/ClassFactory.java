@@ -13,7 +13,7 @@ import org.apache.commons.lang.Validate;
 public class ClassFactory
 {
     /***
-     * Throw a RuntimeException in case an exception related to reflection occurs   
+     * Throw a ClassFactoryException in case an exception related to reflection occurs
      */
     static class ClassFactoryException extends RuntimeException
     {
