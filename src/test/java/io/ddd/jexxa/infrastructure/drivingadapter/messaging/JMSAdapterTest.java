@@ -74,7 +74,7 @@ public class JMSAdapterTest
         MyProducer myProducer = new MyProducer(properties);
 
         //Act
-        jexxaMain.startDrivingAdapters();
+        jexxaMain.start();
         myProducer.sendToTopic();
 
         //Assert
@@ -83,7 +83,7 @@ public class JMSAdapterTest
             Thread.onSpinWait();
         }
 
-        jexxaMain.stopDrivingAdapters();
+        jexxaMain.stop();
     }
 
 

@@ -1,12 +1,7 @@
 package io.ddd.jexxa.core;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
 
@@ -46,7 +41,7 @@ public class JexxaMainTest
     {
         if (objectUnderTest != null)
         {
-            objectUnderTest.stopDrivingAdapters();
+            objectUnderTest.stop();
         }
         Unirest.shutDown();
     }
@@ -65,7 +60,7 @@ public class JexxaMainTest
                 .bind(JMXAdapter.class).to(SimpleApplicationService.class)
                 .bind(RESTfulRPCAdapter.class).to(SimpleApplicationService.class)
 
-                .startDrivingAdapters();
+                .start();
 
         //Assert
         assertJMXAdapter(SimpleApplicationService.class);
@@ -83,7 +78,7 @@ public class JexxaMainTest
                 .addToInfrastructure("io.ddd.jexxa.application.infrastructure")
                 .bind(JMXAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
                 .bind(RESTfulRPCAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
-                .startDrivingAdapters();
+                .start();
 
 
         //Assert
@@ -100,7 +95,7 @@ public class JexxaMainTest
         //Act: Bind all DrivingAdapter to all ApplicationServices
         objectUnderTest
                 .bind(RESTfulRPCAdapter.class).toAnnotation(ApplicationService.class)
-                .startDrivingAdapters();
+                .start();
 
         //Assert
         assertRESTfulRPCAdapter();

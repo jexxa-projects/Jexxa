@@ -48,7 +48,7 @@ public class JMSSenderTest
         var objectUnderTest = new JMSSender(properties);
         var jexxaMain = new JexxaMain("JMSSenderTest", properties);
         jexxaMain.bind(JMSAdapter.class).to(messageListener);
-        jexxaMain.startDrivingAdapters();
+        jexxaMain.start();
 
         //Act
         objectUnderTest.sendToTopic(message, destination, null);
@@ -59,7 +59,7 @@ public class JMSSenderTest
             Thread.onSpinWait();
         }
 
-        jexxaMain.stopDrivingAdapters();
+        jexxaMain.stop();
     }
 
 
@@ -73,7 +73,7 @@ public class JMSSenderTest
         var objectUnderTest = new JMSSender(properties);
         var jexxaMain = new JexxaMain("JMSSenderTest", properties);
         jexxaMain.bind(JMSAdapter.class).to(messageListener);
-        jexxaMain.startDrivingAdapters();
+        jexxaMain.start();
 
         //Act
         objectUnderTest.sendToQueue(message, destination, null);
@@ -84,7 +84,7 @@ public class JMSSenderTest
             Thread.onSpinWait();
         }
 
-        jexxaMain.stopDrivingAdapters();
+        jexxaMain.stop();
     }
 
 

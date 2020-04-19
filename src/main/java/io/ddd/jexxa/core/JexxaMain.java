@@ -86,13 +86,13 @@ public class JexxaMain
     }
 
 
-    public JexxaMain startDrivingAdapters()
+    public JexxaMain start()
     {
         compositeDrivingAdapter.start();
         return this;
     }
 
-    public JexxaMain stopDrivingAdapters()
+    public JexxaMain stop()
     {
         compositeDrivingAdapter.stop();
         return this;
@@ -107,11 +107,11 @@ public class JexxaMain
     {
         setupSignalHandler();
 
-        startDrivingAdapters();
+        start();
 
         boundedContext.run();
 
-        stopDrivingAdapters();
+        stop();
     }
 
 
