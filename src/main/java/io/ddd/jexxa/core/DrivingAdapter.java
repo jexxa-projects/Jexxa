@@ -9,7 +9,7 @@ import org.apache.commons.lang.Validate;
 public class  DrivingAdapter<T extends IDrivingAdapter>
 {
     private final JexxaMain jexxaMain;
-    Class<T> drivingAdapter;
+    final Class<T> drivingAdapter;
 
     DrivingAdapter(Class<T> drivingAdapter, JexxaMain jexxaMain)
     {

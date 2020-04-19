@@ -1,8 +1,5 @@
 package io.ddd.jexxa.core;
 
-
-import javax.sound.midi.SysexMessage;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;

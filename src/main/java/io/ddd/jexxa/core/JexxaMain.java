@@ -13,6 +13,7 @@ import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 
+@SuppressWarnings("UnusedReturnValue")
 public class JexxaMain
 {
     private final Logger logger = JexxaLogger.getLogger(JexxaMain.class);

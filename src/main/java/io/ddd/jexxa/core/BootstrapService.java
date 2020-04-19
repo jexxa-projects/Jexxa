@@ -2,10 +2,11 @@ package io.ddd.jexxa.core;
 
 import java.util.function.Consumer;
 
+@SuppressWarnings("UnusedReturnValue")
 public class BootstrapService<T>
 {
-    Class<T> bootstrapService;
-    JexxaMain jexxaMain;
+    final Class<T> bootstrapService;
+    final JexxaMain jexxaMain;
 
     BootstrapService(Class<T> bootstrapService, JexxaMain jexxaMain)
     {
