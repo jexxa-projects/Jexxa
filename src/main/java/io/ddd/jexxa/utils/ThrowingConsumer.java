@@ -12,7 +12,7 @@ import java.util.function.Consumer;
  * Integer[] values = {1,2,3};
  * Arrays.stream(values).
  *   forEach(
- *    exceptionLogger(value -> Integer.divideUnsigned(value, 0))
+ *    exceptionLogger(value -&gt; Integer.divideUnsigned(value, 0))
  * );
  * {@code}
  * </pre>
