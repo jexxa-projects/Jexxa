@@ -10,15 +10,15 @@ Jexxa is a lightweight framework to implement business applications based on a [
 
 Goal of this framework is to easily connect and exchange technology stacks, called adapters, to interfaces of a technology agnostic business application, called ports. 
 
-Up to now the framework provides following features:
+Up to now the framework is mainly used for educational purposes. Nevertheless it provides following features which allows writing lightweight business applications:
  
+* Binding your own or included driving adapters to your application core within main. 
 
-* Binding required driving adapters to inbound ports of your application. 
+* Injection of driven adapters into the application core without any framework specific annotations. 
 
-* Dependency injection of driven adapters into your application core without any framework specific annotations. 
+* Integration of various driving adapters REST, JMX, and JDBC. 
 
-* Integration of different driving adapters based on available micro-frameworks. 
-
+* Integration of various driven adapters for JDBC and messaging. 
 
 
 
