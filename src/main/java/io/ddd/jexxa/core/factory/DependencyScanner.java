@@ -33,7 +33,6 @@ class DependencyScanner
         if (whiteListPackages.isEmpty())
         {
             return new ClassGraph()
-                    //.verbose()
                     .enableAllInfo()
                     .scan()
                     .getClassesWithAnnotation(annotation.getName())
@@ -41,7 +40,6 @@ class DependencyScanner
         }
 
         return new ClassGraph()
-                //.verbose()
                 .enableAllInfo()
                 .whitelistPackages( whiteListPackages.toArray(new String[0]))
                 .scan()
@@ -57,7 +55,6 @@ class DependencyScanner
         if (whiteListPackages.isEmpty())
         {
             return new ClassGraph()
-                    //.verbose()
                     .enableAllInfo()
                     .scan()
                     .getClassesImplementing(interfaceType.getName())
@@ -65,7 +62,6 @@ class DependencyScanner
         }
 
         return new ClassGraph()
-                //.verbose()
                 .enableAllInfo()
                 .whitelistPackages( whiteListPackages.toArray(new String[0]))
                 .scan()
