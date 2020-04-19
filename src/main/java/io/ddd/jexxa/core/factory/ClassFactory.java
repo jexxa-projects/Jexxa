@@ -33,7 +33,7 @@ public class ClassFactory
             {
                 return Optional.of(clazz.cast(defaultConstructor.get().newInstance()));
             }
-            catch (Exception e)
+            catch (ReflectiveOperationException e)
             {
                 JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
                 throw new ClassFactoryException(clazz);
@@ -78,7 +78,7 @@ public class ClassFactory
                         interfaceType.cast(method.get().invoke(null, (Object[])null))
                 );
             }
-            catch (Exception e)
+            catch (ReflectiveOperationException e)
             {
                 JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
                 throw new ClassFactoryException(interfaceType);
@@ -106,7 +106,7 @@ public class ClassFactory
                 return Optional.ofNullable(
                         interfaceType.cast(method.get().invoke(null, parameters))
                 );
-            }  catch (Exception e)
+            }  catch (ReflectiveOperationException e)
             {
                 JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
                 throw new ClassFactoryException(interfaceType);
@@ -122,7 +122,7 @@ public class ClassFactory
     {
         try {
             return Optional.of(clazz.getConstructor());
-        }   catch (Exception e) {
+        }   catch (NoSuchMethodException | SecurityException e) {
             return Optional.empty();
         }
     }
