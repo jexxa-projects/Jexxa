@@ -18,6 +18,7 @@ import javax.management.DynamicMBean;
 import javax.management.MBeanInfo;
 import javax.management.MBeanOperationInfo;
 import javax.management.MBeanParameterInfo;
+import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
 import com.google.gson.Gson;
@@ -83,12 +84,11 @@ public class MBeanModel implements DynamicMBean
             Object [] parameter = deserializeObjects(method.getParameterTypes(), params);
             return serializeComplexReturnValue(method.invoke(object, parameter));
         }
-        catch (Exception e)
+        catch (ReflectiveOperationException e)
         {
             JexxaLogger.getLogger(getClass()).error(e.getMessage());
             throw new RuntimeException(e);
         }
-
     }
 
     Object[] deserializeObjects(Class<?>[] parameterTypes, Object[] parameters)
@@ -130,7 +130,7 @@ public class MBeanModel implements DynamicMBean
         try
         {
            return new ObjectName(getDomainPath());
-        } catch (Exception e)
+        } catch (MalformedObjectNameException e)
         {
            throw new IllegalArgumentException(e.getMessage());
         }
