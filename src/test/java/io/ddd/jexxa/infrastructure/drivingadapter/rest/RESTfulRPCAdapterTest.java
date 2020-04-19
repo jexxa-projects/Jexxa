@@ -18,6 +18,9 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Execution(ExecutionMode.SAME_THREAD)
 public class RESTfulRPCAdapterTest
 {
+    static final String CONTENT_TYPE = "Content-Type";
+    static final String APPLICATION_TYPE = "application/json";
+
     final int defaultPort = 7000;
     final String defaultHost = "localhost";
     Properties properties;
@@ -58,7 +61,7 @@ public class RESTfulRPCAdapterTest
 
         //Act
         Integer result = Unirest.get(restPath + "getSimpleValue")
-                .header("Content-Type", "application/json")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
 
@@ -80,7 +83,7 @@ public class RESTfulRPCAdapterTest
 
         //Act using secondAdapter 
         Integer result = Unirest.get(secondRestPath + "getSimpleValue")
-                .header("Content-Type", "application/json")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
 
@@ -101,13 +104,13 @@ public class RESTfulRPCAdapterTest
 
         //Act
         var response = Unirest.post(restPath + "setSimpleValue")
-                .header("Content-Type", "application/json")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(newValue)
                 .asJson();
 
         //Assert
         Integer newResult = Unirest.get(restPath + "getSimpleValue")
-                .header("Content-Type", "application/json")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
         Assertions.assertTrue(response.isSuccess());
@@ -123,13 +126,13 @@ public class RESTfulRPCAdapterTest
 
         //Act
         var response = Unirest.post(restPath + "setSimpleValueObject")
-                .header("Content-Type", "application/json")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(newValue)
                 .asJson();
 
         //Assert
         Integer newResult = Unirest.get(restPath + "getSimpleValue")
-                .header("Content-Type", "application/json")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
         Assertions.assertTrue(response.isSuccess());
@@ -145,13 +148,13 @@ public class RESTfulRPCAdapterTest
 
         //Act
         var response = Unirest.post(restPath + "setSimpleValueObjectTwice")
-                .header("Content-Type", "application/json")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(paramList)
                 .asEmpty();
 
         //Assert
         Integer newResult = Unirest.get(restPath + "getSimpleValue")
-                .header("Content-Type", "application/json")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
         Assertions.assertTrue(response.isSuccess());
@@ -167,7 +170,7 @@ public class RESTfulRPCAdapterTest
 
         //Act
         var oldvalue = Unirest.post(restPath + "setGetSimpleValue")
-                .header("Content-Type", "application/json")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(newValue)
                 .asObject(Integer.class).getBody();
 
@@ -175,7 +178,7 @@ public class RESTfulRPCAdapterTest
         //Act
         //Assert
         Integer newResult = Unirest.get(restPath + "getSimpleValue")
-                .header("Content-Type", "application/json")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
         //Assert
@@ -192,7 +195,7 @@ public class RESTfulRPCAdapterTest
 
         //Act
         var response = Unirest.post(restPath + "throwExceptionTest")
-                .header("Content-Type", "application/json")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asJson();
         JsonObject error = response.mapError(JsonObject.class);
 

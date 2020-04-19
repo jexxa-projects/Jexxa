@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import io.ddd.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 
 public class ClassFactory
@@ -17,9 +16,9 @@ public class ClassFactory
      */
     static class ClassFactoryException extends RuntimeException
     {
-        public ClassFactoryException(Class<?> clazz)
+        public ClassFactoryException(Class<?> clazz, Throwable throwable)
         {
-            super("Could not create class" + clazz.getName());
+            super("Could not create class" + clazz.getName(), throwable);
         }
     }
     
@@ -35,8 +34,7 @@ public class ClassFactory
             }
             catch (ReflectiveOperationException e)
             {
-                JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
-                throw new ClassFactoryException(clazz);
+                throw new ClassFactoryException(clazz, e);
             }
         }
 
@@ -55,10 +53,9 @@ public class ClassFactory
             {
                 return Optional.of(clazz.cast(parameterConstructor.get().newInstance(parameter)));
             }
-            catch ( Exception e)
+            catch ( ReflectiveOperationException e)
             {
-                JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
-                throw new ClassFactoryException(clazz);
+                throw new ClassFactoryException(clazz, e);
             }
         }
 
@@ -80,8 +77,7 @@ public class ClassFactory
             }
             catch (ReflectiveOperationException e)
             {
-                JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
-                throw new ClassFactoryException(interfaceType);
+                throw new ClassFactoryException(interfaceType, e);
             }
         }
 
@@ -108,8 +104,7 @@ public class ClassFactory
                 );
             }  catch (ReflectiveOperationException e)
             {
-                JexxaLogger.getLogger(ClassFactory.class).error(e.getMessage());
-                throw new ClassFactoryException(interfaceType);
+                throw new ClassFactoryException(interfaceType, e);
             }
         }
 
