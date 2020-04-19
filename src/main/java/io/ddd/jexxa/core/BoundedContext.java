@@ -62,9 +62,10 @@ public class BoundedContext
                 this.wait();
             }
         }
-        catch (Exception e)
+        catch (InterruptedException e)
         {
-            JexxaLogger.getLogger(this.getClass()).error(e.getMessage());
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(e);
         }
 
         return jexxaMain;
