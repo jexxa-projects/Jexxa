@@ -195,7 +195,7 @@ public class PortFactory
                     objectList.add( adapterFactory.getInstanceOf(portConstructor.getParameterTypes()[i], adapterProperties) );
                 }
             }
-            catch ( Exception e)
+            catch (ClassFactory.ClassFactoryException e)
             {
                 JexxaLogger.getLogger(getClass()).error("Can not create inbound port {}", portConstructor.getName());
                 return new Object[0];
