@@ -7,6 +7,7 @@ import java.util.Properties;
 import javax.jms.Connection;
 import javax.jms.DeliveryMode;
 import javax.jms.Destination;
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
@@ -102,7 +103,7 @@ public class JMSAdapterTest
                 JexxaLogger.getLogger(MyListener.class).info(((TextMessage) message).getText());
                 messageList.add(message);
             }
-            catch ( Exception e) {
+            catch (JMSException e) {
                 JexxaLogger.getLogger(MyListener.class).error(e.getMessage());
             }
         }
@@ -138,7 +139,7 @@ public class JMSAdapterTest
                 session.close();
                 connection.close();
             }
-            catch (Exception e) {
+            catch (JMSException e) {
                 System.out.println("Caught: " + e);
                 e.printStackTrace();
             }

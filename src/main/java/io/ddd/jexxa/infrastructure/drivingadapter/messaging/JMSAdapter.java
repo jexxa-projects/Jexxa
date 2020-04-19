@@ -51,7 +51,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             connection.setExceptionListener(exception -> JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage()));
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         }
-        catch (Exception e)
+        catch (JMSException e)
         {
             throw new IllegalArgumentException(e.getMessage());
         }
