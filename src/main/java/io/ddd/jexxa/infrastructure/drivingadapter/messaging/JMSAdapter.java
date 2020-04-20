@@ -53,7 +53,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
         catch (JMSException e)
         {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException(e);
         }
     }
 

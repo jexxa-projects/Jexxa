@@ -132,7 +132,7 @@ public class MBeanModel implements DynamicMBean
            return new ObjectName(getDomainPath());
         } catch (MalformedObjectNameException e)
         {
-           throw new IllegalArgumentException(e.getMessage());
+           throw new IllegalArgumentException(e);
         }
     }
 

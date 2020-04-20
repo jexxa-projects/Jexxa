@@ -51,7 +51,7 @@ public class JMXAdapter implements IDrivingAdapter
         }
         catch (InstanceAlreadyExistsException | MBeanRegistrationException | NotCompliantMBeanException e)
         {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException(e);
         }
 
         registeredMBeans.add(mBeanModel);

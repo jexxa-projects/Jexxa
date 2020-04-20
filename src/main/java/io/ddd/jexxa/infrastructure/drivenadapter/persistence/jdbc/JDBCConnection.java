@@ -227,7 +227,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
         }
         catch (SQLException e)
         {                              
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException(e);
         }
     }
 
