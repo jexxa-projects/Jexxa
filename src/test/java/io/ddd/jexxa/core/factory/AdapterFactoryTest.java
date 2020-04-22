@@ -22,7 +22,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Execution(ExecutionMode.CONCURRENT)
 public class AdapterFactoryTest
 {
-    private final String packageName = "io.ddd.jexxa";
+    private final String packageName = "io.ddd.jexxa.application.infrastructure";
     
     @Test
     public void createDrivenAdapter() {

@@ -17,6 +17,8 @@ public class ClassFactoryTest
     {
         //Arrange
         var annotationScanner = new DependencyScanner();
+        annotationScanner.whiteListPackage("io.ddd.jexxa.application.applicationservice");
+
         var factoryResults = new ArrayList<>();
 
         //Act

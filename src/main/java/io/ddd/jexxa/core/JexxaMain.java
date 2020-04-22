@@ -1,5 +1,6 @@
 package io.ddd.jexxa.core;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.Properties;
 import java.util.function.Consumer;
@@ -16,8 +17,10 @@ import org.slf4j.Logger;
 @SuppressWarnings("UnusedReturnValue")
 public class JexxaMain
 {
-    private final Logger logger = JexxaLogger.getLogger(JexxaMain.class);
-    
+
+    private static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
+    private static final Logger logger = JexxaLogger.getLogger(JexxaMain.class);
+
     private final CompositeDrivingAdapter compositeDrivingAdapter;
     private final Properties properties = new Properties();
 
@@ -38,6 +41,8 @@ public class JexxaMain
         Validate.notNull(contextName);
 
         this.boundedContext = new BoundedContext(contextName, this);
+
+        loadJexxaProperties(this.properties);
         this.properties.putAll( properties );
         this.properties.put("io.ddd.jexxa.context.name", contextName);
 
@@ -179,5 +184,24 @@ public class JexxaMain
         initFunction.accept(instance);
         return this;
     }
-    
+
+    private void loadJexxaProperties(Properties properties)
+    {
+        if ( JexxaMain.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES) != null )
+        {
+            try
+            {
+                properties.load(JexxaMain.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES));
+            }
+            catch (IOException e)
+            {
+                logger.error("Could not load properties file {}.", JEXXA_APPLICATION_PROPERTIES);
+            }
+        }
+        else
+        {
+            logger.warn("NO PROPERTIES FILE FOUND {}", JEXXA_APPLICATION_PROPERTIES);
+        }
+
+    }
 }
