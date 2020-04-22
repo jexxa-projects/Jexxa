@@ -52,7 +52,7 @@ public class JMSSender
         }
         catch (JMSException e)
         {
-            throw new IllegalStateException("Could not send message ", e.getCause());
+            throw new IllegalStateException("Could not send message ", e);
         }
     }
 

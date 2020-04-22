@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
@@ -102,7 +103,7 @@ public class JMSSenderTest
                 JexxaLogger.getLogger(JMSAdapterTest.MyListener.class).info(((TextMessage) message).getText());
                 messageList.add(message);
             }
-            catch ( Exception e) {
+            catch ( JMSException e) {
                 JexxaLogger.getLogger(JMSAdapterTest.MyListener.class).error(e.getMessage());
             }
         }
@@ -127,7 +128,7 @@ public class JMSSenderTest
                 JexxaLogger.getLogger(JMSAdapterTest.MyListener.class).info(((TextMessage) message).getText());
                 messageList.add(message);
             }
-            catch ( Exception e) {
+            catch ( JMSException e) {
                 JexxaLogger.getLogger(JMSAdapterTest.MyListener.class).error(e.getMessage());
             }
         }

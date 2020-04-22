@@ -34,7 +34,7 @@ public class RepositoryManager
         {
             LOGGER.error("No suitable default IRepositoryConnection available.");
             LOGGER.error(e.getMessage());
-            throw new IllegalStateException("No suitable default IRepositoryConnection available");
+            throw new IllegalStateException("No suitable default IRepositoryConnection available", e);
         }
     }
 
