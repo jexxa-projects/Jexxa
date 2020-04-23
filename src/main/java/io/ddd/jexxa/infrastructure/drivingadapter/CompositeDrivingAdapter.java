@@ -36,4 +36,9 @@ public class CompositeDrivingAdapter implements IDrivingAdapter
         drivingAdapters.add(drivingAdapter);
     }
 
+    public int size()
+    {
+        return drivingAdapters.size();
+    }
+
 }

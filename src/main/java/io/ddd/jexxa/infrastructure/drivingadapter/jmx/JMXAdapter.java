@@ -70,9 +70,9 @@ public class JMXAdapter implements IDrivingAdapter
     {
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
 
-        registeredMBeans.stream().
-                filter(element -> mbs.isRegistered(element.getObjectName())).
-                forEach(exceptionLogger(element ->  mbs.unregisterMBean(element.getObjectName())));
+        registeredMBeans.stream()
+                .filter(element -> mbs.isRegistered(element.getObjectName()))
+                .forEach(exceptionLogger(element ->  mbs.unregisterMBean(element.getObjectName())));
     }
     
 }
