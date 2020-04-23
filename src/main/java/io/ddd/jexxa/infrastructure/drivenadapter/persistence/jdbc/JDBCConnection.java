@@ -282,7 +282,7 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
         }
         catch (ClassNotFoundException e)
         {
-            throw new IllegalArgumentException("Specified JDBC driver is not available: " + properties.getProperty(JDBC_DRIVER));
+            throw new IllegalArgumentException("Specified JDBC driver is not available: " + properties.getProperty(JDBC_DRIVER), e);
         }
 
     }
