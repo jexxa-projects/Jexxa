@@ -28,6 +28,7 @@ public class JexxaMainTest
 {
     private Properties properties;
     private JexxaMain objectUnderTest;
+    private String contextName = "HelloJexxa";
 
     @BeforeEach
     public void initTests()
@@ -52,7 +53,7 @@ public class JexxaMainTest
     public void bindToPort()
     {
         //Arrange
-        objectUnderTest = new JexxaMain("HelloJexxa", properties);
+        objectUnderTest = new JexxaMain(contextName, properties);
 
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
@@ -71,7 +72,7 @@ public class JexxaMainTest
     public void bindToPortWithDrivenAdapter()
     {
         //Arrange
-        objectUnderTest = new JexxaMain("HelloJexxa", properties);
+        objectUnderTest = new JexxaMain(contextName, properties);
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
@@ -90,7 +91,7 @@ public class JexxaMainTest
     public void bindToAnnotatedPorts()
     {
         //Arrange
-        objectUnderTest = new JexxaMain("HelloJexxa", properties);
+        objectUnderTest = new JexxaMain(contextName, properties);
 
         //Act: Bind all DrivingAdapter to all ApplicationServices
         objectUnderTest
@@ -106,7 +107,7 @@ public class JexxaMainTest
     public void bootstrapService()
     {
         //Arrange
-        objectUnderTest = new JexxaMain("HelloJexxa", properties);
+        objectUnderTest = new JexxaMain(contextName, properties);
 
         //Act
         objectUnderTest
