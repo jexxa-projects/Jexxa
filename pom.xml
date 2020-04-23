@@ -24,6 +24,10 @@
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
     <stereotype.version>1.1</stereotype.version>
+      <sonar.projectKey>repplix_Jexxa</sonar.projectKey>
+      <sonar.organization>repplix</sonar.organization>
+      <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+      <sonar.login>eaa2a67dbae8ab5b1e4b00fb3658001124d0a734</sonar.login>
   </properties>
 
   <dependencies>
