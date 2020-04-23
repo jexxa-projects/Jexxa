@@ -20,6 +20,7 @@ public class RESTfulRPCAdapterTest
 {
     static final String CONTENT_TYPE = "Content-Type";
     static final String APPLICATION_TYPE = "application/json";
+    static final String METHOD_GET_SIMPLE_VALUE = "getSimpleValue";
 
     final int defaultPort = 7000;
     final String defaultHost = "localhost";
@@ -60,7 +61,7 @@ public class RESTfulRPCAdapterTest
         //Arrange -> Nothing TODO 
 
         //Act
-        Integer result = Unirest.get(restPath + "getSimpleValue")
+        Integer result = Unirest.get(restPath + METHOD_GET_SIMPLE_VALUE)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
@@ -82,7 +83,7 @@ public class RESTfulRPCAdapterTest
 
 
         //Act using secondAdapter 
-        Integer result = Unirest.get(secondRestPath + "getSimpleValue")
+        Integer result = Unirest.get(secondRestPath + METHOD_GET_SIMPLE_VALUE)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
@@ -109,7 +110,7 @@ public class RESTfulRPCAdapterTest
                 .asJson();
 
         //Assert
-        Integer newResult = Unirest.get(restPath + "getSimpleValue")
+        Integer newResult = Unirest.get(restPath + METHOD_GET_SIMPLE_VALUE)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
@@ -131,7 +132,7 @@ public class RESTfulRPCAdapterTest
                 .asJson();
 
         //Assert
-        Integer newResult = Unirest.get(restPath + "getSimpleValue")
+        Integer newResult = Unirest.get(restPath + METHOD_GET_SIMPLE_VALUE)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
@@ -153,7 +154,7 @@ public class RESTfulRPCAdapterTest
                 .asEmpty();
 
         //Assert
-        Integer newResult = Unirest.get(restPath + "getSimpleValue")
+        Integer newResult = Unirest.get(restPath + METHOD_GET_SIMPLE_VALUE)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
@@ -177,7 +178,7 @@ public class RESTfulRPCAdapterTest
 
         //Act
         //Assert
-        Integer newResult = Unirest.get(restPath + "getSimpleValue")
+        Integer newResult = Unirest.get(restPath + METHOD_GET_SIMPLE_VALUE)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
