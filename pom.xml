@@ -27,7 +27,7 @@
       <sonar.projectKey>repplix_Jexxa</sonar.projectKey>
       <sonar.organization>repplix</sonar.organization>
       <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-      <sonar.login>eaa2a67dbae8ab5b1e4b00fb3658001124d0a734</sonar.login>
+      <sonar.login>35e335d37d47a4dd816843f2154b4f81f982bc6a</sonar.login>
   </properties>
 
   <dependencies>
