@@ -23,7 +23,7 @@ public class JexxaMain
     private static final String JEXXA_APPLICATION_CORE =  "io.ddd.jexxa.application";
     private static final String JEXXA_DRIVEN_ADAPTER = "io.ddd.jexxa.infrastructure.drivenadapter";
 
-    private static final Logger logger = JexxaLogger.getLogger(JexxaMain.class);
+    private static final Logger LOGGER = JexxaLogger.getLogger(JexxaMain.class);
 
     private final CompositeDrivingAdapter compositeDrivingAdapter;
     private final Properties properties = new Properties();
@@ -104,12 +104,13 @@ public class JexxaMain
     {
         if ( !boundedContext.isRunning() )
         {
+            LOGGER.info("Start BoundedContext '{}' with {} Driving Adapter ", getBoundedContext().contextName(), compositeDrivingAdapter.size());
             compositeDrivingAdapter.start();
             boundedContext.start();
             var startTime = getBoundedContext().uptime();
-            logger.info("BoundedContext '{}' successfully started in {}.{} seconds", getBoundedContext().contextName(), startTime.toSeconds(), startTime.toMillisPart());
+            LOGGER.info("BoundedContext '{}' successfully started in {}.{} seconds", getBoundedContext().contextName(), startTime.toSeconds(), startTime.toMillisPart());
         } else {
-            logger.warn("BoundedContext '{}' already started", getBoundedContext().contextName());
+            LOGGER.warn("BoundedContext '{}' already started", getBoundedContext().contextName());
         }
         return boundedContext;
     }
@@ -121,7 +122,7 @@ public class JexxaMain
         {
             boundedContext.stop();
             compositeDrivingAdapter.stop();
-            logger.info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
+            LOGGER.info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
         }
     }
 
@@ -199,12 +200,12 @@ public class JexxaMain
             }
             catch (IOException e)
             {
-                logger.error("Could not load properties file {}.", JEXXA_APPLICATION_PROPERTIES);
+                LOGGER.error("Could not load properties file {}.", JEXXA_APPLICATION_PROPERTIES);
             }
         }
         else
         {
-            logger.warn("NO PROPERTIES FILE FOUND {}", JEXXA_APPLICATION_PROPERTIES);
+            LOGGER.warn("NO PROPERTIES FILE FOUND {}", JEXXA_APPLICATION_PROPERTIES);
         }
 
     }
