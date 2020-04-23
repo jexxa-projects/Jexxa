@@ -33,7 +33,7 @@ public class MBeanModelTest
         //Arrange
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanModel.CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
         var objectUnderTest = new MBeanModel(applicationService, properties);
 
@@ -48,7 +48,7 @@ public class MBeanModelTest
         String integerTemplate = "{\"int\":\"<int>\"}";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanModel.CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
         var objectUnderTest = new MBeanModel(applicationService, properties);
 
@@ -66,7 +66,7 @@ public class MBeanModelTest
         String stringTemplate = "{\"String\":\"<String>\"}";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanModel.CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
         var objectUnderTest = new MBeanModel(applicationService, properties);
 
@@ -84,7 +84,7 @@ public class MBeanModelTest
         String jexxaValueObjectTemplate = "{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"}";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanModel.CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
         var objectUnderTest = new MBeanModel(applicationService, properties);
 
@@ -102,7 +102,7 @@ public class MBeanModelTest
         String jexxaValueObjectTemplate = "{\"firstValueObject\":{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"},\"secondValueObject\":{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"}}";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanModel.CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
         var objectUnderTest = new MBeanModel(applicationService, properties);
 

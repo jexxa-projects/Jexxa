@@ -19,6 +19,10 @@ public class JexxaMain
 {
 
     private static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
+    private static final String JEXXA_CONTEXT_NAME =  "io.ddd.jexxa.context.name";
+    private static final String JEXXA_APPLICATION_CORE =  "io.ddd.jexxa.application";
+    private static final String JEXXA_DRIVEN_ADAPTER = "io.ddd.jexxa.infrastructure.drivenadapter";
+
     private static final Logger logger = JexxaLogger.getLogger(JexxaMain.class);
 
     private final CompositeDrivingAdapter compositeDrivingAdapter;
@@ -44,7 +48,7 @@ public class JexxaMain
 
         loadJexxaProperties(this.properties);
         this.properties.putAll( properties );
-        this.properties.put("io.ddd.jexxa.context.name", contextName);
+        this.properties.put(JEXXA_CONTEXT_NAME, contextName);
 
         this.compositeDrivingAdapter = new CompositeDrivingAdapter();
 
@@ -52,8 +56,8 @@ public class JexxaMain
         this.drivenAdapterFactory = new AdapterFactory();
         this.portFactory = new PortFactory(drivenAdapterFactory);
 
-        addToInfrastructure("io.ddd.jexxa.infrastructure.drivenadapter");
-        addToApplicationCore("io.ddd.jexxa.application");
+        addToInfrastructure(JEXXA_DRIVEN_ADAPTER);
+        addToApplicationCore(JEXXA_APPLICATION_CORE);
     }
 
     public JexxaMain addToInfrastructure(String packageName)

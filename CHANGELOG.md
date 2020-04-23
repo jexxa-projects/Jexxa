@@ -7,10 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
  
 ## [Unreleased] - yyyy-mm-dd
  
+### Added
+- Changelog
+
  
 ### Changed
 - Code cleanup found by static code analysis with Teamscale
 - Updated README
+
+### Fixed
+- JMXAdater: Added context to BeanInfo instead of "Hello Jexxa"
+
 
 ## [1.3] - 2020-03-18
  

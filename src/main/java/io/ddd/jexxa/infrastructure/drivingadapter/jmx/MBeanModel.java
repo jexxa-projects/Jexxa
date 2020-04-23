@@ -27,7 +27,7 @@ import io.ddd.jexxa.utils.JexxaLogger;
 
 public class MBeanModel implements DynamicMBean
 {
-    public static final String CONTEXT_NAME = "io.ddd.jexxa.context.name";
+    public static final String JEXXA_CONTEXT_NAME = "io.ddd.jexxa.context.name";
     private final Gson gson = new Gson();
 
     private final Object object;
@@ -39,7 +39,7 @@ public class MBeanModel implements DynamicMBean
 
         if ( properties != null)
         {
-            contextName = properties.getProperty(CONTEXT_NAME);
+            contextName = properties.getProperty(JEXXA_CONTEXT_NAME);
         }
 
         if ( contextName == null ) {
@@ -116,7 +116,7 @@ public class MBeanModel implements DynamicMBean
     public MBeanInfo getMBeanInfo() {
         return new MBeanInfo(
                 object.getClass().getSimpleName(),
-                "Hello Jexxa",
+                contextName,
                 null,                            
                 null,
                 getMBeanOperation(),
