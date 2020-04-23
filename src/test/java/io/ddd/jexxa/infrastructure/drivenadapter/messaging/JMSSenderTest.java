@@ -26,7 +26,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 public class JMSSenderTest
 {
     final JexxaValueObject message = new JexxaValueObject(42);
-    final String destination = "JMSSenderTest";
+    final String testName = "JMSSenderTest";
     Properties properties;
 
     @BeforeEach
@@ -47,12 +47,12 @@ public class JMSSenderTest
         //Arrange
         var messageListener = new MyTopicListener();
         var objectUnderTest = new JMSSender(properties);
-        var jexxaMain = new JexxaMain("JMSSenderTest", properties);
+        var jexxaMain = new JexxaMain(testName, properties);
         jexxaMain.bind(JMSAdapter.class).to(messageListener);
         jexxaMain.start();
 
         //Act
-        objectUnderTest.sendToTopic(message, destination, null);
+        objectUnderTest.sendToTopic(message, testName, null);
 
         //Assert
         while (messageListener.getMessages().isEmpty())
@@ -72,12 +72,12 @@ public class JMSSenderTest
         //Arrange
         var messageListener = new MyQueueListener();
         var objectUnderTest = new JMSSender(properties);
-        var jexxaMain = new JexxaMain("JMSSenderTest", properties);
+        var jexxaMain = new JexxaMain(testName, properties);
         jexxaMain.bind(JMSAdapter.class).to(messageListener);
         jexxaMain.start();
 
         //Act
-        objectUnderTest.sendToQueue(message, destination, null);
+        objectUnderTest.sendToQueue(message, testName, null);
 
         //Assert
         while (messageListener.getMessages().isEmpty())
