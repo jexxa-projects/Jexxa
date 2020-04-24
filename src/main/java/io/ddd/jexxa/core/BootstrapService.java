@@ -5,18 +5,18 @@ import java.util.function.Consumer;
 @SuppressWarnings("UnusedReturnValue")
 public class BootstrapService<T>
 {
-    final Class<T> bootstrapService;
+    final Class<T> bootstrapServiceClass;
     final JexxaMain jexxaMain;
 
     BootstrapService(Class<T> bootstrapService, JexxaMain jexxaMain)
     {
-        this.bootstrapService = bootstrapService;
+        this.bootstrapServiceClass = bootstrapService;
         this.jexxaMain = jexxaMain;
     }
 
     public JexxaMain with(Consumer<T> initFunction)
     {
-        jexxaMain.addBootstrapService(bootstrapService, initFunction);
+        jexxaMain.addBootstrapService(bootstrapServiceClass, initFunction);
         return jexxaMain;
     }
 }

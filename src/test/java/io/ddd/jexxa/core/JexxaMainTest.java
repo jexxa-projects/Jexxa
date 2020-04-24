@@ -28,7 +28,7 @@ public class JexxaMainTest
 {
     private Properties properties;
     private JexxaMain objectUnderTest;
-    private String contextName = "HelloJexxa";
+    private final String contextName = "HelloJexxa";
 
     @BeforeEach
     public void initTests()

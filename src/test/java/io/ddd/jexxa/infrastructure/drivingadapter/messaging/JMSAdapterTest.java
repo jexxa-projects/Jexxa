@@ -1,5 +1,6 @@
 package io.ddd.jexxa.infrastructure.drivingadapter.messaging;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -16,6 +17,7 @@ import javax.jms.TextMessage;
 
 import io.ddd.jexxa.core.JexxaMain;
 import io.ddd.jexxa.utils.JexxaLogger;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;
@@ -51,7 +53,7 @@ public class JMSAdapterTest
             Thread.onSpinWait();
         }
 
-        objectUnderTest.stop();
+        Assertions.assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
     }
 
 
@@ -84,7 +86,7 @@ public class JMSAdapterTest
             Thread.onSpinWait();
         }
 
-        jexxaMain.stop();
+        Assertions.assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
 

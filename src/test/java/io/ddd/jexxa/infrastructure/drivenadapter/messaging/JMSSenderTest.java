@@ -1,6 +1,7 @@
 package io.ddd.jexxa.infrastructure.drivenadapter.messaging;
 
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -16,6 +17,7 @@ import io.ddd.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.ddd.jexxa.infrastructure.drivingadapter.messaging.JMSAdapterTest;
 import io.ddd.jexxa.infrastructure.drivingadapter.messaging.JMSListener;
 import io.ddd.jexxa.utils.JexxaLogger;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -60,7 +62,7 @@ public class JMSSenderTest
             Thread.onSpinWait();
         }
 
-        jexxaMain.stop();
+        Assertions.assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
 
@@ -85,7 +87,7 @@ public class JMSSenderTest
             Thread.onSpinWait();
         }
 
-        jexxaMain.stop();
+        Assertions.assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
 

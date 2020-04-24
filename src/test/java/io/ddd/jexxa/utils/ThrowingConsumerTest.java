@@ -25,7 +25,7 @@ public class ThrowingConsumerTest
         //Act
         Arrays.stream(values).
                 forEach(
-                        exceptionLogger(value -> Integer.divideUnsigned(value, 0))
+                        Assertions.assertDoesNotThrow(() -> exceptionLogger(value -> Integer.divideUnsigned(value, 0)))
                 );
 
         //Assert => No assertion must occur

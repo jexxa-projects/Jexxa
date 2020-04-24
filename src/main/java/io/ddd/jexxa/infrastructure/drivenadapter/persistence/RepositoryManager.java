@@ -33,7 +33,6 @@ public class RepositoryManager
         catch (ReflectiveOperationException e)
         {
             LOGGER.error("No suitable default IRepositoryConnection available.");
-            LOGGER.error(e.getMessage());
             throw new IllegalStateException("No suitable default IRepositoryConnection available", e);
         }
     }

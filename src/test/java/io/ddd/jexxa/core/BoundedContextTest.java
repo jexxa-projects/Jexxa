@@ -1,7 +1,11 @@
 package io.ddd.jexxa.core;
 
+import java.time.Duration;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
@@ -13,24 +17,26 @@ public class BoundedContextTest
 
     @Test
     @Timeout(1)
-    public void runAndShutdown()
+    public void shutdown()
     {
         //Arrange
-        objectUnderTest = jexxaMain.start();
-        var thread = new Thread(this::invokeShutdown);
+        var thread = new Thread(this::waitForShutDown);
         thread.start();
 
-        //Act
-        objectUnderTest.waitForShutdown();
-    }
-
-    void invokeShutdown()
-    {
-        while (!objectUnderTest.isRunning())
+        while ( objectUnderTest == null ||
+                !objectUnderTest.isRunning())
         {
-           Thread.onSpinWait();
+            Thread.onSpinWait();
         }
 
+        //Act
         objectUnderTest.shutdown();
+        Assertions.assertTimeout(Duration.ofSeconds(1), (Executable) thread::join);
+    }
+
+    void waitForShutDown()
+    {
+        objectUnderTest = jexxaMain.start();
+        objectUnderTest.waitForShutdown();
     }
 }

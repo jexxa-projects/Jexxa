@@ -9,33 +9,33 @@ import org.apache.commons.lang.Validate;
 public class  DrivingAdapter<T extends IDrivingAdapter>
 {
     private final JexxaMain jexxaMain;
-    final Class<T> drivingAdapter;
+    final Class<T> drivingAdapterClass;
 
-    DrivingAdapter(Class<T> drivingAdapter, JexxaMain jexxaMain)
+    DrivingAdapter(Class<T> drivingAdapterClass, JexxaMain jexxaMain)
     {
-        Validate.notNull(drivingAdapter);
+        Validate.notNull(drivingAdapterClass);
         Validate.notNull(jexxaMain);
-        this.drivingAdapter = drivingAdapter;
+        this.drivingAdapterClass = drivingAdapterClass;
         this.jexxaMain = jexxaMain;
     }
 
     public <P> JexxaMain to(Class<P> port)
     {
         if ( isPortWrapper(port)) {
-            return jexxaMain.bindToPortWrapper(drivingAdapter, port);
+            return jexxaMain.bindToPortWrapper(drivingAdapterClass, port);
         }   else {
-            return jexxaMain.bindToPort(drivingAdapter, port);
+            return jexxaMain.bindToPort(drivingAdapterClass, port);
         }
     }
 
     public JexxaMain to(Object port)
     {
-        return jexxaMain.bindToPort(drivingAdapter, port);
+        return jexxaMain.bindToPort(drivingAdapterClass, port);
     }
 
     public <P extends Annotation> JexxaMain toAnnotation(Class<P> annotation)
     {
-        return jexxaMain.bindToAnnotatedPorts(drivingAdapter, annotation);
+        return jexxaMain.bindToAnnotatedPorts(drivingAdapterClass, annotation);
     }
 
     private <P> boolean isPortWrapper(Class<P> port)
