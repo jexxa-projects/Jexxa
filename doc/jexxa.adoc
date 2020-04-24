@@ -112,5 +112,3 @@ because they are essential to an application service, even if some technology st
 ** Allocation policy for driven adapter is that they are reused by default => can be changed in settings/properties
 ** ApplicationService/inbound port is not an interface because it is not required. Since a port represents business logic it has in general no different implementations
  In case you have to limit the API for specific driving adapter put a port-adapter in front of the port
-
-
