@@ -99,6 +99,30 @@ public class RESTfulRPCAdapterTest
 
     }
 
+    @Test
+    public void testUnsetProperties()
+    {
+        //Arrange
+        var secondAdapter = new RESTfulRPCAdapter(new Properties());
+        secondAdapter.register(simpleApplicationService);
+        secondAdapter.start();
+        var secondRestPath = "http://localhost:" + secondAdapter.getPort() + "/SimpleApplicationService/";
+
+
+        //Act using secondAdapter
+        Integer result = Unirest.get(secondRestPath + METHOD_GET_SIMPLE_VALUE)
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(Integer.class).getBody();
+
+
+        secondAdapter.stop();
+
+        //Assert
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
+        Assertions.assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
+    }
+
     @Test  // RPC call test: void setSimpleValue(44)
     public void testPOSTCommandWithOneAttribute()
     {
