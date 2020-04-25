@@ -7,11 +7,13 @@ import io.ddd.jexxa.application.annotation.UnavailableDuringRuntime;
 import io.ddd.jexxa.application.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
+@Tag("unit-test")
 public class DependencyScannerTest
 {
     @Test

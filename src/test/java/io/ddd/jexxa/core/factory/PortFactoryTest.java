@@ -5,11 +5,13 @@ import java.util.Properties;
 import io.ddd.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
 import io.ddd.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
+@Tag("unit-test")
 public class PortFactoryTest
 {
 

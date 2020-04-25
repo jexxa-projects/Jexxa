@@ -18,12 +18,14 @@ import javax.jms.TextMessage;
 import io.ddd.jexxa.core.JexxaMain;
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
+@Tag("integration-test")
 public class JMSAdapterTest
 {
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")

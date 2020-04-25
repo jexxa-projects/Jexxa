@@ -11,8 +11,9 @@ import io.ddd.jexxa.application.domainservice.INotUniqueService;
 import io.ddd.jexxa.application.domainservice.IPropertiesConstructorService;
 import io.ddd.jexxa.application.infrastructure.drivenadapter.factory.DefaultConstructorAdapter;
 import io.ddd.jexxa.application.infrastructure.drivenadapter.factory.PropertiesConstructorAdapter;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
  * @see AdapterFactory for conventions to create an adapter 
  */
 @Execution(ExecutionMode.CONCURRENT)
+@Tag("unit-test")
 public class AdapterFactoryTest
 {
     private final String packageName = "io.ddd.jexxa.application.infrastructure";
