@@ -12,14 +12,13 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag("unit-test")
 public class RESTfulRPCModelTest
 {
-    private SimpleApplicationService simpleApplicationService;
     private RESTfulRPCModel objectUnderTest;
 
 
     @BeforeEach
     public void setupTests()
     {
-        simpleApplicationService = new SimpleApplicationService();
+        SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
         simpleApplicationService.setSimpleValue(42);
         objectUnderTest = new RESTfulRPCModel(simpleApplicationService);
     }
