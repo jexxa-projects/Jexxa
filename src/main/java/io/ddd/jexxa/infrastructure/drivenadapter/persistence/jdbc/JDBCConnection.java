@@ -42,6 +42,8 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
         this.keyFunction = keyFunction;
         this.aggregateClazz = aggregateClazz;
 
+        validateProperties(properties);
+
         initDBDriver(properties);
         if (properties.containsKey(JDBC_AUTOCREATE)) {
             if (properties.containsKey(JDBC_DEFAULT_URL)) {
@@ -285,6 +287,12 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
             throw new IllegalArgumentException("Specified JDBC driver is not available: " + properties.getProperty(JDBC_DRIVER), e);
         }
 
+    }
+
+    private void validateProperties(Properties properties)
+    {
+        Validate.isTrue(properties.containsKey(JDBC_URL), "Parameter " + JDBC_URL + " is missing");
+        Validate.isTrue(properties.containsKey(JDBC_DRIVER), "Parameter " + JDBC_DRIVER + " is missing");
     }
 
     public void close()

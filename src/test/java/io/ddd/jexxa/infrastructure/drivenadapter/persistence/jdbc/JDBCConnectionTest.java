@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import io.ddd.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,16 @@ public class JDBCConnectionTest
         objectUnderTest.removeAll();
     }
 
+    @AfterEach
+    public void teardown()
+    {
+        if ( objectUnderTest != null )
+        {
+            objectUnderTest.close();
+        }
+    }
+
+
     @Test
     public void addAggregate()
     {
@@ -45,13 +56,6 @@ public class JDBCConnectionTest
         Assertions.assertTrue(objectUnderTest.get().size() > 0);
     }
 
-    @Test
-    public void addAggregateTwice()
-    {
-        //act
-        objectUnderTest.add(aggregate);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> objectUnderTest.add(aggregate));
-    }
 
     @Test
     public void removeAggregate()
@@ -64,6 +68,57 @@ public class JDBCConnectionTest
 
         //Assert
         Assertions.assertTrue(objectUnderTest.get().isEmpty());
+    }
+
+
+    @Test
+    public void testExceptionInvalidOperations()
+    {
+        //Exception if key is used to add twice  
+        objectUnderTest.add(aggregate);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> objectUnderTest.add(aggregate));
+
+        //Exception if illegal key is removed
+        objectUnderTest.remove(aggregate.getKey());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> objectUnderTest.remove(aggregate.getKey()));
+
+        //Exception if unknown aggregate ist updated
+        Assertions.assertThrows(IllegalArgumentException.class, () ->objectUnderTest.update(aggregate));
+    }
+
+    @Test
+    public void invalidProperties()
+    {
+        //1.Assert missing properties
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCConnection<>(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                new Properties()
+        ));
+
+        //2.Arrange invalid properties: Invalid Driver
+        Properties propertiesInvalidDriver = new Properties();
+        propertiesInvalidDriver.put(JDBCConnection.JDBC_DRIVER, "org.unknown.Driver");
+        propertiesInvalidDriver.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
+
+        //2.Assert invalid properties: Invalid Driver 
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCConnection<>(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                propertiesInvalidDriver
+        ));
+
+        //3. Arrange invalid properties: Invalid URL
+        Properties propertiesInvalidURL = new Properties();
+        propertiesInvalidURL.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
+        propertiesInvalidURL.put(JDBCConnection.JDBC_URL, "jdbc:unknonwn://localhost:5432/jexxa");
+
+        //3.Assert invalid properties: Invalid URL
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCConnection<>(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                propertiesInvalidURL
+        ));
     }
 
 }
