@@ -15,7 +15,9 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
+import io.ddd.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.ddd.jexxa.core.JexxaMain;
+import io.ddd.jexxa.infrastructure.drivenadapter.persistence.jdbc.JDBCConnection;
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
@@ -89,6 +91,38 @@ public class JMSAdapterTest
         }
 
         Assertions.assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
+
+    @Test
+    public void invalidProperties()
+    {
+        //1.Assert missing properties
+        Assertions.assertThrows(IllegalArgumentException.class, () ->  new JMSAdapter(new Properties()));
+
+        //2.Arrange invalid properties: Invalid JNDI_FACTORY_KEY
+        Properties propertiesInvalidProvider = new Properties();
+        propertiesInvalidProvider.put(JMSAdapter.JNDI_PROVIDER_URL_KEY, "invalid");
+        propertiesInvalidProvider.put(JMSAdapter.JNDI_FACTORY_KEY, JMSAdapter.DEFAULT_JNDI_FACTORY);
+
+        //2.Assert invalid properties: Invalid Driver
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCConnection<>(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                propertiesInvalidProvider
+        ));
+
+        //3. Arrange invalid properties: Invalid URL
+        Properties propertiesInvalidFactory = new Properties();
+        propertiesInvalidFactory.put(JMSAdapter.JNDI_PROVIDER_URL_KEY, JMSAdapter.DEFAULT_JNDI_PROVIDER_URL);
+        propertiesInvalidFactory.put(JMSAdapter.JNDI_FACTORY_KEY, "invalid");
+
+        //3.Assert invalid properties: Invalid URL
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCConnection<>(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                propertiesInvalidFactory
+        ));
     }
 
 

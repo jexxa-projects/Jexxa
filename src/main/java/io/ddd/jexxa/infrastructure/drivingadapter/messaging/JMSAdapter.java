@@ -21,6 +21,7 @@ import javax.naming.NamingException;
 
 import io.ddd.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.ddd.jexxa.utils.JexxaLogger;
+import org.apache.commons.lang.Validate;
 
 
 public class JMSAdapter implements AutoCloseable, IDrivingAdapter
@@ -44,7 +45,10 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
     public JMSAdapter(final Properties properties)
     {
+        validateProperties(properties);
+
         this.properties = properties;
+
         try
         {
             connection = createConnection();
@@ -147,11 +151,17 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
     }
 
-    JMSListener getJMSListener(Object object)
+    private JMSListener getJMSListener(Object object)
     {
         return Arrays.stream(object.getClass().getMethods())
                 .filter(method -> method.isAnnotationPresent(JMSListener.class))
                 .findFirst()
                 .orElseThrow().getDeclaredAnnotation(JMSListener.class);
+    }
+
+    private void validateProperties(Properties properties)
+    {
+        Validate.isTrue(properties.containsKey(JNDI_PROVIDER_URL_KEY), "Property + " + JNDI_PROVIDER_URL_KEY + " is missing ");
+        Validate.isTrue(properties.containsKey(JNDI_FACTORY_KEY), "Property + " + JNDI_FACTORY_KEY + " is missing ");
     }
 }
