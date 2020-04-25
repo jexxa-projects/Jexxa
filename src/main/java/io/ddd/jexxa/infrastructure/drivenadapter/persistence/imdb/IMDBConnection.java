@@ -11,7 +11,6 @@ import java.util.function.Function;
 import io.ddd.jexxa.infrastructure.drivenadapter.persistence.IRepositoryConnection;
 
 /**
- * TODO: Add an option to serialize data on disk 
  */
 @SuppressWarnings("unused")
 public class IMDBConnection<T, K>  implements IRepositoryConnection<T, K>
