@@ -11,6 +11,9 @@
 <profiles>
     <profile>
         <id>github</id>
+        <properties>
+            <sonar-login>${env.SONAR_TOKEN}</sonar-login>
+        </properties>
         <repositories>
             <repository>
                 <id>central</id>

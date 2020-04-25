@@ -46,7 +46,7 @@
     <sonar.projectKey>repplix_Jexxa</sonar.projectKey>
     <sonar.organization>repplix</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    <sonar.login>35e335d37d47a4dd816843f2154b4f81f982bc6a</sonar.login>
+    <sonar.login>${sonar-login}</sonar.login>
     <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco-ut/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     <argLine>-Xmx2048m -Xms1024m</argLine>
   </properties>

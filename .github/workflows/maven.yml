@@ -52,3 +52,10 @@ jobs:
         GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}  
         GITHUB_TOKEN: ${{ github.token }}
       run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml deploy 
+
+    - name: sonarqube update
+      env:
+        GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}
+        GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: mvn sonar:sonar 
