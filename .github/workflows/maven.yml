@@ -58,4 +58,4 @@ jobs:
         GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}
         GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: mvn sonar:sonar 
+      run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml sonar:sonar
