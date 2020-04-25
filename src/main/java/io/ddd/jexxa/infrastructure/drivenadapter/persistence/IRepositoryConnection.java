@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * TODO: Check if return value of get should be changed to Set&lt;T&gt;
- * Throws IllegalArgumentException if any operations fails   
+ * Throws IllegalArgumentException if any operations fails
  */
 @SuppressWarnings("unused")
 public interface IRepositoryConnection<T, K>
@@ -22,6 +21,4 @@ public interface IRepositoryConnection<T, K>
     Optional<T> get(K primaryKey);
 
     List<T> get();
-
-
 }
