@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag("integration-test")
-public class JexxaAggregateRepositoryTest
+public class JexxaAggregateRepositoryIT
 {
 
     public static Stream<Properties> data() {

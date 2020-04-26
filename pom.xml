@@ -161,16 +161,13 @@
           <version>3.8.0</version>
         </plugin>
         <plugin>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>2.22.1</version>
+        </plugin>
+
+        <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
-          <configuration>
-            <!--suppress UnresolvedMavenProperty -->
-            <!-- Property surefireArgLine wird vom maven-surefire-plugin gesetzt-->
-            <argLine>${surefireArgLine}</argLine>
-
-            <!-- include tags -->
-            <groups>unit-test,integration-test</groups>
-          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
@@ -193,21 +190,51 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-failsafe-plugin</artifactId>
-          <version>2.22.1</version>
-          <!-- include tags -->
-        </plugin>
+
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>0.8.5</version>
 
         </plugin>
-
       </plugins>
     </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <!-- include tags -->
+        <configuration>
+          <!--suppress UnresolvedMavenProperty -->
+          <!-- Property surefireArgLine wird vom maven-surefire-plugin gesetzt-->
+          <argLine>${failsafeArgLine}</argLine>
+        </configuration>
+        <executions>
+          <execution>
+            <id>integration-tests</id>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!--suppress UnresolvedMavenProperty -->
+          <!-- Property surefireArgLine wird vom maven-surefire-plugin gesetzt-->
+          <argLine>${surefireArgLine}</argLine>
+
+          <!-- include tags -->
+          <groups>unit-test</groups>
+        </configuration>
+      </plugin>
+    </plugins>
+
+
 
     <testResources>
       <testResource>
@@ -269,7 +296,7 @@
 
               <execution>
                 <id>pre-integration-test</id>
-                <phase>pre-integration-test</phase>
+                <phase>integration-test</phase>
                 <goals>
                   <goal>prepare-agent</goal>
                 </goals>
@@ -289,7 +316,7 @@
               -->
               <execution>
                 <id>post-integration-test</id>
-                <phase>post-integration-test</phase>
+                <phase>integration-test</phase>
                 <goals>
                   <goal>report</goal>
                 </goals>

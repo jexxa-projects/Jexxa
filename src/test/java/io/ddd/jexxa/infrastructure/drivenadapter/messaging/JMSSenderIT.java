@@ -14,7 +14,7 @@ import javax.jms.TextMessage;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.ddd.jexxa.core.JexxaMain;
 import io.ddd.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
-import io.ddd.jexxa.infrastructure.drivingadapter.messaging.JMSAdapterTest;
+import io.ddd.jexxa.infrastructure.drivingadapter.messaging.JMSAdapterIT;
 import io.ddd.jexxa.infrastructure.drivingadapter.messaging.JMSListener;
 import io.ddd.jexxa.utils.JexxaLogger;
 import org.junit.jupiter.api.Assertions;
@@ -27,10 +27,10 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag("integration-test")
-public class JMSSenderTest
+public class JMSSenderIT
 {
     final JexxaValueObject message = new JexxaValueObject(42);
-    final String testName = "JMSSenderTest";
+    final String testName = "JMSSenderIT";
     Properties properties;
 
     @BeforeEach
@@ -99,16 +99,16 @@ public class JMSSenderTest
         final List<Message> messageList = new ArrayList<>();
 
         @Override
-        @JMSListener(destination = "JMSSenderTest", messagingType = JMSListener.MessagingType.TOPIC)
+        @JMSListener(destination = "JMSSenderIT", messagingType = JMSListener.MessagingType.TOPIC)
         public void onMessage(Message message)
         {
             try
             {
-                JexxaLogger.getLogger(JMSAdapterTest.MyListener.class).info(((TextMessage) message).getText());
+                JexxaLogger.getLogger(JMSAdapterIT.MyListener.class).info(((TextMessage) message).getText());
                 messageList.add(message);
             }
             catch ( JMSException e) {
-                JexxaLogger.getLogger(JMSAdapterTest.MyListener.class).error(e.getMessage());
+                JexxaLogger.getLogger(JMSAdapterIT.MyListener.class).error(e.getMessage());
             }
         }
 
@@ -124,16 +124,16 @@ public class JMSSenderTest
         final List<Message> messageList = new ArrayList<>();
 
         @Override
-        @JMSListener(destination = "JMSSenderTest", messagingType = JMSListener.MessagingType.QUEUE)
+        @JMSListener(destination = "JMSSenderIT", messagingType = JMSListener.MessagingType.QUEUE)
         public void onMessage(Message message)
         {
             try
             {
-                JexxaLogger.getLogger(JMSAdapterTest.MyListener.class).info(((TextMessage) message).getText());
+                JexxaLogger.getLogger(JMSAdapterIT.MyListener.class).info(((TextMessage) message).getText());
                 messageList.add(message);
             }
             catch ( JMSException e) {
-                JexxaLogger.getLogger(JMSAdapterTest.MyListener.class).error(e.getMessage());
+                JexxaLogger.getLogger(JMSAdapterIT.MyListener.class).error(e.getMessage());
             }
         }
 

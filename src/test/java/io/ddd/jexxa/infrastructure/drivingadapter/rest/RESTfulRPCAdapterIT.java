@@ -18,7 +18,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @SuppressWarnings("SameParameterValue")
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag("integration-test")
-public class RESTfulRPCAdapterTest
+public class RESTfulRPCAdapterIT
 {
     static final String CONTENT_TYPE = "Content-Type";
     static final String APPLICATION_TYPE = "application/json";

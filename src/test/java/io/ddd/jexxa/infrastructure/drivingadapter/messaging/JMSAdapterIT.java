@@ -28,7 +28,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag("integration-test")
-public class JMSAdapterTest
+public class JMSAdapterIT
 {
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
