@@ -82,3 +82,28 @@ public class HelloJexxa
     }
 }
 ```
+### Configure your Jexxa application  
+By default a JexxaMain instance looks for the following properties file
+```maven
+resources/jexxa-application.properties
+```                                   
+
+Available properties are described [here](https://github.com/repplix/Jexxa/blob/master/src/main/resources/jexxa-application.properties)
+
+## Build Jexxa from scratch
+
+In case you would like to compile Jexxa by yourself without integration tests call: 
+
+```maven
+mvn clean install -DskipITs
+```  
+
+### Dependencies for integration tests 
+For running integration we recommend running required dependencies in a local docker container:
+* ActiveMQ instance with default settings: See [here](https://hub.docker.com/r/rmohr/activemq/).   
+* PostgresDB database with default settings. Default user/password should be admin/admin: See [here](https://hub.docker.com/_/postgres).   
+  
+To build Jexxa with integration tests call: 
+```maven
+mvn clean install 
+```  
