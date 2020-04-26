@@ -164,7 +164,6 @@
           <artifactId>maven-failsafe-plugin</artifactId>
           <version>2.22.1</version>
         </plugin>
-
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
@@ -190,24 +189,22 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
-
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>0.8.5</version>
-
         </plugin>
       </plugins>
     </pluginManagement>
 
+    <!-- Plugin specific configuration -->
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <!-- include tags -->
         <configuration>
           <!--suppress UnresolvedMavenProperty -->
-          <!-- Property surefireArgLine wird vom maven-surefire-plugin gesetzt-->
+          <!-- Property failsafeArgLine is set from failsafe plugin-->
           <argLine>${failsafeArgLine}</argLine>
         </configuration>
         <executions>
@@ -227,9 +224,6 @@
           <!--suppress UnresolvedMavenProperty -->
           <!-- Property surefireArgLine wird vom maven-surefire-plugin gesetzt-->
           <argLine>${surefireArgLine}</argLine>
-
-          <!-- include tags -->
-          <groups>unit-test</groups>
         </configuration>
       </plugin>
     </plugins>
@@ -296,7 +290,7 @@
 
               <execution>
                 <id>pre-integration-test</id>
-                <phase>integration-test</phase>
+                <phase>pre-integration-test</phase>
                 <goals>
                   <goal>prepare-agent</goal>
                 </goals>
@@ -316,7 +310,7 @@
               -->
               <execution>
                 <id>post-integration-test</id>
-                <phase>integration-test</phase>
+                <phase>post-integration-test</phase>
                 <goals>
                   <goal>report</goal>
                 </goals>
@@ -342,7 +336,7 @@
                       </includes>
                     </fileSet>
                   </fileSets>
-                  <destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
+                  <destFile>${project.build.directory}/coverage-reports/jacoco-aggregate.exec</destFile>
                 </configuration>
               </execution>
               <execution>
@@ -352,8 +346,8 @@
                   <goal>report</goal>
                 </goals>
                 <configuration>
-                  <dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
-                  <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+                  <dataFile>${project.build.directory}/coverage-reports/jacoco-aggregate.exec</dataFile>
+                  <outputDirectory>${project.reporting.outputDirectory}/jacoco-aggregate</outputDirectory>
                 </configuration>
               </execution>
             </executions>
