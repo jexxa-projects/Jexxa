@@ -2,6 +2,8 @@ package io.ddd.jexxa.infrastructure.drivingadapter.jmx;
 
 import java.util.Properties;
 
+import javax.management.Attribute;
+
 import io.ddd.jexxa.application.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
 import org.junit.jupiter.api.Assertions;
@@ -113,6 +115,25 @@ public class MBeanModelTest
 
         //Assert
         Assertions.assertEquals(jexxaValueObjectTemplate, result);
+    }
+
+    @Test
+    public void disabledMethdos()
+    {
+        //Arrange
+        var applicationService = new SimpleApplicationService();
+        var properties = new Properties();
+        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+
+        var objectUnderTest = new MBeanModel(applicationService, properties);
+
+        //Assert that we get no Attributes because we only provide access to public methods
+        Assertions.assertNull(objectUnderTest.getAttribute(""));
+        //Assert that we get no Attributes because we only provide access to public methods
+        Assertions.assertTrue(objectUnderTest.getAttributes(new String[0]).isEmpty());
+
+        //Assert that we can not set any parameter  
+        Assertions.assertThrows(UnsupportedOperationException.class,  () -> objectUnderTest.setAttribute(new Attribute("value", 42)));
     }
 
 }
