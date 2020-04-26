@@ -47,7 +47,7 @@
     <sonar.organization>repplix</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.login>${sonar-login}</sonar.login>
-    <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco-ut/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco-ut/jacoco.xml,target/site/jacoco-it/jacoco.xml </sonar.coverage.jacoco.xmlReportPaths>
     <argLine>-Xmx2048m -Xms1024m</argLine>
   </properties>
 
@@ -342,7 +342,7 @@
                       </includes>
                     </fileSet>
                   </fileSets>
-                  <destFile>${project.build.directory}/coverage-reports/jacoco-aggregate.exec</destFile>
+                  <destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
                 </configuration>
               </execution>
               <execution>
@@ -352,8 +352,8 @@
                   <goal>report</goal>
                 </goals>
                 <configuration>
-                  <dataFile>${project.build.directory}/coverage-reports/jacoco-aggregate.exec</dataFile>
-                  <outputDirectory>${project.reporting.outputDirectory}/jacoco-aggregate</outputDirectory>
+                  <dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
+                  <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
                 </configuration>
               </execution>
             </executions>
