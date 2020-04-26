@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import javax.management.Attribute;
 
+import com.google.gson.Gson;
 import io.ddd.jexxa.application.applicationservice.SimpleApplicationService;
 import io.ddd.jexxa.application.domain.valueobject.JexxaValueObject;
 import org.junit.jupiter.api.Assertions;
@@ -116,6 +117,49 @@ public class MBeanModelTest
         //Assert
         Assertions.assertEquals(jexxaValueObjectTemplate, result);
     }
+
+    @Test
+    public void invokeSetSimpleValue()
+    {
+        //Arrange
+        var applicationService = new SimpleApplicationService();
+        var properties = new Properties();
+        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        var action = "setSimpleValue";
+        var newValue = 5;
+        var gson = new Gson();
+
+
+        var objectUnderTest = new MBeanModel(applicationService, properties);
+
+        //Act
+        objectUnderTest.invoke(action, new String[]{gson.toJson(newValue)}, new String[0]);
+
+        //Assert
+        Assertions.assertEquals(newValue, applicationService.getSimpleValue());
+    }
+
+
+    @Test
+    public void invokeSetSimpleValueObject()
+    {
+        //Arrange
+        var applicationService = new SimpleApplicationService();
+        var properties = new Properties();
+        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        var action = "setSimpleValueObject";
+        var newValue = new JexxaValueObject(5);
+        var gson = new Gson();
+
+        var objectUnderTest = new MBeanModel(applicationService, properties);
+
+        //Act
+        objectUnderTest.invoke(action, new String[]{gson.toJson(newValue)}, new String[0]);
+
+        //Assert
+        Assertions.assertEquals(newValue.getValue(), applicationService.getSimpleValueObject().getValue());
+    }
+
 
     @Test
     public void disabledMethdos()
