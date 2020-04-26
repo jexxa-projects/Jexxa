@@ -80,7 +80,7 @@ public class JDBCConnectionTest
         objectUnderTest.add(aggregate);
         Assertions.assertThrows(IllegalArgumentException.class, () -> objectUnderTest.add(aggregate));
 
-        //Exception if illegal key is removed
+        //Exception if unknown key is removed
         objectUnderTest.remove(aggregate.getKey());
         Assertions.assertThrows(IllegalArgumentException.class, () -> objectUnderTest.remove(aggregate.getKey()));
 
