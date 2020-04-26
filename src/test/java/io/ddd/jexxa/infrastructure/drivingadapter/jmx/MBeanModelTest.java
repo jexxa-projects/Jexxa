@@ -3,6 +3,7 @@ package io.ddd.jexxa.infrastructure.drivingadapter.jmx;
 import java.util.Properties;
 
 import javax.management.Attribute;
+import javax.management.AttributeList;
 
 import com.google.gson.Gson;
 import io.ddd.jexxa.application.applicationservice.SimpleApplicationService;
@@ -162,7 +163,7 @@ public class MBeanModelTest
 
 
     @Test
-    public void disabledMethdos()
+    public void disabledMBeanModelMethods()
     {
         //Arrange
         var applicationService = new SimpleApplicationService();
@@ -178,6 +179,8 @@ public class MBeanModelTest
 
         //Assert that we can not set any parameter  
         Assertions.assertThrows(UnsupportedOperationException.class,  () -> objectUnderTest.setAttribute(new Attribute("value", 42)));
+        //Assert that we can not set any parameter
+        Assertions.assertThrows(UnsupportedOperationException.class,  () -> objectUnderTest.setAttributes(new AttributeList()));
     }
 
 }
