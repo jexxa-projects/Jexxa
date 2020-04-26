@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Updated README
 
 ### Fixed
-- JMXAdater: Added context to BeanInfo instead of "Hello Jexxa"
+- JMXAdater: Added context name to BeanInfo instead of "Hello Jexxa"
 
 
 ## [1.3] - 2020-03-18
