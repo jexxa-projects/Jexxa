@@ -52,6 +52,12 @@
         <password>${env.GITHUB_TOKEN2}</password>
         <username>${env.GITHUB_USERNAME2}</username>
     </server>
+
+    <server>
+        <id>oss.sonatype.org</id>
+        <username>${env.SONATYPE_USERNAME}</username>
+        <password>${env.SONATYPE_PASSWORD}</password>
+    </server>
 </servers>
 
 </settings>
