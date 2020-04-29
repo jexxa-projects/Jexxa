@@ -1,0 +1,72 @@
+package io.jexxa.application.infrastructure.drivenadapter.persistence;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+
+import io.jexxa.application.domain.aggregate.JexxaAggregate;
+import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.domainservice.IJexxaAggregateRepository;
+import io.jexxa.infrastructure.drivenadapter.persistence.IRepositoryConnection;
+import io.jexxa.infrastructure.drivenadapter.persistence.RepositoryManager;
+
+public class JexxaAggregateRepository implements IJexxaAggregateRepository
+{
+    private final IRepositoryConnection<JexxaAggregate, JexxaValueObject> repositoryConnection;
+
+    private JexxaAggregateRepository(IRepositoryConnection<JexxaAggregate, JexxaValueObject> repositoryConnection)
+    {
+        this.repositoryConnection = repositoryConnection;
+    }
+
+    @Override
+    public void add(JexxaAggregate jexxaAggregate)
+    {
+        repositoryConnection.add(jexxaAggregate);
+    }
+
+    @Override
+    public JexxaAggregate get(JexxaValueObject aggregateID)
+    {
+        return repositoryConnection.get(aggregateID).orElseThrow();
+    }
+
+    @Override
+    public Optional<JexxaAggregate> find(JexxaValueObject aggregateID)
+    {
+        return repositoryConnection.get(aggregateID);
+    }
+
+    @Override
+    public List<JexxaAggregate> get()
+    {
+        return repositoryConnection.get();
+    }
+
+    @Override
+    public void update(JexxaAggregate aggregate)
+    {
+        repositoryConnection.update(aggregate);
+    }
+
+    @Override
+    public void remove(JexxaAggregate aggregate)
+    {
+        repositoryConnection.remove(aggregate.getKey());
+    }
+    
+    @Override
+    public void removeAll()
+    {
+        repositoryConnection.removeAll();
+    }
+
+    public static IJexxaAggregateRepository create(Properties properties)
+    {
+        return new JexxaAggregateRepository(RepositoryManager.getConnection(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                properties)
+        );
+    }
+}

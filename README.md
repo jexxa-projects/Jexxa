@@ -32,9 +32,9 @@ General information:
 
 ```xml
 <dependency>
-  <groupId>io.ddd.Jexxa</groupId>
+  <groupId>io.jexxa</groupId>
   <artifactId>Jexxa</artifactId>
-  <version>1.3</version>
+  <version>1.4</version>
 </dependency> 
 ```
 
@@ -49,9 +49,9 @@ compile "io.ddd.Jexxa:jexxa:1.3"
 A simple ``Hello World`` example which can be found [here](https://github.com/repplix/Jexxa/blob/master/src/test/java/io/ddd/jexxa/application/HelloJexxa.java):  
 
 ```java     
-import io.ddd.jexxa.core.JexxaMain;
-import io.ddd.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
-import io.ddd.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
+import JexxaMain;
+import JMXAdapter;
+import RESTfulRPCAdapter;
 
 public class HelloJexxa
 {
