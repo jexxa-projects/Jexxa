@@ -43,7 +43,9 @@ jobs:
     - name: Maven build      
       env:
         GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}  
-        GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}  
+        GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}
+        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
       run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml -B package --file pom.xml
     
     - name: Publish to GitHub Packages Apache Maven
@@ -51,7 +53,9 @@ jobs:
         GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}  
         GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}  
         GITHUB_TOKEN: ${{ github.token }}
-      run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml deploy 
+        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml deploy
 
     - name: sonarqube update
       env:
@@ -59,4 +63,6 @@ jobs:
         GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}
         GITHUB_TOKEN: ${{ github.token }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
       run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml sonar:sonar
