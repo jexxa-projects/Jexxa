@@ -41,7 +41,7 @@ General information:
 #### Gradle
 
 ```groovy
-compile "io.ddd.Jexxa:jexxa:1.3"
+compile "io.Jexxa:jexxa:1.4"
 ``` 
 
 ### Start programming 
@@ -49,9 +49,10 @@ compile "io.ddd.Jexxa:jexxa:1.3"
 A simple ``Hello World`` example which can be found [here](https://github.com/repplix/Jexxa/blob/master/src/test/java/io/ddd/jexxa/application/HelloJexxa.java):  
 
 ```java     
-import JexxaMain;
-import JMXAdapter;
-import RESTfulRPCAdapter;
+import io.jexxa.core.JexxaMain;
+import io.jexxa.infrastructure.drivenadapter.messaging.JMSSender;
+import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
+import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 
 public class HelloJexxa
 {
