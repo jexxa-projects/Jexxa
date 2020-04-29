@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - JMXAdapter: Added context name to BeanInfo instead of "Hello Jexxa"
 
 
-## [1.3] - 2020-03-18
+## [1.3] - 2020-04-19
  
 ### Added
 - Fluent API for application developer to bind adapter to ports 
