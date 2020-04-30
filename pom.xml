@@ -49,6 +49,9 @@
     <junit.jupiter.params.version>5.6.2</junit.jupiter.params.version>
     <slf4j.simple.version>1.7.28</slf4j.simple.version>
 
+    <!--version of  maven plugins  -->
+    <gpg.plugin.version>1.6</gpg.plugin.version>
+
     <!-- target/compiler configuration  -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>11</maven.compiler.release>
@@ -62,6 +65,7 @@
     <sonar.login>${sonar-login}</sonar.login>
     <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco-ut/jacoco.xml,target/site/jacoco-it/jacoco.xml </sonar.coverage.jacoco.xmlReportPaths>
     <argLine>-Xmx2048m -Xms1024m</argLine>
+
   </properties>
 
   <dependencies>
@@ -207,6 +211,11 @@
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>0.8.5</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>${gpg.plugin.version}</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -239,6 +248,7 @@
           <argLine>${surefireArgLine}</argLine>
         </configuration>
       </plugin>
+
     </plugins>
 
 
@@ -366,6 +376,34 @@
             </executions>
           </plugin>
 
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>sign-artifacts</id>
+      <activation>
+        <property>
+          <name>sign</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>${gpg.plugin.version}</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
       </build>
     </profile>
