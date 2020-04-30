@@ -362,14 +362,14 @@
   <distributionManagement>
     <snapshotRepository>
       <id>oss.sonatype.org</id>
-      <name>GitHub snapshot</name>
+      <name>Jexxa snapshot</name>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
       <!--- <url>https://maven.pkg.github.com/repplix/Jexxa</url> -->
       <uniqueVersion>true</uniqueVersion>
     </snapshotRepository>
     <repository>
-      <id>github-Jexxa</id>
-      <name>GitHub OWNER Apache Maven Packages</name>
+      <id>oss.sonatype.org</id>
+      <name>Jexxa Maven Packages</name>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
   </distributionManagement>
