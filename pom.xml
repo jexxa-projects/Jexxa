@@ -7,8 +7,22 @@
   <artifactId>Jexxa</artifactId>
   <version>1.4-SNAPSHOT</version>
 
+  <!-- Project Information -->
   <name>Jexxa</name>
   <url>https://github.com/repplix/Jexxa</url>
+  <description>Jexxa - A Ports and Adapters Framework for Java</description>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>Michael Repplinger</name>
+    </developer>
+  </developers>
 
   <scm>
     <connection>scm:git:https://github.com/repplix/Jexxa.git</connection>
@@ -16,8 +30,7 @@
     <developerConnection>scm:git:https://github.com/repplix/Jexxa.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
-
-
+  
   <properties>
     <!-- version of compile dependencies -->
     <classgraph.version>4.8.75</classgraph.version>
