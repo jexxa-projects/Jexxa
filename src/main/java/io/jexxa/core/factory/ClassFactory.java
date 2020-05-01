@@ -125,6 +125,11 @@ public class ClassFactory
     /**
      * This method returns a constructor that can be used to create clazz with given parameters, even if constructor offers only interfaces
      * of given parameter.
+     **
+     * @param clazz Class of object whose constructor is requested
+     * @param parameter Object array with parameters the constructor must provide 
+     * @param <T> Type of the class whose constructor is requested
+     * @return A construcotr or an empty optional if no constructor is available that provides given parameter
      */
     private static <T> Optional<Constructor<?>> getConstructor(Class<T> clazz, Object[] parameter)
     {

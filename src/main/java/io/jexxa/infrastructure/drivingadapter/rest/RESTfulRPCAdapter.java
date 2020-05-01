@@ -82,11 +82,16 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     }
 
     /**
-     * Mapping of exception is done as follows 
+     * Mapping of exception is done as follows
+     * <pre>
+     * {@code
      *   {
      *     "Exception": "<exception as json>",
      *     "ExceptionType": "<Type of the excetopn>",
      *   }
+     * }
+     * </pre>
+     * 
      */
     private void registerExceptionHandler()
     {

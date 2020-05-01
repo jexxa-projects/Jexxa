@@ -159,7 +159,10 @@ public class PortFactory
 
 
     /**
-     * Find a constructor whose parameter can be instantiated
+     * Find a constructor whose parameter can be instantiated an adapterFactory 
+     *
+     * @param inboundPort class information of the inbound port
+     * @return a constructor that can be used to create a port or an empty Optional 
      */
     private Optional<Constructor<?>> findConstructor(Class<?> inboundPort)
     {
@@ -205,16 +208,20 @@ public class PortFactory
     }
 
     /**
-     * Returns the port that is required by given port wrapper
+     * Returns the port that is required by given port-adapter which is by convention the first and only parameter of th constructor
+     *
+     * @param portAdapter Class information of the portAdapter
+     * @param <T> type of the portAdapter
+     * @return Class information of the port that is used by this port-adapter which is by convention the first and only parameter of th constructor
      */
-    private <T> Class<?> getPort(Class<T> portWrapper)
+    private <T> Class<?> getPort(Class<T> portAdapter)
     {
-        return Arrays.stream(portWrapper.getConstructors())
+        return Arrays.stream(portAdapter.getConstructors())
                 .filter(constructor -> constructor.getParameterCount() == 1)
                 .filter(constructor -> !constructor.getParameterTypes()[0].isInterface())
                 .findFirst()
                 .<Class<?>>map(constructor -> constructor.getParameterTypes()[0])
-                .orElseThrow(() -> new RuntimeException("PortWrapper " + portWrapper.getSimpleName() + " requires unknown port"));
+                .orElseThrow(() -> new RuntimeException("PortWrapper " + portAdapter.getSimpleName() + " requires unknown port"));
     }
 
 
