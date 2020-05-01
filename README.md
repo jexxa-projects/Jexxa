@@ -83,7 +83,7 @@ public class HelloJexxa
 }
 ```
 ### Adding a logger 
-Jexxa does not include a logger, which means that you have to add your own logger to your application. If you not a logger, you will get a warning message to your consoel. In case you have not any special requirements you can add the following dependency to your project to fix this issue:
+Jexxa does not include a logger, which means that you have to add your own logger to your application. If you do not add a logger, you will get a warning message to your console. In case your application has not any special requirements you can add the following dependency to your project:
 
 ```maven
  <dependency>
