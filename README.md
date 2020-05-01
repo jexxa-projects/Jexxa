@@ -82,6 +82,17 @@ public class HelloJexxa
     }
 }
 ```
+### Adding a logger 
+Jexxa does not include a logger, which means that you have to add your own logger to your application. If you not a logger, you will get a warning message to your consoel. In case you have not any special requirements you can add the following dependency to your project to fix this issue:
+
+```maven
+ <dependency>
+   <groupId>org.slf4j</groupId>
+   <artifactId>slf4j-simple</artifactId>
+   <version>1.7.30</version>
+ </dependency>
+```                                   
+
 ### Configure your Jexxa application  
 By default a JexxaMain instance looks for the following properties file
 ```maven
