@@ -46,7 +46,7 @@ compile "io.Jexxa:jexxa:1.4"
 
 ### Start programming 
 
-A simple ``Hello World`` example which can be found [here](https://github.com/repplix/Jexxa/blob/master/src/test/java/io/ddd/jexxa/application/HelloJexxa.java):  
+A simple ``Hello World`` example can be found [here](https://github.com/repplix/Jexxa/blob/master/src/test/java/io/jexxa/application/HelloJexxa.java):  
 
 ```java     
 import io.jexxa.core.JexxaMain;
