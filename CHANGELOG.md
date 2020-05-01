@@ -5,19 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
  
+## [Unreleased]  - yyyy-mm-dd
+                             
 ## [1.4] - 2020-05-01
  
 ### Added
 - Changelog
-
  
 ### Changed
+- Changed groupID from io.ddd.jexxa into io.jexxa 
 - Code cleanup found by static code analysis with Teamscale
 - Updated README
 
 ### Fixed
 - JMXAdapter: Added context name to BeanInfo instead of "Hello Jexxa"
-
 
 ## [1.3] - 2020-04-19
  
