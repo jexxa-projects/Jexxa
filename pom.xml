@@ -276,12 +276,13 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>2.0.4</version>
+        <version>3.2.1</version>
         <executions>
           <execution>
             <id>attach-sources</id>
             <goals>
               <goal>jar</goal>
+              <goal>jar-no-fork</goal>
             </goals>
           </execution>
         </executions>
