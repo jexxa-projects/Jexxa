@@ -50,8 +50,7 @@ A simple ``Hello World`` example which can be found [here](https://github.com/re
 
 ```java     
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivenadapter.messaging.JMSSender;
-import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
+import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 
 public class HelloJexxa
