@@ -46,12 +46,11 @@ compile "io.Jexxa:jexxa:1.4"
 
 ### Start programming 
 
-A simple ``Hello World`` example which can be found [here](https://github.com/repplix/Jexxa/blob/master/src/test/java/io/ddd/jexxa/application/HelloJexxa.java):  
+A simple ``Hello World`` example can be found [here](https://github.com/repplix/Jexxa/blob/master/src/test/java/io/jexxa/application/HelloJexxa.java):  
 
 ```java     
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivenadapter.messaging.JMSSender;
-import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
+import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 
 public class HelloJexxa
@@ -83,6 +82,17 @@ public class HelloJexxa
     }
 }
 ```
+### Adding a logger 
+Jexxa does not include a logger, which means that you have to add your own logger to your application. If you do not add a logger, you will get a warning message to your console. In case your application has not any special requirements you can add the following dependency to your project:
+
+```maven
+ <dependency>
+   <groupId>org.slf4j</groupId>
+   <artifactId>slf4j-simple</artifactId>
+   <version>1.7.30</version>
+ </dependency>
+```                                   
+
 ### Configure your Jexxa application  
 By default a JexxaMain instance looks for the following properties file
 ```maven
