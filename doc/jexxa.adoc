@@ -36,9 +36,15 @@
 |Notes
 
 |0.1
-|2019-03-05
+|2020-03-05
 |Michael Repplinger
 |initial version
+
+|0.2
+|2020-05-03
+|Michael Repplinger
+a|* Major update of section Vision
+* Added section Motivation
 
 |===
 
@@ -47,6 +53,35 @@
 
 
 == Vision
+Jexxa is a lightweight framework to implement business applications based on a https://www.thinktocode.com/2018/07/19/ports-and-adapters-architecture/[ports and adapters] architecture.
+
+Goal of this framework is to easily connect technology stacks to a technology agnostic business application. Ideally the main-method of your application is the only location where technology stacks are connected to your application core.
+
+Existing frameworks such as the https://spring.io[Spring Framework] or the J2EE standard provide much more powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is quite hard to maintain applications over several decades especially if such frameworks are used inside the application core.
+
+Even though Jexxa is used within lightweight business applications it has a strong educational focus. Up to now, the main goals of this framework are:
+
+* Become an idea how to strictly separate between technology stacks and domain logic on a code basis which is essential for durable software systems.
+
+* Be aware which technology stacks you really require to realize the use cases of your customers. Typically, they are quite less than expected. Make it as easy as possible to replace them for your or the succeeding team maintaining the application.
+
+* Find the right balance between the 'not invented here' syndrome, and the required time to update external dependencies of your application and to train your developer teams.
+
+Even if you use real powerful frameworks for good reason within your application I hope that Jexxa gives you some ideas and helps you to think about your current and future code.
+
+== Motivation
+*Durability*
+
+When developing applications with a high durability as used in production, financial or insurance sector it is highly recommended using an architecture such as ports and adapter to strictly separate the technology stacks from the application core. A developer should only use standard features of or libraries/SDKs shipped with a programming language to develop the application core. Available frameworks should be used to attach the latest technology stacks to the application core.
+
+Applications without well-defined boundaries between technology stacks and application core itself become hard to maintain due to following reasons:
+
+* Replacing or adding a technology stack is hard or even impossible so that a disruptive technology causes that your application core becomes legacy.
+* to the application core so that it is quite hard to replace a framework. Much worse, these applications are typically hard to maintain in the sense of adding or even updating technology stacks because the application core itself might be affected as well. In the long run, changing the application core due to new or changed business rules requires a developer that still has experience with an old version of a very specific framework.
+
+
+
+
 
 
 == TODO: Describe general building blocks
