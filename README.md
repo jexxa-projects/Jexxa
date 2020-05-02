@@ -6,7 +6,7 @@
 
 # Jexxa - A Ports and Adapters Framework for Java 
 
-Jexxa is a lightweight framework to implement business applications based on a [ports and adapters](https://www.thinktocode.com/2018/07/19/ports-and-adapters-architecture/) architecture. 
+Jexxa is a lightweight framework to implement business applications based on a [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/) architecture. 
 
 Goal of this framework is to easily connect technology stacks to your technology agnostic business application. This means that the main-method of your application is the only location where technology stacks are connected to your business logic.      
 

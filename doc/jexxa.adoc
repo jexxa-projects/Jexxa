@@ -8,16 +8,16 @@
 //image::./images/Logo.jpg[align=center]
 
 //Verwendung von überstetzten Headern
-:toc-title: Inhaltsverzeichnis
-:caution-caption: Achtung
-:important-caption: Wichtig
-:note-caption: Hinweis
-:tip-caption: Tipp
-:warning-caption: Warnung
-:appendix-caption: Anhang
-:example-caption: Beispiel
-:figure-caption: Abbildung
-:table-caption: Tabelle
+//:toc-title: Inhaltsverzeichnis
+//:caution-caption: Achtung
+//:important-caption: Wichtig
+//:note-caption: Hinweis
+//:tip-caption: Tipp
+//:warning-caption: Warnung
+//:appendix-caption: Anhang
+//:example-caption: Beispiel
+//:figure-caption: Abbildung
+//:table-caption: Tabelle
 
 // Verwende Symbole für IMPORTANT, NOTE, ...
 :icons: font
@@ -28,11 +28,11 @@
 
 [cols="1,2,3,4", options="header"]
 [reftext="Tabelle {counter:local-table-number}"]
-.Historie
+.History
 |===
 |Version
-|Datum
-|Autor
+|Date
+|Author
 |Notes
 
 |0.1
@@ -44,6 +44,7 @@
 |2020-05-03
 |Michael Repplinger
 a|* Major update of section Vision
+* Major update of section General Building Blocks
 * Added section Motivation
 
 |===
@@ -53,7 +54,7 @@ a|* Major update of section Vision
 
 
 == Vision
-Jexxa is a lightweight framework to implement business applications based on a https://www.thinktocode.com/2018/07/19/ports-and-adapters-architecture/[ports and adapters] architecture.
+Jexxa is a lightweight framework to implement business applications based on a https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/[ports and adapters] architecture.
 
 Goal of this framework is to easily connect technology stacks to a technology agnostic business application. Ideally the main-method of your application is the only location where technology stacks are connected to your application core.
 
@@ -67,7 +68,7 @@ Even though Jexxa is used within lightweight business applications it has a stro
 
 * Find the right balance between the 'not invented here' syndrome, and the required time to update external dependencies of your application and to train your developer teams.
 
-Even if you use real powerful frameworks for good reason within your application I hope that Jexxa gives you some ideas and helps you to think about your current and future code.
+Even if you use real powerful frameworks for good reason within your application I hope that you find Jexxa helpful in some way.
 
 == Motivation
 *Durability*
@@ -80,25 +81,38 @@ Applications without well-defined boundaries between technology stacks and appli
 * to the application core so that it is quite hard to replace a framework. Much worse, these applications are typically hard to maintain in the sense of adding or even updating technology stacks because the application core itself might be affected as well. In the long run, changing the application core due to new or changed business rules requires a developer that still has experience with an old version of a very specific framework.
 
 
+== General Building Blocks
+
+Jexxa uses the following general building blocks which belongs either to the __application core__ or to the  __infrastructure__ which includes all kind of technology related functionality.
 
 
+[cols="1,2"]
+|===
+|Building Block
+|Description
 
 
-== TODO: Describe general building blocks
+| Driving Adapter
+| A driving adapter belongs to the infrastructure and receives a command from a specific client such as a UI, or a console and forwards it to a specific port. Within Jexxa a driving adapter is able to automatically expose the methods from all kind of ports by using a convention. In cases where this is not possible, Jexxa offers a so called __Inbound Port Adapter__.
 
-** Inbound Ports =>  Concrete implementation (Interfaces only required if Inbound ports change => In case of business logic this is quite unusual)
-** Outbound ports => Interfaces that are used within the application core. When creating anm inbound port we have to set/pass implementation of these interfaces inside the application core
+|Inbound Port
+| An inbound port belongs to the application core and provides use cases that can be started by a driving adapter. Depending on the design of your application core this might be an interface, or a concrete implementation of the use cases.
 
-** Driving Adapter => Concrete implementation of a technology stack to receive commands/domain events and invoke methods of an inbound port. We have two kind if Driving Adapter
-*** 1 to n assignment
-*** 1 to 1 assignment
+|Outbound Port
+| An outbound port belongs to the application core but only as interface. Typically, it can only be realized by using a specific technology stack such as a database. Since it belongs to the application, the methods of an outbound port should reflect the domain language from the application core.
 
-** Driven Adapter => Implementing interfaces of outbound ports
-**** Direct inheritance
-**** Wrapper approach
+|Driven Adapter
+|A driven adapter belongs to the infrastructure and is a concrete implementation of a specific outbound port. A driven adapter is injected into the application core which in turns only knows about the interface.
+
+|Inbound Port Adapter
+| An inbound port adapter belongs to the infrastructure and maps incoming requests to a dedicated port. This is typically required if a mapping between different styles such as a mapping between resources and methods as for RESTfulHTTP.
+
+|===
 
 
 == TODO: Describe Interaction of  building blocks
+
+
 * Interaction of  building blocks
 ** DrivingAdapter ->
 ** -> PortAdapter (optional/ only for 1 to 1)
