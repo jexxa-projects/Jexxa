@@ -64,7 +64,7 @@ Even though Jexxa is used within lightweight business applications it has a stro
 
 * Become an idea how to strictly separate between technology stacks and domain logic on a code basis which is essential for durable software systems.
 
-* Be aware which technology stacks you really require to realize the use cases of your customers. Typically, they are quite less than expected. Make it as easy as possible to replace them for your or the succeeding team maintaining the application.
+* Be aware which technology stacks you really required to realize the use cases of your customers. Typically, they are quite less than expected. Make it as easy as possible to replace them for your or the succeeding team maintaining the application.
 
 * Find the right balance between the 'not invented here' syndrome, and the required time to update external dependencies of your application and to train your developer teams.
 
@@ -93,7 +93,12 @@ Jexxa uses the following general building blocks which belongs either to the __a
 
 
 | Driving Adapter
-| A driving adapter belongs to the infrastructure and receives a command from a specific client such as a UI, or a console and forwards it to a specific port. Within Jexxa a driving adapter is able to automatically expose the methods from all kind of ports by using a convention. In cases where this is not possible, Jexxa offers a so called __Inbound Port Adapter__.
+a| A driving adapter belongs to the infrastructure and receives a command from a specific client such as a UI, or a console and forwards it to a specific port.
+
+A __generic__ driving adapter encapsulate the receiving technology and is able to automatically expose the methods from all kind of connected inbound ports by using a convention. So it can be connected directly to a port.
+
+A __receiving__ driving adapter includes only a receiving technology and must be connected to __port adapter__ which performs the mapping to a specific port. The __port adapter__ must be implemented by the application developer.
+
 
 |Inbound Port
 | An inbound port belongs to the application core and provides use cases that can be started by a driving adapter. Depending on the design of your application core this might be an interface, or a concrete implementation of the use cases.
@@ -104,14 +109,63 @@ Jexxa uses the following general building blocks which belongs either to the __a
 |Driven Adapter
 |A driven adapter belongs to the infrastructure and is a concrete implementation of a specific outbound port. A driven adapter is injected into the application core which in turns only knows about the interface.
 
-|Inbound Port Adapter
-| An inbound port adapter belongs to the infrastructure and maps incoming requests to a dedicated port. This is typically required if a mapping between different styles such as a mapping between resources and methods as for RESTfulHTTP.
+| Port Adapter
+| This kind adapter allows for mapping between different representational styles such as exposing ports of an application core via REST. In contrast to a generic driving adapter, this kind of mapping has to be implemented for each exposed port.
+
 
 |===
 
 
 == TODO: Describe Interaction of  building blocks
 
+[plantuml, diagram-classes, svg, align=center]
+....
+
+package Jexxa {
+[Driving Adapters]
+[Driven Adapter Strategies]
+}
+
+package ApplicationCore {
+[Inbound Ports]
+[Outbound Ports]
+}
+
+
+package Infrastructure {
+[Driven Adapters]
+}
+
+package Jexxa  {
+}
+
+[Driving Adapters] -right--> [Inbound Ports]
+[Inbound Ports] -down-> [Outbound Ports]
+[Outbound Ports] <|.. [Driven Adapters]
+[Driven Adapters] o--> [Driven Adapter Strategies]
+
+
+[Driving Adapters] -[hidden]-- [Driven Adapter Strategies]
+
+
+....
+
+
+
+[cols="1,2"]
+|===
+|Building Block
+|Convention
+
+| Driving Adapter
+a| * Constructor gets a `Properties` object with all configuration information 
+
+| Port Adapter
+a| * Constructor gets a single attribute which is the port
+* All other required config information must be provided by its driving adapter
+
+
+|===
 
 * Interaction of  building blocks
 ** DrivingAdapter ->
