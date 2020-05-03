@@ -197,7 +197,7 @@ package Infrastructure {
 Within Jexxa we use several conventions which should it makes hard to misuse this framework. The usage of conventions avoids using any other java specific features such as annotations. In addition, it should support understanding `why` and not only `how` things are done.
 
 
-[cols="1,2,2"]
+[cols="1,3,2"]
 |===
 a|Building Block
 |Conventions
@@ -214,7 +214,7 @@ Note this is the same Properties object that is given to `JexxaMain`
 
 2. A Generic driving adapter is reused when it is bind to different ports.
 
-a| 1. Using constructors or factory methods do not required any special annotations. Using `Properties` is a standard approach in Java.
+a| 1. Using constructors or factory methods do not require any special annotations. Using `Properties` is a standard approach in Java.
 2. Is required because a generic driving adapter also encapsulates the transport mechanism which typically binds other resources like a network port. Therefore, a second instance at least with same configuration is not possible.
 
 a|Inbound Port
@@ -224,7 +224,7 @@ a| 1. Constructor of the inbound port only has interfaces of required outbound p
 
 a| 1. All parts of the application core should be self-contained as much as possible. The infrastructure should only be aware of the interfaces of or required by the application core but not of its inner components. Therefore, only outbound ports are allowed in a constructor.
 2. Since Jexxa provides instantiating ports, it needs concrete Class-information in main-method.
-3. This decision should simplify implementing synchroniation of parallel processing from different driving adapters.
+3. This decision should simplify implementing synchronization of parallel processing from different driving adapters.
 
 
 a|Outbound Port
@@ -241,14 +241,14 @@ a| 1. Only a single implementation of an outbound port exist.
 * Public static factory method that gets no parameters and returns the type of the Outbound Port
 * Public static factory method with a single Properties parameter and returns the type of the outbound port.
 
-a| 1. Jexxa provides no mechanism to explicitly define a specific driven adapter. At the moment you can only shrink the search space of driven adapters on a package level.
+a| 1. Jexxa provides no mechanism to explicitly define a specific driven adapter. At the moment you can only limit the search space of driven adapters on a package level.
 
-2. Using constructors or factory methods do not required any special annotations.
+2. Using constructors or factory methods do not require any special annotations.
 
 
 
 | Port Adapter
-a| 1. Public constructor with a single attribute. The attribute is the concrete type of the specific port.
+a| 1. A single public constructor with a single attribute. The attribute is the concrete type of the corresponding port.
 a| 1. A port adapter is tightly coupled to a specific port. Therefore, it gets its concrete type injected.
 
 
