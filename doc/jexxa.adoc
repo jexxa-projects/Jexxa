@@ -5,6 +5,14 @@
 :toclevels: 4
 
 
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
 //image::./images/Logo.jpg[align=center]
 
 //Verwendung von überstetzten Headern
