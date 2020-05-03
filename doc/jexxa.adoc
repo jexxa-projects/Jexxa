@@ -62,23 +62,28 @@ Existing frameworks such as the https://spring.io[Spring Framework] or the J2EE 
 
 Even though Jexxa is used within lightweight business applications it has a strong educational focus. Up to now, the main goals of this framework are:
 
-* Become an idea how to strictly separate between technology stacks and domain logic on a code basis which is essential for durable software systems.
+* Get an idea how to strictly separate between technology stacks and domain logic on a code basis which is essential for durable software systems.
 
 * Be aware which technology stacks you really required to realize the use cases of your customers. Typically, they are quite less than expected. Make it as easy as possible to replace them for your or the succeeding team maintaining the application.
 
-* Find the right balance between the 'not invented here' syndrome, and the required time to update external dependencies of your application and to train your developer teams.
+* Find the right balance between the 'not invented here' syndrome, and the required time to update external dependencies of your application as well as to train your developer teams in new versions of these dependencies.
 
 Even if you use real powerful frameworks for good reason within your application I hope that you find Jexxa helpful in some way.
 
 == Motivation
-*Durability*
+The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for this application.
 
-When developing applications with a high durability as used in production, financial or insurance sector it is highly recommended using an architecture such as ports and adapter to strictly separate the technology stacks from the application core. A developer should only use standard features of or libraries/SDKs shipped with a programming language to develop the application core. Available frameworks should be used to attach the latest technology stacks to the application core.
+When developing applications with a high durability as used in production, financial or insurance sector it is highly recommended using an architecture with a string focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, a developer should only use standard features of or libraries/SDKs shipped with a programming language. Available frameworks should be used to attach the latest technology stacks to the application core.
 
-Applications without well-defined boundaries between technology stacks and application core itself become hard to maintain due to following reasons:
+Applications without well-defined boundaries between technology stacks and the application core become hard to maintain because changes on one side could (and in reality will) affect the other side. Typical symptoms are:
 
-* Replacing or adding a technology stack is hard or even impossible so that a disruptive technology causes that your application core becomes legacy.
-* to the application core so that it is quite hard to replace a framework. Much worse, these applications are typically hard to maintain in the sense of adding or even updating technology stacks because the application core itself might be affected as well. In the long run, changing the application core due to new or changed business rules requires a developer that still has experience with an old version of a very specific framework.
+* Updating to a newer version of a technology stack is hard or even impossible so that it is much  safer to use an old version.
+
+* Adding or replacing a technology stack is hard or even impossible so that a disruptive technology causes that your application core becomes legacy. In the long run you also need developer on a senior grade who have deep knowledge of the outdated technology stacks.
+
+* Changes on the application core itself takes much longer time as in the beginning. In the end you need senior developers who have a deep understanding of the specific business domain, the used technology stacks and the convoluted structures of the entire application.
+
+* In the long run such structural issues could (and in reality will) affect your enterprise architecture so that neighbored systems need to be aware and take special actions for legacy systems.  
 
 
 == General Building Blocks
@@ -110,7 +115,7 @@ A __receiving__ driving adapter includes only a receiving technology and must be
 |A driven adapter belongs to the infrastructure and is a concrete implementation of a specific outbound port. A driven adapter is injected into the application core which in turns only knows about the interface.
 
 | Port Adapter
-| This kind adapter allows for mapping between different representational styles such as exposing ports of an application core via REST. In contrast to a generic driving adapter, this kind of mapping has to be implemented for each exposed port.
+| A port adapter allows for mapping between different representational styles such as exposing ports of an application core via RESTfulHTTP. A port adapter belongs to the infrastructure of the application and is connected to a receiving driving adapter.
 
 
 |===
@@ -118,7 +123,10 @@ A __receiving__ driving adapter includes only a receiving technology and must be
 
 == TODO: Describe Interaction of  building blocks
 
-[plantuml, diagram-classes, svg, align=center]
+
+
+
+[plantuml, diagram-components, svg, align=center]
 ....
 
 package Jexxa {
@@ -133,23 +141,24 @@ package ApplicationCore {
 
 
 package Infrastructure {
+[Port Adapters]
 [Driven Adapters]
 }
 
-package Jexxa  {
-}
 
-[Driving Adapters] -right--> [Inbound Ports]
+
+[Driving Adapters] -right--> [Port Adapters]
+[Port Adapters] -right--> [Inbound Ports]
 [Inbound Ports] -down-> [Outbound Ports]
 [Outbound Ports] <|.. [Driven Adapters]
-[Driven Adapters] o--> [Driven Adapter Strategies]
+[Driven Adapters] o-left-[Driven Adapter Strategies]
 
 
 [Driving Adapters] -[hidden]-- [Driven Adapter Strategies]
+[Port Adapters] -[hidden]-- [Driven Adapters]
 
 
 ....
-
 
 
 [cols="1,2"]
