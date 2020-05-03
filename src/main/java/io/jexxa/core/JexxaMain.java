@@ -156,7 +156,7 @@ public class JexxaMain
         return this;
     }
 
-    JexxaMain bindToPortWrapper(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
+    JexxaMain bindToPortAdapter(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
     {
         var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
 

@@ -22,7 +22,7 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
     public <P> JexxaMain to(Class<P> port)
     {
         if ( isPortWrapper(port)) {
-            return jexxaMain.bindToPortWrapper(drivingAdapterClass, port);
+            return jexxaMain.bindToPortAdapter(drivingAdapterClass, port);
         }   else {
             return jexxaMain.bindToPort(drivingAdapterClass, port);
         }
