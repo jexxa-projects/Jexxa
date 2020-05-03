@@ -184,40 +184,65 @@ package Infrastructure {
 
 
 
+== Conventions used in Jexxa
 
-== TODO: Describe factories:
-* General idea is
-** DrivingAdapter starts the interaction => so we create them first. We can make following assumptions
-*** Concrete type information class<T> is available within main because:
-**** An application typically needs to explicitly decide how to expose a port.
-**** Alternatively we can say that we bind a specific type
-**** In case we have 1 to 1 mapping there is no other chance
-*** Driving adapter needs specific configuration => In java this is typically done by Properties
-***** Constructor needs a Properties
-***** We have a default constructor in case no configuration is required
-***** We need a special configuration interface which has to be used in main => In order to support this we have to do following steps => 1. Create an adapter => 2. register port(s) => 3. configure adapter (optional) => 4. start adapter  => From point of main application we bind an adapter to a port (step 1. , 2.) and then we call 4. (start all) from main => This ensures that main can do a special configuration   
-
-** InboundPort
-*** We can make following assumptions:
-*** Concrete type information class<T> is available within main.
-*** Constructor requires all OutboundPorts for the job of the InboundPort
-*** In case special configuration from main is required we hand in this via a Properties instance
-*** => Number of constructors is at max 2 (one with and one without properties, remaining parameters should only be interfaces (outbound ports) )
-*** => To create an inbound port we have to instantiate driven adapter first which implements the interfaces
-
-** Outbound port
-*** Concrete Type information are not available => We have to discover them based on the interfaces we have
-*** Typically we want to exchange the implementation depending on infrastructure (developing, production, ...) => We want to use some kind of factor or factory method that returns us the interface based on the properties => For simplicity we search for static factory methods which take no argument or properties and return Outbound port (interface)
+Within Jexxa we use several conventions which should it makes hard to misuse this framework. The usage of conventions avoids using any other java specific features such as annotations. In addition, it should support understanding `why` and not only `how` things are done.
 
 
-* Bootstrap service
-** A bootstrap service is typically a domain service which performs some initial steps before using the application core. Typical services are: Adding master data to a specific repository if required.
-Note: it is important that these steps are at least initialized via the application core
-because they are essential to an application service, even if some technology stacks such as liquibase is used     
+[cols="1,2,2"]
+|===
+a|Building Block
+|Conventions
+|Reason
 
 
-* General note:
-** 1 to 1 relationship between repository and aggregate
-** Allocation policy for driven adapter is that they are reused by default => can be changed in settings/properties
-** ApplicationService/inbound port is not an interface because it is not required. Since a port represents business logic it has in general no different implementations
- In case you have to limit the API for specific driving adapter put a port-adapter in front of the port
+a| Generic Driving Adapter
+a| 1. To create a Driving Adapter by Jexxa, one of the following creating methods must be available.
+* Public Default constructor available
+* Public constructor with a single `Properties` attribute
+* Public static factory method that gets no parameters and returns the type of the driving adapter
+* Public static factory method with a single Properties parameter and returns the type of the requested driving adapter
+Note this is the same Properties object that is given to `JexxaMain`
+
+2. A Generic driving adapter is reused when it is bind to different ports.
+
+a| 1. Using constructors or factory methods do not required any special annotations. Using `Properties` is a standard approach in Java.
+2. Is required because a generic driving adapter also encapsulates the transport mechanism which typically binds other resources like a network port. Therefore a second instance at least with same configuration is not possible. 
+
+a|Inbound Port
+a| 1. Constructor of the inbound port only has interfaces of required outbound ports as interface.
+   2. In `JexxaMain` the concrete Class-information is specified to instantiate the port.
+3. An Inbound port of a specific type is only created once even if it is connected to different driving adapters.
+
+a| 1. All parts of the application core should be self-contained as much as possible. The infrastructure should only be aware of the interfaces of or required by the application core but not of its inner components. Therefore, only outbound ports are allowed in a constructor.
+2. Since Jexxa provides instantiating ports, it needs concrete Class-information in main-method.
+3. This decision should simplify implementing synchroniation of parallel processing from different driving adapters.
+
+
+a|Outbound Port
+a| None
+a| None
+
+
+|Driven Adapter
+
+a| 1. Only a single implementation of an outbound port exist.
+2. To create a Driven Adapter by Jexxa, one of the following constructing methods must be available.
+* Public Default constructor
+* Public constructor with a single `Properties` attribute
+* Public static factory method that gets no parameters and returns the type of the Outbound Port
+* Public static factory method with a single Properties parameter and returns the type of the outbound port.
+
+a| 1. Jexxa provides no mechanism to explicitly define a specific driven adapter. At the moment you can only shrink the search space of driven adapters on a package level.
+
+2. Using constructors or factory methods do not required any special annotations.
+
+
+
+| Port Adapter
+a| 1. Public constructor with a single attribute. The attribute is the concrete type of the specific port.
+a| 1. A port adapter is tightly coupled to a specific port. Therefore, it gets its concrete type injected.
+
+
+|===
+
