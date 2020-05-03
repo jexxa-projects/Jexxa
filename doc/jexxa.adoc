@@ -215,7 +215,7 @@ Note this is the same Properties object that is given to `JexxaMain`
 2. A Generic driving adapter is reused when it is bind to different ports.
 
 a| 1. Using constructors or factory methods do not required any special annotations. Using `Properties` is a standard approach in Java.
-2. Is required because a generic driving adapter also encapsulates the transport mechanism which typically binds other resources like a network port. Therefore a second instance at least with same configuration is not possible. 
+2. Is required because a generic driving adapter also encapsulates the transport mechanism which typically binds other resources like a network port. Therefore, a second instance at least with same configuration is not possible.
 
 a|Inbound Port
 a| 1. Constructor of the inbound port only has interfaces of required outbound ports as interface.
