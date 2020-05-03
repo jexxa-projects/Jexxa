@@ -88,104 +88,101 @@ Applications without well-defined boundaries between technology stacks and the a
 
 == General Building Blocks
 
-Jexxa uses the following general building blocks which belongs either to the __application core__ or to the  __infrastructure__ which includes all kind of technology related functionality.
+Jexxa has a strong focus to Domain Driven Design and uses a lot of this terminology. It uses the following general building blocks which belongs either to the __application core__ or to the  __infrastructure__ which includes all kind of technology related functionality.
 
 
-[cols="1,2"]
+[cols="1,2,2"]
 |===
-|Building Block
-|Description
+a|Building Block & Streotype
+|General Description
+|Support by Jexxa
 
 
-| Driving Adapter
+a| Driving Adapter
+\<<Driving Adapter>>
 a| A driving adapter belongs to the infrastructure and receives a command from a specific client such as a UI, or a console and forwards it to a specific port.
+a| Providing __generic__ driving adapters that encapsulate the receiving technology and automatically expose the methods from connected inbound ports by using a convention.
 
-A __generic__ driving adapter encapsulate the receiving technology and is able to automatically expose the methods from all kind of connected inbound ports by using a convention. So it can be connected directly to a port.
-
-A __receiving__ driving adapter includes only a receiving technology and must be connected to __port adapter__ which performs the mapping to a specific port. The __port adapter__ must be implemented by the application developer.
+Providing __receiving__ driving adapters that include only a receiving technology and can be connected to a __port adapter__ which is implemented in the infrastructure of the application.
 
 
-|Inbound Port
+a|Inbound Port
+\<<Port>>
 | An inbound port belongs to the application core and provides use cases that can be started by a driving adapter. Depending on the design of your application core this might be an interface, or a concrete implementation of the use cases.
+|Instantiation of inbound ports in the main of the application including dependency injection of required outbound ports.
 
-|Outbound Port
-| An outbound port belongs to the application core but only as interface. Typically, it can only be realized by using a specific technology stack such as a database. Since it belongs to the application, the methods of an outbound port should reflect the domain language from the application core.
+a|Outbound Port
+\<<Port>>
+a| An outbound port belongs to the application core but only as interface. This interface is implemented in the infrastructure of the application core by using a specific technology stack such as a database driver.
+
+
+a| Outbound ports are 'just' interfaces. So there is no special support in Jexxa.
+
+IMPORTANT: Since the outbound port belongs to the application, its methods should reflect the domain language of the application core.
 
 |Driven Adapter
+\<<Driven Adapter>>
+
 |A driven adapter belongs to the infrastructure and is a concrete implementation of a specific outbound port. A driven adapter is injected into the application core which in turns only knows about the interface.
+| Providing _driven adapter strategies_ to simplify development of driven adapters of the application.
+
+Exchanging a concrete technology strategy depending on your production requirements and/or on your software development process. For example, you can easily switch your database technology between in memory, JDBC, or key value without changing your driven adapters.
+
 
 | Port Adapter
+\<<Driving Adapter>>
 | A port adapter allows for mapping between different representational styles such as exposing ports of an application core via RESTfulHTTP. A port adapter belongs to the infrastructure of the application and is connected to a receiving driving adapter.
+| Providing receiving driving adapters that simplify the development of the port adapters.
 
 
 |===
 
 
-== TODO: Describe Interaction of  building blocks
+=== Interaction and Dependencies of Building Blocks
 
 
 
 
 [plantuml, diagram-components, svg, align=center]
 ....
+skinparam PackagePadding 20
 
 package Jexxa {
-[Driving Adapters]
-[Driven Adapter Strategies]
+[Generic Driving Adapters]  <<Driving Adapter>>
+[Receiving Driving Adapters] <<Driving Adapter>>
+[Driven Adapter Strategies] <<Driven Adapter>>
 }
 
 package ApplicationCore {
-[Inbound Ports]
-[Outbound Ports]
+[Inbound Ports] <<Port>>
+[Outbound Ports] <<Port>>
 }
 
 
 package Infrastructure {
-[Port Adapters]
-[Driven Adapters]
+[Port Adapters] <<Driving Adapter>>
+[Driven Adapters] <<Driven Adapter>>
 }
 
 
+[Receiving Driving Adapters] -right-> [Port Adapters]
+[Generic Driving Adapters] -right-> [Inbound Ports]
 
-[Driving Adapters] -right--> [Port Adapters]
-[Port Adapters] -right--> [Inbound Ports]
+[Port Adapters] -right-> [Inbound Ports]
 [Inbound Ports] -down-> [Outbound Ports]
 [Outbound Ports] <|.. [Driven Adapters]
 [Driven Adapters] o-left-[Driven Adapter Strategies]
 
 
-[Driving Adapters] -[hidden]-- [Driven Adapter Strategies]
+[Generic Driving Adapters] -[hidden]- [Port Adapters]
+[Generic Driving Adapters] --[hidden]- [Receiving Driving Adapters]
+[Receiving Driving Adapters] -[hidden]-- [Driven Adapter Strategies]
 [Port Adapters] -[hidden]-- [Driven Adapters]
 
 
 ....
 
 
-[cols="1,2"]
-|===
-|Building Block
-|Convention
-
-| Driving Adapter
-a| * Constructor gets a `Properties` object with all configuration information 
-
-| Port Adapter
-a| * Constructor gets a single attribute which is the port
-* All other required config information must be provided by its driving adapter
-
-
-|===
-
-* Interaction of  building blocks
-** DrivingAdapter ->
-** -> PortAdapter (optional/ only for 1 to 1)
-** -> Inbound Port
-** -> Outbound Port
-** -> OutboundPort Wrapper (optional to decouple generic part of driven adapter)
-** -> Driven Adapter
-
-* Driving adapter and driven adapter are stateless from a Jexxa application point of view.
-* Driven adapter are stateless as well. So any repository has to manage a dataset in a way that no dedicated initialization is required.     
 
 
 == TODO: Describe factories:
