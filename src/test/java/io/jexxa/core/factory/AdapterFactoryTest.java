@@ -1,6 +1,8 @@
 package io.jexxa.core.factory;
 
 
+import static io.jexxa.TestTags.UNIT_TEST;
+
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -21,7 +23,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
  * @see AdapterFactory for conventions to create an adapter 
  */
 @Execution(ExecutionMode.CONCURRENT)
-@Tag("unit-test")
+@Tag(UNIT_TEST)
 public class AdapterFactoryTest
 {
     private final String packageName = "io.jexxa.application.infrastructure";

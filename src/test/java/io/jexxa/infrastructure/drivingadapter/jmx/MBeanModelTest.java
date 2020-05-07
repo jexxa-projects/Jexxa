@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
+import static io.jexxa.TestTags.UNIT_TEST;
+
 import java.util.Properties;
 
 import javax.management.Attribute;
@@ -15,7 +17,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
-@Tag("unit-test")
+@Tag(UNIT_TEST)
 public class MBeanModelTest
 {
     @SuppressWarnings({"SameParameterValue", "FieldCanBeLocal", "unused"})

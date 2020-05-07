@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
+import static io.jexxa.TestTags.INTEGRATION_TEST;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
-@Tag("integration-test")
+@Tag(INTEGRATION_TEST)
 public class JMSAdapterIT
 {
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")

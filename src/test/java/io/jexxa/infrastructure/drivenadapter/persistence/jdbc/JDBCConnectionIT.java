@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivenadapter.persistence.jdbc;
 
+import static io.jexxa.TestTags.INTEGRATION_TEST;
+
 import java.util.Properties;
 
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
@@ -10,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-@Tag("integration-test")
+@Tag(INTEGRATION_TEST)
 public class JDBCConnectionIT
 {
     private JexxaAggregate aggregate;

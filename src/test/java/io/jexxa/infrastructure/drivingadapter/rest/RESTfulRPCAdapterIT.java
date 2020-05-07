@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
+import static io.jexxa.TestTags.INTEGRATION_TEST;
+
 import java.util.Properties;
 
 import com.google.gson.Gson;
@@ -17,7 +19,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @SuppressWarnings("SameParameterValue")
 @Execution(ExecutionMode.SAME_THREAD)
-@Tag("integration-test")
+@Tag(INTEGRATION_TEST)
 public class RESTfulRPCAdapterIT
 {
     static final String CONTENT_TYPE = "Content-Type";

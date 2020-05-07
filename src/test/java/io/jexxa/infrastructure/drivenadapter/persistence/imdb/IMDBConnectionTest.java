@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivenadapter.persistence.imdb;
 
+import static io.jexxa.TestTags.UNIT_TEST;
+
 import java.util.Properties;
 
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
@@ -11,7 +13,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
-@Tag("unit-test")
+@Tag(UNIT_TEST)
 public class IMDBConnectionTest
 {
 

@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivenadapter.persistence;
 
+import static io.jexxa.TestTags.INTEGRATION_TEST;
+
 import java.util.Properties;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -18,7 +20,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 
 @Execution(ExecutionMode.SAME_THREAD)
-@Tag("integration-test")
+@Tag(INTEGRATION_TEST)
 public class JexxaAggregateRepositoryIT
 {
 

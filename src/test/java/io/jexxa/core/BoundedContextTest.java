@@ -1,5 +1,7 @@
 package io.jexxa.core;
 
+import static io.jexxa.TestTags.UNIT_TEST;
+
 import java.time.Duration;
 
 import org.junit.jupiter.api.Assertions;
@@ -11,7 +13,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
-@Tag("unit-test")
+@Tag(UNIT_TEST)
 public class BoundedContextTest
 {
     final JexxaMain jexxaMain = new JexxaMain("BoundedContextTest");

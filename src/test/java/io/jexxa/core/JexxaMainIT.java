@@ -1,6 +1,8 @@
 package io.jexxa.core;
 
 
+import static io.jexxa.TestTags.INTEGRATION_TEST;
+
 import java.lang.management.ManagementFactory;
 import java.util.Properties;
 import java.util.Set;
@@ -25,7 +27,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
-@Tag("integration-test")
+@Tag(INTEGRATION_TEST)
 public class JexxaMainIT
 {
     private Properties properties;

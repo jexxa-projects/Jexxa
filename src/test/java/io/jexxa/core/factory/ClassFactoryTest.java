@@ -1,6 +1,8 @@
 package io.jexxa.core.factory;
 
 
+import static io.jexxa.TestTags.UNIT_TEST;
+
 import java.util.ArrayList;
 
 import io.jexxa.application.annotation.ApplicationService;
@@ -11,7 +13,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
-@Tag("unit-test")
+@Tag(UNIT_TEST)
 public class ClassFactoryTest
 {
     @Test
