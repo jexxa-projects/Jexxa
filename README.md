@@ -110,9 +110,22 @@ mvn clean install -DskipITs
 ```  
 
 ### Dependencies for integration tests 
-For running integration we recommend running required dependencies in a local docker container:
+For running integration tests we recommend using local docker containers to provide following dependencies:
 * ActiveMQ instance with default settings: See [here](https://hub.docker.com/r/rmohr/activemq/).   
 * PostgresDB database with default settings. Default user/password should be admin/admin: See [here](https://hub.docker.com/_/postgres).   
+  
+Check the status of the running containers:
+```docker
+docker ps  -f status=running --format "{{.Names}}" 
+```
+Output should look as follows
+
+```docker
+...
+Postgres
+activemq
+...
+```
   
 To build Jexxa with integration tests call: 
 ```maven
