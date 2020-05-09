@@ -2,10 +2,12 @@ package io.jexxa.infrastructure.drivenadapter.persistence.jdbc;
 
 import static io.jexxa.TestTags.INTEGRATION_TEST;
 
+import java.io.IOException;
 import java.util.Properties;
 
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.core.JexxaMain;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,17 +21,12 @@ public class JDBCConnectionIT
     private JDBCConnection<JexxaAggregate, JexxaValueObject> objectUnderTest;
 
     @BeforeEach
-    public void initTests()
+    public void initTests() throws IOException
     {
         //Arrange
         aggregate = JexxaAggregate.create(new JexxaValueObject(42));
         var properties = new Properties();
-        properties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
-        properties.put(JDBCConnection.JDBC_PASSWORD, "admin");
-        properties.put(JDBCConnection.JDBC_USERNAME, "admin");
-        properties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
-        properties.put(JDBCConnection.JDBC_DEFAULT_URL, "jdbc:postgresql://localhost:5432/postgres");
-        properties.put(JDBCConnection.JDBC_AUTOCREATE, "true");
+        properties.load(getClass().getResourceAsStream(JexxaMain.JEXXA_APPLICATION_PROPERTIES));
 
         objectUnderTest = new JDBCConnection<>(
                 JexxaAggregate.class,

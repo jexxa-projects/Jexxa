@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 public class JexxaMain
 {
 
-    private static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
+    public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
     private static final String JEXXA_CONTEXT_NAME =  "io.jexxa.context.name";
     private static final String JEXXA_APPLICATION_CORE =  "io.jexxa.application";
     private static final String JEXXA_DRIVEN_ADAPTER = "io.jexxa.infrastructure.drivenadapter";

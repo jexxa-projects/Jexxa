@@ -2,6 +2,7 @@ package io.jexxa.infrastructure.drivingadapter.messaging;
 
 import static io.jexxa.TestTags.INTEGRATION_TEST;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapter.persistence.jdbc.JDBCConnection;
 import io.jexxa.utils.JexxaLogger;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -32,6 +34,17 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(INTEGRATION_TEST)
 public class JMSAdapterIT
 {
+    private Properties properties;
+
+    @BeforeEach
+    public void initTests() throws IOException
+    {
+        //Arrange
+        properties = new Properties();
+        properties.load(getClass().getResourceAsStream(JexxaMain.JEXXA_APPLICATION_PROPERTIES));
+
+    }
+
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
@@ -39,27 +52,25 @@ public class JMSAdapterIT
     {
         //Arrange
         var messageListener = new MyListener();
-        var properties = new Properties();
-        properties.put(JMSAdapter.JNDI_FACTORY_KEY, JMSAdapter.DEFAULT_JNDI_FACTORY);
-        properties.put(JMSAdapter.JNDI_PROVIDER_URL_KEY, JMSAdapter.DEFAULT_JNDI_PROVIDER_URL);
-        properties.put(JMSAdapter.JNDI_USER_KEY, JMSAdapter.DEFAULT_JNDI_USER);
-        properties.put(JMSAdapter.JNDI_PASSWORD_KEY, JMSAdapter.DEFAULT_JNDI_PASSWORD);
-        var objectUnderTest = new JMSAdapter(properties);
-        objectUnderTest.register(messageListener);
-        MyProducer myProducer = new MyProducer(properties);
-        
-        //Act
-        objectUnderTest.start();
-        myProducer.sendToTopic();
 
-
-        //Assert 
-        while (messageListener.getMessages().isEmpty())
+        try (  var objectUnderTest = new JMSAdapter(properties) )
         {
-            Thread.onSpinWait();
+            objectUnderTest.register(messageListener);
+
+            MyProducer myProducer = new MyProducer(properties);
+            //Act
+            objectUnderTest.start();
+            myProducer.sendToTopic();
+
+            //Assert
+            while (messageListener.getMessages().isEmpty())
+            {
+                Thread.onSpinWait();
+            }
+
+            Assertions.assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
         }
 
-        Assertions.assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
     }
 
 
@@ -71,11 +82,6 @@ public class JMSAdapterIT
     {
         //Arrange
         var messageListener = new MyListener();
-        var properties = new Properties();
-        properties.put(JMSAdapter.JNDI_FACTORY_KEY, JMSAdapter.DEFAULT_JNDI_FACTORY);
-        properties.put(JMSAdapter.JNDI_PROVIDER_URL_KEY, JMSAdapter.DEFAULT_JNDI_PROVIDER_URL);
-        properties.put(JMSAdapter.JNDI_USER_KEY, JMSAdapter.DEFAULT_JNDI_USER);
-        properties.put(JMSAdapter.JNDI_PASSWORD_KEY, JMSAdapter.DEFAULT_JNDI_PASSWORD);
 
         JexxaMain jexxaMain = new JexxaMain("JMSAdapterTest", properties);
         jexxaMain.bind(JMSAdapter.class).to(messageListener);
@@ -129,7 +135,7 @@ public class JMSAdapterIT
 
 
 
-    static public class MyListener implements MessageListener
+    public static class MyListener implements MessageListener
     {
 
         final List<Message> messageList = new ArrayList<>();
