@@ -173,11 +173,11 @@ package Infrastructure {
 }
 
 
-[Receiving Driving Adapters] -right-> [Port Adapters]
-[Generic Driving Adapters] -right-> [Inbound Ports]
+[Receiving Driving Adapters] o-right-> [Port Adapters]
+[Generic Driving Adapters] o-right-> [Inbound Ports]
 
-[Port Adapters] -right-> [Inbound Ports]
-[Inbound Ports] -down-> [Outbound Ports]
+[Port Adapters] *-right-> [Inbound Ports]
+[Inbound Ports] o-down-> [Outbound Ports]
 [Outbound Ports] <|.. [Driven Adapters]
 [Driven Adapters] o-left-[Driven Adapter Strategies]
 
@@ -212,19 +212,21 @@ a| 1. To create a Driving Adapter by Jexxa, one of the following creating method
 * Public static factory method with a single Properties parameter and returns the type of the requested driving adapter
 Note this is the same Properties object that is given to `JexxaMain`
 
-2. A Generic driving adapter is reused when it is bind to different ports.
+2. A Generic driving adapter is a singleton and reused when it is bind to different ports.
+3. In `JexxaMain` the concrete Class-information is specified to instantiate the Driving Adapter.
 
 a| 1. Using constructors or factory methods do not require any special annotations. Using `Properties` is a standard approach in Java.
 2. Is required because a generic driving adapter also encapsulates the transport mechanism which typically binds other resources like a network port. Therefore, a second instance at least with same configuration is not possible.
+3. Required to instantiate concrete Driving Adapter in main-method.
 
 a|Inbound Port
-a| 1. Constructor of the inbound port only has interfaces of required outbound ports as interface.
-   2. In `JexxaMain` the concrete Class-information is specified to instantiate the port.
-3. An Inbound port of a specific type is only created once even if it is connected to different driving adapters.
+a| 1. Constructor of the inbound port only has interfaces of required outbound ports as parameter.
+2. An Inbound port is a singleton and reused if it is connected to different driving adapters.
 
 a| 1. All parts of the application core should be self-contained as much as possible. The infrastructure should only be aware of the interfaces of or required by the application core but not of its inner components. Therefore, only outbound ports are allowed in a constructor.
-2. Since Jexxa provides instantiating ports, it needs concrete Class-information in main-method.
-3. This decision should simplify implementing synchronization of parallel processing from different driving adapters.
+2. This decision should:
+* Simplify implementing synchronization of parallel processing from different driving adapters.
+* Support designing stateless ports 
 
 
 a|Outbound Port
