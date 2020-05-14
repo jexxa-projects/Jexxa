@@ -130,6 +130,11 @@ public class JexxaMain
     {
         return boundedContext;
     }
+
+    public Properties getProperties()
+    {
+        return properties;
+    }
     
     JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
         Validate.notNull(adapter);

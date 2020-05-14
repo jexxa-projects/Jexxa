@@ -17,7 +17,7 @@ public class HelloJexxa
 
                 //Connect a REST adapter to an object in order to access its public methods via RMI over REST
                 .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
-
+ 
                 //Start Jexxa and establish all connections
                 .start()
 

@@ -35,7 +35,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.2] - 2020-03-18
  
 ### Fixed
-- Javadoc issued during release build  
+- Javadoc issues during release build  
  
 ## [1.1] - 2020-03-18
  
