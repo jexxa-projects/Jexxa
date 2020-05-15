@@ -12,10 +12,12 @@ public class HelloJexxa
         JexxaMain jexxaMain = new JexxaMain("HelloJexxa");
 
         jexxaMain
-                //Connect a JMX adapter to an object in order to access its public methods via `jconsole`
+                // Connect a JMX adapter to a business object.
+                // It allows to access the public methods of the business object via `jconsole`
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
 
-                //Connect a REST adapter to an object in order to access its public methods via RMI over REST
+                // Connect a REST adapter to same business object.
+                // It allows to access the public methods of the business object via RMI over REST
                 .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
  
                 //Start Jexxa and establish all connections

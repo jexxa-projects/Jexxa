@@ -158,7 +158,7 @@ skinparam PackagePadding 20
 package Jexxa {
 [Generic Driving Adapters]  <<Driving Adapter>>
 [Receiving Driving Adapters] <<Driving Adapter>>
-[Driven Adapter Strategies] <<Driven Adapter>>
+[Driven Adapter Strategies] <<Driven Adapter Strategies>>
 }
 
 package ApplicationCore {
