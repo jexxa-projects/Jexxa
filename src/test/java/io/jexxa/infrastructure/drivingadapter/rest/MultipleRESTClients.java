@@ -70,7 +70,7 @@ public class MultipleRESTClients
                 .limit(MAX_THREADS)
                 .collect(Collectors.toList());
 
-        List<Integer> expectedResult = IntStream.rangeClosed(1, 1000)
+        List<Integer> expectedResult = IntStream.rangeClosed(1, MAX_COUNTER)
                 .boxed()
                 .collect(toList());
 
