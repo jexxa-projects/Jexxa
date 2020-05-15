@@ -52,6 +52,8 @@ compile "io.Jexxa:jexxa:1.4"
 A simple ``Hello World`` example can be found [here](https://github.com/repplix/Jexxa/blob/master/src/test/java/io/jexxa/application/HelloJexxa.java):  
 
 ```java     
+package io.jexxa.application;
+
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
@@ -64,18 +66,20 @@ public class HelloJexxa
         JexxaMain jexxaMain = new JexxaMain("HelloJexxa");
 
         jexxaMain
-                //Connect a JMX adapter to an object in order to access its public methods via `jconsole`
+                // Connect a JMX adapter to a business object.
+                // It allows to access the public methods of the business object via `jconsole`
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
 
-                //Connect a REST adapter to an object in order to access its public methods via RMI over REST
+                // Connect a REST adapter to same business object.
+                // It allows to access the public methods of the business object via RMI over REST
                 .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
-
+ 
                 //Start Jexxa and establish all connections
                 .start()
 
                 //Wait until shutdown is called by one of the following options:
                 // - Press CTRL-C
-                // - Use `jconsole` to connect to this application and invoke method shutdown 
+                // - Use `jconsole` to connect to this application and invoke method shutdown
                 // - Use HTTP-post to URL: `http://localhost:7000/BoundedContext/shutdown`
                 //   (using curl: `curl -X POST http://localhost:7000/BoundedContext/shutdown`)
                 .waitForShutdown()
