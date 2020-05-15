@@ -117,7 +117,9 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
                     Object[] methodParameters = deserializeParameters(htmlBody, element.getMethod());
 
-                    ctx.json(element.getMethod().invoke(object, methodParameters));
+                    Object result = IDrivingAdapter.aquireLock().invoke(element.getMethod(), object, methodParameters);
+
+                    ctx.json(result);
                 }));
     }
 
@@ -131,8 +133,10 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
                     Object[] methodParameters = deserializeParameters(htmlBody, element.getMethod());
 
-                    Object result = element.getMethod().invoke(object, methodParameters);
-
+                    Object result = IDrivingAdapter
+                            .aquireLock()
+                            .invoke(element.getMethod(), object, methodParameters);
+                    
                     if (result != null)
                     {
                         ctx.json(result);

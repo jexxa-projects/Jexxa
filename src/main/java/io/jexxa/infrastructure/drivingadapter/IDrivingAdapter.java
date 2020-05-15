@@ -14,4 +14,9 @@ public interface IDrivingAdapter
      * @pre object: Must not be null
      */
     void register(Object object);
+
+    static SynchronizationFacade aquireLock()
+    {
+        return new SynchronizationFacade();
+    }
 }

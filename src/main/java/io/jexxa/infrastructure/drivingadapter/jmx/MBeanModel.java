@@ -23,6 +23,7 @@ import javax.management.ObjectName;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.utils.JexxaLogger;
 
 public class MBeanModel implements DynamicMBean
@@ -82,7 +83,11 @@ public class MBeanModel implements DynamicMBean
         try
         {
             Object [] parameter = deserializeObjects(method.getParameterTypes(), params);
-            return serializeComplexReturnValue(method.invoke(object, parameter));
+            Object result = IDrivingAdapter
+                    .aquireLock()
+                    .invoke(method, object, parameter);
+
+            return serializeComplexReturnValue(result);
         }
         catch (ReflectiveOperationException e)
         {
