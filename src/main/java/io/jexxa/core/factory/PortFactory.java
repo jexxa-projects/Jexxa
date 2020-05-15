@@ -48,6 +48,7 @@ public class PortFactory
         return this;
     }
 
+    @SuppressWarnings("unused")
     public void setDrivenAdapterPolicy(CreationPolicy creationPolicy)
     {
         this.drivenAdapterPolicy = creationPolicy;

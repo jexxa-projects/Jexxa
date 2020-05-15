@@ -15,7 +15,7 @@ public interface IDrivingAdapter
      */
     void register(Object object);
 
-    static SynchronizationFacade aquireLock()
+    static SynchronizationFacade acquireLock()
     {
         return new SynchronizationFacade();
     }

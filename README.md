@@ -13,7 +13,7 @@ Jexxa is a lightweight framework to implement business applications based on a [
 
 Goal of this framework is to easily connect technology stacks to your technology agnostic business application. This means that the main-method of your application is the only location where technology stacks are connected to your business logic.      
 
-Up to now the framework is mainly used for educational purposes. Nevertheless it provides following features which allows writing lightweight business applications:
+Up to now I use the framework mainly for educational purposes. Nevertheless, it provides following features which allows writing lightweight business applications:
  
 * Bind driving adapters to your application core within main-method.  
 
@@ -101,7 +101,7 @@ Jexxa does not include a logger, which means that you have to add your own logge
 ```                                   
 
 ### Configure your Jexxa application  
-By default a JexxaMain instance looks for the following properties file
+By default, a JexxaMain instance looks for the following properties file
 ```maven
 resources/jexxa-application.properties
 ```                                   
@@ -118,8 +118,8 @@ mvn clean install -DskipITs
 
 ### Dependencies for integration tests 
 For running integration tests we recommend using local docker containers to provide following dependencies:
-* ActiveMQ instance with default settings: See [here](https://hub.docker.com/r/rmohr/activemq/).   
-* PostgresDB database with default settings. Default user/password should be admin/admin: See [here](https://hub.docker.com/_/postgres).   
+* An ActiveMQ instance with default settings: See [here](https://hub.docker.com/r/rmohr/activemq/).   
+* A PostgresDB database with default settings. Default user/password should be admin/admin: See [here](https://hub.docker.com/_/postgres).   
   
 Check the status of the running containers:
 ```docker

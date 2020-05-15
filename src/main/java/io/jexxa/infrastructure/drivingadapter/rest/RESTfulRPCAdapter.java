@@ -87,7 +87,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
      * {@code
      *   {
      *     "Exception": "<exception as json>",
-     *     "ExceptionType": "<Type of the excetopn>",
+     *     "ExceptionType": "<Type of the exception>",
      *   }
      * }
      * </pre>
@@ -117,7 +117,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
                     Object[] methodParameters = deserializeParameters(htmlBody, element.getMethod());
 
-                    Object result = IDrivingAdapter.aquireLock().invoke(element.getMethod(), object, methodParameters);
+                    Object result = IDrivingAdapter.acquireLock().invoke(element.getMethod(), object, methodParameters);
 
                     ctx.json(result);
                 }));
@@ -134,7 +134,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                     Object[] methodParameters = deserializeParameters(htmlBody, element.getMethod());
 
                     Object result = IDrivingAdapter
-                            .aquireLock()
+                            .acquireLock()
                             .invoke(element.getMethod(), object, methodParameters);
                     
                     if (result != null)

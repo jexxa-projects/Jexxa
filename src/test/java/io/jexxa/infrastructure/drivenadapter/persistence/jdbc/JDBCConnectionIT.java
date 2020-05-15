@@ -112,7 +112,7 @@ public class JDBCConnectionIT
         //3. Arrange invalid properties: Invalid URL
         Properties propertiesInvalidURL = new Properties();
         propertiesInvalidURL.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
-        propertiesInvalidURL.put(JDBCConnection.JDBC_URL, "jdbc:unknonwn://localhost:5432/jexxa");
+        propertiesInvalidURL.put(JDBCConnection.JDBC_URL, "jdbc:unknown://localhost:5432/jexxa");
 
         //3.Assert invalid properties: Invalid URL
         Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCConnection<>(

@@ -84,7 +84,7 @@ public class MBeanModel implements DynamicMBean
         {
             Object [] parameter = deserializeObjects(method.getParameterTypes(), params);
             Object result = IDrivingAdapter
-                    .aquireLock()
+                    .acquireLock()
                     .invoke(method, object, parameter);
 
             return serializeComplexReturnValue(result);

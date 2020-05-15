@@ -198,7 +198,7 @@ public class RESTfulRPCAdapterIT
         var newValue = 44;
 
         //Act
-        var oldvalue = Unirest.post(restPath + "setGetSimpleValue")
+        var oldValue = Unirest.post(restPath + "setGetSimpleValue")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(newValue)
                 .asObject(Integer.class).getBody();
@@ -211,8 +211,8 @@ public class RESTfulRPCAdapterIT
                 .asObject(Integer.class).getBody();
 
         //Assert
-        Assertions.assertNotNull(oldvalue);
-        Assertions.assertEquals(defaultValue, oldvalue.intValue());
+        Assertions.assertNotNull(oldValue);
+        Assertions.assertEquals(defaultValue, oldValue.intValue());
         Assertions.assertEquals(newValue, simpleApplicationService.getSimpleValueObject().getValue());
         Assertions.assertEquals(newValue, newResult.intValue());
     }

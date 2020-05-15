@@ -10,7 +10,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import io.jexxa.utils.ThrowingConsumer;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.Assertions;
@@ -32,9 +31,10 @@ public class MultipleRESTClients
 
     static public class ApplicationService
     {
-        int counter = 0;
-        List<Integer> usedCounter = new ArrayList<>();
+        private int counter = 0;
+        private final List<Integer> usedCounter = new ArrayList<>();
 
+        @SuppressWarnings("unused")
         public void increment()
         {
             if ( counter < MAX_COUNTER )
@@ -76,11 +76,9 @@ public class MultipleRESTClients
 
 
         //Act
-        clientPool.stream()
-                .forEach(Thread::start);
+        clientPool.forEach(Thread::start);
 
-        clientPool.stream()
-                .forEach(ThrowingConsumer.exceptionCollector(Thread::join, exceptionList));
+        clientPool.forEach(ThrowingConsumer.exceptionCollector(Thread::join, exceptionList));
 
 
         //Assert

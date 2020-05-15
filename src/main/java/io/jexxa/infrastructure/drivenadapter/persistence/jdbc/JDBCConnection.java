@@ -235,8 +235,8 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
 
     private void createDatabase(final Properties properties)
     {
-        var splittedURL = properties.getProperty(JDBC_URL).split("/");
-        var dbName = splittedURL[splittedURL.length-1].toLowerCase(); //last part of the URL is the name of the database (Note: Some DBs such as postgres require a name in lower case!)
+        var splitedURL = properties.getProperty(JDBC_URL).split("/");
+        var dbName = splitedURL[splitedURL.length-1].toLowerCase(); //last part of the URL is the name of the database (Note: Some DBs such as postgres require a name in lower case!)
 
         Properties creationProperties = new Properties();
         creationProperties.putAll(properties);
