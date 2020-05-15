@@ -35,14 +35,17 @@ public class JMXAdapterTest
         objectUnderTest.start();
 
 
-        //Assert
+        //Assert that mbean service is registered  
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         Set<ObjectInstance> result = mbs.queryMBeans(null , null);
 
         Assertions.assertNotNull(result);
-        Assertions.assertTrue(result.
-                stream().
-                anyMatch(element -> element.getClassName().endsWith(SimpleApplicationService.class.getSimpleName()))
+        Assertions.assertTrue(result
+                .stream()
+                .anyMatch(element -> element
+                        .getClassName()
+                        .endsWith(SimpleApplicationService.class.getSimpleName())
+                )
         );
 
         objectUnderTest.stop();
