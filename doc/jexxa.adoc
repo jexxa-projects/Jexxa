@@ -147,7 +147,6 @@ a|Components
 
 
 a| Driving Adapter
-\<<Driving Adapter>>
 a| A driving adapter belongs to the infrastructure and receives a command from a specific client such as a UI, or a console and forwards it to a specific port.
 a| Providing __generic__ driving adapters that encapsulate the receiving technology and automatically expose the methods from connected inbound ports by using a convention.
 
@@ -155,12 +154,10 @@ Providing __receiving__ driving adapters that include only a receiving technolog
 
 
 a|Inbound Port
-\<<Port>>
 | An inbound port belongs to the application core and provides use cases that can be started by a driving adapter. Depending on the design of your application core this might be an interface, or a concrete implementation of the use cases.
 |Instantiation of inbound ports in the main of the application including dependency injection of required outbound ports.
 
 a|Outbound Port
-\<<Port>>
 a| An outbound port belongs to the application core but only as interface. This interface is implemented in the infrastructure of the application core by using a specific technology stack such as a database driver.
 
 
@@ -169,7 +166,6 @@ a| Outbound ports are 'just' interfaces. So there is no special support in Jexxa
 IMPORTANT: Since the outbound port belongs to the application, its methods should reflect the domain language of the application core.
 
 |Driven Adapter
-\<<Driven Adapter>>
 
 |A driven adapter belongs to the infrastructure and is a concrete implementation of a specific outbound port. A driven adapter is injected into the application core which in turns only knows about the interface.
 | Providing _driven adapter strategies_ to simplify development of driven adapters of the application.
@@ -178,23 +174,19 @@ Exchanging a concrete technology strategy depending on your production requireme
 
 
 | Port Adapter
-\<<Driving Adapter>>
-| A port adapter allows for mapping between different representational styles such as exposing ports of an application core via RESTfulHTTP. A port adapter belongs to the infrastructure of the application and is connected to a receiving driving adapter.
+
+| A port adapter allows for mapping between different representational styles of a specific port. For example this is required if a port should be exposed via a RESTful API. A port adapter belongs to the infrastructure of the application and is connected to a receiving driving adapter. 
 | Providing receiving driving adapters that simplify the development of the port adapters.
 
 
 |===
 
 
-
-
-
-
 == Conventions used in Jexxa
 
 Within Jexxa we use several conventions which are related to dependency injection. In contrast to other frameworks Jexxa does not use or offer annotations for dependency injection at all. The reason is to avoid a tight coupling between the application core and Jexxa itself. Therefore, we use conventions to perform dependency injection. In addition, these conventions define some kind of guard rails to clarify the single responsibility of the components.
 
-[cols="1,3,2"]
+[cols="1,3,3"]
 |===
 a|Components
 |Conventions
@@ -202,26 +194,35 @@ a|Components
 
 
 a| Generic Driving Adapter
-a| 1. To create a Driving Adapter by Jexxa, one of the following creating methods must be available.
-* Public Default constructor available
+a| 1. To create a Driving Adapter by Jexxa, one of the following constructors must be available.
+* Public Default constructor
 * Public constructor with a single `Properties` attribute
 * Public static factory method that gets no parameters and returns the type of the driving adapter
-* Public static factory method with a single Properties parameter and returns the type of the requested driving adapter
-Note this is the same Properties object that is given to `JexxaMain`
+* Public static factory method with a single `Properties` parameter and returns the type of the requested driving adapter
 
 2. A Generic driving adapter is a singleton and reused when it is bind to different ports.
+
 3. In `JexxaMain` the concrete Class-information is specified to instantiate the Driving Adapter.
 
-a| 1. Using constructors or factory methods do not require any special annotations. Using `Properties` is a standard approach in Java.
+a|
+1. Using constructors or factory methods do not require any special annotations. Using `Properties` is a standard approach in Java to provide configuration information. Note: A driving adapter gets the same `Properties` object as `JexxaMain`.
+
 2. Is required because a generic driving adapter also encapsulates the transport mechanism which typically binds other resources like a network port. Therefore, a second instance at least with same configuration is not possible.
+
 3. Required to instantiate concrete Driving Adapter in main-method.
 
 a|Inbound Port
-a| 1. Constructor of the inbound port only has interfaces of required outbound ports as parameter.
-2. An Inbound port is a singleton and reused if it is connected to different driving adapters.
+a|
+1. There is only a single constructor available.
+2. If the constructor expect parameters, they must be (interfaces of) required outbound ports.
+3. An Inbound port is a singleton and reused if it is connected to different driving adapters.
 
-a| 1. All parts of the application core should be self-contained as much as possible. The infrastructure should only be aware of the interfaces of or required by the application core but not of its inner components. Therefore, only outbound ports are allowed in a constructor.
-2. This decision should:
+NOTE: Jexxa also allows to bind ports that are manually created in main. This is only recommended if you application core needs any special configuration
+
+a|
+1. Ensures that it is clear which constructor is used.
+2. All parts of the application core should be self-contained as much as possible. Therefore only outbound ports should be hand in. In addition, the infrastructure should also be agnostic to domain logic and know only the __interfaces__ of or required by the application core but not of its inner components. Therefore, only outbound ports are allowed as parameters in a constructor.
+3. This decision should:
 * Simplify implementing synchronization of parallel processing from different driving adapters.
 * Support designing stateless ports 
 
@@ -233,12 +234,12 @@ a| None
 
 |Driven Adapter
 
-a| 1. Only a single implementation of an outbound port exist.
-2. To create a Driven Adapter by Jexxa, one of the following constructing methods must be available.
-* Public Default constructor
+a| 1. Only a single driven adapter implements a specific outbound port.
+2. To create a Driven Adapter by Jexxa, one of the following constructors must be available:
+* Public default constructor
 * Public constructor with a single `Properties` attribute
-* Public static factory method that gets no parameters and returns the type of the Outbound Port
-* Public static factory method with a single Properties parameter and returns the type of the outbound port.
+* Public static factory method that gets no parameters and returns the type of the Outbound Port (and not the type of the driven adapter)
+* Public static factory method with a single `Properties` parameter and returns the type of the outbound port (and not the type of the driven adapter).
 
 a| 1. Jexxa provides no mechanism to explicitly define a specific driven adapter. At the moment you can only limit the search space of driven adapters on a package level.
 
@@ -247,9 +248,8 @@ a| 1. Jexxa provides no mechanism to explicitly define a specific driven adapter
 
 
 | Port Adapter
-a| 1. A single public constructor with a single attribute. The attribute is the concrete type of the corresponding port.
+a| 1. A single public constructor with a single attribute. The attribute is the concrete type of a specific port.
 a| 1. A port adapter is tightly coupled to a specific port. Therefore, it gets its concrete type injected.
-
 
 |===
 
