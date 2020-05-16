@@ -97,12 +97,12 @@ Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology f
 skinparam PackagePadding 20
 
 package JexxaCore <<Infrastructure>> {
-[Dependency Injection] <<Factories>>
+[Dependency Injection] <<Factory>>
 }
 
 package JexxaAdapter <<Infrastructure>> {
 [Generic Driving Adapters]  <<Driving Adapter>>
-[Receiving Driving Adapters] <<Driving Adapter>>
+[Specific Driving Adapters] <<Driving Adapter>>
 [Driven Adapter Strategies] <<Driven Adapter Strategies>>
 }
 
@@ -116,7 +116,7 @@ package Infrastructure <<Application>> {
 [Driven Adapters] <<Driven Adapter>>
 }
 
-[Receiving Driving Adapters] o-right-> [Port Adapters]
+[Specific Driving Adapters] o-right-> [Port Adapters]
 [Generic Driving Adapters] o-right-> [Inbound Ports]
 
 [Port Adapters] *-right-> [Inbound Ports]
@@ -129,8 +129,8 @@ package Infrastructure <<Application>> {
 [Dependency Injection] ..> JexxaAdapter : create
 
 [Generic Driving Adapters] -[hidden]- [Port Adapters]
-[Generic Driving Adapters] -[hidden]- [Receiving Driving Adapters]
-[Receiving Driving Adapters] -[hidden]- [Driven Adapter Strategies]
+[Generic Driving Adapters] -[hidden]- [Specific Driving Adapters]
+[Specific Driving Adapters] -[hidden]- [Driven Adapter Strategies]
 [Port Adapters] -[hidden]- [Driven Adapters]
 
 ....
@@ -192,7 +192,7 @@ Exchanging a concrete technology strategy depending on your production requireme
 
 == Conventions used in Jexxa
 
-Within Jexxa we use several conventions which are related to dependency injection. In contrast to other frameworks Jexxa does not use or offer annotations for dependency injection at all. The main reason is to avoid a tight coupling between the application core and Jexxa itself. In addition, these conventions define some kind of guard rails to clarify the single responsibility of the components.
+Within Jexxa we use several conventions which are related to dependency injection. In contrast to other frameworks Jexxa does not use or offer annotations for dependency injection at all. The reason is to avoid a tight coupling between the application core and Jexxa itself. Therefore, we use conventions to perform dependency injection. In addition, these conventions define some kind of guard rails to clarify the single responsibility of the components.
 
 [cols="1,3,2"]
 |===
