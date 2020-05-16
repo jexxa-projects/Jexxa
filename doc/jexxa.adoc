@@ -13,19 +13,6 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
-//image::./images/Logo.jpg[align=center]
-
-//Verwendung von überstetzten Headern
-//:toc-title: Inhaltsverzeichnis
-//:caution-caption: Achtung
-//:important-caption: Wichtig
-//:note-caption: Hinweis
-//:tip-caption: Tipp
-//:warning-caption: Warnung
-//:appendix-caption: Anhang
-//:example-caption: Beispiel
-//:figure-caption: Abbildung
-//:table-caption: Tabelle
 
 // Verwende Symbole für IMPORTANT, NOTE, ...
 :icons: font
@@ -72,7 +59,7 @@ Even though Jexxa is used within lightweight business applications it has a stro
 
 * Get an idea how to strictly separate between technology stacks and domain logic on a code basis which is essential for durable software systems.
 
-* Be aware which technology stacks you really required to realize the use cases of your customers. Typically, they are quite less than expected. Make it as easy as possible to replace them for your or the succeeding team maintaining the application.
+* Be aware which technology stacks you really require to realize the use cases of your customers. Typically, they are quite less than expected. Make it as easy as possible to replace them for your or the succeeding team maintaining the application.
 
 * Find the right balance between the 'not invented here' syndrome, and the required time to update external dependencies of your application as well as to train your developer teams in new versions of these dependencies.
 
@@ -81,7 +68,7 @@ Even if you use real powerful frameworks for good reason within your application
 == Motivation
 The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for this application.
 
-When developing applications with a high durability as used in production, financial or insurance sector it is highly recommended using an architecture with a string focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, a developer should only use standard features of or libraries/SDKs shipped with a programming language. Available frameworks should be used to attach the latest technology stacks to the application core.
+When developing applications with a high durability as used in production, financial or insurance sector it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers should only use standard language features or libraries/SDKs shipped with a programming language. Available frameworks should be used to attach the latest technology stacks to the application core.
 
 Applications without well-defined boundaries between technology stacks and the application core become hard to maintain because changes on one side could (and in reality will) affect the other side. Typical symptoms are:
 
@@ -96,12 +83,65 @@ Applications without well-defined boundaries between technology stacks and the a
 
 == General Building Blocks
 
-Jexxa has a strong focus to Domain Driven Design and uses a lot of this terminology. It uses the following general building blocks which belongs either to the __application core__ or to the  __infrastructure__ which includes all kind of technology related functionality.
+Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic design. An application that is build on Jexxa provides components that belong either to the __application core__ or to the  __infrastructure__. The __application core__ includes the business logic whereas the __infrastructure__ provides required technology stacks.
+
+
+<<JexxaComponents>> shows the components provided by Jexxa, and their dependencies to an application core. The components are described in more detail in <<JexxaComponentDescription>>.
+
+
+[plantuml, diagram-components, svg, align=center]
+[reftext="Figure {counter:local-figure-number}"]
+.Interaction and Dependencies of components in Jexxa. It shows that the application core has no knowledge of the infrastructure and thus is completely technology agnostic.
+[[JexxaComponents]]
+....
+skinparam PackagePadding 20
+
+package JexxaCore <<Infrastructure>> {
+[Dependency Injection] <<Factories>>
+}
+
+package JexxaAdapter <<Infrastructure>> {
+[Generic Driving Adapters]  <<Driving Adapter>>
+[Receiving Driving Adapters] <<Driving Adapter>>
+[Driven Adapter Strategies] <<Driven Adapter Strategies>>
+}
+
+package ApplicationCore <<Application>> {
+[Inbound Ports] <<Port>>
+[Outbound Ports] <<Port>>
+}
+
+package Infrastructure <<Application>> {
+[Port Adapters] <<Driving Adapter>>
+[Driven Adapters] <<Driven Adapter>>
+}
+
+[Receiving Driving Adapters] o-right-> [Port Adapters]
+[Generic Driving Adapters] o-right-> [Inbound Ports]
+
+[Port Adapters] *-right-> [Inbound Ports]
+[Inbound Ports] o-down-> [Outbound Ports]
+[Outbound Ports] <|.. [Driven Adapters]
+[Driven Adapters] o-left-[Driven Adapter Strategies]
+
+[Dependency Injection] ..> Infrastructure : create
+[Dependency Injection] ..> ApplicationCore : create
+[Dependency Injection] ..> JexxaAdapter : create
+
+[Generic Driving Adapters] -[hidden]- [Port Adapters]
+[Generic Driving Adapters] -[hidden]- [Receiving Driving Adapters]
+[Receiving Driving Adapters] -[hidden]- [Driven Adapter Strategies]
+[Port Adapters] -[hidden]- [Driven Adapters]
+
+....
+
 
 
 [cols="1,2,2"]
+[reftext="Table {counter:local-table-number}"]
+[[JexxaComponentDescription]]
 |===
-a|Building Block & Streotype
+a|Components
 |General Description
 |Support by Jexxa
 
@@ -146,60 +186,17 @@ Exchanging a concrete technology strategy depending on your production requireme
 |===
 
 
-=== Interaction and Dependencies of Building Blocks
 
-
-
-
-[plantuml, diagram-components, svg, align=center]
-....
-skinparam PackagePadding 20
-
-package Jexxa {
-[Generic Driving Adapters]  <<Driving Adapter>>
-[Receiving Driving Adapters] <<Driving Adapter>>
-[Driven Adapter Strategies] <<Driven Adapter Strategies>>
-}
-
-package ApplicationCore {
-[Inbound Ports] <<Port>>
-[Outbound Ports] <<Port>>
-}
-
-
-package Infrastructure {
-[Port Adapters] <<Driving Adapter>>
-[Driven Adapters] <<Driven Adapter>>
-}
-
-
-[Receiving Driving Adapters] o-right-> [Port Adapters]
-[Generic Driving Adapters] o-right-> [Inbound Ports]
-
-[Port Adapters] *-right-> [Inbound Ports]
-[Inbound Ports] o-down-> [Outbound Ports]
-[Outbound Ports] <|.. [Driven Adapters]
-[Driven Adapters] o-left-[Driven Adapter Strategies]
-
-
-[Generic Driving Adapters] -[hidden]- [Port Adapters]
-[Generic Driving Adapters] --[hidden]- [Receiving Driving Adapters]
-[Receiving Driving Adapters] -[hidden]-- [Driven Adapter Strategies]
-[Port Adapters] -[hidden]-- [Driven Adapters]
-
-
-....
 
 
 
 == Conventions used in Jexxa
 
-Within Jexxa we use several conventions which should it makes hard to misuse this framework. The usage of conventions avoids using any other java specific features such as annotations. In addition, it should support understanding `why` and not only `how` things are done.
-
+Within Jexxa we use several conventions which are related to dependency injection. In contrast to other frameworks Jexxa does not use or offer annotations for dependency injection at all. The main reason is to avoid a tight coupling between the application core and Jexxa itself. In addition, these conventions define some kind of guard rails to clarify the single responsibility of the components.
 
 [cols="1,3,2"]
 |===
-a|Building Block
+a|Components
 |Conventions
 |Reason
 
