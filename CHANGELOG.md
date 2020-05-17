@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
  
-## [1.4.1-Unreleased]  - yyyy-mm-dd
+## [1.4.1] - 2020-05-17
 
 ### Added
 - Thread-safety for accessing ports by multiple driving adapters in parallel   

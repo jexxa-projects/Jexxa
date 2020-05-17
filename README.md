@@ -40,14 +40,14 @@ General information:
 <dependency>
   <groupId>io.jexxa</groupId>
   <artifactId>Jexxa</artifactId>
-  <version>1.4</version>
+  <version>1.4.1</version>
 </dependency> 
 ```
 
 #### Gradle
 
 ```groovy
-compile "io.Jexxa:jexxa:1.4"
+compile "io.Jexxa:jexxa:1.4.1"
 ``` 
 
 ### Start programming 
