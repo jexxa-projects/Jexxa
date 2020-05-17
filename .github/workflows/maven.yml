@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         # test against LTS Java version:
-        java: [ 1.8, 1.11 ]
+        java: [ 1.11 ]
 
     # Service containers to run with `runner-job`
     services:
