@@ -42,6 +42,12 @@ a|* Major update of section Vision
 * Major update of section General Building Blocks
 * Added section Motivation
 
+
+|0.3
+|2020-05-17
+|Michael Repplinger
+a| * Updated motivation after review  
+
 |===
 
 :numbered:
@@ -51,17 +57,17 @@ a|* Major update of section Vision
 == Vision
 Jexxa is a lightweight framework to implement business applications based on a https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/[ports and adapters] architecture.
 
-Goal of this framework is to easily connect technology stacks to a technology agnostic business application. Ideally the main-method of your application is the only location where technology stacks are connected to your application core.
+Goal of this framework is to easily connect technology stacks, called adapters, to interfaces of a technology agnostic business application which are called ports. For this purpose Jexxa offers a lightweight core which manages the lifecycle and access of both ports and adapters. The fluent API of Jexxa hides this functionality and explicitly represents the binding between technology stacks and domain components within the main method of an application.
 
-Existing frameworks such as the https://spring.io[Spring Framework] or the J2EE standard provide much more powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is quite hard to maintain applications over several decades especially if such frameworks are used inside the application core.
+Existing frameworks such as the https://spring.io[Spring Framework] or the J2EE standard provide much more powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is quite hard to maintain applications over several decades especially if such frameworks are used inside the business application.
 
-Even though Jexxa is used within lightweight business applications it has a strong educational focus. Up to now, the main goals of this framework are:
+Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus. Up to now, the main goals of this framework are:
 
 * Get an idea how to strictly separate between technology stacks and domain logic on a code basis which is essential for durable software systems.
 
 * Be aware which technology stacks you really require to realize the use cases of your customers. Typically, they are quite less than expected. Make it as easy as possible to replace them for your or the succeeding team maintaining the application.
 
-* Find the right balance between the 'not invented here' syndrome, and the required time to update external dependencies of your application as well as to train your developer teams in new versions of these dependencies.
+* Find the right balance between the 'not invented here' syndrome, and the required time to update external dependencies of your application including the time to train your teams in correctly using them. 
 
 Even if you use real powerful frameworks for good reason within your application I hope that you find Jexxa helpful in some way.
 
@@ -70,11 +76,11 @@ The main motivation to develop this framework comes from experiences with develo
 
 When developing applications with a high durability as used in production, financial or insurance sector it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers should only use standard language features or libraries/SDKs shipped with a programming language. Available frameworks should be used to attach the latest technology stacks to the application core.
 
-Applications without well-defined boundaries between technology stacks and the application core become hard to maintain because changes on one side could (and in reality will) affect the other side. Typical symptoms are:
+Applications without well-defined boundaries between technology stacks and application core become hard to maintain because changes on one side could (and in reality will) affect the other side. Typical symptoms are:
 
-* Updating to a newer version of a technology stack is hard or even impossible so that it is much  safer to use an old version.
+* Updating to a newer version of a technology stack is hard or even impossible so that it is much safer to use the old one. New developed applications of course use this old version as well because your team 'trusts' it, and you avoid maintaining a zoo of different versions.
 
-* Adding or replacing a technology stack is hard or even impossible so that a disruptive technology causes that your application core becomes legacy. In the long run you also need developer on a senior grade who have deep knowledge of the outdated technology stacks.
+* Adding or replacing a technology stack is hard or even impossible so that a disruptive technology causes that your application core becomes legacy as well. A common example are database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs -> relational DBs -> a zoo of NoSQL DBs. Since database technologies can become crucial for your business your company employs developers on a senior grade who have deep knowledge of the outdated and new technology stacks and synchronize your business data.
 
 * Changes on the application core itself takes much longer time as in the beginning. In the end you need senior developers who have a deep understanding of the specific business domain, the used technology stacks and the convoluted structures of the entire application.
 
@@ -83,7 +89,7 @@ Applications without well-defined boundaries between technology stacks and the a
 
 == General Building Blocks
 
-Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic design. An application that is build on Jexxa provides components that belong either to the __application core__ or to the  __infrastructure__. The __application core__ includes the business logic whereas the __infrastructure__ provides required technology stacks.
+Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application that is build on Jexxa provides components that belong either to the __application core__ or to the  __infrastructure__. The __application core__ includes the business logic whereas the __infrastructure__ provides required technology stacks.
 
 
 <<JexxaComponents>> shows the components provided by Jexxa, and their dependencies to an application core. The components are described in more detail in <<JexxaComponentDescription>>.
