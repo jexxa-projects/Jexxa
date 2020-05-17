@@ -88,10 +88,6 @@ public class JexxaMain
         return new DrivingAdapter<>(clazz, this);
     }
 
-    public <T> T newInstanceOfPort(Class<T> port)
-    {
-        return port.cast(portFactory.newInstanceOf(port, properties));
-    }
 
     public <T> T getInstanceOfPort(Class<T> port)
     {
