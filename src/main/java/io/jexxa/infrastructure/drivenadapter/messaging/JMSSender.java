@@ -94,7 +94,6 @@ public class JMSSender
     @SuppressWarnings("DuplicatedCode")
     Connection createConnection()
     {
-        //noinspection DuplicatedCode
         try
         {
             final InitialContext initialContext = new InitialContext(properties);
