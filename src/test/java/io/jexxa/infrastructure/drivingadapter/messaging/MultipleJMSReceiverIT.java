@@ -3,7 +3,6 @@ package io.jexxa.infrastructure.drivingadapter.messaging;
 import static io.jexxa.TestTags.INTEGRATION_TEST;
 import static java.util.stream.Collectors.toList;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.IntStream;
@@ -18,6 +17,7 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
+import io.jexxa.application.applicationservice.IncrementApplicationService;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.utils.JexxaLogger;
 import org.junit.jupiter.api.Assertions;
@@ -30,41 +30,16 @@ public class MultipleJMSReceiverIT
     static final int MAX_COUNTER = 1000;
     static final int MAX_THREADS = 5;
 
-    private ApplicationService applicationService;
+    private IncrementApplicationService incrementApplicationService;
 
-    static public class ApplicationService
-    {
-        private int counter = 0;
-        private final List<Integer> usedCounter = new ArrayList<>();
-
-        @SuppressWarnings("unused")
-        public void increment()
-        {
-            if ( counter < MAX_COUNTER )
-            {
-                ++counter;
-                usedCounter.add(counter);
-            }
-        }
-
-        public int getCounter()
-        {
-            return counter;
-        }
-
-        public List<Integer> getUsedCounter()
-        {
-            return usedCounter;
-        }
-    }
 
     public static class ApplicationServiceListener implements MessageListener
     {
-        private final ApplicationService applicationService;
+        private final IncrementApplicationService incrementApplicationService;
 
-        public ApplicationServiceListener(ApplicationService applicationService)
+        public ApplicationServiceListener(IncrementApplicationService incrementApplicationService)
         {
-            this.applicationService = applicationService;
+            this.incrementApplicationService = incrementApplicationService;
         }
 
         @Override
@@ -73,8 +48,7 @@ public class MultipleJMSReceiverIT
         {
             try
             {
-                //JexxaLogger.getLogger(JMSAdapterIT.MyListener.class).info(((TextMessage) message).getText());
-                applicationService.increment();
+                incrementApplicationService.increment();
             }
             catch (Exception e) {
                 JexxaLogger.getLogger(ApplicationServiceListener.class).error(e.getMessage());
@@ -94,7 +68,7 @@ public class MultipleJMSReceiverIT
         {
             jexxaMain.bind(JMSAdapter.class).to(ApplicationServiceListener.class);
         }
-        applicationService = jexxaMain.getInstanceOfPort(ApplicationService.class);
+        incrementApplicationService = jexxaMain.getInstanceOfPort(IncrementApplicationService.class);
         List<Integer> expectedResult = IntStream.rangeClosed(1, MAX_COUNTER)
                 .boxed()
                 .collect(toList());
@@ -107,20 +81,19 @@ public class MultipleJMSReceiverIT
         //Assert
         jexxaMain.stop();
 
-        Assertions.assertEquals(expectedResult, applicationService.getUsedCounter());
+        Assertions.assertEquals(expectedResult, incrementApplicationService.getUsedCounter());
     }
 
     private void incrementService(Properties properties) throws Exception
     {
         MyProducer myProducer = new MyProducer(properties);
-        while ( applicationService.getCounter() < MAX_COUNTER )
+        while ( incrementApplicationService.getCounter() < MAX_COUNTER )
         {
             //Act
             myProducer.sendToTopic();
         }
     }
-
-
+    
 
     public static class MyProducer implements AutoCloseable
     {
@@ -137,7 +110,7 @@ public class MultipleJMSReceiverIT
                 connection.start();
 
                 session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-                Destination destination = session.createTopic("ApplicationServiceListener");
+                Destination destination = session.createTopic(ApplicationServiceListener.class.getSimpleName());
 
                 producer = session.createProducer(destination);
                 producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
@@ -151,12 +124,10 @@ public class MultipleJMSReceiverIT
         {
             try
             {
-
                 String text = "Hello world";
                 TextMessage message = session.createTextMessage(text);
 
                 producer.send(message);
-
             }
             catch (JMSException e)
             {
