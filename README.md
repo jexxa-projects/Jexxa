@@ -27,6 +27,9 @@ General information:
 * Project web page: [jexxa.io](https://www.jexxa.io)  
 * Documentation: [Architecture of Jexxa](https://github.com/repplix/Jexxa/blob/master/doc/jexxa.adoc) 
 
+## Supported Java environments
+* Java 11 (or higher)
+
 ## Quickstart
 
 ### Add dependency
@@ -138,3 +141,8 @@ To build Jexxa with integration tests call:
 ```maven
 mvn clean install 
 ```  
+
+##Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
