@@ -110,7 +110,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             {
                 consumer = session.createConsumer(destination, jmsListener.selector());
             }
-            consumer.setMessageListener(messageListener);
+            consumer.setMessageListener(new SynchronizedMessageListener(messageListener));
             consumerList.add(consumer);
 
         }

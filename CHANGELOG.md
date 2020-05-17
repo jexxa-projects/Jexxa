@@ -5,7 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
  
-## [Unreleased]  - yyyy-mm-dd
+## [1.4.1-Unreleased]  - yyyy-mm-dd
+
+### Added
+- Thread-safety for accessing ports by multiple driving adapters in parallel   
+
+### Changed
+- Documentation about Jexxa in doc/jexxa.adoc
+
+### Fixed
+- Some code cleanup based on static code analysis 
                              
 ## [1.4] - 2020-05-01
  

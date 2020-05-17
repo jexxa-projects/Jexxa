@@ -13,7 +13,7 @@ Jexxa is a lightweight framework to implement business applications based on a [
 
 Goal of this framework is to easily connect technology stacks to your technology agnostic business application. This means that the main-method of your application is the only location where technology stacks are connected to your business logic.      
 
-Up to now I use the framework mainly for educational purposes. Nevertheless, it provides following features which allows writing lightweight business applications:
+Up to now we use the framework mainly for educational purposes. Nevertheless, it provides following features which allows writing lightweight business applications:
  
 * Bind driving adapters to your application core within main-method.  
 

@@ -62,7 +62,7 @@ public class RESTfulRPCAdapterIT
     @Test // RPC call test: int getSimpleValue()
     public void testGETCommand() 
     {
-        //Arrange -> Nothing TODO 
+        //Arrange -> Nothing to do  
 
         //Act
         Integer result = Unirest.get(restPath + METHOD_GET_SIMPLE_VALUE)

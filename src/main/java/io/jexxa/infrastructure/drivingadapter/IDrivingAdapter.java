@@ -2,18 +2,17 @@ package io.jexxa.infrastructure.drivingadapter;
 
 /**
  * Generic interface to start/stop a DrivingAdapter
- *  */
+ */
 public interface IDrivingAdapter
 {
     void start();
 
     void stop();
 
-    /*
-     * @param object: Object to be registered.
-     * @pre object: Must not be null
+    /**
+     * @param port: port to be registered with driving adapter.
      */
-    void register(Object object);
+    void register(Object port);
 
     static SynchronizationFacade acquireLock()
     {

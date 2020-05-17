@@ -15,6 +15,11 @@ public class SynchronizationFacade
         }
     }
 
+    public Object getSynchronizationObject()
+    {
+        return GLOBAL_SYNCHRONIZATION_OBJECT;
+    }
+
     SynchronizationFacade() //Package protected constructor 
     {
     }
