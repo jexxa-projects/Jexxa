@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 @Tag(INTEGRATION_TEST)
-public class MultipleRESTClients
+public class MultipleRESTClientsIT
 {
     final ApplicationService applicationService = new ApplicationService();
     static final String CONTENT_TYPE = "Content-Type";
