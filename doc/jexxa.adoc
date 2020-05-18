@@ -192,7 +192,7 @@ Exchanging a concrete technology strategy depending on your production requireme
 
 Within Jexxa we use several conventions which are related to dependency injection. In contrast to other frameworks Jexxa does not use or offer annotations for dependency injection at all. The reason is to avoid a tight coupling between the application core and Jexxa itself. Therefore, we use conventions to perform dependency injection. In addition, these conventions define some kind of guard rails to clarify the single responsibility of the components.
 
-[cols="1,3,3"]
+[cols="1,2,2"]
 |===
 a|Components
 |Conventions
