@@ -67,29 +67,6 @@ public class PortFactory
 
 
     /**
-     * Creates a new instance of given inbound port each time this method is called 
-     *
-     * @see #getInstanceOf(Class, Properties) 
-     * @param inboundPort type of the inbound port
-     * @param adapterProperties properties required to create and configure driven adapter
-     * @param <T> Type of the object that should be created
-     * @return a new instance of inbound port 
-     */
-    public <T> T newInstanceOf(Class<T> inboundPort, Properties adapterProperties)
-    {
-        Validate.notNull(inboundPort);
-        Validate.notNull(adapterProperties);
-
-        var supportedConstructor = findConstructor(inboundPort)
-                .orElseThrow(() -> new MissingAdapterException(inboundPort, adapterFactory));
-
-        var drivenAdapter = createAdapter(supportedConstructor, adapterProperties);
-        
-        return ClassFactory.newInstanceOf(inboundPort, drivenAdapter)
-                .orElseThrow();
-    }
-
-    /**
      * Checks if an instance of given inbound port was already created using this methods and returns this instance.
      * Only if no instance was created so far using this method a new one is created.
      *
@@ -157,6 +134,28 @@ public class PortFactory
                 .orElseThrow(() -> new MissingAdapterException(portInstance.getClass(), adapterFactory));
     }
 
+    /**
+     * Creates a new instance of given inbound port each time this method is called
+     *
+     * @see #getInstanceOf(Class, Properties)
+     * @param inboundPort type of the inbound port
+     * @param adapterProperties properties required to create and configure driven adapter
+     * @param <T> Type of the object that should be created
+     * @return a new instance of inbound port
+     */
+    <T> T newInstanceOf(Class<T> inboundPort, Properties adapterProperties)
+    {
+        Validate.notNull(inboundPort);
+        Validate.notNull(adapterProperties);
+
+        var portConstructor = findConstructor(inboundPort)
+                .orElseThrow(() -> new MissingAdapterException(inboundPort, adapterFactory));
+
+        var dependencies = createDependencies(portConstructor, adapterProperties);
+
+        return ClassFactory.newInstanceOf(inboundPort, dependencies)
+                .orElseThrow();
+    }
 
 
     /**
@@ -181,7 +180,7 @@ public class PortFactory
     }
 
 
-    private Object[] createAdapter(Constructor<?> portConstructor, Properties adapterProperties)
+    private Object[] createDependencies(Constructor<?> portConstructor, Properties adapterProperties)
     {
         var objectList = new ArrayList<>();
 
