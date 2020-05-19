@@ -1,7 +1,6 @@
 = Jexxa - A hexagonal software architecture for your application
 :source-highlighter: coderay
 :toc:
-:toc-placement: preamble
 :toclevels: 4
 
 
@@ -21,34 +20,6 @@ endif::[]
 
 //Hinweis: Die counter:local-table-number und counter:local-figure-number werden verwendet, damit im Fliesstext als Referenz die Nummer der Tabelle bzw. Abbildung angezeigt wird, also z.B. "wie in Abbildung 5 zu sehen ist"
 
-[cols="1,2,3,4", options="header"]
-[reftext="Tabelle {counter:local-table-number}"]
-.History
-|===
-|Version
-|Date
-|Author
-|Notes
-
-|0.1
-|2020-03-05
-|Michael Repplinger
-|initial version
-
-|0.2
-|2020-05-03
-|Michael Repplinger
-a|* Major update of section Vision
-* Major update of section General Building Blocks
-* Added section Motivation
-
-
-|0.3
-|2020-05-17
-|Michael Repplinger
-a| * Updated motivation after review  
-
-|===
 
 :numbered:
 
