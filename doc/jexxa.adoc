@@ -32,20 +32,20 @@ Jexxa is a lightweight framework to implement business applications based on a h
 * A well-defined interface to integrate arbitrary technology stacks.
 * A fluent API that explicitly represents the binding between technology stacks and domain components within the main method of an application.
 
-Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus. Jexxa has special focus on following paradigms:
+Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus, especially on  following paradigms:
 
 * _Dependency Inversion_: Get an idea how to strictly separate between technology stacks and domain logic on a code basis which is essential for durable business applications.
 
 * _Simplicity_: Be aware which technology stacks you really require to realize the use cases of your customers. Typically, they are quite less than expected. Keep different technology stacks loosely coupled and make it as easy as possible to replace them for your or the succeeding team maintaining the application.
 
-* _Inversion of Control_: Find the required degree of inversion of control for your software projects. Only control aspects that are technically required but not important for your business application should be hidden by a framework. The remaining required aspects should be explicitly represented.
+* _Inversion of Control_(IoC): Find the required degree of IoC for your software projects. Control aspects that are technically required but not important for your business application should be hidden by a framework. The remaining required aspects should be explicitly represented.
 
 Even if you use real powerful frameworks for good reason within your application I hope that you find Jexxa helpful in some way.
 
 == Motivation
 The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for this application.
 
-Existing frameworks such as the https://spring.io[Spring Framework] or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is quite hard to maintain applications over several decades especially if such frameworks are used inside the business application.
+Existing frameworks such as the https://spring.io[Spring Framework] or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is quite hard to maintain applications over several decades especially if such frameworks find their way inside the business application.
 
 When developing applications with a high durability as used in production, financial or insurance sector it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers should only use standard language features or libraries/SDKs shipped with a programming language. Available frameworks should be used to attach the latest technology stacks to the application core.
 
@@ -67,50 +67,14 @@ Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology f
 
 <<JexxaComponents>> shows the components provided by Jexxa, and their dependencies to an application core. The components are described in more detail in <<JexxaComponentDescription>>.
 
-
-[plantuml, diagram-components, svg, align=center]
+[plantuml, images/JexxaComponents, svg, align=center]
 [reftext="Figure {counter:local-figure-number}"]
 .Interaction and Dependencies of components in Jexxa. It shows that the application core has no knowledge of the infrastructure and thus is completely technology agnostic.
 [[JexxaComponents]]
 ....
 skinparam PackagePadding 20
 
-package JexxaCore <<Infrastructure>> {
-[Dependency Injection] <<Factory>>
-}
-
-package JexxaAdapter <<Infrastructure>> {
-[Generic Driving Adapters]  <<Driving Adapter>>
-[Specific Driving Adapters] <<Driving Adapter>>
-[Driven Adapter Strategies] <<Driven Adapter Strategies>>
-}
-
-package ApplicationCore <<Application>> {
-[Inbound Ports] <<Port>>
-[Outbound Ports] <<Port>>
-}
-
-package Infrastructure <<Application>> {
-[Port Adapters] <<Driving Adapter>>
-[Driven Adapters] <<Driven Adapter>>
-}
-
-[Specific Driving Adapters] o-right-> [Port Adapters]
-[Generic Driving Adapters] o-right-> [Inbound Ports]
-
-[Port Adapters] *-right-> [Inbound Ports]
-[Inbound Ports] o-down-> [Outbound Ports]
-[Outbound Ports] <|.. [Driven Adapters]
-[Driven Adapters] o-left-[Driven Adapter Strategies]
-
-[Dependency Injection] ..> Infrastructure : create
-[Dependency Injection] ..> ApplicationCore : create
-[Dependency Injection] ..> JexxaAdapter : create
-
-[Generic Driving Adapters] -[hidden]- [Port Adapters]
-[Generic Driving Adapters] -[hidden]- [Specific Driving Adapters]
-[Specific Driving Adapters] -[hidden]- [Driven Adapter Strategies]
-[Port Adapters] -[hidden]- [Driven Adapters]
+!include images/JexxaComponents.iuml
 
 ....
 
