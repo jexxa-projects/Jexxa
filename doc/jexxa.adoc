@@ -86,27 +86,27 @@ skinparam PackagePadding 20
 |===
 a|Components
 |General Description
-|Support by Jexxa
+|Realization in Jexxa
 
 
 a| Driving Adapter
 a| A driving adapter belongs to the infrastructure and receives a command from a specific client such as a UI, or a console and forwards it to a specific port.
-a| Providing __generic__ driving adapters that encapsulate the receiving technology and automatically expose the methods from connected inbound ports by using a convention.
+a| A __generic__ driving adapter encapsulates a communication technology and automatically exposes methods from connected inbound ports by using a convention. For example this can be used for an RPC mechanism.
 
-Providing __receiving__ driving adapters that include only a receiving technology and can be connected to a __port adapter__ which is implemented in the infrastructure of the application.
+A __specific__ driving adapter includes only a communication technology. It can be connected to a __port adapter__ which is implemented in the infrastructure of the application. The port adapter then performs a port specific mapping to expose a specific port or its method to clients. This is typically required for RESTfulHTTP 
 
 
 a|Inbound Port
 | An inbound port belongs to the application core and provides use cases that can be started by a driving adapter. Depending on the design of your application core this might be an interface, or a concrete implementation of the use cases.
-|Instantiation of inbound ports in the main of the application including dependency injection of required outbound ports.
+a| * Jexxa provides implicit constructor injection for your inbound ports which is described in <<Dependency Injection (DI)>>.
+* Jexxa also allows to instantiate and manage ports by yourself an just use provided driving and driven adapter.   
 
 a|Outbound Port
 a| An outbound port belongs to the application core but only as interface. This interface is implemented in the infrastructure of the application core by using a specific technology stack such as a database driver.
 
 
-a| Outbound ports are 'just' interfaces. So there is no special support in Jexxa.
+a| Outbound ports are 'just' interfaces that must be defined by your application core. Jexxa provides support to implement these interfaces. See tab __Driven Adapter Strategies__
 
-IMPORTANT: Since the outbound port belongs to the application, its methods should reflect the domain language of the application core.
 
 |Driven Adapter
 
@@ -125,11 +125,23 @@ Exchanging a concrete technology strategy depending on your production requireme
 |===
 
 
-== Conventions used in Jexxa
+== Inversion of Control (IoC)
 
-Within Jexxa we use several conventions which are related to dependency injection. In contrast to other frameworks Jexxa does not use or offer annotations for dependency injection at all. The reason is to avoid a tight coupling between the application core and Jexxa itself. Therefore, we use conventions to perform dependency injection. In addition, these conventions define some kind of guard rails to clarify the single responsibility of the components.
+=== Dependency Injection (DI)
+
+Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject implementations of the required outbound ports. Within Jexxa we only support _implicit constructor injection_ for following reason:
+
+* Constructor injection ensures that the required dependencies required for the object to function properly are available at the moment the object is created.
+
+* Fields assigned in the constructor can be final so that the object can be immutable or protect the required fields.
+
+* No special annotation is required so that the application core remains completely decoupled from Jexxa. In addition, no special config files are required.
+
+Within Jexxa we use conventions described in <<JexxaConventions>> which are related to dependency injection. Compared to other frameworks the limitation to constructor injection could be considered puristic but together with these conventions you get good guard rails to clarify the single responsibility of your ports.
 
 [cols="1,3,2"]
+[reftext="Table {counter:local-table-number}"]
+[[JexxaConventions]]
 |===
 a|Components
 |Conventions
@@ -193,3 +205,4 @@ a| 1. A port adapter is tightly coupled to a specific port. Therefore, it gets i
 
 |===
 
+=== Scope
