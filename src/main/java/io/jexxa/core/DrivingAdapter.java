@@ -1,8 +1,9 @@
 package io.jexxa.core;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
 
+import io.jexxa.core.convention.AdapterConvention;
+import io.jexxa.core.convention.PortConvention;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import org.apache.commons.lang.Validate;
 
@@ -15,21 +16,28 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
     {
         Validate.notNull(drivingAdapterClass);
         Validate.notNull(jexxaMain);
+
+        AdapterConvention.validate(drivingAdapterClass);
+
         this.drivingAdapterClass = drivingAdapterClass;
         this.jexxaMain = jexxaMain;
     }
 
     public <P> JexxaMain to(Class<P> port)
     {
-        if ( isPortWrapper(port)) {
+        Validate.notNull(port);
+
+        if ( AdapterConvention.isPortAdapter(port)) {
             return jexxaMain.bindToPortAdapter(drivingAdapterClass, port);
-        }   else {
-            return jexxaMain.bindToPort(drivingAdapterClass, port);
         }
+
+        PortConvention.validate(port);
+        return jexxaMain.bindToPort(drivingAdapterClass, port);
     }
 
     public JexxaMain to(Object port)
     {
+        Validate.notNull(port);
         return jexxaMain.bindToPort(drivingAdapterClass, port);
     }
 
@@ -37,13 +45,5 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
     {
         return jexxaMain.bindToAnnotatedPorts(drivingAdapterClass, annotation);
     }
-
-    private <P> boolean isPortWrapper(Class<P> port)
-    {
-        return Arrays.stream(port.getConstructors())
-                .filter(constructor -> constructor.getParameterTypes().length == 1)
-                .anyMatch(constructor -> !constructor.getParameterTypes()[0].isInterface());
-    }
-
 
 }
