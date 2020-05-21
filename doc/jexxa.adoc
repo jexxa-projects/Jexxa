@@ -26,24 +26,26 @@ endif::[]
 
 
 == Vision
-Jexxa is a lightweight framework to implement business applications based on a https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/[ports and adapters] architecture.
+Jexxa is a lightweight framework to implement business applications based on a https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/[ports and adapters] architecture. It shows how to easily connect technology stacks, called adapters, to interfaces of a technology agnostic business application which are called ports. For this purpose Jexxa offers:
 
-Goal of this framework is to easily connect technology stacks, called adapters, to interfaces of a technology agnostic business application which are called ports. For this purpose Jexxa offers a lightweight core which manages the lifecycle and access of both ports and adapters. The fluent API of Jexxa hides this functionality and explicitly represents the binding between technology stacks and domain components within the main method of an application.
+* A lightweight core which manages the lifecycle of both ports and adapters.
+* A well-defined interface to integrate arbitrary technology stacks.
+* A fluent API that explicitly represents the binding between technology stacks and domain components within the main method of an application.
 
-Existing frameworks such as the https://spring.io[Spring Framework] or the J2EE standard provide much more powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is quite hard to maintain applications over several decades especially if such frameworks are used inside the business application.
+Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus. Jexxa has special focus on following paradigms:
 
-Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus. Up to now, the main goals of this framework are:
+* _Dependency Inversion_: Get an idea how to strictly separate between technology stacks and domain logic on a code basis which is essential for durable business applications.
 
-* Get an idea how to strictly separate between technology stacks and domain logic on a code basis which is essential for durable software systems.
+* _Simplicity_: Be aware which technology stacks you really require to realize the use cases of your customers. Typically, they are quite less than expected. Keep different technology stacks loosely coupled and make it as easy as possible to replace them for your or the succeeding team maintaining the application.
 
-* Be aware which technology stacks you really require to realize the use cases of your customers. Typically, they are quite less than expected. Make it as easy as possible to replace them for your or the succeeding team maintaining the application.
-
-* Find the right balance between the 'not invented here' syndrome, and the required time to update external dependencies of your application including the time to train your teams in correctly using them. 
+* _Inversion of Control_: Find the required degree of inversion of control for your software projects. Only control aspects that are technically required but not important for your business application should be hidden by a framework. The remaining required aspects should be explicitly represented.
 
 Even if you use real powerful frameworks for good reason within your application I hope that you find Jexxa helpful in some way.
 
 == Motivation
 The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for this application.
+
+Existing frameworks such as the https://spring.io[Spring Framework] or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is quite hard to maintain applications over several decades especially if such frameworks are used inside the business application.
 
 When developing applications with a high durability as used in production, financial or insurance sector it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers should only use standard language features or libraries/SDKs shipped with a programming language. Available frameworks should be used to attach the latest technology stacks to the application core.
 
@@ -171,37 +173,34 @@ a|Components
 
 
 a| Generic Driving Adapter
-a| 1. To create a Driving Adapter by Jexxa, one of the following constructors must be available.
+a| 1. To create a Driving Adapter by Jexxa, one of the following constructors must be available (checked in this order).
 * Public Default constructor
 * Public constructor with a single `Properties` attribute
 * Public static factory method that gets no parameters and returns the type of the driving adapter
 * Public static factory method with a single `Properties` parameter and returns the type of the requested driving adapter
 
-2. A Generic driving adapter is a singleton and reused when it is bind to different ports.
+2. A Generic driving adapter is managed as singleton and reused when it is bind to different ports.
 
-3. In `JexxaMain` the concrete Class-information is specified to instantiate the Driving Adapter.
 
 a|
 1. Using constructors or factory methods do not require any special annotations. Using `Properties` is a standard approach in Java to provide configuration information. Note: A driving adapter gets the same `Properties` object as `JexxaMain`.
 
-2. Is required because a generic driving adapter also encapsulates the transport mechanism which typically binds other resources like a network port. Therefore, a second instance at least with same configuration is not possible.
-
-3. Required to instantiate concrete Driving Adapter in main-method.
+2. Is required because a generic driving adapter also encapsulates the transport mechanism which typically binds other resources like a network port. Therefore, a second instance at least with same configuration is not supported at the moment.
 
 a|Inbound Port
 a|
-1. There is only a single constructor available.
-2. If the constructor expect parameters, they must be (interfaces of) required outbound ports.
-3. An Inbound port is a singleton and reused if it is connected to different driving adapters.
+1. A single public constructor.
+2. Parameters of the constructor must be interfaces of required outbound ports.
+3. An Inbound port is managed as singleton and reused if it is connected to different driving adapters.
 
-NOTE: Jexxa also allows to bind ports that are manually created in main. This is only recommended if you application core needs any special configuration
+NOTE: Jexxa also allows to bind ports that are manually created in main. This is only recommended if your application core needs any special configuration
 
 a|
-1. Ensures that it is clear which constructor is used.
-2. All parts of the application core should be self-contained as much as possible. Therefore only outbound ports should be hand in. In addition, the infrastructure should also be agnostic to domain logic and know only the __interfaces__ of or required by the application core but not of its inner components. Therefore, only outbound ports are allowed as parameters in a constructor.
-3. This decision should:
-* Simplify implementing synchronization of parallel processing from different driving adapters.
-* Support designing stateless ports 
+1. Avoids ambiguity when choosing the constructor.  
+2. Ports should be self-contained as much as possible. Therefore only outbound ports should be hand in. This ensures that the infrastructure is agnostic to domain logic and knows only the __interfaces__ required by the application core but not any other inner components. Therefore, only outbound ports are allowed as parameters in a constructor.
+3.
+* Simplifies synchronization of parallel processing from different driving adapters.
+* Supports designing stateless ports
 
 
 a|Outbound Port
@@ -212,13 +211,13 @@ a| None
 |Driven Adapter
 
 a| 1. Only a single driven adapter implements a specific outbound port.
-2. To create a Driven Adapter by Jexxa, one of the following constructors must be available:
+2. To create a Driven Adapter by Jexxa, one of the following constructors must be available (checked in this order):
 * Public default constructor
 * Public constructor with a single `Properties` attribute
 * Public static factory method that gets no parameters and returns the type of the Outbound Port (and not the type of the driven adapter)
 * Public static factory method with a single `Properties` parameter and returns the type of the outbound port (and not the type of the driven adapter).
 
-a| 1. Jexxa provides no mechanism to explicitly define a specific driven adapter. At the moment you can only limit the search space of driven adapters on a package level.
+a| 1. Avoids ambiguity when choosing a Driven Adapter. At the moment you can only limit the search space of driven adapters on a package level.
 
 2. Using constructors or factory methods do not require any special annotations.
 
