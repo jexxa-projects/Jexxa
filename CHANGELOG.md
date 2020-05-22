@@ -7,12 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.4.2-UNRELEASED] - yyyy-mm-dd
 
-### Added
-
 ### Changed
+- Documentation about Jexxa in doc/jexxa.adoc
 
 ### Fixed
-
+- Checking Jexxa's conventions for ports and adapters with a fail fast approach
  
 ## [1.4.1] - 2020-05-17
 
