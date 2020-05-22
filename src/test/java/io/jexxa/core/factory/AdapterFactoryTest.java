@@ -29,7 +29,7 @@ public class AdapterFactoryTest
     private final String packageName = "io.jexxa.application.infrastructure";
     
     @Test
-    public void createDrivenAdapter() {
+    void createDrivenAdapter() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -42,7 +42,7 @@ public class AdapterFactoryTest
     }
 
     @Test
-    public void createDrivenAdapterImpl() {
+    void createDrivenAdapterImpl() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -58,7 +58,7 @@ public class AdapterFactoryTest
 
 
     @Test
-    public void getDrivenAdapter() {
+    void getDrivenAdapter() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -83,7 +83,7 @@ public class AdapterFactoryTest
     }
 
     @Test
-    public void createDrivenAdapterWithPropertiesConstructor() {
+    void createDrivenAdapterWithPropertiesConstructor() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -99,7 +99,7 @@ public class AdapterFactoryTest
 
 
     @Test 
-    public void createDrivenAdapterWithFactoryMethod() {
+    void createDrivenAdapterWithFactoryMethod() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -112,7 +112,7 @@ public class AdapterFactoryTest
     }
 
     @Test
-    public void createDrivenAdapterWithPropertiesFactoryMethod() {
+    void createDrivenAdapterWithPropertiesFactoryMethod() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
             whiteListPackage(packageName);
@@ -127,7 +127,7 @@ public class AdapterFactoryTest
 
 
     @Test
-    public void drivenAdapterAvailable() {
+    void drivenAdapterAvailable() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -145,7 +145,7 @@ public class AdapterFactoryTest
     }
 
     @Test
-    public void drivenAdapterUnavailable() {
+    void drivenAdapterUnavailable() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -161,7 +161,7 @@ public class AdapterFactoryTest
     }
 
     @Test 
-    public void createNoUniqueImplementation() {
+    void createNoUniqueImplementation() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -173,7 +173,7 @@ public class AdapterFactoryTest
     }
 
     @Test 
-    public void createNoImplementationAvailable() {
+    void createNoImplementationAvailable() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -183,5 +183,4 @@ public class AdapterFactoryTest
                 objectUnderTest.newInstanceOf(INotImplementedService.class)
         );
     }
-
 }

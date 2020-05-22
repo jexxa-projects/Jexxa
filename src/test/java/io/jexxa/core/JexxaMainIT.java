@@ -35,14 +35,14 @@ public class JexxaMainIT
     private final String contextName = "HelloJexxa";
 
     @BeforeEach
-    public void initTests()
+    void initTests()
     {
         properties = new Properties();
         properties.putAll(getRESTfulRPCProperties());
     }
 
     @AfterEach
-    public void tearDownTests()
+    void tearDownTests()
     {
         if (objectUnderTest != null)
         {
@@ -54,7 +54,7 @@ public class JexxaMainIT
 
     
     @Test
-    public void bindToPort()
+    void bindToPort()
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName, properties);
@@ -73,7 +73,7 @@ public class JexxaMainIT
     }
 
     @Test
-    public void bindToPortWithDrivenAdapter()
+    void bindToPortWithDrivenAdapter()
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName, properties);
@@ -92,7 +92,7 @@ public class JexxaMainIT
     
 
     @Test
-    public void bindToAnnotatedPorts()
+    void bindToAnnotatedPorts()
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName, properties);
@@ -108,7 +108,7 @@ public class JexxaMainIT
 
 
     @Test
-    public void bootstrapService()
+    void bootstrapService()
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName, properties);

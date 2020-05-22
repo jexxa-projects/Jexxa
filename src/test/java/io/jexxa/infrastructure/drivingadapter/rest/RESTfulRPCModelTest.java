@@ -18,7 +18,7 @@ public class RESTfulRPCModelTest
 
 
     @BeforeEach
-    public void setupTests()
+    void setupTests()
     {
         SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
         simpleApplicationService.setSimpleValue(42);
@@ -26,7 +26,7 @@ public class RESTfulRPCModelTest
     }
 
     @Test
-    public void validateGETCommands()
+    void validateGETCommands()
     {
         //Act
         var result = objectUnderTest.getGETCommands();
@@ -48,7 +48,7 @@ public class RESTfulRPCModelTest
     }
 
     @Test
-    public void validatePOSTCommands()
+    void validatePOSTCommands()
     {
         //Act
         var result = objectUnderTest.getPOSTCommands();
@@ -72,7 +72,7 @@ public class RESTfulRPCModelTest
     }
 
     @Test
-    public void invalidApplicationService()
+    void invalidApplicationService()
     {
         //Act / Assert
         Assertions.assertThrows(IllegalArgumentException.class, () ->

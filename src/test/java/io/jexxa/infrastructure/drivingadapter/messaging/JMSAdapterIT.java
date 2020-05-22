@@ -37,7 +37,7 @@ public class JMSAdapterIT
     private Properties properties;
 
     @BeforeEach
-    public void initTests() throws IOException
+    void initTests() throws IOException
     {
         //Arrange
         properties = new Properties();
@@ -48,7 +48,7 @@ public class JMSAdapterIT
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
-    public void startJMSAdapter() 
+    void startJMSAdapter()
     {
         //Arrange
         var messageListener = new MyListener();
@@ -78,7 +78,7 @@ public class JMSAdapterIT
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
-    public void startJMSAdapterJexxa() 
+    void startJMSAdapterJexxa()
     {
         //Arrange
         var messageListener = new MyListener();
@@ -103,7 +103,7 @@ public class JMSAdapterIT
 
 
     @Test
-    public void invalidProperties()
+    void invalidProperties()
     {
         //1.Assert missing properties
         Assertions.assertThrows(IllegalArgumentException.class, () ->  new JMSAdapter(new Properties()));

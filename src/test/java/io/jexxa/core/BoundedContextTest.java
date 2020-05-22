@@ -21,7 +21,7 @@ public class BoundedContextTest
 
     @Test
     @Timeout(1)
-    public void shutdown()
+    void shutdown()
     {
         //Arrange
         var thread = new Thread(this::waitForShutDown);

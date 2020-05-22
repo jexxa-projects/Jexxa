@@ -46,7 +46,7 @@ public class MultipleRESTClientsIT
     }
 
     @Test
-    public void synchronizeMultipleClients()
+    void synchronizeMultipleClients()
     {
         //Arrange
         applicationService.setMaxCounter(MAX_COUNTER);
@@ -87,7 +87,7 @@ public class MultipleRESTClientsIT
     }
 
     @AfterEach
-    public void tearDown()
+    void tearDown()
     {
         jexxaMain.stop();
         Unirest.shutDown();

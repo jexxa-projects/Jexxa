@@ -20,7 +20,7 @@ public class ThrowingConsumerTest
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
-    public void exceptionLoggerTest()
+    void exceptionLoggerTest()
     {
         //Arrange
         Integer[] values = {1,2,3};
@@ -36,7 +36,7 @@ public class ThrowingConsumerTest
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
-    public void exceptionCollectorTest()
+    void exceptionCollectorTest()
     {
         //Arrange
         Integer[] values = {1,2,3};

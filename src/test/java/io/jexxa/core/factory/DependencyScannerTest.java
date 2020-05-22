@@ -19,7 +19,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 public class DependencyScannerTest
 {
     @Test
-    public void findAnnotatedClasses() {
+    void findAnnotatedClasses() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
         var packageName = "io.jexxa.application";
@@ -37,7 +37,7 @@ public class DependencyScannerTest
     }
 
     @Test
-    public void findAnnotatedClassesWithinPackage() {
+    void findAnnotatedClassesWithinPackage() {
         //Arrange
         var packageName = "io.jexxa.application";
         var objectUnderTest = new DependencyScanner();
@@ -57,7 +57,7 @@ public class DependencyScannerTest
     
 
     @Test
-    public void findAnnotatedClassesFailsWithinPackage() {
+    void findAnnotatedClassesFailsWithinPackage() {
         //Arrange
         var invalidPackageName = "io.invalid.package";
         var objectUnderTest = new DependencyScanner();
@@ -72,7 +72,7 @@ public class DependencyScannerTest
     }
 
     @Test
-    public void getClassesImplementingInterface() {
+    void getClassesImplementingInterface() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
         var packageName = "io.jexxa.infrastructure";
@@ -104,7 +104,7 @@ public class DependencyScannerTest
     }
 
     @Test 
-    public void handleAnnotationUnavailableDuringRuntime()
+    void handleAnnotationUnavailableDuringRuntime()
     {
         //Arrange
         var objectUnderTest = new DependencyScanner();

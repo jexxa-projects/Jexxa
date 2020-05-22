@@ -59,7 +59,7 @@ public class MultipleJMSReceiverIT
 
 
     @Test
-    public void synchronizeMultipleClients() throws Exception
+    void synchronizeMultipleClients() throws Exception
     {
         //Arrange
         JexxaMain jexxaMain = new JexxaMain("MultiThreading");

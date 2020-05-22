@@ -47,7 +47,7 @@ public class JexxaAggregateRepositoryIT
 
     @ParameterizedTest
     @MethodSource("data")
-    public void addAggregate(Properties repositoryProperties)
+    void addAggregate(Properties repositoryProperties)
     {
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
@@ -68,7 +68,7 @@ public class JexxaAggregateRepositoryIT
 
     @ParameterizedTest
     @MethodSource("data")
-    public void getAggregateByID(Properties repositoryProperties)
+    void getAggregateByID(Properties repositoryProperties)
     {
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
@@ -90,7 +90,7 @@ public class JexxaAggregateRepositoryIT
 
     @ParameterizedTest
     @MethodSource("data")
-    public void removeAggregate(Properties repositoryProperties)
+    void removeAggregate(Properties repositoryProperties)
     {
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
@@ -116,7 +116,7 @@ public class JexxaAggregateRepositoryIT
 
     @ParameterizedTest
     @MethodSource("data")
-    public void updateAggregate(Properties repositoryProperties)
+    void updateAggregate(Properties repositoryProperties)
     {
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);

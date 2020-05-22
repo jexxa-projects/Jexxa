@@ -36,7 +36,7 @@ public class JMSSenderIT
     Properties properties;
 
     @BeforeEach
-    public void initTests()
+    void initTests()
     {
         properties = new Properties();
         properties.put(JMSSender.JNDI_FACTORY_KEY, JMSSender.DEFAULT_JNDI_FACTORY);
@@ -48,7 +48,7 @@ public class JMSSenderIT
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
-    public void sentMessageToTopic()
+    void sentMessageToTopic()
     {
         //Arrange
         var messageListener = new MyTopicListener();
@@ -73,7 +73,7 @@ public class JMSSenderIT
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
-    public void sentMessageToQueue()
+    void sentMessageToQueue()
     {
         //Arrange
         var messageListener = new MyQueueListener();

@@ -21,7 +21,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 public class JMXAdapterTest
 {
     @Test
-    public void registerApplicationService()
+    void registerApplicationService()
     {
         //Arrange
         var defaultValue = 42;
