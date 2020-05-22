@@ -4,8 +4,8 @@ package io.jexxa.infrastructure.drivenadapter.persistence;
 import java.util.Properties;
 import java.util.function.Function;
 
-import io.jexxa.infrastructure.drivenadapter.persistence.imdb.IMDBConnection;
-import io.jexxa.infrastructure.drivenadapter.persistence.jdbc.JDBCConnection;
+import io.jexxa.infrastructure.drivenadapter.persistence.imdb.IMDBRepository;
+import io.jexxa.infrastructure.drivenadapter.persistence.jdbc.JDBCRepository;
 import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
@@ -17,7 +17,7 @@ public class RepositoryManager
 
 
     @SuppressWarnings("unchecked")
-    public static <T,K> IRepositoryConnection<T,K> getConnection(
+    public static <T,K> IRepository<T,K> getRepository(
             Class<T> aggregateClazz,
             Function<T,K> keyFunction,
             Properties properties
@@ -28,7 +28,7 @@ public class RepositoryManager
                     .getDefaultConnection(properties)
                     .getConstructor(Class.class, Function.class, Properties.class);
             
-            return (IRepositoryConnection<T,K>)constructor.newInstance(aggregateClazz, keyFunction, properties);
+            return (IRepository<T,K>)constructor.newInstance(aggregateClazz, keyFunction, properties);
         }
         catch (ReflectiveOperationException e)
         {
@@ -44,11 +44,11 @@ public class RepositoryManager
 
     private Class<?> getDefaultConnection(Properties properties)
     {
-        if (properties.containsKey(JDBCConnection.JDBC_DRIVER))
+        if (properties.containsKey(JDBCRepository.JDBC_DRIVER))
         {
-            return JDBCConnection.class;
+            return JDBCRepository.class;
         }
-        return IMDBConnection.class;
+        return IMDBRepository.class;
     }
 
 }

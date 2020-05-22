@@ -15,10 +15,10 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 @Tag(INTEGRATION_TEST)
-class JDBCConnectionIT
+class JDBCRepositoryIT
 {
     private JexxaAggregate aggregate;
-    private JDBCConnection<JexxaAggregate, JexxaValueObject> objectUnderTest;
+    private JDBCRepository<JexxaAggregate, JexxaValueObject> objectUnderTest;
 
     @BeforeEach
     public void initTests() throws IOException
@@ -28,7 +28,7 @@ class JDBCConnectionIT
         var properties = new Properties();
         properties.load(getClass().getResourceAsStream(JexxaMain.JEXXA_APPLICATION_PROPERTIES));
 
-        objectUnderTest = new JDBCConnection<>(
+        objectUnderTest = new JDBCRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 properties

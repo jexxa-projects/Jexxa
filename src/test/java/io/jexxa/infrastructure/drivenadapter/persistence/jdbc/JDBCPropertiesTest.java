@@ -16,7 +16,7 @@ class JDBCPropertiesTest
     public void invalidProperties()
     {
         //1.Assert missing properties
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCConnection<>(
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 new Properties()
@@ -24,11 +24,11 @@ class JDBCPropertiesTest
 
         //2.Arrange invalid properties: Invalid Driver
         Properties propertiesInvalidDriver = new Properties();
-        propertiesInvalidDriver.put(JDBCConnection.JDBC_DRIVER, "org.unknown.Driver");
-        propertiesInvalidDriver.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
+        propertiesInvalidDriver.put(JDBCRepository.JDBC_DRIVER, "org.unknown.Driver");
+        propertiesInvalidDriver.put(JDBCRepository.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
 
         //2.Assert invalid properties: Invalid Driver
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCConnection<>(
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 propertiesInvalidDriver
@@ -36,11 +36,11 @@ class JDBCPropertiesTest
 
         //3. Arrange invalid properties: Invalid URL
         Properties propertiesInvalidURL = new Properties();
-        propertiesInvalidURL.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
-        propertiesInvalidURL.put(JDBCConnection.JDBC_URL, "jdbc:unknown://localhost:5432/jexxa");
+        propertiesInvalidURL.put(JDBCRepository.JDBC_DRIVER, "org.postgresql.Driver");
+        propertiesInvalidURL.put(JDBCRepository.JDBC_URL, "jdbc:unknown://localhost:5432/jexxa");
 
         //3.Assert invalid properties: Invalid URL
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCConnection<>(
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 propertiesInvalidURL

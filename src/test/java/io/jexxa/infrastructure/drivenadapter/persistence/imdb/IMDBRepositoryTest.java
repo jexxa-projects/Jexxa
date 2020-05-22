@@ -14,7 +14,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(UNIT_TEST)
-class IMDBConnectionTest
+class IMDBRepositoryTest
 {
 
     @Test
@@ -22,7 +22,7 @@ class IMDBConnectionTest
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new IMDBConnection<>(
+        var objectUnderTest = new IMDBRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 new Properties()
@@ -42,7 +42,7 @@ class IMDBConnectionTest
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new IMDBConnection<>(
+        var objectUnderTest = new IMDBRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 new Properties()
@@ -60,7 +60,7 @@ class IMDBConnectionTest
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new IMDBConnection<>(
+        var objectUnderTest = new IMDBRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 new Properties()
@@ -80,7 +80,7 @@ class IMDBConnectionTest
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new IMDBConnection<>(
+        var objectUnderTest = new IMDBRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 new Properties()
@@ -89,7 +89,7 @@ class IMDBConnectionTest
         objectUnderTest.add(aggregate);
 
         //act
-        var newConnection = new IMDBConnection<>(
+        var newConnection = new IMDBRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 new Properties()
@@ -106,7 +106,7 @@ class IMDBConnectionTest
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new IMDBConnection<>(
+        var objectUnderTest = new IMDBRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 new Properties()
@@ -115,7 +115,7 @@ class IMDBConnectionTest
         objectUnderTest.add(aggregate);
 
         //act
-        var newConnection = new IMDBConnection<>(
+        var newConnection = new IMDBRepository<>(
                 JexxaValueObject.class,
                 JexxaValueObject::getValue,
                 new Properties()

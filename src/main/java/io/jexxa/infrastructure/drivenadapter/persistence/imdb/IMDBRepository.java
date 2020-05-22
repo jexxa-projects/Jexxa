@@ -8,12 +8,12 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-import io.jexxa.infrastructure.drivenadapter.persistence.IRepositoryConnection;
+import io.jexxa.infrastructure.drivenadapter.persistence.IRepository;
 
 /**
  */
 @SuppressWarnings("unused")
-public class IMDBConnection<T, K>  implements IRepositoryConnection<T, K>
+public class IMDBRepository<T, K>  implements IRepository<T, K>
 {
     // Each IMDB repository is represented by a map for a specific type.
     private static final Map< Class<?>, Map<?,?> > REPOSITORY_MAP = new ConcurrentHashMap<>();
@@ -23,7 +23,7 @@ public class IMDBConnection<T, K>  implements IRepositoryConnection<T, K>
     final Function<T,K> keyFunction;
 
     @SuppressWarnings("java:S1172")
-    public IMDBConnection(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
+    public IMDBRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
     {
         aggregateMap = getAggregateMap(aggregateClazz);
         this.keyFunction = keyFunction;

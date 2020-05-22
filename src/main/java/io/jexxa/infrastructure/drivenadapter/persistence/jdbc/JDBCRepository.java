@@ -14,12 +14,12 @@ import java.util.Properties;
 import java.util.function.Function;
 
 import com.google.gson.Gson;
-import io.jexxa.infrastructure.drivenadapter.persistence.IRepositoryConnection;
+import io.jexxa.infrastructure.drivenadapter.persistence.IRepository;
 import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 
-public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCloseable
+public class JDBCRepository<T, K> implements IRepository<T, K>, AutoCloseable
 {
     public static final String JDBC_URL = "io.jexxa.jdbc.url";
     public static final String JDBC_USERNAME = "io.jexxa.jdbc.username";
@@ -30,14 +30,14 @@ public class JDBCConnection<T, K> implements IRepositoryConnection<T, K>, AutoCl
 
 
 
-    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCConnection.class);
+    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCRepository.class);
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
     private Connection connection;
 
 
-    public JDBCConnection(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
+    public JDBCRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
     {
         this.keyFunction = keyFunction;
         this.aggregateClazz = aggregateClazz;

@@ -20,7 +20,7 @@ import javax.jms.TextMessage;
 
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivenadapter.persistence.jdbc.JDBCConnection;
+import io.jexxa.infrastructure.drivenadapter.persistence.jdbc.JDBCRepository;
 import io.jexxa.utils.JexxaLogger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -114,7 +114,7 @@ public class JMSAdapterIT
         propertiesInvalidProvider.put(JMSAdapter.JNDI_FACTORY_KEY, JMSAdapter.DEFAULT_JNDI_FACTORY);
 
         //2.Assert invalid properties: Invalid Driver
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCConnection<>(
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 propertiesInvalidProvider
@@ -126,7 +126,7 @@ public class JMSAdapterIT
         propertiesInvalidFactory.put(JMSAdapter.JNDI_FACTORY_KEY, "invalid");
 
         //3.Assert invalid properties: Invalid URL
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCConnection<>(
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 propertiesInvalidFactory

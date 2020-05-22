@@ -7,7 +7,7 @@ import java.util.Optional;
  * Throws IllegalArgumentException if any operations fails
  */
 @SuppressWarnings("unused")
-public interface IRepositoryConnection<T, K>
+public interface IRepository<T, K>
 {
     @SuppressWarnings("EmptyMethod")
     void update(T aggregate);
