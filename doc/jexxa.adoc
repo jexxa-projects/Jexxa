@@ -69,7 +69,7 @@ Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology f
 
 [plantuml, images/JexxaComponents, svg, align=center]
 [reftext="Figure {counter:local-figure-number}"]
-.Interaction and Dependencies of components in Jexxa. It shows that the application core has no knowledge of the infrastructure and thus is completely technology agnostic.
+.Dependencies of components in Jexxa. It shows that the application core has no knowledge of the infrastructure and thus is completely technology agnostic.
 [[JexxaComponents]]
 ....
 skinparam PackagePadding 20
@@ -129,17 +129,17 @@ Exchanging a concrete technology strategy depending on your production requireme
 
 === Dependency Injection (DI)
 
-Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject implementations of the required outbound ports. Within Jexxa we only support _implicit constructor injection_ for following reason:
+Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support _implicit constructor injection_ for following reason:
 
-* Constructor injection ensures that the required dependencies required for the object to function properly are available at the moment the object is created.
+* Constructor injection ensures that the dependencies required for the object to function properly are available directly after creating the object.
 
-* Fields assigned in the constructor can be final so that the object can be immutable or protect the required fields.
+* Fields assigned in the constructor can be final so that the object can be immutable or at least protect the corresponding fields.
 
-* No special annotation is required so that the application core remains completely decoupled from Jexxa. In addition, no special config files are required.
+* No special annotations or configuration files are needed so that the application core remains completely decoupled from Jexxa. 
 
-Within Jexxa we use conventions described in <<JexxaConventions>> which are related to dependency injection. Compared to other frameworks the limitation to constructor injection could be considered puristic but together with these conventions you get good guard rails to clarify the single responsibility of your ports.
+Within Jexxa we use conventions described in <<JexxaConventions>> to explicitly limit the direction of dependencies as described in <<JexxaComponents>>. Compared to other frameworks these limitations could be considered puristic, but they provide good guard rails to clarify the single responsibility of your ports.
 
-[cols="1,3,2"]
+[cols="1,2,2"]
 [reftext="Table {counter:local-table-number}"]
 [[JexxaConventions]]
 |===
@@ -149,34 +149,26 @@ a|Components
 
 
 a| Generic Driving Adapter
-a| 1. To create a Driving Adapter by Jexxa, one of the following constructors must be available (checked in this order).
+a| One of the following constructors must be available (checked in this order).
+
 * Public Default constructor
 * Public constructor with a single `Properties` attribute
 * Public static factory method that gets no parameters and returns the type of the driving adapter
 * Public static factory method with a single `Properties` parameter and returns the type of the requested driving adapter
 
-2. A Generic driving adapter is managed as singleton and reused when it is bind to different ports.
 
 
 a|
-1. Using constructors or factory methods do not require any special annotations. Using `Properties` is a standard approach in Java to provide configuration information. Note: A driving adapter gets the same `Properties` object as `JexxaMain`.
-
-2. Is required because a generic driving adapter also encapsulates the transport mechanism which typically binds other resources like a network port. Therefore, a second instance at least with same configuration is not supported at the moment.
+Using constructors or factory methods do not require any special annotations. Using `Properties` is a standard approach in Java to provide configuration information. Note: A driving adapter gets the same `Properties` object as `JexxaMain`.
 
 a|Inbound Port
 a|
 1. A single public constructor.
 2. Parameters of the constructor must be interfaces of required outbound ports.
-3. An Inbound port is managed as singleton and reused if it is connected to different driving adapters.
-
-NOTE: Jexxa also allows to bind ports that are manually created in main. This is only recommended if your application core needs any special configuration
 
 a|
 1. Avoids ambiguity when choosing the constructor.  
-2. Ports should be self-contained as much as possible. Therefore only outbound ports should be hand in. This ensures that the infrastructure is agnostic to domain logic and knows only the __interfaces__ required by the application core but not any other inner components. Therefore, only outbound ports are allowed as parameters in a constructor.
-3.
-* Simplifies synchronization of parallel processing from different driving adapters.
-* Supports designing stateless ports
+2. Ports should be self-contained as much as possible. Therefore only outbound ports should be hand in. This ensures that the infrastructure is agnostic to domain logic and knows only the __interfaces__ required by the application core but not any other inner components.
 
 
 a|Outbound Port
@@ -187,7 +179,7 @@ a| None
 |Driven Adapter
 
 a| 1. Only a single driven adapter implements a specific outbound port.
-2. To create a Driven Adapter by Jexxa, one of the following constructors must be available (checked in this order):
+2. One of the following constructors must be available (checked in this order):
 * Public default constructor
 * Public constructor with a single `Properties` attribute
 * Public static factory method that gets no parameters and returns the type of the Outbound Port (and not the type of the driven adapter)
@@ -206,3 +198,73 @@ a| 1. A port adapter is tightly coupled to a specific port. Therefore, it gets i
 |===
 
 === Scope
+
+Jexxa provides some simple mechanisms to define and control the scope of ports and adapters.
+
+==== Registering Ports and Adapters
+First of all you can control the used dependencies by defining the packages for the application core and the infrastructure independently. By default, Jexxa adds the package `io.jexxa.infrastructure.drivenadapter` to find driving adapters.
+
+==== Threading Scope
+At the moment Jexxa ensure that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to following reason:
+
+* Multi threading is typically essential within technology stacks and not within the application core itself.
+* When you start developing your application you have typically only a limited number of users.
+* When your application becomes a huge success and must scale to a lot of users you should scale it by running multiple instances of the application. Today's container solutions offer a much better scaling and managing approach.
+
+==== Allocation Scope of Dependencies
+The allocation scope of Jexxa's building blocks is described in <<JexxaScope>>
+
+[cols="1,2,2"]
+[reftext="Table {counter:local-table-number}"]
+[[JexxaScope]]
+|===
+a|Components
+|Scope
+|Reason
+
+
+a| Driving Adapter
+a| Is managed as singleton and reused when it is bind to different ports.
+
+a|
+Simplifies managing technical resources like network ports or IP addresses.
+
+NOTE: In case you need a strict control how objects are exposed for example to different IP addresses, you have to use a specific driving adapter combined with port-adapter.
+
+a|Inbound Port
+a|
+1. An inbound port created by Jexxa is managed as singleton and reused if it is connected to different driving adapters.
+
+2. An inbound port created by the application can be bind to adapters. In this case the application has full control of the number of instances.
+
+
+a|
+1. The singleton scope supports designing stateless ports which is in general recommended.
+2. This is only recommended if your application core cannot fulfill the conventions of Jexxa (see <<JexxaConventions>>).
+
+a|Outbound Port
+a| None
+a| None
+
+
+|Driven Adapter
+
+a| Is managed as singleton and reused when it is injected into different ports.
+a|
+The singleton scope supports designing stateless outbound ports which is in general recommended.
+
+
+| Port Adapter
+a| Is always created new and not reused at all. 
+a| Allows fine grained control of how a driving adapter should expose the included port. For example you can define that specific ports are only available via a management IP address. 
+|===
+
+==== Transactions
+Jexxa does not support any transaction when using different driven adapter. Traditional enterprise frameworks for example spawn (often by default) a transaction between the database and the messaging system to ensure that data is only written into the database when publishing it to a messaging bus is successful. This is a great feature if you really need it. Unfortunately, it is also often used to compensate programming errors or even a bad software design.
+
+Instead, we recommend building your ports of the application core so that it provides an idempotent semantic.
+
+
+
+
+
