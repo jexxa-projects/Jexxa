@@ -14,7 +14,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(UNIT_TEST)
-public class IMDBConnectionTest
+class IMDBConnectionTest
 {
 
     @Test

@@ -14,7 +14,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
 @Tag(UNIT_TEST)
-public class PortFactoryTest
+class PortFactoryTest
 {
 
     private final String applicationCorePackageName = "io.jexxa.application";

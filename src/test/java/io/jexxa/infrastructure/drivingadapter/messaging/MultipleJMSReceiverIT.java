@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 @Tag(INTEGRATION_TEST)
-public class MultipleJMSReceiverIT
+class MultipleJMSReceiverIT
 {
     static final int MAX_COUNTER = 1000;
     static final int MAX_THREADS = 5;
@@ -95,7 +95,7 @@ public class MultipleJMSReceiverIT
     }
     
 
-    public static class MyProducer implements AutoCloseable
+    static class MyProducer implements AutoCloseable
     {
         final Connection connection;
         final Session session;
@@ -120,7 +120,7 @@ public class MultipleJMSReceiverIT
             }
         }
 
-        public void sendToTopic()
+        void sendToTopic()
         {
             try
             {

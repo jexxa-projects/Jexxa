@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 @Tag(INTEGRATION_TEST)
-public class JDBCConnectionIT
+class JDBCConnectionIT
 {
     private JexxaAggregate aggregate;
     private JDBCConnection<JexxaAggregate, JexxaValueObject> objectUnderTest;

@@ -18,7 +18,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
 @Tag(UNIT_TEST)
-public class JMXAdapterTest
+class JMXAdapterTest
 {
     @Test
     void registerApplicationService()

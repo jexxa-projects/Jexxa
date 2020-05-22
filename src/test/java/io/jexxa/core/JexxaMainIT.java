@@ -28,7 +28,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(INTEGRATION_TEST)
-public class JexxaMainIT
+class JexxaMainIT
 {
     private Properties properties;
     private JexxaMain objectUnderTest;

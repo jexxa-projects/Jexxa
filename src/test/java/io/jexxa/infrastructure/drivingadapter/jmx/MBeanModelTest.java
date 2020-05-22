@@ -18,12 +18,12 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
 @Tag(UNIT_TEST)
-public class MBeanModelTest
+class MBeanModelTest
 {
     @SuppressWarnings({"SameParameterValue", "FieldCanBeLocal", "unused"})
     static class JexxaCompoundValueObject
     {
-        public static final JexxaCompoundValueObject DEFAULT_VALUE = new JexxaCompoundValueObject(42);
+        static final JexxaCompoundValueObject DEFAULT_VALUE = new JexxaCompoundValueObject(42);
 
         private final JexxaValueObject firstValueObject;
         private final JexxaValueObject secondValueObject;

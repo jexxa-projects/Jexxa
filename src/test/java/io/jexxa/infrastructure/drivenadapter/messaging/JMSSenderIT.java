@@ -29,7 +29,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(INTEGRATION_TEST)
-public class JMSSenderIT
+class JMSSenderIT
 {
     final JexxaValueObject message = new JexxaValueObject(42);
     final String testName = "JMSSenderIT";
@@ -95,7 +95,7 @@ public class JMSSenderIT
     }
 
 
-    static public class MyTopicListener implements MessageListener
+    static class MyTopicListener implements MessageListener
     {
 
         final List<Message> messageList = new ArrayList<>();
@@ -139,7 +139,7 @@ public class JMSSenderIT
             }
         }
 
-        public List<Message> getMessages()
+        List<Message> getMessages()
         {
             return messageList;
         }

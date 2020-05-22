@@ -21,10 +21,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(INTEGRATION_TEST)
-public class JexxaAggregateRepositoryIT
+class JexxaAggregateRepositoryIT
 {
 
-    public static Stream<Properties> data() {
+    static Stream<Properties> data() {
         var postgresProperties = new Properties();
         postgresProperties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
         postgresProperties.put(JDBCConnection.JDBC_PASSWORD, "admin");

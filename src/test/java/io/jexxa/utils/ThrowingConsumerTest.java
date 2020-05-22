@@ -15,7 +15,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
 @Tag(UNIT_TEST)
-public class ThrowingConsumerTest
+class ThrowingConsumerTest
 {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

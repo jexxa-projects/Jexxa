@@ -154,20 +154,20 @@ public class JMSAdapterIT
             }
         }
 
-        public List<Message> getMessages()
+        List<Message> getMessages()
         {
             return messageList;
         }
     }
 
-    public static class MyProducer {
+    static class MyProducer {
         final Connection connection;
         MyProducer(Properties properties)
         {
             JMSAdapter jmsAdapter = new JMSAdapter(properties);
             this.connection = jmsAdapter.createConnection();
         }
-        public void sendToTopic() {
+        void sendToTopic() {
             try {
                 connection.start();
 

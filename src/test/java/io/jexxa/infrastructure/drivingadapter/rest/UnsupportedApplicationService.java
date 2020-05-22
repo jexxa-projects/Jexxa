@@ -6,7 +6,7 @@ import io.jexxa.application.domain.valueobject.JexxaValueObject;
 * This service is not available via RESTfulRPC because method setSimpleValueObject is available twice 
 */
 @SuppressWarnings("unused")
-public class UnsupportedApplicationService
+class UnsupportedApplicationService
 {
     private JexxaValueObject first;
     @SuppressWarnings("FieldCanBeLocal")

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
  */
 @Execution(ExecutionMode.CONCURRENT)
 @Tag(UNIT_TEST)
-public class AdapterFactoryTest
+class AdapterFactoryTest
 {
     private final String packageName = "io.jexxa.application.infrastructure";
     
