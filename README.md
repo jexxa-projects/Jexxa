@@ -5,7 +5,6 @@
  [![Total alerts](https://img.shields.io/lgtm/alerts/g/repplix/Jexxa.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/repplix/Jexxa/alerts/) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=repplix_Jexxa&metric=alert_status)](https://sonarcloud.io/dashboard?id=repplix_Jexxa)
  ![Java CI](https://github.com/repplix/Jexxa/workflows/Java%20CI/badge.svg)
 
-
 # Jexxa - A Ports and Adapters Framework for Java 
 
 Jexxa is a lightweight framework to implement business applications based on a [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/) architecture. 
