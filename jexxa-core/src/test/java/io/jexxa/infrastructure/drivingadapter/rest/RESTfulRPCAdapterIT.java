@@ -228,16 +228,13 @@ class RESTfulRPCAdapterIT
         JsonObject error = response.mapError(JsonObject.class);
 
         //Assert
-        Assertions.assertThrows(SimpleApplicationService.SimpleApplicationException.class, () -> {
-            if ( error != null )
-            {
-                if (SimpleApplicationService.SimpleApplicationException.class.getName().equals(error.get("ExceptionType").getAsString()) )
-                {
-                    throw new Gson().fromJson(error.get("Exception").getAsString(), SimpleApplicationService.SimpleApplicationException.class ) ;
-                }
-            }
+        Assertions.assertNotNull(error);
+        Assertions.assertEquals(SimpleApplicationService.SimpleApplicationException.class.getName(), error.get("ExceptionType").getAsString());
 
+        var jsonString = error.get("Exception").getAsString();
+        var gson = new Gson();
+        Assertions.assertThrows(SimpleApplicationService.SimpleApplicationException.class, () -> {
+            throw gson.fromJson(jsonString, SimpleApplicationService.SimpleApplicationException.class);
         });
     }
-
 }
