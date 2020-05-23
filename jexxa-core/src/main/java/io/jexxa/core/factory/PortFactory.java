@@ -143,7 +143,7 @@ public class PortFactory
      * @param <T> Type of the object that should be created
      * @return a new instance of inbound port
      */
-    <T> T newInstanceOf(Class<T> inboundPort, Properties adapterProperties)
+    protected <T> T newInstanceOf(Class<T> inboundPort, Properties adapterProperties)
     {
         Validate.notNull(inboundPort);
         Validate.notNull(adapterProperties);

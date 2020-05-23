@@ -31,9 +31,9 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestTags.INTEGRATION_TEST)
 class JMSSenderIT
 {
-    final JexxaValueObject message = new JexxaValueObject(42);
-    final String testName = "JMSSenderIT";
-    Properties properties;
+    private final JexxaValueObject message = new JexxaValueObject(42);
+    private final String testName = "JMSSenderIT";
+    private Properties properties;
 
     @BeforeEach
     protected void initTests()
@@ -98,7 +98,7 @@ class JMSSenderIT
     static class MyTopicListener implements MessageListener
     {
 
-        final List<Message> messageList = new ArrayList<>();
+        private final List<Message> messageList = new ArrayList<>();
 
         @Override
         @JMSListener(destination = "JMSSenderIT", messagingType = JMSListener.MessagingType.TOPIC)
@@ -123,7 +123,7 @@ class JMSSenderIT
     static public class MyQueueListener implements MessageListener
     {
 
-        final List<Message> messageList = new ArrayList<>();
+        private final List<Message> messageList = new ArrayList<>();
 
         @Override
         @JMSListener(destination = "JMSSenderIT", messagingType = JMSListener.MessagingType.QUEUE)
@@ -139,7 +139,7 @@ class JMSSenderIT
             }
         }
 
-        List<Message> getMessages()
+        protected List<Message> getMessages()
         {
             return messageList;
         }

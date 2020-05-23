@@ -15,14 +15,14 @@ class DependencyScanner
     private final List<String> whiteListPackages = new ArrayList<>();
     private ScanResult scanResult;
 
-    DependencyScanner whiteListPackage(String packageName)
+    protected DependencyScanner whiteListPackage(String packageName)
     {
         whiteListPackages.add(packageName);
         scanResult = null; //Reset scan result so that it is recreated with new white listed packages
         return this;
     }
 
-    DependencyScanner whiteListPackages(List<String> packageList)
+    protected DependencyScanner whiteListPackages(List<String> packageList)
     {
         whiteListPackages.addAll(packageList);
         scanResult = null; //Reset scan result so that it is recreated with new white listed packages
@@ -30,7 +30,7 @@ class DependencyScanner
     }
 
 
-    List<Class<?>> getClassesWithAnnotation(final Class<? extends Annotation> annotation)
+    protected List<Class<?>> getClassesWithAnnotation(final Class<? extends Annotation> annotation)
     {
         validateRetentionRuntime(annotation);
 
@@ -40,7 +40,7 @@ class DependencyScanner
     }
 
 
-    List<Class<?>> getClassesImplementing(final Class<?> interfaceType)
+    protected List<Class<?>> getClassesImplementing(final Class<?> interfaceType)
     {
         Validate.notNull(interfaceType);
         return getScanResult()

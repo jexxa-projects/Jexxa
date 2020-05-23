@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -55,7 +54,7 @@ class MultipleRESTClientsIT
 
         var clientPool = Stream.generate(() -> new Thread(this::incrementService))
                 .limit(MAX_THREADS)
-                .collect(Collectors.toList());
+                .collect(toList());
 
         var exceptionList = new ArrayList<Throwable>();
         
@@ -81,7 +80,7 @@ class MultipleRESTClientsIT
                     .asJson();
             if (!response.isSuccess())
             {
-                throw new RuntimeException("HTTP Response Error: " + response.getStatus() + " " + response.getStatusText() );
+                throw new IllegalArgumentException("HTTP Response Error: " + response.getStatus() + " " + response.getStatusText() );
             }
         }
     }

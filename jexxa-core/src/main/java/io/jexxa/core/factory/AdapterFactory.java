@@ -1,10 +1,11 @@
 package io.jexxa.core.factory;
 
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang.Validate;
 
@@ -99,14 +100,14 @@ public class AdapterFactory
     }
 
 
-    List<Class<?>> getMissingAdapter(List<Class <?> > adapterList)
+    protected List<Class<?>> getMissingAdapter(List<Class <?> > adapterList)
     {
         return adapterList.stream()
                 .filter(adapter -> getImplementationOf(adapter).isEmpty())
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
-    boolean isAvailable(List<Class <?> > adapterList)
+    protected boolean isAvailable(List<Class <?> > adapterList)
     {
         return adapterList.stream()
                 .noneMatch(adapter -> getImplementationOf(adapter).isEmpty());

@@ -1,6 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
 
+import static java.util.stream.Collectors.toList;
 import static javax.management.MBeanOperationInfo.UNKNOWN;
 
 import java.lang.annotation.Annotation;
@@ -10,7 +11,6 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 import javax.management.Attribute;
 import javax.management.AttributeList;
@@ -144,7 +144,7 @@ public class MBeanModel implements DynamicMBean
     private MBeanOperationInfo[] getMBeanOperation()
     {
         var methodList = Arrays.stream(object.getClass().getMethods()).
-                collect(Collectors.toList());
+                collect(toList());
 
         //Get methods only from concrete type => Exclude all methods from Object
         methodList.removeAll(Arrays.asList(Object.class.getMethods()));

@@ -140,8 +140,7 @@ class JMSAdapterIT
 
     public static class MyListener implements MessageListener
     {
-
-        final List<Message> messageList = new ArrayList<>();
+        private final List<Message> messageList = new ArrayList<>();
 
         @Override
         @JMSListener(destination = "MyListener", messagingType = JMSListener.MessagingType.TOPIC)
@@ -157,14 +156,14 @@ class JMSAdapterIT
             }
         }
 
-        List<Message> getMessages()
+        protected List<Message> getMessages()
         {
             return messageList;
         }
     }
 
     static class MyProducer {
-        final Connection connection;
+        private final Connection connection;
         MyProducer(Properties properties)
         {
             JMSAdapter jmsAdapter = new JMSAdapter(properties);

@@ -21,8 +21,8 @@ public class ClassFactory
             super("Could not create class" + clazz.getName(), throwable);
         }
     }
-    
-    static <T> Optional<T> newInstanceOf(Class<T> clazz)
+
+    protected static <T> Optional<T> newInstanceOf(Class<T> clazz)
     {
         Validate.notNull(clazz);
 
@@ -41,7 +41,7 @@ public class ClassFactory
         return Optional.empty();
     }
 
-    public static <T> Optional<T> newInstanceOf(Class<T> clazz, Object[] parameter)
+    protected static <T> Optional<T> newInstanceOf(Class<T> clazz, Object[] parameter)
     {
         Validate.notNull(clazz);
         Validate.notNull(parameter);
@@ -61,9 +61,9 @@ public class ClassFactory
 
         return Optional.empty();
     }
-    
 
-    static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory)
+
+    protected static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory)
     {
         Validate.notNull(factory);
 
@@ -85,7 +85,7 @@ public class ClassFactory
     }
 
 
-    static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory, Object[] parameters)
+    protected static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory, Object[] parameters)
     {
         Validate.notNull(factory);
         Validate.notNull(interfaceType);

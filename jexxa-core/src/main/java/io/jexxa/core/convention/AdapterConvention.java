@@ -1,9 +1,10 @@
 package io.jexxa.core.convention;
 
+import static java.util.stream.Collectors.toList;
+
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 public class AdapterConvention
 {
@@ -34,7 +35,7 @@ public class AdapterConvention
                 .stream(clazz.getMethods())
                 .filter(method -> Modifier.isStatic(method.getModifiers()))
                 .filter(method -> method.getReturnType().isAssignableFrom(clazz))
-                .collect(Collectors.toList());
+                .collect(toList());
 
         if ( factoryMethods.stream().anyMatch(method -> method.getParameterCount() == 0) )
         {

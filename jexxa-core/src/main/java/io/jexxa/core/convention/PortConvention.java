@@ -1,7 +1,8 @@
 package io.jexxa.core.convention;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class PortConvention
 {
@@ -21,7 +22,7 @@ public class PortConvention
         var result = Arrays
                 .stream(clazz.getConstructors()[0].getParameterTypes())
                 .filter( attribute -> !attribute.isInterface())
-                .collect(Collectors.toList());
+                .collect(toList());
 
         if (!result.isEmpty())
         {

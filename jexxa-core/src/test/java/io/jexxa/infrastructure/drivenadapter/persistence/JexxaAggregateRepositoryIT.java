@@ -1,11 +1,11 @@
 package io.jexxa.infrastructure.drivenadapter.persistence;
 
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Properties;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import io.jexxa.TestTags;
@@ -57,7 +57,7 @@ class JexxaAggregateRepositoryIT
         var counterStream = Stream.of(100);
         var aggregateList = counterStream
                 .map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) )
-                .collect( Collectors.toList() );
+                .collect( toList() );
 
         //Act
         aggregateList.forEach(objectUnderTest::add);
@@ -83,7 +83,7 @@ class JexxaAggregateRepositoryIT
         //Act
         var aggregateList = counterSupplier.get()
                 .map( key -> objectUnderTest.get(new JexxaValueObject(key)))
-                .collect( Collectors.toList() );
+                .collect( toList() );
 
         //Assert
         assertEquals(counterSupplier.get().count(), aggregateList.size());
@@ -105,7 +105,7 @@ class JexxaAggregateRepositoryIT
         //collect elements from Repository using get() which throws a runtime exception in case the element is not available   
         var aggregateList = counterSupplier.get()
                 .map( key -> objectUnderTest.get(new JexxaValueObject(key)))
-                .collect( Collectors.toList() );
+                .collect( toList() );
 
         //Act
         aggregateList.forEach(objectUnderTest::remove);
@@ -127,7 +127,7 @@ class JexxaAggregateRepositoryIT
         var counterStream = Stream.of(100);
         var aggregateList = counterStream
                 .map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) )
-                .collect( Collectors.toList() );
+                .collect( toList() );
 
         aggregateList.forEach(objectUnderTest::add);
 

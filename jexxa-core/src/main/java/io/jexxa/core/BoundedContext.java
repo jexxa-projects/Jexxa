@@ -71,12 +71,12 @@ public class BoundedContext
         return jexxaMain;
     }
 
-    synchronized void start()
+    protected synchronized void start()
     {
         isRunning = true;
     }
 
-    void stop()
+    protected void stop()
     {
         isRunning = false;
         shutdown();
