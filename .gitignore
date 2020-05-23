@@ -12,3 +12,5 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 .idea/
 *.iml
+doc/*.html
+doc/images/*.svg
