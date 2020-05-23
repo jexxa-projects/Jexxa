@@ -78,8 +78,9 @@ class JDBCRepositoryIT
         Assertions.assertThrows(IllegalArgumentException.class, () -> objectUnderTest.add(aggregate));
 
         //Exception if unknown key is removed
-        objectUnderTest.remove(aggregate.getKey());
-        Assertions.assertThrows(IllegalArgumentException.class, () -> objectUnderTest.remove(aggregate.getKey()));
+        var key = aggregate.getKey();
+        objectUnderTest.remove(key);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> objectUnderTest.remove(key));
 
         //Exception if unknown aggregate ist updated
         Assertions.assertThrows(IllegalArgumentException.class, () ->objectUnderTest.update(aggregate));
