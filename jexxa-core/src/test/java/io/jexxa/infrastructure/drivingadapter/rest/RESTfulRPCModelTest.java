@@ -1,7 +1,5 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
-import static io.jexxa.TestTags.UNIT_TEST;
-
 import io.jexxa.TestTags;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import org.junit.jupiter.api.Assertions;

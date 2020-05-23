@@ -1,6 +1,5 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
-import static io.jexxa.TestTags.INTEGRATION_TEST;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;

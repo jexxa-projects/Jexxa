@@ -1,7 +1,5 @@
 package io.jexxa.infrastructure.drivenadapter.persistence.jdbc;
 
-import static io.jexxa.TestTags.UNIT_TEST;
-
 import java.util.Properties;
 
 import io.jexxa.TestTags;

@@ -1,6 +1,5 @@
 package io.jexxa.core;
 
-import static io.jexxa.TestTags.UNIT_TEST;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.jexxa.TestTags;

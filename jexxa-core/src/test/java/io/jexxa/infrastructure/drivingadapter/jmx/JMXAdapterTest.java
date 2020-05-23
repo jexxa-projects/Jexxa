@@ -1,8 +1,6 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
 
-import static io.jexxa.TestTags.UNIT_TEST;
-
 import java.lang.management.ManagementFactory;
 import java.util.Set;
 

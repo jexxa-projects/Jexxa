@@ -1,6 +1,5 @@
 package io.jexxa.core;
 
-import static io.jexxa.TestTags.UNIT_TEST;
 
 import java.time.Duration;
 

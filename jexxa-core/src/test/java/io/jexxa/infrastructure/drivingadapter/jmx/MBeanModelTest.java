@@ -1,7 +1,5 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
-import static io.jexxa.TestTags.UNIT_TEST;
-
 import java.util.Properties;
 
 import javax.management.Attribute;

@@ -1,7 +1,5 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
-import static io.jexxa.TestTags.INTEGRATION_TEST;
-
 import java.util.Properties;
 
 import com.google.gson.Gson;
