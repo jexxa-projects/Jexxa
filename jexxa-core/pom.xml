@@ -39,7 +39,7 @@
     <!-- internal dependencies for Jexxa core -->
     <dependency>
       <groupId>io.jexxa</groupId>
-      <artifactId>Jexxa-Adapter-API</artifactId>
+      <artifactId>jexxa-adapter-api</artifactId>
       <version>1.0.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
