@@ -9,7 +9,7 @@ import java.util.Properties;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import io.jexxa.TestTags;
+import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import kong.unirest.Unirest;
@@ -22,7 +22,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @SuppressWarnings("SameParameterValue")
 @Execution(ExecutionMode.SAME_THREAD)
-@Tag(TestTags.INTEGRATION_TEST)
+@Tag(TestConstants.INTEGRATION_TEST)
 class RESTfulRPCAdapterIT
 {
     private static final String CONTENT_TYPE = "Content-Type";

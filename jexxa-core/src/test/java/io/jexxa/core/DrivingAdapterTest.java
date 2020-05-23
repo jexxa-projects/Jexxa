@@ -2,7 +2,7 @@ package io.jexxa.core;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import io.jexxa.TestTags;
+import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.InvalidApplicationService;
 import io.jexxa.application.infrastructure.drivingadapter.InvalidAdapter;
 import io.jexxa.core.convention.AdapterConventionViolation;
@@ -11,7 +11,7 @@ import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-@Tag(TestTags.UNIT_TEST)
+@Tag(TestConstants.UNIT_TEST)
 class DrivingAdapterTest
 {
 

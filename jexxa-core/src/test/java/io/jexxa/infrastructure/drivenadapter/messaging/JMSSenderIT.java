@@ -14,7 +14,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-import io.jexxa.TestTags;
+import io.jexxa.TestConstants;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
@@ -28,7 +28,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
-@Tag(TestTags.INTEGRATION_TEST)
+@Tag(TestConstants.INTEGRATION_TEST)
 class JMSSenderIT
 {
     private final JexxaValueObject message = new JexxaValueObject(42);

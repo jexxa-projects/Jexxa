@@ -20,7 +20,7 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
-import io.jexxa.TestTags;
+import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapter.persistence.jdbc.JDBCRepository;
@@ -33,7 +33,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
-@Tag(TestTags.INTEGRATION_TEST)
+@Tag(TestConstants.INTEGRATION_TEST)
 class JMSAdapterIT
 {
     private Properties properties;

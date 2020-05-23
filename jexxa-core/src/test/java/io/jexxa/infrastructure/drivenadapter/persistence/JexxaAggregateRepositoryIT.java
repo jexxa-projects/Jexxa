@@ -8,7 +8,7 @@ import java.util.Properties;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import io.jexxa.TestTags;
+import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaAggregateRepository;
@@ -21,7 +21,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 
 @Execution(ExecutionMode.SAME_THREAD)
-@Tag(TestTags.INTEGRATION_TEST)
+@Tag(TestConstants.INTEGRATION_TEST)
 class JexxaAggregateRepositoryIT
 {
 

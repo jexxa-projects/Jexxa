@@ -7,7 +7,7 @@ import io.jexxa.application.annotation.ValueObject;
 public class JexxaValueObject
 {
     private final int value;
-    final double valueInPercent;
+    private final double valueInPercent;
 
     public JexxaValueObject(int value) {
         this.value = value;

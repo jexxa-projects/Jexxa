@@ -13,7 +13,7 @@ import java.util.Set;
 import javax.management.MBeanServer;
 import javax.management.ObjectInstance;
 
-import io.jexxa.TestTags;
+import io.jexxa.TestConstants;
 import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
 import io.jexxa.application.applicationservice.JexxaApplicationService;
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
-@Tag(TestTags.INTEGRATION_TEST)
+@Tag(TestConstants.INTEGRATION_TEST)
 class JexxaMainIT
 {
     private Properties properties;
@@ -159,7 +159,7 @@ class JexxaMainIT
 
 
 
-    Properties getRESTfulRPCProperties() {
+    private Properties getRESTfulRPCProperties() {
         Properties properties = new Properties();
         properties.put(RESTfulRPCAdapter.HOST_PROPERTY, "localhost");
         properties.put(RESTfulRPCAdapter.PORT_PROPERTY, Integer.toString(7000));

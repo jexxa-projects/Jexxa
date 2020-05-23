@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Properties;
 
-import io.jexxa.TestTags;
+import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-@Tag(TestTags.UNIT_TEST)
+@Tag(TestConstants.UNIT_TEST)
 class JDBCPropertiesTest
 {
     @Test

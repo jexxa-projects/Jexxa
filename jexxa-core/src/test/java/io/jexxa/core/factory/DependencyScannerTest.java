@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import io.jexxa.TestTags;
+import io.jexxa.TestConstants;
 import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.annotation.UnavailableDuringRuntime;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
-@Tag(TestTags.UNIT_TEST)
+@Tag(TestConstants.UNIT_TEST)
 class DependencyScannerTest
 {
     @Test

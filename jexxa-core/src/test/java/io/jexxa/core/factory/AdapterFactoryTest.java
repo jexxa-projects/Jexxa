@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import io.jexxa.TestTags;
+import io.jexxa.TestConstants;
 import io.jexxa.application.domainservice.IDefaultConstructorService;
 import io.jexxa.application.domainservice.IFactoryMethodService;
 import io.jexxa.application.domainservice.INotImplementedService;
@@ -28,7 +28,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
  * @see AdapterFactory for conventions to create an adapter 
  */
 @Execution(ExecutionMode.CONCURRENT)
-@Tag(TestTags.UNIT_TEST)
+@Tag(TestConstants.UNIT_TEST)
 class AdapterFactoryTest
 {
     private final String packageName = "io.jexxa.application.infrastructure";
