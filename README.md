@@ -12,17 +12,17 @@ Goal of this framework is to easily connect technology stacks to your technology
 
 Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus. At the moment it provides following features:
  
-*  Bind driving adapters to your application core within main-method.  
-*  Inject driven adapters into the application core without any framework specific @Annotations. 
-*  Integrated driving adapters: RMI over REST, JMX, and JMS. 
-*  Integrated driven adapters: JDBC, in memory DB (IMDB), and JMS based messaging. 
+*   Bind driving adapters to your application core within main-method.  
+*   Inject driven adapters into the application core without any framework specific @Annotations. 
+*   Integrated driving adapters: RMI over REST, JMX, and JMS. 
+*   Integrated driven adapters: JDBC, in memory DB (IMDB), and JMS based messaging. 
 
 General information: 
-*  Project web page: [jexxa.io](https://www.jexxa.io)  
-*  Documentation: [Architecture of Jexxa](https://github.com/repplix/Jexxa/blob/master/doc/jexxa.adoc) 
+*   Project web page: [jexxa.io](https://www.jexxa.io)  
+*   Documentation: [Architecture of Jexxa](https://github.com/repplix/Jexxa/blob/master/doc/jexxa.adoc) 
 
 ## Supported Java environments
-*  Java 11 (or higher)
+*   Java 11 (or higher)
 
 ## Quickstart
 
@@ -115,8 +115,8 @@ mvn clean install -DskipITs
 
 ### Dependencies for integration tests 
 For running integration tests we recommend using local docker containers to provide following dependencies:
-*  An ActiveMQ instance with default settings: See [here](https://hub.docker.com/r/rmohr/activemq/).   
-*  A PostgresDB database with default settings. Default user/password should be admin/admin: See [here](https://hub.docker.com/_/postgres).   
+*   An ActiveMQ instance with default settings: See [here](https://hub.docker.com/r/rmohr/activemq/).   
+*   A PostgresDB database with default settings. Default user/password should be admin/admin: See [here](https://hub.docker.com/_/postgres).   
   
 Check the status of the running containers:
 ```docker
