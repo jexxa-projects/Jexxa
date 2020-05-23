@@ -20,9 +20,10 @@ class DrivingAdapterTest
     {
         //Arrange
         JexxaMain jexxaMain = new JexxaMain(DrivingAdapterTest.class.getSimpleName());
+        var drivingAdapter = jexxaMain.bind(JMXAdapter.class);
 
         //Act / Assert
-        assertThrows(PortConventionViolation.class, () -> jexxaMain.bind(JMXAdapter.class).to(InvalidApplicationService.class));
+        assertThrows(PortConventionViolation.class, () -> drivingAdapter.to(InvalidApplicationService.class));
     }
 
     @Test

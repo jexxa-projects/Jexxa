@@ -1,7 +1,5 @@
 package io.jexxa.core.factory;
 
-import static io.jexxa.TestTags.UNIT_TEST;
-
 import java.util.List;
 
 import io.jexxa.TestTags;
@@ -89,7 +87,7 @@ class DependencyScannerTest
 
 
     @Test
-    public void getClassesInPackageImplementingInterface() {
+    void getClassesInPackageImplementingInterface() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
         var packageName = "io.jexxa.infrastructure.drivingadapter.rest";
