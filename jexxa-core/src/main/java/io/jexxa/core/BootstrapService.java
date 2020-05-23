@@ -5,8 +5,8 @@ import java.util.function.Consumer;
 @SuppressWarnings("UnusedReturnValue")
 public class BootstrapService<T>
 {
-    final Class<T> bootstrapServiceClass;
-    final JexxaMain jexxaMain;
+    private final Class<T> bootstrapServiceClass;
+    private final JexxaMain jexxaMain;
 
     BootstrapService(Class<T> bootstrapService, JexxaMain jexxaMain)
     {

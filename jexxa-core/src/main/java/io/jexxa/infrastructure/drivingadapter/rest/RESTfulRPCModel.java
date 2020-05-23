@@ -21,7 +21,7 @@ import java.util.List;
  */
 class RESTfulRPCModel
 {
-    final Object object;
+    private final Object object;
 
     public RESTfulRPCModel(Object object)
     {
@@ -44,23 +44,23 @@ class RESTfulRPCModel
             this.method = method;
         }
 
-        String getResourcePath()
+        protected String getResourcePath()
         {
             return resourcePath;
         }
 
-        Method getMethod()
+        protected Method getMethod()
         {
             return method;
         }
 
-        HTTPCommand getHTTPCommand()
+        protected HTTPCommand getHTTPCommand()
         {
             return httpCommand;
         }
     }
 
-    List<RESTfulRPCMethod> getGETCommands() {
+    protected List<RESTfulRPCMethod> getGETCommands() {
        var result = new ArrayList<RESTfulRPCMethod>();
 
        List<Method> publicMethods = getPublicMethods(object.getClass());
@@ -79,7 +79,7 @@ class RESTfulRPCModel
     }
 
 
-    List<RESTfulRPCMethod> getPOSTCommands() {
+    protected List<RESTfulRPCMethod> getPOSTCommands() {
         var result = new ArrayList<RESTfulRPCMethod>();
 
         List<Method> publicMethods = getPublicMethods(object.getClass());

@@ -27,8 +27,8 @@ import org.junit.jupiter.api.Test;
 @Tag(TestTags.INTEGRATION_TEST)
 class MultipleJMSReceiverIT
 {
-    static final int MAX_COUNTER = 1000;
-    static final int MAX_THREADS = 5;
+    private static final int MAX_COUNTER = 1000;
+    private static final int MAX_THREADS = 5;
 
     private IncrementApplicationService incrementApplicationService;
 
@@ -59,7 +59,7 @@ class MultipleJMSReceiverIT
 
 
     @Test
-    protected void synchronizeMultipleClients() throws Exception
+    protected void synchronizeMultipleClients() 
     {
         //Arrange
         JexxaMain jexxaMain = new JexxaMain("MultiThreading");
@@ -84,7 +84,7 @@ class MultipleJMSReceiverIT
         assertEquals(expectedResult, incrementApplicationService.getUsedCounter());
     }
 
-    private void incrementService(Properties properties) throws Exception
+    private void incrementService(Properties properties)
     {
         MyProducer myProducer = new MyProducer(properties);
         while ( incrementApplicationService.getCounter() < MAX_COUNTER )
@@ -97,11 +97,11 @@ class MultipleJMSReceiverIT
 
     static class MyProducer implements AutoCloseable
     {
-        final Connection connection;
-        final Session session;
-        final MessageProducer producer;
+        private final Connection connection;
+        private final Session session;
+        private final MessageProducer producer;
 
-        MyProducer(Properties properties) throws Exception
+        MyProducer(Properties properties) 
         {
             JMSAdapter jmsAdapter = new JMSAdapter(properties);
             try
@@ -116,7 +116,7 @@ class MultipleJMSReceiverIT
                 producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
             } catch (JMSException e)
             {
-               throw new Exception(e);
+               throw new IllegalArgumentException(e);
             }
         }
 

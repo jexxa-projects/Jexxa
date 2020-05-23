@@ -1,5 +1,9 @@
 package io.jexxa.infrastructure.drivenadapter.persistence.jdbc;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.Properties;
 
@@ -8,7 +12,6 @@ import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -20,7 +23,7 @@ class JDBCRepositoryIT
     private JDBCRepository<JexxaAggregate, JexxaValueObject> objectUnderTest;
 
     @BeforeEach
-    public void initTests() throws IOException
+    protected void initTests() throws IOException
     {
         //Arrange
         aggregate = JexxaAggregate.create(new JexxaValueObject(42));
@@ -36,7 +39,7 @@ class JDBCRepositoryIT
     }
 
     @AfterEach
-    void tearDown()
+    protected void tearDown()
     {
         if ( objectUnderTest != null )
         {
@@ -46,19 +49,19 @@ class JDBCRepositoryIT
 
 
     @Test
-    void addAggregate()
+    protected void addAggregate()
     {
         //act
         objectUnderTest.add(aggregate);
 
         //Assert
-        Assertions.assertEquals(aggregate.getKey(), objectUnderTest.get(aggregate.getKey()).orElseThrow().getKey());
-        Assertions.assertTrue(objectUnderTest.get().size() > 0);
+        assertEquals(aggregate.getKey(), objectUnderTest.get(aggregate.getKey()).orElseThrow().getKey());
+        assertTrue(objectUnderTest.get().size() > 0);
     }
 
 
     @Test
-    void removeAggregate()
+    protected void removeAggregate()
     {
         //Arrange
         objectUnderTest.add(aggregate);
@@ -67,22 +70,22 @@ class JDBCRepositoryIT
         objectUnderTest.remove( aggregate.getKey() );
 
         //Assert
-        Assertions.assertTrue(objectUnderTest.get().isEmpty());
+        assertTrue(objectUnderTest.get().isEmpty());
     }
 
     @Test
-    void testExceptionInvalidOperations()
+    protected void testExceptionInvalidOperations()
     {
         //Exception if key is used to add twice
         objectUnderTest.add(aggregate);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> objectUnderTest.add(aggregate));
+        assertThrows(IllegalArgumentException.class, () -> objectUnderTest.add(aggregate));
 
         //Exception if unknown key is removed
         var key = aggregate.getKey();
         objectUnderTest.remove(key);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> objectUnderTest.remove(key));
+        assertThrows(IllegalArgumentException.class, () -> objectUnderTest.remove(key));
 
         //Exception if unknown aggregate ist updated
-        Assertions.assertThrows(IllegalArgumentException.class, () ->objectUnderTest.update(aggregate));
+        assertThrows(IllegalArgumentException.class, () ->objectUnderTest.update(aggregate));
     }
 }

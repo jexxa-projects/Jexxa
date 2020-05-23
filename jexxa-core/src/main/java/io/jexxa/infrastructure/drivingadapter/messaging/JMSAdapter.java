@@ -32,8 +32,6 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
 
     public static final String DEFAULT_JNDI_PROVIDER_URL = "tcp://localhost:61616";
-    public static final String DEFAULT_JNDI_USER = "admin";
-    public static final String DEFAULT_JNDI_PASSWORD = "admin";
     public static final String DEFAULT_JNDI_FACTORY = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 
     private final Connection connection;
@@ -132,7 +130,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
     
     @SuppressWarnings("DuplicatedCode")
-    Connection createConnection()
+    protected Connection createConnection()
     {
         try 
         {

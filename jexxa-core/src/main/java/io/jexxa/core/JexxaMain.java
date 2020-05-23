@@ -134,7 +134,7 @@ public class JexxaMain
         return properties;
     }
     
-    JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
+    protected JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
         Validate.notNull(adapter);
         Validate.notNull(port);
 
@@ -147,7 +147,7 @@ public class JexxaMain
         return this;
     }
 
-    JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Object port) {
+    protected JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Object port) {
         Validate.notNull(adapter);
         Validate.notNull(port);
 
@@ -159,7 +159,7 @@ public class JexxaMain
         return this;
     }
 
-    JexxaMain bindToPortAdapter(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
+    protected JexxaMain bindToPortAdapter(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
     {
         var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
 
@@ -172,7 +172,7 @@ public class JexxaMain
         return this;
     }
 
-    JexxaMain bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
+    protected JexxaMain bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
         Validate.notNull(adapter);
         Validate.notNull(portAnnotation);
 
@@ -186,7 +186,7 @@ public class JexxaMain
 
         return this;
     }
-    <T> JexxaMain addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
+    protected <T> JexxaMain addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
     {
         T instance = portFactory.getInstanceOf(bootstrapService, properties);
         initFunction.accept(instance);

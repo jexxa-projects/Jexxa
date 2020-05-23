@@ -19,8 +19,8 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     private static final Map< Class<?>, Map<?,?> > REPOSITORY_MAP = new ConcurrentHashMap<>();
 
 
-    final Map<K, T> aggregateMap;
-    final Function<T,K> keyFunction;
+    private final Map<K, T> aggregateMap;
+    private final Function<T,K> keyFunction;
 
     @SuppressWarnings("java:S1172")
     public IMDBRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)

@@ -92,7 +92,7 @@ public class JMSSender
     }
 
     @SuppressWarnings("DuplicatedCode")
-    Connection createConnection()
+    private Connection createConnection()
     {
         try
         {

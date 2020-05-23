@@ -32,7 +32,7 @@ public class MBeanModel implements DynamicMBean
     private final Gson gson = new Gson();
 
     private final Object object;
-    String contextName;
+    private String contextName;
     
     MBeanModel(Object object, Properties properties)
     {
@@ -92,11 +92,11 @@ public class MBeanModel implements DynamicMBean
         catch (ReflectiveOperationException e)
         {
             JexxaLogger.getLogger(getClass()).error(e.getMessage());
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 
-    Object[] deserializeObjects(Class<?>[] parameterTypes, Object[] parameters)
+    private Object[] deserializeObjects(Class<?>[] parameterTypes, Object[] parameters)
     {
         if (parameterTypes == null || parameterTypes.length == 0)
         {
@@ -141,7 +141,7 @@ public class MBeanModel implements DynamicMBean
         }
     }
 
-    MBeanOperationInfo[] getMBeanOperation()
+    private MBeanOperationInfo[] getMBeanOperation()
     {
         var methodList = Arrays.stream(object.getClass().getMethods()).
                 collect(Collectors.toList());
@@ -161,7 +161,7 @@ public class MBeanModel implements DynamicMBean
                 toArray(MBeanOperationInfo[]::new);
     }
 
-    String getDomainPath()
+    protected String getDomainPath()
     {
         // Build domainPath for jmx as follows for better grouping (e.g., in JConsole)
         // The grouping is:  <ContextName> -> <First Annotation of object (if available) > -> <simple name of object>
@@ -186,7 +186,7 @@ public class MBeanModel implements DynamicMBean
     }
 
 
-    String toJsonTemplate(Class<?> clazz )
+    protected String toJsonTemplate(Class<?> clazz)
     {
         JsonObject jsonObject = new JsonObject();
 

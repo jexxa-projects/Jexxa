@@ -4,7 +4,7 @@ import io.jexxa.application.domainservice.IJexxaAggregateRepository;
 
 public class JexxaApplicationService
 {
-    final IJexxaAggregateRepository jexxaAggregateRepository;
+    private final IJexxaAggregateRepository jexxaAggregateRepository;
 
     public JexxaApplicationService(IJexxaAggregateRepository jexxaAggregateRepository)
     {

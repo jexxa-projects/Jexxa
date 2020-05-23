@@ -17,8 +17,8 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestTags.UNIT_TEST)
 class BoundedContextTest
 {
-    final JexxaMain jexxaMain = new JexxaMain("BoundedContextTest");
-    BoundedContext objectUnderTest;
+    private final JexxaMain jexxaMain = new JexxaMain("BoundedContextTest");
+    private BoundedContext objectUnderTest;
 
     @Test
     @Timeout(1)
