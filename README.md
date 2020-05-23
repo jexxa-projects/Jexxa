@@ -104,7 +104,7 @@ By default, a JexxaMain instance looks for the following properties file
 resources/jexxa-application.properties
 ```                                   
 
-Available properties are described [here](https://github.com/repplix/Jexxa/blob/master/src/main/resources/jexxa-application.properties)
+Available properties are described [here](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/main/resources/jexxa-application.properties)
 
 ## Build Jexxa from scratch
 
