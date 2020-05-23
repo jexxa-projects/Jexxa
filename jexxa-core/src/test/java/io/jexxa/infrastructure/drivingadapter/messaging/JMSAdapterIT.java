@@ -106,7 +106,8 @@ class JMSAdapterIT
     void invalidProperties()
     {
         //1.Assert missing properties
-        Assertions.assertThrows(IllegalArgumentException.class, () ->  new JMSAdapter(new Properties()));
+        var emptyProperties = new Properties();
+        Assertions.assertThrows(IllegalArgumentException.class, () ->  new JMSAdapter(emptyProperties));
 
         //2.Arrange invalid properties: Invalid JNDI_FACTORY_KEY
         Properties propertiesInvalidProvider = new Properties();
