@@ -1,7 +1,5 @@
 package io.jexxa.infrastructure.drivenadapter.persistence.jdbc;
 
-import static io.jexxa.TestTags.INTEGRATION_TEST;
-
 import java.io.IOException;
 import java.util.Properties;
 
@@ -38,7 +36,7 @@ class JDBCRepositoryIT
     }
 
     @AfterEach
-    public void teardown()
+    void tearDown()
     {
         if ( objectUnderTest != null )
         {
@@ -48,7 +46,7 @@ class JDBCRepositoryIT
 
 
     @Test
-    public void addAggregate()
+    void addAggregate()
     {
         //act
         objectUnderTest.add(aggregate);
@@ -60,7 +58,7 @@ class JDBCRepositoryIT
 
 
     @Test
-    public void removeAggregate()
+    void removeAggregate()
     {
         //Arrange
         objectUnderTest.add(aggregate);
@@ -73,7 +71,7 @@ class JDBCRepositoryIT
     }
 
     @Test
-    public void testExceptionInvalidOperations()
+    void testExceptionInvalidOperations()
     {
         //Exception if key is used to add twice
         objectUnderTest.add(aggregate);

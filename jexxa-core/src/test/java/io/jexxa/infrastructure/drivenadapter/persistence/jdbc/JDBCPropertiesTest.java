@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 class JDBCPropertiesTest
 {
     @Test
-    public void invalidProperties()
+    void invalidProperties()
     {
         //1.Assert missing properties
         Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCRepository<>(

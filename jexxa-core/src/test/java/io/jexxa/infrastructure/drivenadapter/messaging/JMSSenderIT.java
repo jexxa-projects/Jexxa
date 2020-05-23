@@ -1,7 +1,6 @@
 package io.jexxa.infrastructure.drivenadapter.messaging;
 
 
-import static io.jexxa.TestTags.INTEGRATION_TEST;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import io.jexxa.TestTags;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
-import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapterIT;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSListener;
 import io.jexxa.utils.JexxaLogger;
 import org.junit.jupiter.api.Assertions;
@@ -107,11 +105,11 @@ class JMSSenderIT
         {
             try
             {
-                JexxaLogger.getLogger(JMSAdapterIT.MyListener.class).info(((TextMessage) message).getText());
+                JexxaLogger.getLogger(JMSSenderIT.class).info(((TextMessage) message).getText());
                 messageList.add(message);
             }
             catch ( JMSException e) {
-                JexxaLogger.getLogger(JMSAdapterIT.MyListener.class).error(e.getMessage());
+                JexxaLogger.getLogger(JMSSenderIT.class).error(e.getMessage());
             }
         }
 
@@ -132,11 +130,11 @@ class JMSSenderIT
         {
             try
             {
-                JexxaLogger.getLogger(JMSAdapterIT.MyListener.class).info(((TextMessage) message).getText());
+                JexxaLogger.getLogger(JMSSenderIT.class).info(((TextMessage) message).getText());
                 messageList.add(message);
             }
             catch ( JMSException e) {
-                JexxaLogger.getLogger(JMSAdapterIT.MyListener.class).error(e.getMessage());
+                JexxaLogger.getLogger(JMSSenderIT.class).error(e.getMessage());
             }
         }
 

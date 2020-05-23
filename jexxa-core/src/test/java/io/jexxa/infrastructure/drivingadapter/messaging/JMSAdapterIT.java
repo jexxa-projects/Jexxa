@@ -32,7 +32,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestTags.INTEGRATION_TEST)
-public class JMSAdapterIT
+class JMSAdapterIT
 {
     private Properties properties;
 
