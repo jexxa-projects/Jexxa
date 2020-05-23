@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>Jexxa</artifactId>
+    <artifactId>jexxa</artifactId>
     <groupId>io.jexxa</groupId>
     <version>1.5.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>Jexxa-Adapter-API</artifactId>
+  <artifactId>jexxa-adapter-api</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
   <name>Jexxa-Adapter-API</name>
