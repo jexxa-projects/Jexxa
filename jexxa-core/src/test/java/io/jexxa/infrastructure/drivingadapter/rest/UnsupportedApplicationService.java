@@ -15,6 +15,7 @@ class UnsupportedApplicationService
     public void setSimpleValueObject(JexxaValueObject simpleValueObject)
     {
         this.first = simpleValueObject;
+        this.second = new JexxaValueObject(42);
     }
     public void setSimpleValueObject(JexxaValueObject first, JexxaValueObject second)
     {
