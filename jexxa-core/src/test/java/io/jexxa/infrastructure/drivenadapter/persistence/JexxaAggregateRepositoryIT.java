@@ -1,7 +1,5 @@
 package io.jexxa.infrastructure.drivenadapter.persistence;
 
-import static io.jexxa.TestTags.INTEGRATION_TEST;
-
 import java.util.Properties;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
