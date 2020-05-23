@@ -1,5 +1,10 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Properties;
 
 import com.google.gson.Gson;
@@ -9,7 +14,6 @@ import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -21,26 +25,26 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestTags.INTEGRATION_TEST)
 class RESTfulRPCAdapterIT
 {
-    static final String CONTENT_TYPE = "Content-Type";
-    static final String APPLICATION_TYPE = "application/json";
-    static final String METHOD_GET_SIMPLE_VALUE = "getSimpleValue";
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String APPLICATION_TYPE = "application/json";
+    private static final String METHOD_GET_SIMPLE_VALUE = "getSimpleValue";
 
-    final int defaultPort = 7000;
-    final String defaultHost = "localhost";
-    Properties properties;
-    final String restPath = "http://localhost:7000/SimpleApplicationService/";
+    private final String restPath = "http://localhost:7000/SimpleApplicationService/";
 
-    final int defaultValue = 42;
-    final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
+    private final int defaultValue = 42;
+    private final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
 
     RESTfulRPCAdapter objectUnderTest;
 
     @BeforeEach
-    void setupTests(){
+    protected void setupTests(){
         //Setup
         simpleApplicationService.setSimpleValue(42);
 
-        properties = new Properties();
+        var properties = new Properties();
+        var defaultHost = "localhost";
+        var defaultPort = 7000;
+
         properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
         properties.put(RESTfulRPCAdapter.PORT_PROPERTY, Integer.toString(defaultPort));
 
@@ -50,7 +54,7 @@ class RESTfulRPCAdapterIT
     }
 
     @AfterEach
-    void tearDownTests(){
+    protected void tearDownTests(){
         //tear down
         objectUnderTest.stop();
         objectUnderTest = null;
@@ -59,7 +63,7 @@ class RESTfulRPCAdapterIT
 
 
     @Test // RPC call test: int getSimpleValue()
-    void testGETCommand()
+    protected void testGETCommand()
     {
         //Arrange -> Nothing to do  
 
@@ -70,13 +74,13 @@ class RESTfulRPCAdapterIT
 
 
         //Assert
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
-        Assertions.assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
+        assertNotNull(result);
+        assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
+        assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
     }
 
     @Test
-    void testWithRandomPort()
+    protected void testWithRandomPort()
     {
         //Arrange
         var secondAdapter = new RESTfulRPCAdapter("localhost",0);
@@ -94,14 +98,14 @@ class RESTfulRPCAdapterIT
         secondAdapter.stop();
 
         //Assert
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
-        Assertions.assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
+        assertNotNull(result);
+        assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
+        assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
 
     }
 
     @Test
-    void testUnsetProperties()
+    protected void testUnsetProperties()
     {
         //Arrange
         var secondAdapter = new RESTfulRPCAdapter(new Properties());
@@ -119,13 +123,13 @@ class RESTfulRPCAdapterIT
         secondAdapter.stop();
 
         //Assert
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
-        Assertions.assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
+        assertNotNull(result);
+        assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
+        assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
     }
 
     @Test  // RPC call test: void setSimpleValue(44)
-    void testPOSTCommandWithOneAttribute()
+    protected void testPOSTCommandWithOneAttribute()
     {
         //Arrange
         var newValue = 44;
@@ -141,13 +145,13 @@ class RESTfulRPCAdapterIT
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
-        Assertions.assertTrue(response.isSuccess());
-        Assertions.assertEquals(newValue, simpleApplicationService.getSimpleValue());
-        Assertions.assertEquals(newValue, newResult.intValue());
+        assertTrue(response.isSuccess());
+        assertEquals(newValue, simpleApplicationService.getSimpleValue());
+        assertEquals(newValue, newResult.intValue());
     }
 
     @Test // RPC call test: void setSimpleValueObject(SimpleValueObject(44))
-    void testPOSTCommandWithOneObject()
+    protected void testPOSTCommandWithOneObject()
     {
         //Arrange
         var newValue = new JexxaValueObject(44);
@@ -163,13 +167,13 @@ class RESTfulRPCAdapterIT
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
-        Assertions.assertTrue(response.isSuccess());
-        Assertions.assertEquals(newValue.getValue(), simpleApplicationService.getSimpleValueObject().getValue());
-        Assertions.assertEquals(newValue.getValue(), newResult.intValue());
+        assertTrue(response.isSuccess());
+        assertEquals(newValue.getValue(), simpleApplicationService.getSimpleValueObject().getValue());
+        assertEquals(newValue.getValue(), newResult.intValue());
     }
 
     @Test // RPC call test: void setSimpleValueObjectTwice(SimpleValueObject(44), SimpleValueObject(88))
-    void testPOSTCommandWithTwoObjects()
+    protected void testPOSTCommandWithTwoObjects()
     {
         //Arrange
         var paramList = new JexxaValueObject[]{new JexxaValueObject(44), new JexxaValueObject(88)};
@@ -185,13 +189,13 @@ class RESTfulRPCAdapterIT
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
-        Assertions.assertTrue(response.isSuccess());
-        Assertions.assertEquals(paramList[1].getValue(), simpleApplicationService.getSimpleValueObject().getValue());
-        Assertions.assertEquals(paramList[1].getValue(), newResult.intValue());
+        assertTrue(response.isSuccess());
+        assertEquals(paramList[1].getValue(), simpleApplicationService.getSimpleValueObject().getValue());
+        assertEquals(paramList[1].getValue(), newResult.intValue());
     }
 
     @Test // RPC call test:  int setGetSimpleValue(44)
-    void testPOSTCommandWithReturnValue()
+    protected void testPOSTCommandWithReturnValue()
     {
         //Arrange
         var newValue = 44;
@@ -210,14 +214,14 @@ class RESTfulRPCAdapterIT
                 .asObject(Integer.class).getBody();
 
         //Assert
-        Assertions.assertNotNull(oldValue);
-        Assertions.assertEquals(defaultValue, oldValue.intValue());
-        Assertions.assertEquals(newValue, simpleApplicationService.getSimpleValueObject().getValue());
-        Assertions.assertEquals(newValue, newResult.intValue());
+        assertNotNull(oldValue);
+        assertEquals(defaultValue, oldValue.intValue());
+        assertEquals(newValue, simpleApplicationService.getSimpleValueObject().getValue());
+        assertEquals(newValue, newResult.intValue());
     }
 
     @Test
-    void testPOSTCommandWithException()
+    protected void testPOSTCommandWithException()
     {
         //Arrange
 
@@ -228,12 +232,12 @@ class RESTfulRPCAdapterIT
         JsonObject error = response.mapError(JsonObject.class);
 
         //Assert
-        Assertions.assertNotNull(error);
-        Assertions.assertEquals(SimpleApplicationService.SimpleApplicationException.class.getName(), error.get("ExceptionType").getAsString());
+        assertNotNull(error);
+        assertEquals(SimpleApplicationService.SimpleApplicationException.class.getName(), error.get("ExceptionType").getAsString());
 
         var jsonString = error.get("Exception").getAsString();
         var gson = new Gson();
-        Assertions.assertThrows(SimpleApplicationService.SimpleApplicationException.class, () -> {
+        assertThrows(SimpleApplicationService.SimpleApplicationException.class, () -> {
             throw gson.fromJson(jsonString, SimpleApplicationService.SimpleApplicationException.class);
         });
     }
