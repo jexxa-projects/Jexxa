@@ -1,9 +1,10 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d5e41e143a3443a79b24b7b516ac5262)](https://app.codacy.com/manual/repplix/Jexxa?utm_source=github.com&utm_medium=referral&utm_content=repplix/Jexxa&utm_campaign=Badge_Grade_Dashboard)
 [![Maven Central](https://img.shields.io/maven-central/v/io.jexxa/Jexxa)](https://maven-badges.herokuapp.com/maven-central/io.jexxa/Jexxa/) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/repplix/Jexxa.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/repplix/Jexxa/context:java)
+ [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d5e41e143a3443a79b24b7b516ac5262)](https://app.codacy.com/manual/repplix/Jexxa?utm_source=github.com&utm_medium=referral&utm_content=repplix/Jexxa&utm_campaign=Badge_Grade_Dashboard)
  [![Total alerts](https://img.shields.io/lgtm/alerts/g/repplix/Jexxa.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/repplix/Jexxa/alerts/) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=repplix_Jexxa&metric=alert_status)](https://sonarcloud.io/dashboard?id=repplix_Jexxa)
  ![Java CI](https://github.com/repplix/Jexxa/workflows/Java%20CI/badge.svg)
+
 
 # Jexxa - A Ports and Adapters Framework for Java 
 
