@@ -1,12 +1,16 @@
 package io.jexxa.core.factory;
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Properties;
 
 import io.jexxa.TestTags;
 import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
 import io.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -22,7 +26,7 @@ class PortFactoryTest
 
 
     @Test
-    void adapterAvailable() {
+    protected void adapterAvailable() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
@@ -33,11 +37,11 @@ class PortFactoryTest
         boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenAdapters.class);
 
         //Assert
-        Assertions.assertTrue(result);
+        assertTrue(result);
     }
 
     @Test
-    void adapterUnavailable() {
+    protected void adapterUnavailable() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
@@ -48,12 +52,12 @@ class PortFactoryTest
         boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenAdapters.class);
 
         //Assert
-        Assertions.assertTrue(result);
+        assertTrue(result);
     }
 
 
     @Test
-    void newInstanceOfPort() {
+    protected void newInstanceOfPort() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
@@ -65,13 +69,13 @@ class PortFactoryTest
         var second = objectUnderTest.newInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
 
         //Assert
-        Assertions.assertNotNull(first);
-        Assertions.assertNotNull(second);
-        Assertions.assertNotEquals(first, second);
+        assertNotNull(first);
+        assertNotNull(second);
+        assertNotEquals(first, second);
     }
 
     @Test
-    void getInstanceOfPort() {
+    protected void getInstanceOfPort() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
@@ -83,14 +87,14 @@ class PortFactoryTest
         var second = objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
 
         //Assert that first and second adapter are equal 
-        Assertions.assertNotNull(first);
-        Assertions.assertNotNull(second);
-        Assertions.assertEquals(first,second);
+        assertNotNull(first);
+        assertNotNull(second);
+        assertEquals(first,second);
     }
 
 
     @Test
-    void getInstanceOfPortAdapter() {
+    protected void getInstanceOfPortAdapter() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(drivenAdapterPackageName);
@@ -102,9 +106,9 @@ class PortFactoryTest
         var second = objectUnderTest.getPortAdapterOf(SimpleApplicationServiceAdapter.class, new Properties());
 
         //Assert that first and second adapter are equal
-        Assertions.assertNotNull(first);
-        Assertions.assertNotNull(second);
-        Assertions.assertEquals(first.getPort(),second.getPort());
+        assertNotNull(first);
+        assertNotNull(second);
+        assertEquals(first.getPort(),second.getPort());
     }
 
 }

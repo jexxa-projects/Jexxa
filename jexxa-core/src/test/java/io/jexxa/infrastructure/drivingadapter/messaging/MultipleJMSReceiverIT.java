@@ -1,6 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
 import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import java.util.Properties;
@@ -20,7 +21,6 @@ import io.jexxa.TestTags;
 import io.jexxa.application.applicationservice.IncrementApplicationService;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.utils.JexxaLogger;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -59,7 +59,7 @@ class MultipleJMSReceiverIT
 
 
     @Test
-    void synchronizeMultipleClients() throws Exception
+    protected void synchronizeMultipleClients() throws Exception
     {
         //Arrange
         JexxaMain jexxaMain = new JexxaMain("MultiThreading");
@@ -81,7 +81,7 @@ class MultipleJMSReceiverIT
         //Assert
         jexxaMain.stop();
 
-        Assertions.assertEquals(expectedResult, incrementApplicationService.getUsedCounter());
+        assertEquals(expectedResult, incrementApplicationService.getUsedCounter());
     }
 
     private void incrementService(Properties properties) throws Exception
@@ -120,7 +120,7 @@ class MultipleJMSReceiverIT
             }
         }
 
-        void sendToTopic()
+        protected void sendToTopic()
         {
             try
             {

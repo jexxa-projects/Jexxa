@@ -1,5 +1,8 @@
 package io.jexxa.infrastructure.drivenadapter.persistence;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Properties;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -10,7 +13,6 @@ import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaAggregateRepository;
 import io.jexxa.infrastructure.drivenadapter.persistence.jdbc.JDBCRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -23,7 +25,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 class JexxaAggregateRepositoryIT
 {
 
-    static Stream<Properties> data() {
+    static protected Stream<Properties> data() {
         var postgresProperties = new Properties();
         postgresProperties.put(JDBCRepository.JDBC_DRIVER, "org.postgresql.Driver");
         postgresProperties.put(JDBCRepository.JDBC_PASSWORD, "admin");
@@ -46,7 +48,7 @@ class JexxaAggregateRepositoryIT
 
     @ParameterizedTest
     @MethodSource("data")
-    void addAggregate(Properties repositoryProperties)
+    protected void addAggregate(Properties repositoryProperties)
     {
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
@@ -61,13 +63,13 @@ class JexxaAggregateRepositoryIT
         aggregateList.forEach(objectUnderTest::add);
 
         //Assert
-        Assertions.assertEquals(aggregateList.size(), objectUnderTest.get().size());
+        assertEquals(aggregateList.size(), objectUnderTest.get().size());
     }
 
 
     @ParameterizedTest
     @MethodSource("data")
-    void getAggregateByID(Properties repositoryProperties)
+    protected void getAggregateByID(Properties repositoryProperties)
     {
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
@@ -84,12 +86,12 @@ class JexxaAggregateRepositoryIT
                 .collect( Collectors.toList() );
 
         //Assert
-        Assertions.assertEquals(counterSupplier.get().count(), aggregateList.size());
+        assertEquals(counterSupplier.get().count(), aggregateList.size());
     }
 
     @ParameterizedTest
     @MethodSource("data")
-    void removeAggregate(Properties repositoryProperties)
+    protected void removeAggregate(Properties repositoryProperties)
     {
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
@@ -109,13 +111,13 @@ class JexxaAggregateRepositoryIT
         aggregateList.forEach(objectUnderTest::remove);
 
         //Assert
-        Assertions.assertTrue(objectUnderTest.get().isEmpty());
+        assertTrue(objectUnderTest.get().isEmpty());
     }
 
 
     @ParameterizedTest
     @MethodSource("data")
-    void updateAggregate(Properties repositoryProperties)
+    protected void updateAggregate(Properties repositoryProperties)
     {
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
@@ -134,7 +136,7 @@ class JexxaAggregateRepositoryIT
         aggregateList.forEach(objectUnderTest::update);
 
         //Assert internal value is correctly set 
-        objectUnderTest.get().forEach( element -> Assertions.assertEquals(aggregateValue, element.getInternalValue()) );
+        objectUnderTest.get().forEach( element -> assertEquals(aggregateValue, element.getInternalValue()) );
     }
 
 }

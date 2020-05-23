@@ -1,11 +1,16 @@
 package io.jexxa.infrastructure.drivenadapter.persistence.imdb;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Properties;
 
 import io.jexxa.TestTags;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -17,7 +22,7 @@ class IMDBRepositoryTest
 {
 
     @Test
-    void addAggregate()
+    protected void addAggregate()
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
@@ -32,12 +37,12 @@ class IMDBRepositoryTest
         objectUnderTest.add(aggregate);
 
         //Assert
-        Assertions.assertEquals(aggregate, objectUnderTest.get(aggregate.getKey()).orElse(null));
-        Assertions.assertTrue(objectUnderTest.get().size() > 0);
+        assertEquals(aggregate, objectUnderTest.get(aggregate.getKey()).orElse(null));
+        assertTrue(objectUnderTest.get().size() > 0);
     }
 
     @Test
-    void addAggregateTwice()
+    protected void addAggregateTwice()
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
@@ -50,12 +55,12 @@ class IMDBRepositoryTest
         
         //act
         objectUnderTest.add(aggregate);
-        Assertions.assertThrows(IllegalArgumentException.class, () ->objectUnderTest.add(aggregate));
+        assertThrows(IllegalArgumentException.class, () ->objectUnderTest.add(aggregate));
     }
 
 
     @Test
-    void removeAggregate()
+    protected void removeAggregate()
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
@@ -71,11 +76,11 @@ class IMDBRepositoryTest
         objectUnderTest.remove( aggregate.getKey() );
 
         //Assert
-        Assertions.assertTrue(objectUnderTest.get().isEmpty());
+        assertTrue(objectUnderTest.get().isEmpty());
     }
 
     @Test
-    void differentConnections()
+    protected void differentConnections()
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
@@ -95,13 +100,13 @@ class IMDBRepositoryTest
         );
 
         //Assert that connections are different but refer to the same repository 
-        Assertions.assertNotEquals(objectUnderTest, newConnection);
-        Assertions.assertFalse(objectUnderTest.get().isEmpty());
-        Assertions.assertFalse(newConnection.get().isEmpty());
+        assertNotEquals(objectUnderTest, newConnection);
+        assertFalse(objectUnderTest.get().isEmpty());
+        assertFalse(newConnection.get().isEmpty());
     }
 
     @Test
-    void differentRepositories()
+    protected void differentRepositories()
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
@@ -123,9 +128,9 @@ class IMDBRepositoryTest
         newConnection.add(new JexxaValueObject(42));
 
         //Assert that connections are different but refer to the same repository
-        Assertions.assertNotEquals(objectUnderTest, newConnection);
-        Assertions.assertEquals(1, objectUnderTest.get().size());
-        Assertions.assertEquals(1, newConnection.get().size());
+        assertNotEquals(objectUnderTest, newConnection);
+        assertEquals(1, objectUnderTest.get().size());
+        assertEquals(1, newConnection.get().size());
 
     }
 

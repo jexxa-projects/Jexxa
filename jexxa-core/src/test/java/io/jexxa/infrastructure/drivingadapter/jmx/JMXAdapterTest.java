@@ -1,6 +1,9 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.lang.management.ManagementFactory;
 import java.util.Set;
 
@@ -9,7 +12,6 @@ import javax.management.ObjectInstance;
 
 import io.jexxa.TestTags;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -20,7 +22,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class JMXAdapterTest
 {
     @Test
-    void registerApplicationService()
+    protected void registerApplicationService()
     {
         //Arrange
         var defaultValue = 42;
@@ -38,8 +40,8 @@ class JMXAdapterTest
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         Set<ObjectInstance> result = mbs.queryMBeans(null , null);
 
-        Assertions.assertNotNull(result);
-        Assertions.assertTrue(result
+        assertNotNull(result);
+        assertTrue(result
                 .stream()
                 .anyMatch(element -> element
                         .getClassName()

@@ -1,5 +1,10 @@
 package io.jexxa.core.factory;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
 
 import io.jexxa.TestTags;
@@ -7,7 +12,6 @@ import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.annotation.UnavailableDuringRuntime;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -18,7 +22,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class DependencyScannerTest
 {
     @Test
-    void findAnnotatedClasses() {
+    protected void findAnnotatedClasses() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
         var packageName = "io.jexxa.application";
@@ -28,15 +32,15 @@ class DependencyScannerTest
         var applicationServiceList = objectUnderTest.getClassesWithAnnotation(ApplicationService.class);
 
         //Assert
-        Assertions.assertFalse(applicationServiceList.isEmpty());
-        Assertions.assertTrue(applicationServiceList
+        assertFalse(applicationServiceList.isEmpty());
+        assertTrue(applicationServiceList
                 .stream()
                 .anyMatch(SimpleApplicationService.class::isAssignableFrom));
 
     }
 
     @Test
-    void findAnnotatedClassesWithinPackage() {
+    protected void findAnnotatedClassesWithinPackage() {
         //Arrange
         var packageName = "io.jexxa.application";
         var objectUnderTest = new DependencyScanner();
@@ -47,8 +51,8 @@ class DependencyScannerTest
                 getClassesWithAnnotation(ApplicationService.class);
 
         //Assert
-        Assertions.assertFalse(applicationServiceList.isEmpty());
-        Assertions.assertTrue(applicationServiceList
+        assertFalse(applicationServiceList.isEmpty());
+        assertTrue(applicationServiceList
                 .stream()
                 .anyMatch(SimpleApplicationService.class::isAssignableFrom));
 
@@ -56,7 +60,7 @@ class DependencyScannerTest
     
 
     @Test
-    void findAnnotatedClassesFailsWithinPackage() {
+    protected void findAnnotatedClassesFailsWithinPackage() {
         //Arrange
         var invalidPackageName = "io.invalid.package";
         var objectUnderTest = new DependencyScanner();
@@ -67,11 +71,11 @@ class DependencyScannerTest
                 getClassesWithAnnotation(ApplicationService.class);
 
         //Assert
-        Assertions.assertTrue(applicationServiceList.isEmpty());
+        assertTrue(applicationServiceList.isEmpty());
     }
 
     @Test
-    void getClassesImplementingInterface() {
+    protected void getClassesImplementingInterface() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
         var packageName = "io.jexxa.infrastructure";
@@ -82,12 +86,12 @@ class DependencyScannerTest
         List<Class<?>> drivingAdapters = objectUnderTest.getClassesImplementing(IDrivingAdapter.class);
 
         //Assert
-        Assertions.assertFalse(drivingAdapters.isEmpty());
+        assertFalse(drivingAdapters.isEmpty());
     }
 
 
     @Test
-    void getClassesInPackageImplementingInterface() {
+    protected void getClassesInPackageImplementingInterface() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
         var packageName = "io.jexxa.infrastructure.drivingadapter.rest";
@@ -98,18 +102,18 @@ class DependencyScannerTest
                 getClassesImplementing(IDrivingAdapter.class);
 
         //Assert
-        Assertions.assertFalse(drivingAdapters.isEmpty());
-        Assertions.assertEquals(1, drivingAdapters.size());
+        assertFalse(drivingAdapters.isEmpty());
+        assertEquals(1, drivingAdapters.size());
     }
 
     @Test 
-    void handleAnnotationUnavailableDuringRuntime()
+    protected void handleAnnotationUnavailableDuringRuntime()
     {
         //Arrange
         var objectUnderTest = new DependencyScanner();
 
         //Act
-        Assertions.assertThrows(IllegalArgumentException.class, () -> objectUnderTest.getClassesWithAnnotation(UnavailableDuringRuntime.class));
+        assertThrows(IllegalArgumentException.class, () -> objectUnderTest.getClassesWithAnnotation(UnavailableDuringRuntime.class));
     }
 
 }

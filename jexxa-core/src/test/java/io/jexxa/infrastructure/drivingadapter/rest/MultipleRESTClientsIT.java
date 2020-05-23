@@ -1,6 +1,8 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
 import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,6 @@ import io.jexxa.core.JexxaMain;
 import io.jexxa.utils.ThrowingConsumer;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -22,20 +23,18 @@ import org.junit.jupiter.api.Test;
 @Tag(TestTags.INTEGRATION_TEST)
 class MultipleRESTClientsIT
 {
-    static final String CONTENT_TYPE = "Content-Type";
-    static final String APPLICATION_TYPE = "application/json";
-    static final String METHOD_GET_SIMPLE_VALUE = "increment";
-    static final int MAX_COUNTER = 1000;
-    static final int MAX_THREADS = 5;
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String APPLICATION_TYPE = "application/json";
+    private static final String METHOD_GET_SIMPLE_VALUE = "increment";
+    private static final int MAX_COUNTER = 1000;
+    private static final int MAX_THREADS = 5;
 
-    final String restPath = "http://localhost:7000/IncrementApplicationService/";
-
-    IncrementApplicationService applicationService;
-    JexxaMain jexxaMain;
+    private IncrementApplicationService applicationService;
+    private JexxaMain jexxaMain;
 
 
     @BeforeEach
-    void setUp()
+    protected void setUp()
     {
         jexxaMain = new JexxaMain(MultipleRESTClientsIT.class.getSimpleName());
         jexxaMain
@@ -46,7 +45,7 @@ class MultipleRESTClientsIT
     }
 
     @Test
-    void synchronizeMultipleClients()
+    protected void synchronizeMultipleClients()
     {
         //Arrange
         applicationService.setMaxCounter(MAX_COUNTER);
@@ -67,15 +66,16 @@ class MultipleRESTClientsIT
 
 
         //Assert
-        Assertions.assertEquals(expectedResult, applicationService.getUsedCounter());
-        Assertions.assertTrue(exceptionList.isEmpty());
+        assertEquals(expectedResult, applicationService.getUsedCounter());
+        assertTrue(exceptionList.isEmpty());
     }
 
-    void incrementService()
+    protected void incrementService()
     {
         while ( applicationService.getCounter() < MAX_COUNTER )
         {
             //Act
+            var restPath = "http://localhost:7000/IncrementApplicationService/";
             var response = Unirest.post(restPath + METHOD_GET_SIMPLE_VALUE)
                     .header(CONTENT_TYPE, APPLICATION_TYPE)
                     .asJson();
@@ -87,7 +87,7 @@ class MultipleRESTClientsIT
     }
 
     @AfterEach
-    void tearDown()
+    protected void tearDown()
     {
         jexxaMain.stop();
         Unirest.shutDown();

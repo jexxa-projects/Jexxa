@@ -1,6 +1,9 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -22,7 +25,6 @@ import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapter.persistence.jdbc.JDBCRepository;
 import io.jexxa.utils.JexxaLogger;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -37,7 +39,7 @@ class JMSAdapterIT
     private Properties properties;
 
     @BeforeEach
-    void initTests() throws IOException
+    protected void initTests() throws IOException
     {
         //Arrange
         properties = new Properties();
@@ -48,7 +50,7 @@ class JMSAdapterIT
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
-    void startJMSAdapter()
+    protected void startJMSAdapter()
     {
         //Arrange
         var messageListener = new MyListener();
@@ -68,7 +70,7 @@ class JMSAdapterIT
                 Thread.onSpinWait();
             }
 
-            Assertions.assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
+            assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
         }
 
     }
@@ -78,7 +80,7 @@ class JMSAdapterIT
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
-    void startJMSAdapterJexxa()
+    protected void startJMSAdapterJexxa()
     {
         //Arrange
         var messageListener = new MyListener();
@@ -98,16 +100,16 @@ class JMSAdapterIT
             Thread.onSpinWait();
         }
 
-        Assertions.assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
 
     @Test
-    void invalidProperties()
+    protected void invalidProperties()
     {
         //1.Assert missing properties
         var emptyProperties = new Properties();
-        Assertions.assertThrows(IllegalArgumentException.class, () ->  new JMSAdapter(emptyProperties));
+        assertThrows(IllegalArgumentException.class, () ->  new JMSAdapter(emptyProperties));
 
         //2.Arrange invalid properties: Invalid JNDI_FACTORY_KEY
         Properties propertiesInvalidProvider = new Properties();
@@ -115,7 +117,7 @@ class JMSAdapterIT
         propertiesInvalidProvider.put(JMSAdapter.JNDI_FACTORY_KEY, JMSAdapter.DEFAULT_JNDI_FACTORY);
 
         //2.Assert invalid properties: Invalid Driver
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCRepository<>(
+        assertThrows(IllegalArgumentException.class, () -> new JDBCRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 propertiesInvalidProvider
@@ -127,7 +129,7 @@ class JMSAdapterIT
         propertiesInvalidFactory.put(JMSAdapter.JNDI_FACTORY_KEY, "invalid");
 
         //3.Assert invalid properties: Invalid URL
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCRepository<>(
+        assertThrows(IllegalArgumentException.class, () -> new JDBCRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 propertiesInvalidFactory
@@ -168,7 +170,7 @@ class JMSAdapterIT
             JMSAdapter jmsAdapter = new JMSAdapter(properties);
             this.connection = jmsAdapter.createConnection();
         }
-        void sendToTopic() {
+        protected void sendToTopic() {
             try {
                 connection.start();
 

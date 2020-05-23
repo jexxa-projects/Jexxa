@@ -1,10 +1,11 @@
 package io.jexxa.core;
 
 
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+
 import java.time.Duration;
 
 import io.jexxa.TestTags;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -21,7 +22,7 @@ class BoundedContextTest
 
     @Test
     @Timeout(1)
-    void shutdown()
+    protected void shutdown()
     {
         //Arrange
         var thread = new Thread(this::waitForShutDown);
@@ -35,10 +36,10 @@ class BoundedContextTest
 
         //Act
         objectUnderTest.shutdown();
-        Assertions.assertTimeout(Duration.ofSeconds(1), (Executable) thread::join);
+        assertTimeout(Duration.ofSeconds(1), (Executable) thread::join);
     }
 
-    void waitForShutDown()
+    protected void waitForShutDown()
     {
         objectUnderTest = jexxaMain.start();
         objectUnderTest.waitForShutdown();

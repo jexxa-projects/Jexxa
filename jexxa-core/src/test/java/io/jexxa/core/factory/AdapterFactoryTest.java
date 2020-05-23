@@ -2,6 +2,12 @@ package io.jexxa.core.factory;
 
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -13,7 +19,6 @@ import io.jexxa.application.domainservice.INotUniqueService;
 import io.jexxa.application.domainservice.IPropertiesConstructorService;
 import io.jexxa.application.infrastructure.drivenadapter.factory.DefaultConstructorAdapter;
 import io.jexxa.application.infrastructure.drivenadapter.factory.PropertiesConstructorAdapter;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -29,7 +34,7 @@ class AdapterFactoryTest
     private final String packageName = "io.jexxa.application.infrastructure";
     
     @Test
-    void createDrivenAdapter() {
+    protected void createDrivenAdapter() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -38,11 +43,11 @@ class AdapterFactoryTest
         var result = objectUnderTest.newInstanceOf(IDefaultConstructorService.class);
 
         //Assert
-        Assertions.assertNotNull(result);
+        assertNotNull(result);
     }
 
     @Test
-    void createDrivenAdapterImpl() {
+    protected void createDrivenAdapterImpl() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -52,13 +57,13 @@ class AdapterFactoryTest
         var secondResult = objectUnderTest.newInstanceOf(PropertiesConstructorAdapter.class, new Properties());
 
         //Assert
-        Assertions.assertNotNull(firstResult);
-        Assertions.assertNotNull(secondResult);
+        assertNotNull(firstResult);
+        assertNotNull(secondResult);
     }
 
 
     @Test
-    void getDrivenAdapter() {
+    protected void getDrivenAdapter() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -73,17 +78,17 @@ class AdapterFactoryTest
         var secondProperties = objectUnderTest.getInstanceOf(IPropertiesConstructorService.class, new Properties());
 
         //Assert
-        Assertions.assertNotNull(first);
-        Assertions.assertNotNull(second);
-        Assertions.assertNotNull(firstProperties);
-        Assertions.assertNotNull(secondProperties);
+        assertNotNull(first);
+        assertNotNull(second);
+        assertNotNull(firstProperties);
+        assertNotNull(secondProperties);
 
-        Assertions.assertEquals(first,second);
-        Assertions.assertEquals(firstProperties,secondProperties);
+        assertEquals(first,second);
+        assertEquals(firstProperties,secondProperties);
     }
 
     @Test
-    void createDrivenAdapterWithPropertiesConstructor() {
+    protected void createDrivenAdapterWithPropertiesConstructor() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -94,12 +99,12 @@ class AdapterFactoryTest
         var result = objectUnderTest.newInstanceOf(IPropertiesConstructorService.class, properties);
 
         //Assert
-        Assertions.assertNotNull(result);
+        assertNotNull(result);
     }
 
 
-    @Test 
-    void createDrivenAdapterWithFactoryMethod() {
+    @Test
+    protected void createDrivenAdapterWithFactoryMethod() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -108,11 +113,11 @@ class AdapterFactoryTest
         var result = objectUnderTest.newInstanceOf(IFactoryMethodService.class);
 
         //Assert
-        Assertions.assertNotNull(result);
+        assertNotNull(result);
     }
 
     @Test
-    void createDrivenAdapterWithPropertiesFactoryMethod() {
+    protected void createDrivenAdapterWithPropertiesFactoryMethod() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
             whiteListPackage(packageName);
@@ -122,12 +127,12 @@ class AdapterFactoryTest
         var result = objectUnderTest.newInstanceOf(IFactoryMethodService.class, properties);
 
         //Assert
-        Assertions.assertNotNull(result);
+        assertNotNull(result);
     }
 
 
     @Test
-    void drivenAdapterAvailable() {
+    protected void drivenAdapterAvailable() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -141,11 +146,11 @@ class AdapterFactoryTest
         boolean result = objectUnderTest.isAvailable(adapterList);
 
         //Assert
-        Assertions.assertTrue(result);
+        assertTrue(result);
     }
 
     @Test
-    void drivenAdapterUnavailable() {
+    protected void drivenAdapterUnavailable() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
@@ -157,29 +162,29 @@ class AdapterFactoryTest
         boolean result = objectUnderTest.isAvailable(adapterList);
 
         //Assert
-        Assertions.assertFalse(result);
+        assertFalse(result);
     }
 
-    @Test 
-    void createNoUniqueImplementation() {
+    @Test
+    protected void createNoUniqueImplementation() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
 
-        //Act
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
+        //Act/Assert
+        assertThrows(IllegalArgumentException.class, () ->
                 objectUnderTest.newInstanceOf(INotUniqueService.class)
         );
     }
 
-    @Test 
-    void createNoImplementationAvailable() {
+    @Test
+    protected void createNoImplementationAvailable() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(packageName);
 
-        //Act
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
+        //Act/Assert
+        assertThrows(IllegalArgumentException.class, () ->
                 objectUnderTest.newInstanceOf(INotImplementedService.class)
         );
     }

@@ -2,6 +2,10 @@ package io.jexxa.core;
 
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.lang.management.ManagementFactory;
 import java.util.Properties;
 import java.util.Set;
@@ -19,7 +23,6 @@ import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -35,14 +38,14 @@ class JexxaMainIT
     private final String contextName = "HelloJexxa";
 
     @BeforeEach
-    void initTests()
+    protected void initTests()
     {
         properties = new Properties();
         properties.putAll(getRESTfulRPCProperties());
     }
 
     @AfterEach
-    void tearDownTests()
+    protected void tearDownTests()
     {
         if (objectUnderTest != null)
         {
@@ -54,7 +57,7 @@ class JexxaMainIT
 
     
     @Test
-    void bindToPort()
+    protected void bindToPort()
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName, properties);
@@ -73,7 +76,7 @@ class JexxaMainIT
     }
 
     @Test
-    void bindToPortWithDrivenAdapter()
+    protected void bindToPortWithDrivenAdapter()
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName, properties);
@@ -92,7 +95,7 @@ class JexxaMainIT
     
 
     @Test
-    void bindToAnnotatedPorts()
+    protected void bindToAnnotatedPorts()
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName, properties);
@@ -108,7 +111,7 @@ class JexxaMainIT
 
 
     @Test
-    void bootstrapService()
+    protected void bootstrapService()
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName, properties);
@@ -121,24 +124,24 @@ class JexxaMainIT
         var jexxaApplicationService = objectUnderTest.getInstanceOfPort(JexxaApplicationService.class);
 
         //Assert 
-        Assertions.assertTrue(jexxaApplicationService.getAggregateCount() > 0);
+        assertTrue(jexxaApplicationService.getAggregateCount() > 0);
     }
 
 
     /* ---------------------Util methods ------------------ */
-    void assertJMXAdapter(Class<?> clazz) {
+    protected void assertJMXAdapter(Class<?> clazz) {
         //Assert
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         Set<ObjectInstance> result = mbs.queryMBeans(null , null);
 
-        Assertions.assertNotNull(result);
-        Assertions.assertTrue(result.
+        assertNotNull(result);
+        assertTrue(result.
                 stream().
                 anyMatch(element -> element.getClassName().endsWith(clazz.getSimpleName()))
         );
     }
 
-    void assertRESTfulRPCAdapter() {
+    protected void assertRESTfulRPCAdapter() {
         //Assert
         String restPath = "http://"
                 + properties.get(RESTfulRPCAdapter.HOST_PROPERTY) + ":"
@@ -150,8 +153,8 @@ class JexxaMainIT
                 .header("Content-Type", "application/json")
                 .asObject(Integer.class).getBody();
 
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(42, result);
+        assertNotNull(result);
+        assertEquals(42, result);
     }
 
 

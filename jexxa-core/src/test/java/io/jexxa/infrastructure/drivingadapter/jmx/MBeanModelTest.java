@@ -1,5 +1,10 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Properties;
 
 import javax.management.Attribute;
@@ -9,7 +14,6 @@ import com.google.gson.Gson;
 import io.jexxa.TestTags;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -35,7 +39,7 @@ class MBeanModelTest
     }
 
     @Test
-    void getDomainPath()
+    protected void getDomainPath()
     {
         //Arrange
         var applicationService = new SimpleApplicationService();
@@ -45,11 +49,11 @@ class MBeanModelTest
         var objectUnderTest = new MBeanModel(applicationService, properties);
 
         //Act
-        Assertions.assertEquals("MBeanModelTest:type=ApplicationService,name=SimpleApplicationService", objectUnderTest.getDomainPath());
+        assertEquals("MBeanModelTest:type=ApplicationService,name=SimpleApplicationService", objectUnderTest.getDomainPath());
     }
 
     @Test
-    void toJsonTemplatePrimitive()
+    protected void toJsonTemplatePrimitive()
     {
         //Arrange
         String integerTemplate = "{\"int\":\"<int>\"}";
@@ -63,11 +67,11 @@ class MBeanModelTest
         var result = objectUnderTest.toJsonTemplate(int.class);
 
         //Assert
-        Assertions.assertEquals(integerTemplate, result);
+        assertEquals(integerTemplate, result);
     }
 
     @Test
-    void stringToJsonTemplate()
+    protected void stringToJsonTemplate()
     {
         //Arrange
         String stringTemplate = "{\"String\":\"<String>\"}";
@@ -81,11 +85,11 @@ class MBeanModelTest
         var result = objectUnderTest.toJsonTemplate(String.class);
 
         //Assert
-        Assertions.assertEquals(stringTemplate, result);
+        assertEquals(stringTemplate, result);
     }
 
     @Test
-    void toJsonTemplate()
+    protected void toJsonTemplate()
     {
         //Arrange
         String jexxaValueObjectTemplate = "{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"}";
@@ -99,11 +103,11 @@ class MBeanModelTest
         var result = objectUnderTest.toJsonTemplate(JexxaValueObject.class);
 
         //Assert
-        Assertions.assertEquals(jexxaValueObjectTemplate, result);
+        assertEquals(jexxaValueObjectTemplate, result);
     }
 
     @Test
-    void toJsonTemplateComplexValue()
+    protected void toJsonTemplateComplexValue()
     {
         //Arrange
         String jexxaValueObjectTemplate = "{\"firstValueObject\":{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"},\"secondValueObject\":{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"}}";
@@ -117,11 +121,11 @@ class MBeanModelTest
         var result = objectUnderTest.toJsonTemplate(JexxaCompoundValueObject.class);
 
         //Assert
-        Assertions.assertEquals(jexxaValueObjectTemplate, result);
+        assertEquals(jexxaValueObjectTemplate, result);
     }
 
     @Test
-    void invokeSetSimpleValue()
+    protected void invokeSetSimpleValue()
     {
         //Arrange
         var applicationService = new SimpleApplicationService();
@@ -138,12 +142,12 @@ class MBeanModelTest
         objectUnderTest.invoke(action, new String[]{gson.toJson(newValue)}, new String[0]);
 
         //Assert
-        Assertions.assertEquals(newValue, applicationService.getSimpleValue());
+        assertEquals(newValue, applicationService.getSimpleValue());
     }
 
 
     @Test
-    void invokeSetSimpleValueObject()
+    protected void invokeSetSimpleValueObject()
     {
         //Arrange
         var applicationService = new SimpleApplicationService();
@@ -159,12 +163,12 @@ class MBeanModelTest
         objectUnderTest.invoke(action, new String[]{gson.toJson(newValue)}, new String[0]);
 
         //Assert
-        Assertions.assertEquals(newValue.getValue(), applicationService.getSimpleValueObject().getValue());
+        assertEquals(newValue.getValue(), applicationService.getSimpleValueObject().getValue());
     }
 
 
     @Test
-    void disabledMBeanModelMethods()
+    protected void disabledMBeanModelMethods()
     {
         //Arrange
         var applicationService = new SimpleApplicationService();
@@ -174,16 +178,16 @@ class MBeanModelTest
         var objectUnderTest = new MBeanModel(applicationService, properties);
 
         //Assert that we get no Attributes because we only provide access to public methods
-        Assertions.assertNull(objectUnderTest.getAttribute(""));
+        assertNull(objectUnderTest.getAttribute(""));
         //Assert that we get no Attributes because we only provide access to public methods
-        Assertions.assertTrue(objectUnderTest.getAttributes(new String[0]).isEmpty());
+        assertTrue(objectUnderTest.getAttributes(new String[0]).isEmpty());
 
         //Assert that we can not set any parameter
         var attribute = new Attribute("value", 42);
-        Assertions.assertThrows(UnsupportedOperationException.class,  () -> objectUnderTest.setAttribute(attribute));
+        assertThrows(UnsupportedOperationException.class,  () -> objectUnderTest.setAttribute(attribute));
         //Assert that we can not set any parameter
         var attributeList = new AttributeList();
-        Assertions.assertThrows(UnsupportedOperationException.class,  () -> objectUnderTest.setAttributes(attributeList));
+        assertThrows(UnsupportedOperationException.class,  () -> objectUnderTest.setAttributes(attributeList));
     }
 
 }

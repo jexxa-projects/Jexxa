@@ -2,6 +2,8 @@ package io.jexxa.infrastructure.drivenadapter.messaging;
 
 
 
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,6 @@ import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSListener;
 import io.jexxa.utils.JexxaLogger;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ class JMSSenderIT
     Properties properties;
 
     @BeforeEach
-    void initTests()
+    protected void initTests()
     {
         properties = new Properties();
         properties.put(JMSSender.JNDI_FACTORY_KEY, JMSSender.DEFAULT_JNDI_FACTORY);
@@ -47,7 +48,7 @@ class JMSSenderIT
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
-    void sentMessageToTopic()
+    protected void sentMessageToTopic()
     {
         //Arrange
         var messageListener = new MyTopicListener();
@@ -65,14 +66,14 @@ class JMSSenderIT
             Thread.onSpinWait();
         }
 
-        Assertions.assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
 
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
-    void sentMessageToQueue()
+    protected void sentMessageToQueue()
     {
         //Arrange
         var messageListener = new MyQueueListener();
@@ -90,7 +91,7 @@ class JMSSenderIT
             Thread.onSpinWait();
         }
 
-        Assertions.assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
 
