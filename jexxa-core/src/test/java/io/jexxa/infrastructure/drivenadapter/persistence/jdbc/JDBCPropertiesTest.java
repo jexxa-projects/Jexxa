@@ -15,10 +15,11 @@ class JDBCPropertiesTest
     void invalidProperties()
     {
         //1.Assert missing properties
+        var emptyProperties = new Properties();
         Assertions.assertThrows(IllegalArgumentException.class, () -> new JDBCRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
-                new Properties()
+                emptyProperties
         ));
 
         //2.Arrange invalid properties: Invalid Driver

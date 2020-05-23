@@ -14,7 +14,10 @@ public class AdapterConvention
             clazz.getConstructor();
             return; //Default constructor available
         }
-        catch (NoSuchMethodException | SecurityException ignored) {}
+        catch (NoSuchMethodException | SecurityException ignored)
+        {
+            //If exception is thrown just go on to check if other type of constructor are available
+        }
 
 
         try
@@ -24,6 +27,7 @@ public class AdapterConvention
         }
         catch (NoSuchMethodException | SecurityException ignored)
         {
+            //If exception is thrown just go on to check if other type of constructor are available
         }
 
         var factoryMethods = Arrays
