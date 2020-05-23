@@ -11,6 +11,7 @@ import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
+import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Session;
@@ -160,5 +161,26 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     {
         Validate.isTrue(properties.containsKey(JNDI_PROVIDER_URL_KEY), "Property + " + JNDI_PROVIDER_URL_KEY + " is missing ");
         Validate.isTrue(properties.containsKey(JNDI_FACTORY_KEY), "Property + " + JNDI_FACTORY_KEY + " is missing ");
+    }
+
+    static class SynchronizedMessageListener implements MessageListener
+    {
+        private final MessageListener jmsListener;
+
+        SynchronizedMessageListener(MessageListener jmsListener )
+        {
+            Validate.notNull(jmsListener);
+            this.jmsListener = jmsListener;
+        }
+
+
+        @Override
+        public void onMessage(Message message)
+        {
+            synchronized (IDrivingAdapter.acquireLock().getSynchronizationObject())
+            {
+                jmsListener.onMessage(message);
+            }
+        }
     }
 }

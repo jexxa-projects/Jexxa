@@ -10,7 +10,7 @@ import org.apache.commons.lang.Validate;
 public class  DrivingAdapter<T extends IDrivingAdapter>
 {
     private final JexxaMain jexxaMain;
-    final Class<T> drivingAdapterClass;
+    private final Class<T> drivingAdapterClass;
 
     DrivingAdapter(Class<T> drivingAdapterClass, JexxaMain jexxaMain)
     {

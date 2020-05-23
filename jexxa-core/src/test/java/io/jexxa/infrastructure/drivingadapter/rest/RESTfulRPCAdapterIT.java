@@ -34,7 +34,7 @@ class RESTfulRPCAdapterIT
     private final int defaultValue = 42;
     private final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
 
-    RESTfulRPCAdapter objectUnderTest;
+    private RESTfulRPCAdapter objectUnderTest;
 
     @BeforeEach
     protected void setupTests(){

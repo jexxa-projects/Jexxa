@@ -8,6 +8,8 @@ import io.jexxa.application.domain.valueobject.JexxaValueObject;
 @ApplicationService
 public class SimpleApplicationService
 {
+    private int firstValue;
+
     public static class SimpleApplicationException extends Exception
     {
         public SimpleApplicationException(String information)
@@ -15,8 +17,6 @@ public class SimpleApplicationService
             super(information);
         }
     }
-
-    private int firstValue;
 
     public SimpleApplicationService()
     {

@@ -26,7 +26,7 @@ class MBeanModelTest
     @SuppressWarnings({"SameParameterValue", "FieldCanBeLocal", "unused"})
     static class JexxaCompoundValueObject
     {
-        static final JexxaCompoundValueObject DEFAULT_VALUE = new JexxaCompoundValueObject(42);
+        private static final JexxaCompoundValueObject DEFAULT_VALUE = new JexxaCompoundValueObject(42);
 
         private final JexxaValueObject firstValueObject;
         private final JexxaValueObject secondValueObject;
