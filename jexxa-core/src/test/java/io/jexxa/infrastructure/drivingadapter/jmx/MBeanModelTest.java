@@ -178,10 +178,12 @@ class MBeanModelTest
         //Assert that we get no Attributes because we only provide access to public methods
         Assertions.assertTrue(objectUnderTest.getAttributes(new String[0]).isEmpty());
 
-        //Assert that we can not set any parameter  
-        Assertions.assertThrows(UnsupportedOperationException.class,  () -> objectUnderTest.setAttribute(new Attribute("value", 42)));
         //Assert that we can not set any parameter
-        Assertions.assertThrows(UnsupportedOperationException.class,  () -> objectUnderTest.setAttributes(new AttributeList()));
+        var attribute = new Attribute("value", 42);
+        Assertions.assertThrows(UnsupportedOperationException.class,  () -> objectUnderTest.setAttribute(attribute));
+        //Assert that we can not set any parameter
+        var attributeList = new AttributeList();
+        Assertions.assertThrows(UnsupportedOperationException.class,  () -> objectUnderTest.setAttributes(attributeList));
     }
 
 }
