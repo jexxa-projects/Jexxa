@@ -9,14 +9,14 @@
 
 Jexxa is a lightweight framework to implement business applications based on a [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/) architecture. 
 
-Goal of this framework is to easily connect technology stacks to your technology agnostic business application. This means that the main-method of your application is the only location where technology stacks are connected to your business logic.      
+Goal of this framework is to easily connect technology stacks to your technology agnostic business application. These connections are explicitly represented in the main-method of your application and can be independently exchanged.      
 
-Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus. At the moment it provides following features:
+Even though Jexxa has strong educational focus it is used within lightweight business applications and microservices. At the moment it provides following features:
  
-*   Bind driving adapters to your application core within main-method.  
 *   Inject driven adapters into the application core without any framework specific @Annotations. 
+*   Bind driving adapters to your application core to expose its methods to remote clients.
 *   Integrated driving adapters: RMI over REST, JMX, and JMS. 
-*   Integrated driven adapters: JDBC, in memory DB (IMDB), and JMS based messaging. 
+*   Integrated strategies for driven adapters: JDBC, in memory DB (IMDB), and JMS based messaging. 
 
 General information: 
 *   Project web page: [jexxa.io](https://www.jexxa.io)  
