@@ -267,7 +267,7 @@ public class JDBCRepository<T, K> implements IRepository<T, K>, AutoCloseable
                         properties.getProperty(JDBC_PASSWORD));
              Statement statement = setupConnection.createStatement())
         {
-            var command = String.format("CREATE TABLE %s ( key VARCHAR(255) PRIMARY KEY, value text) ", aggregateClazz.getSimpleName());
+            var command = String.format("CREATE TABLE IF NOT EXISTS %s ( key VARCHAR(255) PRIMARY KEY, value text) ", aggregateClazz.getSimpleName());
             statement.executeUpdate(command);
         }
         catch (SQLException e)
