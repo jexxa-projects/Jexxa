@@ -46,13 +46,7 @@ class MultipleJMSReceiverIT
         @JMSListener(destination = "ApplicationServiceListener", messagingType = JMSListener.MessagingType.TOPIC)
         public void onMessage(Message message)
         {
-            try
-            {
-                incrementApplicationService.increment();
-            }
-            catch (Exception e) {
-                JexxaLogger.getLogger(ApplicationServiceListener.class).error(e.getMessage());
-            }
+            incrementApplicationService.increment();
         }
     }
 
@@ -100,10 +94,11 @@ class MultipleJMSReceiverIT
         private final Connection connection;
         private final Session session;
         private final MessageProducer producer;
+        private final JMSAdapter jmsAdapter;
 
         MyProducer(Properties properties) 
         {
-            JMSAdapter jmsAdapter = new JMSAdapter(properties);
+            jmsAdapter = new JMSAdapter(properties);
             try
             {
                 this.connection = jmsAdapter.createConnection();
@@ -143,19 +138,20 @@ class MultipleJMSReceiverIT
                 {
                     session.close();
                 }
-            } catch (Exception e)
+            } catch (JMSException e)
             {
-                System.out.println(e.getMessage());
+                JexxaLogger.getLogger(MyProducer.class).error(e.getMessage());
             }
 
             try
             {
-                if (connection != null) {
+                if (connection != null)
+                {
                     connection.close();
                 }
-             } catch (Exception e)
+             } catch (JMSException e)
             {
-                System.out.println(e.getMessage());
+                JexxaLogger.getLogger(MyProducer.class).error(e.getMessage());
             }
         }
 

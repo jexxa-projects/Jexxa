@@ -25,7 +25,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 class JexxaAggregateRepositoryIT
 {
 
-    static protected Stream<Properties> data() {
+    protected static Stream<Properties> data() {
         var postgresProperties = new Properties();
         postgresProperties.put(JDBCRepository.JDBC_DRIVER, "org.postgresql.Driver");
         postgresProperties.put(JDBCRepository.JDBC_PASSWORD, "admin");
