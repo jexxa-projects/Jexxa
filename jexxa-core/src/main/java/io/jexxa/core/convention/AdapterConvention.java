@@ -63,6 +63,6 @@ public class AdapterConvention
 
     private AdapterConvention()
     {
-
+      //Private Constructor
     }
 }

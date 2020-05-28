@@ -39,7 +39,7 @@ public class RepositoryManager
 
     private RepositoryManager()
     {
-
+        //Package protected constructor
     }
 
     private Class<?> getDefaultConnection(Properties properties)

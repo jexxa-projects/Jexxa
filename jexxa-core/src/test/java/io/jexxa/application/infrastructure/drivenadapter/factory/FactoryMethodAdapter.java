@@ -9,13 +9,13 @@ public class FactoryMethodAdapter implements IFactoryMethodService
 {
     private FactoryMethodAdapter()
     {
-        
+        //Empty and private constructor so that static methods must be used in tests
     }
 
 
     private FactoryMethodAdapter(Properties properties)
     {
-
+        //Empty and private constructor so that static methods must be used in tests 
     }
 
     public static IFactoryMethodService create()

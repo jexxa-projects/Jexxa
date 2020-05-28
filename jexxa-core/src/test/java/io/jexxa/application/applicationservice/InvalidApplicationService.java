@@ -7,6 +7,6 @@ public class InvalidApplicationService
      */
     InvalidApplicationService ()
     {
-
+        //Empty constructor since class is for testing purpose only
     }
 }

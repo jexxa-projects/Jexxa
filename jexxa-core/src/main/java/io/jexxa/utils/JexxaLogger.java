@@ -11,6 +11,6 @@ public class JexxaLogger
     }
 
     private JexxaLogger() {
-
+        //Private constructor
     }
 }

@@ -40,8 +40,9 @@ public class SynchronizationFacade
         return GLOBAL_SYNCHRONIZATION_OBJECT;
     }
 
-    SynchronizationFacade() //Package protected constructor 
+    SynchronizationFacade()
     {
+        //Package protected constructor
     }
 
     private static void validateNotNull(Object object) //Own implementation to avoid additional dependencies

@@ -9,6 +9,6 @@ public class ApplicationServiceWithUnavailableDrivenAdapter
 {
     public ApplicationServiceWithUnavailableDrivenAdapter(INotImplementedService notImplementedService)
     {
-
+        //Empty constructor since class is for testing purpose only
     }
 }

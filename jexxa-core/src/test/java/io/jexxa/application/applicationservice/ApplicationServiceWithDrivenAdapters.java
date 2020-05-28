@@ -15,6 +15,6 @@ public class ApplicationServiceWithDrivenAdapters
             IPropertiesConstructorService propertiesConstructorService
     )
     {
-
+        //Empty constructor since class is for testing purpose only
     }
 }

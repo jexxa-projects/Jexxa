@@ -9,6 +9,6 @@ public class PropertiesConstructorAdapter implements IPropertiesConstructorServi
 {
     public PropertiesConstructorAdapter(Properties properties)
     {
-        
+        //Empty because it is only used for testing purpose
     }
 }
