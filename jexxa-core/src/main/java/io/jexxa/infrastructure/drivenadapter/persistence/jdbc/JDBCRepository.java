@@ -25,8 +25,8 @@ public class JDBCRepository<T, K> implements IRepository<T, K>, AutoCloseable
     public static final String JDBC_USERNAME = "io.jexxa.jdbc.username";
     public static final String JDBC_PASSWORD = "io.jexxa.jdbc.password";
     public static final String JDBC_DRIVER = "io.jexxa.jdbc.driver";
-    public static final String JDBC_AUTOCREATE = "io.jexxa.jdbc.autocreate";
-    public static final String JDBC_DEFAULT_URL = "io.jexxa.jdbc.defaulturl";
+    public static final String JDBC_AUTOCREATE_DATABASE = "io.jexxa.jdbc.autocreate.database";
+    public static final String JDBC_AUTOCREATE_TABLE = "io.jexxa.jdbc.autocreate.table";
 
 
 
@@ -45,17 +45,10 @@ public class JDBCRepository<T, K> implements IRepository<T, K>, AutoCloseable
         validateProperties(properties);
 
         initDBDriver(properties);
-        if (properties.containsKey(JDBC_AUTOCREATE)) {
-            if (properties.containsKey(JDBC_DEFAULT_URL)) {
-                createDatabase(properties);
-                createTable(properties);
-            }
-            else
-            {
-                LOGGER.warn("Key {} is defined but key {} ist not set => Ignore {} ", JDBC_AUTOCREATE, JDBC_DEFAULT_URL, JDBC_AUTOCREATE);
-            }
 
-        }
+        autocreateDatabase(properties);
+
+        autocreateTable(properties);
 
         this.connection = initJDBCConnection(properties);
     }
@@ -233,46 +226,52 @@ public class JDBCRepository<T, K> implements IRepository<T, K>, AutoCloseable
         }
     }
 
-    private void createDatabase(final Properties properties)
+    private void autocreateDatabase(final Properties properties)
     {
-        var splitedURL = properties.getProperty(JDBC_URL).split("/");
-        var dbName = splitedURL[splitedURL.length-1].toLowerCase(); //last part of the URL is the name of the database (Note: Some DBs such as postgres require a name in lower case!)
-
-        Properties creationProperties = new Properties();
-        creationProperties.putAll(properties);
-
-        try (var setupConnection = DriverManager.
-                getConnection(
-                        creationProperties.getProperty(JDBC_DEFAULT_URL),
-                        creationProperties.getProperty(JDBC_USERNAME),
-                        creationProperties.getProperty(JDBC_PASSWORD));
-                Statement statement = setupConnection.createStatement())
+        if (properties.containsKey(JDBC_AUTOCREATE_DATABASE))
         {
-            setupConnection.setAutoCommit(true);
-            statement.execute(String.format("create DATABASE %s ", dbName));
-            LOGGER.info("Database {} successfully created ", dbName);
-        }
-        catch (SQLException e)
-        {
-            LOGGER.warn("Could not create database {} => Assume that database already exists", dbName);
+            var splitURL = properties.getProperty(JDBC_URL).split("/");
+            var dbName = splitURL[splitURL.length - 1].toLowerCase(); //last part of the URL is the name of the database (Note: Some DBs such as postgres require a name in lower case!)
+
+            Properties creationProperties = new Properties();
+            creationProperties.putAll(properties);
+
+            try (var setupConnection = DriverManager.
+                    getConnection(
+                            creationProperties.getProperty(JDBC_AUTOCREATE_DATABASE),
+                            creationProperties.getProperty(JDBC_USERNAME),
+                            creationProperties.getProperty(JDBC_PASSWORD));
+                 Statement statement = setupConnection.createStatement())
+            {
+                setupConnection.setAutoCommit(true);
+                statement.execute(String.format("create DATABASE %s ", dbName));
+                LOGGER.info("Database {} successfully created ", dbName);
+            }
+            catch (SQLException e)
+            {
+                LOGGER.warn("Could not create database {} => Assume that database already exists", dbName);
+            }
         }
     }
 
-    private void createTable(final Properties properties)
+    private void autocreateTable(final Properties properties)
     {
-        try (var setupConnection = DriverManager.
-                getConnection(
-                        properties.getProperty(JDBC_URL).toLowerCase(),
-                        properties.getProperty(JDBC_USERNAME),
-                        properties.getProperty(JDBC_PASSWORD));
-             Statement statement = setupConnection.createStatement())
+        if (properties.containsKey(JDBC_AUTOCREATE_TABLE))
         {
-            var command = String.format("CREATE TABLE IF NOT EXISTS %s ( key VARCHAR(255) PRIMARY KEY, value text) ", aggregateClazz.getSimpleName());
-            statement.executeUpdate(command);
-        }
-        catch (SQLException e)
-        {
-            LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
+            try (var setupConnection = DriverManager.
+                    getConnection(
+                            properties.getProperty(JDBC_URL).toLowerCase(),
+                            properties.getProperty(JDBC_USERNAME),
+                            properties.getProperty(JDBC_PASSWORD));
+                 Statement statement = setupConnection.createStatement())
+            {
+                var command = String.format("CREATE TABLE IF NOT EXISTS %s ( key VARCHAR(255) PRIMARY KEY, value text) ", aggregateClazz.getSimpleName());
+                statement.executeUpdate(command);
+            }
+            catch (SQLException e)
+            {
+                LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
+            }
         }
     }
 

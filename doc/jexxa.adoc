@@ -255,7 +255,7 @@ The singleton scope supports designing stateless outbound ports which is in gene
 
 
 | Port Adapter
-a| Is always created new and not reused at all. 
+a| Is always created new and not reused.
 a| Allows fine grained control of how a driving adapter should expose the included port. For example you can define that specific ports are only available via a management IP address. 
 |===
 

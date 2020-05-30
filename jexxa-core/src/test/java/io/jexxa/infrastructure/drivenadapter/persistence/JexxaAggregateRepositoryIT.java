@@ -31,16 +31,15 @@ class JexxaAggregateRepositoryIT
         postgresProperties.put(JDBCRepository.JDBC_PASSWORD, "admin");
         postgresProperties.put(JDBCRepository.JDBC_USERNAME, "admin");
         postgresProperties.put(JDBCRepository.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
-        postgresProperties.put(JDBCRepository.JDBC_AUTOCREATE, "true");
-        postgresProperties.put(JDBCRepository.JDBC_DEFAULT_URL, "jdbc:postgresql://localhost:5432/postgres");
+        postgresProperties.put(JDBCRepository.JDBC_AUTOCREATE_TABLE, "true");
+        postgresProperties.put(JDBCRepository.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
 
         var h2Properties = new Properties();
         h2Properties.put(JDBCRepository.JDBC_DRIVER, "org.h2.Driver");
         h2Properties.put(JDBCRepository.JDBC_PASSWORD, "admin");
         h2Properties.put(JDBCRepository.JDBC_USERNAME, "admin");
         h2Properties.put(JDBCRepository.JDBC_URL, "jdbc:h2:mem:jexxa;DB_CLOSE_DELAY=-1");
-        h2Properties.put(JDBCRepository.JDBC_AUTOCREATE, "true");
-        h2Properties.put(JDBCRepository.JDBC_DEFAULT_URL, "jdbc:h2:mem:jexxa;DB_CLOSE_DELAY=-1");
+        h2Properties.put(JDBCRepository.JDBC_AUTOCREATE_TABLE, "true");
 
         return Stream.of(new Properties(), postgresProperties, h2Properties);
     }
