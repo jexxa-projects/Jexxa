@@ -14,7 +14,7 @@ Goal of this framework is to easily connect technology stacks to your technology
 Even though Jexxa has strong educational focus it is used within lightweight business applications and microservices. At the moment it provides following features:
  
 *   Inject driven adapters into the application core without any framework specific @Annotations. 
-*   Bind driving adapters to your application core to expose its methods to remote clients.
+*   Bind driving adapters to your application core and expose its methods to remote clients.
 *   Integrated driving adapters: RMI over REST, JMX, and JMS. 
 *   Integrated strategies for driven adapters: JDBC, in memory DB (IMDB), and JMS based messaging. 
 
