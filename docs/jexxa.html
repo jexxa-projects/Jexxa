@@ -1059,7 +1059,7 @@ In case you need a strict control how objects are exposed for example to differe
 <div class="sect3">
 <h4 id="_transactions"><a class="anchor" href="#_transactions"></a>4.2.4. Transactions</h4>
 <div class="paragraph">
-<p>Jexxa does not support any transaction when using different driven adapter. Traditional enterprise frameworks for example spawn (often by default) a transaction between the database and the messaging system to ensure that data is only written into the database when publishing it to a messaging bus is successful. This is a great feature if you really need it. Unfortunately, it is also often used to compensate programming errors or even a bad software design.</p>
+<p>Jexxa does not support any transaction when using multiple driven adapters in a single use case. Traditional enterprise frameworks for example spawn (often by default) a transaction between the used technology stacks, such as a database and a messaging system, to ensure that data is only written into the database when publishing it to a messaging bus is successful. This is a great feature if you really need it. Unfortunately, it is also often used to compensate programming errors or even a bad software design.</p>
 </div>
 <div class="paragraph">
 <p>Instead, we recommend building your ports of the application core so that they provide an idempotent semantic.</p>
@@ -1071,7 +1071,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-05-31 16:12:57 +0200
+Last updated 2020-05-31 16:22:14 +0200
 </div>
 </div>
 </body>
