@@ -69,7 +69,7 @@ Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology f
 
 [JexxaComponents, align=center]
 
-.This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other.
+.This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages labeled with `\<<Jexxa>>` are provided by Jexxa. Packages provided with `\<<Application>>` have to be realized by the application. 
 [[JexxaComponents]]
 [reftext="Figure {counter:local-figure-number}"]
 image::images/JexxaComponents.svg[JexxaComponents]
@@ -90,7 +90,7 @@ skinparam PackagePadding 20
 
 [cols="1,2,2"]
 [reftext="Table {counter:local-table-number}"]
-[[JexxaComponentDescription]]
+[[JexxaPackagetDescription]]
 |===
 a|Package
 |Description
@@ -112,9 +112,11 @@ a|Components
 
 a| Driving Adapter
 a| A driving adapter belongs to the infrastructure and receives a command from a specific client such as a UI, or a console and forwards it to a specific port.
-a| A __generic__ driving adapter encapsulates a communication technology and automatically exposes methods from connected inbound ports by using a convention. For example this can be used for an RPC mechanism.
+a| Jexxa provides a convention over configuration approach for driving adapters.
 
-A __specific__ driving adapter includes only a communication technology. It can be connected to a __port adapter__ which is implemented in the infrastructure of the application. The port adapter then performs a port specific mapping to expose a specific port or its method to clients. This is typically required for RESTfulHTTP 
+A __generic__ driving adapter automatically exposes methods from connected inbound ports by using a convention. For example this can be used for an RPC mechanism.
+
+A __specific__ driving adapter is used if a convention can not be applied. Instead you have to implement a configuration within the infrastructure of the application in form of a __port adapter__. The port adapter is connected to the specific driving adapter and performs a specific mapping to expose a port. For example this is required for RESTfulHTTP.
 
 
 a|Inbound Port
@@ -126,7 +128,7 @@ a|Outbound Port
 a| An outbound port belongs to the application core but only as interface. This interface is implemented in the infrastructure of the application core by using a specific technology stack such as a database driver.
 
 
-a| Outbound ports are 'just' interfaces that must be defined by your application core. Jexxa provides support to implement these interfaces. See tab __Driven Adapter Strategies__
+a| Outbound ports are 'just' interfaces that must be defined by your application core. Jexxa provides support to implement these interfaces. See tab __Driven Adapter Strategies__.
 
 
 |Driven Adapter
@@ -226,20 +228,21 @@ a| 1. A port adapter is tightly coupled to a specific port. Therefore, it gets i
 
 === Scope
 
-Jexxa provides some simple mechanisms to define and control the scope of ports and adapters.
+Jexxa provides some simple mechanisms to define and control the scopes of ports and adapters which are described in this section.
 
-==== Registering Ports and Adapters
-Within Jexxa you can control the used dependencies by defining the packages for the application core and the infrastructure independently. 
+==== Visibility of Ports and Adapters
 
-==== Threading Scope
+By default, you have to tell Jexxa the location of your driven adapter and ports on a package level so that they can be created by Jexxa'S DI mechanism. This allows an application to specify used ports and adapters on a very fine-grained level.
+
+==== Threading 
 At the moment Jexxa ensure that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to following reason:
 
 * Multi threading is typically essential within technology stacks and not within the application core itself.
 * When you start developing your application you have typically only a limited number of users.
 * When your application becomes a huge success and must scale to a lot of users you should scale it by running multiple instances of the application. Today's container solutions offer a much better scaling and managing approach.
 
-==== Allocation Scope of Dependencies
-The allocation scope of Jexxa's building blocks is described in <<JexxaScope>>
+==== Allocation scope of Dependencies
+The allocation scope defines how many instances of components are created by Jexxa. This is described in <<JexxaScope>>.
 
 [cols="1,2,2"]
 [reftext="Table {counter:local-table-number}"]
