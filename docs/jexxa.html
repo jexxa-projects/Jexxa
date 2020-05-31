@@ -580,7 +580,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>A <em>generic</em> driving adapter automatically exposes methods from connected inbound ports by using a convention. For example this can be used for an RPC mechanism.</p>
 </div>
 <div class="paragraph">
-<p>A <em>specific</em> driving adapter is used if a convention can not be applied. Instead you have to implement a configuration within the infrastructure of the application in form of a <em>port adapter</em>. The port adapter is connected to the specific driving adapter and performs a specific mapping to expose a port. For example this is required for RESTfulHTTP.</p>
+<p>A <em>specific</em> driving adapter is used if a convention cannot be applied. Instead you have to implement a configuration within the infrastructure of your application in form of a <em>port adapter</em>. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -594,7 +594,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Jexxa provides implicit constructor injection for your inbound ports which is described in <a href="#_dependency_injection_di">Dependency Injection (DI)</a>.</p>
 </li>
 <li>
-<p>Jexxa also allows to instantiate and manage ports by yourself an just use provided driving and driven adapter.</p>
+<p>Jexxa also allows to instantiate and manage ports by yourself an just use provided driving and driven adapter strategies.</p>
 </li>
 </ul>
 </div></div></td>
@@ -613,8 +613,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapter</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A driven adapter belongs to the infrastructure and is a concrete implementation of a specific outbound port. A driven adapter is injected into the application core which in turns only knows about the interface.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Providing <em>driven adapter strategies</em> to simplify development of driven adapters of the application.</p>
-<p class="tableblock">Exchanging a concrete technology strategy depending on your production requirements and/or on your software development process. For example, you can easily switch your database technology between in memory, JDBC, or key value without changing your driven adapters.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jexxa provides <em>driven adapter strategies</em> to simplify development of driven adapters of an application.</p>
+<p class="tableblock">Typically these strategies can be configured via <code>Properties</code> so that a concrete technology can be adjusted to your development process. For example, you can easily switch your database technology between in memory, JDBC, or key value without changing your driven adapters.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapter Strategy</p></td>
@@ -935,7 +935,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-05-31 12:05:38 +0200
+Last updated 2020-05-31 12:25:17 +0200
 </div>
 </div>
 </body>
