@@ -1,4 +1,4 @@
-doc/.asciidoctor/
+docs/.asciidoctor/
 target/
 pom.xml.tag
 pom.xml.releaseBackup

@@ -20,7 +20,7 @@ Even though Jexxa has strong educational focus it is used within lightweight bus
 
 General information: 
 *   Project web page: [jexxa.io](https://www.jexxa.io)  
-*   Documentation: [Architecture of Jexxa](https://github.com/repplix/Jexxa/blob/master/doc/jexxa.html) 
+*   Documentation: [Architecture of Jexxa](https://github.com/repplix/Jexxa/blob/master/docs/jexxa.html) 
 
 ## Supported Java environments
 *   Java 11 (or higher)
