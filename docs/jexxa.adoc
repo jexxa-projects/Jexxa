@@ -71,15 +71,16 @@ Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology f
 
 [plantuml, images/JexxaComponents, svg, align=center]
 [reftext="Figure {counter:local-figure-number}"]
-..This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages labeled with `\<<Jexxa>>` are provided by Jexxa. Packages provided with `\<<Application>>` have to be realized by the application. 
+.This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages labeled with `\<<Jexxa>>` are provided by Jexxa. Packages labeled with `\<<Application>>` have to be realized by the application.
 [[JexxaComponents]]
 ....
 @startuml
 skinparam PackagePadding 20
 
 package JexxaCore <<Jexxa>> {
-[JexxaMain] <<API>>
-[Dependency Injection] <<Inversion of Control>>
+[Convention] <<Inversion of Control>>
+[Core] <<Fluent API>>
+[Factory] <<Inversion of Control>>
 }
 
 package JexxaInfrastructure <<Jexxa>> {
@@ -106,16 +107,17 @@ package Infrastructure <<Application>> {
 [Outbound Ports] <|.. [Driven Adapters]
 [Driven Adapters] o-left-[Driven Adapter Strategies]
 
-[Dependency Injection] ..> Infrastructure : create
-[Dependency Injection] ..> ApplicationCore : create
-[Dependency Injection] ..> JexxaInfrastructure : create
+[Factory] ..> Infrastructure : create
+[Factory] ..> ApplicationCore : create
+[Factory] ..> JexxaInfrastructure : create
 
 [Generic Driving Adapters] -[hidden]- [Port Adapters]
 [Generic Driving Adapters] -[hidden]- [Specific Driving Adapters]
 [Specific Driving Adapters] -[hidden]- [Driven Adapter Strategies]
 [Port Adapters] -[hidden]- [Driven Adapters]
 
-[JexxaMain] -left-> [Dependency Injection]
+[Core] -left-> [Factory]
+[Core] -up-> [Convention]
 
 @enduml
 ....
@@ -124,6 +126,7 @@ package Infrastructure <<Application>> {
 
 [cols="1,2"]
 [reftext="Table {counter:local-table-number}"]
+.Describes the packages of a typical application build with Jexxa.    
 [[JexxaPackagetDescription]]
 |===
 a|Package
@@ -149,6 +152,7 @@ The components of package `ApplicationCore` are:
 
 [cols="1,2,2"]
 [reftext="Table {counter:local-table-number}"]
+.Describes the components of package `ApplicationCore`.
 [[ApplicationCoreComponentDescription]]
 |===
 a|Components
@@ -176,6 +180,7 @@ The components of package `Infrastructure` are:
 
 [cols="1,2,2"]
 [reftext="Table {counter:local-table-number}"]
+.Describes the components of package `Infrastructure`.
 [[InfrastructureComponentDescription]]
 |===
 a|Components
@@ -206,6 +211,7 @@ The components of `JexxaInfrastructure` are:
 
 [cols="1,2,2"]
 [reftext="Table {counter:local-table-number}"]
+.Describes the components of package `JexxaInfrastructure`.
 [[JexxaComponentDescription]]
 |===
 a|Components
@@ -213,9 +219,9 @@ a|Components
 |Realization in Jexxa
 
 
-a| Driving Adapter
-a| A driving adapter belongs to the infrastructure and receives a command from a specific client such as a UI, or a console and forwards it to a specific port.
-a| Jexxa provides a convention over configuration approach for driving adapters.
+a| Generic/Specific Driving Adapters
+a| Driving adapters belong to the infrastructure and receive commands from a specific client such as a UI, or a console and forwards them to connected ports.
+a| Jexxa provides a convention and configuration approach for driving adapters.
 
 A __generic__ driving adapter automatically exposes methods from connected inbound ports by using a convention. For example this can be used for an RPC mechanism.
 
@@ -237,20 +243,24 @@ Available strategies in Jexxa are based on the standard javax interfaces (e.g. J
 
 [cols="1,2,2"]
 [reftext="Table {counter:local-table-number}"]
+.Describes the components of package `JexxaCore`.
 [[JexxaCoreComponentDescription]]
 |===
 a|Components
 |General Description
 |Realization in Jexxa
 
-a| JexxaMain
-a| This component includes the `JexxaMain` which is used in the main-method of your application.
+a| Core
+a| This component includes class `JexxaMain` which is the entry point in the main-method of your application to use Jexxa.
 a| `JexxaMain` provides a fluent API to explicitly show the binding of technology stacks to your inbound ports. 
 
-a| Dependency Injection
+a| Factory
 a| Instantiates ports and adapters and manages their life cycle.
 a| Jexxa supports implicit constructor injection which is described in <<Dependency Injection (DI)>>.
 
+a| Convention
+a| Provides classes to validate the compliance with conventions of ports and adapters.
+a| Jexxa provides a fast fail approach regarding conventions. The conventions are described in <<Dependency Injection (DI)>>.
 
 |===
 
@@ -271,6 +281,7 @@ Within Jexxa we use conventions described in <<JexxaConventions>> to explicitly 
 
 [cols="1,2,2"]
 [reftext="Table {counter:local-table-number}"]
+.Conventions used to realize implicit constructor injection.
 [[JexxaConventions]]
 |===
 a|Components
@@ -278,7 +289,7 @@ a|Components
 |Reason
 
 
-a| Generic Driving Adapter
+a| Driving Adapter
 a| One of the following constructors must be available (checked in this order).
 
 * Public Default constructor
@@ -347,6 +358,7 @@ The allocation scope defines how many instances of components are created by Jex
 
 [cols="1,2,2"]
 [reftext="Table {counter:local-table-number}"]
+.Allocation scope for the components in a Jexxa application.
 [[JexxaScope]]
 |===
 a|Components
