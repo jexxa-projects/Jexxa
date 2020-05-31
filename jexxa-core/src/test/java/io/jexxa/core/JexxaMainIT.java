@@ -2,6 +2,8 @@ package io.jexxa.core;
 
 
 
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -61,6 +63,8 @@ class JexxaMainIT
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName, properties);
+        objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
 
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
@@ -80,6 +84,9 @@ class JexxaMainIT
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName, properties);
+        objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
+
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
@@ -99,7 +106,10 @@ class JexxaMainIT
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName, properties);
+        objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
 
+        
         //Act: Bind all DrivingAdapter to all ApplicationServices
         objectUnderTest
                 .bind(RESTfulRPCAdapter.class).toAnnotation(ApplicationService.class)
@@ -114,11 +124,12 @@ class JexxaMainIT
     protected void bootstrapService()
     {
         //Arrange
-        objectUnderTest = new JexxaMain(contextName, properties);
+        objectUnderTest = new JexxaMain(contextName);
+        objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
 
         //Act
         objectUnderTest
-                .addToInfrastructure("io.jexxa.application.infrastructure")
                 .bootstrap(InitializeJexxaAggregates.class).with(InitializeJexxaAggregates::initDomainData);
 
         var jexxaApplicationService = objectUnderTest.getInstanceOfPort(JexxaApplicationService.class);

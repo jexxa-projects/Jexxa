@@ -1,7 +1,9 @@
-package io.jexxa.infrastructure.drivenadapter.messaging;
+package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
 
 
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import java.time.Duration;
@@ -54,8 +56,11 @@ class JMSSenderIT
         var messageListener = new MyTopicListener();
         var objectUnderTest = new JMSSender(properties);
         var jexxaMain = new JexxaMain(testName, properties);
-        jexxaMain.bind(JMSAdapter.class).to(messageListener);
-        jexxaMain.start();
+
+        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
+                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+                .bind(JMSAdapter.class).to(messageListener)
+                .start();
 
         //Act
         objectUnderTest.sendToTopic(message, testName, null);
@@ -79,8 +84,11 @@ class JMSSenderIT
         var messageListener = new MyQueueListener();
         var objectUnderTest = new JMSSender(properties);
         var jexxaMain = new JexxaMain(testName, properties);
-        jexxaMain.bind(JMSAdapter.class).to(messageListener);
-        jexxaMain.start();
+
+        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
+                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+                .bind(JMSAdapter.class).to(messageListener)
+                .start();
 
         //Act
         objectUnderTest.sendToQueue(message, testName, null);

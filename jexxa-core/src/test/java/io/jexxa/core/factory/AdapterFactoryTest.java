@@ -2,6 +2,7 @@ package io.jexxa.core.factory;
 
 
 
+import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,13 +32,11 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestConstants.UNIT_TEST)
 class AdapterFactoryTest
 {
-    private final String packageName = "io.jexxa.application.infrastructure";
-    
     @Test
     protected void createDrivenAdapter() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
-                whiteListPackage(packageName);
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
 
         //Act
         var result = objectUnderTest.newInstanceOf(IDefaultConstructorService.class);
@@ -50,7 +49,7 @@ class AdapterFactoryTest
     protected void createDrivenAdapterImpl() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
-                whiteListPackage(packageName);
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
 
         //Act
         var firstResult = objectUnderTest.newInstanceOf(DefaultConstructorAdapter.class);
@@ -66,7 +65,7 @@ class AdapterFactoryTest
     protected void getDrivenAdapter() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
-                whiteListPackage(packageName);
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
 
         //Act
         var first = objectUnderTest.getInstanceOf(IDefaultConstructorService.class);
@@ -91,7 +90,7 @@ class AdapterFactoryTest
     protected void createDrivenAdapterWithPropertiesConstructor() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
-                whiteListPackage(packageName);
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
 
         var properties = new Properties();
 
@@ -107,7 +106,7 @@ class AdapterFactoryTest
     protected void createDrivenAdapterWithFactoryMethod() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
-                whiteListPackage(packageName);
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
 
         //Act
         var result = objectUnderTest.newInstanceOf(IFactoryMethodService.class);
@@ -120,7 +119,7 @@ class AdapterFactoryTest
     protected void createDrivenAdapterWithPropertiesFactoryMethod() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
-            whiteListPackage(packageName);
+            whiteListPackage(JEXXA_DRIVEN_ADAPTER);
         var properties = new Properties();
         
         //Act
@@ -135,7 +134,7 @@ class AdapterFactoryTest
     protected void drivenAdapterAvailable() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
-                whiteListPackage(packageName);
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
 
         var adapterList = new ArrayList<Class<?>>();
         adapterList.add(IDefaultConstructorService.class);
@@ -153,7 +152,7 @@ class AdapterFactoryTest
     protected void drivenAdapterUnavailable() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
-                whiteListPackage(packageName);
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
 
         var adapterList = new ArrayList<Class<?>>();
         adapterList.add(INotImplementedService.class);
@@ -169,7 +168,7 @@ class AdapterFactoryTest
     protected void createNoUniqueImplementation() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
-                whiteListPackage(packageName);
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
 
         //Act/Assert
         assertThrows(IllegalArgumentException.class, () ->
@@ -181,7 +180,7 @@ class AdapterFactoryTest
     protected void createNoImplementationAvailable() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
-                whiteListPackage(packageName);
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
 
         //Act/Assert
         assertThrows(IllegalArgumentException.class, () ->

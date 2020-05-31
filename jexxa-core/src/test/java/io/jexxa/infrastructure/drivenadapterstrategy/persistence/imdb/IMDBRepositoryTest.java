@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapter.persistence.imdb;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

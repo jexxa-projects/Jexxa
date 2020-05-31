@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapter.persistence.jdbc;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

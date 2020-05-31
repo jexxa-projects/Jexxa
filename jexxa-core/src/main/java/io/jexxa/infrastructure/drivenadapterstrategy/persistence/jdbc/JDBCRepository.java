@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapter.persistence.jdbc;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
 import java.io.StringReader;
 import java.sql.Connection;
@@ -14,7 +14,7 @@ import java.util.Properties;
 import java.util.function.Function;
 
 import com.google.gson.Gson;
-import io.jexxa.infrastructure.drivenadapter.persistence.IRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;

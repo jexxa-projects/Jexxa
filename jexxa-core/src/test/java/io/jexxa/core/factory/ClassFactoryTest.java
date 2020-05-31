@@ -1,6 +1,7 @@
 package io.jexxa.core.factory;
 
 
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ class ClassFactoryTest
     {
         //Arrange
         var annotationScanner = new DependencyScanner();
-        annotationScanner.whiteListPackage("io.jexxa.application.applicationservice");
+        annotationScanner.whiteListPackage(JEXXA_APPLICATION_SERVICE);
 
         var factoryResults = new ArrayList<>();
 

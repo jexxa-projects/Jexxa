@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapter.persistence;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,7 +12,7 @@ import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaAggregateRepository;
-import io.jexxa.infrastructure.drivenadapter.persistence.jdbc.JDBCRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCRepository;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;

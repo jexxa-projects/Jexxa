@@ -200,6 +200,7 @@ public class PortFactory
             catch (ClassFactory.ClassFactoryException e)
             {
                 JexxaLogger.getLogger(getClass()).error("Can not create inbound port {}", portConstructor.getName());
+                JexxaLogger.getLogger(getClass()).error(e.getCause().getMessage());
                 return new Object[0];
             }
         }

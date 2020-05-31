@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapter.messaging;
+package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
 
 import java.util.Map;

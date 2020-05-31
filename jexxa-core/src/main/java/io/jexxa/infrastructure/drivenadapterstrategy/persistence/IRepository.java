@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapter.persistence;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence;
 
 import java.util.List;
 import java.util.Optional;

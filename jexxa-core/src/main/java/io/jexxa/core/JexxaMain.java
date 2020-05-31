@@ -22,8 +22,6 @@ public class JexxaMain
 
     public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
     private static final String JEXXA_CONTEXT_NAME =  "io.jexxa.context.name";
-    private static final String JEXXA_APPLICATION_CORE =  "io.jexxa.application";
-    private static final String JEXXA_DRIVEN_ADAPTER = "io.jexxa.infrastructure.drivenadapter";
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JexxaMain.class);
 
@@ -58,8 +56,6 @@ public class JexxaMain
         this.drivenAdapterFactory = new AdapterFactory();
         this.portFactory = new PortFactory(drivenAdapterFactory);
 
-        addToInfrastructure(JEXXA_DRIVEN_ADAPTER);
-        addToApplicationCore(JEXXA_APPLICATION_CORE);
     }
 
     public JexxaMain addToInfrastructure(String packageName)

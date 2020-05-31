@@ -1,6 +1,8 @@
 package io.jexxa.core.factory;
 
 
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -20,18 +22,13 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestConstants.UNIT_TEST)
 class PortFactoryTest
 {
-
-    private final String applicationCorePackageName = "io.jexxa.application";
-    private final String drivenAdapterPackageName = "io.jexxa.application.infrastructure";
-
-
     @Test
-    protected void adapterAvailable() {
+    protected void createPortWithAvailableDrivenAdapter() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
-                whiteListPackage(drivenAdapterPackageName);
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
-                whiteListPackage(applicationCorePackageName);
+                whiteListPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act
         boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenAdapters.class);
@@ -41,12 +38,12 @@ class PortFactoryTest
     }
 
     @Test
-    protected void adapterUnavailable() {
+    protected void createPortWithMissingAdapter() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
-                whiteListPackage(drivenAdapterPackageName);
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
-                whiteListPackage(applicationCorePackageName);
+                whiteListPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act
         boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenAdapters.class);
@@ -60,9 +57,9 @@ class PortFactoryTest
     protected void newInstanceOfPort() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
-                whiteListPackage(drivenAdapterPackageName);
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
-                whiteListPackage(applicationCorePackageName);
+                whiteListPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act
         var first = objectUnderTest.newInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
@@ -78,9 +75,9 @@ class PortFactoryTest
     protected void getInstanceOfPort() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
-                whiteListPackage(drivenAdapterPackageName);
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
-                whiteListPackage(applicationCorePackageName);
+                whiteListPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act
         var first = objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
@@ -97,9 +94,9 @@ class PortFactoryTest
     protected void getInstanceOfPortAdapter() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
-                whiteListPackage(drivenAdapterPackageName);
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
-                whiteListPackage(applicationCorePackageName);
+                whiteListPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act
         var first = objectUnderTest.getPortAdapterOf(SimpleApplicationServiceAdapter.class, new Properties());

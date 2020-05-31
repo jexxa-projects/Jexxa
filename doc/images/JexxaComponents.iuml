@@ -1,14 +1,14 @@
 @startuml
 skinparam PackagePadding 20
 
-package JexxaCore <<Infrastructure>> {
+package JexxaCore <<Jexxa>> {
 [Dependency Injection] <<Factory>>
 }
 
-package JexxaAdapter <<Infrastructure>> {
+package JexxaInfrastructure <<Jexxa>> {
 [Generic Driving Adapters]  <<Driving Adapter>>
 [Specific Driving Adapters] <<Driving Adapter>>
-[Driven Adapter Strategies] <<Driven Adapter Strategies>>
+[Driven Adapter Strategies] <<Driven Adapter Strategy>>
 }
 
 package ApplicationCore <<Application>> {
@@ -31,7 +31,7 @@ package Infrastructure <<Application>> {
 
 [Dependency Injection] ..> Infrastructure : create
 [Dependency Injection] ..> ApplicationCore : create
-[Dependency Injection] ..> JexxaAdapter : create
+[Dependency Injection] ..> JexxaInfrastructure : create
 
 [Generic Driving Adapters] -[hidden]- [Port Adapters]
 [Generic Driving Adapters] -[hidden]- [Specific Driving Adapters]

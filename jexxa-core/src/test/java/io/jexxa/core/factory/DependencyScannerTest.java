@@ -1,5 +1,7 @@
 package io.jexxa.core.factory;
 
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DRIVING_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,8 +27,7 @@ class DependencyScannerTest
     protected void findAnnotatedClasses() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
-        var packageName = "io.jexxa.application";
-        objectUnderTest.whiteListPackage(packageName);
+        objectUnderTest.whiteListPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act
         var applicationServiceList = objectUnderTest.getClassesWithAnnotation(ApplicationService.class);
@@ -42,12 +43,11 @@ class DependencyScannerTest
     @Test
     protected void findAnnotatedClassesWithinPackage() {
         //Arrange
-        var packageName = "io.jexxa.application";
         var objectUnderTest = new DependencyScanner();
 
         //Act
         var applicationServiceList = objectUnderTest.
-                whiteListPackage(packageName).
+                whiteListPackage(JEXXA_APPLICATION_SERVICE).
                 getClassesWithAnnotation(ApplicationService.class);
 
         //Assert
@@ -78,8 +78,7 @@ class DependencyScannerTest
     protected void getClassesImplementingInterface() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
-        var packageName = "io.jexxa.infrastructure";
-        objectUnderTest.whiteListPackage(packageName);
+        objectUnderTest.whiteListPackage(JEXXA_DRIVING_ADAPTER);
 
 
         //Act
@@ -91,7 +90,7 @@ class DependencyScannerTest
 
 
     @Test
-    protected void getClassesInPackageImplementingInterface() {
+    protected void getClassesImplementingInterfaceInSpecificPacakge() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
         var packageName = "io.jexxa.infrastructure.drivingadapter.rest";

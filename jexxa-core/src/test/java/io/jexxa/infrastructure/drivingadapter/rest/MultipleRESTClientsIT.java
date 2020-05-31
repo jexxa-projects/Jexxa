@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -36,7 +38,8 @@ class MultipleRESTClientsIT
     protected void setUp()
     {
         jexxaMain = new JexxaMain(MultipleRESTClientsIT.class.getSimpleName());
-        jexxaMain
+        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
+                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .bind(RESTfulRPCAdapter.class).to(IncrementApplicationService.class)
                 .start();
 

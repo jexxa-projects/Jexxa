@@ -1,6 +1,8 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
 
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
@@ -23,7 +25,7 @@ import javax.jms.TextMessage;
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivenadapter.persistence.jdbc.JDBCRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCRepository;
 import io.jexxa.utils.JexxaLogger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -86,12 +88,15 @@ class JMSAdapterIT
         var messageListener = new MyListener();
 
         JexxaMain jexxaMain = new JexxaMain("JMSAdapterTest", properties);
-        jexxaMain.bind(JMSAdapter.class).to(messageListener);
-        
+
+        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
+                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+                .bind(JMSAdapter.class).to(messageListener)
+                .start();
+
         MyProducer myProducer = new MyProducer(properties);
 
         //Act
-        jexxaMain.start();
         myProducer.sendToTopic();
 
         //Assert

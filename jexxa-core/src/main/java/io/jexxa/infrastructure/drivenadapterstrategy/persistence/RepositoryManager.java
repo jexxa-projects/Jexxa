@@ -1,18 +1,15 @@
-package io.jexxa.infrastructure.drivenadapter.persistence;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence;
 
 
 import java.util.Properties;
 import java.util.function.Function;
 
-import io.jexxa.infrastructure.drivenadapter.persistence.imdb.IMDBRepository;
-import io.jexxa.infrastructure.drivenadapter.persistence.jdbc.JDBCRepository;
-import io.jexxa.utils.JexxaLogger;
-import org.slf4j.Logger;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCRepository;
 
 
 public class RepositoryManager
 {
-    private static final Logger LOGGER = JexxaLogger.getLogger(RepositoryManager.class);
     private static final RepositoryManager REPOSITORY_MANAGER = new RepositoryManager();
 
 
@@ -32,8 +29,12 @@ public class RepositoryManager
         }
         catch (ReflectiveOperationException e)
         {
-            LOGGER.error("No suitable default IRepositoryConnection available.");
-            throw new IllegalStateException("No suitable default IRepositoryConnection available", e);
+            if ( e.getCause() != null)
+            {
+                throw new IllegalArgumentException(e.getCause().getMessage(), e.getCause());
+            }
+
+            throw new IllegalArgumentException("No suitable default IRepository available", e);
         }
     }
 

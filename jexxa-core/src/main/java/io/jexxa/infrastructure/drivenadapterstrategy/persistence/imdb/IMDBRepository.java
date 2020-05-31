@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapter.persistence.imdb;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-import io.jexxa.infrastructure.drivenadapter.persistence.IRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 
 /**
  */

@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -57,6 +59,9 @@ class MultipleJMSReceiverIT
     {
         //Arrange
         JexxaMain jexxaMain = new JexxaMain("MultiThreading");
+
+        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
+                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER);
 
         for ( int i = 0; i < MAX_THREADS; ++i)
         {

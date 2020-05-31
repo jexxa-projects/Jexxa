@@ -65,8 +65,17 @@ Applications without well-defined boundaries between technology stacks and appli
 Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application that is build on Jexxa provides components that belong either to the __application core__ or to the  __infrastructure__. The __application core__ includes the business logic whereas the __infrastructure__ provides required technology stacks.
 
 
-<<JexxaComponents>> shows the components provided by Jexxa, and their dependencies to an application core. The components are described in more detail in <<JexxaComponentDescription>>.
+<<JexxaComponents>> shows the separation of a Jexxa application into packages, the included components, and the relationship of the components among each other. The components are described in more detail in <<JexxaComponentDescription>>.
 
+[JexxaComponents, align=center]
+
+.This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other.
+[[JexxaComponents]]
+[reftext="Figure {counter:local-figure-number}"]
+image::images/JexxaComponents.svg[JexxaComponents]
+
+
+////
 [plantuml, images/JexxaComponents, svg, align=center]
 [reftext="Figure {counter:local-figure-number}"]
 .Dependencies of components in Jexxa. It shows that the application core has no knowledge of the infrastructure and thus is completely technology agnostic.
@@ -77,7 +86,19 @@ skinparam PackagePadding 20
 !include images/JexxaComponents.iuml
 
 ....
+////
 
+[cols="1,2,2"]
+[reftext="Table {counter:local-table-number}"]
+[[JexxaComponentDescription]]
+|===
+a|Package
+|Description
+
+
+TODO: Package description
+TODO: Component description
+|===
 
 
 [cols="1,2,2"]
@@ -115,6 +136,12 @@ a| Outbound ports are 'just' interfaces that must be defined by your application
 
 Exchanging a concrete technology strategy depending on your production requirements and/or on your software development process. For example, you can easily switch your database technology between in memory, JDBC, or key value without changing your driven adapters.
 
+|Driven Adapter Strategy
+
+|A _driven adapter strategy_ belongs to the infrastructure and is a specific strategy how to map objects from the application core to a specific technology stack. For example if you use a database for persisting your data, the strategy decides the ORM mapping of your objects.
+| Jexxa provides some _driven adapter strategies_ to simplify development. If such a strategy is suitable for your application, the implementation of a driven adapter is just a facade which maps the interface of the outbound port to the methods of the strategy.
+
+Available strategies in Jexxa are based on the standard javax interfaces (e.g. JMS or JDBC) so that you can configure the concrete technology depending on your production requirements and/or on your software development process. For example, you can easily switch your database technology between in memory, or JDBC without changing your driven adapters.
 
 | Port Adapter
 
@@ -202,7 +229,7 @@ a| 1. A port adapter is tightly coupled to a specific port. Therefore, it gets i
 Jexxa provides some simple mechanisms to define and control the scope of ports and adapters.
 
 ==== Registering Ports and Adapters
-First of all you can control the used dependencies by defining the packages for the application core and the infrastructure independently. By default, Jexxa adds the package `io.jexxa.infrastructure.drivenadapter` to find driving adapters.
+Within Jexxa you can control the used dependencies by defining the packages for the application core and the infrastructure independently. 
 
 ==== Threading Scope
 At the moment Jexxa ensure that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to following reason:

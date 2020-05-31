@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 -   Documentation about Jexxa in doc/jexxa.adoc
+-   Properties for JDBC databases (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/main/resources/jexxa-application.properties))
 
 ### Fixed
 -   Checking Jexxa's conventions for ports and adapters with a fail fast approach
