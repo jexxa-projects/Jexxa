@@ -460,9 +460,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_visibility_of_ports_and_adapters">4.2.1. Visibility of Ports and Adapters</a></li>
 <li><a href="#_threading">4.2.2. Threading</a></li>
 <li><a href="#_allocation_scope_of_dependencies">4.2.3. Allocation scope of Dependencies</a></li>
-<li><a href="#_transactions">4.2.4. Transactions</a></li>
 </ul>
 </li>
+<li><a href="#_transactions">4.3. Transactions</a></li>
 </ul>
 </li>
 </ul>
@@ -723,7 +723,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapter Strategies</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Driven adapter strategies provide how to map objects from the application core to a specific technology stack. For example if you use a database for persisting your data, the strategy decides the ORM mapping of your objects.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Jexxa provides some <em>driven adapter strategies</em> to simplify development of driven adapters. If such a strategy is suitable for your application, the implementation of a driven adapter is just a facade which maps the interface of the outbound port to the methods of the strategy.</p>
-<p class="tableblock">Available strategies in Jexxa are based on the standard javax interfaces (e.g. JMS or JDBC) and can be configured via <code>Properties</code> and allows you to adjusted them to your development process. For example, you can easily switch your database technology between in memory, JDBC, or key value without changing your driven adapters.</p></td>
+<p class="tableblock">Available strategies in Jexxa are based on the standard javax interfaces (e.g. JMS or JDBC) and can be configured via <code>Properties</code>. This allows you to adjust the configuration to your development process. For example, you can easily switch your database technology between in memory or JDBC, or the used URL.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1024,10 +1024,10 @@ In case you need a strict control how objects are exposed for example to differe
 <td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>An inbound port created by Jexxa is managed as singleton and reused if it is connected to different driving adapters.</p>
+<p>Inbound ports created by Jexxa are managed as singleton and reused if they are connected to different driving adapters.</p>
 </li>
 <li>
-<p>An inbound port created by the application can be bind to adapters. In this case the application has full control of the number of instances.</p>
+<p>Inbound ports created by the application can be bind to adapters. In this case the application has full control of the number of instances.</p>
 </li>
 </ol>
 </div></div></td>
@@ -1074,8 +1074,9 @@ In case you need a strict control how objects are exposed for example to differe
 </tbody>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_transactions"><a class="anchor" href="#_transactions"></a>4.2.4. Transactions</h4>
+</div>
+<div class="sect2">
+<h3 id="_transactions"><a class="anchor" href="#_transactions"></a>4.3. Transactions</h3>
 <div class="paragraph">
 <p>Jexxa does not support any transaction when using multiple driven adapters in a single use case. Traditional enterprise frameworks for example spawn (often by default) a transaction between the used technology stacks, such as a database and a messaging system, to ensure that data is only written into the database when publishing it to a messaging bus is successful. This is a great feature if you really need it. Unfortunately, it is also often used to compensate programming errors or even a bad software design.</p>
 </div>
@@ -1086,10 +1087,9 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 </div>
 </div>
-</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-05-31 20:25:29 +0200
+Last updated 2020-06-01 08:37:10 +0200
 </div>
 </div>
 </body>

@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[2.0.0-UNRELEASED] - yyyy-mm-dd
 ### Added
--   Added global exception handler for getting better results of startup errors 
+-   Added global exception handler in JexxaMain for getting better results of startup errors 
 -   Improved the documentation of Jexxa (see [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa.html)) 
 
 ### Changed
