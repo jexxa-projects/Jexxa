@@ -45,7 +45,7 @@ class MultipleJMSReceiverIT
         }
 
         @Override
-        @JMSListener(destination = "ApplicationServiceListener", messagingType = JMSListener.MessagingType.TOPIC)
+        @JMSConfiguration(destination = "ApplicationServiceListener", messagingType = JMSConfiguration.MessagingType.TOPIC)
         public void onMessage(Message message)
         {
             incrementApplicationService.increment();

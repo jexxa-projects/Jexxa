@@ -148,7 +148,7 @@ class JMSAdapterIT
         private final List<Message> messageList = new ArrayList<>();
 
         @Override
-        @JMSListener(destination = "MyListener", messagingType = JMSListener.MessagingType.TOPIC)
+        @JMSConfiguration(destination = "MyListener", messagingType = JMSConfiguration.MessagingType.TOPIC)
         public void onMessage(Message message)
         {
             try

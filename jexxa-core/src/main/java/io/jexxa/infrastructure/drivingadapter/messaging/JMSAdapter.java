@@ -88,26 +88,26 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         {
             var messageListener = (MessageListener) (object);
 
-            JMSListener jmsListener = getJMSListener(object);
+            JMSConfiguration jmsConfiguration = getConfiguration(object);
 
             Destination destination;
-            if (jmsListener.messagingType() == JMSListener.MessagingType.TOPIC)
+            if (jmsConfiguration.messagingType() == JMSConfiguration.MessagingType.TOPIC)
             {
-                destination = session.createTopic(jmsListener.destination());
+                destination = session.createTopic(jmsConfiguration.destination());
             }
             else
             {
-               destination = session.createQueue(jmsListener.destination());
+               destination = session.createQueue(jmsConfiguration.destination());
             }
 
             MessageConsumer consumer;
-            if (jmsListener.selector().isEmpty())
+            if (jmsConfiguration.selector().isEmpty())
             {
                 consumer = session.createConsumer(destination);
             }
             else
             {
-                consumer = session.createConsumer(destination, jmsListener.selector());
+                consumer = session.createConsumer(destination, jmsConfiguration.selector());
             }
             consumer.setMessageListener(new SynchronizedMessageListener(messageListener));
             consumerList.add(consumer);
@@ -149,12 +149,13 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
     }
 
-    private JMSListener getJMSListener(Object object)
+    private JMSConfiguration getConfiguration(Object object)
     {
         return Arrays.stream(object.getClass().getMethods())
-                .filter(method -> method.isAnnotationPresent(JMSListener.class))
+                .filter(method -> method.isAnnotationPresent(JMSConfiguration.class))
                 .findFirst()
-                .orElseThrow().getDeclaredAnnotation(JMSListener.class);
+                .orElseThrow(() -> new IllegalArgumentException("Given object does not provide a " + JMSConfiguration.class.getSimpleName()))
+                .getDeclaredAnnotation(JMSConfiguration.class);
     }
 
     private void validateProperties(Properties properties)

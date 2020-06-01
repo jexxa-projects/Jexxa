@@ -20,7 +20,7 @@ import io.jexxa.TestConstants;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
-import io.jexxa.infrastructure.drivingadapter.messaging.JMSListener;
+import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.utils.JexxaLogger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -109,7 +109,7 @@ class JMSSenderIT
         private final List<Message> messageList = new ArrayList<>();
 
         @Override
-        @JMSListener(destination = "JMSSenderIT", messagingType = JMSListener.MessagingType.TOPIC)
+        @JMSConfiguration(destination = "JMSSenderIT", messagingType = JMSConfiguration.MessagingType.TOPIC)
         public void onMessage(Message message)
         {
             try
@@ -134,7 +134,7 @@ class JMSSenderIT
         private final List<Message> messageList = new ArrayList<>();
 
         @Override
-        @JMSListener(destination = "JMSSenderIT", messagingType = JMSListener.MessagingType.QUEUE)
+        @JMSConfiguration(destination = "JMSSenderIT", messagingType = JMSConfiguration.MessagingType.QUEUE)
         public void onMessage(Message message)
         {
             try
