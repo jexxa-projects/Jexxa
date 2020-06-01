@@ -16,9 +16,9 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
 @Tag(TestConstants.UNIT_TEST)
-class RESTfulRPCModelTest
+class RESTfulRPCConventionTest
 {
-    private RESTfulRPCModel objectUnderTest;
+    private RESTfulRPCConvention objectUnderTest;
 
 
     @BeforeEach
@@ -26,7 +26,7 @@ class RESTfulRPCModelTest
     {
         SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
         simpleApplicationService.setSimpleValue(42);
-        objectUnderTest = new RESTfulRPCModel(simpleApplicationService);
+        objectUnderTest = new RESTfulRPCConvention(simpleApplicationService);
     }
 
     @Test
@@ -40,7 +40,7 @@ class RESTfulRPCModelTest
         assertFalse(result.isEmpty());
 
         //2. Check that all commands are marked as GET
-        result.forEach(element -> assertEquals(RESTfulRPCModel.RESTfulRPCMethod.HTTPCommand.GET,
+        result.forEach(element -> assertEquals(RESTfulRPCConvention.RESTfulRPCMethod.HTTPCommand.GET,
                 element.getHTTPCommand()));
 
         //3. Check URIs
@@ -62,7 +62,7 @@ class RESTfulRPCModelTest
         assertFalse(result.isEmpty());
 
         //2.Check that all commands are marked as GET
-        result.forEach(element -> assertEquals(RESTfulRPCModel.RESTfulRPCMethod.HTTPCommand.POST,
+        result.forEach(element -> assertEquals(RESTfulRPCConvention.RESTfulRPCMethod.HTTPCommand.POST,
                 element.getHTTPCommand()));
 
         //3.Check URIs
@@ -80,7 +80,7 @@ class RESTfulRPCModelTest
     {
         //Act / Assert
         assertThrows(IllegalArgumentException.class, () ->
-                new RESTfulRPCModel(new UnsupportedApplicationService())
+                new RESTfulRPCConvention(new UnsupportedApplicationService())
         );
     }
 

@@ -9,10 +9,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.javalin.Javalin;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.utils.JexxaLogger;
-import io.javalin.Javalin;
-
 import org.apache.commons.lang.Validate;
 
 
@@ -109,7 +108,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void registerGETMethods(Object object)
     {
-        var methodList = new RESTfulRPCModel(object).getGETCommands();
+        var methodList = new RESTfulRPCConvention(object).getGETCommands();
 
         methodList.forEach(element -> javalin.get(element.getResourcePath(),
                 ctx -> {
@@ -125,7 +124,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void registerPOSTMethods(Object object)
     {
-        var methodList = new RESTfulRPCModel(object).getPOSTCommands();
+        var methodList = new RESTfulRPCConvention(object).getPOSTCommands();
 
         methodList.forEach(element -> javalin.post(element.getResourcePath(),
                 ctx -> {
