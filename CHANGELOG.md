@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -   Naming convention for specific driving adapter: 
     -   Class name of the adapter itself ends with `Adapter` 
     -   Class name of the configuration ends with `Configuration`  
+
+-   Updated dependencies 
     
 ### Fixed
 
