@@ -19,7 +19,7 @@ import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 
-public class JDBCRepository<T, K> implements IRepository<T, K>, AutoCloseable
+public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoCloseable
 {
     public static final String JDBC_URL = "io.jexxa.jdbc.url";
     public static final String JDBC_USERNAME = "io.jexxa.jdbc.username";
@@ -30,14 +30,14 @@ public class JDBCRepository<T, K> implements IRepository<T, K>, AutoCloseable
 
 
 
-    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCRepository.class);
+    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCKeyValueRepository.class);
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
     private Connection connection;
 
 
-    public JDBCRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
+    public JDBCKeyValueRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
     {
         this.keyFunction = keyFunction;
         this.aggregateClazz = aggregateClazz;

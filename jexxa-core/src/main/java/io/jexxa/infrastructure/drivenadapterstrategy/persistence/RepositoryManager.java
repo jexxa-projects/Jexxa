@@ -5,7 +5,7 @@ import java.util.Properties;
 import java.util.function.Function;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 
 
 public class RepositoryManager
@@ -45,9 +45,9 @@ public class RepositoryManager
 
     private Class<?> getDefaultConnection(Properties properties)
     {
-        if (properties.containsKey(JDBCRepository.JDBC_DRIVER))
+        if (properties.containsKey(JDBCKeyValueRepository.JDBC_DRIVER))
         {
-            return JDBCRepository.class;
+            return JDBCKeyValueRepository.class;
         }
         return IMDBRepository.class;
     }
