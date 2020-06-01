@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.0.0-UNRELEASED] - yyyy-mm-dd
+## \[2.0.0] - 2020-06-01
 ### Added
 -   Added global exception handler in JexxaMain for getting better results of startup errors 
 -   Improved the documentation of Jexxa (see [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa.html)) 
