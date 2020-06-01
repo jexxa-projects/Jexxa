@@ -34,8 +34,8 @@ General information:
 ```xml
 <dependency>
   <groupId>io.jexxa</groupId>
-  <artifactId>Jexxa</artifactId>
-  <version>1.4.2</version>
+  <artifactId>jexxa-core</artifactId>
+  <version>2.0.0</version>
 </dependency> 
 ```
 
