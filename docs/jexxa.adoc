@@ -233,7 +233,7 @@ A __specific__ driving adapter is used if a convention cannot be applied. Instea
 |Driven adapter strategies provide how to map objects from the application core to a specific technology stack. For example if you use a database for persisting your data, the strategy decides the ORM mapping of your objects.
 | Jexxa provides some _driven adapter strategies_ to simplify development of driven adapters. If such a strategy is suitable for your application, the implementation of a driven adapter is just a facade which maps the interface of the outbound port to the methods of the strategy.
 
-Available strategies in Jexxa are based on the standard javax interfaces (e.g. JMS or JDBC) and can be configured via `Properties` and allows you to adjusted them to your development process. For example, you can easily switch your database technology between in memory, JDBC, or key value without changing your driven adapters.
+Available strategies in Jexxa are based on the standard javax interfaces (e.g. JMS or JDBC) and can be configured via `Properties`. This allows you to adjust the configuration to your development process. For example, you can easily switch your database technology between in memory or JDBC, or the used URL.
 
 |===
 
@@ -376,9 +376,9 @@ NOTE: In case you need a strict control how objects are exposed for example to d
 
 a|Inbound Port
 a|
-1. An inbound port created by Jexxa is managed as singleton and reused if it is connected to different driving adapters.
+1. Inbound ports created by Jexxa are managed as singleton and reused if they are connected to different driving adapters.
 
-2. An inbound port created by the application can be bind to adapters. In this case the application has full control of the number of instances.
+2. Inbound ports created by the application can be bind to adapters. In this case the application has full control of the number of instances.
 
 
 a|
