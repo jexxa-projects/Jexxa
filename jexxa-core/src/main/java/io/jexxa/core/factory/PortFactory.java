@@ -130,9 +130,15 @@ public class PortFactory
     {
         var portInstance = getInstanceOf(getPort(portAdapter), properties);
 
-        return ClassFactory.newInstanceOf(portAdapter, new Object[]{portInstance})
+        try {
+            return ClassFactory.newInstanceOf(portAdapter, new Object[]{portInstance})
                 .orElseThrow(() -> new MissingAdapterException(portInstance.getClass(), adapterFactory));
-    }
+        }
+            catch (ReflectiveOperationException e)
+        {
+            throw new InvalidPortConfigurationException(portAdapter, e.getCause());
+        }
+}
 
     /**
      * Creates a new instance of given inbound port each time this method is called
@@ -152,9 +158,15 @@ public class PortFactory
                 .orElseThrow(() -> new MissingAdapterException(inboundPort, adapterFactory));
 
         var dependencies = createDependencies(portConstructor, adapterProperties);
-
-        return ClassFactory.newInstanceOf(inboundPort, dependencies)
-                .orElseThrow();
+        try
+        {
+            return ClassFactory.newInstanceOf(inboundPort, dependencies)
+                    .orElseThrow();
+        }
+        catch (ReflectiveOperationException e)
+        {
+            throw new InvalidPortConfigurationException(inboundPort, e.getCause());
+        }
     }
 
 
@@ -186,22 +198,13 @@ public class PortFactory
 
         for ( int i = 0; i < portConstructor.getParameterTypes().length; ++i )
         {
-            try
-            {
-                //Depending on creation policy we create a new instance or try to reuse existing instance
-                if ( drivenAdapterPolicy == CreationPolicy.NEW_INSTANCE) {
-                    objectList.add( adapterFactory.newInstanceOf(portConstructor.getParameterTypes()[i], adapterProperties) );
-                }
-                else
-                {
-                    objectList.add( adapterFactory.getInstanceOf(portConstructor.getParameterTypes()[i], adapterProperties) );
-                }
+            //Depending on creation policy we create a new instance or try to reuse existing instance
+            if ( drivenAdapterPolicy == CreationPolicy.NEW_INSTANCE) {
+                objectList.add( adapterFactory.newInstanceOf(portConstructor.getParameterTypes()[i], adapterProperties) );
             }
-            catch (ClassFactory.ClassFactoryException e)
+            else
             {
-                JexxaLogger.getLogger(getClass()).error("Can not create inbound port {}", portConstructor.getName());
-                JexxaLogger.getLogger(getClass()).error(e.getCause().getMessage());
-                return new Object[0];
+                objectList.add( adapterFactory.getInstanceOf(portConstructor.getParameterTypes()[i], adapterProperties) );
             }
         }
 
@@ -225,5 +228,27 @@ public class PortFactory
                 .orElseThrow(() -> new RuntimeException("PortWrapper " + portAdapter.getSimpleName() + " requires unknown port"));
     }
 
+    protected static class InvalidPortConfigurationException extends RuntimeException
+    {
+        private final String errorMessage;
 
+        public <T> InvalidPortConfigurationException(Class<T> port, Throwable cause)
+        {
+            super(cause);
+            if (cause != null )
+            {
+                errorMessage = "Cannot create port " + port.getName() + "\n" + "Error message from adapter : " + cause.getMessage();
+            }
+            else
+            {
+                errorMessage = "Cannot create adapter " + port.getName() + "\n";
+            }
+        }
+
+        @Override
+        public String getMessage()
+        {
+            return errorMessage;
+        }
+    }
 }

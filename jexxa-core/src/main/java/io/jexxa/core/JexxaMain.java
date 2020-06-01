@@ -55,7 +55,7 @@ public class JexxaMain
         this.drivingAdapterFactory = new AdapterFactory();
         this.drivenAdapterFactory = new AdapterFactory();
         this.portFactory = new PortFactory(drivenAdapterFactory);
-
+        setExceptionHandler();
     }
 
     public JexxaMain addToInfrastructure(String packageName)
@@ -209,6 +209,15 @@ public class JexxaMain
 
     }
 
+    private void setExceptionHandler()
+    {
+        if (Thread.getDefaultUncaughtExceptionHandler() != null )
+        {
+            LOGGER.warn("Uncaught Exception Handler already set => Don't register Jexxa's uncaught exception handler");
+            return;
+        }
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+    }
 
     static class CompositeDrivingAdapter implements IDrivingAdapter
     {
@@ -243,6 +252,13 @@ public class JexxaMain
         {
             return drivingAdapters.size();
         }
+    }
 
+
+    static class ExceptionHandler implements Thread.UncaughtExceptionHandler {
+
+        public void uncaughtException(Thread t, Throwable e) {
+            LOGGER.error("\nCould not startup Jexxa! {}", e.getMessage());
+        }
     }
 }

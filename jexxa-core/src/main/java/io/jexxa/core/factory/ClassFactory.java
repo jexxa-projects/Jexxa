@@ -11,37 +11,19 @@ import org.apache.commons.lang.Validate;
 
 public class ClassFactory
 {
-    /***
-     * Throw a ClassFactoryException in case an exception related to reflection occurs
-     */
-    static class ClassFactoryException extends RuntimeException
-    {
-        public ClassFactoryException(Class<?> clazz, Throwable throwable)
-        {
-            super("Could not create class" + clazz.getName(), throwable);
-        }
-    }
-
-    protected static <T> Optional<T> newInstanceOf(Class<T> clazz)
+    protected static <T> Optional<T> newInstanceOf(Class<T> clazz) throws ReflectiveOperationException
     {
         Validate.notNull(clazz);
 
         var defaultConstructor = getConstructor(clazz);
         if (defaultConstructor.isPresent()) {
-            try
-            {
-                return Optional.of(clazz.cast(defaultConstructor.get().newInstance()));
-            }
-            catch (ReflectiveOperationException e)
-            {
-                throw new ClassFactoryException(clazz, e);
-            }
+            return Optional.of(clazz.cast(defaultConstructor.get().newInstance()));
         }
 
         return Optional.empty();
     }
 
-    protected static <T> Optional<T> newInstanceOf(Class<T> clazz, Object[] parameter)
+    protected static <T> Optional<T> newInstanceOf(Class<T> clazz, Object[] parameter) throws ReflectiveOperationException
     {
         Validate.notNull(clazz);
         Validate.notNull(parameter);
@@ -49,43 +31,29 @@ public class ClassFactory
         var parameterConstructor = getConstructor(clazz, parameter);
 
         if (parameterConstructor.isPresent()) {
-            try
-            {
-                return Optional.of(clazz.cast(parameterConstructor.get().newInstance(parameter)));
-            }
-            catch ( ReflectiveOperationException e)
-            {
-                throw new ClassFactoryException(clazz, e);
-            }
+            return Optional.of(clazz.cast(parameterConstructor.get().newInstance(parameter)));
         }
 
         return Optional.empty();
     }
 
 
-    protected static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory)
+    protected static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory) throws ReflectiveOperationException
     {
         Validate.notNull(factory);
 
         var method = getFactoryMethod(factory, interfaceType);
         if (method.isPresent()) {
-            try
-            {
-                return Optional.ofNullable(
-                        interfaceType.cast(method.get().invoke(null, (Object[])null))
-                );
-            }
-            catch (ReflectiveOperationException e)
-            {
-                throw new ClassFactoryException(interfaceType, e);
-            }
+            return Optional.ofNullable(
+                    interfaceType.cast(method.get().invoke(null, (Object[])null))
+            );
         }
 
         return Optional.empty();
     }
 
 
-    protected static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory, Object[] parameters)
+    protected static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory, Object[] parameters) throws ReflectiveOperationException
     {
         Validate.notNull(factory);
         Validate.notNull(interfaceType);
@@ -97,15 +65,8 @@ public class ClassFactory
 
         var method = getFactoryMethod(factory, interfaceType, parameterTypes);
         if (method.isPresent()) {
-            try
-            {
-                return Optional.ofNullable(
-                        interfaceType.cast(method.get().invoke(null, parameters))
-                );
-            }  catch (ReflectiveOperationException e)
-            {
-                throw new ClassFactoryException(interfaceType, e);
-            }
+            return Optional.ofNullable(
+                    interfaceType.cast(method.get().invoke(null, parameters)));
         }
 
         return Optional.empty();

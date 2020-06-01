@@ -36,16 +36,23 @@ public class AdapterFactory
         Class<?> factory = getImplementationOf(interfaceType).
                 orElseThrow(() -> new IllegalArgumentException("No implementation found for interface " + interfaceType.getName()));
 
-        //Apply 1. convention and try to use default constructor
-        var instance = ClassFactory.newInstanceOf(factory);
-
-        //Apply 2. convention and try to use a factory method
-        if (instance.isEmpty())
+        try
         {
-            instance = ClassFactory.newInstanceOf(interfaceType, factory);
+            //Apply 1. convention and try to use default constructor
+            var instance = ClassFactory.newInstanceOf(factory);
+
+            //Apply 2. convention and try to use a factory method
+            if (instance.isEmpty())
+            {
+                instance = ClassFactory.newInstanceOf(interfaceType, factory);
+            }
+            return interfaceType.cast(instance.orElseThrow());
+        }
+        catch (ReflectiveOperationException e)
+        {
+            throw new InvalidAdapterConfigurationException(interfaceType, e.getCause());
         }
 
-        return interfaceType.cast(instance.orElseThrow());
     }
 
     public <T> T newInstanceOf(Class<T> interfaceType, Properties properties) {
@@ -54,22 +61,30 @@ public class AdapterFactory
         Class<?> implementation = getImplementationOf(interfaceType).
                 orElseThrow(() -> new IllegalArgumentException("No implementation found for interface " + interfaceType.getName()));
 
-        //Apply 1. convention and try to use a constructor accepting properties
-        var instance = ClassFactory.newInstanceOf(implementation, new Object[]{properties});
-
-        //Apply 2. convention and try to use a factory method accepting properties
-        if (instance.isEmpty())
+        try
         {
-            instance = ClassFactory.newInstanceOf(interfaceType, implementation, new Object[]{properties});
-        }
+            //Apply 1. convention and try to use a constructor accepting properties
+            var instance = ClassFactory.newInstanceOf(implementation, new Object[]{properties});
 
-        //Try to create without properties 
-        if (instance.isEmpty())
-        {
-            return newInstanceOf(interfaceType);
+            //Apply 2. convention and try to use a factory method accepting properties
+            if (instance.isEmpty())
+            {
+                instance = ClassFactory.newInstanceOf(interfaceType, implementation, new Object[]{properties});
+            }
+
+            //Try to create without properties
+            if (instance.isEmpty())
+            {
+                return newInstanceOf(interfaceType);
+            }
+
+            return interfaceType.cast(instance.orElseThrow());
+
         }
-        
-        return interfaceType.cast(instance.orElseThrow());
+        catch (ReflectiveOperationException e)
+        {
+            throw new InvalidAdapterConfigurationException(interfaceType, e.getCause());
+        }
     }
 
 
@@ -138,5 +153,29 @@ public class AdapterFactory
         }
 
         return Optional.of(implementationList.get(0));
+    }
+
+    protected static class InvalidAdapterConfigurationException extends RuntimeException
+    {
+        private final String errorMessage;
+
+        public <T> InvalidAdapterConfigurationException(Class<T> adapter, Throwable cause)
+        {
+            super(cause);
+            if (cause != null )
+            {
+                errorMessage = "Cannot create adapter " + adapter.getName() + "\n" + "Error message from adapter : " + cause.getMessage();
+            }
+            else
+            {
+                errorMessage = "Cannot create adapter " + adapter.getName() + "\n";
+            }
+        }
+
+        @Override
+        public String getMessage()
+        {
+            return errorMessage;
+        }
     }
 }

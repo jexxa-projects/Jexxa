@@ -6,11 +6,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[2.0.0-UNRELEASED] - yyyy-mm-dd
 ### Added
+-   Added global exception handler for getting better results of startup errors 
+-   Improved the documentation of Jexxa (see [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa.html)) 
 
 ### Changed
 -   Split Jexxa into Jexxa-Core and Jexxa-Adapter-API projects in order to avoid direct dependencies to new driving adapter 
 -   Moved CompositeDrivingAdapter as inner class of JexxaMain because it is only used there   
 
+-   Naming convention for generic driving adapter: 
+    -   Class name of the adapter itself ends with `Adapter` 
+    -   Class name of the convention ends with `Convention`  
+
+-   Naming convention for specific driving adapter: 
+    -   Class name of the adapter itself ends with `Adapter` 
+    -   Class name of the configuration ends with `Configuration`  
+    
 ### Fixed
 
 ## \[1.4.2] - 2020-05-22

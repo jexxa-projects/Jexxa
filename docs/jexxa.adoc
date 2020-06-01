@@ -402,7 +402,7 @@ a| Is always created new and not reused.
 a| Allows fine grained control of how a driving adapter should expose the included port. For example you can define that specific ports are only available via a management IP address. 
 |===
 
-==== Transactions
+=== Transactions
 Jexxa does not support any transaction when using multiple driven adapters in a single use case. Traditional enterprise frameworks for example spawn (often by default) a transaction between the used technology stacks, such as a database and a messaging system, to ensure that data is only written into the database when publishing it to a messaging bus is successful. This is a great feature if you really need it. Unfortunately, it is also often used to compensate programming errors or even a bad software design.
 
 Instead, we recommend building your ports of the application core so that they provide an idempotent semantic.

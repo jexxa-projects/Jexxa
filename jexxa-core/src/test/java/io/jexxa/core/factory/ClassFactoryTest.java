@@ -2,7 +2,9 @@ package io.jexxa.core.factory;
 
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.utils.ThrowingConsumer.exceptionCollector;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 
@@ -18,19 +20,21 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class ClassFactoryTest
 {
     @Test
-    protected void createApplicationService()
+    protected void createApplicationService() 
     {
         //Arrange
         var annotationScanner = new DependencyScanner();
         annotationScanner.whiteListPackage(JEXXA_APPLICATION_SERVICE);
+        var collectedException = new ArrayList<Throwable>();
 
         var factoryResults = new ArrayList<>();
 
         //Act
         var result = annotationScanner.getClassesWithAnnotation(ApplicationService.class);
-        result.forEach( element -> factoryResults.add( ClassFactory.newInstanceOf(element)) );
+        result.forEach( exceptionCollector(element -> factoryResults.add( ClassFactory.newInstanceOf(element)), collectedException));
 
         //Assert
+        assertTrue(collectedException.isEmpty());
         assertFalse(factoryResults.isEmpty());
     }
 }
