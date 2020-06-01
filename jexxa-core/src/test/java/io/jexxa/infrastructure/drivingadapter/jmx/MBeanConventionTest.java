@@ -21,7 +21,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
 @Tag(TestConstants.UNIT_TEST)
-class MBeanModelTest
+class MBeanConventionTest
 {
     @SuppressWarnings({"SameParameterValue", "FieldCanBeLocal", "unused"})
     static class JexxaCompoundValueObject
@@ -44,12 +44,13 @@ class MBeanModelTest
         //Arrange
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
-        var objectUnderTest = new MBeanModel(applicationService, properties);
+        var objectUnderTest = new MBeanConvention(applicationService, properties);
 
         //Act
-        assertEquals("MBeanModelTest:type=ApplicationService,name=SimpleApplicationService", objectUnderTest.getDomainPath());
+        assertEquals(properties.get(MBeanConvention.JEXXA_CONTEXT_NAME) + ":type=ApplicationService,name=SimpleApplicationService",
+                objectUnderTest.getDomainPath());
     }
 
     @Test
@@ -59,9 +60,9 @@ class MBeanModelTest
         String integerTemplate = "{\"int\":\"<int>\"}";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
-        var objectUnderTest = new MBeanModel(applicationService, properties);
+        var objectUnderTest = new MBeanConvention(applicationService, properties);
 
         //Act
         var result = objectUnderTest.toJsonTemplate(int.class);
@@ -77,9 +78,9 @@ class MBeanModelTest
         String stringTemplate = "{\"String\":\"<String>\"}";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
-        var objectUnderTest = new MBeanModel(applicationService, properties);
+        var objectUnderTest = new MBeanConvention(applicationService, properties);
 
         //Act
         var result = objectUnderTest.toJsonTemplate(String.class);
@@ -95,9 +96,9 @@ class MBeanModelTest
         String jexxaValueObjectTemplate = "{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"}";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
-        var objectUnderTest = new MBeanModel(applicationService, properties);
+        var objectUnderTest = new MBeanConvention(applicationService, properties);
 
         //Act
         var result = objectUnderTest.toJsonTemplate(JexxaValueObject.class);
@@ -113,9 +114,9 @@ class MBeanModelTest
         String jexxaValueObjectTemplate = "{\"firstValueObject\":{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"},\"secondValueObject\":{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"}}";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
-        var objectUnderTest = new MBeanModel(applicationService, properties);
+        var objectUnderTest = new MBeanConvention(applicationService, properties);
 
         //Act
         var result = objectUnderTest.toJsonTemplate(JexxaCompoundValueObject.class);
@@ -130,13 +131,13 @@ class MBeanModelTest
         //Arrange
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
         var action = "setSimpleValue";
         var newValue = 5;
         var gson = new Gson();
 
 
-        var objectUnderTest = new MBeanModel(applicationService, properties);
+        var objectUnderTest = new MBeanConvention(applicationService, properties);
 
         //Act
         objectUnderTest.invoke(action, new String[]{gson.toJson(newValue)}, new String[0]);
@@ -152,12 +153,12 @@ class MBeanModelTest
         //Arrange
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
         var action = "setSimpleValueObject";
         var newValue = new JexxaValueObject(5);
         var gson = new Gson();
 
-        var objectUnderTest = new MBeanModel(applicationService, properties);
+        var objectUnderTest = new MBeanConvention(applicationService, properties);
 
         //Act
         objectUnderTest.invoke(action, new String[]{gson.toJson(newValue)}, new String[0]);
@@ -173,9 +174,9 @@ class MBeanModelTest
         //Arrange
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanModel.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
-        var objectUnderTest = new MBeanModel(applicationService, properties);
+        var objectUnderTest = new MBeanConvention(applicationService, properties);
 
         //Assert that we get no Attributes because we only provide access to public methods
         assertNull(objectUnderTest.getAttribute(""));

@@ -26,7 +26,7 @@ import com.google.gson.JsonObject;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.utils.JexxaLogger;
 
-public class MBeanModel implements DynamicMBean
+public class MBeanConvention implements DynamicMBean
 {
     public static final String JEXXA_CONTEXT_NAME = "io.jexxa.context.name";
     private final Gson gson = new Gson();
@@ -34,7 +34,7 @@ public class MBeanModel implements DynamicMBean
     private final Object object;
     private String contextName;
     
-    MBeanModel(Object object, Properties properties)
+    MBeanConvention(Object object, Properties properties)
     {
         this.object = object;
 

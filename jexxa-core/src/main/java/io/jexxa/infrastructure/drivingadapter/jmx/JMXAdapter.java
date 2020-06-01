@@ -16,7 +16,7 @@ import org.apache.commons.lang.Validate;
 
 public class JMXAdapter implements IDrivingAdapter
 {
-    private final List<MBeanModel> registeredMBeans = new ArrayList<>();
+    private final List<MBeanConvention> registeredMBeans = new ArrayList<>();
     private final Properties properties;
 
 
@@ -35,10 +35,10 @@ public class JMXAdapter implements IDrivingAdapter
         Validate.notNull(object);
 
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-        MBeanModel mBeanModel = new MBeanModel(object, properties);
+        MBeanConvention mBeanConvention = new MBeanConvention(object, properties);
 
         //Check if service is already registered 
-        if (!mbs.queryMBeans(mBeanModel.getObjectName(), null).isEmpty())
+        if (!mbs.queryMBeans(mBeanConvention.getObjectName(), null).isEmpty())
         {
             throw new IllegalArgumentException(this.getClass().getSimpleName() + "> Object already registered : " + object.getClass().getSimpleName());
         }
@@ -46,14 +46,14 @@ public class JMXAdapter implements IDrivingAdapter
         //register Service
         try
         {
-            mbs.registerMBean(mBeanModel, mBeanModel.getObjectName());
+            mbs.registerMBean(mBeanConvention, mBeanConvention.getObjectName());
         }
         catch (InstanceAlreadyExistsException | MBeanRegistrationException | NotCompliantMBeanException e)
         {
             throw new IllegalArgumentException(e);
         }
 
-        registeredMBeans.add(mBeanModel);
+        registeredMBeans.add(mBeanConvention);
     }
 
     @Override
