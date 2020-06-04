@@ -10,11 +10,11 @@ public class AdapterConvention
 {
     public static <T> void validate(Class<T> clazz)
     {
-        if (isDefaultConstructorAvailable(clazz)
+        if (
+                isDefaultConstructorAvailable(clazz)
                 || isPropertiesConstructorAvailable(clazz)
                 || isDefaultFactoryMethodAvailable(clazz)
                 || isPropertiesFactoryMethodAvailable(clazz)
-
         )
         {
             return;
