@@ -9,17 +9,13 @@ import io.jexxa.application.domain.valueobject.JexxaValueObject;
 class UnsupportedApplicationService
 {
     private JexxaValueObject first;
-    @SuppressWarnings("FieldCanBeLocal")
-    private JexxaValueObject second;
 
     public void setSimpleValueObject(JexxaValueObject simpleValueObject)
     {
         this.first = simpleValueObject;
-        this.second = new JexxaValueObject(42);
     }
     public void setSimpleValueObject(JexxaValueObject first, JexxaValueObject second)
     {
-        this.first = first;
-        this.second = second;
+        this.first = new JexxaValueObject(first.getValue() * second.getValue());
     }
 }
