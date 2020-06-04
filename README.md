@@ -42,7 +42,7 @@ General information:
 #### Gradle
 
 ```groovy
-compile "io.Jexxa:jexxa:1.4.2"
+compile "io.Jexxa:jexxa-core:2.0.0"
 ``` 
 
 ### Start programming 
