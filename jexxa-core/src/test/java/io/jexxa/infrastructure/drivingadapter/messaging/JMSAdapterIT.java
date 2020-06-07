@@ -168,14 +168,17 @@ class JMSAdapterIT
     }
 
     static class MyProducer {
-        private final Connection connection;
+        private final Properties properties;
         MyProducer(Properties properties)
         {
-            JMSAdapter jmsAdapter = new JMSAdapter(properties);
-            this.connection = jmsAdapter.createConnection();
+            this.properties = properties;
         }
+        
         protected void sendToTopic() {
             try {
+                JMSAdapter jmsAdapter = new JMSAdapter(properties);
+                Connection connection = jmsAdapter.createConnection();
+
                 connection.start();
 
                 Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);

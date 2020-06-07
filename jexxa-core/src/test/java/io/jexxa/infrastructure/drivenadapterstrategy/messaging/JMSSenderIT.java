@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTimeout;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -34,17 +33,12 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class JMSSenderIT
 {
     private final JexxaValueObject message = new JexxaValueObject(42);
-    private final String testName = "JMSSenderIT";
-    private Properties properties;
+    JexxaMain jexxaMain;
 
     @BeforeEach
     protected void initTests()
     {
-        properties = new Properties();
-        properties.put(JMSSender.JNDI_FACTORY_KEY, JMSSender.DEFAULT_JNDI_FACTORY);
-        properties.put(JMSSender.JNDI_PROVIDER_URL_KEY, JMSSender.DEFAULT_JNDI_PROVIDER_URL);
-        properties.put(JMSSender.JNDI_USER_KEY, JMSSender.DEFAULT_JNDI_USER);
-        properties.put(JMSSender.JNDI_PASSWORD_KEY, JMSSender.DEFAULT_JNDI_PASSWORD);
+        jexxaMain = new JexxaMain(JMSSenderIT.class.getSimpleName());
     }
 
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
@@ -54,8 +48,7 @@ class JMSSenderIT
     {
         //Arrange
         var messageListener = new MyTopicListener();
-        var objectUnderTest = new JMSSender(properties);
-        var jexxaMain = new JexxaMain(testName, properties);
+        var objectUnderTest = new JMSSender(jexxaMain.getProperties());
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
@@ -63,7 +56,7 @@ class JMSSenderIT
                 .start();
 
         //Act
-        objectUnderTest.sendToTopic(message, testName, null);
+        objectUnderTest.sendToTopic(message, JMSSenderIT.class.getSimpleName(), null);
 
         //Assert
         while (messageListener.getMessages().isEmpty())
@@ -82,8 +75,7 @@ class JMSSenderIT
     {
         //Arrange
         var messageListener = new MyQueueListener();
-        var objectUnderTest = new JMSSender(properties);
-        var jexxaMain = new JexxaMain(testName, properties);
+        var objectUnderTest = new JMSSender(jexxaMain.getProperties());
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
@@ -91,7 +83,7 @@ class JMSSenderIT
                 .start();
 
         //Act
-        objectUnderTest.sendToQueue(message, testName, null);
+        objectUnderTest.sendToQueue(message, JMSSenderIT.class.getSimpleName(), null);
 
         //Assert
         while (messageListener.getMessages().isEmpty())

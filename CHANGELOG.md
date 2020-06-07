@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## \[2.0.1 - UNRELEASED] - YYYY-MM-DD
+### Added
+-   Added automatic reconnection mechanism for JMS Listener in case of a broker excpetion 
+
+### Changed
+-   Updated dependencies 
+
+
 ## \[2.0.0] - 2020-06-01
 ### Added
 -   Added global exception handler in JexxaMain for getting better results of startup errors 

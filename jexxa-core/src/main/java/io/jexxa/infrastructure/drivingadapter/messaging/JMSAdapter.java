@@ -35,9 +35,11 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     public static final String DEFAULT_JNDI_PROVIDER_URL = "tcp://localhost:61616";
     public static final String DEFAULT_JNDI_FACTORY = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 
-    private final Connection connection;
-    private final Session session;
+    private Connection connection;
+    private Session session;
     private final List<MessageConsumer> consumerList = new ArrayList<>();
+    private final List<Object> registeredListener = new ArrayList<>();
+    private JMSRestart jmsRestart;
 
     private final Properties properties;
 
@@ -49,16 +51,13 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
         try
         {
-            connection = createConnection();
-            connection.setExceptionListener(exception -> JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage()));
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            initConnection();
         }
         catch (JMSException e)
         {
             throw new IllegalArgumentException(e);
         }
     }
-
 
 
     public void start()
@@ -77,7 +76,11 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     @Override
     public void stop()
     {
+        if ( jmsRestart != null ) {
+            jmsRestart.stop();
+        }
         close();
+        registeredListener.clear();
     }
 
     @SuppressWarnings("java:S2095") // We must not close the connection
@@ -97,7 +100,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             }
             else
             {
-               destination = session.createQueue(jmsConfiguration.destination());
+                destination = session.createQueue(jmsConfiguration.destination());
             }
 
             MessageConsumer consumer;
@@ -111,7 +114,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             }
             consumer.setMessageListener(new SynchronizedMessageListener(messageListener));
             consumerList.add(consumer);
-
+            registeredListener.add(object);
         }
         catch (JMSException e)
         {
@@ -129,11 +132,11 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         Optional.ofNullable(connection).ifPresent(ThrowingConsumer.exceptionLogger(Connection::close));
     }
 
-    
+
     @SuppressWarnings("DuplicatedCode")
     protected Connection createConnection()
     {
-        try 
+        try
         {
             final InitialContext initialContext = new InitialContext(properties);
             final ConnectionFactory connectionFactory = (ConnectionFactory) initialContext.lookup("ConnectionFactory");
@@ -149,6 +152,11 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
     }
 
+    protected Connection getConnection()
+    {
+        return connection;
+    }
+
     private JMSConfiguration getConfiguration(Object object)
     {
         return Arrays.stream(object.getClass().getMethods())
@@ -156,6 +164,22 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Given object does not provide a " + JMSConfiguration.class.getSimpleName()))
                 .getDeclaredAnnotation(JMSConfiguration.class);
+    }
+
+    private void initConnection() throws JMSException
+    {
+        connection = createConnection();
+        connection.setExceptionListener(exception -> {
+                    JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage());
+
+                    if (jmsRestart != null) { // Stop any previous restarter if available
+                        jmsRestart.stop();
+                    }
+
+                    jmsRestart = new JMSRestart(this, new ArrayList<>(registeredListener));
+                    jmsRestart.start();
+        });
+        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
     }
 
     private void validateProperties(Properties properties)
@@ -168,7 +192,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     {
         private final MessageListener jmsListener;
 
-        SynchronizedMessageListener(MessageListener jmsListener )
+        SynchronizedMessageListener(MessageListener jmsListener)
         {
             Validate.notNull(jmsListener);
             this.jmsListener = jmsListener;
@@ -182,6 +206,74 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             {
                 jmsListener.onMessage(message);
             }
+        }
+    }
+
+    static class JMSRestart
+    {
+        final JMSAdapter jmsAdapter;
+        final List<Object> listener;
+        boolean isRunning = false;
+        Thread thread;
+
+        JMSRestart(JMSAdapter jmsAdapter, List<Object> listener)
+        {
+            this.jmsAdapter = jmsAdapter;
+            this.listener = listener;
+        }
+
+        public void stop()
+        {
+            isRunning = false;
+            try
+            {
+                thread.join();
+            }
+            catch (InterruptedException e)
+            {
+                JexxaLogger.getLogger(JMSRestart.class).error(e.getMessage());
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        public void start()
+        {
+            thread = new Thread(() -> {
+                isRunning = true;
+                while (isRunning)
+                {
+                    try
+                    {
+                        JexxaLogger.getLogger(JMSRestart.class).warn("Try to restart JMS message listener");
+
+                        jmsAdapter.close();
+                        jmsAdapter.initConnection();
+                        listener.forEach(jmsAdapter::register);
+                        jmsAdapter.start();
+                        
+                        JexxaLogger.getLogger(JMSRestart.class).warn("Listener successfully restarted");
+                        return;
+                    }
+                    catch (JMSException e)
+                    {
+                        JexxaLogger.getLogger(JMSRestart.class).error(e.getMessage());
+                    }
+
+                    try
+                    {
+                        //noinspection BusyWait
+                        Thread.sleep(500);
+                    }
+                    catch (InterruptedException e)
+                    {
+                        JexxaLogger.getLogger(JMSRestart.class).error(e.getMessage());
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
+
+                }
+            });
+            thread.start();
         }
     }
 }

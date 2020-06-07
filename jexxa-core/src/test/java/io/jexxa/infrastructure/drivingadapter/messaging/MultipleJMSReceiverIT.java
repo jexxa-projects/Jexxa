@@ -137,6 +137,7 @@ class MultipleJMSReceiverIT
 
         public void close()
         {
+            jmsAdapter.stop();
             try
             {
                 if (session != null)
