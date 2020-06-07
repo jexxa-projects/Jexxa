@@ -23,11 +23,11 @@ public class QueueListener implements MessageListener
     {
         try
         {
-            JexxaLogger.getLogger(io.jexxa.infrastructure.utils.messaging.TopicListener.class).info(((TextMessage) message).getText());
+            JexxaLogger.getLogger(QueueListener.class).info(((TextMessage) message).getText());
             messageList.add(message);
         }
         catch ( JMSException e) {
-            JexxaLogger.getLogger(io.jexxa.infrastructure.utils.messaging.TopicListener.class).error(e.getMessage());
+            JexxaLogger.getLogger(QueueListener.class).error(e.getMessage());
         }
     }
 
