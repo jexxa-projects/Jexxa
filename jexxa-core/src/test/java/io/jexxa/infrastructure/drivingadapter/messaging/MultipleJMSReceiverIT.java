@@ -9,28 +9,25 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.IntStream;
 
-import javax.jms.Connection;
-import javax.jms.DeliveryMode;
-import javax.jms.Destination;
-import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.MessageProducer;
-import javax.jms.Session;
-import javax.jms.TextMessage;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.IncrementApplicationService;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.utils.JexxaLogger;
+import io.jexxa.infrastructure.utils.messaging.MessageSender;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 @Tag(TestConstants.INTEGRATION_TEST)
 class MultipleJMSReceiverIT
 {
     private static final int MAX_COUNTER = 1000;
     private static final int MAX_THREADS = 5;
+    private static final String MESSAGE = "Hello World";
+
+    private static final String DESTINATION = "ApplicationServiceListener";
 
     private IncrementApplicationService incrementApplicationService;
 
@@ -45,7 +42,7 @@ class MultipleJMSReceiverIT
         }
 
         @Override
-        @JMSConfiguration(destination = "ApplicationServiceListener", messagingType = JMSConfiguration.MessagingType.TOPIC)
+        @JMSConfiguration(destination = DESTINATION, messagingType = JMSConfiguration.MessagingType.TOPIC)
         public void onMessage(Message message)
         {
             incrementApplicationService.increment();
@@ -55,6 +52,7 @@ class MultipleJMSReceiverIT
 
 
     @Test
+    @Timeout(10)
     protected void synchronizeMultipleClients() 
     {
         //Arrange
@@ -85,82 +83,11 @@ class MultipleJMSReceiverIT
 
     private void incrementService(Properties properties)
     {
-        MyProducer myProducer = new MyProducer(properties);
+        MessageSender myProducer = new MessageSender(properties, DESTINATION, JMSConfiguration.MessagingType.TOPIC);
         while ( incrementApplicationService.getCounter() < MAX_COUNTER )
         {
             //Act
-            myProducer.sendToTopic();
+            myProducer.send(MESSAGE);
         }
     }
-    
-
-    static class MyProducer implements AutoCloseable
-    {
-        private final Connection connection;
-        private final Session session;
-        private final MessageProducer producer;
-        private final JMSAdapter jmsAdapter;
-
-        MyProducer(Properties properties) 
-        {
-            jmsAdapter = new JMSAdapter(properties);
-            try
-            {
-                this.connection = jmsAdapter.createConnection();
-                connection.start();
-
-                session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-                Destination destination = session.createTopic(ApplicationServiceListener.class.getSimpleName());
-
-                producer = session.createProducer(destination);
-                producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-            } catch (JMSException e)
-            {
-               throw new IllegalArgumentException(e);
-            }
-        }
-
-        protected void sendToTopic()
-        {
-            try
-            {
-                String text = "Hello world";
-                TextMessage message = session.createTextMessage(text);
-
-                producer.send(message);
-            }
-            catch (JMSException e)
-            {
-                JexxaLogger.getLogger(JMSAdapterIT.MyProducer.class).error(e.getMessage());
-            }
-        }
-
-        public void close()
-        {
-            jmsAdapter.stop();
-            try
-            {
-                if (session != null)
-                {
-                    session.close();
-                }
-            } catch (JMSException e)
-            {
-                JexxaLogger.getLogger(MyProducer.class).error(e.getMessage());
-            }
-
-            try
-            {
-                if (connection != null)
-                {
-                    connection.close();
-                }
-             } catch (JMSException e)
-            {
-                JexxaLogger.getLogger(MyProducer.class).error(e.getMessage());
-            }
-        }
-
-    }
-
 }

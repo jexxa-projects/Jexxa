@@ -8,25 +8,15 @@ import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
-
-import javax.jms.Connection;
-import javax.jms.DeliveryMode;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.MessageProducer;
-import javax.jms.Session;
-import javax.jms.TextMessage;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
-import io.jexxa.utils.JexxaLogger;
+import io.jexxa.infrastructure.utils.messaging.MessageSender;
+import io.jexxa.infrastructure.utils.messaging.QueueListener;
+import io.jexxa.infrastructure.utils.messaging.TopicListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -38,6 +28,8 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestConstants.INTEGRATION_TEST)
 class JMSAdapterIT
 {
+    private static final String MESSAGE = "Hello World";
+
     private Properties properties;
 
     @BeforeEach
@@ -46,25 +38,51 @@ class JMSAdapterIT
         //Arrange
         properties = new Properties();
         properties.load(getClass().getResourceAsStream(JexxaMain.JEXXA_APPLICATION_PROPERTIES));
-
     }
 
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
-    protected void startJMSAdapter()
+    protected void startJMSAdapterTopic()
     {
         //Arrange
-        var messageListener = new MyListener();
+        var messageListener = new TopicListener();
 
         try (  var objectUnderTest = new JMSAdapter(properties) )
         {
             objectUnderTest.register(messageListener);
 
-            MyProducer myProducer = new MyProducer(properties);
+            MessageSender myProducer = new MessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
             //Act
             objectUnderTest.start();
-            myProducer.sendToTopic();
+            myProducer.send(MESSAGE);
+
+            //Assert
+            while (messageListener.getMessages().isEmpty())
+            {
+                Thread.onSpinWait();
+            }
+
+            assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
+        }
+    }
+
+    @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
+    @Test
+    @Timeout(1)
+    protected void startJMSAdapterQueue()
+    {
+        //Arrange
+        var messageListener = new QueueListener();
+
+        try (  var objectUnderTest = new JMSAdapter(properties) )
+        {
+            objectUnderTest.register(messageListener);
+
+            MessageSender myProducer = new MessageSender(properties, QueueListener.QUEUE_DESTINATION, JMSConfiguration.MessagingType.QUEUE);
+            //Act
+            objectUnderTest.start();
+            myProducer.send(MESSAGE);
 
             //Assert
             while (messageListener.getMessages().isEmpty())
@@ -85,7 +103,7 @@ class JMSAdapterIT
     protected void startJMSAdapterJexxa()
     {
         //Arrange
-        var messageListener = new MyListener();
+        var messageListener = new TopicListener();
 
         JexxaMain jexxaMain = new JexxaMain("JMSAdapterTest", properties);
 
@@ -94,10 +112,10 @@ class JMSAdapterIT
                 .bind(JMSAdapter.class).to(messageListener)
                 .start();
 
-        MyProducer myProducer = new MyProducer(properties);
+        MessageSender myProducer = new MessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
 
         //Act
-        myProducer.sendToTopic();
+        myProducer.send(MESSAGE);
 
         //Assert
         while (messageListener.getMessages().isEmpty())
@@ -140,65 +158,4 @@ class JMSAdapterIT
                 propertiesInvalidFactory
         ));
     }
-
-
-
-    public static class MyListener implements MessageListener
-    {
-        private final List<Message> messageList = new ArrayList<>();
-
-        @Override
-        @JMSConfiguration(destination = "MyListener", messagingType = JMSConfiguration.MessagingType.TOPIC)
-        public void onMessage(Message message)
-        {
-            try
-            {
-                JexxaLogger.getLogger(MyListener.class).info(((TextMessage) message).getText());
-                messageList.add(message);
-            }
-            catch (JMSException e) {
-                JexxaLogger.getLogger(MyListener.class).error(e.getMessage());
-            }
-        }
-
-        protected List<Message> getMessages()
-        {
-            return messageList;
-        }
-    }
-
-    static class MyProducer {
-        private final Properties properties;
-        MyProducer(Properties properties)
-        {
-            this.properties = properties;
-        }
-        
-        protected void sendToTopic() {
-            try {
-                JMSAdapter jmsAdapter = new JMSAdapter(properties);
-                Connection connection = jmsAdapter.createConnection();
-
-                connection.start();
-
-                Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-                Destination destination = session.createTopic(MyListener.class.getSimpleName());
-
-                MessageProducer producer = session.createProducer(destination);
-                producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-
-                String text = "Hello world" ;
-                TextMessage message = session.createTextMessage(text);
-
-                producer.send(message);
-
-                session.close();
-                connection.close();
-            }
-            catch (JMSException e) {
-                JexxaLogger.getLogger(MyProducer.class).error(e.getMessage());
-            }
-        }
-    }
-
 }

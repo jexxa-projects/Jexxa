@@ -134,7 +134,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
 
     @SuppressWarnings("DuplicatedCode")
-    protected Connection createConnection()
+    public static Connection createConnection(Properties properties)
     {
         try
         {
@@ -168,7 +168,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
     private void initConnection() throws JMSException
     {
-        connection = createConnection();
+        connection = createConnection(properties);
         connection.setExceptionListener(exception -> {
                     JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage());
 
