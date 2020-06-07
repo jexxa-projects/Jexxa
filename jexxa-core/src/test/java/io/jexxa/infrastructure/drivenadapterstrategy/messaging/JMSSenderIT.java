@@ -33,7 +33,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class JMSSenderIT
 {
     private final JexxaValueObject message = new JexxaValueObject(42);
-    JexxaMain jexxaMain;
+    private JexxaMain jexxaMain;
 
     @BeforeEach
     protected void initTests()

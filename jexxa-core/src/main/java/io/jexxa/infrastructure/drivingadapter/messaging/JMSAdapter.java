@@ -209,12 +209,12 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
     }
 
-    static class JMSRestart
+    private static class JMSRestart
     {
-        final JMSAdapter jmsAdapter;
-        final List<Object> listener;
-        boolean isRunning = false;
-        Thread thread;
+        private final JMSAdapter jmsAdapter;
+        private final List<Object> listener;
+        private boolean isRunning = false;
+        private Thread thread;
 
         JMSRestart(JMSAdapter jmsAdapter, List<Object> listener)
         {
