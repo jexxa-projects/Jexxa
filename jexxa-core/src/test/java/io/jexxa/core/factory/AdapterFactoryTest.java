@@ -33,7 +33,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class AdapterFactoryTest
 {
     @Test
-    protected void createDrivenAdapter() {
+    void createDrivenAdapter() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -46,7 +46,7 @@ class AdapterFactoryTest
     }
 
     @Test
-    protected void createDrivenAdapterImpl() {
+    void createDrivenAdapterImpl() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -62,7 +62,7 @@ class AdapterFactoryTest
 
 
     @Test
-    protected void getDrivenAdapter() {
+    void getDrivenAdapter() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -87,7 +87,7 @@ class AdapterFactoryTest
     }
 
     @Test
-    protected void createDrivenAdapterWithPropertiesConstructor() {
+    void createDrivenAdapterWithPropertiesConstructor() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -103,7 +103,7 @@ class AdapterFactoryTest
 
 
     @Test
-    protected void createDrivenAdapterWithFactoryMethod() {
+    void createDrivenAdapterWithFactoryMethod() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -116,7 +116,7 @@ class AdapterFactoryTest
     }
 
     @Test
-    protected void createDrivenAdapterWithPropertiesFactoryMethod() {
+    void createDrivenAdapterWithPropertiesFactoryMethod() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
             whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -131,7 +131,7 @@ class AdapterFactoryTest
 
 
     @Test
-    protected void drivenAdapterAvailable() {
+    void drivenAdapterAvailable() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -149,7 +149,7 @@ class AdapterFactoryTest
     }
 
     @Test
-    protected void drivenAdapterUnavailable() {
+    void drivenAdapterUnavailable() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -165,7 +165,7 @@ class AdapterFactoryTest
     }
 
     @Test
-    protected void createNoUniqueImplementation() {
+    void createNoUniqueImplementation() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -177,7 +177,7 @@ class AdapterFactoryTest
     }
 
     @Test
-    protected void createNoImplementationAvailable() {
+    void createNoImplementationAvailable() {
         //Arrange
         var objectUnderTest = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
