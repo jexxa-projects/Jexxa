@@ -46,19 +46,19 @@ Even if you use real powerful frameworks for good reason within your application
 == Motivation
 The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for this application.
 
-Existing frameworks such as the https://spring.io[Spring Framework] or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is quite hard to maintain applications over several decades especially if such frameworks find their way inside the business application.
+Existing frameworks such as the https://spring.io[Spring Framework] or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into business applications.
 
-When developing applications with a high durability as used in production, financial or insurance sector it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers should only use standard language features or libraries/SDKs shipped with a programming language. Available frameworks should be used to attach the latest technology stacks to the application core.
+When developing applications with a high durability as used in production, financial or insurance sector, it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers shall only use standard language features or libraries/SDKs shipped with a programming language. Available frameworks shall be used to attach the latest technology stacks to the application core.
 
-Applications without well-defined boundaries between technology stacks and application core become hard to maintain because changes on one side could (and in reality will) affect the other side. Typical symptoms are:
+Applications without well-defined boundaries between technology stacks and application core become difficult to maintain because changes on one side could (and in reality will) affect the other side. Typical symptoms are:
 
-* Updating to a newer version of a technology stack is hard or even impossible so that it is much safer to use the old one. New developed applications of course use this old version as well because your team 'trusts' it, and you avoid maintaining a zoo of different versions.
+* Updating to a newer version of a technology stack is difficult or even impossible so that it is much safer to use the old one. Of course new developed applications use this old version as well because your team 'trusts' it, and you avoid maintaining a zoo of different versions.
 
-* Adding or replacing a technology stack is hard or even impossible so that a disruptive technology causes that your application core becomes legacy as well. A common example are database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs -> relational DBs -> a zoo of NoSQL DBs. Since database technologies can become crucial for your business your company employs developers on a senior grade who have deep knowledge of the outdated and new technology stacks and synchronize your business data.
+* Adding or replacing a technology stack is difficult or even impossible, so a disruptive technology will cause your application core to become legacy as well. A common example are database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs -> relational DBs -> a zoo of NoSQL DBs. Because database technologies can become vital for your business, your company employs senior-grade developers who have deep knowledge of both legacy and new technology stacks and synchronize your business data.
 
 * Changes on the application core itself takes much longer time as in the beginning. In the end you need senior developers who have a deep understanding of the specific business domain, the used technology stacks and the convoluted structures of the entire application.
 
-* In the long run such structural issues could (and in reality will) affect your enterprise architecture so that neighbored systems need to be aware and take special actions for legacy systems.  
+* In the long term, such structural issues could (and in reality will) affect your enterprise architecture, so neighboring systems need to be aware and take special actions for legacy systems.  
 
 
 == General Building Blocks
