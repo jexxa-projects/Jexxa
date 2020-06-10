@@ -1,4 +1,4 @@
-package io.jexxa.application;
+package io.jexxa.sample;
 
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
@@ -20,7 +20,7 @@ public class HelloJexxa
                 // It allows to access the public methods of the business object via RMI over REST
                 .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
 
-                //Start Jexxa and establish all connections
+                //Start Jexxa and all bindings 
                 .start()
 
                 //Wait until shutdown is called by one of the following options:

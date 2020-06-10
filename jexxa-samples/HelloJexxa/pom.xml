@@ -20,7 +20,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <mainClass>io.jexxa.application.HelloJexxa</mainClass>
+              <mainClass>io.jexxa.sample.HelloJexxa</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -37,7 +37,7 @@
             <configuration>
               <archive>
                 <manifest>
-                  <mainClass>io.jexxa.application.HelloJexxa</mainClass>
+                  <mainClass>io.jexxa.sample.HelloJexxa</mainClass>
                 </manifest>
               </archive>
               <descriptorRefs>
