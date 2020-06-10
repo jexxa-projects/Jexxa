@@ -404,6 +404,7 @@
   <modules>
     <module>jexxa-core</module>
     <module>jexxa-adapter-api</module>
+    <module>jexxa-samples</module>
   </modules>
   
 </project>
