@@ -47,10 +47,10 @@ compile "io.Jexxa:jexxa-core:2.0.0"
 
 ### Start programming 
 
-A simple ``Hello World`` example can be found [here](https://github.com/repplix/Jexxa/blob/master/jexxa-samples/HelloJexxa/src/main/java/io/jexxa/application/HelloJexxa.java):  
+A simple ``Hello World`` example can be found [here](https://github.com/repplix/Jexxa/blob/master/jexxa-samples/HelloJexxa/src/main/java/io/jexxa/sample/HelloJexxa.java):  
 
 ```java     
-package io.jexxa.application;
+package io.jexxa.sample;
 
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
@@ -71,8 +71,8 @@ public class HelloJexxa
                 // Connect a REST adapter to same business object.
                 // It allows to access the public methods of the business object via RMI over REST
                 .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
- 
-                //Start Jexxa and establish all connections
+
+                //Start Jexxa and all bindings 
                 .start()
 
                 //Wait until shutdown is called by one of the following options:
