@@ -20,7 +20,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class ClassFactoryTest
 {
     @Test
-    protected void createApplicationService() 
+    void createApplicationService()
     {
         //Arrange
         var annotationScanner = new DependencyScanner();

@@ -10,7 +10,7 @@ import io.jexxa.infrastructure.utils.messaging.MessageSender;
 import io.jexxa.infrastructure.utils.messaging.TopicListener;
 import org.junit.jupiter.api.Test;
 
-public class JMSBrokerFailedIT
+class JMSBrokerFailedIT
 {
     private static final String MESSAGE = "Hello World";
 

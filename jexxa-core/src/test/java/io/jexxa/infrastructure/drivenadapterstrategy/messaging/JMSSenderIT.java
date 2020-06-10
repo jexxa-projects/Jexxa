@@ -70,7 +70,7 @@ class JMSSenderIT
 
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
-    @Timeout(1)
+    @Timeout(2)
     void sentMessageToQueue()
     {
         //Arrange

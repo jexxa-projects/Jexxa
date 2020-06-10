@@ -78,9 +78,12 @@ class RESTfulRPCConventionTest
     @Test
     void invalidApplicationService()
     {
+        //Arrange
+        var objectUnderTest = new UnsupportedApplicationService();
+
         //Act / Assert
         assertThrows(IllegalArgumentException.class, () ->
-                new RESTfulRPCConvention(new UnsupportedApplicationService())
+                new RESTfulRPCConvention(objectUnderTest)
         );
     }
 

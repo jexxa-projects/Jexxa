@@ -24,7 +24,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class DependencyScannerTest
 {
     @Test
-    protected void findAnnotatedClasses() {
+    void findAnnotatedClasses() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
         objectUnderTest.whiteListPackage(JEXXA_APPLICATION_SERVICE);
@@ -41,7 +41,7 @@ class DependencyScannerTest
     }
 
     @Test
-    protected void findAnnotatedClassesWithinPackage() {
+    void findAnnotatedClassesWithinPackage() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
 
@@ -60,7 +60,7 @@ class DependencyScannerTest
     
 
     @Test
-    protected void findAnnotatedClassesFailsWithinPackage() {
+    void findAnnotatedClassesFailsWithinPackage() {
         //Arrange
         var invalidPackageName = "io.invalid.package";
         var objectUnderTest = new DependencyScanner();
@@ -75,7 +75,7 @@ class DependencyScannerTest
     }
 
     @Test
-    protected void getClassesImplementingInterface() {
+    void getClassesImplementingInterface() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
         objectUnderTest.whiteListPackage(JEXXA_DRIVING_ADAPTER);
@@ -90,7 +90,7 @@ class DependencyScannerTest
 
 
     @Test
-    protected void getClassesImplementingInterfaceInSpecificPacakge() {
+    void getClassesImplementingInterfaceInSpecificPacakge() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
         var packageName = "io.jexxa.infrastructure.drivingadapter.rest";
@@ -106,7 +106,7 @@ class DependencyScannerTest
     }
 
     @Test 
-    protected void handleAnnotationUnavailableDuringRuntime()
+    void handleAnnotationUnavailableDuringRuntime()
     {
         //Arrange
         var objectUnderTest = new DependencyScanner();

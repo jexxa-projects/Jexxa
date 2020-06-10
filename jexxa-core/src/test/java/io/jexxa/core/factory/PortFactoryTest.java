@@ -23,7 +23,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class PortFactoryTest
 {
     @Test
-    protected void createPortWithAvailableDrivenAdapter() {
+    void createPortWithAvailableDrivenAdapter() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -38,7 +38,7 @@ class PortFactoryTest
     }
 
     @Test
-    protected void createPortWithMissingAdapter() {
+    void createPortWithMissingAdapter() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -54,7 +54,7 @@ class PortFactoryTest
 
 
     @Test
-    protected void newInstanceOfPort() {
+    void newInstanceOfPort() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -72,7 +72,7 @@ class PortFactoryTest
     }
 
     @Test
-    protected void getInstanceOfPort() {
+    void getInstanceOfPort() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -91,7 +91,7 @@ class PortFactoryTest
 
 
     @Test
-    protected void getInstanceOfPortAdapter() {
+    void getInstanceOfPortAdapter() {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
