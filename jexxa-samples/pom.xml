@@ -8,7 +8,6 @@
     <version>2.1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>io</groupId>
   <artifactId>jexxa-samples</artifactId>
   <packaging>pom</packaging>
   <name>Jexxa-Samples</name>
