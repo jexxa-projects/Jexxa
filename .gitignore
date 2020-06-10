@@ -14,3 +14,4 @@ buildNumber.properties
 *.iml
 doc/*.html
 doc/images/*.svg
+teamscale*
