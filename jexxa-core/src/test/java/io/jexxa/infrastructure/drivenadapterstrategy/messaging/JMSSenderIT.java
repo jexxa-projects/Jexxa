@@ -36,7 +36,7 @@ class JMSSenderIT
     private JexxaMain jexxaMain;
 
     @BeforeEach
-    protected void initTests()
+    void initTests()
     {
         jexxaMain = new JexxaMain(JMSSenderIT.class.getSimpleName());
     }
@@ -44,7 +44,7 @@ class JMSSenderIT
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
-    protected void sentMessageToTopic()
+    void sentMessageToTopic()
     {
         //Arrange
         var messageListener = new MyTopicListener();
@@ -71,7 +71,7 @@ class JMSSenderIT
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
-    protected void sentMessageToQueue()
+    void sentMessageToQueue()
     {
         //Arrange
         var messageListener = new MyQueueListener();
@@ -139,7 +139,7 @@ class JMSSenderIT
             }
         }
 
-        protected List<Message> getMessages()
+        List<Message> getMessages()
         {
             return messageList;
         }

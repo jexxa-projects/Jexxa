@@ -25,7 +25,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 class JexxaAggregateRepositoryIT
 {
 
-    protected static Stream<Properties> data() {
+    static Stream<Properties> data() {
         var postgresProperties = new Properties();
         postgresProperties.put(JDBCKeyValueRepository.JDBC_DRIVER, "org.postgresql.Driver");
         postgresProperties.put(JDBCKeyValueRepository.JDBC_PASSWORD, "admin");
@@ -47,7 +47,7 @@ class JexxaAggregateRepositoryIT
 
     @ParameterizedTest
     @MethodSource("data")
-    protected void addAggregate(Properties repositoryProperties)
+    void addAggregate(Properties repositoryProperties)
     {
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
@@ -68,7 +68,7 @@ class JexxaAggregateRepositoryIT
 
     @ParameterizedTest
     @MethodSource("data")
-    protected void getAggregateByID(Properties repositoryProperties)
+    void getAggregateByID(Properties repositoryProperties)
     {
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
@@ -90,7 +90,7 @@ class JexxaAggregateRepositoryIT
 
     @ParameterizedTest
     @MethodSource("data")
-    protected void removeAggregate(Properties repositoryProperties)
+    void removeAggregate(Properties repositoryProperties)
     {
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
@@ -116,7 +116,7 @@ class JexxaAggregateRepositoryIT
 
     @ParameterizedTest
     @MethodSource("data")
-    protected void updateAggregate(Properties repositoryProperties)
+    void updateAggregate(Properties repositoryProperties)
     {
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);

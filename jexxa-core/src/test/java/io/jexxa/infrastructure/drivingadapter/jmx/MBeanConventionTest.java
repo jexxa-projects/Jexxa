@@ -39,7 +39,7 @@ class MBeanConventionTest
     }
 
     @Test
-    protected void getDomainPath()
+    void getDomainPath()
     {
         //Arrange
         var applicationService = new SimpleApplicationService();
@@ -54,7 +54,7 @@ class MBeanConventionTest
     }
 
     @Test
-    protected void toJsonTemplatePrimitive()
+    void toJsonTemplatePrimitive()
     {
         //Arrange
         String integerTemplate = "{\"int\":\"<int>\"}";
@@ -72,7 +72,7 @@ class MBeanConventionTest
     }
 
     @Test
-    protected void stringToJsonTemplate()
+    void stringToJsonTemplate()
     {
         //Arrange
         String stringTemplate = "{\"String\":\"<String>\"}";
@@ -90,7 +90,7 @@ class MBeanConventionTest
     }
 
     @Test
-    protected void toJsonTemplate()
+    void toJsonTemplate()
     {
         //Arrange
         String jexxaValueObjectTemplate = "{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"}";
@@ -108,7 +108,7 @@ class MBeanConventionTest
     }
 
     @Test
-    protected void toJsonTemplateComplexValue()
+    void toJsonTemplateComplexValue()
     {
         //Arrange
         String jexxaValueObjectTemplate = "{\"firstValueObject\":{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"},\"secondValueObject\":{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"}}";
@@ -126,7 +126,7 @@ class MBeanConventionTest
     }
 
     @Test
-    protected void invokeSetSimpleValue()
+    void invokeSetSimpleValue()
     {
         //Arrange
         var applicationService = new SimpleApplicationService();
@@ -148,7 +148,7 @@ class MBeanConventionTest
 
 
     @Test
-    protected void invokeSetSimpleValueObject()
+    void invokeSetSimpleValueObject()
     {
         //Arrange
         var applicationService = new SimpleApplicationService();
@@ -169,7 +169,7 @@ class MBeanConventionTest
 
 
     @Test
-    protected void disabledMBeanModelMethods()
+    void disabledMBeanModelMethods()
     {
         //Arrange
         var applicationService = new SimpleApplicationService();

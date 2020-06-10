@@ -22,7 +22,7 @@ class IMDBRepositoryTest
 {
 
     @Test
-    protected void addAggregate()
+    void addAggregate()
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
@@ -42,7 +42,7 @@ class IMDBRepositoryTest
     }
 
     @Test
-    protected void addAggregateTwice()
+    void addAggregateTwice()
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
@@ -60,7 +60,7 @@ class IMDBRepositoryTest
 
 
     @Test
-    protected void removeAggregate()
+    void removeAggregate()
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
@@ -80,7 +80,7 @@ class IMDBRepositoryTest
     }
 
     @Test
-    protected void differentConnections()
+    void differentConnections()
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
@@ -106,7 +106,7 @@ class IMDBRepositoryTest
     }
 
     @Test
-    protected void differentRepositories()
+    void differentRepositories()
     {
         //Arrange
         var aggregate = JexxaAggregate.create(new JexxaValueObject(42));

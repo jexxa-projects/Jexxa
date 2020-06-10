@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class JDBCPropertiesTest
 {
     @Test
-    protected void invalidProperties()
+    void invalidProperties()
     {
         //1.Assert missing properties
         var emptyProperties = new Properties();

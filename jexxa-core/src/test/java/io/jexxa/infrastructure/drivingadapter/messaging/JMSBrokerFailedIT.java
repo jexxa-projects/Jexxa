@@ -15,7 +15,7 @@ public class JMSBrokerFailedIT
     private static final String MESSAGE = "Hello World";
 
     @Test
-    protected void testReconnect() throws JMSException, InterruptedException
+    void testReconnect() throws JMSException, InterruptedException
     {
         //Arrange
         var maxSendMessages = 10;

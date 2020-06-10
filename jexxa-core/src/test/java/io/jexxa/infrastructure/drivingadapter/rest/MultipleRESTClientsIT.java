@@ -35,7 +35,7 @@ class MultipleRESTClientsIT
 
 
     @BeforeEach
-    protected void setUp()
+    void setUp()
     {
         jexxaMain = new JexxaMain(MultipleRESTClientsIT.class.getSimpleName());
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
@@ -47,7 +47,7 @@ class MultipleRESTClientsIT
     }
 
     @Test
-    protected void synchronizeMultipleClients()
+    void synchronizeMultipleClients()
     {
         //Arrange
         applicationService.setMaxCounter(MAX_COUNTER);
@@ -72,7 +72,7 @@ class MultipleRESTClientsIT
         assertTrue(exceptionList.isEmpty());
     }
 
-    protected void incrementService()
+    void incrementService()
     {
         while ( applicationService.getCounter() < MAX_COUNTER )
         {
@@ -89,7 +89,7 @@ class MultipleRESTClientsIT
     }
 
     @AfterEach
-    protected void tearDown()
+    void tearDown()
     {
         jexxaMain.stop();
         Unirest.shutDown();

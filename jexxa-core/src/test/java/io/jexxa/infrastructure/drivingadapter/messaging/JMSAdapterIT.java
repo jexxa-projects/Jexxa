@@ -33,7 +33,7 @@ class JMSAdapterIT
     private Properties properties;
 
     @BeforeEach
-    protected void initTests() throws IOException
+    void initTests() throws IOException
     {
         //Arrange
         properties = new Properties();
@@ -43,7 +43,7 @@ class JMSAdapterIT
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
-    protected void startJMSAdapterTopic()
+    void startJMSAdapterTopic()
     {
         //Arrange
         var messageListener = new TopicListener();
@@ -70,7 +70,7 @@ class JMSAdapterIT
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
-    protected void startJMSAdapterQueue()
+    void startJMSAdapterQueue()
     {
         //Arrange
         var messageListener = new QueueListener();
@@ -100,7 +100,7 @@ class JMSAdapterIT
     @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
-    protected void startJMSAdapterJexxa()
+    void startJMSAdapterJexxa()
     {
         //Arrange
         var messageListener = new TopicListener();
@@ -128,7 +128,7 @@ class JMSAdapterIT
 
 
     @Test
-    protected void invalidProperties()
+    void invalidProperties()
     {
         //1.Assert missing properties
         var emptyProperties = new Properties();

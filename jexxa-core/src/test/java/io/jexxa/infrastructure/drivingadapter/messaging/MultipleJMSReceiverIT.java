@@ -53,7 +53,7 @@ class MultipleJMSReceiverIT
 
     @Test
     @Timeout(10)
-    protected void synchronizeMultipleClients() 
+    void synchronizeMultipleClients()
     {
         //Arrange
         JexxaMain jexxaMain = new JexxaMain("MultiThreading");

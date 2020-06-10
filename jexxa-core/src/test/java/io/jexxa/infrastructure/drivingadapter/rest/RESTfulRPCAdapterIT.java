@@ -37,7 +37,7 @@ class RESTfulRPCAdapterIT
     private RESTfulRPCAdapter objectUnderTest;
 
     @BeforeEach
-    protected void setupTests(){
+    void setupTests(){
         //Setup
         simpleApplicationService.setSimpleValue(42);
 
@@ -54,7 +54,7 @@ class RESTfulRPCAdapterIT
     }
 
     @AfterEach
-    protected void tearDownTests(){
+    void tearDownTests(){
         //tear down
         objectUnderTest.stop();
         objectUnderTest = null;
@@ -63,7 +63,7 @@ class RESTfulRPCAdapterIT
 
 
     @Test // RPC call test: int getSimpleValue()
-    protected void testGETCommand()
+    void testGETCommand()
     {
         //Arrange -> Nothing to do  
 
@@ -80,7 +80,7 @@ class RESTfulRPCAdapterIT
     }
 
     @Test
-    protected void testWithRandomPort()
+    void testWithRandomPort()
     {
         //Arrange
         var secondAdapter = new RESTfulRPCAdapter("localhost",0);
@@ -105,7 +105,7 @@ class RESTfulRPCAdapterIT
     }
 
     @Test
-    protected void testUnsetProperties()
+    void testUnsetProperties()
     {
         //Arrange
         var secondAdapter = new RESTfulRPCAdapter(new Properties());
@@ -129,7 +129,7 @@ class RESTfulRPCAdapterIT
     }
 
     @Test  // RPC call test: void setSimpleValue(44)
-    protected void testPOSTCommandWithOneAttribute()
+    void testPOSTCommandWithOneAttribute()
     {
         //Arrange
         var newValue = 44;
@@ -151,7 +151,7 @@ class RESTfulRPCAdapterIT
     }
 
     @Test // RPC call test: void setSimpleValueObject(SimpleValueObject(44))
-    protected void testPOSTCommandWithOneObject()
+    void testPOSTCommandWithOneObject()
     {
         //Arrange
         var newValue = new JexxaValueObject(44);
@@ -173,7 +173,7 @@ class RESTfulRPCAdapterIT
     }
 
     @Test // RPC call test: void setSimpleValueObjectTwice(SimpleValueObject(44), SimpleValueObject(88))
-    protected void testPOSTCommandWithTwoObjects()
+    void testPOSTCommandWithTwoObjects()
     {
         //Arrange
         var paramList = new JexxaValueObject[]{new JexxaValueObject(44), new JexxaValueObject(88)};
@@ -195,7 +195,7 @@ class RESTfulRPCAdapterIT
     }
 
     @Test // RPC call test:  int setGetSimpleValue(44)
-    protected void testPOSTCommandWithReturnValue()
+    void testPOSTCommandWithReturnValue()
     {
         //Arrange
         var newValue = 44;
@@ -221,7 +221,7 @@ class RESTfulRPCAdapterIT
     }
 
     @Test
-    protected void testPOSTCommandWithException()
+    void testPOSTCommandWithException()
     {
         //Arrange
 

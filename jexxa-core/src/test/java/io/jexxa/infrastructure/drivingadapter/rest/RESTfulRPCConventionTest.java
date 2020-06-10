@@ -22,7 +22,7 @@ class RESTfulRPCConventionTest
 
 
     @BeforeEach
-    protected void setupTests()
+    void setupTests()
     {
         SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
         simpleApplicationService.setSimpleValue(42);
@@ -30,7 +30,7 @@ class RESTfulRPCConventionTest
     }
 
     @Test
-    protected void validateGETCommands()
+    void validateGETCommands()
     {
         //Act
         var result = objectUnderTest.getGETCommands();
@@ -52,7 +52,7 @@ class RESTfulRPCConventionTest
     }
 
     @Test
-    protected void validatePOSTCommands()
+    void validatePOSTCommands()
     {
         //Act
         var result = objectUnderTest.getPOSTCommands();
@@ -69,14 +69,14 @@ class RESTfulRPCConventionTest
         result.forEach(element -> assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.getMethod().getName(),
                 element.getResourcePath()));
 
-        //4.Check return types are NOT protected void or Parameter > 0
+        //4.Check return types are NOT void or Parameter > 0
         result.forEach(element -> assertTrue( (void.class.equals(element.getMethod().getReturnType())
                                             || element.getMethod().getParameterCount() > 0 )));
 
     }
 
     @Test
-    protected void invalidApplicationService()
+    void invalidApplicationService()
     {
         //Act / Assert
         assertThrows(IllegalArgumentException.class, () ->

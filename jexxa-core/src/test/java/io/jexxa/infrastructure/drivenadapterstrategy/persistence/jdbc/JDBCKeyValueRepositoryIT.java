@@ -23,7 +23,7 @@ class JDBCKeyValueRepositoryIT
     private JDBCKeyValueRepository<JexxaAggregate, JexxaValueObject> objectUnderTest;
 
     @BeforeEach
-    protected void initTests() throws IOException
+    void initTests() throws IOException
     {
         //Arrange
         aggregate = JexxaAggregate.create(new JexxaValueObject(42));
@@ -39,7 +39,7 @@ class JDBCKeyValueRepositoryIT
     }
 
     @AfterEach
-    protected void tearDown()
+    void tearDown()
     {
         if ( objectUnderTest != null )
         {
@@ -49,7 +49,7 @@ class JDBCKeyValueRepositoryIT
 
 
     @Test
-    protected void addAggregate()
+    void addAggregate()
     {
         //act
         objectUnderTest.add(aggregate);
@@ -61,7 +61,7 @@ class JDBCKeyValueRepositoryIT
 
 
     @Test
-    protected void removeAggregate()
+    void removeAggregate()
     {
         //Arrange
         objectUnderTest.add(aggregate);
@@ -74,7 +74,7 @@ class JDBCKeyValueRepositoryIT
     }
 
     @Test
-    protected void testExceptionInvalidOperations()
+    void testExceptionInvalidOperations()
     {
         //Exception if key is used to add twice
         objectUnderTest.add(aggregate);
