@@ -516,27 +516,27 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for this application.</p>
 </div>
 <div class="paragraph">
-<p>Existing frameworks such as the <a href="https://spring.io">Spring Framework</a> or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is quite hard to maintain applications over several decades especially if such frameworks find their way inside the business application.</p>
+<p>Existing frameworks such as the <a href="https://spring.io">Spring Framework</a> or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into business applications.</p>
 </div>
 <div class="paragraph">
-<p>When developing applications with a high durability as used in production, financial or insurance sector it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers should only use standard language features or libraries/SDKs shipped with a programming language. Available frameworks should be used to attach the latest technology stacks to the application core.</p>
+<p>When developing applications with a high durability as used in production, financial or insurance sector, it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers shall only use standard language features or libraries/SDKs shipped with a programming language. Available frameworks shall be used to attach the latest technology stacks to the application core.</p>
 </div>
 <div class="paragraph">
-<p>Applications without well-defined boundaries between technology stacks and application core become hard to maintain because changes on one side could (and in reality will) affect the other side. Typical symptoms are:</p>
+<p>Applications without well-defined boundaries between technology stacks and application core become difficult to maintain because changes on one side could (and in reality will) affect the other side. Typical symptoms are:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Updating to a newer version of a technology stack is hard or even impossible so that it is much safer to use the old one. New developed applications of course use this old version as well because your team 'trusts' it, and you avoid maintaining a zoo of different versions.</p>
+<p>Updating to a newer version of a technology stack is difficult or even impossible so that it is much safer to use the old one. Of course new developed applications use this old version as well because your team 'trusts' it, and you avoid maintaining a zoo of different versions.</p>
 </li>
 <li>
-<p>Adding or replacing a technology stack is hard or even impossible so that a disruptive technology causes that your application core becomes legacy as well. A common example are database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs &#8594; relational DBs &#8594; a zoo of NoSQL DBs. Since database technologies can become crucial for your business your company employs developers on a senior grade who have deep knowledge of the outdated and new technology stacks and synchronize your business data.</p>
+<p>Adding or replacing a technology stack is difficult or even impossible, so a disruptive technology will cause your application core to become legacy as well. A common example are database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs &#8594; relational DBs &#8594; a zoo of NoSQL DBs. Because database technologies can become vital for your business, your company employs senior-grade developers who have deep knowledge of both legacy and new technology stacks and synchronize your business data.</p>
 </li>
 <li>
 <p>Changes on the application core itself takes much longer time as in the beginning. In the end you need senior developers who have a deep understanding of the specific business domain, the used technology stacks and the convoluted structures of the entire application.</p>
 </li>
 <li>
-<p>In the long run such structural issues could (and in reality will) affect your enterprise architecture so that neighbored systems need to be aware and take special actions for legacy systems.</p>
+<p>In the long term, such structural issues could (and in reality will) affect your enterprise architecture, so neighboring systems need to be aware and take special actions for legacy systems.</p>
 </li>
 </ul>
 </div>
@@ -553,7 +553,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="JexxaComponents" class="imageblock text-center">
 <div class="content">
-<img src="images/JexxaComponents.svg" alt="JexxaComponents" width="657" height="973">
+<img src="images/JexxaComponents.svg" alt="JexxaComponents" width="756" height="782">
 </div>
 <div class="title">Figure 1. This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages labeled with <code>&lt;&lt;Jexxa&gt;&gt;</code> are provided by Jexxa. Packages labeled with <code>&lt;&lt;Application&gt;&gt;</code> have to be realized by the application.</div>
 </div>
@@ -1089,7 +1089,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-06-01 08:37:10 +0200
+Last updated 2020-06-10 11:15:25 +0200
 </div>
 </div>
 </body>
