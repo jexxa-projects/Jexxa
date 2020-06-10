@@ -22,7 +22,7 @@ class BoundedContextTest
 
     @Test
     @Timeout(1)
-    protected void shutdown()
+    void shutdown()
     {
         //Arrange
         var thread = new Thread(this::waitForShutDown);
@@ -39,7 +39,7 @@ class BoundedContextTest
         assertTimeout(Duration.ofSeconds(1), (Executable) thread::join);
     }
 
-    protected void waitForShutDown()
+    void waitForShutDown()
     {
         objectUnderTest = jexxaMain.start();
         objectUnderTest.waitForShutdown();

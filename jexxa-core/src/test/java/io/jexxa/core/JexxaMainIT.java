@@ -40,14 +40,14 @@ class JexxaMainIT
     private final String contextName = "HelloJexxa";
 
     @BeforeEach
-    protected void initTests()
+    void initTests()
     {
         properties = new Properties();
         properties.putAll(getRESTfulRPCProperties());
     }
 
     @AfterEach
-    protected void tearDownTests()
+    void tearDownTests()
     {
         if (objectUnderTest != null)
         {
@@ -59,7 +59,7 @@ class JexxaMainIT
 
     
     @Test
-    protected void bindToPort()
+    void bindToPort()
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName, properties);
@@ -80,7 +80,7 @@ class JexxaMainIT
     }
 
     @Test
-    protected void bindToPortWithDrivenAdapter()
+    void bindToPortWithDrivenAdapter()
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName, properties);
@@ -102,7 +102,7 @@ class JexxaMainIT
     
 
     @Test
-    protected void bindToAnnotatedPorts()
+    void bindToAnnotatedPorts()
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName, properties);
@@ -121,7 +121,7 @@ class JexxaMainIT
 
 
     @Test
-    protected void bootstrapService()
+    void bootstrapService()
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName);
@@ -140,7 +140,7 @@ class JexxaMainIT
 
 
     /* ---------------------Util methods ------------------ */
-    protected void assertJMXAdapter(Class<?> clazz) {
+    void assertJMXAdapter(Class<?> clazz) {
         //Assert
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         Set<ObjectInstance> result = mbs.queryMBeans(null , null);
@@ -152,7 +152,7 @@ class JexxaMainIT
         );
     }
 
-    protected void assertRESTfulRPCAdapter() {
+    void assertRESTfulRPCAdapter() {
         //Assert
         String restPath = "http://"
                 + properties.get(RESTfulRPCAdapter.HOST_PROPERTY) + ":"

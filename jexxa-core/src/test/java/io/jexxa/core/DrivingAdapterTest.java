@@ -16,7 +16,7 @@ class DrivingAdapterTest
 {
 
     @Test
-    protected void throwOnInvalidPortConvention()
+    void throwOnInvalidPortConvention()
     {
         //Arrange
         JexxaMain jexxaMain = new JexxaMain(DrivingAdapterTest.class.getSimpleName());
@@ -27,7 +27,7 @@ class DrivingAdapterTest
     }
 
     @Test
-    protected void throwOnInvalidAdapterConvention()
+    void throwOnInvalidAdapterConvention()
     {
         //Arrange
         JexxaMain jexxaMain = new JexxaMain(DrivingAdapterTest.class.getSimpleName());
