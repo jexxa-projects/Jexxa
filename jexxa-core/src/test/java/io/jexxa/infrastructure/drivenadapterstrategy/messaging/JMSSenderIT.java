@@ -1,26 +1,20 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
 
-
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
+import java.util.concurrent.TimeUnit;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
-import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
-import io.jexxa.utils.JexxaLogger;
+import io.jexxa.infrastructure.utils.messaging.QueueListener;
+import io.jexxa.infrastructure.utils.messaging.TopicListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -41,13 +35,12 @@ class JMSSenderIT
         jexxaMain = new JexxaMain(JMSSenderIT.class.getSimpleName());
     }
 
-    @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
     void sentMessageToTopic()
     {
         //Arrange
-        var messageListener = new MyTopicListener();
+        var messageListener = new TopicListener();
         var objectUnderTest = new JMSSender(jexxaMain.getProperties());
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
@@ -56,25 +49,21 @@ class JMSSenderIT
                 .start();
 
         //Act
-        objectUnderTest.sendToTopic(message, JMSSenderIT.class.getSimpleName(), null);
+        objectUnderTest.sendToTopic(message, TopicListener.TOPIC_DESTINATION);
 
         //Assert
-        while (messageListener.getMessages().isEmpty())
-        {
-            Thread.onSpinWait();
-        }
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !messageListener.getMessages().isEmpty());
 
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
 
-    @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(2)
     void sentMessageToQueue()
     {
         //Arrange
-        var messageListener = new MyQueueListener();
+        var messageListener = new QueueListener();
         var objectUnderTest = new JMSSender(jexxaMain.getProperties());
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
@@ -83,66 +72,11 @@ class JMSSenderIT
                 .start();
 
         //Act
-        objectUnderTest.sendToQueue(message, JMSSenderIT.class.getSimpleName(), null);
+        objectUnderTest.sendToQueue(message, QueueListener.QUEUE_DESTINATION);
 
         //Assert
-        while (messageListener.getMessages().isEmpty())
-        {
-            Thread.onSpinWait();
-        }
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !messageListener.getMessages().isEmpty());
 
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
-
-
-    static class MyTopicListener implements MessageListener
-    {
-
-        private final List<Message> messageList = new ArrayList<>();
-
-        @Override
-        @JMSConfiguration(destination = "JMSSenderIT", messagingType = JMSConfiguration.MessagingType.TOPIC)
-        public void onMessage(Message message)
-        {
-            try
-            {
-                JexxaLogger.getLogger(JMSSenderIT.class).info(((TextMessage) message).getText());
-                messageList.add(message);
-            }
-            catch ( JMSException e) {
-                JexxaLogger.getLogger(JMSSenderIT.class).error(e.getMessage());
-            }
-        }
-
-        public List<Message> getMessages()
-        {
-            return messageList;
-        }
-    }
-
-    static public class MyQueueListener implements MessageListener
-    {
-
-        private final List<Message> messageList = new ArrayList<>();
-
-        @Override
-        @JMSConfiguration(destination = "JMSSenderIT", messagingType = JMSConfiguration.MessagingType.QUEUE)
-        public void onMessage(Message message)
-        {
-            try
-            {
-                JexxaLogger.getLogger(JMSSenderIT.class).info(((TextMessage) message).getText());
-                messageList.add(message);
-            }
-            catch ( JMSException e) {
-                JexxaLogger.getLogger(JMSSenderIT.class).error(e.getMessage());
-            }
-        }
-
-        List<Message> getMessages()
-        {
-            return messageList;
-        }
-    }
-
 }
