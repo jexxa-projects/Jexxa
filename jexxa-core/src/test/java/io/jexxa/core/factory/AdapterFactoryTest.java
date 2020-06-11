@@ -171,9 +171,10 @@ class AdapterFactoryTest
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
 
         //Act/Assert
-        assertThrows(AmbiguousAdapterException.class, () ->
+        var exception = assertThrows(AmbiguousAdapterException.class, () ->
                 objectUnderTest.newInstanceOf(INotUniqueService.class)
         );
+        assertNotNull(exception.getMessage());
     }
 
     @Test
