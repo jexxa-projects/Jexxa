@@ -36,7 +36,7 @@ class JMSBrokerFailedIT
         simulateConnectionException(jmsAdapter.getConnection());
 
         var service = Executors.newSingleThreadScheduledExecutor();
-        service.schedule(() -> myProducer.send(MESSAGE),100, TimeUnit.MILLISECONDS ); // Send messages in a 100 ms interval 
+        service.scheduleAtFixedRate(() -> myProducer.send(MESSAGE),100, 100, TimeUnit.MILLISECONDS ); // Send messages in a 100 ms interval
 
         //Assert
         await().atMost(Duration.ofSeconds(2,0)).until(() -> !messageListener.getMessages().isEmpty());

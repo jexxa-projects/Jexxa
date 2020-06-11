@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -216,69 +219,51 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     {
         private final JMSAdapter jmsAdapter;
         private final List<Object> listener;
-        private boolean isRunning = false;
-        private Thread thread;
+        private final ScheduledExecutorService executorService;
 
         JMSConnectionExceptionHandler(JMSAdapter jmsAdapter, List<Object> listener)
         {
             this.jmsAdapter = jmsAdapter;
             this.listener = listener;
+            executorService = Executors.newSingleThreadScheduledExecutor();
+
         }
 
         public void stopFailover()
         {
-            isRunning = false;
             try
             {
-                thread.join();
-            }
-            catch (InterruptedException e)
+                executorService.awaitTermination(500, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e)
             {
-                JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error(e.getMessage());
                 Thread.currentThread().interrupt();
             }
         }
 
         public void startFailover()
         {
-            thread = new Thread(this::restartSubscription);
-            thread.start();
+            executorService.scheduleAtFixedRate(this::restartSubscription, 0, 500, TimeUnit.MILLISECONDS);
         }
 
         private void restartSubscription()    {
-            isRunning = true;
-            while (isRunning)
+            try
             {
-                try
-                {
-                    JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).warn("Try to restart JMS message listener");
+                JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).warn("Try to restart JMS message listener");
 
-                    jmsAdapter.close();
-                    jmsAdapter.initConnection();
-                    listener.forEach(jmsAdapter::register);
-                    jmsAdapter.start();
+                jmsAdapter.close();
+                jmsAdapter.initConnection();
+                listener.forEach(jmsAdapter::register);
+                jmsAdapter.start();
 
-                    JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).warn("Listener successfully restarted");
-                    return;
-                }
-                catch (JMSException | IllegalStateException e)
-                {
-                    JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error("Failed to restart JMS Listener");
-                    JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error(e.getMessage());
-                }
-
-                try
-                {
-                    //noinspection BusyWait
-                    Thread.sleep(500);
-                }
-                catch (InterruptedException e)
-                {
-                    JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error(e.getMessage());
-                    Thread.currentThread().interrupt();
-                    return;
-                }
+                executorService.shutdown();  //Shutdown service if restart was successful
+                JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).warn("Listener successfully restarted");
             }
+            catch (JMSException | IllegalStateException e)
+            {
+                JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error("Failed to restart JMS Listener");
+                JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error(e.getMessage());
+            }
+
         }
 
     }

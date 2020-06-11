@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import io.jexxa.application.domainservice.IInvalidAdapterProperties;
 
+@SuppressWarnings("unused")
 public class InvalidAdapterProperties implements IInvalidAdapterProperties
 {
     public InvalidAdapterProperties(Properties properties)
