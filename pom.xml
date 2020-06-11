@@ -249,6 +249,12 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
+            <configuration>
+              <excludes>
+                <exclude>io.jexxa.samples.*</exclude>
+              </excludes>
+            </configuration>
+
             <executions>
               <!--
                   Prepares the property pointing to the JaCoCo runtime agent which
