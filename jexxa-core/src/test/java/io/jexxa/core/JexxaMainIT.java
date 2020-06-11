@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.management.ManagementFactory;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.management.MBeanServer;
@@ -35,16 +34,15 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestConstants.INTEGRATION_TEST)
 class JexxaMainIT
 {
-    private Properties properties;
     private JexxaMain objectUnderTest;
     private final String contextName = "HelloJexxa";
 
     @BeforeEach
     void initTests()
     {
-        properties = new Properties();
-        properties.putAll(getRESTfulRPCProperties());
-    }
+        objectUnderTest = new JexxaMain(contextName);
+        objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);    }
 
     @AfterEach
     void tearDownTests()
@@ -61,12 +59,8 @@ class JexxaMainIT
     @Test
     void bindToPort()
     {
-        //Arrange
-        objectUnderTest = new JexxaMain(contextName, properties);
-        objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
-
-
+        //Arrange - All done in initTests
+        
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
                 .bind(JMXAdapter.class).to(SimpleApplicationService.class)
@@ -82,15 +76,11 @@ class JexxaMainIT
     @Test
     void bindToPortWithDrivenAdapter()
     {
-        //Arrange
-        objectUnderTest = new JexxaMain(contextName, properties);
-        objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
-
+        //Arrange - All done in initTests
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
-                .addToInfrastructure("io.jexxa.application.infrastructure")
+                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .bind(JMXAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
                 .bind(RESTfulRPCAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
                 .start();
@@ -104,11 +94,7 @@ class JexxaMainIT
     @Test
     void bindToAnnotatedPorts()
     {
-        //Arrange
-        objectUnderTest = new JexxaMain(contextName, properties);
-        objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
-
+        //Arrange - All done in initTests
         
         //Act: Bind all DrivingAdapter to all ApplicationServices
         objectUnderTest
@@ -155,8 +141,8 @@ class JexxaMainIT
     void assertRESTfulRPCAdapter() {
         //Assert
         String restPath = "http://"
-                + properties.get(RESTfulRPCAdapter.HOST_PROPERTY) + ":"
-                + properties.get(RESTfulRPCAdapter.PORT_PROPERTY) + "/"
+                + objectUnderTest.getProperties().get(RESTfulRPCAdapter.HOST_PROPERTY) + ":"
+                + objectUnderTest.getProperties().get(RESTfulRPCAdapter.PORT_PROPERTY) + "/"
                 + SimpleApplicationService.class.getSimpleName() + "/"
                 + "getSimpleValue";
         
@@ -168,12 +154,4 @@ class JexxaMainIT
         assertEquals(42, result);
     }
 
-
-
-    private Properties getRESTfulRPCProperties() {
-        Properties properties = new Properties();
-        properties.put(RESTfulRPCAdapter.HOST_PROPERTY, "localhost");
-        properties.put(RESTfulRPCAdapter.PORT_PROPERTY, Integer.toString(7000));
-        return properties;
-    }
 }
