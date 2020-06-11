@@ -36,6 +36,7 @@ public class JMSSender
     public JMSSender(final Properties properties)
     {
         this.properties = properties;
+        createConnection(); //Try create a connection to ensure fail fast 
     }
 
     public void sendToTopic(Object message, final String topicName)
