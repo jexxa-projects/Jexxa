@@ -1,4 +1,4 @@
-package io.jexxa.sample.simpletimeservice.infrastructure.drivenadapter;
+package io.jexxa.sample.simpletimeservice.infrastructure.drivenadapter.console;
 
 import java.time.LocalTime;
 

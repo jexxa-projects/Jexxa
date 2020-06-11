@@ -13,7 +13,7 @@ public class TimeServiceApplication
         JexxaMain jexxaMain = new JexxaMain(TimeServiceApplication.class.getSimpleName());
 
         jexxaMain.addToApplicationCore("io.jexxa.sample.simpletimeservice.domainservice")
-                .addToInfrastructure("io.jexxa.sample.simpletimeservice.infrastructure")
+                .addToInfrastructure("io.jexxa.sample.simpletimeservice.infrastructure.drivenadapter.messaging")
 
                 .bind(RESTfulRPCAdapter.class).to(TimeService.class)
                 .bind(JMXAdapter.class).to(TimeService.class)

@@ -13,8 +13,18 @@
 
   <properties>
     <main.class>io.jexxa.sample.simpletimeservice.TimeServiceApplication</main.class>
+    <activemq.client.version>5.15.12</activemq.client.version>
   </properties>
 
+
+  <dependencies>
+    <!-- dependencies for tests with ActiveMQ -->
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-client</artifactId>
+      <version>${activemq.client.version}</version>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
