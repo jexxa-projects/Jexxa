@@ -171,7 +171,7 @@ class AdapterFactoryTest
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
 
         //Act/Assert
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(AmbiguousAdapterException.class, () ->
                 objectUnderTest.newInstanceOf(INotUniqueService.class)
         );
     }

@@ -37,6 +37,11 @@ public class JMSSender
     {
         this.properties = properties;
     }
+
+    public void sendToTopic(Object message, final String topicName)
+    {
+        sendToTopic(message, topicName, null);
+    }
     
     public void sendToTopic(Object message, final String topicName, final Properties messageProperties)
     {
@@ -54,6 +59,11 @@ public class JMSSender
         {
             throw new IllegalStateException("Could not send message ", e);
         }
+    }
+
+    public void sendToQueue(Object message, final String queue)
+    {
+        sendToQueue(message, queue, null);
     }
 
     public void sendToQueue(final Object message, final String queueName, Properties messageProperties)

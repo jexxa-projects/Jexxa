@@ -145,7 +145,10 @@ public class AdapterFactory
         var implementationList = dependencyScanner.getClassesImplementing(interfaceType);
 
         Validate.notNull(implementationList);
-        Validate.isTrue(implementationList.size() <= 1); // If more than one implementation is available our convention is violated
+        if (implementationList.size() > 1) // If more than one implementation is available our convention is violated
+        {
+            throw new AmbiguousAdapterException(interfaceType, implementationList);
+        }
 
         if ( implementationList.isEmpty() )
         {
