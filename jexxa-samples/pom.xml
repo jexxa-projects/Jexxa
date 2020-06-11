@@ -27,5 +27,6 @@
 
   <modules>
     <module>HelloJexxa</module>
+    <module>SimpleTimeService</module>
   </modules>
 </project>

@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[2.0.1 - UNRELEASED] - YYYY-MM-DD
 ### Added
--   Added automatic reconnection mechanism for JMS Listener in case of a broker excpetion 
+-   Added automatic reconnection mechanism for JMS Listener in case of a broker exception 
 
 ### Changed
 -   Updated dependencies 
