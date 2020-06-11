@@ -31,6 +31,7 @@
     <junit.jupiter.engine.version>5.7.0-M1</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.7.0-M1</junit.jupiter.params.version>
     <slf4j.simple.version>1.7.28</slf4j.simple.version>
+    <awaitility.version>4.0.3</awaitility.version>
 
     <sonar.projectKey>repplix_Jexxa</sonar.projectKey>
   </properties>
@@ -139,6 +140,12 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>${slf4j.simple.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility-groovy</artifactId>
+      <version>${awaitility.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

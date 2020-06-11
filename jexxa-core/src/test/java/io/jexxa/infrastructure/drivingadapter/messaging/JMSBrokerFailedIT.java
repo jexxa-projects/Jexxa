@@ -1,6 +1,11 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import java.time.Duration;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.jms.Connection;
 import javax.jms.JMSException;
@@ -15,11 +20,9 @@ class JMSBrokerFailedIT
     private static final String MESSAGE = "Hello World";
 
     @Test
-    void testReconnect() throws JMSException, InterruptedException
+    void testReconnect() throws JMSException
     {
         //Arrange
-        var maxSendMessages = 10;
-        var currentSendMessages = 0;
         var jexxaMain = new JexxaMain(JMSBrokerFailedIT.class.getSimpleName());
         var messageListener = new TopicListener();
         var jmsAdapter = new JMSAdapter(jexxaMain.getProperties());
@@ -32,15 +35,13 @@ class JMSBrokerFailedIT
         //Act
         simulateConnectionException(jmsAdapter.getConnection());
 
-        //Assert
-        while (messageListener.getMessages().isEmpty() && currentSendMessages <= maxSendMessages)
-        {
-            myProducer.send(MESSAGE); //Regularly send a message
-            ++currentSendMessages;
-            //noinspection BusyWait
-            Thread.sleep(100);
-        }
+        var service = Executors.newSingleThreadScheduledExecutor();
+        service.schedule(() -> myProducer.send(MESSAGE),100, TimeUnit.MILLISECONDS ); // Send messages in a 100 ms interval 
 
+        //Assert
+        await().atMost(Duration.ofSeconds(2,0)).until(() -> !messageListener.getMessages().isEmpty());
+
+        service.shutdown();
         jmsAdapter.stop();
 
         assertFalse(messageListener.getMessages().isEmpty());
