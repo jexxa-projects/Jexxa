@@ -9,9 +9,9 @@ public class AmbiguousAdapterException extends RuntimeException
     public <T> AmbiguousAdapterException(Class<T> clazz, List<Class<?>> implementationList)
     {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Outbound port ")
+        stringBuilder.append("AmbiguousAdapterException: Outbound port ")
                 .append(clazz.getName())
-                .append(" is implemented by multiple times : \n");
+                .append(" is implemented by multiple adapters : \n");
 
         implementationList.forEach( implementation -> stringBuilder.append("   * ")
                 .append(implementation.getName())
