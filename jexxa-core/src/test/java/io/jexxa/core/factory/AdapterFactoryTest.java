@@ -1,7 +1,6 @@
 package io.jexxa.core.factory;
 
 
-
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -15,6 +14,7 @@ import java.util.Properties;
 import io.jexxa.TestConstants;
 import io.jexxa.application.domainservice.IDefaultConstructorService;
 import io.jexxa.application.domainservice.IFactoryMethodService;
+import io.jexxa.application.domainservice.IInvalidAdapterProperties;
 import io.jexxa.application.domainservice.INotImplementedService;
 import io.jexxa.application.domainservice.INotUniqueService;
 import io.jexxa.application.domainservice.IPropertiesConstructorService;
@@ -186,6 +186,19 @@ class AdapterFactoryTest
         //Act/Assert
         assertThrows(IllegalArgumentException.class, () ->
                 objectUnderTest.newInstanceOf(INotImplementedService.class)
+        );
+    }
+
+
+    @Test
+    void createInvalidAdapterProperties() {
+        //Arrange
+        var objectUnderTest = new AdapterFactory().
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
+
+        //Act/Assert
+        assertThrows(AdapterFactory.InvalidAdapterConfigurationException.class, () ->
+                objectUnderTest.newInstanceOf(IInvalidAdapterProperties.class, new Properties())
         );
     }
 }
