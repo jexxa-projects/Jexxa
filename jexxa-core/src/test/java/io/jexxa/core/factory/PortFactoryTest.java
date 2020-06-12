@@ -6,12 +6,14 @@ import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Properties;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
+import io.jexxa.application.infrastructure.drivingadapter.InvalidPortAdapter;
 import io.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -23,7 +25,8 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class PortFactoryTest
 {
     @Test
-    void createPortWithAvailableDrivenAdapter() {
+    void createPortWithAvailableDrivenAdapter()
+    {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -38,7 +41,8 @@ class PortFactoryTest
     }
 
     @Test
-    void createPortWithMissingAdapter() {
+    void createPortWithMissingAdapter()
+    {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -54,7 +58,8 @@ class PortFactoryTest
 
 
     @Test
-    void newInstanceOfPort() {
+    void newInstanceOfPort()
+    {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -72,7 +77,8 @@ class PortFactoryTest
     }
 
     @Test
-    void getInstanceOfPort() {
+    void getInstanceOfPort()
+    {                                                                                
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -86,12 +92,13 @@ class PortFactoryTest
         //Assert that first and second adapter are equal 
         assertNotNull(first);
         assertNotNull(second);
-        assertEquals(first,second);
+        assertEquals(first, second);
     }
 
 
     @Test
-    void getInstanceOfPortAdapter() {
+    void getInstanceOfPortAdapter()
+    {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 whiteListPackage(JEXXA_DRIVEN_ADAPTER);
@@ -105,7 +112,21 @@ class PortFactoryTest
         //Assert that first and second adapter are equal
         assertNotNull(first);
         assertNotNull(second);
-        assertEquals(first.getPort(),second.getPort());
+        assertEquals(first.getPort(), second.getPort());
     }
 
+    @Test
+    void getInstanceOfInvalidPortAdapter()
+    {
+        //Arrange
+        var drivenAdapterFactory = new AdapterFactory().
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
+        var objectUnderTest = new PortFactory(drivenAdapterFactory).
+                whiteListPackage(JEXXA_APPLICATION_SERVICE);
+
+        //Act / Assert
+        assertThrows(PortFactory.InvalidPortConfigurationException.class,
+                () -> objectUnderTest.getPortAdapterOf(InvalidPortAdapter.class, new Properties())
+        );
+    }
 }
