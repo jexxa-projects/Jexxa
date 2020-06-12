@@ -1,13 +1,12 @@
 package io.jexxa.application.infrastructure.drivingadapter;
 
-import io.jexxa.application.applicationservice.ThrowingApplicationService;
+import io.jexxa.application.applicationservice.SimpleApplicationService;
 
+@SuppressWarnings("unused")
 public class InvalidPortAdapter
 {
-    private ThrowingApplicationService port;
-
-    public InvalidPortAdapter( ThrowingApplicationService port)
+    public InvalidPortAdapter( SimpleApplicationService port)
     {
-        this.port = port;
+        throw new IllegalArgumentException("Simulate exception in constructor of a PortAdapter.");
     }
 }
