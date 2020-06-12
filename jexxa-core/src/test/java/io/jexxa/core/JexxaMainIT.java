@@ -4,15 +4,7 @@ package io.jexxa.core;
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.lang.management.ManagementFactory;
-import java.util.Set;
-
-import javax.management.MBeanServer;
-import javax.management.ObjectInstance;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.annotation.ApplicationService;
@@ -20,8 +12,8 @@ import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapt
 import io.jexxa.application.applicationservice.JexxaApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domainservice.InitializeJexxaAggregates;
-import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
-import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
+import io.jexxa.application.infrastructure.drivingadapter.ProxyAdapter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,14 +55,18 @@ class JexxaMainIT
         
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
-                .bind(JMXAdapter.class).to(SimpleApplicationService.class)
-                .bind(RESTfulRPCAdapter.class).to(SimpleApplicationService.class)
+                .bind(ProxyAdapter.class).to(SimpleApplicationService.class)
 
                 .start();
 
         //Assert
-        assertJMXAdapter(SimpleApplicationService.class);
-        assertRESTfulRPCAdapter();
+        var result = objectUnderTest.getDrivingAdapter(ProxyAdapter.class)
+                .getPortList()
+                .stream()
+                .filter( element -> SimpleApplicationService.class.equals(element.getClass()) )
+                .findFirst();
+
+        assertTrue(result.isPresent());
     }
 
     @Test
@@ -81,13 +77,19 @@ class JexxaMainIT
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .bind(JMXAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
-                .bind(RESTfulRPCAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
+                .bind(ProxyAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
                 .start();
 
 
         //Assert
-        assertJMXAdapter(ApplicationServiceWithDrivenAdapters.class);
+        //Assert
+        var result = objectUnderTest.getDrivingAdapter(ProxyAdapter.class)
+                .getPortList()
+                .stream()
+                .filter( element -> ApplicationServiceWithDrivenAdapters.class.equals(element.getClass()) )
+                .findFirst();
+
+        assertTrue(result.isPresent());
     }
     
 
@@ -98,12 +100,17 @@ class JexxaMainIT
         
         //Act: Bind all DrivingAdapter to all ApplicationServices
         objectUnderTest
-                .bind(RESTfulRPCAdapter.class).toAnnotation(ApplicationService.class)
+                .bind(ProxyAdapter.class).toAnnotation(ApplicationService.class)
                 .start();
 
         //Assert
-        assertRESTfulRPCAdapter();
-    }
+        var result = objectUnderTest.getDrivingAdapter(ProxyAdapter.class)
+                .getPortList()
+                .stream()
+                .filter( element -> SimpleApplicationService.class.equals(element.getClass()) )
+                .findFirst();
+
+        assertTrue(result.isPresent());    }
 
 
     @Test
@@ -111,6 +118,7 @@ class JexxaMainIT
     {
         //Arrange
         objectUnderTest = new JexxaMain(contextName);
+        objectUnderTest.getProperties().remove(JDBCKeyValueRepository.JDBC_DRIVER);  //Remove in order to use InMemoryDB
         objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
 
@@ -126,32 +134,7 @@ class JexxaMainIT
 
 
     /* ---------------------Util methods ------------------ */
-    void assertJMXAdapter(Class<?> clazz) {
-        //Assert
-        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-        Set<ObjectInstance> result = mbs.queryMBeans(null , null);
 
-        assertNotNull(result);
-        assertTrue(result.
-                stream().
-                anyMatch(element -> element.getClassName().endsWith(clazz.getSimpleName()))
-        );
-    }
 
-    void assertRESTfulRPCAdapter() {
-        //Assert
-        String restPath = "http://"
-                + objectUnderTest.getProperties().get(RESTfulRPCAdapter.HOST_PROPERTY) + ":"
-                + objectUnderTest.getProperties().get(RESTfulRPCAdapter.PORT_PROPERTY) + "/"
-                + SimpleApplicationService.class.getSimpleName() + "/"
-                + "getSimpleValue";
-        
-        Integer result = Unirest.get(restPath)
-                .header("Content-Type", "application/json")
-                .asObject(Integer.class).getBody();
-
-        assertNotNull(result);
-        assertEquals(42, result);
-    }
 
 }

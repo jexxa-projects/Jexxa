@@ -92,6 +92,10 @@ public class JexxaMain
         return port.cast(portFactory.getInstanceOf(port, properties));
     }
 
+    public <T> T getDrivingAdapter(Class<T> adapter)
+    {
+        return drivingAdapterFactory.getInstanceOf(adapter, getProperties());
+    }
 
     @SuppressWarnings("java:S2629")
     public BoundedContext start()

@@ -12,7 +12,6 @@ public class RepositoryManager
 {
     private static final RepositoryManager REPOSITORY_MANAGER = new RepositoryManager();
 
-
     @SuppressWarnings("unchecked")
     public static <T,K> IRepository<T,K> getRepository(
             Class<T> aggregateClazz,
