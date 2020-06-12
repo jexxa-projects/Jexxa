@@ -179,13 +179,7 @@ public class PortFactory
     private Optional<Constructor<?>> findConstructor(Class<?> inboundPort)
     {
         var constructorList = Arrays.asList(inboundPort.getConstructors());
-
-        if ( constructorList.size() > 1)
-        {
-            JexxaLogger.getLogger(getClass()).
-                    warn("More than one constructor available for {}. => Reconsider to provide only a single constructor", inboundPort.getName());
-        }
-
+        
         return constructorList.stream()
                 .filter(constructor -> adapterFactory.isAvailable(Arrays.asList(constructor.getParameterTypes())))
                 .findFirst();
