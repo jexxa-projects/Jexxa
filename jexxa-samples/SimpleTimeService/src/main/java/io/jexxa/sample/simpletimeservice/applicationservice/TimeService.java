@@ -18,6 +18,7 @@ public class TimeService
         return LocalTime.now();
     }
 
+    @SuppressWarnings("unused")
     public void publishTime()
     {
         timePublisher.publish(getTime());
