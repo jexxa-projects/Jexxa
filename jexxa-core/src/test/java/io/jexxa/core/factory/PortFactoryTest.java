@@ -125,8 +125,9 @@ class PortFactoryTest
                 whiteListPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act / Assert
-        assertThrows(PortFactory.InvalidPortConfigurationException.class,
-                () -> objectUnderTest.getPortAdapterOf(InvalidPortAdapter.class, new Properties())
-        );
+        var excetpion = assertThrows(PortFactory.InvalidPortConfigurationException.class,
+                () -> objectUnderTest.getPortAdapterOf(InvalidPortAdapter.class, new Properties()) );
+
+        assertNotNull(excetpion.getMessage());
     }
 }
