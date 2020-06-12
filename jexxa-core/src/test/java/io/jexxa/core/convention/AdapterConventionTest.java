@@ -12,7 +12,7 @@ import io.jexxa.application.infrastructure.drivingadapter.InvalidAdapter;
 import io.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
 import org.junit.jupiter.api.Test;
 
-public class AdapterConventionTest
+class AdapterConventionTest
 {
     @Test
     void validateAdapterConvention()
