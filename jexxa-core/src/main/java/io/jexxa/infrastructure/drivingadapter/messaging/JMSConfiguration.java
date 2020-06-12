@@ -17,5 +17,4 @@ public @interface JMSConfiguration
     String destination() default "";
     String selector() default "";
     MessagingType messagingType() default MessagingType.TOPIC;
-
 }

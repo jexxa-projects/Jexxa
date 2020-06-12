@@ -54,7 +54,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
         try
         {
-            initConnection();
+            initConnection(); 
         }
         catch (JMSException e)
         {
@@ -226,7 +226,6 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             this.jmsAdapter = jmsAdapter;
             this.listener = listener;
             executorService = Executors.newSingleThreadScheduledExecutor();
-
         }
 
         public void stopFailover()
