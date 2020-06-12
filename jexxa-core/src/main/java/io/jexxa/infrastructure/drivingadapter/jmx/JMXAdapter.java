@@ -20,13 +20,9 @@ public class JMXAdapter implements IDrivingAdapter
     private final Properties properties;
 
 
-    public JMXAdapter()
-    {
-        this(null);
-    }
-
     public JMXAdapter(Properties properties)
     {
+        Validate.notNull(properties);
         this.properties = properties;
     }
 

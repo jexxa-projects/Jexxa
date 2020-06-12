@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.management.ManagementFactory;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.management.MBeanServer;
@@ -29,7 +30,7 @@ class JMXAdapterTest
         var simpleApplicationService = new SimpleApplicationService();
         simpleApplicationService.setSimpleValue(defaultValue);
 
-        var objectUnderTest = new JMXAdapter();
+        var objectUnderTest = new JMXAdapter(new Properties());
         
         //Act
         objectUnderTest.register(simpleApplicationService);

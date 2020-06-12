@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.utils.JexxaLogger;
+import org.apache.commons.lang.Validate;
 
 public class MBeanConvention implements DynamicMBean
 {
@@ -32,20 +33,15 @@ public class MBeanConvention implements DynamicMBean
     private final Gson gson = new Gson();
 
     private final Object object;
-    private String contextName;
+    private final String contextName;
     
     MBeanConvention(Object object, Properties properties)
     {
+        Validate.notNull(object);
+        Validate.notNull(properties);
+
         this.object = object;
-
-        if ( properties != null)
-        {
-            contextName = properties.getProperty(JEXXA_CONTEXT_NAME);
-        }
-
-        if ( contextName == null ) {
-            contextName = "UnknownContext";
-        }
+        contextName = properties.getProperty(JEXXA_CONTEXT_NAME, "UnknownContext");
     }
 
 
@@ -103,7 +99,8 @@ public class MBeanConvention implements DynamicMBean
             return new Object[0];
         }
 
-        if ( parameters.length != parameterTypes.length) {
+        if ( parameters.length != parameterTypes.length)
+        {
             throw new IllegalArgumentException("Invalid number of parameter");
         }
 
