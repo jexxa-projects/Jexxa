@@ -9,6 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertTimeout;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
+import javax.jms.Connection;
+import javax.jms.JMSException;
+
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
@@ -37,7 +40,7 @@ class JMSSenderIT
 
     @Test
     @Timeout(1)
-    void sentMessageToTopic()
+    void sendMessageToTopic()
     {
         //Arrange
         var messageListener = new TopicListener();
@@ -60,7 +63,7 @@ class JMSSenderIT
 
     @Test
     @Timeout(2)
-    void sentMessageToQueue()
+    void sendMessageToQueue()
     {
         //Arrange
         var messageListener = new QueueListener();
@@ -78,5 +81,38 @@ class JMSSenderIT
         await().atMost(1, TimeUnit.SECONDS).until(() -> !messageListener.getMessages().isEmpty());
 
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
+    @Test
+    @Timeout(1)
+    void sendMessageReconnectQueue() throws JMSException
+    {
+        //Arrange
+        var messageListener = new QueueListener();
+        var objectUnderTest = new JMSSender(jexxaMain.getProperties());
+
+        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
+                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+                .bind(JMSAdapter.class).to(messageListener)
+                .start();
+
+        //Act (simulate an error in between sending two messages
+        objectUnderTest.sendToQueue(message, QueueListener.QUEUE_DESTINATION);
+        simulateConnectionException(objectUnderTest.getConnection());
+        objectUnderTest.sendToQueue(message, QueueListener.QUEUE_DESTINATION);
+
+        //Assert
+        await().atMost(1, TimeUnit.SECONDS).until(() -> messageListener.getMessages().size() >= 2);
+
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
+    private void simulateConnectionException(Connection connection) throws JMSException
+    {
+        var listener = connection.getExceptionListener();
+
+        connection.close();
+
+        listener.onException(new JMSException("Simulated error "));
     }
 }

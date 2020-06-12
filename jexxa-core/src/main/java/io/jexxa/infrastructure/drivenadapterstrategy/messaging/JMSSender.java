@@ -62,7 +62,7 @@ public class JMSSender implements AutoCloseable
         catch (JMSException e)
         {
             close();
-            throw new IllegalStateException("Could not send message ", e);
+            throw new IllegalStateException("Could not send message", e);
         }
     }
 
@@ -106,7 +106,7 @@ public class JMSSender implements AutoCloseable
         messageProducer.send(textMessage);
     }
 
-    private Session getSession() throws JMSException
+    Session getSession() throws JMSException
     {
         if (this.session == null)
         {
@@ -117,7 +117,7 @@ public class JMSSender implements AutoCloseable
     }
 
 
-    private Connection getConnection()
+    Connection getConnection()
     {
         if (connection == null)
         {
@@ -164,25 +164,26 @@ public class JMSSender implements AutoCloseable
             if (session != null)
             {
                 session.close();
-                session = null;
             }
         }
         catch (JMSException e)
         {
             JexxaLogger.getLogger(JMSSender.class).error("Could not close JMS Session: {0} ",e);
         }
+        session = null;
+
 
         try
         {
             if (connection != null)
             {
                 connection.close();
-                connection = null;
             }
         }
         catch (JMSException e)
         {
             JexxaLogger.getLogger(JMSSender.class).error("Could not close JMS connection: {0} ",e);
         }
+        connection = null;
     }
 }
