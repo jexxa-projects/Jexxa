@@ -20,6 +20,7 @@ import io.jexxa.application.domainservice.INotUniqueService;
 import io.jexxa.application.domainservice.IPropertiesConstructorService;
 import io.jexxa.application.infrastructure.drivenadapter.factory.DefaultConstructorAdapter;
 import io.jexxa.application.infrastructure.drivenadapter.factory.PropertiesConstructorAdapter;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -32,12 +33,17 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestConstants.UNIT_TEST)
 class AdapterFactoryTest
 {
+    static AdapterFactory objectUnderTest;
+
+    @BeforeAll
+    static void initFactory()
+    {
+        objectUnderTest = new AdapterFactory().
+                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
+    }
+
     @Test
     void createDrivenAdapter() {
-        //Arrange
-        var objectUnderTest = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
-
         //Act
         var result = objectUnderTest.newInstanceOf(IDefaultConstructorService.class);
 
@@ -47,10 +53,6 @@ class AdapterFactoryTest
 
     @Test
     void createDrivenAdapterImpl() {
-        //Arrange
-        var objectUnderTest = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
-
         //Act
         var firstResult = objectUnderTest.newInstanceOf(DefaultConstructorAdapter.class);
         var secondResult = objectUnderTest.newInstanceOf(PropertiesConstructorAdapter.class, new Properties());
@@ -62,11 +64,7 @@ class AdapterFactoryTest
 
 
     @Test
-    void getDrivenAdapter() {
-        //Arrange
-        var objectUnderTest = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
-
+    void validateSingletonScopeOfDrivenAdapter() {
         //Act
         var first = objectUnderTest.getInstanceOf(IDefaultConstructorService.class);
         var second = objectUnderTest.getInstanceOf(IDefaultConstructorService.class);
@@ -88,14 +86,8 @@ class AdapterFactoryTest
 
     @Test
     void createDrivenAdapterWithPropertiesConstructor() {
-        //Arrange
-        var objectUnderTest = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
-
-        var properties = new Properties();
-
         //Act
-        var result = objectUnderTest.newInstanceOf(IPropertiesConstructorService.class, properties);
+        var result = objectUnderTest.newInstanceOf(IPropertiesConstructorService.class, new Properties());
 
         //Assert
         assertNotNull(result);
@@ -104,10 +96,6 @@ class AdapterFactoryTest
 
     @Test
     void createDrivenAdapterWithFactoryMethod() {
-        //Arrange
-        var objectUnderTest = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
-
         //Act
         var result = objectUnderTest.newInstanceOf(IFactoryMethodService.class);
 
@@ -117,13 +105,8 @@ class AdapterFactoryTest
 
     @Test
     void createDrivenAdapterWithPropertiesFactoryMethod() {
-        //Arrange
-        var objectUnderTest = new AdapterFactory().
-            whiteListPackage(JEXXA_DRIVEN_ADAPTER);
-        var properties = new Properties();
-        
         //Act
-        var result = objectUnderTest.newInstanceOf(IFactoryMethodService.class, properties);
+        var result = objectUnderTest.newInstanceOf(IFactoryMethodService.class, new Properties());
 
         //Assert
         assertNotNull(result);
@@ -132,10 +115,6 @@ class AdapterFactoryTest
 
     @Test
     void drivenAdapterAvailable() {
-        //Arrange
-        var objectUnderTest = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
-
         var adapterList = new ArrayList<Class<?>>();
         adapterList.add(IDefaultConstructorService.class);
         adapterList.add(IFactoryMethodService.class);
@@ -150,10 +129,6 @@ class AdapterFactoryTest
 
     @Test
     void drivenAdapterUnavailable() {
-        //Arrange
-        var objectUnderTest = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
-
         var adapterList = new ArrayList<Class<?>>();
         adapterList.add(INotImplementedService.class);
 
@@ -166,10 +141,6 @@ class AdapterFactoryTest
 
     @Test
     void createNoUniqueImplementation() {
-        //Arrange
-        var objectUnderTest = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
-
         //Act/Assert
         var exception = assertThrows(AmbiguousAdapterException.class, () ->
                 objectUnderTest.newInstanceOf(INotUniqueService.class)
@@ -179,10 +150,6 @@ class AdapterFactoryTest
 
     @Test
     void createNoImplementationAvailable() {
-        //Arrange
-        var objectUnderTest = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
-
         //Act/Assert
         assertThrows(IllegalArgumentException.class, () ->
                 objectUnderTest.newInstanceOf(INotImplementedService.class)
@@ -192,10 +159,6 @@ class AdapterFactoryTest
 
     @Test
     void createInvalidAdapterProperties() {
-        //Arrange
-        var objectUnderTest = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
-
         //Act/Assert
         assertThrows(AdapterFactory.InvalidAdapterConfigurationException.class, () ->
                 objectUnderTest.newInstanceOf(IInvalidAdapterProperties.class, new Properties())

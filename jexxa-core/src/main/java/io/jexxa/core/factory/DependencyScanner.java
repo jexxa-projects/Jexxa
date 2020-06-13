@@ -62,13 +62,15 @@ class DependencyScanner
             if (whiteListPackages.isEmpty())
             {
                 scanResult = new ClassGraph()
-                        .enableAllInfo()
+                        .enableAnnotationInfo()
+                        .enableClassInfo()
                         .scan();
             }
             else
             {
                 scanResult = new ClassGraph()
-                        .enableAllInfo()
+                        .enableAnnotationInfo()
+                        .enableClassInfo()
                         .whitelistPackages(whiteListPackages.toArray(new String[0]))
                         .scan();
 

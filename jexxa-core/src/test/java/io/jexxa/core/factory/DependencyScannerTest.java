@@ -24,23 +24,6 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class DependencyScannerTest
 {
     @Test
-    void findAnnotatedClasses() {
-        //Arrange
-        var objectUnderTest = new DependencyScanner();
-        objectUnderTest.whiteListPackage(JEXXA_APPLICATION_SERVICE);
-
-        //Act
-        var applicationServiceList = objectUnderTest.getClassesWithAnnotation(ApplicationService.class);
-
-        //Assert
-        assertFalse(applicationServiceList.isEmpty());
-        assertTrue(applicationServiceList
-                .stream()
-                .anyMatch(SimpleApplicationService.class::isAssignableFrom));
-
-    }
-
-    @Test
     void findAnnotatedClassesWithinPackage() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
@@ -90,7 +73,7 @@ class DependencyScannerTest
 
 
     @Test
-    void getClassesImplementingInterfaceInSpecificPacakge() {
+    void getClassesImplementingInterfaceInSpecificPackage() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
         var packageName = "io.jexxa.infrastructure.drivingadapter.rest";
