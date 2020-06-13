@@ -1,9 +1,11 @@
 package io.jexxa.core;
 
 
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 import io.jexxa.TestConstants;
 import org.junit.jupiter.api.Tag;
@@ -28,11 +30,7 @@ class BoundedContextTest
         var thread = new Thread(this::waitForShutDown);
         thread.start();
 
-        while ( objectUnderTest == null ||
-                !objectUnderTest.isRunning())
-        {
-            Thread.onSpinWait();
-        }
+        await().atMost(1, TimeUnit.SECONDS).until(() -> (objectUnderTest != null && objectUnderTest.isRunning()));
 
         //Act
         objectUnderTest.shutdown();

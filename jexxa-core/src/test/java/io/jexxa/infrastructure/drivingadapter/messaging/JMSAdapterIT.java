@@ -3,12 +3,14 @@ package io.jexxa.infrastructure.drivingadapter.messaging;
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
@@ -40,7 +42,6 @@ class JMSAdapterIT
         properties.load(getClass().getResourceAsStream(JexxaMain.JEXXA_APPLICATION_PROPERTIES));
     }
 
-    @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
     void startJMSAdapterTopic()
@@ -58,16 +59,12 @@ class JMSAdapterIT
             myProducer.send(MESSAGE);
 
             //Assert
-            while (messageListener.getMessages().isEmpty())
-            {
-                Thread.onSpinWait();
-            }
+            await().atMost(1, TimeUnit.SECONDS).until(() -> !messageListener.getMessages().isEmpty());
 
             assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
         }
     }
 
-    @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
     void startJMSAdapterQueue()
@@ -85,10 +82,7 @@ class JMSAdapterIT
             myProducer.send(MESSAGE);
 
             //Assert
-            while (messageListener.getMessages().isEmpty())
-            {
-                Thread.onSpinWait();
-            }
+            await().atMost(1, TimeUnit.SECONDS).until( () -> !messageListener.getMessages().isEmpty());
 
             assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
         }
@@ -97,7 +91,6 @@ class JMSAdapterIT
 
 
 
-    @SuppressWarnings("LoopConditionNotUpdatedInsideLoop")
     @Test
     @Timeout(1)
     void startJMSAdapterJexxa()
@@ -118,10 +111,7 @@ class JMSAdapterIT
         myProducer.send(MESSAGE);
 
         //Assert
-        while (messageListener.getMessages().isEmpty())
-        {
-            Thread.onSpinWait();
-        }
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !messageListener.getMessages().isEmpty());
 
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
