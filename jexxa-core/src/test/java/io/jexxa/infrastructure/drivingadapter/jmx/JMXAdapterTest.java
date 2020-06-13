@@ -2,6 +2,7 @@ package io.jexxa.infrastructure.drivingadapter.jmx;
 
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.management.ManagementFactory;
@@ -53,6 +54,19 @@ class JMXAdapterTest
         objectUnderTest.stop();
     }
 
-    
+    @Test
+    void throwExceptionWhenRegisterApplicationServiceTwice()
+    {
+        //Arrange
+        var defaultValue = 42;
+        var simpleApplicationService = new SimpleApplicationService();
+        simpleApplicationService.setSimpleValue(defaultValue);
+
+        var objectUnderTest = new JMXAdapter(new Properties());
+
+        //Act
+        objectUnderTest.register(simpleApplicationService);
+        assertThrows(IllegalArgumentException.class, () -> objectUnderTest.register(simpleApplicationService));
+    }
 }
 
