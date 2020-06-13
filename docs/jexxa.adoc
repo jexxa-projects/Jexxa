@@ -79,7 +79,7 @@ skinparam PackagePadding 20
 
 package JexxaCore <<Jexxa>> {
 [Convention] <<Inversion of Control>>
-[Core] <<Fluent API>>
+[Core] <<Jexxa API>>
 [Factory] <<Inversion of Control>>
 }
 
