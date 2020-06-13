@@ -71,7 +71,7 @@ class DependencyScanner
                 scanResult = new ClassGraph()
                         .enableAnnotationInfo()
                         .enableClassInfo()
-                        .whitelistPackages(whiteListPackages.toArray(new String[0]))
+                        .acceptPackages(whiteListPackages.toArray(new String[0]))
                         .scan();
 
             }
