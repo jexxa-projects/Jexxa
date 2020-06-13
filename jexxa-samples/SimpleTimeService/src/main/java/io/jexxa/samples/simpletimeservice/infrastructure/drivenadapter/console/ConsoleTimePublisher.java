@@ -1,8 +1,8 @@
-package io.jexxa.sample.simpletimeservice.infrastructure.drivenadapter.console;
+package io.jexxa.samples.simpletimeservice.infrastructure.drivenadapter.console;
 
 import java.time.LocalTime;
 
-import io.jexxa.sample.simpletimeservice.domainservice.ITimePublisher;
+import io.jexxa.samples.simpletimeservice.domainservice.ITimePublisher;
 import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;

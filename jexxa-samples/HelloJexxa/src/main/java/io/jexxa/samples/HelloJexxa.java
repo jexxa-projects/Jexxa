@@ -1,4 +1,4 @@
-package io.jexxa.sample;
+package io.jexxa.samples;
 
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;

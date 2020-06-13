@@ -1,9 +1,9 @@
-package io.jexxa.sample.simpletimeservice;
+package io.jexxa.samples.simpletimeservice;
 
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
-import io.jexxa.sample.simpletimeservice.applicationservice.TimeService;
+import io.jexxa.samples.simpletimeservice.applicationservice.TimeService;
 
 public class TimeServiceApplication
 {

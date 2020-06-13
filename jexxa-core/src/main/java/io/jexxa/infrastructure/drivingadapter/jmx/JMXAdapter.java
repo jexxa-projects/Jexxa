@@ -69,5 +69,5 @@ public class JMXAdapter implements IDrivingAdapter
                 .filter(element -> mbs.isRegistered(element.getObjectName()))
                 .forEach(ThrowingConsumer.exceptionLogger(element ->  mbs.unregisterMBean(element.getObjectName())));
     }
-    
+
 }

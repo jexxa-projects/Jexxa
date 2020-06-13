@@ -1,6 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
 
+import static io.jexxa.infrastructure.drivingadapter.jmx.MBeanConvention.JEXXA_CONTEXT_NAME;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,10 +29,12 @@ class JMXAdapterTest
     {
         //Arrange
         var defaultValue = 42;
+        var properties = new Properties();
+        properties.put(JEXXA_CONTEXT_NAME, "registerApplicationService"); // Unique name
         var simpleApplicationService = new SimpleApplicationService();
         simpleApplicationService.setSimpleValue(defaultValue);
 
-        var objectUnderTest = new JMXAdapter(new Properties());
+        var objectUnderTest = new JMXAdapter(properties);
         
         //Act
         objectUnderTest.register(simpleApplicationService);
@@ -59,14 +62,18 @@ class JMXAdapterTest
     {
         //Arrange
         var defaultValue = 42;
+        var properties = new Properties();
+        properties.put(JEXXA_CONTEXT_NAME, "throwExceptionWhenRegisterApplicationServiceTwice"); // Unique name
+        
         var simpleApplicationService = new SimpleApplicationService();
         simpleApplicationService.setSimpleValue(defaultValue);
 
-        var objectUnderTest = new JMXAdapter(new Properties());
+        var objectUnderTest = new JMXAdapter(properties);
 
         //Act
         objectUnderTest.register(simpleApplicationService);
         assertThrows(IllegalArgumentException.class, () -> objectUnderTest.register(simpleApplicationService));
+        objectUnderTest.stop();
     }
 }
 

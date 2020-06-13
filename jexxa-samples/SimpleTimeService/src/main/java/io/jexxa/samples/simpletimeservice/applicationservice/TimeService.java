@@ -1,8 +1,8 @@
-package io.jexxa.sample.simpletimeservice.applicationservice;
+package io.jexxa.samples.simpletimeservice.applicationservice;
 
 import java.time.LocalTime;
 
-import io.jexxa.sample.simpletimeservice.domainservice.ITimePublisher;
+import io.jexxa.samples.simpletimeservice.domainservice.ITimePublisher;
 
 public class TimeService
 {
