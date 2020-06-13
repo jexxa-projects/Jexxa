@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Properties;
 
 import io.jexxa.TestConstants;
@@ -41,10 +42,8 @@ class JDBCKeyValueRepositoryIT
     @AfterEach
     void tearDown()
     {
-        if ( objectUnderTest != null )
-        {
-            objectUnderTest.close();
-        }
+        Optional.ofNullable(objectUnderTest)
+                .ifPresent(JDBCKeyValueRepository::close);
     }
 
 

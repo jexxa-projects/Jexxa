@@ -16,6 +16,7 @@ import java.util.function.Function;
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.utils.JexxaLogger;
+import io.jexxa.utils.ThrowingConsumer;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 
@@ -296,17 +297,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
 
     public void close()
     {
-        try
-        {
-            if (connection != null)
-            {
-                connection.close();
-            }
-            connection = null;
-        }
-        catch (SQLException e)
-        {
-            LOGGER.error(e.getMessage());
-        }
+        Optional.ofNullable(connection)
+                .ifPresent(ThrowingConsumer.exceptionLogger(Connection::close));
     }
 }

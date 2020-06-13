@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure.utils.messaging;
 
+import java.util.Optional;
 import java.util.Properties;
 
 import javax.jms.Connection;
@@ -13,6 +14,7 @@ import javax.jms.TextMessage;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.utils.JexxaLogger;
+import io.jexxa.utils.ThrowingConsumer;
 
 public class MessageSender implements AutoCloseable
 {
@@ -63,27 +65,11 @@ public class MessageSender implements AutoCloseable
 
     public void close()
     {
-        try
-        {
-            if (session != null)
-            {
-                session.close();
-            }
-        } catch (JMSException e)
-        {
-            JexxaLogger.getLogger(MessageSender.class).error(e.getMessage());
-        }
+        Optional.ofNullable(session)
+                .ifPresent(ThrowingConsumer.exceptionLogger(Session::close));
 
-        try
-        {
-            if (connection != null)
-            {
-                connection.close();
-            }
-        } catch (JMSException e)
-        {
-            JexxaLogger.getLogger(MessageSender.class).error(e.getMessage());
-        }
+        Optional.ofNullable(connection)
+                .ifPresent(ThrowingConsumer.exceptionLogger(Connection::close));
     }
 
 }

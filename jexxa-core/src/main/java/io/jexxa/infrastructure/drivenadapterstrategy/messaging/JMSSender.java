@@ -2,6 +2,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 import javax.jms.Connection;
@@ -15,6 +16,7 @@ import javax.naming.NamingException;
 
 import com.google.gson.Gson;
 import io.jexxa.utils.JexxaLogger;
+import io.jexxa.utils.ThrowingConsumer;
 import org.apache.commons.lang.Validate;
 
 /**
@@ -159,31 +161,13 @@ public class JMSSender implements AutoCloseable
     @Override
     public void close()
     {
-        try
-        {
-            if (session != null)
-            {
-                session.close();
-            }
-        }
-        catch (JMSException e)
-        {
-            JexxaLogger.getLogger(JMSSender.class).error("Could not close JMS Session: {0} ",e);
-        }
+        Optional.ofNullable(session)
+                .ifPresent(ThrowingConsumer.exceptionLogger(Session::close));
+
+        Optional.ofNullable(connection)
+                .ifPresent(ThrowingConsumer.exceptionLogger(Connection::close));
+
         session = null;
-
-
-        try
-        {
-            if (connection != null)
-            {
-                connection.close();
-            }
-        }
-        catch (JMSException e)
-        {
-            JexxaLogger.getLogger(JMSSender.class).error("Could not close JMS connection: {0} ",e);
-        }
         connection = null;
     }
 }
