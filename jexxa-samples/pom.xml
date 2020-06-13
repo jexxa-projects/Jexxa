@@ -9,6 +9,7 @@
   </parent>
 
   <artifactId>jexxa-samples</artifactId>
+  <groupId>io.jexxa.sample</groupId>
   <packaging>pom</packaging>
   <name>Jexxa-Samples</name>
     
