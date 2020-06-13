@@ -516,7 +516,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for this application.</p>
 </div>
 <div class="paragraph">
-<p>Existing frameworks such as the <a href="https://spring.io">Spring Framework</a> or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into business applications.</p>
+<p>Existing frameworks such as the <a href="https://spring.io">Spring Framework</a> or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into the domain logic.</p>
 </div>
 <div class="paragraph">
 <p>When developing applications with a high durability as used in production, financial or insurance sector, it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers shall only use standard language features or libraries/SDKs shipped with a programming language. Available frameworks shall be used to attach the latest technology stacks to the application core.</p>
@@ -530,7 +530,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Updating to a newer version of a technology stack is difficult or even impossible so that it is much safer to use the old one. Of course new developed applications use this old version as well because your team 'trusts' it, and you avoid maintaining a zoo of different versions.</p>
 </li>
 <li>
-<p>Adding or replacing a technology stack is difficult or even impossible, so a disruptive technology will cause your application core to become legacy as well. A common example are database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs &#8594; relational DBs &#8594; a zoo of NoSQL DBs. Because database technologies can become vital for your business, your company employs senior-grade developers who have deep knowledge of both legacy and new technology stacks and synchronize your business data.</p>
+<p>Adding or replacing a technology stack is difficult or even impossible, so a disruptive technology will cause your application core to become legacy as well. A common example are database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs &#8594; relational DBs &#8594; a zoo of NoSQL DBs. Because database technologies can become crucial for your business, your company employs senior-grade developers who have deep knowledge of both legacy and new technology stacks and synchronize your business data.</p>
 </li>
 <li>
 <p>Changes on the application core itself takes much longer time as in the beginning. In the end you need senior developers who have a deep understanding of the specific business domain, the used technology stacks and the convoluted structures of the entire application.</p>
@@ -753,7 +753,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>This component includes class <code>JexxaMain</code> which is the entry point in the main-method of your application to use Jexxa.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>JexxaMain</code> provides a fluent API to explicitly show the binding of technology stacks to your inbound ports.</p>
+<p><code>JexxaMain</code> provides a fluent API to explicitly show the binding of technology stacks to your inbound ports. In addition it provides a <code>BoundedContext</code> which allows to control your application in your environment.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -1089,7 +1089,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-06-13 08:12:28 +0200
+Last updated 2020-06-13 16:18:03 +0200
 </div>
 </div>
 </body>

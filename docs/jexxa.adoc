@@ -46,7 +46,7 @@ Even if you use real powerful frameworks for good reason within your application
 == Motivation
 The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for this application.
 
-Existing frameworks such as the https://spring.io[Spring Framework] or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into business applications.
+Existing frameworks such as the https://spring.io[Spring Framework] or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into the domain logic.
 
 When developing applications with a high durability as used in production, financial or insurance sector, it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers shall only use standard language features or libraries/SDKs shipped with a programming language. Available frameworks shall be used to attach the latest technology stacks to the application core.
 
@@ -54,7 +54,7 @@ Applications without well-defined boundaries between technology stacks and appli
 
 * Updating to a newer version of a technology stack is difficult or even impossible so that it is much safer to use the old one. Of course new developed applications use this old version as well because your team 'trusts' it, and you avoid maintaining a zoo of different versions.
 
-* Adding or replacing a technology stack is difficult or even impossible, so a disruptive technology will cause your application core to become legacy as well. A common example are database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs -> relational DBs -> a zoo of NoSQL DBs. Because database technologies can become vital for your business, your company employs senior-grade developers who have deep knowledge of both legacy and new technology stacks and synchronize your business data.
+* Adding or replacing a technology stack is difficult or even impossible, so a disruptive technology will cause your application core to become legacy as well. A common example are database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs -> relational DBs -> a zoo of NoSQL DBs. Because database technologies can become crucial for your business, your company employs senior-grade developers who have deep knowledge of both legacy and new technology stacks and synchronize your business data.
 
 * Changes on the application core itself takes much longer time as in the beginning. In the end you need senior developers who have a deep understanding of the specific business domain, the used technology stacks and the convoluted structures of the entire application.
 
@@ -252,7 +252,7 @@ a|Components
 
 a| Core
 a| This component includes class `JexxaMain` which is the entry point in the main-method of your application to use Jexxa.
-a| `JexxaMain` provides a fluent API to explicitly show the binding of technology stacks to your inbound ports. 
+a| `JexxaMain` provides a fluent API to explicitly show the binding of technology stacks to your inbound ports. In addition it provides a `BoundedContext` which allows to control your application in your environment.
 
 a| Factory
 a| Instantiates ports and adapters and manages their life cycle.
