@@ -1,8 +1,8 @@
 package io.jexxa.core;
 
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -193,34 +193,25 @@ public class JexxaMain
         return this;
     }
 
+
     private void loadJexxaProperties(Properties properties)
     {
-        if ( JexxaMain.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES) != null )
-        {
-            try
-            {
-                properties.load(JexxaMain.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES));
-            }
-            catch (IOException e)
-            {
-                LOGGER.error("Could not load properties file {}.", JEXXA_APPLICATION_PROPERTIES);
-            }
-        }
-        else
-        {
-            LOGGER.warn("NO PROPERTIES FILE FOUND {}", JEXXA_APPLICATION_PROPERTIES);
-        }
-
+        Optional.ofNullable(JexxaMain.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES))
+                .ifPresentOrElse(
+                        ThrowingConsumer.exceptionLogger(properties::load),
+                        () -> LOGGER.warn("NO PROPERTIES FILE FOUND {}", JEXXA_APPLICATION_PROPERTIES)
+                );
+        
     }
 
     private void setExceptionHandler()
     {
-        if (Thread.getDefaultUncaughtExceptionHandler() != null )
-        {
-            LOGGER.warn("Uncaught Exception Handler already set => Don't register Jexxa's uncaught exception handler");
-            return;
-        }
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+        Optional.ofNullable(Thread.getDefaultUncaughtExceptionHandler())
+                .ifPresentOrElse(
+                        value -> LOGGER.warn("Uncaught Exception Handler already set => Don't register Jexxa's uncaught exception handler"),
+                        () -> Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler())
+                );
+
     }
 
     static class CompositeDrivingAdapter implements IDrivingAdapter
