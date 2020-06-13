@@ -79,9 +79,8 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     @Override
     public void stop()
     {
-        if ( jmsConnectionExceptionHandler != null ) {
-            jmsConnectionExceptionHandler.stopFailover();
-        }
+        Optional.ofNullable( jmsConnectionExceptionHandler )
+                .ifPresent(JMSConnectionExceptionHandler::stopFailover);
         close();
         registeredListener.clear();
     }
@@ -233,7 +232,8 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             try
             {
                 executorService.awaitTermination(500, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e)
+            }
+            catch (InterruptedException e)
             {
                 Thread.currentThread().interrupt();
             }

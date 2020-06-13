@@ -134,7 +134,8 @@ public class JexxaMain
         return properties;
     }
     
-    protected JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port) {
+    protected JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port)
+    {
 
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
         var inboundPort    = portFactory.getInstanceOf(port, properties);
@@ -145,7 +146,8 @@ public class JexxaMain
         return this;
     }
 
-    protected JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Object port) {
+    protected JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Object port)
+    {
 
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
         drivingAdapter.register(port);
