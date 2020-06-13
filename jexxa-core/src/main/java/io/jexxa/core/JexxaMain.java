@@ -134,7 +134,7 @@ public class JexxaMain
         return properties;
     }
     
-    protected JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port)
+    protected void bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port)
     {
 
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
@@ -143,7 +143,6 @@ public class JexxaMain
         drivingAdapter.register(inboundPort);
 
         compositeDrivingAdapter.add(drivingAdapter);
-        return this;
     }
 
     protected JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Object port)
@@ -157,7 +156,7 @@ public class JexxaMain
         return this;
     }
 
-    protected JexxaMain bindToPortAdapter(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
+    protected void bindToPortAdapter(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
     {
         var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
 
@@ -166,26 +165,21 @@ public class JexxaMain
         drivingAdapter.register(portWrapperInstance);
 
         compositeDrivingAdapter.add(drivingAdapter);
-
-        return this;
     }
 
-    protected JexxaMain bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
+    protected void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
 
         var portList = portFactory.getInstanceOfPorts(portAnnotation, properties);
         portList.forEach(drivingAdapter::register);
         
         compositeDrivingAdapter.add(drivingAdapter);
-
-        return this;
     }
 
-    protected <T> JexxaMain addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
+    protected <T> void addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
     {
         T instance = portFactory.getInstanceOf(bootstrapService, properties);
         initFunction.accept(instance);
-        return this;
     }
 
 

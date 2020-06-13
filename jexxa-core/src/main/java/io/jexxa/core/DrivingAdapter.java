@@ -28,11 +28,13 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
         Validate.notNull(port);
 
         if ( AdapterConvention.isPortAdapter(port)) {
-            return jexxaMain.bindToPortAdapter(drivingAdapterClass, port);
+            jexxaMain.bindToPortAdapter(drivingAdapterClass, port);
+            return jexxaMain;
         }
 
         PortConvention.validate(port);
-        return jexxaMain.bindToPort(drivingAdapterClass, port);
+        jexxaMain.bindToPort(drivingAdapterClass, port);
+        return jexxaMain;
     }
 
     public JexxaMain to(Object port)
@@ -43,7 +45,8 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
 
     public <P extends Annotation> JexxaMain toAnnotation(Class<P> annotation)
     {
-        return jexxaMain.bindToAnnotatedPorts(drivingAdapterClass, annotation);
+        jexxaMain.bindToAnnotatedPorts(drivingAdapterClass, annotation);
+        return jexxaMain;
     }
 
 }
