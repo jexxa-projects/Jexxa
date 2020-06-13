@@ -22,9 +22,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-@Execution(ExecutionMode.SAME_THREAD)
-@Tag(TestConstants.INTEGRATION_TEST)
-class JexxaMainIT
+@Execution(ExecutionMode.CONCURRENT)
+@Tag(TestConstants.UNIT_TEST)
+class JexxaMainTest
 {
     private JexxaMain objectUnderTest;
     private final String contextName = "HelloJexxa";
@@ -131,10 +131,5 @@ class JexxaMainIT
         //Assert 
         assertTrue(jexxaApplicationService.getAggregateCount() > 0);
     }
-
-
-    /* ---------------------Util methods ------------------ */
-
-
 
 }
