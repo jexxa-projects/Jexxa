@@ -11,7 +11,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.javalin.Javalin;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 
 
@@ -70,14 +69,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     public int getPort()
     {
-        if (port == 0)   // In this case a random port is defined and thus we mus query it from Javalin directly 
-        {
-            return javalin.port();
-        }
-        else
-        {
-            return port;
-        }
+        return javalin.port();
     }
 
     /**
@@ -188,24 +180,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void readProperties(Properties properties)
     {
-        if (properties.getProperty(HOST_PROPERTY) == null || properties.getProperty(HOST_PROPERTY).isEmpty())
-        {
-            JexxaLogger.getLogger(getClass()).warn("{} not set. Using 'localhost' ", HOST_PROPERTY);
-            this.hostname = "localhost";
-        }
-        else
-        {
-            this.hostname = properties.getProperty(HOST_PROPERTY);
-        }
-
-        if (properties.getProperty(PORT_PROPERTY) == null || properties.getProperty(PORT_PROPERTY).isEmpty())
-        {
-            JexxaLogger.getLogger(getClass()).warn("{} not set. Using random system port ", PORT_PROPERTY);
-            this.port = 0;
-        }
-        else
-        {
-            this.port = Integer.parseInt(properties.getProperty(PORT_PROPERTY));
-        }
+        this.hostname = properties.getProperty(HOST_PROPERTY, "localhost");
+        this.port = Integer.parseInt(properties.getProperty(PORT_PROPERTY, "0"));
     }
 }
