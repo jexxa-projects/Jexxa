@@ -13,7 +13,8 @@ import io.jexxa.application.applicationservice.JexxaApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domainservice.InitializeJexxaAggregates;
 import io.jexxa.application.infrastructure.drivingadapter.ProxyAdapter;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -117,8 +118,8 @@ class JexxaMainTest
     void bootstrapService()
     {
         //Arrange
+        RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);
         objectUnderTest = new JexxaMain(contextName);
-        objectUnderTest.getProperties().remove(JDBCKeyValueRepository.JDBC_DRIVER);  //Remove in order to use InMemoryDB
         objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
 
