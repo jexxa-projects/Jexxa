@@ -435,6 +435,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body class="article">
 <div id="header">
@@ -861,6 +862,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p>Parameters of the constructor must be interfaces of required outbound ports.</p>
 </li>
+<li>
+<p>A unique implementation of each interface exists in the search scope of Jexxa. This scope is defined by method <code>JexxaMain::addToInfrastructure</code>.</p>
+</li>
 </ol>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
@@ -1008,7 +1012,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<i class="fa icon-note" title=":information_source:"></i>
 </td>
 <td class="content">
 In case you need a strict control how objects are exposed for example to different IP addresses, you have to use a specific driving adapter combined with port-adapter.
@@ -1089,7 +1093,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-06-13 16:18:03 +0200
+Last updated 2020-06-14 17:08:13 +0200
 </div>
 </div>
 </body>
