@@ -40,11 +40,14 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
     public JexxaMain to(Object port)
     {
         Validate.notNull(port);
+        
         return jexxaMain.bindToPort(drivingAdapterClass, port);
     }
 
     public <P extends Annotation> JexxaMain toAnnotation(Class<P> annotation)
     {
+        Validate.notNull(annotation);
+
         jexxaMain.bindToAnnotatedPorts(drivingAdapterClass, annotation);
         return jexxaMain;
     }
