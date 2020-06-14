@@ -306,6 +306,7 @@ a|Inbound Port
 a|
 1. A single public constructor.
 2. Parameters of the constructor must be interfaces of required outbound ports.
+3. A unique implementation of each interface exists in the search scope of Jexxa. This scope is defined by method `JexxaMain::addToInfrastructure`.
 
 a|
 1. Avoids ambiguity when choosing the constructor.  
