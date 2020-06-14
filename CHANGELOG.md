@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[2.0.1 - UNRELEASED] - YYYY-MM-DD
 ### Added
--   Added automatic reconnection mechanism for JMS Listener in case of a broker exception 
+-   Added automatic reconnection mechanism for JMS Listener in case of a broker exception
+
+-   Extended `RepositoryManager` for persistence strategies to define strategies on an aggregate level
+
+-   Added samples to show usage of Jexxa      
 
 ### Changed
 -   Updated dependencies 
@@ -16,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[2.0.0] - 2020-06-01
 ### Added
 -   Added global exception handler in JexxaMain for getting better results of startup errors 
+
 -   Improved the documentation of Jexxa (see [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa.html)) 
 
 ### Changed
