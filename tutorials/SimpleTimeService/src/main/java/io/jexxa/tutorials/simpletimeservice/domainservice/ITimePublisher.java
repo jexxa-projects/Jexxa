@@ -1,4 +1,4 @@
-package io.jexxa.samples.simpletimeservice.domainservice;
+package io.jexxa.tutorials.simpletimeservice.domainservice;
 
 import java.time.LocalTime;
 

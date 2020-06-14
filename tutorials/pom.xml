@@ -8,10 +8,10 @@
     <version>2.1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>jexxa-samples</artifactId>
-  <groupId>io.jexxa.samples</groupId>
+  <artifactId>tutorials</artifactId>
+  <groupId>io.jexxa.tutorials</groupId>
   <packaging>pom</packaging>
-  <name>Jexxa-Samples</name>
+  <name>Tutorials</name>
     
   <dependencies>
     <dependency>
