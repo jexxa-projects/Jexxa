@@ -11,7 +11,7 @@
   <name>HelloJexxa</name>
 
   <properties>
-    <main.class>>io.jexxa.tutorials.HelloJexxa</main.class>
+    <main.class>io.jexxa.tutorials.HelloJexxa</main.class>
   </properties>
 
   <build>
