@@ -40,13 +40,7 @@ class RepositoryManagerIT
         //Arrange
         RepositoryManager.getInstance().setDefaultStrategy(null);
 
-        var postgresProperties = new Properties();
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_PASSWORD, "admin");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_USERNAME, "admin");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
+        var postgresProperties = getDefaultProperties();
 
         //Act
         var result =  RepositoryManager.getInstance().getStrategy(JexxaAggregate.class,
@@ -63,13 +57,7 @@ class RepositoryManagerIT
     void validateDefaultStrategyOverProperties()
     {
         //Arrange: Define a JDBC connection in properties but also set a default strategy
-        var postgresProperties = new Properties();
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_PASSWORD, "admin");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_USERNAME, "admin");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
+        var postgresProperties = getDefaultProperties();
 
         //Act
         RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);
@@ -87,13 +75,7 @@ class RepositoryManagerIT
     void validateSpecificStrategyOverDefaultStrategy()
     {
         //Arrange: Define a JDBC connection in properties but also set a default strategy
-        var postgresProperties = new Properties();
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_PASSWORD, "admin");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_USERNAME, "admin");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
+        var postgresProperties = getDefaultProperties();
 
         RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);  // Set a default strategy which is used in case no specific strategy is defines
 
@@ -109,5 +91,16 @@ class RepositoryManagerIT
         assertEquals(JDBCKeyValueRepository.class.getName(), result.getClass().getName() );
     }
 
+    private Properties getDefaultProperties()
+    {
+        var postgresProperties = new Properties();
+        postgresProperties.put(JDBCKeyValueRepository.JDBC_DRIVER, "org.postgresql.Driver");
+        postgresProperties.put(JDBCKeyValueRepository.JDBC_PASSWORD, "admin");
+        postgresProperties.put(JDBCKeyValueRepository.JDBC_USERNAME, "admin");
+        postgresProperties.put(JDBCKeyValueRepository.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
+        postgresProperties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_TABLE, "true");
+        postgresProperties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
 
+        return postgresProperties;
+    }
 }
