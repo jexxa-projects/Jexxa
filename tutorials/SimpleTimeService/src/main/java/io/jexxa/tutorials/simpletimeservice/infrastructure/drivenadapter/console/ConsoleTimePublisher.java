@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 public class ConsoleTimePublisher implements ITimePublisher
 {
 
-    private static final Logger logger = JexxaLogger.getLogger(ConsoleTimePublisher.class);
+    private static final Logger LOGGER = JexxaLogger.getLogger(ConsoleTimePublisher.class);
 
     @Override
     public void publish(LocalTime localTime)
@@ -19,6 +19,6 @@ public class ConsoleTimePublisher implements ITimePublisher
 
         var logMessage = localTime.toString();
 
-        logger.info(logMessage);
+        LOGGER.info(logMessage);
     }
 }
