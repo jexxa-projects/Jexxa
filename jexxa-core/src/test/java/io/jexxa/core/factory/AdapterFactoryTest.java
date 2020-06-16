@@ -33,7 +33,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestConstants.UNIT_TEST)
 class AdapterFactoryTest
 {
-    static AdapterFactory objectUnderTest;
+    static AdapterFactory objectUnderTest = null;
 
     @BeforeAll
     static void initFactory()
