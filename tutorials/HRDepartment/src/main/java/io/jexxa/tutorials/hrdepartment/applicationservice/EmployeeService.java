@@ -10,6 +10,7 @@ import io.jexxa.tutorials.hrdepartment.domain.valueobject.EmployeeNumber;
 import io.jexxa.tutorials.hrdepartment.domainservice.EmployeeRegistry;
 import io.jexxa.tutorials.hrdepartment.domainservice.EmploymentService;
 
+@SuppressWarnings("unused")
 public class EmployeeService
 {
     private final EmploymentService employmentService;
