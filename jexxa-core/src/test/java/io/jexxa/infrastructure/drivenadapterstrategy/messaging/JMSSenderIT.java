@@ -21,7 +21,6 @@ import io.jexxa.infrastructure.utils.messaging.TopicListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
@@ -39,7 +38,6 @@ class JMSSenderIT
     }
 
     @Test
-    @Timeout(1)
     void sendMessageToTopic()
     {
         //Arrange
@@ -62,7 +60,6 @@ class JMSSenderIT
 
 
     @Test
-    @Timeout(2)
     void sendMessageToQueue()
     {
         //Arrange
@@ -84,7 +81,6 @@ class JMSSenderIT
     }
 
     @Test
-    @Timeout(1)
     void sendMessageReconnectQueue() throws JMSException
     {
         //Arrange
