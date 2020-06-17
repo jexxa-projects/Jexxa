@@ -29,5 +29,6 @@
   <modules>
     <module>HelloJexxa</module>
     <module>SimpleTimeService</module>
+    <module>HumanResourcesMgmt</module>
   </modules>
 </project>
