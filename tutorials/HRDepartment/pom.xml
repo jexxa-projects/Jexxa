@@ -7,13 +7,30 @@
     <version>2.1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>HumanResourcesMgmt</artifactId>
-  <name>HumanResourcesMgmt</name>
+  <artifactId>hrdepartment</artifactId>
+  <name>HRDepartment</name>
 
   <properties>
-    <main.class>io.jexxa.tutorials.humanresourcesmgmt.HumanResourcesMgmtApplication</main.class>
+    <main.class>io.jexxa.tutorials.hrdepartment.HumanResourcesMgmtApplication</main.class>
     <activemq.client.version>5.15.12</activemq.client.version>
+    <postgres.version>42.2.14</postgres.version>
   </properties>
+
+  <dependencies>
+    <!-- dependencies for tests with ActiveMQ -->
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-client</artifactId>
+      <version>${activemq.client.version}</version>
+    </dependency>
+
+    <!-- dependencies for tests with JDBCAdapter -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${postgres.version}</version>
+    </dependency>
+    </dependencies>
 
   <build>
     <plugins>
