@@ -4,7 +4,9 @@ import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.IntStream;
@@ -18,7 +20,6 @@ import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.utils.messaging.MessageSender;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
 
 @Tag(TestConstants.INTEGRATION_TEST)
 class MultipleJMSReceiverIT
@@ -52,7 +53,6 @@ class MultipleJMSReceiverIT
 
 
     @Test
-    @Timeout(10)
     void synchronizeMultipleClients()
     {
         //Arrange
@@ -73,7 +73,7 @@ class MultipleJMSReceiverIT
         jexxaMain.start();
 
         //Act
-        incrementService(jexxaMain.getProperties());
+        assertTimeout(Duration.ofSeconds(10), () -> incrementService(jexxaMain.getProperties()));
         
         //Assert
         jexxaMain.stop();
