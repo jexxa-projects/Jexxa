@@ -82,10 +82,9 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     public void removeAll()
     {
 
-        try (Statement statement = connection.createStatement())
+        try ( PreparedStatement statement = connection.prepareStatement("delete from " + aggregateClazz.getSimpleName()) )
         {
-            var command = "delete from " + aggregateClazz.getSimpleName();
-            statement.executeUpdate(command);
+            statement.executeUpdate();
         }
         catch (SQLException e)
         {

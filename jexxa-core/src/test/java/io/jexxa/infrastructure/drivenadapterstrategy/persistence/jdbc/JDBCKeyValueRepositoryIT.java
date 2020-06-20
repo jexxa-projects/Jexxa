@@ -55,7 +55,7 @@ class JDBCKeyValueRepositoryIT
 
         //Assert
         assertEquals(aggregate.getKey(), objectUnderTest.get(aggregate.getKey()).orElseThrow().getKey());
-        assertTrue(objectUnderTest.get().size() > 0);
+        assertEquals(1, objectUnderTest.get().size());
     }
 
 
