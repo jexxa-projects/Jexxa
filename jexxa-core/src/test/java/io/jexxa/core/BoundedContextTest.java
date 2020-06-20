@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 import io.jexxa.TestConstants;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -23,7 +22,6 @@ class BoundedContextTest
     private BoundedContext objectUnderTest;
 
     @Test
-    @Timeout(1)
     void shutdown()
     {
         //Arrange

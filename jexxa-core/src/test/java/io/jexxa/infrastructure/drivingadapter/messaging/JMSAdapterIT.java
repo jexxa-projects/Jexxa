@@ -22,7 +22,6 @@ import io.jexxa.infrastructure.utils.messaging.TopicListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
@@ -43,7 +42,6 @@ class JMSAdapterIT
     }
 
     @Test
-    @Timeout(1)
     void startJMSAdapterTopic()
     {
         //Arrange
@@ -66,7 +64,6 @@ class JMSAdapterIT
     }
 
     @Test
-    @Timeout(1)
     void startJMSAdapterQueue()
     {
         //Arrange
@@ -92,7 +89,6 @@ class JMSAdapterIT
 
 
     @Test
-    @Timeout(1)
     void startJMSAdapterJexxa()
     {
         //Arrange
