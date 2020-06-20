@@ -1,6 +1,5 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
-import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -103,13 +102,10 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         String key = gson.toJson(keyFunction.apply(aggregate));
         String value = gson.toJson(aggregate);
 
-        StringReader keyReader = new StringReader(key);
-        StringReader valueReader = new StringReader(value);
-
         try (PreparedStatement preparedStatement = connection.prepareStatement("insert into " + aggregate.getClass().getSimpleName() + " values(?,?)"))
         {
-            preparedStatement.setCharacterStream(1, keyReader, key.length());
-            preparedStatement.setCharacterStream(2, valueReader, value.length());
+            preparedStatement.setString(1, key);
+            preparedStatement.setString(2, value);
             preparedStatement.executeUpdate();
         }
         catch (SQLException e)
@@ -129,15 +125,12 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         String key = gson.toJson(keyFunction.apply(aggregate));
         String value = gson.toJson(aggregate);
 
-        StringReader keyReader = new StringReader(key);
-        StringReader valueReader = new StringReader(value);
-
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 "update " + aggregate.getClass().getSimpleName() + " set value = ? where key = ?")
         )
         {
-            preparedStatement.setCharacterStream(1, valueReader, value.length());
-            preparedStatement.setCharacterStream(2, keyReader, key.length());
+            preparedStatement.setString(1, value);
+            preparedStatement.setString(2, key);
             int result = preparedStatement.executeUpdate();
             if (result == 0)
             {
@@ -160,10 +153,11 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
 
         Gson gson = new Gson();
         String key = gson.toJson(primaryKey);
-        String query = String.format("select value from %s where key='%s'", aggregateClazz.getSimpleName(), key);
 
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)
+        try (
+                PreparedStatement statement = connection.prepareStatement
+                        ("select value from " + aggregateClazz.getSimpleName() +  " where key='" + key + "'");
+                ResultSet resultSet = statement.executeQuery()
         )
         {
            if ( resultSet.next() )
