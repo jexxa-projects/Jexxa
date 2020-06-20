@@ -2,8 +2,6 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -62,11 +60,12 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         Gson gson = new Gson();
         String jsonKey = gson.toJson(key);
 
-        try (Statement statement = connection.createStatement())
+        try (var preparedStatement = connection.prepareStatement("delete from " + aggregateClazz.getSimpleName() + " where key= ?"))
         {
-            var command = String.format("delete from %s where key='%s'", aggregateClazz.getSimpleName(),  jsonKey);
+            preparedStatement.setString(1, jsonKey);
 
-            if ( statement.executeUpdate(command) == 0 ){
+            if ( preparedStatement.executeUpdate() == 0 )
+            {
                 throw new IllegalArgumentException("Could not delete aggregate " + aggregateClazz.getSimpleName());
             }
         }
@@ -81,7 +80,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     public void removeAll()
     {
 
-        try ( PreparedStatement statement = connection.prepareStatement("delete from " + aggregateClazz.getSimpleName()) )
+        try ( var statement = connection.prepareStatement("delete from " + aggregateClazz.getSimpleName()))
         {
             statement.executeUpdate();
         }
@@ -102,7 +101,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         String key = gson.toJson(keyFunction.apply(aggregate));
         String value = gson.toJson(aggregate);
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement("insert into " + aggregate.getClass().getSimpleName() + " values(?,?)"))
+        try (var preparedStatement = connection.prepareStatement("insert into " + aggregate.getClass().getSimpleName()+ " values(?,?)"))
         {
             preparedStatement.setString(1, key);
             preparedStatement.setString(2, value);
@@ -125,9 +124,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         String key = gson.toJson(keyFunction.apply(aggregate));
         String value = gson.toJson(aggregate);
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "update " + aggregate.getClass().getSimpleName() + " set value = ? where key = ?")
-        )
+        try (var preparedStatement = connection.prepareStatement("update " + aggregateClazz.getSimpleName() + " set value = ? where key = ?") )
         {
             preparedStatement.setString(1, value);
             preparedStatement.setString(2, key);
@@ -154,20 +151,20 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         Gson gson = new Gson();
         String key = gson.toJson(primaryKey);
 
-        try (
-                PreparedStatement statement = connection.prepareStatement
-                        ("select value from " + aggregateClazz.getSimpleName() +  " where key='" + key + "'");
-                ResultSet resultSet = statement.executeQuery()
-        )
+        try ( var preparedStatement = connection.prepareStatement("select value from " + aggregateClazz.getSimpleName() + " where key = ? ")  )
         {
-           if ( resultSet.next() )
-           {
-               return Optional.ofNullable(gson.fromJson(resultSet.getString(1), aggregateClazz));
-           }
-           else
-           {
-               return Optional.empty();
-           }
+            preparedStatement.setString(1, key);
+            try ( var resultSet = preparedStatement.executeQuery() )
+            {
+                if ( resultSet.next() )
+                {
+                    return Optional.ofNullable(gson.fromJson(resultSet.getString(1), aggregateClazz));
+                }
+                else
+                {
+                    return Optional.empty();
+                }
+            }
 
         }
         catch (SQLException e)
@@ -183,8 +180,8 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         var result = new ArrayList<T>();
         Gson gson = new Gson();
         try (
-                Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("select value from "+ aggregateClazz.getSimpleName())
+                var statement = connection.createStatement();
+                var resultSet = statement.executeQuery("select value from "+ aggregateClazz.getSimpleName())
              )
         {
             while (resultSet.next())
