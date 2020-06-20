@@ -8,7 +8,7 @@ import io.jexxa.application.applicationservice.InvalidApplicationService;
 import io.jexxa.application.domainservice.IJexxaAggregateRepository;
 import org.junit.jupiter.api.Test;
 
-public class PortConventionTest
+class PortConventionTest
 {
     @Test
     void invalidPortConsturctor()
