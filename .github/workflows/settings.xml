@@ -22,9 +22,9 @@
                 <snapshots><enabled>false</enabled></snapshots>
             </repository>
             <repository>
-                <id>github-stereotype</id>
+                <id>github-addend</id>
                 <name>GitHub OWNER Apache Maven Packages</name>
-                <url>https://github.com/repplix/stereotype</url>
+                <url>https://github.com/repplix/Addend</url>
                 <releases><enabled>true</enabled></releases>
                 <snapshots><enabled>true</enabled></snapshots>
             </repository>
