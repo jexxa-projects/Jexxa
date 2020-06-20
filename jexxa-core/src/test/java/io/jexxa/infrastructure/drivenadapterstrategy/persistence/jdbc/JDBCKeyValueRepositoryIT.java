@@ -58,6 +58,20 @@ class JDBCKeyValueRepositoryIT
         assertEquals(1, objectUnderTest.get().size());
     }
 
+    @Test
+    void getUnknownAggregate()
+    {
+        //arrange
+        var unknownAggregate = JexxaAggregate.create(new JexxaValueObject(42));
+
+
+        //act
+        var result = objectUnderTest.get(unknownAggregate.getKey());
+
+        //Assert
+        assertTrue(result.isEmpty());
+    }
+
 
     @Test
     void removeAggregate()
