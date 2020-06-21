@@ -10,7 +10,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBReposi
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 
 
-public class RepositoryManager
+public final class RepositoryManager
 {
     private static final RepositoryManager REPOSITORY_MANAGER = new RepositoryManager();
 
@@ -59,7 +59,7 @@ public class RepositoryManager
 
 
     /**
-     * @deprecated Use {@link #getStrategy(Class, Function, Properties)} instead 
+     * @deprecated Use {@link #getStrategy(Class, Function, Properties)} instead
      */
     @Deprecated(forRemoval=true)
     public static <T,K> IRepository<T,K> getRepository(

@@ -6,7 +6,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class AdapterConvention
+public final class AdapterConvention
 {
     public static <T> void validate(Class<T> clazz)
     {

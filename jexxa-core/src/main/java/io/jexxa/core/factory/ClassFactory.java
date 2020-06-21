@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang.Validate;
 
-public class ClassFactory
+public final class ClassFactory
 {
     protected static <T> Optional<T> newInstanceOf(Class<T> clazz) throws ReflectiveOperationException
     {

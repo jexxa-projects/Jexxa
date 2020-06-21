@@ -28,7 +28,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class JexxaMainTest
 {
     private JexxaMain objectUnderTest;
-    private final String contextName = "HelloJexxa";
+    private static final String contextName = "HelloJexxa";
 
     @BeforeEach
     void initTests()

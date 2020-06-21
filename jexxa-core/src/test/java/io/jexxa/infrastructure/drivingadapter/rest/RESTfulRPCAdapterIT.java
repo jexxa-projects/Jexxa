@@ -29,9 +29,9 @@ class RESTfulRPCAdapterIT
     private static final String APPLICATION_TYPE = "application/json";
     private static final String METHOD_GET_SIMPLE_VALUE = "getSimpleValue";
 
-    private final String restPath = "http://localhost:7000/SimpleApplicationService/";
+    private static final String restPath = "http://localhost:7000/SimpleApplicationService/";
 
-    private final int defaultValue = 42;
+    private static final int defaultValue = 42;
     private final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
 
     private RESTfulRPCAdapter objectUnderTest;

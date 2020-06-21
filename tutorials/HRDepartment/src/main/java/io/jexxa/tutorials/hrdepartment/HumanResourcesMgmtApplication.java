@@ -5,7 +5,7 @@ import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import io.jexxa.tutorials.hrdepartment.applicationservice.EmployeeService;
 
-public class HumanResourcesMgmtApplication
+public final class HumanResourcesMgmtApplication
 {
     public static void main(String[] args)
     {
@@ -22,5 +22,10 @@ public class HumanResourcesMgmtApplication
                 .start()
                 .waitForShutdown()
                 .stop();
+    }
+
+    private HumanResourcesMgmtApplication()
+    {
+        //Private constructor since we only offer main 
     }
 }

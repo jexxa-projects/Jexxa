@@ -37,14 +37,13 @@ public class TimeServiceApplication
                 .stop();
     }
 
-    public static String getDrivenAdapter(String[] args)
+    private static String getDrivenAdapter(String[] args)
     {
         Options options = new Options();
         options.addOption("j", "jms", false, "jms driven adapter");
 
         CommandLineParser parser = new DefaultParser();
         try {
-            // parse the command line arguments
             CommandLine line = parser.parse( options, args );
 
             if (line.hasOption("jms"))
@@ -53,10 +52,14 @@ public class TimeServiceApplication
             }
         }
         catch( ParseException exp ) {
-            // oops, something went wrong
             JexxaLogger.getLogger(TimeServiceApplication.class)
                     .error( "Parsing failed.  Reason: {}", exp.getMessage() );
         }
         return CONSOLE_DRIVEN_ADAPTER;
+    }
+
+    private TimeServiceApplication()
+    {
+        //Private constructor since we only offer main 
     }
 }

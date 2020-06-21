@@ -5,7 +5,7 @@ import java.util.Properties;
 import io.jexxa.application.domainservice.IFactoryMethodService;
 
 @SuppressWarnings("unused")
-public class FactoryMethodAdapter implements IFactoryMethodService
+public final class FactoryMethodAdapter implements IFactoryMethodService
 {
     private FactoryMethodAdapter()
     {

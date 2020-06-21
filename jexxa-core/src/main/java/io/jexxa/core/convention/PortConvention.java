@@ -4,7 +4,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.Arrays;
 
-public class PortConvention
+public final class PortConvention
 {
 
     public static <T> void validate(Class<T> clazz)

@@ -5,7 +5,7 @@ import io.jexxa.application.annotation.AggregateID;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 
 @Aggregate
-public class JexxaAggregate
+public final class JexxaAggregate
 {
     private final JexxaValueObject jexxaValueObject;
 

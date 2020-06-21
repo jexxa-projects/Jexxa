@@ -4,7 +4,7 @@ import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 
-public class HelloJexxa
+public final class HelloJexxa
 {
     public static void main(String[] args)
     {
@@ -32,5 +32,10 @@ public class HelloJexxa
 
                 //Finally invoke stop() for proper cleanup
                 .stop();
+    }
+
+    private HelloJexxa()
+    {
+        //Private constructor since we only offer main  
     }
 }
