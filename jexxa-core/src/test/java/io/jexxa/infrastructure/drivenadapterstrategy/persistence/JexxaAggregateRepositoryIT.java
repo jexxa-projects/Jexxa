@@ -4,8 +4,8 @@ import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.Properties;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import io.jexxa.TestConstants;
@@ -13,6 +13,7 @@ import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaAggregateRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -24,6 +25,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 @Tag(TestConstants.INTEGRATION_TEST)
 class JexxaAggregateRepositoryIT
 {
+    private List<JexxaAggregate> aggregateList;
 
     static Stream<Properties> data() {
         var postgresProperties = new Properties();
@@ -45,6 +47,15 @@ class JexxaAggregateRepositoryIT
     }
 
 
+    @BeforeEach
+    @MethodSource("data")
+    void initTests()
+    {
+        aggregateList = Stream.of(100)
+                .map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) )
+                .collect( toList() );
+    }
+
     @ParameterizedTest
     @MethodSource("data")
     void addAggregate(Properties repositoryProperties)
@@ -52,11 +63,6 @@ class JexxaAggregateRepositoryIT
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
-
-        var counterStream = Stream.of(100);
-        var aggregateList = counterStream
-                .map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) )
-                .collect( toList() );
 
         //Act
         aggregateList.forEach(objectUnderTest::add);
@@ -73,19 +79,15 @@ class JexxaAggregateRepositoryIT
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
-
-        Supplier<Stream<Integer>> counterSupplier = () -> Stream.of(100);
-        counterSupplier.get()
-                .map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) )
-                .forEach( objectUnderTest::add );
+        aggregateList.forEach(objectUnderTest::add);
 
         //Act
-        var aggregateList = counterSupplier.get()
-                .map( key -> objectUnderTest.get(new JexxaValueObject(key)))
+        var resultList = aggregateList.stream()
+                .map( aggregate -> objectUnderTest.get(aggregate.getKey()))
                 .collect( toList() );
 
         //Assert
-        assertEquals(counterSupplier.get().count(), aggregateList.size());
+        assertEquals(aggregateList.size(), resultList.size());
     }
 
     @ParameterizedTest
@@ -95,19 +97,13 @@ class JexxaAggregateRepositoryIT
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
+        aggregateList.forEach(objectUnderTest::add);
 
-        Supplier<Stream<Integer>> counterSupplier = () -> Stream.of(100);
-        counterSupplier.get()
-                .map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) )
-                .forEach( objectUnderTest::add );
-
-        //collect elements from Repository using get() which throws a runtime exception in case the element is not available   
-        var aggregateList = counterSupplier.get()
-                .map( key -> objectUnderTest.get(new JexxaValueObject(key)))
-                .collect( toList() );
+        //collect elements from Repository using get() which throws a runtime exception in case the element is not available
+        var resultList = objectUnderTest.get();
 
         //Act
-        aggregateList.forEach(objectUnderTest::remove);
+        resultList.forEach(objectUnderTest::remove);
 
         //Assert
         assertTrue(objectUnderTest.get().isEmpty());
@@ -121,14 +117,9 @@ class JexxaAggregateRepositoryIT
         //Arrange
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
+        aggregateList.forEach(objectUnderTest::add);
 
         int aggregateValue = 42;
-        var counterStream = Stream.of(100);
-        var aggregateList = counterStream
-                .map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) )
-                .collect( toList() );
-
-        aggregateList.forEach(objectUnderTest::add);
 
         //Act
         aggregateList.forEach(element -> element.setInternalValue(aggregateValue));
