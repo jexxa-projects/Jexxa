@@ -11,6 +11,7 @@ import java.util.Properties;
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -20,19 +21,25 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestConstants.UNIT_TEST)
 class IMDBRepositoryTest
 {
+    private JexxaAggregate aggregate;
+    private IMDBRepository<JexxaAggregate, JexxaValueObject> objectUnderTest;
 
-    @Test
-    void addAggregate()
+    @BeforeEach
+    void initTest()
     {
         //Arrange
-        var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new IMDBRepository<>(
+        aggregate = JexxaAggregate.create(new JexxaValueObject(42));
+        objectUnderTest = new IMDBRepository<>(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 new Properties()
         );
         objectUnderTest.removeAll();
+    }
 
+    @Test
+    void addAggregate()
+    {
         //act
         objectUnderTest.add(aggregate);
 
@@ -44,15 +51,6 @@ class IMDBRepositoryTest
     @Test
     void addAggregateTwice()
     {
-        //Arrange
-        var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new IMDBRepository<>(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
-                new Properties()
-        );
-        objectUnderTest.removeAll();
-        
         //act
         objectUnderTest.add(aggregate);
         assertThrows(IllegalArgumentException.class, () ->objectUnderTest.add(aggregate));
@@ -63,13 +61,6 @@ class IMDBRepositoryTest
     void removeAggregate()
     {
         //Arrange
-        var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new IMDBRepository<>(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
-                new Properties()
-        );
-        objectUnderTest.removeAll();
         objectUnderTest.add(aggregate);
 
         //act
@@ -83,13 +74,6 @@ class IMDBRepositoryTest
     void differentConnections()
     {
         //Arrange
-        var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new IMDBRepository<>(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
-                new Properties()
-        );
-        objectUnderTest.removeAll();
         objectUnderTest.add(aggregate);
 
         //act
@@ -109,13 +93,6 @@ class IMDBRepositoryTest
     void differentRepositories()
     {
         //Arrange
-        var aggregate = JexxaAggregate.create(new JexxaValueObject(42));
-        var objectUnderTest = new IMDBRepository<>(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
-                new Properties()
-        );
-        objectUnderTest.removeAll();
         objectUnderTest.add(aggregate);
 
         //act
