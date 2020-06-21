@@ -29,31 +29,38 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class JMSSenderIT
 {
     private final JexxaValueObject message = new JexxaValueObject(42);
+
+    private TopicListener topicListener;
+    private QueueListener queueListener;
     private JexxaMain jexxaMain;
+
+    private JMSSender objectUnderTest;
 
     @BeforeEach
     void initTests()
     {
         jexxaMain = new JexxaMain(JMSSenderIT.class.getSimpleName());
+        topicListener = new TopicListener();
+        queueListener = new QueueListener();
+        objectUnderTest = new JMSSender(jexxaMain.getProperties());
+
+        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
+                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+                .bind(JMSAdapter.class).to(queueListener)
+                .bind(JMSAdapter.class).to(topicListener)
+                .start();
     }
 
     @Test
     void sendMessageToTopic()
     {
-        //Arrange
-        var messageListener = new TopicListener();
-        var objectUnderTest = new JMSSender(jexxaMain.getProperties());
-
-        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .bind(JMSAdapter.class).to(messageListener)
-                .start();
+        //Arrange --
 
         //Act
         objectUnderTest.sendToTopic(message, TopicListener.TOPIC_DESTINATION);
 
         //Assert
-        await().atMost(1, TimeUnit.SECONDS).until(() -> !messageListener.getMessages().isEmpty());
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
 
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
@@ -62,20 +69,13 @@ class JMSSenderIT
     @Test
     void sendMessageToQueue()
     {
-        //Arrange
-        var messageListener = new QueueListener();
-        var objectUnderTest = new JMSSender(jexxaMain.getProperties());
-
-        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .bind(JMSAdapter.class).to(messageListener)
-                .start();
+        //Arrange --
 
         //Act
         objectUnderTest.sendToQueue(message, QueueListener.QUEUE_DESTINATION);
 
         //Assert
-        await().atMost(1, TimeUnit.SECONDS).until(() -> !messageListener.getMessages().isEmpty());
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
 
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
@@ -83,14 +83,7 @@ class JMSSenderIT
     @Test
     void sendMessageReconnectQueue() throws JMSException
     {
-        //Arrange
-        var messageListener = new QueueListener();
-        var objectUnderTest = new JMSSender(jexxaMain.getProperties());
-
-        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .bind(JMSAdapter.class).to(messageListener)
-                .start();
+        //Arrange --
 
         //Act (simulate an error in between sending two messages
         objectUnderTest.sendToQueue(message, QueueListener.QUEUE_DESTINATION);
@@ -98,7 +91,7 @@ class JMSSenderIT
         objectUnderTest.sendToQueue(message, QueueListener.QUEUE_DESTINATION);
 
         //Assert
-        await().atMost(1, TimeUnit.SECONDS).until(() -> messageListener.getMessages().size() >= 2);
+        await().atMost(1, TimeUnit.SECONDS).until(() -> queueListener.getMessages().size() >= 2);
 
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
