@@ -115,14 +115,14 @@ public class AdapterFactory
     }
 
 
-    protected List<Class<?>> getMissingAdapter(List<Class <?> > adapterList)
+    List<Class<?>> getMissingAdapter(List<Class <?> > adapterList)
     {
         return adapterList.stream()
                 .filter(adapter -> getImplementationOf(adapter).isEmpty())
                 .collect(toList());
     }
 
-    protected boolean isAvailable(List<Class <?> > adapterList)
+    boolean isAvailable(List<Class <?> > adapterList)
     {
         return adapterList.stream()
                 .noneMatch(adapter -> getImplementationOf(adapter).isEmpty());
@@ -158,7 +158,7 @@ public class AdapterFactory
         return Optional.of(implementationList.get(0));
     }
 
-    protected static class InvalidAdapterConfigurationException extends RuntimeException
+    static class InvalidAdapterConfigurationException extends RuntimeException
     {
         private final String errorMessage;
 

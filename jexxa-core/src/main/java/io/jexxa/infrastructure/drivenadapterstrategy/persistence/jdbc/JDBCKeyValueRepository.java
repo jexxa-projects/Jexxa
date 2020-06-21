@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Function;
@@ -222,7 +223,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         if (properties.containsKey(JDBC_AUTOCREATE_DATABASE))
         {
             var splitURL = properties.getProperty(JDBC_URL).split("/");
-            var dbName = splitURL[splitURL.length - 1].toLowerCase(); //last part of the URL is the name of the database (Note: Some DBs such as postgres require a name in lower case!)
+            var dbName = splitURL[splitURL.length - 1].toLowerCase(Locale.ENGLISH); //last part of the URL is the name of the database (Note: Some DBs such as postgres require a name in lower case!)
 
             Properties creationProperties = new Properties();
             creationProperties.putAll(properties);
@@ -251,7 +252,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         {
             try (var setupConnection = DriverManager.
                     getConnection(
-                            properties.getProperty(JDBC_URL).toLowerCase(),
+                            properties.getProperty(JDBC_URL).toLowerCase(Locale.ENGLISH),
                             properties.getProperty(JDBC_USERNAME),
                             properties.getProperty(JDBC_PASSWORD));
                  Statement statement = setupConnection.createStatement())

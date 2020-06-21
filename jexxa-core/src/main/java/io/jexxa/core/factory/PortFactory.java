@@ -149,7 +149,7 @@ public class PortFactory
      * @param <T> Type of the object that should be created
      * @return a new instance of inbound port
      */
-    protected <T> T newInstanceOf(Class<T> inboundPort, Properties adapterProperties)
+    <T> T newInstanceOf(Class<T> inboundPort, Properties adapterProperties)
     {
         Validate.notNull(inboundPort);
         Validate.notNull(adapterProperties);
@@ -222,7 +222,7 @@ public class PortFactory
                 .orElseThrow(() -> new RuntimeException("PortWrapper " + portAdapter.getSimpleName() + " requires unknown port"));
     }
 
-    protected static class InvalidPortConfigurationException extends RuntimeException
+    static class InvalidPortConfigurationException extends RuntimeException
     {
         private final String errorMessage;
 

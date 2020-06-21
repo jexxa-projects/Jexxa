@@ -10,19 +10,19 @@ import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 import org.apache.commons.lang.Validate;
 
-class DependencyScanner
+final class DependencyScanner
 {
     private final List<String> whiteListPackages = new ArrayList<>();
     private ScanResult scanResult;
 
-    protected DependencyScanner whiteListPackage(String packageName)
+    DependencyScanner whiteListPackage(String packageName)
     {
         whiteListPackages.add(packageName);
         scanResult = null; //Reset scan result so that it is recreated with new white listed packages
         return this;
     }
 
-    protected DependencyScanner whiteListPackages(List<String> packageList)
+    DependencyScanner whiteListPackages(List<String> packageList)
     {
         whiteListPackages.addAll(packageList);
         scanResult = null; //Reset scan result so that it is recreated with new white listed packages
@@ -30,7 +30,7 @@ class DependencyScanner
     }
 
 
-    protected List<Class<?>> getClassesWithAnnotation(final Class<? extends Annotation> annotation)
+    List<Class<?>> getClassesWithAnnotation(final Class<? extends Annotation> annotation)
     {
         validateRetentionRuntime(annotation);
 
@@ -40,7 +40,7 @@ class DependencyScanner
     }
 
 
-    protected List<Class<?>> getClassesImplementing(final Class<?> interfaceType)
+    List<Class<?>> getClassesImplementing(final Class<?> interfaceType)
     {
         Validate.notNull(interfaceType);
         return getScanResult()
