@@ -45,19 +45,19 @@ class JMSAdapterIT
     void startJMSAdapterTopic()
     {
         //Arrange
-        var messageListener = new TopicListener();
+        var topicListener = new TopicListener();
 
         try (  var objectUnderTest = new JMSAdapter(properties) )
         {
-            objectUnderTest.register(messageListener);
+            objectUnderTest.register(topicListener);
 
-            MessageSender myProducer = new MessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+            MessageSender topicSender = new MessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
             //Act
             objectUnderTest.start();
-            myProducer.send(MESSAGE);
+            topicSender.send(MESSAGE);
 
             //Assert
-            await().atMost(1, TimeUnit.SECONDS).until(() -> !messageListener.getMessages().isEmpty());
+            await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
 
             assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
         }
@@ -67,19 +67,19 @@ class JMSAdapterIT
     void startJMSAdapterQueue()
     {
         //Arrange
-        var messageListener = new QueueListener();
+        var queueListener = new QueueListener();
 
         try (  var objectUnderTest = new JMSAdapter(properties) )
         {
-            objectUnderTest.register(messageListener);
+            objectUnderTest.register(queueListener);
 
-            MessageSender myProducer = new MessageSender(properties, QueueListener.QUEUE_DESTINATION, JMSConfiguration.MessagingType.QUEUE);
+            MessageSender queueSender = new MessageSender(properties, QueueListener.QUEUE_DESTINATION, JMSConfiguration.MessagingType.QUEUE);
             //Act
             objectUnderTest.start();
-            myProducer.send(MESSAGE);
+            queueSender.send(MESSAGE);
 
             //Assert
-            await().atMost(1, TimeUnit.SECONDS).until( () -> !messageListener.getMessages().isEmpty());
+            await().atMost(1, TimeUnit.SECONDS).until( () -> !queueListener.getMessages().isEmpty());
 
             assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
         }
