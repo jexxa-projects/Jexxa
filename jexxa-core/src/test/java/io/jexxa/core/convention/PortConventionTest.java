@@ -24,11 +24,12 @@ class PortConventionTest
     {
         public InvalidApplicationServiceMultipleConstructor()
         {
-
+            //Empty constructor for testing purpose
         }
 
         public InvalidApplicationServiceMultipleConstructor(IJexxaAggregateRepository jexxaAggregateRepository)
         {
+            //Empty constructor for testing purpose
         }
     }
 
@@ -37,7 +38,7 @@ class PortConventionTest
     {
         public InvalidApplicationServiceNoInterface(Properties properties)
         {
-
+            //Empty constructor for testing purpose
         }
 
     }

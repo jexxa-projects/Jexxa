@@ -9,7 +9,7 @@ import io.jexxa.tutorials.hrdepartment.domain.aggregate.Employee;
 import io.jexxa.tutorials.hrdepartment.domain.valueobject.EmployeeNumber;
 import io.jexxa.tutorials.hrdepartment.domainservice.EmployeeRegistry;
 
-public class PersistendEmployeeResitry implements EmployeeRegistry
+public final class PersistendEmployeeResitry implements EmployeeRegistry
 {
     private final IRepository<Employee, EmployeeNumber> irepository;
 

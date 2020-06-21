@@ -10,7 +10,7 @@ import io.jexxa.application.domainservice.IJexxaAggregateRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 
-public class JexxaAggregateRepository implements IJexxaAggregateRepository
+public final class JexxaAggregateRepository implements IJexxaAggregateRepository
 {
     private final IRepository<JexxaAggregate, JexxaValueObject> repositoryConnection;
 

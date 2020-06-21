@@ -11,7 +11,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-public class TimeServiceApplication
+public final class TimeServiceApplication
 {
     private static final String JMS_DRIVEN_ADAPTER = "io.jexxa.tutorials.simpletimeservice.infrastructure.drivenadapter.messaging";
     private static final String CONSOLE_DRIVEN_ADAPTER = "io.jexxa.tutorials.simpletimeservice.infrastructure.drivenadapter.console";

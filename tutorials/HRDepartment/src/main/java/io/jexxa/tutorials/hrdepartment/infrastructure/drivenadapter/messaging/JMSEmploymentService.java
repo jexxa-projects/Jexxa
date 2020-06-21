@@ -7,7 +7,7 @@ import io.jexxa.tutorials.hrdepartment.domain.domainevent.EmploymentStarted;
 import io.jexxa.tutorials.hrdepartment.domain.domainevent.EmploymentStopped;
 import io.jexxa.tutorials.hrdepartment.domainservice.EmploymentService;
 
-public class JMSEmploymentService implements EmploymentService
+public final class JMSEmploymentService implements EmploymentService
 {
     private final JMSSender jmsSender;
     private static final String EMPLOYMENT_SERVICE_TOPIC = "EmploymentServiceTopic";

@@ -6,7 +6,7 @@ import io.jexxa.tutorials.hrdepartment.domain.domainevent.EmploymentStarted;
 import io.jexxa.tutorials.hrdepartment.domain.domainevent.EmploymentStopped;
 import io.jexxa.tutorials.hrdepartment.domain.valueobject.EmployeeNumber;
 
-public class Employee
+public final class Employee
 {
     private final EmployeeNumber employeeNumber;
 

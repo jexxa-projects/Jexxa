@@ -119,7 +119,7 @@ public class JMSSender implements AutoCloseable
     }
 
 
-    Connection getConnection()
+    final Connection getConnection()
     {
         if (connection == null)
         {
