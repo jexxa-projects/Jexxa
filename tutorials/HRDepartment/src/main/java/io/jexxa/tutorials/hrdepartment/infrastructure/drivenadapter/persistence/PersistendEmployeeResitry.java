@@ -42,7 +42,7 @@ public final class PersistendEmployeeResitry implements EmployeeRegistry
         irepository.update(employee);
     }
 
-    public static EmployeeRegistry getInstance(Properties properties)
+    public static EmployeeRegistry createInstance(Properties properties)
     {
         return new PersistendEmployeeResitry(
                 RepositoryManager.getInstance().getStrategy(Employee.class, Employee::getID, properties)

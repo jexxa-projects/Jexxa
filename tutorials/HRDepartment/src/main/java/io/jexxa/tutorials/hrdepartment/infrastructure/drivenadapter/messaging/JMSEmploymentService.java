@@ -29,7 +29,7 @@ public final class JMSEmploymentService implements EmploymentService
         jmsSender.sendToTopic(employmentStarted, EMPLOYMENT_SERVICE_TOPIC);
     }
 
-    public static EmploymentService getInstance(Properties properties )
+    public static EmploymentService createInstance(Properties properties )
     {
         return new JMSEmploymentService(new JMSSender(properties));
     }
