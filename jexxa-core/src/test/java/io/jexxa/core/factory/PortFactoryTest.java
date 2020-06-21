@@ -4,6 +4,7 @@ package io.jexxa.core.factory;
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -45,7 +46,7 @@ class PortFactoryTest
     {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
+                whiteListPackage("invalid.package");
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
                 whiteListPackage(JEXXA_APPLICATION_SERVICE);
 
@@ -53,7 +54,7 @@ class PortFactoryTest
         boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenAdapters.class);
 
         //Assert
-        assertTrue(result);
+        assertFalse(result);
     }
 
 
