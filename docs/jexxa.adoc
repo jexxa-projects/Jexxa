@@ -51,7 +51,7 @@ Applications without well-defined boundaries between technology stacks and appli
 
 == General Building Blocks
 
-Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application that is build on Jexxa provides components that belong either to the __application core__ or to the  __infrastructure__. The __application core__ includes the business logic whereas the __infrastructure__ provides required technology stacks.
+Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application built on Jexxa provides components that belong either to the __application core__ or to the  __infrastructure__. The __application core__ includes the business logic, whereas the __infrastructure__ provides the required technology stacks.
 
 
 <<JexxaComponents>> shows the separation of a Jexxa application into packages, the included components, and the relationship of the components among each other.
@@ -149,9 +149,9 @@ a|Components
 
 
 a|`Inbound Ports`
-| Inbound ports belong to the application core and provide use cases that can be started by a driving adapter. Depending on the design of your application core a port might be an interface, or a concrete implementation of a set of use cases.
+| Inbound ports belong to the application core and provide use cases that can be started by a driving adapter. Depending on the design of your application core a port might be an interface or a specific implementation of a set of use cases.
 a| * Jexxa provides implicit constructor injection for your inbound ports which is described in <<Dependency Injection (DI)>>.
-* Jexxa also allows to instantiate and manage ports by yourself an just use provided driving adapters and driven adapter strategies.
+* Jexxa also allows to instantiate and manage ports yourself using the provided driving adapters and driven adapter strategies.
 
 a|Outbound Ports
 a| Outbound ports belong to the application core but only as interface. These interfaces are implemented in package `Infrastructure` by a driving adapter which provides access to a specific technology stack such as a database driver.
@@ -180,13 +180,13 @@ a|Components
 |Driven Adapters
 
 |Driven adapters implement the outbound ports and can be injected into the inbound ports which in turn operates on these interfaces. Typically they map domain objects to a specific technology stack.
-| Jexxa provides _driven adapter strategies_ to simplify development of driven adapters of an application.
+| Jexxa provides _driven adapter strategies_ to simplify the development of driven adapters of an application.
 
 
 
 | Port Adapters
 
-| Port adapters allows for mapping between different representational styles of a specific port. For example this is required if a port should be exposed via a RESTful API. A port adapter belongs to the infrastructure of the application and is bind to a __specific driving adapter__.
+| Port adapters enable mapping between different representational styles of a specific port. For example this is required if a port should be exposed via a RESTful API. A port adapter belongs to the infrastructure of the application and is bound to a __specific driving adapter__.
 | Providing receiving driving adapters that simplify the development of the port adapters.
 
 
@@ -208,7 +208,7 @@ a|Components
 
 
 a| Generic/Specific Driving Adapters
-a| Driving adapters belong to the infrastructure and receive commands from a specific client such as a UI, or a console and forwards them to connected ports.
+a| Driving adapters belong to the infrastructure and receive commands from a specific client such as a UI or a console and forwards them to connected ports.
 a| Jexxa provides a convention and configuration approach for driving adapters.
 
 A __generic__ driving adapter automatically exposes methods from connected inbound ports by using a convention. For example this can be used for an RPC mechanism.
@@ -259,13 +259,13 @@ a| Jexxa provides a fast fail approach regarding conventions. The conventions ar
 
 Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support _implicit constructor injection_ for following reason:
 
-* Constructor injection ensures that the dependencies required for the object to function properly are available directly after creating the object.
+* Constructor injection ensures that the dependencies required for the object to function properly are available immediately after creating the object.
 
-* Fields assigned in the constructor can be final so that the object can be immutable or at least protect the corresponding fields.
+* Fields assigned in the constructor can be final. Thus, the object can be immutable or at least protect the corresponding fields.
 
-* No special annotations or configuration files are needed so that the application core remains completely decoupled from Jexxa. 
+* No special annotations or configuration files are required so that the application core remains completely decoupled from Jexxa. 
 
-Within Jexxa we use conventions described in <<JexxaConventions>> to explicitly limit the direction of dependencies as described in <<JexxaComponents>>. Compared to other frameworks these limitations could be considered puristic, but they provide good guard rails to clarify the single responsibility of your ports.
+Within Jexxa we use conventions described in <<JexxaConventions>> to explicitly limit the direction of dependencies as described in <<JexxaComponents>>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.
 
 [cols="1,2,2"]
 [reftext="Table {counter:local-table-number}"]
@@ -298,7 +298,7 @@ a|
 
 a|
 1. Avoids ambiguity when choosing the constructor.  
-2. Ports should be self-contained as much as possible. Therefore only outbound ports should be hand in. This ensures that the infrastructure is agnostic to domain logic and knows only the __interfaces__ required by the application core but not any other inner components.
+2. Ports should be self-contained as much as possible. Therefore, only outbound ports should be hand in. This ensures that the infrastructure is agnostic to domain logic and knows only the __interfaces__ required by the application core but not any other inner components.
 
 
 a|Outbound Port
@@ -333,14 +333,14 @@ Jexxa provides some simple mechanisms to define and control the scopes of ports 
 
 ==== Visibility of Ports and Adapters
 
-By default, you have to tell Jexxa the location of your driven adapter and ports on a package level so that they can be created by Jexxa'S DI mechanism. This allows an application to specify used ports and adapters on a very fine-grained level.
+By default, you have to tell Jexxa the location of your driven adapter and ports on a package level so that they can be created by Jexxa's DI mechanism. This allows an application to specify used ports and adapters on a very fine-grained level.
 
 ==== Threading 
-At the moment Jexxa ensure that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to following reason:
+Currently, Jexxa ensures that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to following reasons:
 
 * Multi threading is typically essential within technology stacks and not within the application core itself.
-* When you start developing your application you have typically only a limited number of users.
-* When your application becomes a huge success and must scale to a lot of users you should scale it by running multiple instances of the application. Today's container solutions offer a much better scaling and managing approach.
+* When you start developing your application, you have typically only a limited number of users.
+* When your application becomes a huge success and must scale to a lot of users, you should scale it by running multiple instances of the application. Today's container solutions offer a much better scaling and managing approach.
 
 ==== Allocation scope of Dependencies
 The allocation scope defines how many instances of components are created by Jexxa. This is described in <<JexxaScope>>.
@@ -367,7 +367,7 @@ a|Inbound Port
 a|
 1. Inbound ports created by Jexxa are managed as singleton and reused if they are connected to different driving adapters.
 
-2. Inbound ports created by the application can be bind to adapters. In this case the application has full control of the number of instances.
+2. Inbound ports created by the application can be bound to adapters. In this case the application has full control of the number of instances.
 
 
 a|
@@ -395,8 +395,3 @@ a| Allows fine grained control of how a driving adapter should expose the includ
 Jexxa does not support any transaction when using multiple driven adapters in a single use case. Traditional enterprise frameworks for example spawn (often by default) a transaction between the used technology stacks, such as a database and a messaging system, to ensure that data is only written into the database when publishing it to a messaging bus is successful. This is a great feature if you really need it. Unfortunately, it is also often used to compensate programming errors or even a bad software design.
 
 Instead, we recommend building your ports of the application core so that they provide an idempotent semantic.
-
-
-
-
-
