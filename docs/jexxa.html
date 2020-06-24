@@ -863,7 +863,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Parameters of the constructor must be interfaces of required outbound ports.</p>
 </li>
 <li>
-<p>A unique implementation of each interface exists in the search scope of Jexxa. This scope is defined by method <code>JexxaMain::addToInfrastructure</code>.</p>
+<p>A unique implementation of each interface exists in the search scope of Jexxa. This scope is defined on a package level by method <code>JexxaMain::addToInfrastructure</code>.</p>
 </li>
 </ol>
 </div></div></td>
@@ -874,6 +874,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li>
 <p>Ports should be self-contained as much as possible. Therefore only outbound ports should be hand in. This ensures that the infrastructure is agnostic to domain logic and knows only the <em>interfaces</em> required by the application core but not any other inner components.</p>
+</li>
+<li>
+<p>Each package should only include a single implementation of a specific interface to achieve the common-closure principle.</p>
 </li>
 </ol>
 </div></div></td>
@@ -1093,7 +1096,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-06-14 17:08:13 +0200
+Last updated 2020-06-24 17:16:09 +0200
 </div>
 </div>
 </body>
