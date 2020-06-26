@@ -10,7 +10,7 @@ import io.jexxa.tutorials.hrdepartment.domainservice.EmploymentService;
 public final class JMSEmploymentService implements EmploymentService
 {
     private final JMSSender jmsSender;
-    private static final String EMPLOYMENT_SERVICE_TOPIC = "EmploymentServiceTopic";
+    public static final String EMPLOYMENT_SERVICE_TOPIC = "EmploymentServiceTopic";
 
     private JMSEmploymentService(JMSSender jmsSender)
     {

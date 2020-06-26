@@ -1,5 +1,6 @@
 package io.jexxa.tutorials.hrdepartment.domain.aggregate;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import io.jexxa.tutorials.hrdepartment.domain.domainevent.EmploymentStarted;
@@ -11,7 +12,7 @@ public final class Employee
     private final EmployeeID employeeID;
 
     private Date stopEmployment = null;
-    private Date startEmployment = null;
+    private LocalDate startEmployment = null;
 
     public EmployeeID getID()
     {
@@ -25,13 +26,13 @@ public final class Employee
         return new EmploymentStopped(getID(), date);
     }
 
-    public EmploymentStarted startEmployment(Date date)
+    public EmploymentStarted startEmployment(LocalDate date)
     {
         startEmployment = date;
         return new EmploymentStarted(getID(), date);
     }
 
-    public Date getStartEmployment()
+    public LocalDate getStartEmployment()
     {
         return startEmployment;
     }

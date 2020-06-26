@@ -1,5 +1,6 @@
 package io.jexxa.tutorials.hrdepartment.applicationservice;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +26,7 @@ public class EmployeeService
     public EmployeeID createEmployee()
     {
         var newEmployee = Employee.create( getNextEmployeeID() );
-        
+
         employeeRegistry.add(newEmployee);
 
         return newEmployee.getID();
@@ -40,7 +41,7 @@ public class EmployeeService
         employmentService.announceStoppedEmployment(updatedStatus);
     }
 
-    public void startEmployment(EmployeeID employeeID, Date date)
+    public void startEmployment(EmployeeID employeeID, LocalDate date)
     {
         var employee = employeeRegistry.get(employeeID);
         var updatedStatus = employee.startEmployment(date);
@@ -57,12 +58,14 @@ public class EmployeeService
                 .collect(Collectors.toList());
     }
 
+
     private EmployeeID getNextEmployeeID()
     {
         return getAllEmployees()
                 .stream()
                 .max(Comparator.comparing(EmployeeID::getValue))
-                .orElse(new EmployeeID(1));
+                .map(employeeID -> new EmployeeID(employeeID.getValue() + 1))
+                .orElseGet(() -> new EmployeeID(1));
     }
 
 }

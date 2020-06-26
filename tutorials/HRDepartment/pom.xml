@@ -11,11 +11,12 @@
   <name>HRDepartment</name>
 
   <properties>
-    <main.class>io.jexxa.tutorials.hrdepartment.HumanResourcesMgmtApplication</main.class>
+    <main.class>io.jexxa.tutorials.hrdepartment.HRDepartment</main.class>
     <activemq.client.version>5.15.12</activemq.client.version>
     <postgres.version>42.2.14</postgres.version>
     <junit.jupiter.engine.version>5.7.0-M1</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.7.0-M1</junit.jupiter.params.version>
+    <awaitility.version>4.0.3</awaitility.version>
   </properties>
 
   <dependencies>
@@ -45,6 +46,12 @@
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
       <version>${junit.jupiter.params.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility-groovy</artifactId>
+      <version>${awaitility.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
