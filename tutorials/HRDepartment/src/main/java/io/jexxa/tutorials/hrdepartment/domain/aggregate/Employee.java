@@ -4,18 +4,18 @@ import java.util.Date;
 
 import io.jexxa.tutorials.hrdepartment.domain.domainevent.EmploymentStarted;
 import io.jexxa.tutorials.hrdepartment.domain.domainevent.EmploymentStopped;
-import io.jexxa.tutorials.hrdepartment.domain.valueobject.EmployeeNumber;
+import io.jexxa.tutorials.hrdepartment.domain.valueobject.EmployeeID;
 
 public final class Employee
 {
-    private final EmployeeNumber employeeNumber;
+    private final EmployeeID employeeID;
 
     private Date stopEmployment = null;
     private Date startEmployment = null;
 
-    public EmployeeNumber getID()
+    public EmployeeID getID()
     {
-        return employeeNumber;
+        return employeeID;
     }
 
 
@@ -42,15 +42,15 @@ public final class Employee
         return stopEmployment;
     }
 
-    private Employee(EmployeeNumber employeeNumber)
+    private Employee(EmployeeID employeeID)
     {
-        this.employeeNumber = employeeNumber;
+        this.employeeID = employeeID;
     }
 
 
-    public static Employee create(EmployeeNumber employeeNumber)
+    public static Employee create(EmployeeID employeeID)
     {
-        return new Employee(employeeNumber);
+        return new Employee(employeeID);
     }
 
 }

@@ -6,14 +6,14 @@ import java.util.Properties;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.tutorials.hrdepartment.domain.aggregate.Employee;
-import io.jexxa.tutorials.hrdepartment.domain.valueobject.EmployeeNumber;
+import io.jexxa.tutorials.hrdepartment.domain.valueobject.EmployeeID;
 import io.jexxa.tutorials.hrdepartment.domainservice.EmployeeRegistry;
 
 public final class PersistendEmployeeResitry implements EmployeeRegistry
 {
-    private final IRepository<Employee, EmployeeNumber> irepository;
+    private final IRepository<Employee, EmployeeID> irepository;
 
-    private PersistendEmployeeResitry(IRepository<Employee, EmployeeNumber> irepository)
+    private PersistendEmployeeResitry(IRepository<Employee, EmployeeID> irepository)
     {
         this.irepository = irepository;
     }
@@ -25,9 +25,9 @@ public final class PersistendEmployeeResitry implements EmployeeRegistry
     }
 
     @Override
-    public Employee get(EmployeeNumber employeeNumber)
+    public Employee get(EmployeeID employeeID)
     {
-        return irepository.get(employeeNumber).orElseThrow(() -> new IllegalArgumentException("Unknown employee:  " + employeeNumber.getValue()));
+        return irepository.get(employeeID).orElseThrow(() -> new IllegalArgumentException("Unknown employee:  " + employeeID.getValue()));
     }
 
     @Override

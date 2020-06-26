@@ -2,16 +2,16 @@ package io.jexxa.tutorials.hrdepartment.domain.domainevent;
 
 import java.util.Date;
 
-import io.jexxa.tutorials.hrdepartment.domain.valueobject.EmployeeNumber;
+import io.jexxa.tutorials.hrdepartment.domain.valueobject.EmployeeID;
 
 public class EmploymentStarted
 {
-    private final EmployeeNumber employeeNumber;
+    private final EmployeeID employeeID;
     private final Date startedDate;
 
-    public EmploymentStarted(EmployeeNumber employeeNumber, Date startedDate)
+    public EmploymentStarted(EmployeeID employeeID, Date startedDate)
     {
-        this.employeeNumber = employeeNumber;
+        this.employeeID = employeeID;
         this.startedDate = startedDate;
     }
 
@@ -20,8 +20,8 @@ public class EmploymentStarted
         return startedDate;
     }
 
-    public EmployeeNumber getEmployeeNumber()
+    public EmployeeID getEmployeeID()
     {
-        return employeeNumber;
+        return employeeID;
     }
 }
