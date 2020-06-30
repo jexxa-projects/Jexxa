@@ -46,6 +46,7 @@
     <maven.surefire.plugin>3.0.0-M4</maven.surefire.plugin>
     <maven.release.plugin>3.0.0-M1</maven.release.plugin>
     <maven.jacoco.plugin>0.8.5</maven.jacoco.plugin>
+    <maven.reports.plugin>3.1.0</maven.reports.plugin>
 
     <!-- target/compiler configuration  -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -97,6 +98,11 @@
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
           <version>${maven.install.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>${maven.reports.plugin}</version>
         </plugin>
         <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
         <plugin>
