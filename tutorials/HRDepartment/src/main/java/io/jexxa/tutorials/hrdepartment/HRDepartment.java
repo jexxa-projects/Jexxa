@@ -5,11 +5,11 @@ import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import io.jexxa.tutorials.hrdepartment.applicationservice.EmployeeService;
 
-public final class HumanResourcesMgmtApplication
+public final class HRDepartment
 {
     public static void main(String[] args)
     {
-        JexxaMain jexxaMain = new JexxaMain(HumanResourcesMgmtApplication.class.getSimpleName());
+        JexxaMain jexxaMain = new JexxaMain(HRDepartment.class.getSimpleName());
 
         jexxaMain
                 .addToInfrastructure("io.jexxa.tutorials.hrdepartment.infrastructure")
@@ -24,7 +24,7 @@ public final class HumanResourcesMgmtApplication
                 .stop();
     }
 
-    private HumanResourcesMgmtApplication()
+    private HRDepartment()
     {
         //Private constructor since we only offer main 
     }

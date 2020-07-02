@@ -1,10 +1,10 @@
 package io.jexxa.tutorials.hrdepartment.domain.valueobject;
 
-public class EmployeeNumber
+public class EmployeeID
 {
     private final int value;
 
-    public EmployeeNumber(int value)
+    public EmployeeID(int value)
     {
         this.value = value;
     }

@@ -1,27 +1,27 @@
 package io.jexxa.tutorials.hrdepartment.domain.domainevent;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-import io.jexxa.tutorials.hrdepartment.domain.valueobject.EmployeeNumber;
+import io.jexxa.tutorials.hrdepartment.domain.valueobject.EmployeeID;
 
 public class EmploymentStarted
 {
-    private final EmployeeNumber employeeNumber;
-    private final Date startedDate;
+    private final EmployeeID employeeID;
+    private final LocalDate startedDate;
 
-    public EmploymentStarted(EmployeeNumber employeeNumber, Date startedDate)
+    public EmploymentStarted(EmployeeID employeeID, LocalDate startedDate)
     {
-        this.employeeNumber = employeeNumber;
+        this.employeeID = employeeID;
         this.startedDate = startedDate;
     }
 
-    public Date getStartedDate()
+    public LocalDate getStartedDate()
     {
         return startedDate;
     }
 
-    public EmployeeNumber getEmployeeNumber()
+    public EmployeeID getEmployeeID()
     {
-        return employeeNumber;
+        return employeeID;
     }
 }

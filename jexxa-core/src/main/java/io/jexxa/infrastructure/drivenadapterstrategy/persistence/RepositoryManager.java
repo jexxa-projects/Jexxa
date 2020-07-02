@@ -60,6 +60,14 @@ public final class RepositoryManager
 
     /**
      * @deprecated Use {@link #getStrategy(Class, Function, Properties)} instead
+     *
+     * @param <T> Type of the aggregate
+     * @param <K> Type of the aggregatekey function
+     * @param aggregateClazz class information of the aggregate
+     * @param keyFunction method that returns aggregate key
+     * @param properties properties for configuring the repository 
+     * @return interface to Repository            
+     *
      */
     @Deprecated(forRemoval=true)
     public static <T,K> IRepository<T,K> getRepository(

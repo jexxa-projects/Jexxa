@@ -29,9 +29,9 @@ class RESTfulRPCAdapterIT
     private static final String APPLICATION_TYPE = "application/json";
     private static final String METHOD_GET_SIMPLE_VALUE = "getSimpleValue";
 
-    private static final String restPath = "http://localhost:7000/SimpleApplicationService/";
+    private static final String REST_PATH = "http://localhost:7000/SimpleApplicationService/";
 
-    private static final int defaultValue = 42;
+    private static final int DEFAULT_VALUE = 42;
     private final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
 
     private RESTfulRPCAdapter objectUnderTest;
@@ -68,14 +68,14 @@ class RESTfulRPCAdapterIT
         //Arrange -> Nothing to do  
 
         //Act
-        Integer result = Unirest.get(restPath + METHOD_GET_SIMPLE_VALUE)
+        Integer result = Unirest.get(REST_PATH + METHOD_GET_SIMPLE_VALUE)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
 
         //Assert
         assertNotNull(result);
-        assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
+        assertEquals(DEFAULT_VALUE, simpleApplicationService.getSimpleValue());
         assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
     }
 
@@ -99,7 +99,7 @@ class RESTfulRPCAdapterIT
 
         //Assert
         assertNotNull(result);
-        assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
+        assertEquals(DEFAULT_VALUE, simpleApplicationService.getSimpleValue());
         assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
 
     }
@@ -124,7 +124,7 @@ class RESTfulRPCAdapterIT
 
         //Assert
         assertNotNull(result);
-        assertEquals(defaultValue, simpleApplicationService.getSimpleValue());
+        assertEquals(DEFAULT_VALUE, simpleApplicationService.getSimpleValue());
         assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
     }
 
@@ -135,13 +135,13 @@ class RESTfulRPCAdapterIT
         var newValue = 44;
 
         //Act
-        var response = Unirest.post(restPath + "setSimpleValue")
+        var response = Unirest.post(REST_PATH + "setSimpleValue")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(newValue)
                 .asJson();
 
         //Assert
-        Integer newResult = Unirest.get(restPath + METHOD_GET_SIMPLE_VALUE)
+        Integer newResult = Unirest.get(REST_PATH + METHOD_GET_SIMPLE_VALUE)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
@@ -157,13 +157,13 @@ class RESTfulRPCAdapterIT
         var newValue = new JexxaValueObject(44);
 
         //Act
-        var response = Unirest.post(restPath + "setSimpleValueObject")
+        var response = Unirest.post(REST_PATH + "setSimpleValueObject")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(newValue)
                 .asJson();
 
         //Assert
-        Integer newResult = Unirest.get(restPath + METHOD_GET_SIMPLE_VALUE)
+        Integer newResult = Unirest.get(REST_PATH + METHOD_GET_SIMPLE_VALUE)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
@@ -179,13 +179,13 @@ class RESTfulRPCAdapterIT
         var paramList = new JexxaValueObject[]{new JexxaValueObject(44), new JexxaValueObject(88)};
 
         //Act
-        var response = Unirest.post(restPath + "setSimpleValueObjectTwice")
+        var response = Unirest.post(REST_PATH + "setSimpleValueObjectTwice")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(paramList)
                 .asEmpty();
 
         //Assert
-        Integer newResult = Unirest.get(restPath + METHOD_GET_SIMPLE_VALUE)
+        Integer newResult = Unirest.get(REST_PATH + METHOD_GET_SIMPLE_VALUE)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
@@ -201,7 +201,7 @@ class RESTfulRPCAdapterIT
         var newValue = 44;
 
         //Act
-        var oldValue = Unirest.post(restPath + "setGetSimpleValue")
+        var oldValue = Unirest.post(REST_PATH + "setGetSimpleValue")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(newValue)
                 .asObject(Integer.class).getBody();
@@ -209,13 +209,13 @@ class RESTfulRPCAdapterIT
 
         //Act
         //Assert
-        Integer newResult = Unirest.get(restPath + METHOD_GET_SIMPLE_VALUE)
+        Integer newResult = Unirest.get(REST_PATH + METHOD_GET_SIMPLE_VALUE)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
         //Assert
         assertNotNull(oldValue);
-        assertEquals(defaultValue, oldValue.intValue());
+        assertEquals(DEFAULT_VALUE, oldValue.intValue());
         assertEquals(newValue, simpleApplicationService.getSimpleValueObject().getValue());
         assertEquals(newValue, newResult.intValue());
     }
@@ -226,7 +226,7 @@ class RESTfulRPCAdapterIT
         //Arrange
 
         //Act
-        var response = Unirest.post(restPath + "throwExceptionTest")
+        var response = Unirest.post(REST_PATH + "throwExceptionTest")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asJson();
         JsonObject error = response.mapError(JsonObject.class);

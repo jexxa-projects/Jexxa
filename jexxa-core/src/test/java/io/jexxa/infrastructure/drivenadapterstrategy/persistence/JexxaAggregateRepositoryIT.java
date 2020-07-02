@@ -25,9 +25,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 @Tag(TestConstants.INTEGRATION_TEST)
 class JexxaAggregateRepositoryIT
 {
+    private static final String REPOSITORY_CONFIG = "repositoryConfig";
+
     private List<JexxaAggregate> aggregateList;
 
-    static Stream<Properties> data() {
+    static Stream<Properties> repositoryConfig() {
         var postgresProperties = new Properties();
         postgresProperties.put(JDBCKeyValueRepository.JDBC_DRIVER, "org.postgresql.Driver");
         postgresProperties.put(JDBCKeyValueRepository.JDBC_PASSWORD, "admin");
@@ -48,7 +50,6 @@ class JexxaAggregateRepositoryIT
 
 
     @BeforeEach
-    @MethodSource("data")
     void initTests()
     {
         aggregateList = Stream.of(100)
@@ -57,7 +58,7 @@ class JexxaAggregateRepositoryIT
     }
 
     @ParameterizedTest
-    @MethodSource("data")
+    @MethodSource(REPOSITORY_CONFIG)
     void addAggregate(Properties repositoryProperties)
     {
         //Arrange
@@ -73,7 +74,7 @@ class JexxaAggregateRepositoryIT
 
 
     @ParameterizedTest
-    @MethodSource("data")
+    @MethodSource(REPOSITORY_CONFIG)
     void getAggregateByID(Properties repositoryProperties)
     {
         //Arrange
@@ -91,7 +92,7 @@ class JexxaAggregateRepositoryIT
     }
 
     @ParameterizedTest
-    @MethodSource("data")
+    @MethodSource(REPOSITORY_CONFIG)
     void removeAggregate(Properties repositoryProperties)
     {
         //Arrange
@@ -111,7 +112,7 @@ class JexxaAggregateRepositoryIT
 
 
     @ParameterizedTest
-    @MethodSource("data")
+    @MethodSource(REPOSITORY_CONFIG)
     void updateAggregate(Properties repositoryProperties)
     {
         //Arrange

@@ -10,7 +10,8 @@ public final class JexxaLogger
         return LoggerFactory.getLogger(clazz);
     }
 
-    private JexxaLogger() {
+    private JexxaLogger()
+    {
         //Private constructor
     }
 }

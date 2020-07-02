@@ -10,7 +10,7 @@ import io.jexxa.tutorials.hrdepartment.domainservice.EmploymentService;
 public final class JMSEmploymentService implements EmploymentService
 {
     private final JMSSender jmsSender;
-    private static final String EMPLOYMENT_SERVICE_TOPIC = "EmploymentServiceTopic";
+    public static final String EMPLOYMENT_SERVICE_TOPIC = "EmploymentServiceTopic";
 
     private JMSEmploymentService(JMSSender jmsSender)
     {
@@ -29,7 +29,7 @@ public final class JMSEmploymentService implements EmploymentService
         jmsSender.sendToTopic(employmentStarted, EMPLOYMENT_SERVICE_TOPIC);
     }
 
-    public static EmploymentService getInstance(Properties properties )
+    public static EmploymentService createInstance(Properties properties )
     {
         return new JMSEmploymentService(new JMSSender(properties));
     }

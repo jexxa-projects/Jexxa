@@ -28,12 +28,12 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class JexxaMainTest
 {
     private JexxaMain objectUnderTest;
-    private static final String contextName = "HelloJexxa";
+    private static final String CONTEXT_NAME = "HelloJexxa";
 
     @BeforeEach
     void initTests()
     {
-        objectUnderTest = new JexxaMain(contextName);
+        objectUnderTest = new JexxaMain(CONTEXT_NAME);
         objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .addToApplicationCore(JEXXA_APPLICATION_SERVICE);    }
 
@@ -119,7 +119,7 @@ class JexxaMainTest
     {
         //Arrange
         RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);
-        objectUnderTest = new JexxaMain(contextName);
+        objectUnderTest = new JexxaMain(CONTEXT_NAME);
         objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
 
