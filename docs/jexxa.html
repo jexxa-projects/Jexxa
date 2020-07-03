@@ -547,7 +547,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_general_building_blocks"><a class="anchor" href="#_general_building_blocks"></a>3. General Building Blocks</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application that is build on Jexxa provides components that belong either to the <em>application core</em> or to the  <em>infrastructure</em>. The <em>application core</em> includes the business logic whereas the <em>infrastructure</em> provides required technology stacks.</p>
+<p>Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application built on Jexxa provides components that belong either to the <em>application core</em> or to the  <em>infrastructure</em>. The <em>application core</em> includes the business logic, whereas the <em>infrastructure</em> provides the required technology stacks.</p>
 </div>
 <div class="paragraph">
 <p><a href="#JexxaComponents">Figure 1</a> shows the separation of a Jexxa application into packages, the included components, and the relationship of the components among each other.</p>
@@ -624,14 +624,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>Inbound Ports</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Inbound ports belong to the application core and provide use cases that can be started by a driving adapter. Depending on the design of your application core a port might be an interface, or a concrete implementation of a set of use cases.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Inbound ports belong to the application core and provide use cases that can be started by a driving adapter. Depending on the design of your application core a port might be an interface or a specific implementation of a set of use cases.</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
 <ul>
 <li>
 <p>Jexxa provides implicit constructor injection for your inbound ports which is described in <a href="#_dependency_injection_di">Dependency Injection (DI)</a>.</p>
 </li>
 <li>
-<p>Jexxa also allows to instantiate and manage ports by yourself an just use provided driving adapters and driven adapter strategies.</p>
+<p>Jexxa also allows to instantiate and manage ports yourself using the provided driving adapters and driven adapter strategies.</p>
 </li>
 </ul>
 </div></div></td>
@@ -673,11 +673,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapters</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Driven adapters implement the outbound ports and can be injected into the inbound ports which in turn operates on these interfaces. Typically they map domain objects to a specific technology stack.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Jexxa provides <em>driven adapter strategies</em> to simplify development of driven adapters of an application.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jexxa provides <em>driven adapter strategies</em> to simplify the development of driven adapters of an application.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Port Adapters</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Port adapters allows for mapping between different representational styles of a specific port. For example this is required if a port should be exposed via a RESTful API. A port adapter belongs to the infrastructure of the application and is bind to a <em>specific driving adapter</em>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Port adapters enable mapping between different representational styles of a specific port. For example this is required if a port should be exposed via a RESTful API. A port adapter belongs to the infrastructure of the application and is bound to a <em>specific driving adapter</em>.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Providing receiving driving adapters that simplify the development of the port adapters.</p></td>
 </tr>
 </tbody>
@@ -708,7 +708,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Generic/Specific Driving Adapters</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Driving adapters belong to the infrastructure and receive commands from a specific client such as a UI, or a console and forwards them to connected ports.</p>
+<p>Driving adapters belong to the infrastructure and receive commands from a specific client such as a UI or a console and forwards them to connected ports.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>Jexxa provides a convention and configuration approach for driving adapters.</p>
@@ -795,18 +795,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>Constructor injection ensures that the dependencies required for the object to function properly are available directly after creating the object.</p>
+<p>Constructor injection ensures that the dependencies required for the object to function properly are available immediately after creating the object.</p>
 </li>
 <li>
-<p>Fields assigned in the constructor can be final so that the object can be immutable or at least protect the corresponding fields.</p>
+<p>Fields assigned in the constructor can be final. Thus, the object can be immutable or at least protect the corresponding fields.</p>
 </li>
 <li>
-<p>No special annotations or configuration files are needed so that the application core remains completely decoupled from Jexxa.</p>
+<p>No special annotations or configuration files are required so that the application core remains completely decoupled from Jexxa.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Within Jexxa we use conventions described in <a href="#JexxaConventions">Table 6</a> to explicitly limit the direction of dependencies as described in <a href="#JexxaComponents">Figure 1</a>. Compared to other frameworks these limitations could be considered puristic, but they provide good guard rails to clarify the single responsibility of your ports.</p>
+<p>Within Jexxa we use conventions described in <a href="#JexxaConventions">Table 6</a> to explicitly limit the direction of dependencies as described in <a href="#JexxaComponents">Figure 1</a>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.</p>
 </div>
 <table id="JexxaConventions" class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 6. Conventions used to realize implicit constructor injection.</caption>
@@ -873,7 +873,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Avoids ambiguity when choosing the constructor.</p>
 </li>
 <li>
-<p>Ports should be self-contained as much as possible. Therefore only outbound ports should be hand in. This ensures that the infrastructure is agnostic to domain logic and knows only the <em>interfaces</em> required by the application core but not any other inner components.</p>
+<p>Ports should be self-contained as much as possible. Therefore, only outbound ports should be hand in. This ensures that the infrastructure is agnostic to domain logic and knows only the <em>interfaces</em> required by the application core but not any other inner components.</p>
 </li>
 <li>
 <p>Each package should only include a single implementation of a specific interface to achieve the common-closure principle.</p>
@@ -959,13 +959,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect3">
 <h4 id="_visibility_of_ports_and_adapters"><a class="anchor" href="#_visibility_of_ports_and_adapters"></a>4.2.1. Visibility of Ports and Adapters</h4>
 <div class="paragraph">
-<p>By default, you have to tell Jexxa the location of your driven adapter and ports on a package level so that they can be created by Jexxa&#8217;S DI mechanism. This allows an application to specify used ports and adapters on a very fine-grained level.</p>
+<p>By default, you have to tell Jexxa the location of your driven adapter and ports on a package level so that they can be created by Jexxa&#8217;s DI mechanism. This allows an application to specify used ports and adapters on a very fine-grained level.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_threading"><a class="anchor" href="#_threading"></a>4.2.2. Threading</h4>
 <div class="paragraph">
-<p>At the moment Jexxa ensure that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to following reason:</p>
+<p>Currently, Jexxa ensures that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to following reasons:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -973,10 +973,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Multi threading is typically essential within technology stacks and not within the application core itself.</p>
 </li>
 <li>
-<p>When you start developing your application you have typically only a limited number of users.</p>
+<p>When you start developing your application, you have typically only a limited number of users.</p>
 </li>
 <li>
-<p>When your application becomes a huge success and must scale to a lot of users you should scale it by running multiple instances of the application. Today&#8217;s container solutions offer a much better scaling and managing approach.</p>
+<p>When your application becomes a huge success and must scale to a lot of users, you should scale it by running multiple instances of the application. Today&#8217;s container solutions offer a much better scaling and managing approach.</p>
 </li>
 </ul>
 </div>
@@ -1034,7 +1034,7 @@ In case you need a strict control how objects are exposed for example to differe
 <p>Inbound ports created by Jexxa are managed as singleton and reused if they are connected to different driving adapters.</p>
 </li>
 <li>
-<p>Inbound ports created by the application can be bind to adapters. In this case the application has full control of the number of instances.</p>
+<p>Inbound ports created by the application can be bound to adapters. In this case the application has full control of the number of instances.</p>
 </li>
 </ol>
 </div></div></td>
@@ -1096,7 +1096,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-06-24 17:16:09 +0200
+Last updated 2020-07-03 06:31:21 +0200
 </div>
 </div>
 </body>
