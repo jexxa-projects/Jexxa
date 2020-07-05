@@ -16,9 +16,9 @@
 *   A running ActiveMQ instance (at least if you start the application with JMS)
 *   curl or jconsoel to trigger the application  
 
-# Write the Application Core 
+## 1. Implement the Application Core 
 
-## Implement class `TimeService` 
+### Implement class `TimeService` 
 
 This class provides the supports the main two use cases of this application which are: 
 *   Provide current time
@@ -49,7 +49,7 @@ public class TimeService
 }
 ```                  
 
-## Declare interface `ITimePublisher`
+### Declare interface `ITimePublisher`
 
 The interface is quite simple since we need just a single method to publish a time. 
 
@@ -60,9 +60,9 @@ public interface ITimePublisher
 }
 ```                  
 
-# Implement the Infrastructure
+## 2. Implement the Infrastructure
 
-## Driven Adapter with console output 
+### Driven Adapter with console output 
 The implementation is quite simple and just prints given time to a logger.  
 
 Note: Jexxa uses implicit constructor injection together with a strict convention over configuration approach.
@@ -95,7 +95,7 @@ public class ConsoleTimePublisher implements ITimePublisher
 ```
 That's it. 
 
-## Driven Adapter with JMS
+### Driven Adapter with JMS
 
 Jexxa provides so called `DrivenAdapterStrategy` for various Java-APIs such as JMS. When using these strategies the implementation of a driven adapter is just a facade and maps domain specific methods to the technology stack. In the following implementation we use the `JMSSender` provided by Jexxa.   
 
@@ -136,7 +136,7 @@ java.naming.user=admin
 java.naming.password=admin
 ``` 
 
-# Implement the application
+## 3. Implement the Application 
 
 Finally, we have to write our application. As you can see in the code below there are two main differences compared to `HelloJexxa`:
 
