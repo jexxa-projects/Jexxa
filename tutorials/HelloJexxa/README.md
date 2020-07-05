@@ -79,3 +79,14 @@ You will see following (or similar) output
 *   Execute `shutdown` to end the application 
 
 ![JConsole](images/JConsole.png) 
+
+### Adjust properties
+In this simple tutorial `jexxa-application.properties` includes only the two parameters for RESTFulRPCAdapter. 
+The most interesting one here is `io.jexxa.rest.port` that allows to define the used network port. 
+
+```properties                                                          
+#Settings for RESTfulRPCAdapter
+io.jexxa.rest.host=localhost
+io.jexxa.rest.port=7000
+```
+                                                          
