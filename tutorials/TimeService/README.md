@@ -66,10 +66,11 @@ The implementation is quite simple and just prints given time to a logger. That'
 Note: Jexxa uses implicit constructor injection together with a strict convention over configuration approach.
 
 Therefore, each driven adapter needs one of the following constructors: 
-* Public Default constructor
-* Public constructor with a single `Properties` attribute
-* Public static factory method that gets no parameters and returns the type of the driving adapter
-* Public static factory method with a single `Properties` parameter and returns the type of the requested driving adapter
+
+*   Public Default constructor
+*   Public constructor with a single `Properties` attribute
+*   Public static factory method that gets no parameters and returns the type of the driving adapter
+*   Public static factory method with a single `Properties` parameter and returns the type of the requested driving adapter
    
 
 ```java
