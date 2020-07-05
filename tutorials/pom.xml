@@ -22,13 +22,13 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.30</version>
+      <version>${slf4j.simple.version}</version>
     </dependency>
   </dependencies>
 
   <modules>
     <module>HelloJexxa</module>
-    <module>SimpleTimeService</module>
+    <module>TimeService</module>
     <module>HRDepartment</module>
   </modules>
 </project>

@@ -1,10 +1,10 @@
-package io.jexxa.tutorials.simpletimeservice.infrastructure.drivenadapter.messaging;
+package io.jexxa.tutorials.timeservice.infrastructure.drivenadapter.messaging;
 
 import java.time.LocalTime;
 import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JMSSender;
-import io.jexxa.tutorials.simpletimeservice.domainservice.ITimePublisher;
+import io.jexxa.tutorials.timeservice.domainservice.ITimePublisher;
 
 public class JMSTimePublisher implements ITimePublisher
 {

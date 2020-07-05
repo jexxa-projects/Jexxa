@@ -75,7 +75,7 @@
     <junit.platform.launcher.version>1.7.0-M1</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.7.0-M1</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.7.0-M1</junit.jupiter.params.version>
-    <slf4j.simple.version>1.7.28</slf4j.simple.version>
+    <slf4j.simple.version>1.7.30</slf4j.simple.version>
     <awaitility.version>4.0.3</awaitility.version>
   </properties>
 

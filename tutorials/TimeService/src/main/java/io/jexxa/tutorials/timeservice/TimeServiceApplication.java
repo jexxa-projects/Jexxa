@@ -1,9 +1,9 @@
-package io.jexxa.tutorials.simpletimeservice;
+package io.jexxa.tutorials.timeservice;
 
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
-import io.jexxa.tutorials.simpletimeservice.applicationservice.TimeService;
+import io.jexxa.tutorials.timeservice.applicationservice.TimeService;
 import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -22,11 +22,17 @@ public final class TimeServiceApplication
         JexxaMain jexxaMain = new JexxaMain(TimeServiceApplication.class.getSimpleName());
 
         jexxaMain.addToApplicationCore("io.jexxa.tutorials.simpletimeservice.domainservice")
+                //Define which driven adapter should be used, the one in console or the one in messaging (for jms)
+                //Note: We can only register one driven adapter for the
                 .addToInfrastructure(getDrivenAdapter(args))
 
+                // Bind a REST and JMX adapter to the TimeService
+                // It allows to access the public methods of the TimeService via RMI over REST or Jconsole
                 .bind(RESTfulRPCAdapter.class).to(TimeService.class)
                 .bind(JMXAdapter.class).to(TimeService.class)
 
+                // Bind a REST and JMX adapter to the TimeService
+                // It allows to access the public methods of the TimeService via RMI over REST or Jconsole
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
                 .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
 
