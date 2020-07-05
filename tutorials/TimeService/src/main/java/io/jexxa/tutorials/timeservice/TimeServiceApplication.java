@@ -13,16 +13,19 @@ import org.apache.commons.cli.ParseException;
 
 public final class TimeServiceApplication
 {
-    private static final String JMS_DRIVEN_ADAPTER = "io.jexxa.tutorials.simpletimeservice.infrastructure.drivenadapter.messaging";
-    private static final String CONSOLE_DRIVEN_ADAPTER = "io.jexxa.tutorials.simpletimeservice.infrastructure.drivenadapter.console";
-
+    private static final String JMS_DRIVEN_ADAPTER      = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter.messaging";
+    private static final String CONSOLE_DRIVEN_ADAPTER  = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter.console";
+    private static final String OUTBOUND_PORTS          = TimeServiceApplication.class.getPackageName() + ".domainservice";
 
     public static void main(String[] args)
     {
-        JexxaMain jexxaMain = new JexxaMain(TimeServiceApplication.class.getSimpleName());
+        JexxaMain jexxaMain = new JexxaMain("TimeService");
 
-        jexxaMain.addToApplicationCore("io.jexxa.tutorials.simpletimeservice.domainservice")
-                //Define which driven adapter should be used, the one in console or the one in messaging (for jms)
+        jexxaMain
+                //Define which outbound ports should be managed by Jexxa
+                .addToApplicationCore(OUTBOUND_PORTS)
+                
+                //Define which driven adapter should be used by Jexxa
                 //Note: We can only register one driven adapter for the
                 .addToInfrastructure(getDrivenAdapter(args))
 
@@ -31,8 +34,6 @@ public final class TimeServiceApplication
                 .bind(RESTfulRPCAdapter.class).to(TimeService.class)
                 .bind(JMXAdapter.class).to(TimeService.class)
 
-                // Bind a REST and JMX adapter to the TimeService
-                // It allows to access the public methods of the TimeService via RMI over REST or Jconsole
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
                 .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
 
@@ -49,7 +50,8 @@ public final class TimeServiceApplication
         options.addOption("j", "jms", false, "jms driven adapter");
 
         CommandLineParser parser = new DefaultParser();
-        try {
+        try
+        {
             CommandLine line = parser.parse( options, args );
 
             if (line.hasOption("jms"))
