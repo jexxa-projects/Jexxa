@@ -85,7 +85,8 @@ public class HelloJexxa
                 .stop();
     }
 }
-```
+```    
+
 ### Adding a logger 
 Jexxa does not include a logger, which means that you have to add your own logger to your application. If you do not add a logger, you will get a warning message to your console. In case your application has not any special requirements you can add the following dependency to your project:
 
@@ -104,6 +105,10 @@ resources/jexxa-application.properties
 ```                                   
 
 Available properties are described [here](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/main/resources/jexxa-application.properties)
+
+### Tutorials
+
+More detailed information about usage of Jexxa can be found in the [tutorials](tutorials/README.md). 
 
 ## Build Jexxa from scratch
 
