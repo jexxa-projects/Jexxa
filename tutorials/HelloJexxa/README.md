@@ -49,14 +49,9 @@ You will see following (or similar) output
         nano	807987000
     ```
 
-
 ### Access the application JConsole
-* Start jconsole and select the MBean `BoundedContext` as shown in screenshot below
-* Now you can execute all methods of this object 
+
+*   Start jconsole and select the MBean `BoundedContext` as shown in screenshot below
+*   Now you can execute all methods of this object 
+
 ![JConsole](images/JConsole.png). 
-
-
-
-
-
-
