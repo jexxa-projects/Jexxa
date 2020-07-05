@@ -53,7 +53,7 @@ You will see following (or similar) output
 ### Access the application JConsole
 * Start jconsole and select the MBean `BoundedContext` as shown in screenshot below
 * Now you can execute all methods of this object 
-![JConsole](images/jconsole.png). 
+![JConsole](images/JConsole.png). 
 
 
 
