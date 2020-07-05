@@ -4,7 +4,7 @@
 
 * How to write a simple application using Jexxa
 * How to bind different technology-stacks to the `BoundedContext` object
-* How to access the running Jexxa-application from outside
+* How to control the running application from outside via `BoundedContext` object 
 
 ## What you need
 
