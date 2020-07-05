@@ -9,5 +9,5 @@ All tutorials focus on the usage of Jexxa. Therefore, the business logic in thes
 ## HelloJexxa
 See documentation [HelloJexxa](HelloJexxa/README.md)
 
-## SimpleTimeService
+## TimeService
 See documentation [TimeService](TimeService/README.md)

@@ -2,10 +2,10 @@
 
 ## What You Learn
 
-* How to write an application service acting as a so called inbound-port 
-* How to declare an outbound-port sending current time  
-* How to provide an implementation of this outbound-port with console output
-* How to provide an implementation of this outbound-port using `DrivenAdapterStrategy` from Jexxa for JMS.  
+*   How to write an application service acting as a so called inbound-port 
+*   How to declare an outbound-port sending current time  
+*   How to provide an implementation of this outbound-port with console output
+*   How to provide an implementation of this outbound-port using `DrivenAdapterStrategy` from Jexxa for JMS.  
 
 ## What you need
 
@@ -14,10 +14,11 @@
 *   JDK 11 (or higher) installed 
 *   Maven 3.3 (or higher) installed
 *   A running ActiveMQ instance (at least if you start the application with JMS)
+*   curl or jconsoel to trigger the application  
 
-## Write the Application Core 
+# Write the Application Core 
 
-### Implement class `TimeService` 
+## Implement class `TimeService` 
 
 This class provides the supports the main two use cases of this application which are: 
 *   Provide current time
@@ -48,7 +49,7 @@ public class TimeService
 }
 ```                  
 
-### Declare interface `ITimePublisher`
+## Declare interface `ITimePublisher`
 
 The interface is quite simple since we need just a single method to publish a time. 
 
@@ -59,9 +60,9 @@ public interface ITimePublisher
 }
 ```                  
 
-## Implement the Infrastructure
+# Implement the Infrastructure
 
-### Driven Adapter with console output 
+## Driven Adapter with console output 
 The implementation is quite simple and just prints given time to a logger.  
 
 Note: Jexxa uses implicit constructor injection together with a strict convention over configuration approach.
@@ -94,17 +95,21 @@ public class ConsoleTimePublisher implements ITimePublisher
 ```
 That's it. 
 
-### Driven Adapter with JMS
+## Driven Adapter with JMS
 
 Jexxa provides so called `DrivenAdapterStrategy` for various Java-APIs such as JMS. When using these strategies the implementation of a driven adapter is just a facade and maps domain specific methods to the technology stack. In the following implementation we use the `JMSSender` provided by Jexxa.   
+
+Note: Since `JMSSender` requires information from a `Properties` we must provide a constructor or static factory method with a `Properties` attribute. By default, Jexxa hands in all information from jexxa-application.properties file.       
 
 ```java
 public class JMSTimePublisher implements ITimePublisher
 {
-    private final JMSSender jmsSender;
-
     private static final String TIME_TOPIC = "TimeService";
 
+    private static final Logger LOGGER = JexxaLogger.getLogger(JMSTimePublisher.class);
+
+    private final JMSSender jmsSender;
+    
     public JMSTimePublisher(Properties properties)
     {
         this.jmsSender = new JMSSender(properties);
@@ -113,13 +118,69 @@ public class JMSTimePublisher implements ITimePublisher
     @Override
     public void publish(LocalTime localTime)
     {
-        jmsSender.sendToTopic(localTime.toString(), TIME_TOPIC);
+        var localTimeAsString = localTime.toString();
+        jmsSender.sendToTopic(localTimeAsString, TIME_TOPIC);
+        LOGGER.info("Successfully published time {} to topic {}", localTimeAsString, TIME_TOPIC);
     }
 }
 ```
-  
 
-## Compile & Start the Application
+Typically, information stated in `jexxa-application.properties` for JMS are as follows: 
+
+```properties
+#suppress inspection "UnusedProperty" for whole file
+#Settings for JMSAdapter and JMSSender
+java.naming.factory.initial=org.apache.activemq.jndi.ActiveMQInitialContextFactory
+java.naming.provider.url=tcp://localhost:61616
+java.naming.user=admin
+java.naming.password=admin
+``` 
+
+# Implement the application
+
+Finally, we have to write our application. As you can see in the code below there are two main differences compared to `HelloJexxa`:
+
+*   We define the packages that should be used by Jexxa. This allows fine-grained control of used driven adapter since we must offer only a single implementation for each outbound port. In addition, this limits the search space for potential driven adapters and speeds up startup time.
+*   We do not need to instantiate a TimeService class explicitly. This is done by Jexxa including instantiation of all required driven adapter.   
+   
+```java
+public final class TimeServiceApplication
+{
+    //Declare the packages that should be used by Jexxa
+    private static final String JMS_DRIVEN_ADAPTER      = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter.messaging";
+    private static final String CONSOLE_DRIVEN_ADAPTER  = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter.console";
+    private static final String OUTBOUND_PORTS          = TimeServiceApplication.class.getPackageName() + ".domainservice";
+
+    public static void main(String[] args)
+    {
+        JexxaMain jexxaMain = new JexxaMain("TimeService");
+
+        jexxaMain
+                //Define which outbound ports should be managed by Jexxa
+                .addToApplicationCore(OUTBOUND_PORTS)
+                
+                //Define which driven adapter should be used by Jexxa
+                //Note: We can only register one driven adapter for the
+                .addToInfrastructure(getDrivenAdapter(args))
+
+                // Bind a REST and JMX adapter to the TimeService
+                // It allows to access the public methods of the TimeService via RMI over REST or Jconsole
+                .bind(RESTfulRPCAdapter.class).to(TimeService.class)
+                .bind(JMXAdapter.class).to(TimeService.class)
+
+                .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
+                .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
+
+                .start()
+
+                .waitForShutdown()
+
+                .stop();
+    }
+}
+```  
+
+## Compile & Start the Application with console output 
 
 ```console                                                          
 mvn clean install
@@ -127,10 +188,51 @@ java -jar target/timeservice-jar-with-dependencies.jar
 ```
 You will see following (or similar) output
 ```console
-[main] INFO io.jexxa.core.JexxaMain - Start BoundedContext 'TimeServiceApplication' with 2 Driving Adapter 
-[main] INFO org.eclipse.jetty.util.log - Logging initialized @440ms to org.eclipse.jetty.util.log.Slf4jLog
+[main] INFO io.jexxa.core.JexxaMain - Start BoundedContext 'TimeService' with 2 Driving Adapter 
+[main] INFO org.eclipse.jetty.util.log - Logging initialized @644ms to org.eclipse.jetty.util.log.Slf4jLog
 [main] INFO io.javalin.Javalin - Starting Javalin ...
 [main] INFO io.javalin.Javalin - Listening on http://localhost:7000/
-[main] INFO io.javalin.Javalin - Javalin started in 129ms \o/
-[main] INFO io.jexxa.core.JexxaMain - BoundedContext 'TimeServiceApplication' successfully started in 0.483 seconds
+[main] INFO io.javalin.Javalin - Javalin started in 121ms \o/
+[main] INFO io.jexxa.core.JexxaMain - BoundedContext 'TimeService' successfully started in 0.649 seconds
+```          
+
+### Publish the time 
+You can use curl to publish the time.  
+```Console
+curl -X POST http://localhost:7000/TimeService/publishTime
+```
+
+Each time you execute curl you should see following output on console: 
+
+```console                                                          
+[qtp2095064787-31] INFO io.jexxa.tutorials.timeservice.infrastructure.drivenadapter.console.ConsoleTimePublisher - 19:17:12.998278
+```
+
+
+## Compile & Start the Application with JMS 
+
+```console                                                          
+mvn clean install
+java -jar target/timeservice-jar-with-dependencies.jar -j 
+```
+You will see following (or similar) output
+```console
+[main] INFO io.jexxa.core.JexxaMain - Start BoundedContext 'TimeService' with 2 Driving Adapter 
+[main] INFO org.eclipse.jetty.util.log - Logging initialized @644ms to org.eclipse.jetty.util.log.Slf4jLog
+[main] INFO io.javalin.Javalin - Starting Javalin ...
+[main] INFO io.javalin.Javalin - Listening on http://localhost:7000/
+[main] INFO io.javalin.Javalin - Javalin started in 121ms \o/
+[main] INFO io.jexxa.core.JexxaMain - BoundedContext 'TimeService' successfully started in 0.649 seconds
+```          
+
+### Publish the time 
+You can use curl to publish the time.  
+```Console
+curl -X POST http://localhost:7000/TimeService/publishTime
+```
+
+Each time you execute curl you should see following output on console: 
+
+```console                                                          
+[qtp26757919-34] INFO io.jexxa.tutorials.timeservice.infrastructure.drivenadapter.messaging.JMSTimePublisher - Successfully published time 19:18:52.992826 to topic TimeService
 ```
