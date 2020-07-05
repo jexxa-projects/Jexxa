@@ -59,6 +59,26 @@
     <sonar.java.source>1.11</sonar.java.source>
     <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco-ut/jacoco.xml,target/site/jacoco-it/jacoco.xml </sonar.coverage.jacoco.xmlReportPaths>
     <argLine>-Xmx2048m -Xms1024m</argLine>
+
+    <!-- version of compile dependencies -->
+    <classgraph.version>4.8.87</classgraph.version>
+    <commons.lang.version>2.6</commons.lang.version>
+    <gson.version>2.8.6</gson.version>
+    <javalin.version>3.9.1</javalin.version>
+    <javax.jms.version>2.0.1</javax.jms.version>
+    <jackson.databind.version>2.11.1</jackson.databind.version>
+
+    <!-- version of test dependencies -->
+    <activemq.client.version>5.16.0</activemq.client.version>
+    <postgres.version>42.2.14</postgres.version>
+    <unirest.java.version>3.8.06</unirest.java.version>
+    <junit.platform.launcher.version>1.7.0-M1</junit.platform.launcher.version>
+    <junit.jupiter.engine.version>5.7.0-M1</junit.jupiter.engine.version>
+    <junit.jupiter.params.version>5.7.0-M1</junit.jupiter.params.version>
+    <slf4j.simple.version>1.7.28</slf4j.simple.version>
+    <awaitility.version>4.0.3</awaitility.version>
+
+    <sonar.projectKey>repplix_Jexxa</sonar.projectKey>
   </properties>
 
 

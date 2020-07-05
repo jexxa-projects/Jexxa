@@ -12,7 +12,6 @@
 
   <properties>
     <main.class>io.jexxa.tutorials.simpletimeservice.TimeServiceApplication</main.class>
-    <activemq.client.version>5.15.12</activemq.client.version>
   </properties>
 
 
