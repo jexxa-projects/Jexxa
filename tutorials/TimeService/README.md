@@ -197,6 +197,7 @@ You will see following (or similar) output
 ```          
 
 ### Publish the time 
+
 You can use curl to publish the time.  
 ```Console
 curl -X POST http://localhost:7000/TimeService/publishTime
@@ -225,7 +226,8 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'TimeService' successfully started in 0.649 seconds
 ```          
 
-### Publish the time 
+### Publish the time
+ 
 You can use curl to publish the time.  
 ```Console
 curl -X POST http://localhost:7000/TimeService/publishTime
