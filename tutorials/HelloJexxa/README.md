@@ -53,5 +53,6 @@ You will see following (or similar) output
 
 *   Start jconsole and select the MBean `BoundedContext` as shown in screenshot below
 *   Now you can execute all methods of this object 
+*   Execute `shutdown` to end the application 
 
 ![JConsole](images/JConsole.png). 
