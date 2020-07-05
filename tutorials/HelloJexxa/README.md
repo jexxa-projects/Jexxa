@@ -16,7 +16,7 @@
 
 ```console                                                          
 mvn clean install
-java -jar target/hellojexxa-2.1.0-SNAPSHOT-jar-with-dependencies.jar
+java -jar target/hellojexxa-jar-with-dependencies.jar
 ```
 You will see following (or similar) output
 ```console
