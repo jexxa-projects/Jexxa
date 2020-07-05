@@ -6,15 +6,16 @@ import java.util.Properties;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JMSSender;
 import io.jexxa.tutorials.timeservice.domainservice.ITimePublisher;
 
+@SuppressWarnings("unused")
 public class JMSTimePublisher implements ITimePublisher
 {
     private final JMSSender jmsSender;
 
     private static final String TIME_TOPIC = "TimeService";
 
-    JMSTimePublisher(JMSSender jmsSender)
+    public JMSTimePublisher(Properties properties)
     {
-        this.jmsSender = jmsSender;
+        this.jmsSender = new JMSSender(properties);
     }
 
     @Override
@@ -22,10 +23,4 @@ public class JMSTimePublisher implements ITimePublisher
     {
         jmsSender.sendToTopic(localTime.toString(), TIME_TOPIC);
     }
-
-    public static ITimePublisher create(Properties properties)
-    {
-        return new JMSTimePublisher(new JMSSender(properties));
-    }
-
 }

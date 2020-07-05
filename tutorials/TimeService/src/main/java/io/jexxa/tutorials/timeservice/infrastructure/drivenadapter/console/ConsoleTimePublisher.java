@@ -7,6 +7,7 @@ import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 
+@SuppressWarnings("unused")
 public class ConsoleTimePublisher implements ITimePublisher
 {
 

@@ -4,17 +4,18 @@
 
 * How to write an application service acting as a so called inbound-port 
 * How to declare an outbound-port sending current time  
-* How to provide two different implementations, or so called driving adapters, of this outbound-port. One driving adapter uses console output. The other one uses JMS.  
+* How to provide an implementation of this outbound-port with console output
+* How to provide an implementation of this outbound-port using `DrivenAdapterStrategy` from Jexxa for JMS.  
 
 ## What you need
 
-*   Understand tutorial `HelloJexxa` 
+*   Understand tutorial `HelloJexxa` because we explain only new aspects 
 *   30 minutes
 *   JDK 11 (or higher) installed 
 *   Maven 3.3 (or higher) installed
 *   A running ActiveMQ instance (at least if you start the application with JMS)
 
-## Write the Application 
+## Write the Application Core 
 
 ### Implement class `TimeService` 
 
@@ -58,10 +59,10 @@ public interface ITimePublisher
 }
 ```                  
 
-### Implement the driven adapter for interface `ITimePublisher`
+## Implement the Infrastructure
 
-#### Driven Adapter with console output 
-The implementation is quite simple and just prints given time to a logger. That's it.  
+### Driven Adapter with console output 
+The implementation is quite simple and just prints given time to a logger.  
 
 Note: Jexxa uses implicit constructor injection together with a strict convention over configuration approach.
 
@@ -72,6 +73,7 @@ Therefore, each driven adapter needs one of the following constructors:
 *   Public static factory method that gets no parameters and returns the type of the driving adapter
 *   Public static factory method with a single `Properties` parameter and returns the type of the requested driving adapter
    
+Since our driven adapter does not need/support any configuration parameter, we can uses Java's default constructor.   
 
 ```java
 public class ConsoleTimePublisher implements ITimePublisher
@@ -90,10 +92,32 @@ public class ConsoleTimePublisher implements ITimePublisher
     }
 }
 ```
+That's it. 
 
-#### Driven Adapter with JMS
- 
- 
+### Driven Adapter with JMS
+
+Jexxa provides so called `DrivenAdapterStrategy` for various Java-APIs such as JMS. When using these strategies the implementation of a driven adapter is just a facade and maps domain specific methods to the technology stack. In the following implementation we use the `JMSSender` provided by Jexxa.   
+
+```java
+public class JMSTimePublisher implements ITimePublisher
+{
+    private final JMSSender jmsSender;
+
+    private static final String TIME_TOPIC = "TimeService";
+
+    public JMSTimePublisher(Properties properties)
+    {
+        this.jmsSender = new JMSSender(properties);
+    }
+
+    @Override
+    public void publish(LocalTime localTime)
+    {
+        jmsSender.sendToTopic(localTime.toString(), TIME_TOPIC);
+    }
+}
+```
+  
 
 ## Compile & Start the Application
 
