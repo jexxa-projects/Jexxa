@@ -93,7 +93,6 @@ public class ConsoleTimePublisher implements ITimePublisher
     }
 }
 ```
-That's it. 
 
 ### Driven Adapter with JMS
 
@@ -149,7 +148,7 @@ public final class TimeServiceApplication
     //Declare the packages that should be used by Jexxa
     private static final String JMS_DRIVEN_ADAPTER      = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter.messaging";
     private static final String CONSOLE_DRIVEN_ADAPTER  = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter.console";
-    private static final String OUTBOUND_PORTS          = TimeServiceApplication.class.getPackageName() + ".domainservice"; -
+    private static final String OUTBOUND_PORTS          = TimeServiceApplication.class.getPackageName() + ".domainservice"; 
 
     public static void main(String[] args)
     {
@@ -179,6 +178,8 @@ public final class TimeServiceApplication
     }
 }
 ```  
+
+That's it. 
 
 ## Compile & Start the Application with console output 
 
