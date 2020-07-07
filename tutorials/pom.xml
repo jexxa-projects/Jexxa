@@ -29,6 +29,5 @@
   <modules>
     <module>HelloJexxa</module>
     <module>TimeService</module>
-    <module>HRDepartment</module>
   </modules>
 </project>
