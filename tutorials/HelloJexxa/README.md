@@ -11,7 +11,7 @@
 
 *   10 minutes
 *   JDK 11 (or higher) installed 
-*   Maven 3.3 (or higher) installed
+*   Maven 3.6 (or higher) installed
 
 ## Write the application
 The source code of the main method is quite obvious. Each line include comments to explain the meaning.  
