@@ -5,17 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## \[2.0.1 - UNRELEASED] - YYYY-MM-DD
+## \[2.1.0] - 2020-07-07
 ### Added
 -   Added automatic reconnection mechanism for JMS Listener in case of a broker exception
 
 -   Extended `RepositoryManager` for persistence strategies to define strategies on an aggregate level
 
--   Added samples to show usage of Jexxa      
+-   Added tutorials to show usage of Jexxa      
 
 ### Changed
 -   Updated dependencies 
-
 
 ## \[2.0.0] - 2020-06-01
 ### Added
