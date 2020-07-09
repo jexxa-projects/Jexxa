@@ -50,7 +50,7 @@ public class AdapterFactory
         }
         catch (ReflectiveOperationException e)
         {
-            throw new InvalidAdapterConfigurationException(interfaceType, e.getCause());
+            throw new InvalidAdapterConfigurationException(interfaceType, e);
         }
 
     }
@@ -83,7 +83,7 @@ public class AdapterFactory
         }
         catch (ReflectiveOperationException e)
         {
-            throw new InvalidAdapterConfigurationException(interfaceType, e.getCause());
+            throw new InvalidAdapterConfigurationException(interfaceType, e);
         }
     }
 
@@ -162,12 +162,12 @@ public class AdapterFactory
     {
         private final String errorMessage;
 
-        public <T> InvalidAdapterConfigurationException(Class<T> adapter, Throwable cause)
+        public <T> InvalidAdapterConfigurationException(Class<T> adapter, Exception exception)
         {
-            super(cause);
-            if (cause != null )
+            super(exception);
+            if (exception.getCause() != null )
             {
-                errorMessage = "Cannot create adapter " + adapter.getName() + "\n" + "Error message from adapter : " + cause.getMessage();
+                errorMessage = "Cannot create adapter " + adapter.getName() + "\n" + "Error message from adapter : " + exception.getCause().getMessage();
             }
             else
             {
