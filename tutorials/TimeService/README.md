@@ -223,7 +223,6 @@ Each time you execute curl you should see following output on console:
 [qtp2095064787-31] INFO io.jexxa.tutorials.timeservice.infrastructure.drivenadapter.console.ConsoleTimePublisher - 19:17:12.998278
 ```
 
-
 ## Compile & Start the Application with JMS 
 
 ```console                                                          
