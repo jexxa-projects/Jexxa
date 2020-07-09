@@ -165,13 +165,13 @@ public class AdapterFactory
         public <T> InvalidAdapterConfigurationException(Class<T> adapter, Exception exception)
         {
             super(exception);
-            if (exception.getCause() != null )
+            if (exception.getCause() == null )
             {
-                errorMessage = "Cannot create adapter " + adapter.getName() + "\n" + "Error message from adapter : " + exception.getCause().getMessage();
+                errorMessage = "Cannot create adapter " + adapter.getName() + "\n";
             }
             else
             {
-                errorMessage = "Cannot create adapter " + adapter.getName() + "\n";
+                errorMessage = "Cannot create adapter " + adapter.getName() + "\n" + "Error message from adapter : " + exception.getCause().getMessage();
             }
         }
 

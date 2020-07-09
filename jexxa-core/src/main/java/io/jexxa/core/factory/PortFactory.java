@@ -229,13 +229,13 @@ public class PortFactory
         public <T> InvalidPortConfigurationException(Class<T> port, Exception exception)
         {
             super(exception);
-            if (exception.getCause() != null )
+            if (exception.getCause() == null )
             {
-                errorMessage = "Cannot create port " + port.getName() + "\n" + "Error message from adapter : " + exception.getCause().getMessage();
+                errorMessage = "Cannot create adapter " + port.getName() + "\n";
             }
             else
             {
-                errorMessage = "Cannot create adapter " + port.getName() + "\n";
+                errorMessage = "Cannot create port " + port.getName() + "\n" + "Error message from adapter : " + exception.getCause().getMessage();
             }
         }
 
