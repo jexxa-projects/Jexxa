@@ -63,8 +63,7 @@ public final class JexxaAggregateRepository implements IJexxaAggregateRepository
 
     public static IJexxaAggregateRepository create(Properties properties)
     {
-        //noinspection removal
-        return new JexxaAggregateRepository(RepositoryManager.getRepository(
+        return new JexxaAggregateRepository(RepositoryManager.getInstance().getStrategy(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 properties)

@@ -50,35 +50,14 @@ public final class RepositoryManager
         {
             if ( e.getCause() != null)
             {
-                throw new IllegalArgumentException(e.getCause().getMessage(), e.getCause());
+                throw new IllegalArgumentException(e.getCause().getMessage(), e);
             }
 
             throw new IllegalArgumentException("No suitable default IRepository available", e);
         }
     }
 
-
-    /**
-     * @deprecated Use {@link #getStrategy(Class, Function, Properties)} instead
-     *
-     * @param <T> Type of the aggregate
-     * @param <K> Type of the aggregatekey function
-     * @param aggregateClazz class information of the aggregate
-     * @param keyFunction method that returns aggregate key
-     * @param properties properties for configuring the repository 
-     * @return interface to Repository            
-     *
-     */
-    @Deprecated(forRemoval=true)
-    public static <T,K> IRepository<T,K> getRepository(
-            Class<T> aggregateClazz,
-            Function<T,K> keyFunction,
-            Properties properties
-    )
-    {
-        return getInstance().getStrategy(aggregateClazz, keyFunction, properties);
-    }
-
+    
     private RepositoryManager()
     {
         //Package protected constructor
