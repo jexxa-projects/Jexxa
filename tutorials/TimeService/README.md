@@ -12,9 +12,9 @@
 *   Understand tutorial `HelloJexxa` because we explain only new aspects 
 *   30 minutes
 *   JDK 11 (or higher) installed 
-*   Maven 3.3 (or higher) installed
+*   Maven 3.6 (or higher) installed
 *   A running ActiveMQ instance (at least if you start the application with JMS)
-*   curl or jconsoel to trigger the application  
+*   curl or jconsole to trigger the application  
 
 ## 1. Implementing Application Core 
 
@@ -222,7 +222,6 @@ Each time you execute curl you should see following output on console:
 ```console                                                          
 [qtp2095064787-31] INFO io.jexxa.tutorials.timeservice.infrastructure.drivenadapter.console.ConsoleTimePublisher - 19:17:12.998278
 ```
-
 
 ## Compile & Start the Application with JMS 
 

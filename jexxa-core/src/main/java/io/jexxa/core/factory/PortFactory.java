@@ -136,7 +136,7 @@ public class PortFactory
         }
             catch (ReflectiveOperationException e)
         {
-            throw new InvalidPortConfigurationException(portAdapter, e.getCause());
+            throw new InvalidPortConfigurationException(portAdapter, e);
         }
 }
 
@@ -165,7 +165,7 @@ public class PortFactory
         }
         catch (ReflectiveOperationException e)
         {
-            throw new InvalidPortConfigurationException(inboundPort, e.getCause());
+            throw new InvalidPortConfigurationException(inboundPort, e);
         }
     }
 
@@ -226,16 +226,16 @@ public class PortFactory
     {
         private final String errorMessage;
 
-        public <T> InvalidPortConfigurationException(Class<T> port, Throwable cause)
+        public <T> InvalidPortConfigurationException(Class<T> port, Exception exception)
         {
-            super(cause);
-            if (cause != null )
+            super(exception);
+            if (exception.getCause() == null )
             {
-                errorMessage = "Cannot create port " + port.getName() + "\n" + "Error message from adapter : " + cause.getMessage();
+                errorMessage = "Cannot create adapter " + port.getName() + "\n";
             }
             else
             {
-                errorMessage = "Cannot create adapter " + port.getName() + "\n";
+                errorMessage = "Cannot create port " + port.getName() + "\n" + "Error message from adapter : " + exception.getCause().getMessage();
             }
         }
 
