@@ -29,5 +29,6 @@
   <modules>
     <module>HelloJexxa</module>
     <module>TimeService</module>
+    <module>BookStore</module>
   </modules>
 </project>
