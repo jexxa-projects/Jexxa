@@ -2,10 +2,8 @@
 
 ## What You Learn
 
-*   How to write an application service acting as a so called inbound-port 
-*   How to declare an outbound-port sending current time  
-*   How to provide an implementation of this outbound-port with console output
-*   How to provide an implementation of this outbound-port using `DrivenAdapterStrategy` from Jexxa for JMS.  
+*   Default package structure for more complex applications based on DDD   
+*   How to provide an implementation of a specific outbound-port which is called `Repository` in terms of DDD 
 
 ## What you need
 
@@ -18,8 +16,19 @@
 
 ## 1. Implementing Application Core 
 
+### Package structure 
+When implementing your first applications using DDD with an onion architecture we recommend following package structure: 
 
-
+*   applicationservice
+*   domainservice
+*   domain 
+    *   valueobject
+    *   aggregate
+    *   domainevent
+*   infrastructure
+    *   drivenadapter
+    *   drivingadapter (if required)
+    
 ## 2. Implement the Infrastructure
 
 
