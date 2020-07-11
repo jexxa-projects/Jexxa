@@ -100,16 +100,18 @@ public class JexxaMain
     @SuppressWarnings("java:S2629")
     public BoundedContext start()
     {
-        if ( !boundedContext.isRunning() )
+        if ( boundedContext.isRunning() )
         {
-            LOGGER.info("Start BoundedContext '{}' with {} Driving Adapter ", getBoundedContext().contextName(), compositeDrivingAdapter.size());
-            compositeDrivingAdapter.start();
-            boundedContext.start();
-            var startTime = getBoundedContext().uptime();
-            LOGGER.info("BoundedContext '{}' successfully started in {}.{} seconds", getBoundedContext().contextName(), startTime.toSeconds(), startTime.toMillisPart());
-        } else {
             LOGGER.warn("BoundedContext '{}' already started", getBoundedContext().contextName());
+            return boundedContext;
         }
+        
+        LOGGER.info("Start BoundedContext '{}' with {} Driving Adapter ", getBoundedContext().contextName(), compositeDrivingAdapter.size());
+        compositeDrivingAdapter.start();
+        boundedContext.start();
+        var startTime = getBoundedContext().uptime();
+        LOGGER.info("BoundedContext '{}' successfully started in {}.{} seconds", getBoundedContext().contextName(), startTime.toSeconds(), startTime.toMillisPart());
+
         return boundedContext;
     }
 
