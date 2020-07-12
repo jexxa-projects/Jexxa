@@ -8,14 +8,50 @@
 ## What you need
 
 *   Understand tutorial `HelloJexxa` ans `TimeService` because we explain only new aspects 
-*   30 minutes
+*   60 minutes
 *   JDK 11 (or higher) installed 
 *   Maven 3.6 (or higher) installed
 *   A running ActiveMQ instance (at least if you start the application with JMS)
 *   curl or jconsole to trigger the application  
 
-## 1. Implementing Application Core 
+## Functionality of the BookStore
+This application should provide following functionality
 
+*   Managing a stock for books.
+    *   For each book provide the number of available copies. 
+    *   If last copy is sold, send a DomainEvent that this book is sold out.
+    *   Add new books and ordered copies of books
+    *   Update stock if we sell books
+    *   Since we have several stores, the stock is identified by the address of the store   
+
+*   Manage the lifetime of books in stock 
+    *   If a book is out of print send a DomainEvent that this book will no longer be printed.
+    *   All books should be identified by their ISBN13.
+    *   The ISBN13 number should be represented with its defined components such as prefix, registrant, ... 
+
+## Implementing Application Core 
+
+### 1. Mapping to DDD patterns  
+First we map the functionality of the application to DDD patterns   
+
+*   `Aggregate`: Elements that change over time and include our business logic 
+    *   `BookStock` because our stock will change        
+    *   `Book` because it can go out of print. Since we manage only books that are in stock our BookStock is also the root aggregate for our books.  
+
+*   `ValueObject`: Elements that represent a state and are immutable
+    *   `StoreAddress` which identifies our stock for a specific store 
+    *   `ISBN13` which identifies a book
+    *   Components of the ISBN13  
+    
+*   `DomainEvents`: Business events that happened in the past 
+    *   `BookOutOfPrint` when a book is no longer printed
+    *   `BookSoldOut` when copies of a book are no longer in stock
+
+*   'DomainService': 
+    *   `DomainEventPublisher`: We need to publish our domain events in some way
+    *   `BookStockRepository`: We have to persist our stock in some way
+     
+       
 ### Package structure 
 When implementing your first applications using DDD with an onion architecture we recommend following package structure: 
 
@@ -25,10 +61,20 @@ When implementing your first applications using DDD with an onion architecture w
     *   valueobject
     *   aggregate
     *   domainevent
+    *   businessexception
 *   infrastructure
     *   drivenadapter
     *   drivingadapter (if required)
-    
+
+### A note on the implementation
+
+*   `ValueObject` and `DomainEvent`: Are immutable and compared based on their internal values
+    *   They must not have setter methods. So all fields should be final. 
+    *   They must provide a valid implementation of equals() and hashcode()
+    *   They include no business logic, but they have to validate their input data
+
+*   `Aggregate`: Is identified by a unique `AggregateID` which is a `ValueObject`     
+     
 ## 2. Implement the Infrastructure
 
 
