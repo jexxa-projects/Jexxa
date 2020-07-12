@@ -11,7 +11,7 @@ public class Publication
 {
     private final int value;
 
-    Publication(int value)
+    public Publication(int value)
     {
         Validate.inclusiveBetween(0, 999999, value, "Publication element not within valid range!");
         this.value = value;

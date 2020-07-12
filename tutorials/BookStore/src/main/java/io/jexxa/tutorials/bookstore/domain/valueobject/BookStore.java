@@ -2,13 +2,13 @@ package io.jexxa.tutorials.bookstore.domain.valueobject;
 
 import java.util.Objects;
 
-public class StoreAddress
+public class BookStore
 {
     private final int zipCode;
     private final String street;
     private final int houseNumber;
 
-    public StoreAddress(int zipCode, String street, int houseNumber )
+    public BookStore(int zipCode, String street, int houseNumber )
     {
         this.zipCode = zipCode;
         this.street = street;
@@ -41,7 +41,7 @@ public class StoreAddress
         {
             return false;
         }
-        StoreAddress that = (StoreAddress) o;
+        BookStore that = (BookStore) o;
         return zipCode == that.zipCode &&
                 houseNumber == that.houseNumber &&
                 Objects.equals(street, that.street);

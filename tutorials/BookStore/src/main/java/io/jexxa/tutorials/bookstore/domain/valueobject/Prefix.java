@@ -3,6 +3,8 @@ package io.jexxa.tutorials.bookstore.domain.valueobject;
 
 import java.util.Objects;
 
+import org.apache.commons.lang.Validate;
+
 /**
  * Prefix element – currently this can only be either 978 or 979. It is always 3 digits in length
  */
@@ -10,8 +12,9 @@ public class Prefix
 {
     private final int value;
 
-    private Prefix(int value)
+    public Prefix(int value)
     {
+        Validate.isTrue( value == 978 || value == 979);
         this.value = value;
     }
 

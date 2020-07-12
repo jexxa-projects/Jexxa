@@ -2,17 +2,17 @@ package io.jexxa.tutorials.bookstore.domain.domainevent;
 
 import java.util.Objects;
 
+import io.jexxa.tutorials.bookstore.domain.valueobject.BookStore;
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
-import io.jexxa.tutorials.bookstore.domain.valueobject.StoreAddress;
 
 public class BookSoldOut
 {
-    private final StoreAddress storeAddress;
+    private final BookStore bookStore;
     private final ISBN13 isbn13;
 
-    public BookSoldOut(StoreAddress storeAddress, ISBN13 isbn13)
+    public BookSoldOut(BookStore bookStore, ISBN13 isbn13)
     {
-        this.storeAddress = storeAddress;
+        this.bookStore = bookStore;
         this.isbn13 = isbn13;
     }
 
@@ -21,9 +21,9 @@ public class BookSoldOut
         return isbn13;
     }
 
-    public StoreAddress getStoreAddress()
+    public BookStore getBookStore()
     {
-        return storeAddress;
+        return bookStore;
     }
 
     @Override
@@ -38,13 +38,13 @@ public class BookSoldOut
             return false;
         }
         BookSoldOut that = (BookSoldOut) o;
-        return Objects.equals(storeAddress, that.storeAddress) &&
+        return Objects.equals(bookStore, that.bookStore) &&
                 Objects.equals(isbn13, that.isbn13);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(storeAddress, isbn13);
+        return Objects.hash(bookStore, isbn13);
     }
 }
