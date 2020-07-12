@@ -10,6 +10,7 @@ import io.jexxa.tutorials.bookstore.domain.aggregate.Book;
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
 import io.jexxa.tutorials.bookstore.domainservice.IBookRepository;
 
+@SuppressWarnings("unused")
 public class BookRepository implements IBookRepository
 {
     private final IRepository<Book, ISBN13> repository;
