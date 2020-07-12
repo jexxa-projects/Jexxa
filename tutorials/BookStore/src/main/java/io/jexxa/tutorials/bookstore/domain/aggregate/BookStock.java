@@ -3,7 +3,11 @@ package io.jexxa.tutorials.bookstore.domain.aggregate;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
+import io.jexxa.tutorials.bookstore.domain.businessexception.BookNotInStockException;
+import io.jexxa.tutorials.bookstore.domain.domainevent.BookOutOfPrint;
+import io.jexxa.tutorials.bookstore.domain.domainevent.BookSoldOut;
 import io.jexxa.tutorials.bookstore.domain.valueobject.BookStore;
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
 
@@ -46,7 +50,43 @@ public class BookStock
         return 0;
     }
 
-    static public BookStock create(BookStore bookStore)
+    public BookOutOfPrint outOfPrint(ISBN13 book)
+    {
+        var result = booksInStock.get(book);
+
+        if ( result == null )
+        {
+            return new BookOutOfPrint(bookStore, book, 0);
+        }
+
+        result.getKey().outOfPrint();
+        return new BookOutOfPrint(bookStore, book, result.getValue());
+    }
+
+    public Optional<BookSoldOut> sell(ISBN13 book) throws BookNotInStockException
+    {
+        if ( !inStock(book) )
+        {
+            throw new BookNotInStockException();
+        }
+
+        var result = booksInStock.get(book);
+        booksInStock.put(book, new AbstractMap.SimpleEntry<>(result.getKey(), result.getValue() - 1));
+
+        if (amountInStock(book) == 0)
+        {
+            //If we sold last book => remove it 
+            if (result.getKey().isOutOfPrint())
+            {
+                booksInStock.remove(book);
+            }
+            return Optional.of(new BookSoldOut(bookStore, book));
+        }
+
+        return Optional.empty();
+    }
+
+    public static BookStock create(BookStore bookStore)
     {
         return new BookStock(bookStore);
     }
