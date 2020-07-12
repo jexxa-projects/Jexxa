@@ -18,11 +18,6 @@ public class Book
         return isbn13;
     }
 
-    public static Book create(ISBN13 isbn13)
-    {
-        return new Book(isbn13);
-    }
-
     public void outOfPrint()
     {
         outOfPrint = true;
@@ -32,4 +27,11 @@ public class Book
     {
         return  outOfPrint;
     }
+
+    //AggregateFactory
+    public static Book create(ISBN13 isbn13)
+    {
+        return new Book(isbn13);
+    }
+
 }
