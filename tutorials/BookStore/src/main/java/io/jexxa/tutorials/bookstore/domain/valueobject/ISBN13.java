@@ -118,15 +118,15 @@ public class ISBN13
         {
             if ( i % 2 == 0)
             {
-                digitSum += digits[i];
+                digitSum += Integer.parseInt(String.valueOf(digits[i]));
             }
             else
             {
-                digitSum += digits[i] * 3;
+                digitSum += Integer.parseInt(String.valueOf(digits[i])) * 3;
             }
         }
-
-        var calculatedCheckDigit = (( 10 - digitSum ) % 10) % 10;
+        
+        var calculatedCheckDigit = (10 - ( digitSum % 10 )) % 10;
 
         Validate.isTrue( calculatedCheckDigit == checkDigit.getValue(), "Invalid checksum: Expected value is " + calculatedCheckDigit + " Given value is " + checkDigit.getValue());
     }
