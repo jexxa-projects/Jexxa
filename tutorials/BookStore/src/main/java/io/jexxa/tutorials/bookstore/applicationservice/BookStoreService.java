@@ -2,9 +2,11 @@ package io.jexxa.tutorials.bookstore.applicationservice;
 
 import io.jexxa.tutorials.bookstore.domain.aggregate.Book;
 import io.jexxa.tutorials.bookstore.domain.businessexception.BookNotInStockException;
+import io.jexxa.tutorials.bookstore.domain.businessexception.InvalidISBNException;
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
 import io.jexxa.tutorials.bookstore.domainservice.IBookRepository;
 import io.jexxa.tutorials.bookstore.domainservice.IDomainEventPublisher;
+import io.jexxa.tutorials.bookstore.domainservice.ISBNService;
 import org.apache.commons.lang3.Validate;
 
 public class BookStoreService
@@ -22,6 +24,11 @@ public class BookStoreService
         this.domainEventPublisher = domainEventPublisher;
     }
 
+    public void receiveBook(String isbn13, int amount) throws InvalidISBNException
+    {
+        receiveBook(ISBNService.convertFrom(isbn13), amount);
+    }
+
     public void receiveBook(ISBN13 isbn13, int amount)
     {
         var result = ibookRepository.search( isbn13 );
@@ -35,12 +42,22 @@ public class BookStoreService
         ibookRepository.update( book );
     }
 
+    public boolean inStock(String isbn13) throws InvalidISBNException
+    {
+        return inStock(ISBNService.convertFrom(isbn13));
+    }
+
     public boolean inStock(ISBN13 isbn13)
     {
         return ibookRepository
                 .search( isbn13 )
                 .map( Book::inStock )
                 .orElse( false );
+    }
+
+    public int amountInStock(String isbn13) throws InvalidISBNException
+    {
+        return amountInStock(ISBNService.convertFrom(isbn13));
     }
 
     public int amountInStock(ISBN13 isbn13)
@@ -57,6 +74,11 @@ public class BookStoreService
                 .search(isbn13)
                 .map(Book::outOfPrint)
                 .ifPresent(domainEventPublisher::publish);
+    }
+
+    public void sell(String isbn13) throws BookNotInStockException, InvalidISBNException
+    {
+        sell(ISBNService.convertFrom(isbn13));
     }
 
     public void sell(ISBN13 isbn13) throws BookNotInStockException
