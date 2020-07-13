@@ -7,9 +7,7 @@
     <version>2.1.1-SNAPSHOT</version>
   </parent>
 
-  <groupId>io.jexxa.tutorial</groupId>
   <artifactId>bookstore</artifactId>
-
   <name>BookStore</name>
 
   <properties>
@@ -56,6 +54,13 @@
       <artifactId>commons-lang3</artifactId>
       <version>3.10</version>
     </dependency>
+    <dependency>
+      <groupId>io.jexxa</groupId>
+      <artifactId>jexxa-adapter-api</artifactId>
+      <version>1.0.1-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
