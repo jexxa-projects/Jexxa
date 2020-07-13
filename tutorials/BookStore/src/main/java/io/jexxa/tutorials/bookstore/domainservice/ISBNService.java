@@ -33,4 +33,9 @@ public class ISBNService
             throw new InvalidISBNException();
         }
     }
+
+    private ISBNService()
+    {
+        //Private Constructor 
+    }
 }
