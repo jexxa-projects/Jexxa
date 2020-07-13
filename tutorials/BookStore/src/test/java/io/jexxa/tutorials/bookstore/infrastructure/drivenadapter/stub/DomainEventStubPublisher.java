@@ -23,17 +23,17 @@ public class DomainEventStubPublisher implements IDomainEventPublisher
         EVENT_LIST.add(domainEvent);
     }
 
-    static int eventCount()
+    public static int eventCount()
     {
         return EVENT_LIST.size();
     }
 
-    static Object getEvent(int position)
+    public static Object getEvent(int position)
     {
         return EVENT_LIST.get(position);
     }
 
-    static void clear()
+    public static void clear()
     {
         EVENT_LIST.clear();
     }
