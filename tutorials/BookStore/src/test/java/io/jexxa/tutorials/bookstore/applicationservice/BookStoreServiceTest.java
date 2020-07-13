@@ -8,6 +8,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManag
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 import io.jexxa.tutorials.bookstore.domain.businessexception.InvalidISBNException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class BookStoreServiceTest
 {
@@ -26,7 +27,7 @@ class BookStoreServiceTest
                 .addToInfrastructure(DRIVEN_ADAPTER_PERSISTENCE);
     }
 
-    
+    @Test
     void receiveBook() throws InvalidISBNException
     {
         //Arrange

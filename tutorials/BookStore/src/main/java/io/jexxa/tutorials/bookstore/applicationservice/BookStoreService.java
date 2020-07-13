@@ -34,7 +34,6 @@ public class BookStoreService
         var result = ibookRepository.search( isbn13 );
         if ( result.isEmpty() )
         {
-            System.out.println("CREATER BOOK ");
             ibookRepository.add(Book.create( isbn13 ));
         }
 
@@ -63,14 +62,10 @@ public class BookStoreService
 
     public int amountInStock(ISBN13 isbn13)
     {
-        /*return ibookRepository
+       return ibookRepository
                 .search(isbn13)
                 .map(Book::amountInStock)
-                .orElse(0);*/
-        return ibookRepository
-                .get(isbn13)
-                .amountInStock();
-
+                .orElse(0);
     }
 
     public void outOfPrint(ISBN13 isbn13)
