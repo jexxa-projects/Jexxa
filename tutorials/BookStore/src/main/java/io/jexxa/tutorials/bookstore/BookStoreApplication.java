@@ -49,6 +49,7 @@ public final class BookStoreApplication
     }
 
 
+    @SuppressWarnings("rawtypes")
     private static Class<? extends IRepository> getDrivenAdapterStrategy(String[] args)
     {
         Options options = new Options();
