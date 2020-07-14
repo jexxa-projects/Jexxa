@@ -6,7 +6,7 @@ import io.jexxa.tutorials.bookstore.domain.businessexception.BookNotInStockExcep
 import io.jexxa.tutorials.bookstore.domain.domainevent.BookSoldOut;
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
 
-public class Book
+public final class Book
 {
     private final ISBN13 isbn13;
     private int amountInStock = 0;

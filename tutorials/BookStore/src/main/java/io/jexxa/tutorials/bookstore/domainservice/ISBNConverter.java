@@ -9,7 +9,7 @@ import io.jexxa.tutorials.bookstore.domain.valueobject.Publication;
 import io.jexxa.tutorials.bookstore.domain.valueobject.Registrant;
 import io.jexxa.tutorials.bookstore.domain.valueobject.RegistrationGroup;
 
-public class ISBNConverter
+public final class ISBNConverter
 {
     public static ISBN13 convertFrom(String isbnAsString) throws InvalidISBNException
     {
@@ -30,7 +30,7 @@ public class ISBNConverter
             );
         } catch (IllegalArgumentException e)
         {
-            throw new InvalidISBNException();
+            throw new InvalidISBNException(e);
         }
     }
 
