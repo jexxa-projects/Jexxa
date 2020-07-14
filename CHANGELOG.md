@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[x.x.x] - yyyy-mm-dd
+### Added
+-   Added tutorials to show usage of Jexxa      
+
+### Fixed
+-   Fixed json template for base types in JMX parameter info     
 
 ## \[2.1.0] - 2020-07-07
 ### Added

@@ -11,8 +11,8 @@ import io.jexxa.tutorials.bookstore.applicationservice.BookStoreService;
 public class BookStoreApplication
 {
     //Declare the packages that should be used by Jexxa
-    private static final String DRIVEN_ADAPTER      = BookStoreApplication.class.getPackageName() + ".infrastructure.drivenadapter";
-    private static final String OUTBOUND_PORTS          = BookStoreApplication.class.getPackageName() + ".domainservice";
+    private static final String DRIVEN_ADAPTER  = BookStoreApplication.class.getPackageName() + ".infrastructure.drivenadapter";
+    private static final String OUTBOUND_PORTS  = BookStoreApplication.class.getPackageName() + ".domainservice";
 
     public static void main(String[] args)
     {

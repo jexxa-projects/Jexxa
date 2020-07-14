@@ -57,7 +57,7 @@ class MBeanConventionTest
     void toJsonTemplatePrimitive()
     {
         //Arrange
-        String integerTemplate = "{\"int\":\"<int>\"}";
+        String integerTemplate = "<int>";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
         properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
@@ -75,7 +75,7 @@ class MBeanConventionTest
     void stringToJsonTemplate()
     {
         //Arrange
-        String stringTemplate = "{\"String\":\"<String>\"}";
+        String stringTemplate = "<String>";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
         properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());

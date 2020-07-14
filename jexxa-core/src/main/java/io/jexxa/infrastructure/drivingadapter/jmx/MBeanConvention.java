@@ -34,7 +34,7 @@ public class MBeanConvention implements DynamicMBean
 
     private final Object object;
     private final String contextName;
-    
+
     MBeanConvention(Object object, Properties properties)
     {
         Validate.notNull(object);
@@ -75,17 +75,17 @@ public class MBeanConvention implements DynamicMBean
     {
         var method = getMethod(actionName).
                 orElseThrow(UnsupportedOperationException::new);
-
+        
         try
         {
-            Object [] parameter = deserializeObjects(method.getParameterTypes(), params);
+            Object[] parameter = deserializeObjects(method.getParameterTypes(), params);
             Object result = IDrivingAdapter
                     .acquireLock()
                     .invoke(method, object, parameter);
 
             return serializeComplexReturnValue(result);
         }
-        catch (ReflectiveOperationException e)
+        catch (ReflectiveOperationException | RuntimeException e)
         {
             JexxaLogger.getLogger(getClass()).error(e.getMessage());
             throw new IllegalArgumentException(e);
@@ -99,14 +99,15 @@ public class MBeanConvention implements DynamicMBean
             return new Object[0];
         }
 
-        if ( parameters.length != parameterTypes.length)
+        if (parameters.length != parameterTypes.length)
         {
             throw new IllegalArgumentException("Invalid number of parameter");
         }
 
         Object[] result = new Object[parameters.length];
 
-        for (int i = 0; i < parameters.length; ++i) {
+        for (int i = 0; i < parameters.length; ++i)
+        {
             result[i] = gson.fromJson((String) parameters[i], parameterTypes[i]);
         }
 
@@ -114,12 +115,12 @@ public class MBeanConvention implements DynamicMBean
     }
 
 
-
-    public MBeanInfo getMBeanInfo() {
+    public MBeanInfo getMBeanInfo()
+    {
         return new MBeanInfo(
                 object.getClass().getSimpleName(),
                 contextName,
-                null,                            
+                null,
                 null,
                 getMBeanOperation(),
                 null
@@ -131,10 +132,11 @@ public class MBeanConvention implements DynamicMBean
     {
         try
         {
-           return new ObjectName(getDomainPath());
-        } catch (MalformedObjectNameException e)
+            return new ObjectName(getDomainPath());
+        }
+        catch (MalformedObjectNameException e)
         {
-           throw new IllegalArgumentException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 
@@ -182,8 +184,16 @@ public class MBeanConvention implements DynamicMBean
         return stringBuilder.toString();
     }
 
+    protected String toJsonTemplate(Class<?> clazz) {
+        if ( clazz.isPrimitive() || clazz.isAssignableFrom(String.class))
+        {
+            return "<"+clazz.getSimpleName()+">";
+        }
 
-    protected String toJsonTemplate(Class<?> clazz)
+        return complexTypetoJsonTemplate(clazz);
+    }
+
+    private String complexTypetoJsonTemplate(Class<?> clazz)
     {
         JsonObject jsonObject = new JsonObject();
 
