@@ -10,6 +10,9 @@ import org.apache.commons.lang.Validate;
  */
 public class Prefix
 {
+    public static final Prefix PREFIX_978 = new Prefix(978);
+    public static final Prefix PREFIX_979 = new Prefix(979);
+
     private final int value;
 
     public Prefix(int value)
@@ -43,8 +46,5 @@ public class Prefix
     {
         return Objects.hash(value);
     }
-
-    public static final Prefix PREFIX_978 = new Prefix(978);
-    public static final Prefix PREFIX_979 = new Prefix(979);
 
 }

@@ -3,14 +3,12 @@ package io.jexxa.tutorials.bookstore.domain.aggregate;
 import java.util.Optional;
 
 import io.jexxa.tutorials.bookstore.domain.businessexception.BookNotInStockException;
-import io.jexxa.tutorials.bookstore.domain.domainevent.BookOutOfPrint;
 import io.jexxa.tutorials.bookstore.domain.domainevent.BookSoldOut;
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
 
 public class Book
 {
     private final ISBN13 isbn13;
-    private boolean outOfPrint = false;
     private int amountInStock = 0;
 
     private Book(ISBN13 isbn13)
@@ -23,18 +21,7 @@ public class Book
     {
         return isbn13;
     }
-
-    public BookOutOfPrint outOfPrint()
-    {
-        outOfPrint = true;
-        return new BookOutOfPrint(isbn13, amountInStock);
-    }
-
-    public boolean isOutOfPrint()
-    {
-        return  outOfPrint;
-    }
-
+    
     public boolean inStock()
     {
         return amountInStock > 0;

@@ -17,15 +17,9 @@
 ## Functionality of the BookStore
 This application should provide following functionality
 
-*   Managing a stock for books.
-    *   For each book provide the number of available copies. 
-    *   If last copy is sold, send a DomainEvent that this book is sold out.
-    *   Add new books and ordered copies of books
-    *   Update stock if we sell books
-    *   Since we have several stores, the stock is identified by the address of the store   
-
-*   Manage the lifetime of books in stock 
-    *   If a book is out of print send a DomainEvent that this book will no longer be printed.
+*   Manage available books in store
+    *   Number of available books in store  
+    *   Send a DomainEvent if a book is sold out which means that last book was sold.
     *   All books should be identified by their ISBN13.
     *   The ISBN13 number should be represented with its defined components such as prefix, registrant, ... 
 
@@ -37,16 +31,13 @@ First we map the functionality of the application to DDD patterns
 *   `Aggregate`: Elements that change over time and include our business logic 
     *   `BookStock` because our stock will change        
     *   `Book` because it can go out of print. Since we manage only books that are in stock our BookStock is also the root aggregate for our books.  
-
 *   `ValueObject`: Elements that represent a state and are immutable
     *   `StoreAddress` which identifies our stock for a specific store 
     *   `ISBN13` which identifies a book
-    *   Components of the ISBN13  
-    
+    *   Components of the ISBN13      
 *   `DomainEvents`: Business events that happened in the past 
     *   `BookOutOfPrint` when a book is no longer printed
     *   `BookSoldOut` when copies of a book are no longer in stock
-
 *   'DomainService': 
     *   `DomainEventPublisher`: We need to publish our domain events in some way
     *   `BookStockRepository`: We have to persist our stock in some way

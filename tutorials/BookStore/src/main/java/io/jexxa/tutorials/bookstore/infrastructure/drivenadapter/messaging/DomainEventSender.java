@@ -3,7 +3,6 @@ package io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.messaging;
 import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JMSSender;
-import io.jexxa.tutorials.bookstore.domain.domainevent.BookOutOfPrint;
 import io.jexxa.tutorials.bookstore.domain.domainevent.BookSoldOut;
 import io.jexxa.tutorials.bookstore.domainservice.IDomainEventPublisher;
 
@@ -16,12 +15,6 @@ public class DomainEventSender implements IDomainEventPublisher
     public DomainEventSender(Properties properties)
     {
         jmsSender = new JMSSender(properties);
-    }
-
-    @Override
-    public void publish(BookOutOfPrint domainEvent)
-    {
-        jmsSender.sendToTopic(domainEvent, BOOKSTORE_TOPIC);
     }
 
     @Override

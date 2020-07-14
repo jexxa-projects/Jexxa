@@ -6,7 +6,7 @@ import io.jexxa.tutorials.bookstore.domain.businessexception.InvalidISBNExceptio
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
 import io.jexxa.tutorials.bookstore.domainservice.IBookRepository;
 import io.jexxa.tutorials.bookstore.domainservice.IDomainEventPublisher;
-import io.jexxa.tutorials.bookstore.domainservice.ISBNService;
+import io.jexxa.tutorials.bookstore.domainservice.ISBNConverter;
 import org.apache.commons.lang3.Validate;
 
 public class BookStoreService
@@ -26,7 +26,7 @@ public class BookStoreService
 
     public void receiveBook(String isbn13, int amount) throws InvalidISBNException
     {
-        receiveBook(ISBNService.convertFrom(isbn13), amount);
+        receiveBook(ISBNConverter.convertFrom(isbn13), amount);
     }
 
     void receiveBook(ISBN13 isbn13, int amount)
@@ -44,7 +44,7 @@ public class BookStoreService
 
     public boolean inStock(String isbn13) throws InvalidISBNException
     {
-        return inStock(ISBNService.convertFrom(isbn13));
+        return inStock(ISBNConverter.convertFrom(isbn13));
     }
 
     boolean inStock(ISBN13 isbn13)
@@ -57,7 +57,7 @@ public class BookStoreService
 
     public int amountInStock(String isbn13) throws InvalidISBNException
     {
-        return amountInStock(ISBNService.convertFrom(isbn13));
+        return amountInStock(ISBNConverter.convertFrom(isbn13));
     }
 
     int amountInStock(ISBN13 isbn13)
@@ -68,17 +68,9 @@ public class BookStoreService
                 .orElse(0);
     }
 
-    public void outOfPrint(ISBN13 isbn13)
-    {
-        ibookRepository
-                .search(isbn13)
-                .map(Book::outOfPrint)
-                .ifPresent(domainEventPublisher::publish);
-    }
-
     public void sell(String isbn13) throws BookNotInStockException, InvalidISBNException
     {
-        sell(ISBNService.convertFrom(isbn13));
+        sell(ISBNConverter.convertFrom(isbn13));
     }
 
     void sell(ISBN13 isbn13) throws BookNotInStockException
