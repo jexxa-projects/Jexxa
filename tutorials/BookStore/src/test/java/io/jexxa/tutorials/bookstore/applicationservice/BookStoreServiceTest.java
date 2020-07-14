@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
+import io.jexxa.tutorials.bookstore.domain.aggregate.Book;
 import io.jexxa.tutorials.bookstore.domain.businessexception.BookNotInStockException;
 import io.jexxa.tutorials.bookstore.domain.businessexception.InvalidISBNException;
 import io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.stub.DomainEventStubPublisher;
@@ -30,6 +31,9 @@ class BookStoreServiceTest
                 .addToInfrastructure(DRIVEN_ADAPTER_PERSISTENCE);
 
         DomainEventStubPublisher.clear();
+
+        RepositoryManager.getInstance().getStrategy(Book.class, Book::getISBN13, jexxaMain.getProperties()).removeAll();
+
     }
 
     @Test

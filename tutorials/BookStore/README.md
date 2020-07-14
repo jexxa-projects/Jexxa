@@ -77,6 +77,7 @@ When implementing your first applications using DDD with an onion architecture w
      
 ## 2. Implement the Infrastructure
 
+TODO: Important note: Key of RepositoryManager must have a valid equals/hashcode implementation 
 
 ### Driven Adapter with JMS
 

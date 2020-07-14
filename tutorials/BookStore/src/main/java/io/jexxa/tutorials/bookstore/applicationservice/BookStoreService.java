@@ -29,7 +29,7 @@ public class BookStoreService
         receiveBook(ISBNService.convertFrom(isbn13), amount);
     }
 
-    public void receiveBook(ISBN13 isbn13, int amount)
+    void receiveBook(ISBN13 isbn13, int amount)
     {
         var result = ibookRepository.search( isbn13 );
         if ( result.isEmpty() )
@@ -47,7 +47,7 @@ public class BookStoreService
         return inStock(ISBNService.convertFrom(isbn13));
     }
 
-    public boolean inStock(ISBN13 isbn13)
+    boolean inStock(ISBN13 isbn13)
     {
         return ibookRepository
                 .search( isbn13 )
@@ -60,7 +60,7 @@ public class BookStoreService
         return amountInStock(ISBNService.convertFrom(isbn13));
     }
 
-    public int amountInStock(ISBN13 isbn13)
+    int amountInStock(ISBN13 isbn13)
     {
        return ibookRepository
                 .search(isbn13)
@@ -81,7 +81,7 @@ public class BookStoreService
         sell(ISBNService.convertFrom(isbn13));
     }
 
-    public void sell(ISBN13 isbn13) throws BookNotInStockException
+    void sell(ISBN13 isbn13) throws BookNotInStockException
     {
         var book = ibookRepository
                 .search(isbn13)
