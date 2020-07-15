@@ -44,7 +44,7 @@ class BookStoreServiceTest
         var amount = 5;
 
         //Act
-        objectUnderTest.receiveBook(isbn13, amount);
+        objectUnderTest.addToStock(isbn13, amount);
 
         //Assert
         assertEquals( amount, objectUnderTest.amountInStock(isbn13) );
@@ -58,7 +58,7 @@ class BookStoreServiceTest
         var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
         var isbn13 = "978-3-86490-387-8";
         var amount = 5;
-        objectUnderTest.receiveBook(isbn13, amount);
+        objectUnderTest.addToStock(isbn13, amount);
 
         //Act
         objectUnderTest.sell(isbn13);
@@ -85,7 +85,7 @@ class BookStoreServiceTest
         var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
         var isbn13 = "978-3-86490-387-8";
         var amount = 1;
-        objectUnderTest.receiveBook(isbn13, amount);
+        objectUnderTest.addToStock(isbn13, amount);
 
         //Act
         objectUnderTest.sell(isbn13);

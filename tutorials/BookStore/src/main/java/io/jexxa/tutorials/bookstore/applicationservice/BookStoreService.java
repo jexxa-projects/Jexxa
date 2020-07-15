@@ -22,7 +22,7 @@ public class BookStoreService
         this.domainEventPublisher = domainEventPublisher;
     }
 
-    public void receiveBook(String isbn13, int amount) 
+    public void addToStock(String isbn13, int amount)
     {
         var validatedISBN = new ISBN13(isbn13);
 
