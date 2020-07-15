@@ -9,7 +9,6 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManag
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 import io.jexxa.tutorials.bookstore.domain.aggregate.Book;
 import io.jexxa.tutorials.bookstore.domain.businessexception.BookNotInStockException;
-import io.jexxa.tutorials.bookstore.domain.businessexception.InvalidISBNException;
 import io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.stub.DomainEventStubPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +36,7 @@ class BookStoreServiceTest
     }
 
     @Test
-    void receiveBook() throws InvalidISBNException
+    void receiveBook()
     {
         //Arrange
         var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
@@ -53,7 +52,7 @@ class BookStoreServiceTest
 
 
     @Test
-    void sellBook() throws InvalidISBNException, BookNotInStockException
+    void sellBook() throws BookNotInStockException
     {
         //Arrange
         var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
@@ -80,7 +79,7 @@ class BookStoreServiceTest
     }
 
     @Test
-    void sellLastBook() throws InvalidISBNException, BookNotInStockException
+    void sellLastBook() throws BookNotInStockException
     {
         //Arrange
         var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
