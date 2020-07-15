@@ -77,8 +77,8 @@ public class BookStoreService
                 .search(isbn13)
                 .orElseThrow(BookNotInStockException::new);
 
-        book.sell()
-                .ifPresent(domainEventPublisher::publish);
+        var lastBookSold = book.sell();
+        lastBookSold.ifPresent(domainEventPublisher::publish);
 
         ibookRepository.update(book);
     }

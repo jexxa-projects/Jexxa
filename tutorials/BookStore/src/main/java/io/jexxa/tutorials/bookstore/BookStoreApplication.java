@@ -9,6 +9,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyVal
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import io.jexxa.tutorials.bookstore.applicationservice.BookStoreService;
+import io.jexxa.tutorials.bookstore.domainservice.ReferenceLibrary;
 import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -33,8 +34,9 @@ public final class BookStoreApplication
                 .addToApplicationCore(OUTBOUND_PORTS)
                 .addToInfrastructure(DRIVEN_ADAPTER)
 
-                // Bind a REST and JMX adapter to the BookStoreService
-                // It allows to access the public methods of the TimeService via RMI over REST or Jconsole
+                //initially get the latest books
+                .bootstrap(ReferenceLibrary.class).with(ReferenceLibrary::addLatestBooks)
+
                 .bind(RESTfulRPCAdapter.class).to(BookStoreService.class)
                 .bind(JMXAdapter.class).to(BookStoreService.class)
 

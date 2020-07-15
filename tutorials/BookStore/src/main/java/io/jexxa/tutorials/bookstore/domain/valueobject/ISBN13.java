@@ -5,7 +5,7 @@ import java.util.Objects;
 import org.apache.commons.lang3.Validate;
 
 /**
- * IMPORTANT NOTE: This is a simplified ISBN13 number which only validates the checksum becuse this is sufficient for this tutorial
+ * IMPORTANT NOTE: This is a simplified ISBN13 number which only validates the checksum because this is sufficient for this tutorial
  */
 public class ISBN13
 {
