@@ -11,23 +11,19 @@ class ISBN13Test
     void testValidISBN13()
     {
         //Arrange
-        var registrationGroup = new RegistrationGroup(3);
-        var registrant = new Registrant(86490);
-        var publication = new Publication(387);
-        var validDigit = new CheckDigit(8);
-        
-        assertDoesNotThrow(() -> new ISBN13(Prefix.PREFIX_978, registrationGroup, registrant, publication, validDigit));
+        var isbn13 = "978-3-86490-387-8";
+
+        //Act/Assert
+        assertDoesNotThrow(() -> new ISBN13(isbn13));
     }
 
     @Test
     void testInvalidISBN13()
     {
         //Arrange
-        var registrationGroup = new RegistrationGroup(3);
-        var registrant = new Registrant(86490);
-        var publication = new Publication(387);
-        var invalidDigit = new CheckDigit(0);
+        var isbn13 = "978-3-86490-387-0"; //Invalid cehcksum 
 
-        assertThrows(IllegalArgumentException.class, () -> new ISBN13(Prefix.PREFIX_978, registrationGroup, registrant, publication, invalidDigit));
+        //Act/Assert
+        assertThrows(IllegalArgumentException.class, () -> new ISBN13(isbn13));
     }
 }
