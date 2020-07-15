@@ -16,7 +16,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-public class BookStoreApplication
+public final class BookStoreApplication
 {
     //Declare the packages that should be used by Jexxa
     private static final String DRIVEN_ADAPTER  = BookStoreApplication.class.getPackageName() + ".infrastructure.drivenadapter";
@@ -49,6 +49,7 @@ public class BookStoreApplication
     }
 
 
+    @SuppressWarnings("rawtypes")
     private static Class<? extends IRepository> getDrivenAdapterStrategy(String[] args)
     {
         Options options = new Options();
