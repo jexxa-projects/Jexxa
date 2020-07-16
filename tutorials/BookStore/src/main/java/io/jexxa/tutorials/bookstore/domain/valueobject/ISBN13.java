@@ -56,13 +56,15 @@ public class ISBN13
 
         for (int i = 0; i < digits.length - 1 ; ++i) //Exclude checksum value (which is at position digits.length -1)
         {
+
+            var digitAsInt = Integer.parseInt(String.valueOf(digits[i]));
             if ( i % 2 == 0)
             {
-                digitSum += Integer.parseInt(String.valueOf(digits[i]));
+                digitSum += digitAsInt;
             }
             else
             {
-                digitSum += Integer.parseInt(String.valueOf(digits[i])) * 3;
+                digitSum += digitAsInt * 3;
             }
         }
 
