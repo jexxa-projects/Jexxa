@@ -1,5 +1,7 @@
 package io.jexxa.tutorials.timeservice.infrastructure.drivingadapter;
 
+import java.time.LocalTime;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -7,7 +9,6 @@ import javax.jms.TextMessage;
 
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.tutorials.timeservice.applicationservice.TimeService;
-import io.jexxa.utils.JexxaLogger;
 
 @SuppressWarnings("unused")
 public class PublishTimeListener implements MessageListener
@@ -26,16 +27,11 @@ public class PublishTimeListener implements MessageListener
     {
         var textMessage = (TextMessage)message;
 
-        try {
-            if ( textMessage.getText().equals("publishTime") )
-            {
-                timeService.publishTime();
-            }
-            else
-            {
-                JexxaLogger.getLogger(PublishTimeListener.class).warn("Unknown Message: {}", textMessage.getText());
-            }
+        try
+        {
+            var time = LocalTime.parse(( textMessage.getText() ));
 
+            timeService.timePublished(time);
         }
         catch (JMSException jmsException)
         {

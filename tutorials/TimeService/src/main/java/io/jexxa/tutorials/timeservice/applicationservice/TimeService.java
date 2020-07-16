@@ -3,7 +3,9 @@ package io.jexxa.tutorials.timeservice.applicationservice;
 import java.time.LocalTime;
 
 import io.jexxa.tutorials.timeservice.domainservice.ITimePublisher;
+import io.jexxa.utils.JexxaLogger;
 
+@SuppressWarnings("unused")
 public class TimeService
 {
     private final ITimePublisher timePublisher;
@@ -24,9 +26,14 @@ public class TimeService
         return LocalTime.now();
     }
 
-    @SuppressWarnings("unused")
     public void publishTime()
     {
         timePublisher.publish(getTime());
     }
+
+    public void timePublished(LocalTime localTime)
+    {
+        JexxaLogger.getLogger(TimeService.class).info("New Time was published time {} ", localTime.toString());
+    }
+
 }
