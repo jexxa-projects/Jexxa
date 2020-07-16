@@ -2,8 +2,10 @@ package io.jexxa.tutorials.timeservice;
 
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
+import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import io.jexxa.tutorials.timeservice.applicationservice.TimeService;
+import io.jexxa.tutorials.timeservice.infrastructure.drivingadapter.PublishTimeListener;
 import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -38,6 +40,8 @@ public final class TimeServiceApplication
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
                 .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
 
+                .bind(JMSAdapter.class).to(PublishTimeListener.class)
+
                 .start()
 
                 .waitForShutdown()
@@ -46,6 +50,16 @@ public final class TimeServiceApplication
     }
 
     private static String getDrivenAdapter(String[] args)
+    {
+        if ( isJMSEnabled(args) )
+        {
+            return JMS_DRIVEN_ADAPTER;
+        }
+
+        return CONSOLE_DRIVEN_ADAPTER;
+    }
+
+    private static boolean isJMSEnabled(String[] args)
     {
         Options options = new Options();
         options.addOption("j", "jms", false, "jms driven adapter");
@@ -57,14 +71,14 @@ public final class TimeServiceApplication
 
             if (line.hasOption("jms"))
             {
-                return JMS_DRIVEN_ADAPTER;
+                return true;
             }
         }
         catch( ParseException exp ) {
             JexxaLogger.getLogger(TimeServiceApplication.class)
                     .error( "Parsing failed.  Reason: {}", exp.getMessage() );
         }
-        return CONSOLE_DRIVEN_ADAPTER;
+        return false;
     }
 
     private TimeServiceApplication()
