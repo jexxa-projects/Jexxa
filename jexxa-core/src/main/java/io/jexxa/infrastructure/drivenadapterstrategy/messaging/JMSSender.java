@@ -46,12 +46,12 @@ public class JMSSender implements AutoCloseable
         Validate.notNull(getConnection()); //Try create a connection to ensure fail fast
     }
 
-    public void sendToTopic(Object message, final String topicName)
+    public <T> void sendToTopic(T message, final String topicName)
     {
         sendToTopic(message, topicName, null);
     }
     
-    public void sendToTopic(Object message, final String topicName, final Properties messageProperties)
+    public <T> void sendToTopic(T message, String topicName, Properties messageProperties)
     {
         try
         {
@@ -68,12 +68,12 @@ public class JMSSender implements AutoCloseable
         }
     }
 
-    public void sendToQueue(Object message, final String queue)
+    public <T> void sendToQueue(T message, final String queue)
     {
         sendToQueue(message, queue, null);
     }
 
-    public void sendToQueue(final Object message, final String queueName, Properties messageProperties)
+    public <T> void sendToQueue(T message, String queueName, Properties messageProperties)
     {
         try
         {
@@ -90,7 +90,7 @@ public class JMSSender implements AutoCloseable
         }
     }
 
-    private void sendMessage(final Object message, final MessageProducer messageProducer, Properties messageProperties) throws JMSException
+    private <T> void sendMessage(T message, MessageProducer messageProducer, Properties messageProperties) throws JMSException
     {
         messageProducer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
