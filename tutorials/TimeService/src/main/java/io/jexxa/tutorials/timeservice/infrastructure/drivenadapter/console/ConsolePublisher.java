@@ -1,6 +1,7 @@
 package io.jexxa.tutorials.timeservice.infrastructure.drivenadapter.console;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import io.jexxa.tutorials.timeservice.domainservice.ITimePublisher;
 import io.jexxa.utils.JexxaLogger;
@@ -18,7 +19,7 @@ public class ConsolePublisher implements ITimePublisher
     {
         Validate.notNull(localTime);
 
-        var logMessage = localTime.toString();
+        var logMessage = localTime.format(DateTimeFormatter.ISO_TIME);
 
         LOGGER.info(logMessage);
     }

@@ -1,6 +1,7 @@
 package io.jexxa.tutorials.timeservice.infrastructure.drivenadapter.messaging;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JMSSender;
@@ -25,8 +26,8 @@ public class JMSPublisher implements ITimePublisher
     @Override
     public void publish(LocalTime localTime)
     {
-        var localTimeAsString = localTime.toString();
-        jmsSender.sendToTopic(localTimeAsString, TIME_TOPIC);
+        var localTimeAsString = localTime.format(DateTimeFormatter.ISO_TIME);
+        jmsSender.sendToTopic(localTime, TIME_TOPIC);
         LOGGER.info("Successfully published time {} to topic {}", localTimeAsString, TIME_TOPIC);
     }
 }

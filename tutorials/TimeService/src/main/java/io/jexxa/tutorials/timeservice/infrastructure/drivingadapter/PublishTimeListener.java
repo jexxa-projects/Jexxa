@@ -7,6 +7,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
+import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.tutorials.timeservice.applicationservice.TimeService;
 
@@ -26,10 +27,9 @@ public class PublishTimeListener implements MessageListener
     public void onMessage(Message message)
     {
         var textMessage = (TextMessage)message;
-
         try
         {
-            var time = LocalTime.parse(( textMessage.getText() ));
+            var time = new Gson().fromJson(textMessage.getText(), LocalTime.class);
 
             timeService.timePublished(time);
         }
