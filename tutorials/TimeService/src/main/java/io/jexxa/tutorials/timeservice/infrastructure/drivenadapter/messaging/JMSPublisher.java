@@ -9,15 +9,15 @@ import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
 @SuppressWarnings("unused")
-public class JMSTimePublisher implements ITimePublisher
+public class JMSPublisher implements ITimePublisher
 {
     private static final String TIME_TOPIC = "TimeService";
 
-    private static final Logger LOGGER = JexxaLogger.getLogger(JMSTimePublisher.class);
+    private static final Logger LOGGER = JexxaLogger.getLogger(JMSPublisher.class);
 
     private final JMSSender jmsSender;
     
-    public JMSTimePublisher(Properties properties)
+    public JMSPublisher(Properties properties)
     {
         this.jmsSender = new JMSSender(properties);
     }

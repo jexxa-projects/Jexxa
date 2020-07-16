@@ -8,10 +8,10 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 
 @SuppressWarnings("unused")
-public class ConsoleTimePublisher implements ITimePublisher
+public class ConsolePublisher implements ITimePublisher
 {
 
-    private static final Logger LOGGER = JexxaLogger.getLogger(ConsoleTimePublisher.class);
+    private static final Logger LOGGER = JexxaLogger.getLogger(ConsolePublisher.class);
 
     @Override
     public void publish(LocalTime localTime)

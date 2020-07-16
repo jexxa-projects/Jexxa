@@ -8,7 +8,7 @@ public class BookSoldOut
 {
     private final ISBN13 isbn13;
 
-    public BookSoldOut(ISBN13 isbn13)
+    private BookSoldOut(ISBN13 isbn13)
     {
         this.isbn13 = isbn13;
     }
@@ -37,5 +37,10 @@ public class BookSoldOut
     public int hashCode()
     {
         return Objects.hash(isbn13);
+    }
+
+    public static BookSoldOut bookSoldOut(ISBN13 isbn13)
+    {
+        return new BookSoldOut(isbn13);
     }
 }

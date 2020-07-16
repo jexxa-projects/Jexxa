@@ -1,5 +1,7 @@
 package io.jexxa.tutorials.bookstore.domain.aggregate;
 
+import static io.jexxa.tutorials.bookstore.domain.domainevent.BookSoldOut.bookSoldOut;
+
 import java.util.Optional;
 
 import io.jexxa.tutorials.bookstore.domain.businessexception.BookNotInStockException;
@@ -48,7 +50,7 @@ public final class Book
 
         if ( ! inStock() )
         {
-            return Optional.of(new BookSoldOut(isbn13));
+            return Optional.of(bookSoldOut(isbn13));
         }
 
         return Optional.empty();

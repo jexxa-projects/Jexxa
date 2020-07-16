@@ -1,5 +1,8 @@
 package io.jexxa.tutorials.bookstore.applicationservice;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import io.jexxa.tutorials.bookstore.domain.aggregate.Book;
 import io.jexxa.tutorials.bookstore.domain.businessexception.BookNotInStockException;
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
@@ -7,6 +10,7 @@ import io.jexxa.tutorials.bookstore.domainservice.IBookRepository;
 import io.jexxa.tutorials.bookstore.domainservice.IDomainEventPublisher;
 import org.apache.commons.lang3.Validate;
 
+@SuppressWarnings("unused")
 public class BookStoreService
 {
 
@@ -81,6 +85,15 @@ public class BookStoreService
         lastBookSold.ifPresent(domainEventPublisher::publish);
 
         ibookRepository.update(book);
+    }
+
+    public List<ISBN13> getBooks()
+    {
+        return ibookRepository
+                .getAll()
+                .stream()
+                .map(Book::getISBN13)
+                .collect(Collectors.toList());
     }
 
 }
