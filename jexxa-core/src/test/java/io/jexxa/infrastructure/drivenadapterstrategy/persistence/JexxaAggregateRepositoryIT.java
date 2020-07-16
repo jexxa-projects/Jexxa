@@ -29,6 +29,7 @@ class JexxaAggregateRepositoryIT
 
     private List<JexxaAggregate> aggregateList;
 
+    @SuppressWarnings("unused")
     static Stream<Properties> repositoryConfig() {
         var postgresProperties = new Properties();
         postgresProperties.put(JDBCKeyValueRepository.JDBC_DRIVER, "org.postgresql.Driver");
