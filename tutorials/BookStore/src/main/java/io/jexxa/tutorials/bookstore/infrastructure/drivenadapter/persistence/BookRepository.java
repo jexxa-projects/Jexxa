@@ -56,5 +56,4 @@ public final class BookRepository implements IBookRepository
                 RepositoryManager.getInstance().getStrategy(Book.class, Book::getISBN13, properties)
         );
     }
-
 }
