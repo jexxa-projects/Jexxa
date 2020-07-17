@@ -13,12 +13,8 @@ public class JMSPublisher implements ITimePublisher
 
     private final JMSSender jmsSender;
 
-    /**
-     * For all driven adapter we have to provide either a static factory or a public constructor to
-     * enable implicit constructor injection
-     *
-     * @param properties Jexxa's properties that must include JMS related configuration parameter
-     */
+    // For all driven adapter we have to provide either a static factory or a public constructor to
+    // enable implicit constructor injection
     public JMSPublisher(Properties properties)
     {
         this.jmsSender = new JMSSender(properties);
