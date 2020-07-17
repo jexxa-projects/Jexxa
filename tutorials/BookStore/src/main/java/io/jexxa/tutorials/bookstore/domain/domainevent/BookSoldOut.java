@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
 
-public class BookSoldOut
+public final class BookSoldOut
 {
     private final ISBN13 isbn13;
 
