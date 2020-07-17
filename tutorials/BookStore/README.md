@@ -31,13 +31,15 @@ First we map the functionality of the application to DDD patterns
 *   `Aggregate`: Elements that change over time and include our business logic 
     *   `BookStock` because our stock will change        
     *   `Book` because it can go out of print. Since we manage only books that are in stock our BookStock is also the root aggregate for our books.  
+    
 *   `ValueObject`: Elements that represent a state and are immutable
     *   `StoreAddress` which identifies our stock for a specific store 
     *   `ISBN13` which identifies a book
-    *   Components of the ISBN13      
+     
 *   `DomainEvents`: Business events that happened in the past 
     *   `BookOutOfPrint` when a book is no longer printed
     *   `BookSoldOut` when copies of a book are no longer in stock
+    
 *   'DomainService': 
     *   `DomainEventPublisher`: We need to publish our domain events in some way
     *   `BookStockRepository`: We have to persist our stock in some way
@@ -47,12 +49,15 @@ First we map the functionality of the application to DDD patterns
 When implementing your first applications using DDD with an onion architecture we recommend following package structure: 
 
 *   applicationservice
+
 *   domainservice
+
 *   domain 
     *   valueobject
     *   aggregate
     *   domainevent
     *   businessexception
+    
 *   infrastructure
     *   drivenadapter
     *   drivingadapter (if required)
@@ -63,6 +68,7 @@ When implementing your first applications using DDD with an onion architecture w
     *   They must not have setter methods. So all fields should be final. 
     *   They must provide a valid implementation of equals() and hashcode()
     *   They include no business logic, but they have to validate their input data
+    
 *   `Aggregate`: Is identified by a unique `AggregateID` which is a `ValueObject`     
      
 ## 2. Implement the Infrastructure
