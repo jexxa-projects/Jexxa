@@ -5,7 +5,7 @@ import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import io.jexxa.tutorials.timeservice.applicationservice.TimeService;
-import io.jexxa.tutorials.timeservice.infrastructure.drivingadapter.PublishTimeListener;
+import io.jexxa.tutorials.timeservice.infrastructure.drivingadapter.messaging.PublishTimeListener;
 import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -28,19 +28,28 @@ public final class TimeServiceApplication
                 //Define which outbound ports should be managed by Jexxa
                 .addToApplicationCore(OUTBOUND_PORTS)
                 
-                //Define which driven adapter should be used by Jexxa
-                //Note: We can only register one driven adapter for the
-                .addToInfrastructure(getDrivenAdapter(args))
+                //Define the driving adapter that should which implementation of the outbound port should be used by Jexxa.
+                //Note: We must only register a single driven adapter for the outbound port
+                .addToInfrastructure(getDrivenAdapter(args));
 
-                // Bind a REST and JMX adapter to the TimeService
-                // It allows to access the public methods of the TimeService via RMI over REST or Jconsole
+                // If JMS is enabled bind 'JMSAdapter' to our application 
+                // Note: Jexxa's JMSAdapter is a so called specific driving adapter which cannot be directly connected directly
+                // to an inbound port because we cannot apply any convention. In this case bind Jexxa's specific driving adapter
+                // 'JMSAdapter' to an application specific DrivingAdapter which is `PublishTimeListener`
+                if ( isJMSEnabled(args) )
+                {
+                    jexxaMain.bind(JMSAdapter.class).to(PublishTimeListener.class);
+                }
+
+
+        //The rest of main is similar to tutorial HelloJexxa
+        jexxaMain
+                // Bind RESTfulRPCAdapter and JMXAdapter to TimeService class so that we can invoke its method
                 .bind(RESTfulRPCAdapter.class).to(TimeService.class)
                 .bind(JMXAdapter.class).to(TimeService.class)
 
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
                 .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
-
-                .bind(JMSAdapter.class).to(PublishTimeListener.class)
 
                 .start()
 

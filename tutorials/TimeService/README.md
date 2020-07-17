@@ -3,9 +3,10 @@
 ## What You Learn
 
 *   How to write an application service acting as a so called inbound-port 
-*   How to declare an outbound-port sending current time  
-*   How to provide an implementation of this outbound-port with console output
-*   How to provide an implementation of this outbound-port using `DrivenAdapterStrategy` from Jexxa for JMS.  
+*   How to declare an outbound-port sending current time   
+*   How to provide an implementation of this outbound-port, a so called driving adapter, with console output
+*   How to provide an implementation of this outbound-port using `DrivenAdapterStrategy` from Jexxa for JMS.
+*   How to use a so called specific adapter together with a application specific driving adapter    
 
 ## What you need
 

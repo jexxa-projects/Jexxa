@@ -1,23 +1,24 @@
 package io.jexxa.tutorials.timeservice.infrastructure.drivenadapter.messaging;
 
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JMSSender;
 import io.jexxa.tutorials.timeservice.domainservice.ITimePublisher;
-import io.jexxa.utils.JexxaLogger;
-import org.slf4j.Logger;
 
 @SuppressWarnings("unused")
 public class JMSPublisher implements ITimePublisher
 {
     private static final String TIME_TOPIC = "TimeService";
 
-    private static final Logger LOGGER = JexxaLogger.getLogger(JMSPublisher.class);
-
     private final JMSSender jmsSender;
-    
+
+    /**
+     * For all driven adapter we have to provide either a static factory or a public constructor to
+     * enable implicit constructor injection
+     *
+     * @param properties Jexxa's properties that must include JMS related configuration parameter
+     */
     public JMSPublisher(Properties properties)
     {
         this.jmsSender = new JMSSender(properties);
@@ -26,8 +27,9 @@ public class JMSPublisher implements ITimePublisher
     @Override
     public void publish(LocalTime localTime)
     {
-        var localTimeAsString = localTime.format(DateTimeFormatter.ISO_TIME);
+        // Send the message to the topic.
+        // Important note: The JMSSender internally uses json to serialize given objects.
+        // Therefore, the receiver must deserialize the received message accordingly
         jmsSender.sendToTopic(localTime, TIME_TOPIC);
-        LOGGER.info("Successfully published time {} to topic {}", localTimeAsString, TIME_TOPIC);
     }
 }
