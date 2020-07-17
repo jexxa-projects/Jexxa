@@ -3,7 +3,8 @@
 ## What You Learn
 
 *   Default package structure for more complex applications based on DDD   
-*   How to provide an implementation of a specific outbound-port which is called `Repository` in terms of DDD 
+*   How to provide an implementation of a specific outbound-port which is called `Repository` in terms of DDD using a data base technology  
+*   How to initialize master data into a Repository      
 
 ## What you need
 
@@ -11,17 +12,15 @@
 *   60 minutes
 *   JDK 11 (or higher) installed 
 *   Maven 3.6 (or higher) installed
-*   A running ActiveMQ instance (at least if you start the application with JMS)
 *   curl or jconsole to trigger the application  
 
 ## Functionality of the BookStore
 This application should provide following functionality
 
 *   Manage available books in store
-    *   Number of available books in store  
-    *   Send a DomainEvent if a book is sold out which means that last book was sold.
-    *   All books should be identified by their ISBN13.
-    *   The ISBN13 number should be represented with its defined components such as prefix, registrant, ... 
+*   All books should be identified by their ISBN13.
+*   Number of available books in store  
+*   Send a DomainEvent if a book is sold out which means that last book was sold.
 
 ## Implementing Application Core 
 

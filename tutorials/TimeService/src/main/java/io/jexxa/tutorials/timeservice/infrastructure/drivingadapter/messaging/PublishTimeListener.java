@@ -8,6 +8,7 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 import com.google.gson.Gson;
+import io.jexxa.core.DrivingAdapter;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.tutorials.timeservice.applicationservice.TimeService;
 
@@ -17,11 +18,7 @@ public class PublishTimeListener implements MessageListener
     private final TimeService timeService;
     private static final String TIME_TOPIC = "TimeService";
 
-    /**
-     * To implement a so called PortAdapter we need a public constructor which expects a single argument that must be a InboundPort.
-     *
-     * @param timeService Inbound port that is used by this DrivingAdapter
-     */
+    //To implement a so called PortAdapter we need a public constructor which expects a single argument that must be a InboundPort.
     public PublishTimeListener(TimeService timeService)
     {
         this.timeService = timeService;

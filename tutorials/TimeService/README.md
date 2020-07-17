@@ -14,7 +14,7 @@
 *   30 minutes
 *   JDK 11 (or higher) installed 
 *   Maven 3.6 (or higher) installed
-*   A running ActiveMQ instance (at least if you start the application with JMS)
+*   A running ActiveMQ instance (at least if you start the application with option `-jms`)
 *   curl or jconsole to trigger the application  
 
 ## 1. Implementing Application Core 
@@ -154,8 +154,45 @@ java.naming.user=admin
 java.naming.password=admin
 ```                       
 
-## 3. Re 
+## 3. Implement the port adapter to receive JMS messages
+Implementing a port adapter is quite similar to the correspinding driven adapter.  
+  
+```java
+@SuppressWarnings("unused")
+public class PublishTimeListener implements MessageListener
+{
+    private final TimeService timeService;
+    private static final String TIME_TOPIC = "TimeService";
 
+    //To implement a so called PortAdapter we need a public constructor which expects a single argument that must be a InboundPort.
+    public PublishTimeListener(TimeService timeService)
+    {
+        this.timeService = timeService;
+    }
+
+    @Override
+    // The JMS specific configuration is defined via annotation.
+    @JMSConfiguration(destination = TIME_TOPIC, messagingType = JMSConfiguration.MessagingType.TOPIC)
+    public void onMessage(Message message)
+    {
+        // The JMSSender sends all messages as TextMessage in Json encoding
+        var textMessage = (TextMessage)message;
+        try
+        {
+            // Deserialize the message which is of type 'LocalTime'
+            var time = new Gson().fromJson(textMessage.getText(), LocalTime.class);
+
+            // Forward this information to corresponding application service. 
+            timeService.timePublished(time);
+        }
+        catch (JMSException jmsException)
+        {
+            jmsException.printStackTrace();
+        }
+
+    }
+}
+```
 
 ## 4. Implement the Application 
 
