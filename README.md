@@ -18,8 +18,9 @@ Even though Jexxa has strong educational focus it is used within lightweight bus
 *   Integrated driving adapters: RMI over REST, JMX, and JMS. 
 *   Integrated strategies for driven adapters: JDBC, in memory DB (IMDB), and JMS based messaging. 
 
-General information:   
+## General information:   
 *   Documentation: [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa.html) 
+*   Tutorials: [Available here](tutorials/README.md) 
 
 ## Supported Java environments
 *   Java 11 (or higher)
@@ -105,10 +106,6 @@ resources/jexxa-application.properties
 ```                                   
 
 Available properties are described [here](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/main/resources/jexxa-application.properties)
-
-### Tutorials
-
-More detailed information about usage of Jexxa can be found in the [tutorials](tutorials/README.md). 
 
 ## Build Jexxa from scratch
 
