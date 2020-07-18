@@ -9,7 +9,7 @@
 
 ## What you need
 
-*   Understand tutorial `HelloJexxa` ans `TimeService` because we explain only new aspects 
+*   Understand tutorial `HelloJexxa` and `TimeService` because we explain only new aspects 
 *   60 minutes
 *   JDK 11 (or higher) installed 
 *   Maven 3.6 (or higher) installed
@@ -237,7 +237,7 @@ curl -X GET  http://localhost:7000/BookStoreService/getBooks
 
 Response: 
 ```Console
-[{"value":"978-1-891830-85-3"},{"value":"978-1-60309-025-4"},{"value":"978-1-60309-016-2"},{"value":"978-1-60309-265-4"},{"value":"978-1-60309-047-6"},{"value":"978-1-60309-322-4"}](
+[{"value":"978-1-891830-85-3"},{"value":"978-1-60309-025-4"},{"value":"978-1-60309-016-2"},{"value":"978-1-60309-265-4"},{"value":"978-1-60309-047-6"},{"value":"978-1-60309-322-4"}]
 ```
 
 #### Ask if a specific book is in stock**
