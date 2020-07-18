@@ -16,3 +16,6 @@ See documentation [TimeService](TimeService/README.md)
 
 ## BookStore
 See documentation [BookStore](BookStore/README.md)
+
+## BookStoreJ
+See documentation [BookStoreJ](BookStoreJ/README.md)
