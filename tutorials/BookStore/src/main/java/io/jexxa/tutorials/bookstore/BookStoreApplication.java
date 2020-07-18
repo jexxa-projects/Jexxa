@@ -25,6 +25,10 @@ public final class BookStoreApplication
 
     public static void main(String[] args)
     {
+        // Define the default strategy which is either an IMDB database or a JDBC based repository
+        // In case of JDBC we use a simple key value approach which stores the key and the value as json strings.
+        // Using json strings might be very inconvenient if you come from typical relational databases but in terms
+        // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
         RepositoryManager.getInstance().setDefaultStrategy(getDrivenAdapterStrategy(args));
 
         JexxaMain jexxaMain = new JexxaMain(BookStoreApplication.class.getSimpleName());
@@ -34,7 +38,7 @@ public final class BookStoreApplication
                 .addToApplicationCore(OUTBOUND_PORTS)
                 .addToInfrastructure(DRIVEN_ADAPTER)
 
-                //initially get the latest books
+                //Get the latest books when starting the application
                 .bootstrap(ReferenceLibrary.class).with(ReferenceLibrary::addLatestBooks)
 
                 .bind(RESTfulRPCAdapter.class).to(BookStoreService.class)

@@ -32,7 +32,6 @@ class BookStoreServiceTest
         DomainEventStubPublisher.clear();
 
         RepositoryManager.getInstance().getStrategy(Book.class, Book::getISBN13, jexxaMain.getProperties()).removeAll();
-
     }
 
     @Test

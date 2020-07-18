@@ -34,6 +34,8 @@ This application core should provide following functionality:
 
 ## Implementing Application Core 
 
+General note: There are several books, courses, tutorials available describing how to implement an application core using the patterns of DDD. The approach used in this tutorial should not be considered as reference but just as one meaningful approach.   
+
 ### 1. Mapping to DDD patterns  
 First we map the functionality of the application to DDD patterns   
 
@@ -47,16 +49,16 @@ First we map the functionality of the application to DDD patterns
     *   `BookSoldOut` when copies of a book are no longer in stock
     
 *   'DomainService': 
-    *   `IDomainEventPublisher`: We need to publish our domain events in some way
-    *   `BookRepository`: Manage `Book` instances
-    *   `ReferenceLibrary`: Return latest books
+    *   `IDomainEventPublisher`: We need to publish our domain events in some way. Since the implementation requires a technology stack we can only define an interface.   
+    *   `IBookRepository`: Interface to manage `Book` instances. Since the implementation requires a technology stack we can only define an interface.  
+    *   `ReferenceLibrary`: Return latest books. For simplicity, we assume that it is a service which does not related to our domain core directly.         
     
 *   `BusinessException`:
     *   `BookNotInStockException`: In case we try to sell a book that is currently not available   
      
        
 ### Package structure 
-When implementing your first applications using DDD with an onion architecture we recommend following package structure: 
+In our tutorials we use following package structure: 
 
 *   applicationservice
 
@@ -70,9 +72,9 @@ When implementing your first applications using DDD with an onion architecture w
     
 *   infrastructure
     *   drivenadapter
-    *   drivingadapter (if required)
+    *   drivingadapter 
 
-### A note on the implementation
+### A note on implementing DDD patterns  
 
 *   `ValueObject` and `DomainEvent`: Are immutable and compared based on their internal values
     *   They must not have setter methods. So all fields should be final. 
@@ -80,24 +82,131 @@ When implementing your first applications using DDD with an onion architecture w
     *   They include no business logic, but they have to validate their input data
     
 *   `Aggregate`: Is identified by a unique `AggregateID` which is a `ValueObject`
-    *   `Book` uses an `ISBN13` object     
+    *   `Book` uses an `ISBN13` object 
+    
+*   `Repositroy` when defining any interface within the application core ensure that you use the domain language for all methods. Resist the temptation to use the language of the used technology stack that you will use to implement this interface.        
      
 ## 2. Implement the Infrastructure
 
-TODO: Important note: Key of RepositoryManager must have a valid equals/hashcode implementation 
+Implementation of `IDomainEventPublisher` just prints the `DomainEvent` to the console. So we can just use the implementation from tutorial `TimeService`.    
 
-### Driven Adapter with JDBC
+### Implement the Repository 
+When using Jexxa's `RepositoryManager` implementing a repository is just a mapping to the `IRepository` interface which provides typical CRUD operations.  
+  
+The requirement are: 
 
+*   The managed object provides a so called key-function which returns a key to uniquely identify the object. In case of this tutorial it is the method `getISBN`.
+*   The key itself must provide a valid implementation of method equals and hashcode to validate equality.     
+
+The following source code shows a typical implementation of a `Repository`. Within the main function you can configure the `RepositoryManager` if required. 
+
+For the sake of completeness we use a static factory method in this implementation instead of a public constructor. Here it is quite important to return the interface and not the concrete type.        
+
+```java
+@SuppressWarnings("unused")
+public final class BookRepository implements IBookRepository
+{
+    private final IRepository<Book, ISBN13> repository;
+
+    private BookRepository(IRepository<Book, ISBN13> repository)
+    {
+        this.repository = repository;
+    }              
+
+    // Factory method that requests a repository strategy from Jexxa's RepositoryManager 
+    public static IBookRepository create(Properties properties)
+    {
+        return new BookRepository(
+                RepositoryManager.getInstance().getStrategy(Book.class, Book::getISBN13, properties)
+        );
+    }
+
+    @Override
+    public void add(Book book)
+    {
+        repository.add(book);
+    }
+
+    @Override
+    public Book get(ISBN13 isbn13)
+    {
+        return repository.get(isbn13).orElseThrow();
+    }
+
+    @Override
+    public boolean isRegistered(ISBN13 isbn13)
+    {
+        return search(isbn13)
+                .isPresent();
+    }
+
+    @Override
+    public Optional<Book> search(ISBN13 isbn13)
+    {
+        return repository.get(isbn13);
+    }
+
+    @Override
+    public void update(Book book)
+    {
+        repository.update(book);
+    }
+
+    @Override
+    public List<Book> getAll()
+    {
+        return repository.get();
+    }
+}
+```
 
 
 
 ## 3. Implement the Application 
 
-Finally, we have to write our application. As you can see in the code below there are two main differences compared to `HelloJexxa`:
+Finally, we have to write our application. As you can see in the code below there are two main differences compared to `HelloJexxa` and `TimeService`:
 
-*   We define the packages that should be used by Jexxa. This allows fine-grained control of used driven adapter since we must offer only a single implementation for each outbound port. In addition, this limits the search space for potential driven adapters and speeds up startup time.
-*   We do not need to instantiate a TimeService class explicitly. This is done by Jexxa including instantiation of all required driven adapter.   
+*   Define a default strategy for our Repositories.
+*   Add a bootstrap service which is directly called to initialize domain-specific aspects.   
    
+
+```java    
+public final class BookStoreApplication
+{
+    //...
+    public static void main(String[] args)
+    {
+        // Define the default strategy which is either an IMDB database or a JDBC based repository
+        // In case of JDBC we use a simple key value approach which stores the key and the value as json strings.
+        // Using json strings might be very inconvenient if you come from typical relational databases but in terms
+        // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
+        RepositoryManager.getInstance().setDefaultStrategy(getDrivenAdapterStrategy(args));
+    
+        JexxaMain jexxaMain = new JexxaMain(BookStoreApplication.class.getSimpleName());
+    
+        jexxaMain
+                //Define which outbound ports should be managed by Jexxa
+                .addToApplicationCore(OUTBOUND_PORTS)
+                .addToInfrastructure(DRIVEN_ADAPTER)
+    
+                //Get the latest books when starting the application
+                .bootstrap(ReferenceLibrary.class).with(ReferenceLibrary::addLatestBooks)
+    
+                .bind(RESTfulRPCAdapter.class).to(BookStoreService.class)
+                .bind(JMXAdapter.class).to(BookStoreService.class)
+    
+                .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
+                .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
+    
+                .start()
+    
+                .waitForShutdown()
+    
+                .stop();
+    }
+    //...
+}
+```
 
 That's it. 
 

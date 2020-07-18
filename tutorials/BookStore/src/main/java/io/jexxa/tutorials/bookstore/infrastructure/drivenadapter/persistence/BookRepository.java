@@ -20,6 +20,14 @@ public final class BookRepository implements IBookRepository
         this.repository = repository;
     }
 
+    // Factory method that requests a repository strategy from Jexxa's RepositoryManager
+    public static IBookRepository create(Properties properties)
+    {
+        return new BookRepository(
+                RepositoryManager.getInstance().getStrategy(Book.class, Book::getISBN13, properties)
+        );
+    }
+
     @Override
     public void add(Book book)
     {
@@ -55,12 +63,5 @@ public final class BookRepository implements IBookRepository
     public List<Book> getAll()
     {
         return repository.get();
-    }
-
-    public static IBookRepository create(Properties properties)
-    {
-        return new BookRepository(
-                RepositoryManager.getInstance().getStrategy(Book.class, Book::getISBN13, properties)
-        );
     }
 }
