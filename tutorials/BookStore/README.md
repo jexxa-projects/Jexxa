@@ -7,7 +7,6 @@
 *   Default package structure for more complex applications based on DDD
 *   How to test your business logic using Jexxa     
 
-
 ## What you need
 
 *   Understand tutorial `HelloJexxa` ans `TimeService` because we explain only new aspects 
@@ -22,9 +21,13 @@ This application core should provide following functionality:
 
 *   Manage available books in store which means
     *   add new books, sell books, query operations 
+
 *   All books should be identified by their ISBN13
+
 *   For each book the store the umber of available copies   
+
 *   Publish `DomainEvent` `BookSoldOut` if last copy of a book is sold
+
 *   A service which gets the latest books from our reference library. For this tutorial it is sufficient that: 
     *   Service provides a hardcoded list  
     *   Service is triggered when starting the application     
