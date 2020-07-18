@@ -229,7 +229,8 @@ You will see following (or similar) output
 
 ### Execute some commands using curl 
 
-#### Get list of books: 
+**1. Get list of books:**
+
 Command: 
 ```Console
 curl -X GET  http://localhost:7000/BookStoreService/getBooks
@@ -240,7 +241,8 @@ Response:
 [{"value":"978-1-891830-85-3"},{"value":"978-1-60309-025-4"},{"value":"978-1-60309-016-2"},{"value":"978-1-60309-265-4"},{"value":"978-1-60309-047-6"},{"value":"978-1-60309-322-4"}](
 ```
 
-#### Ask if a specific book is in stock
+**2. Ask if a specific book is in stock**
+
 Command:
 ```Console
 curl -X POST -H "Content-Type: application/json" \
@@ -253,7 +255,8 @@ Response:
 false
 ```
 
-#### Add some books
+**3. Add some books**
+
 Command:
 ```Console
 curl -X POST -H "Content-Type: application/json" \
@@ -264,7 +267,8 @@ Response: No output
 ```Console
 ```
 
-#### Ask again if a specific book is in stock
+**4. Ask again if a specific book is in stock**
+
 Command:
 ```Console
 curl -X POST -H "Content-Type: application/json" \
