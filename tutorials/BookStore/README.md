@@ -21,10 +21,7 @@
 This application core should provide following functionality:
 
 *   Manage available books in store which means
-    *   add new books
-    *   sell books
-    *   query operations about available books
-       
+    *   add new books, sell books, query operations 
 *   All books should be identified by their ISBN13
 *   For each book the store the umber of available copies   
 *   Publish `DomainEvent` `BookSoldOut` if last copy of a book is sold
@@ -40,19 +37,15 @@ General note: There are several books, courses, tutorials available describing h
 First we map the functionality of the application to DDD patterns   
 
 *   `Aggregate`: Elements that change over time and include our business logic 
-    *   `Book` which manages available copies of a book.   
-    
+    *   `Book` which manages available copies of a book.       
 *   `ValueObject`: Elements that represent a state and are immutable
-    *   `ISBN13` which identifies a book
-     
+    *   `ISBN13` which identifies a book     
 *   `DomainEvent`: Business events that happened in the past 
-    *   `BookSoldOut` when copies of a book are no longer in stock
-    
+    *   `BookSoldOut` when copies of a book are no longer in stock   
 *   'DomainService': 
     *   `IDomainEventPublisher`: We need to publish our domain events in some way. Since the implementation requires a technology stack we can only define an interface.   
     *   `IBookRepository`: Interface to manage `Book` instances. Since the implementation requires a technology stack we can only define an interface.  
-    *   `ReferenceLibrary`: Return latest books. For simplicity, we assume that it is a service which does not related to our domain core directly.         
-    
+    *   `ReferenceLibrary`: Return latest books. For simplicity, we assume that it is a service which does not related to our domain core directly.             
 *   `BusinessException`:
     *   `BookNotInStockException`: In case we try to sell a book that is currently not available   
      
@@ -61,15 +54,12 @@ First we map the functionality of the application to DDD patterns
 In our tutorials we use following package structure: 
 
 *   applicationservice
-
 *   domainservice
-
 *   domain 
     *   valueobject
     *   aggregate
     *   domainevent
-    *   businessexception
-    
+    *   businessexception    
 *   infrastructure
     *   drivenadapter
     *   drivingadapter 
@@ -79,11 +69,9 @@ In our tutorials we use following package structure:
 *   `ValueObject` and `DomainEvent`: Are immutable and compared based on their internal values
     *   They must not have setter methods. So all fields should be final. 
     *   They must provide a valid implementation of equals() and hashcode()
-    *   They include no business logic, but they have to validate their input data
-    
+    *   They include no business logic, but they have to validate their input data    
 *   `Aggregate`: Is identified by a unique `AggregateID` which is a `ValueObject`
-    *   `Book` uses an `ISBN13` object 
-    
+    *   `Book` uses an `ISBN13` object     
 *   `Repositroy` when defining any interface within the application core ensure that you use the domain language for all methods. Resist the temptation to use the language of the used technology stack that you will use to implement this interface.        
      
 ## 2. Implement the Infrastructure
@@ -103,6 +91,7 @@ The following source code shows a typical implementation of a `Repository`. With
 For the sake of completeness we use a static factory method in this implementation instead of a public constructor. Here it is quite important to return the interface and not the concrete type.        
 
 ```java
+  
 @SuppressWarnings("unused")
 public final class BookRepository implements IBookRepository
 {
@@ -169,8 +158,8 @@ Finally, we have to write our application. As you can see in the code below ther
 *   Define a default strategy for our Repositories.
 *   Add a bootstrap service which is directly called to initialize domain-specific aspects.   
    
-
-```java    
+```java
+    
 public final class BookStoreApplication
 {
     //...
