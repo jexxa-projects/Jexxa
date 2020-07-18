@@ -9,7 +9,7 @@
 
 ## What you need
 
-*   10 minutes
+*   15 minutes
 *   JDK 11 (or higher) installed 
 *   Maven 3.6 (or higher) installed
 
