@@ -11,7 +11,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.javalin.Javalin;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 
 public class RESTfulRPCAdapter implements IDrivingAdapter

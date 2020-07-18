@@ -10,7 +10,7 @@ import java.util.Properties;
 
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.ThrowingConsumer;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 /**
  * This class is responsible for creating instances of ports or a wrapper for a port including all required parameter.

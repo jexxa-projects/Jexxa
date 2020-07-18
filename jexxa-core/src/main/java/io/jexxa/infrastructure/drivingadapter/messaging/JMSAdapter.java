@@ -24,7 +24,7 @@ import javax.naming.NamingException;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.ThrowingConsumer;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 
 public class JMSAdapter implements AutoCloseable, IDrivingAdapter

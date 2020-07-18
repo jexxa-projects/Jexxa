@@ -8,7 +8,7 @@ import java.util.List;
 
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 final class DependencyScanner
 {

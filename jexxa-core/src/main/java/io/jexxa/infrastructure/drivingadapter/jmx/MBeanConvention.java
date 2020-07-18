@@ -25,7 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.utils.JexxaLogger;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 public class MBeanConvention implements DynamicMBean
 {

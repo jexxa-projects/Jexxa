@@ -5,7 +5,7 @@ import java.lang.annotation.Annotation;
 import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 public class  DrivingAdapter<T extends IDrivingAdapter>
 {

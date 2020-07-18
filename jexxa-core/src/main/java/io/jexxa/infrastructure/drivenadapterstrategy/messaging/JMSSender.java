@@ -17,11 +17,8 @@ import javax.naming.NamingException;
 import com.google.gson.Gson;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.ThrowingConsumer;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
-/**
- *
- */
 @SuppressWarnings("unused")
 public class JMSSender implements AutoCloseable
 {

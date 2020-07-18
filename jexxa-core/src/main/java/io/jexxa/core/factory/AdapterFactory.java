@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Creates a driving or driving adapter which fulfills one of the following requirements:
