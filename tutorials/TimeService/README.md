@@ -187,7 +187,7 @@ public class PublishTimeListener implements MessageListener
         }
         catch (JMSException jmsException)
         {
-            jmsException.printStackTrace();
+            JexxaLogger.getLogger(PublishTimeListener.class).error(jmsException.getMessage());
         }
 
     }

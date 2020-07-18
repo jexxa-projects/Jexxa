@@ -10,6 +10,7 @@ import javax.jms.TextMessage;
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.tutorials.timeservice.applicationservice.TimeService;
+import io.jexxa.utils.JexxaLogger;
 
 @SuppressWarnings("unused")
 public class PublishTimeListener implements MessageListener
@@ -40,7 +41,7 @@ public class PublishTimeListener implements MessageListener
         }
         catch (JMSException jmsException)
         {
-            jmsException.printStackTrace();
+            JexxaLogger.getLogger(PublishTimeListener.class).error(jmsException.getMessage());
         }
 
     }
