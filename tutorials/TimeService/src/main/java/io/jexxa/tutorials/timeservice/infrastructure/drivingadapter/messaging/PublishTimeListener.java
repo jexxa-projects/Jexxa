@@ -8,7 +8,6 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 import com.google.gson.Gson;
-import io.jexxa.core.DrivingAdapter;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.tutorials.timeservice.applicationservice.TimeService;
 
