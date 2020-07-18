@@ -1,8 +1,9 @@
 package io.jexxa.tutorials.bookstore.domainservice;
 
+import static io.jexxa.tutorials.bookstore.domain.aggregate.Book.newBook;
+
 import java.util.stream.Stream;
 
-import io.jexxa.tutorials.bookstore.domain.aggregate.Book;
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
 import org.apache.commons.lang3.Validate;
 
@@ -19,8 +20,8 @@ public class ReferenceLibrary
     public void addLatestBooks()
     {
         getLatestBooks()
-                .filter(element -> bookRepository.search(element).isEmpty())
-                .forEach(element -> bookRepository.add(Book.create(element)));
+                .filter(book -> ! bookRepository.isRegistered(book))
+                .forEach(isbn13 -> bookRepository.add(newBook(isbn13)));
     }
 
     /** Some Random books found in internet */

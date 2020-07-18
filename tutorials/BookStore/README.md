@@ -79,7 +79,8 @@ When implementing your first applications using DDD with an onion architecture w
     *   They must provide a valid implementation of equals() and hashcode()
     *   They include no business logic, but they have to validate their input data
     
-*   `Aggregate`: Is identified by a unique `AggregateID` which is a `ValueObject`     
+*   `Aggregate`: Is identified by a unique `AggregateID` which is a `ValueObject`
+    *   `Book` uses an `ISBN13` object     
      
 ## 2. Implement the Infrastructure
 

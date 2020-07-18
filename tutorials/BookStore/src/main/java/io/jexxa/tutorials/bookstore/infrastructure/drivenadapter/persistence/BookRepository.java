@@ -33,6 +33,13 @@ public final class BookRepository implements IBookRepository
     }
 
     @Override
+    public boolean isRegistered(ISBN13 isbn13)
+    {
+        return search(isbn13)
+                .isPresent();
+    }
+
+    @Override
     public Optional<Book> search(ISBN13 isbn13)
     {
         return repository.get(isbn13);

@@ -1,5 +1,7 @@
 package io.jexxa.tutorials.bookstore.applicationservice;
 
+import static io.jexxa.tutorials.bookstore.domain.aggregate.Book.newBook;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +35,7 @@ public class BookStoreService
         var result = ibookRepository.search( validatedISBN );
         if ( result.isEmpty() )
         {
-            ibookRepository.add(Book.create( validatedISBN ));
+            ibookRepository.add(newBook( validatedISBN ));
         }
 
         var book = ibookRepository.get(validatedISBN);

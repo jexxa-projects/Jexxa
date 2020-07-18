@@ -12,6 +12,8 @@ public interface IBookRepository
 
     Book get(ISBN13 isbn13);
 
+    boolean isRegistered(ISBN13 isbn13);
+
     Optional<Book> search(ISBN13 isbn13);
 
     void update(Book book);

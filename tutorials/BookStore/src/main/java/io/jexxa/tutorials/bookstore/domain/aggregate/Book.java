@@ -57,7 +57,7 @@ public final class Book
     }
 
     //AggregateFactory
-    public static Book create(ISBN13 isbn13)
+    public static Book newBook(ISBN13 isbn13)
     {
         return new Book(isbn13);
     }
