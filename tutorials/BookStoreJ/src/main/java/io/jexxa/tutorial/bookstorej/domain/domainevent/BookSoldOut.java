@@ -1,9 +1,9 @@
 package io.jexxa.tutorial.bookstorej.domain.domainevent;
 
-import java.util.Objects;
-
+import io.jexxa.addend.applicationcore.DomainEvent;
 import io.jexxa.tutorial.bookstorej.domain.valueobject.ISBN13;
 
+@DomainEvent
 public final class BookSoldOut
 {
     private final ISBN13 isbn13;
@@ -16,27 +16,6 @@ public final class BookSoldOut
     public ISBN13 getISBN13()
     {
         return isbn13;
-    }
-
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass())
-        {
-            return false;
-        }
-        BookSoldOut that = (BookSoldOut) o;
-        return isbn13.equals(that.isbn13);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return Objects.hash(isbn13);
     }
 
     public static BookSoldOut bookSoldOut(ISBN13 isbn13)

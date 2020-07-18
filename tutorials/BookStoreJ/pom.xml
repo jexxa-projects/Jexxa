@@ -36,12 +36,23 @@
       <scope>test</scope>
     </dependency>
 
-
-    <!-- dependencies for tests with ActiveMQ -->
+    <!-- dependencies for application core -->
     <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-client</artifactId>
-      <version>${activemq.client.version}</version>
+      <groupId>io.jexxa.addendj</groupId>
+      <artifactId>AddendJ</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjtools</artifactId>
+      <version>1.9.5</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+      <version>1.9.5</version>
     </dependency>
 
     <!-- dependencies for tests with JDBCAdapter -->
@@ -66,6 +77,38 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>com.nickwongdev</groupId>
+        <artifactId>aspectj-maven-plugin</artifactId>
+        <version>1.12.6</version>
+        <executions>
+          <execution>
+            <id>compile</id>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <weaveDependencies>
+                <weaveDependency>
+                  <groupId>io.jexxa.addendj</groupId>
+                  <artifactId>AddendJ</artifactId>
+                </weaveDependency>
+              </weaveDependencies>
+              <complianceLevel>11</complianceLevel>
+              <XaddSerialVersionUID>true</XaddSerialVersionUID>
+              <encoding>UTF-8</encoding>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
+            <version>1.9.5</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>

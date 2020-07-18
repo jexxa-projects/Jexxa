@@ -5,6 +5,7 @@ import static io.jexxa.tutorial.bookstorej.domain.aggregate.Book.newBook;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.jexxa.addend.applicationcore.ApplicationService;
 import io.jexxa.tutorial.bookstorej.domain.aggregate.Book;
 import io.jexxa.tutorial.bookstorej.domain.businessexception.BookNotInStockException;
 import io.jexxa.tutorial.bookstorej.domain.valueobject.ISBN13;
@@ -13,6 +14,7 @@ import io.jexxa.tutorial.bookstorej.domainservice.IDomainEventPublisher;
 import org.apache.commons.lang3.Validate;
 
 @SuppressWarnings("unused")
+@ApplicationService
 public class BookStoreService
 {
 

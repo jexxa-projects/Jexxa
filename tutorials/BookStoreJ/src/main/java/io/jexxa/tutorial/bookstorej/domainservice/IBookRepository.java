@@ -4,9 +4,11 @@ package io.jexxa.tutorial.bookstorej.domainservice;
 import java.util.List;
 import java.util.Optional;
 
+import io.jexxa.addend.applicationcore.Repository;
 import io.jexxa.tutorial.bookstorej.domain.aggregate.Book;
 import io.jexxa.tutorial.bookstorej.domain.valueobject.ISBN13;
 
+@Repository
 public interface IBookRepository
 {
     void add(Book book);

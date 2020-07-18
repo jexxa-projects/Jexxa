@@ -4,9 +4,11 @@ import static io.jexxa.tutorial.bookstorej.domain.aggregate.Book.newBook;
 
 import java.util.stream.Stream;
 
+import io.jexxa.addend.applicationcore.DomainService;
 import io.jexxa.tutorial.bookstorej.domain.valueobject.ISBN13;
 import org.apache.commons.lang3.Validate;
 
+@DomainService
 public class ReferenceLibrary
 {
     private final IBookRepository bookRepository;
