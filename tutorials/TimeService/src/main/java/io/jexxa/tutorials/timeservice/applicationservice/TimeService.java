@@ -1,6 +1,7 @@
 package io.jexxa.tutorials.timeservice.applicationservice;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import io.jexxa.tutorials.timeservice.domainservice.ITimePublisher;
 import io.jexxa.utils.JexxaLogger;
@@ -33,7 +34,8 @@ public class TimeService
 
     public void timePublished(LocalTime localTime)
     {
-        JexxaLogger.getLogger(TimeService.class).info("New Time was published time {} ", localTime.toString());
+        var logMessage = localTime.format(DateTimeFormatter.ISO_TIME);
+        JexxaLogger.getLogger(TimeService.class).info("New Time was published time {} ", logMessage);
     }
 
 }
