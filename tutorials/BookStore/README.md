@@ -41,14 +41,18 @@ First we map the functionality of the application to DDD patterns
 
 *   `Aggregate`: Elements that change over time and include our business logic 
     *   `Book` which manages available copies of a book.       
+
 *   `ValueObject`: Elements that represent a state and are immutable
     *   `ISBN13` which identifies a book     
+
 *   `DomainEvent`: Business events that happened in the past 
     *   `BookSoldOut` when copies of a book are no longer in stock   
+
 *   'DomainService': 
     *   `IDomainEventPublisher`: We need to publish our domain events in some way. Since the implementation requires a technology stack we can only define an interface.   
     *   `IBookRepository`: Interface to manage `Book` instances. Since the implementation requires a technology stack we can only define an interface.  
     *   `ReferenceLibrary`: Return latest books. For simplicity, we assume that it is a service which does not related to our domain core directly.             
+
 *   `BusinessException`:
     *   `BookNotInStockException`: In case we try to sell a book that is currently not available   
      
@@ -57,12 +61,15 @@ First we map the functionality of the application to DDD patterns
 In our tutorials we use following package structure: 
 
 *   applicationservice
+
 *   domainservice
+
 *   domain 
     *   valueobject
     *   aggregate
     *   domainevent
     *   businessexception    
+
 *   infrastructure
     *   drivenadapter
     *   drivingadapter 
@@ -73,8 +80,10 @@ In our tutorials we use following package structure:
     *   They must not have setter methods. So all fields should be final. 
     *   They must provide a valid implementation of equals() and hashcode()
     *   They include no business logic, but they have to validate their input data    
+
 *   `Aggregate`: Is identified by a unique `AggregateID` which is a `ValueObject`
     *   `Book` uses an `ISBN13` object     
+
 *   `Repositroy` when defining any interface within the application core ensure that you use the domain language for all methods. Resist the temptation to use the language of the used technology stack that you will use to implement this interface.        
      
 ## 2. Implement the Infrastructure
@@ -151,8 +160,6 @@ public final class BookRepository implements IBookRepository
     }
 }
 ```
-
-
 
 ## 3. Implement the Application 
 
