@@ -12,6 +12,11 @@
 
   <properties>
     <main.class>io.jexxa.tutorials.bookstorej.BookStoreJApplication</main.class>
+    <addendj.version>1.0.0</addendj.version>
+    <aspectj.version>1.9.5</aspectj.version>
+    <aspectjtools.version>1.9.5</aspectjtools.version>
+    <aspectjrt.version>1.9.5</aspectjrt.version>
+    <aspectj.maven.plugin.version>1.12.6</aspectj.maven.plugin.version>
   </properties>
 
 
@@ -40,19 +45,19 @@
     <dependency>
       <groupId>io.jexxa.addendj</groupId>
       <artifactId>AddendJ</artifactId>
-      <version>1.0.0</version>
+      <version>${addendj.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjtools</artifactId>
-      <version>1.9.5</version>
+      <version>${aspectjtools.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>1.9.5</version>
+      <version>${aspectjrt.version}</version>
     </dependency>
 
     <!-- dependencies for tests with JDBCAdapter -->
@@ -80,7 +85,7 @@
       <plugin>
         <groupId>com.nickwongdev</groupId>
         <artifactId>aspectj-maven-plugin</artifactId>
-        <version>1.12.6</version>
+        <version>${aspectj.maven.plugin.version}</version>
         <executions>
           <execution>
             <id>compile</id>
@@ -104,7 +109,7 @@
           <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjtools</artifactId>
-            <version>1.9.5</version>
+            <version>${aspectjtools.version}</version>
           </dependency>
         </dependencies>
       </plugin>
