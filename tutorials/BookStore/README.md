@@ -229,7 +229,7 @@ You will see following (or similar) output
 
 ### Execute some commands using curl 
 
-**1. Get list of books:**
+#### Get list of books
 
 Command: 
 ```Console
@@ -241,7 +241,7 @@ Response:
 [{"value":"978-1-891830-85-3"},{"value":"978-1-60309-025-4"},{"value":"978-1-60309-016-2"},{"value":"978-1-60309-265-4"},{"value":"978-1-60309-047-6"},{"value":"978-1-60309-322-4"}](
 ```
 
-**2. Ask if a specific book is in stock**
+#### Ask if a specific book is in stock**
 
 Command:
 ```Console
@@ -255,7 +255,7 @@ Response:
 false
 ```
 
-**3. Add some books**
+#### Add some books
 
 Command:
 ```Console
@@ -267,7 +267,7 @@ Response: No output
 ```Console
 ```
 
-**4. Ask again if a specific book is in stock**
+#### Ask again if a specific book is in stock
 
 Command:
 ```Console
@@ -280,7 +280,7 @@ Response:
 ```Console
 true
 ```
-### Write some tests
+## 4. Write some tests
 Writing some tests with Jexxa is quite easy. Main advantages are: 
 
 *   You can focus on domain logic within your tests.
