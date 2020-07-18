@@ -30,5 +30,6 @@
     <module>HelloJexxa</module>
     <module>TimeService</module>
     <module>BookStore</module>
+    <module>BookStoreJ</module>
   </modules>
 </project>
