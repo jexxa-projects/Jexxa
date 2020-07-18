@@ -211,7 +211,6 @@ That's it.
 
 ## Compile & Start the Application with console output 
 
-
 ```console                                                          
 mvn clean install
 java -jar target/bookstore-jar-with-dependencies.jar 
