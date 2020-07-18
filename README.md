@@ -19,11 +19,10 @@ Even though Jexxa has strong educational focus it is used within lightweight bus
 *   Integrated strategies for driven adapters: JDBC, in memory DB (IMDB), and JMS based messaging. 
 
 ## General information:   
+
+*   Supported Java environments: Java 11 (or higher)   
 *   Documentation: [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa.html) 
 *   Tutorials: [Available here](tutorials/README.md) 
-
-## Supported Java environments
-*   Java 11 (or higher)
 
 ## Quickstart
 
