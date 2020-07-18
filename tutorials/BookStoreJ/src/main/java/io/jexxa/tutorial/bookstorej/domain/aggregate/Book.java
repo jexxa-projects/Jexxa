@@ -65,5 +65,4 @@ public final class Book
     {
         return new Book(isbn13);
     }
-
 }

@@ -3,7 +3,7 @@ package io.jexxa.tutorial.bookstorej.domain.domainevent;
 import io.jexxa.addend.applicationcore.DomainEvent;
 import io.jexxa.tutorial.bookstorej.domain.valueobject.ISBN13;
 
-@DomainEvent
+@DomainEvent("BookSoldOut")
 public final class BookSoldOut
 {
     private final ISBN13 isbn13;

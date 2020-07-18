@@ -16,97 +16,84 @@
 
 ## Implementing Application Core 
 
-### 1. Mapping to DDD patterns  
-TODO: Explain annotations 
+### A pattern language for your application core 
+In the [documentation of Jexxa](https://repplix.github.io/Jexxa/jexxa.html) we describe that Jexxa does not require any special annotations. Main reason is that framework related annotations can tightly couple your application core to a specific technology stack. Therefore, such annotations should not be used within the application. 
 
-### A note on implementing DDD patterns  
-TODO: Explain cross cutting concerns  
+On the other side you can use annotations as pure meta-information within your developing teams, especially to make a so called __pattern language__ explicit. The pattern language is part of the micro architecture of an application and allows your developers to quickly navigate through the source code.  Instead of reading the source code a developer can navigate through the code based on the patterns. 
 
-*   `ValueObject` and `DomainEvent`: Are immutable and compared based on their internal values
-    *   They must not have setter methods. So all fields should be final. 
-    *   They must provide a valid implementation of equals() and hashcode()
-    *   They include no business logic, but they have to validate their input data    
+For example if the application uses the pattern language of DDD, and you have to change the business logic of your application core the corresponding code must be within an aggregate. So you can directly navigate to the `Aggregate` and skip all remaining elements.      
 
-*   `Aggregate`: Is identified by a unique `AggregateID` which is a `ValueObject`
-    *   `Book` uses an `ISBN13` object     
+Therefore, we strongly recommend annotating all classes within the application core with their corresponding element of the pattern language. Classes that cannot be assigned to a specific element violate the single responsibility principle.
 
-*   `Repositroy` when defining any interface within the application core ensure that you use the domain language for all methods. Resist the temptation to use the language of the used technology stack that you will use to implement this interface.        
-     
-## 2. Implement the Infrastructure
+For the pattern langauge of DDD we recommend project [Addend](https://addend.jexxa.io/).     
 
-Implementation of `IDomainEventPublisher` just prints the `DomainEvent` to the console. So we can just use the implementation from tutorial `TimeService`.    
+The following shows the annotation of an 'Aggregate'. Apart from the obvious annoatation, it also uses two other annotations: 
+*   `AggregateID` to explicitly document the unique key
+*   `AggregateFactory` to explicitly document the factory method for the `Aggregate`     
 
+```java
+@Aggregate
+public final class Book
+{
+    private final ISBN13 isbn13;
+    private int amountInStock = 0;
 
+    private Book(ISBN13 isbn13)
+    {
+        this.isbn13 = isbn13;
+    }
 
-That's it. 
+    @AggregateID
+    public ISBN13 getISBN13()
+    {
+        return isbn13;
+    }
+  
+    // ... 
 
-## Compile & Start the Application with console output 
-
-```console                                                          
-mvn clean install
-java -jar target/bookstore-jar-with-dependencies.jar 
+    @AggregateFactory(Book.class)
+    public static Book newBook(ISBN13 isbn13)
+    {
+        return new Book(isbn13);
+    }
+}
 ```
-You will see following (or similar) output
-```console
-[main] INFO io.jexxa.tutorials.bookstore.BookStoreApplication - Use persistence strategy: IMDBRepository 
-[main] INFO io.jexxa.core.JexxaMain - Start BoundedContext 'BookStoreApplication' with 2 Driving Adapter 
-[main] INFO org.eclipse.jetty.util.log - Logging initialized @474ms to org.eclipse.jetty.util.log.Slf4jLog
-[main] INFO io.javalin.Javalin - Starting Javalin ...
-[main] INFO io.javalin.Javalin - Listening on http://localhost:7000/
-[main] INFO io.javalin.Javalin - Javalin started in 148ms \o/
-[main] INFO io.jexxa.core.JexxaMain - BoundedContext 'BookStoreApplication' successfully started in 0.484 seconds
-```          
+ 
+### Cross-cutting concerns   
 
-### Execute some commands using curl 
+When applying the tactical patterns of DDD and map the ubiquituous language into the application core, it can happen that you get a lot of small classes. Especially `ValueObject` classes are affected you have to implement valid cross-cutting concerns for these objects such as `equals()`, `hashCode()` and `toString()`.
 
-#### Get list of books
+These methods can bloat your source code and much worse hide the domain specific aspects. To resolve this issue we recommend AspectJ for realizing cross-cutting concerns. Especially if we already annotate all our classes, we can use these annotations. 
 
-Command: 
-```Console
-curl -X GET  http://localhost:7000/BookStoreService/getBooks
-```
+Important note: This is weighing up between using some kind of technology-stack on the one side to hide technology specific issues and to make the ubiquituos language more explicit on the other side.     
 
-Response: 
-```Console
-[{"value":"978-1-891830-85-3"},{"value":"978-1-60309-025-4"},{"value":"978-1-60309-016-2"},{"value":"978-1-60309-265-4"},{"value":"978-1-60309-047-6"},{"value":"978-1-60309-322-4"}]
-```
+In case you would like to use AspectJ together with pattern language of DDD we recommend project [AddendJ](https://addendj.jexxa.io/).     
 
-#### Ask if a specific book is in stock**
+In the following you see the implementation of class `ISBN13` without an implementation of equals and hashcode. Theses methods are weaved into the source code during compile time.    
+ 
+```java
+@ValueObject
+public class ISBN13
+{
+ private final String value;
 
-Command:
-```Console
-curl -X POST -H "Content-Type: application/json" \
-    -d '"978-1-891830-85-3"' \
-    http://localhost:7000/BookStoreService/inStock                 
-```
+ public ISBN13(String value)
+ {
+     Validate.notNull(value);
+     validateChecksum(value);
 
-Response: 
-```Console
-false
-```
+     this.value = value;
+ }
 
-#### Add some books
-
-Command:
-```Console
-curl -X POST -H "Content-Type: application/json" \
-    -d '["978-1-891830-85-3", 5]' \
-    http://localhost:7000/BookStoreService/addToStock                 
-```
-Response: No output  
-```Console
-```
-
-#### Ask again if a specific book is in stock
-
-Command:
-```Console
-curl -X POST -H "Content-Type: application/json" \
-    -d '"978-1-891830-85-3"' \
-    http://localhost:7000/BookStoreService/inStock                 
-```
-
-Response: 
-```Console
-true
+ public String getValue()
+ {
+     return value;
+ }
+ 
+ private void validateChecksum(String isbn13)
+ {
+   //..
+ }
+ 
+}  
 ```
