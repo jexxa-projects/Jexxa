@@ -54,7 +54,4 @@ class ReferenceLibraryTest
         //Assert: After adding books via our service, our bookstore must know theses books
         assertFalse( bookStore.getBooks().isEmpty() );
     }
-    
-
-
 }

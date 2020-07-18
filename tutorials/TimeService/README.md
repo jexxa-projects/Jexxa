@@ -11,7 +11,7 @@
 ## What you need
 
 *   Understand tutorial `HelloJexxa` because we explain only new aspects 
-*   30 minutes
+*   60 minutes
 *   JDK 11 (or higher) installed 
 *   Maven 3.6 (or higher) installed
 *   A running ActiveMQ instance (at least if you start the application with option `-jms`)

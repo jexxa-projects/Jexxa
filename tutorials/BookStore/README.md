@@ -213,3 +213,122 @@ That's it.
 ## Compile & Start the Application with console output 
 
 
+```console                                                          
+mvn clean install
+java -jar target/bookstore-jar-with-dependencies.jar 
+```
+You will see following (or similar) output
+```console
+[main] INFO io.jexxa.tutorials.bookstore.BookStoreApplication - Use persistence strategy: IMDBRepository 
+[main] INFO io.jexxa.core.JexxaMain - Start BoundedContext 'BookStoreApplication' with 2 Driving Adapter 
+[main] INFO org.eclipse.jetty.util.log - Logging initialized @474ms to org.eclipse.jetty.util.log.Slf4jLog
+[main] INFO io.javalin.Javalin - Starting Javalin ...
+[main] INFO io.javalin.Javalin - Listening on http://localhost:7000/
+[main] INFO io.javalin.Javalin - Javalin started in 148ms \o/
+[main] INFO io.jexxa.core.JexxaMain - BoundedContext 'BookStoreApplication' successfully started in 0.484 seconds
+```          
+
+### Execute some commands using curl 
+
+#### Get list of books: 
+Command: 
+```Console
+curl -X GET  http://localhost:7000/BookStoreService/getBooks
+```
+
+Response: 
+```Console
+[{"value":"978-1-891830-85-3"},{"value":"978-1-60309-025-4"},{"value":"978-1-60309-016-2"},{"value":"978-1-60309-265-4"},{"value":"978-1-60309-047-6"},{"value":"978-1-60309-322-4"}](
+```
+
+#### Ask if a specific book is in stock
+Command:
+```Console
+curl -X POST -H "Content-Type: application/json" \
+    -d '"978-1-891830-85-3"' \
+    http://localhost:7000/BookStoreService/inStock                 
+```
+
+Response: 
+```Console
+false
+```
+
+#### Add some books
+Command:
+```Console
+curl -X POST -H "Content-Type: application/json" \
+    -d '["978-1-891830-85-3", 5]' \
+    http://localhost:7000/BookStoreService/addToStock                 
+```
+Response: No output  
+```Console
+```
+
+#### Ask again if a specific book is in stock
+Command:
+```Console
+curl -X POST -H "Content-Type: application/json" \
+    -d '"978-1-891830-85-3"' \
+    http://localhost:7000/BookStoreService/inStock                 
+```
+
+Response: 
+```Console
+true
+```
+### Write some tests
+Writing some tests with Jexxa is quite easy. Main advantages are: 
+
+*   You can focus on domain logic within your tests.
+*   You don't need to use mocks which can lead to validating execution steps within the domain core instead of validating the use cases
+*   In case of repositories you can easily configure different technology stacks or run same tests using multiple different technology stacks
+
+Following code shows a simple validation of our reference library      
+
+```java
+class ReferenceLibraryTest
+{
+    static private final String DRIVEN_ADAPTER_PERSISTENCE = "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.persistence";
+    static private final String DRIVEN_ADAPTER_MESSAGING =   "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.stub";
+    
+    private JexxaMain jexxaMain;
+
+    @BeforeEach
+    void initTest()
+    {
+        // Here you can define the desired DB strategy without adjusting your tests
+        // Within your tests you can completely focus on the domain logic which allows
+        // you to run the tests as unit tests within daily development or as integration
+        // tests on a build server
+        RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);
+
+        jexxaMain = new JexxaMain(ReferenceLibraryTest.class.getSimpleName());
+        jexxaMain.addToInfrastructure(DRIVEN_ADAPTER_PERSISTENCE)
+                .addToInfrastructure(DRIVEN_ADAPTER_MESSAGING);
+
+        DomainEventStubPublisher.clear();
+
+        //Clean up the repository 
+        RepositoryManager.getInstance()
+                .getStrategy(Book.class, Book::getISBN13, jexxaMain.getProperties())
+                .removeAll();
+    }
+
+
+    @Test
+    void validateAddLatestBooks()
+    {
+        //Arrange : Get the inbound port that we would like to test
+        var objectUnderTest = jexxaMain.getInstanceOfPort(ReferenceLibrary.class);
+        var bookStore = jexxaMain.getInstanceOfPort(BookStoreService.class);
+
+        //Act
+        objectUnderTest.addLatestBooks();
+
+        //Assert: After adding books via our service, our bookstore must know theses books
+        assertFalse( bookStore.getBooks().isEmpty() );
+    }
+} 
+```
+
