@@ -9,13 +9,13 @@ All tutorials focus on the usage of Jexxa. Therefore, the business logic in thes
 *   Perform the steps in Jexxa‘s [README.md](../README.md)    
 
 ## HelloJexxa
-See documentation [HelloJexxa](HelloJexxa/README.md)
+See documentation [HelloJexxa](HelloJexxa/)
 
 ## TimeService
-See documentation [TimeService](TimeService/README.md)
+See documentation [TimeService](TimeService/)
 
 ## BookStore
-See documentation [BookStore](BookStore/README.md)
+See documentation [BookStore](BookStore/)
 
 ## BookStoreJ
-See documentation [BookStoreJ](BookStoreJ/README.md)
+See documentation [BookStoreJ](BookStoreJ/)
