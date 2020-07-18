@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 -   Fixed json template for base types in JMX parameter info     
 
+### Changed
+-   Updated dependencies 
+
 ## \[2.1.0] - 2020-07-07
 ### Added
 -   Added automatic reconnection mechanism for JMS Listener in case of a broker exception
