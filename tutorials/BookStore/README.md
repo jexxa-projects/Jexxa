@@ -2,9 +2,11 @@
 
 ## What You Learn
 
-*   Default package structure for more complex applications based on DDD   
-*   How to provide an implementation of a specific outbound-port which is called `Repository` in terms of DDD using a database   
+*   How to provide an implementation of a specific outbound-port which is called `Repository` in terms of DDD using a database  
 *   How to initialize master data into a Repository      
+*   Default package structure for more complex applications based on DDD
+*   How to test your business logic using Jexxa     
+
 
 ## What you need
 
@@ -15,13 +17,20 @@
 *   curl or jconsole to trigger the application
 *   A postgres DB (if you start the application with option `-jdbc')  
 
-## Functionality of the BookStore
-This application should provide following functionality
+## Requirements to the application core
+This application core should provide following functionality:
 
-*   Manage available books in store
-*   All books should be identified by their ISBN13.
-*   Number of available books in store  
-*   Send a DomainEvent if a book is sold out which means that last book was sold.
+*   Manage available books in store which means
+    *   add new books
+    *   sell books
+    *   query operations about available books
+       
+*   All books should be identified by their ISBN13
+*   For each book the store the umber of available copies   
+*   Publish `DomainEvent` `BookSoldOut` if last copy of a book is sold
+*   A service which gets the latest books from our reference library. For this tutorial it is sufficient that: 
+    *   Service provides a hardcoded list  
+    *   Service is triggered when starting the application     
 
 ## Implementing Application Core 
 
@@ -29,20 +38,21 @@ This application should provide following functionality
 First we map the functionality of the application to DDD patterns   
 
 *   `Aggregate`: Elements that change over time and include our business logic 
-    *   `BookStock` because our stock will change        
-    *   `Book` because it can go out of print. Since we manage only books that are in stock our BookStock is also the root aggregate for our books.  
+    *   `Book` which manages available copies of a book.   
     
 *   `ValueObject`: Elements that represent a state and are immutable
-    *   `StoreAddress` which identifies our stock for a specific store 
     *   `ISBN13` which identifies a book
      
-*   `DomainEvents`: Business events that happened in the past 
-    *   `BookOutOfPrint` when a book is no longer printed
+*   `DomainEvent`: Business events that happened in the past 
     *   `BookSoldOut` when copies of a book are no longer in stock
     
 *   'DomainService': 
-    *   `DomainEventPublisher`: We need to publish our domain events in some way
-    *   `BookStockRepository`: We have to persist our stock in some way
+    *   `IDomainEventPublisher`: We need to publish our domain events in some way
+    *   `BookRepository`: Manage `Book` instances
+    *   `ReferenceLibrary`: Return latest books
+    
+*   `BusinessException`:
+    *   `BookNotInStockException`: In case we try to sell a book that is currently not available   
      
        
 ### Package structure 
