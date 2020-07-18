@@ -37,13 +37,6 @@
     </dependency>
 
     
-    <!-- dependencies for tests with ActiveMQ -->
-    <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-client</artifactId>
-      <version>${activemq.client.version}</version>
-    </dependency>
-
     <!-- dependencies for tests with JDBCAdapter -->
     <dependency>
       <groupId>org.postgresql</groupId>
@@ -56,12 +49,7 @@
       <artifactId>commons-cli</artifactId>
       <version>${commons.cli.version}</version>
     </dependency>
-    
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>${commons.lang3.version}</version>
-    </dependency>
+
   </dependencies>
 
   <build>
