@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -   Added new fluent API for sending JMS messages  
       
 ### Fixed
+-   JexxaMain::getInstanceOfPort validates port conventions to throw a meaningful exception 
 
 ### Changed
 -   Old JMS API is declared as deprecated
