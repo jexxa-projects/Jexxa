@@ -52,6 +52,7 @@ public class JMSSender implements AutoCloseable
      * @deprecated Please use {@link #send(Object)}
      * @param message to be send
      * @param topicName name of the topic
+     * @param <T> Type of the message
      */
     @Deprecated(forRemoval = true)
     public <T> void sendToTopic(T message, String topicName)
@@ -64,6 +65,7 @@ public class JMSSender implements AutoCloseable
      * @param message to be send
      * @param topicName name of the topic
      * @param messageProperties properties added to message header 
+     * @param <T> Type of the message
      */
     @Deprecated(forRemoval = true)
     public <T> void sendToTopic(T message, String topicName, Properties messageProperties)
@@ -106,6 +108,7 @@ public class JMSSender implements AutoCloseable
      * @param message to be send
      * @param queueName name of the queue
      * @param messageProperties properties added to message header
+     * @param <T> Type of the message
      */
     @Deprecated(forRemoval = true)
     public <T> void sendToQueue(T message, String queueName, Properties messageProperties)
