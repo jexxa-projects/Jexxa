@@ -19,7 +19,7 @@ import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "java:S1133"})
 public class JMSSender implements AutoCloseable
 {
     public static final String JNDI_PROVIDER_URL_KEY = "java.naming.provider.url";
@@ -37,7 +37,7 @@ public class JMSSender implements AutoCloseable
     private Connection connection;
     private Session session;
 
-    public JMSSender(final Properties properties)
+    public JMSSender(Properties properties)
     {
         this.properties = properties;
         Validate.notNull(getConnection()); //Try create a connection to ensure fail fast
@@ -50,14 +50,21 @@ public class JMSSender implements AutoCloseable
 
     /**
      * @deprecated Please use {@link #send(Object)}
-     *
+     * @param message to be send
+     * @param topicName name of the topic
      */
     @Deprecated(forRemoval = true)
-    public <T> void sendToTopic(T message, final String topicName)
+    public <T> void sendToTopic(T message, String topicName)
     {
         sendToTopic(message, topicName, null);
     }
 
+    /**
+     * @deprecated Please use {@link #send(Object)}
+     * @param message to be send
+     * @param topicName name of the topic
+     * @param messageProperties properties added to message header 
+     */
     @Deprecated(forRemoval = true)
     public <T> void sendToTopic(T message, String topicName, Properties messageProperties)
     {
@@ -83,12 +90,23 @@ public class JMSSender implements AutoCloseable
     }
 
 
+    /**
+     * @deprecated Please use {@link #send(Object)}
+     * @param message to be send
+     * @param queue name of the queue
+     */
     @Deprecated(forRemoval = true)
-    public <T> void sendToQueue(T message, final String queue)
+    public <T> void sendToQueue(T message, String queue)
     {
         sendToQueue(message, queue, null);
     }
 
+    /**
+     * @deprecated Please use {@link #send(Object)}
+     * @param message to be send
+     * @param queueName name of the queue
+     * @param messageProperties properties added to message header
+     */
     @Deprecated(forRemoval = true)
     public <T> void sendToQueue(T message, String queueName, Properties messageProperties)
     {
@@ -141,7 +159,7 @@ public class JMSSender implements AutoCloseable
     }
 
 
-    final Connection getConnection()
+    Connection getConnection()
     {
         if (connection == null)
         {
