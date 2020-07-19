@@ -97,3 +97,51 @@ public class ISBN13
  
 }  
 ```
+
+## Implement the Application
+
+If your application core is annotated with your pattern language, you can use it together wih Jexxa. Instead of binding a 
+driving adapter to each inbound port explicitly, you can also use mehtod `bindToAnnotation`. In this case alle inbound ports annotated 
+with given annotation are bind to the driving adapter.    
+
+```java
+public final class BookStoreJApplication
+{
+    //Declare the packages that should be used by Jexxa
+    private static final String DRIVEN_ADAPTER  = BookStoreJApplication.class.getPackageName() + ".infrastructure.drivenadapter";
+    private static final String OUTBOUND_PORTS  = BookStoreJApplication.class.getPackageName() + ".domainservice";
+
+    public static void main(String[] args)
+    {
+        // Define the default strategy which is either an IMDB database or a JDBC based repository
+        // In case of JDBC we use a simple key value approach which stores the key and the value as json strings.
+        // Using json strings might be very inconvenient if you come from typical relational databases but in terms
+        // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
+        RepositoryManager.getInstance().setDefaultStrategy(getDrivenAdapterStrategy(args));
+
+        JexxaMain jexxaMain = new JexxaMain(BookStoreJApplication.class.getSimpleName());
+
+        jexxaMain
+                //Define which outbound ports should be managed by Jexxa
+                .addToApplicationCore(OUTBOUND_PORTS)
+                .addToInfrastructure(DRIVEN_ADAPTER)
+
+                //Get the latest books when starting the application
+                .bootstrap(ReferenceLibrary.class).with(ReferenceLibrary::addLatestBooks)
+
+                // In case you annotate your domain core with your pattern language,
+                // You can also bind DrivingAdapter to annotated classes.
+                .bind(RESTfulRPCAdapter.class).toAnnotation(ApplicationService.class)
+                .bind(JMXAdapter.class).toAnnotation(ApplicationService.class)
+
+                .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
+                .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
+
+                .start()
+
+                .waitForShutdown()
+
+                .stop();
+    }
+}  
+```

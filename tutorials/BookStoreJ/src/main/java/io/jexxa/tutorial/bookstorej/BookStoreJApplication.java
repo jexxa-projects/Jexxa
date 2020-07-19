@@ -1,6 +1,7 @@
 package io.jexxa.tutorial.bookstorej;
 
 
+import io.jexxa.addend.applicationcore.ApplicationService;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
@@ -8,7 +9,6 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBReposi
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
-import io.jexxa.tutorial.bookstorej.applicationservice.BookStoreService;
 import io.jexxa.tutorial.bookstorej.domainservice.ReferenceLibrary;
 import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.cli.CommandLine;
@@ -41,8 +41,10 @@ public final class BookStoreJApplication
                 //Get the latest books when starting the application
                 .bootstrap(ReferenceLibrary.class).with(ReferenceLibrary::addLatestBooks)
 
-                .bind(RESTfulRPCAdapter.class).to(BookStoreService.class)
-                .bind(JMXAdapter.class).to(BookStoreService.class)
+                // In case you annotate your domain core with your pattern language,
+                // You can also bind DrivingAdapter to annotated classes.
+                .bind(RESTfulRPCAdapter.class).toAnnotation(ApplicationService.class)
+                .bind(JMXAdapter.class).toAnnotation(ApplicationService.class)
 
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
                 .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
