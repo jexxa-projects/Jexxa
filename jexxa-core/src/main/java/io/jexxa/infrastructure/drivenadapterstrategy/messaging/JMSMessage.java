@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
+import java.util.Objects;
 import java.util.Properties;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -53,7 +54,7 @@ public class JMSMessage
         Validate.isTrue((queueDestination == null) ^ (topicDestination== null)); // exact one destination is set  
 
         Gson gson = new Gson();
-        if (queueDestination != null)
+        if (Objects.nonNull(queueDestination))
         {
             jmsSender.sendTextToQueue(gson.toJson(message), queueDestination.getDestination(), properties);
         }
@@ -68,7 +69,7 @@ public class JMSMessage
     {
         Validate.isTrue((queueDestination == null) ^ (topicDestination== null)); // exact one destination is set
 
-        if (queueDestination != null)
+        if (Objects.nonNull(queueDestination))
         {
             jmsSender.sendTextToQueue(serializer.apply(message), queueDestination.getDestination(), properties);
         }
@@ -83,7 +84,7 @@ public class JMSMessage
     {
         Validate.isTrue((queueDestination == null) ^ (topicDestination== null)); // exact one destination is set
         
-        if (queueDestination != null)
+        if (Objects.nonNull(queueDestination))
         {
             jmsSender.sendTextToQueue(serializer.get(), queueDestination.getDestination(), properties);
         }
@@ -97,7 +98,7 @@ public class JMSMessage
     {
         Validate.isTrue((queueDestination == null) ^ (topicDestination== null)); // exact one destination is set
 
-        if (queueDestination != null)
+        if (Objects.nonNull(queueDestination))
         {
             jmsSender.sendTextToQueue(message.toString(), queueDestination.getDestination(), properties);
         }
