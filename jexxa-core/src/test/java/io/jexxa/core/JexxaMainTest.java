@@ -4,15 +4,18 @@ package io.jexxa.core;
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
+import io.jexxa.application.applicationservice.InvalidApplicationService;
 import io.jexxa.application.applicationservice.JexxaApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domainservice.InitializeJexxaAggregates;
 import io.jexxa.application.infrastructure.drivingadapter.ProxyAdapter;
+import io.jexxa.core.convention.PortConventionViolation;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 import kong.unirest.Unirest;
@@ -131,6 +134,15 @@ class JexxaMainTest
 
         //Assert 
         assertTrue(jexxaApplicationService.getAggregateCount() > 0);
+    }
+
+    @Test
+    void getInstanceOfInvalidPort()
+    {
+        //Arrange --
+
+        //Act/Assert
+        assertThrows(PortConventionViolation.class, () -> objectUnderTest.getInstanceOfPort(InvalidApplicationService.class));
     }
 
 }

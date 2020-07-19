@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
@@ -89,6 +90,7 @@ public class JexxaMain
 
     public <T> T getInstanceOfPort(Class<T> port)
     {
+        PortConvention.validate(port);
         return port.cast(portFactory.getInstanceOf(port, properties));
     }
 
