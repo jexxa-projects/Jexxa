@@ -43,19 +43,36 @@ public class JMSSender implements AutoCloseable
         Validate.notNull(getConnection()); //Try create a connection to ensure fail fast
     }
 
+    public <T> JMSMessage send(T message)
+    {
+        return new JMSMessage(message, this);
+    }
+
+    /**
+     * @deprecated Please use {@link #send(Object)}
+     *
+     */
+    @Deprecated(forRemoval = true)
     public <T> void sendToTopic(T message, final String topicName)
     {
         sendToTopic(message, topicName, null);
     }
-    
+
+    @Deprecated(forRemoval = true)
     public <T> void sendToTopic(T message, String topicName, Properties messageProperties)
+    {
+        var gson = new Gson();
+        sendTextToTopic(gson.toJson(message), topicName, messageProperties);
+    }
+
+    void sendTextToTopic(String message, String topicName, Properties messageProperties)
     {
         try
         {
             var destination = getSession().createTopic(topicName);
             try (var producer = getSession().createProducer(destination) )
             {
-                sendMessage(message, producer, messageProperties);
+                sendTextMessage(message, producer, messageProperties);
             }
         }
         catch (JMSException e)
@@ -65,19 +82,28 @@ public class JMSSender implements AutoCloseable
         }
     }
 
+
+    @Deprecated(forRemoval = true)
     public <T> void sendToQueue(T message, final String queue)
     {
         sendToQueue(message, queue, null);
     }
 
+    @Deprecated(forRemoval = true)
     public <T> void sendToQueue(T message, String queueName, Properties messageProperties)
+    {
+        var gson = new Gson();
+        sendTextToQueue(gson.toJson(message), queueName, messageProperties);
+    }
+
+    void sendTextToQueue(String message, String queueName, Properties messageProperties)
     {
         try
         {
             var destination = getSession().createQueue(queueName);
             try (var producer = getSession().createProducer(destination) )
             {
-                sendMessage(message, producer, messageProperties);
+                sendTextMessage(message, producer, messageProperties);
             }
         }
         catch (JMSException e)
@@ -87,12 +113,11 @@ public class JMSSender implements AutoCloseable
         }
     }
 
-    private <T> void sendMessage(T message, MessageProducer messageProducer, Properties messageProperties) throws JMSException
+    private void sendTextMessage(String message, MessageProducer messageProducer, Properties messageProperties) throws JMSException
     {
         messageProducer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
-        var gson = new Gson();
-        var textMessage = getSession().createTextMessage(gson.toJson(message));
+        var textMessage = getSession().createTextMessage(message);
 
         if (messageProperties != null)
         {

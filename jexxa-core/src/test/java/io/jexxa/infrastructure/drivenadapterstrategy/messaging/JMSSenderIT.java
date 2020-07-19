@@ -3,6 +3,8 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static io.jexxa.infrastructure.utils.messaging.QueueListener.QUEUE_DESTINATION;
+import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTINATION;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
@@ -57,7 +59,25 @@ class JMSSenderIT
         //Arrange --
 
         //Act
-        objectUnderTest.sendToTopic(message, TopicListener.TOPIC_DESTINATION);
+        objectUnderTest.sendToTopic(message, TOPIC_DESTINATION);
+
+        //Assert
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
+
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
+    @Test
+    void sendMessageToTopicFluentAPI()
+    {
+        //Arrange --
+
+        //Act
+        objectUnderTest
+                .send(message)
+                .to(JMSTopic.of(TOPIC_DESTINATION))
+                .addHeader("type", message.getClass().getSimpleName())
+                .asJson();
 
         //Assert
         await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
@@ -72,7 +92,43 @@ class JMSSenderIT
         //Arrange --
 
         //Act
-        objectUnderTest.sendToQueue(message, QueueListener.QUEUE_DESTINATION);
+        objectUnderTest.sendToQueue(message, QUEUE_DESTINATION);
+
+        //Assert
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
+
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
+    @Test
+    void sendMessageToQueueFluentAPI()
+    {
+        //Arrange --
+
+        //Act
+        objectUnderTest
+                .send(message)
+                .to(JMSQueue.of(QUEUE_DESTINATION))
+                .addHeader("type", message.getClass().getSimpleName())
+                .asJson();
+
+        //Assert
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
+
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
+    @Test
+    void sendTextToQueueFluentAPI()
+    {
+        //Arrange --
+
+        //Act
+        objectUnderTest
+                .send(message)
+                .to(JMSQueue.of(QUEUE_DESTINATION))
+                .addHeader("type", message.getClass().getSimpleName())
+                .asString();
 
         //Assert
         await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
@@ -86,9 +142,9 @@ class JMSSenderIT
         //Arrange --
 
         //Act (simulate an error in between sending two messages
-        objectUnderTest.sendToQueue(message, QueueListener.QUEUE_DESTINATION);
+        objectUnderTest.sendToQueue(message, QUEUE_DESTINATION);
         simulateConnectionException(objectUnderTest.getConnection());
-        objectUnderTest.sendToQueue(message, QueueListener.QUEUE_DESTINATION);
+        objectUnderTest.sendToQueue(message, QUEUE_DESTINATION);
 
         //Assert
         await().atMost(1, TimeUnit.SECONDS).until(() -> queueListener.getMessages().size() >= 2);

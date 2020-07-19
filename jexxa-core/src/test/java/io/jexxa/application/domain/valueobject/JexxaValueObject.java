@@ -46,6 +46,16 @@ public class JexxaValueObject
                 this.valueInPercent == getValueInPercent());
     }
 
+    @Override
+    public String toString()
+    {
+        return JexxaValueObject.class.getSimpleName() + " : {" +
+                " value = " + value +
+                " valueInPercent = " + valueInPercent +
+                " } ";
+    }
+
+
     public int hashCode()
     {
         return value; 
