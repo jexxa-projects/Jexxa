@@ -1,21 +1,21 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
-public class JMSQueue
+public class JQueue
 {
     private final String destination;
 
-    JMSQueue(String destination)
+    private JQueue(String destination)
     {
         this.destination = destination;
     }
 
-    String getDestination()
+    public String getDestination()
     {
         return destination;
     }
 
-    static JMSQueue of(String destination)
+    public static JQueue of(String destination)
     {
-        return new JMSQueue(destination);
+        return new JQueue(destination);
     }
 }

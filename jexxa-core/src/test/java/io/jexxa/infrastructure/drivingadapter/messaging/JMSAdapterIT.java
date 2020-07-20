@@ -16,7 +16,7 @@ import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
-import io.jexxa.infrastructure.utils.messaging.MessageSender;
+import io.jexxa.infrastructure.utils.messaging.ITMessageSender;
 import io.jexxa.infrastructure.utils.messaging.QueueListener;
 import io.jexxa.infrastructure.utils.messaging.TopicListener;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +51,7 @@ class JMSAdapterIT
         {
             objectUnderTest.register(topicListener);
 
-            MessageSender topicSender = new MessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+            ITMessageSender topicSender = new ITMessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
             //Act
             objectUnderTest.start();
             topicSender.send(MESSAGE);
@@ -73,7 +73,7 @@ class JMSAdapterIT
         {
             objectUnderTest.register(queueListener);
 
-            MessageSender queueSender = new MessageSender(properties, QueueListener.QUEUE_DESTINATION, JMSConfiguration.MessagingType.QUEUE);
+            ITMessageSender queueSender = new ITMessageSender(properties, QueueListener.QUEUE_DESTINATION, JMSConfiguration.MessagingType.QUEUE);
             //Act
             objectUnderTest.start();
             queueSender.send(MESSAGE);
@@ -101,7 +101,7 @@ class JMSAdapterIT
                 .bind(JMSAdapter.class).to(messageListener)
                 .start();
 
-        MessageSender myProducer = new MessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+        ITMessageSender myProducer = new ITMessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
 
         //Act
         myProducer.send(MESSAGE);

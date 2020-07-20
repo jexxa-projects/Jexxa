@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
+package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
@@ -18,6 +18,10 @@ import com.google.gson.Gson;
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JQueue;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JTopic;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.utils.messaging.QueueListener;
 import io.jexxa.infrastructure.utils.messaging.TopicListener;
@@ -37,7 +41,7 @@ class JMSSenderIT
     private QueueListener queueListener;
     private JexxaMain jexxaMain;
 
-    private JMSSender objectUnderTest;
+    private MessageSender objectUnderTest;
 
     @BeforeEach
     void initTests()
@@ -45,7 +49,7 @@ class JMSSenderIT
         jexxaMain = new JexxaMain(JMSSenderIT.class.getSimpleName());
         topicListener = new TopicListener();
         queueListener = new QueueListener();
-        objectUnderTest = new JMSSender(jexxaMain.getProperties());
+        objectUnderTest = MessageSenderManager.getInstance().getStrategy(jexxaMain.getProperties());
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
@@ -76,7 +80,7 @@ class JMSSenderIT
         //Act
         objectUnderTest
                 .send(message)
-                .to(JMSTopic.of(TOPIC_DESTINATION))
+                .to(JTopic.of(TOPIC_DESTINATION))
                 .addHeader("type", message.getClass().getSimpleName())
                 .asJson();
 
@@ -95,7 +99,7 @@ class JMSSenderIT
         //Act
         objectUnderTest
                 .send(message)
-                .to(JMSTopic.of(TOPIC_DESTINATION))
+                .to(JTopic.of(TOPIC_DESTINATION))
                 .addHeader("type", message.getClass().getSimpleName())
                 .as(gson::toJson);
 
@@ -127,7 +131,7 @@ class JMSSenderIT
         //Act
         objectUnderTest
                 .send(message)
-                .to(JMSQueue.of(QUEUE_DESTINATION))
+                .to(JQueue.of(QUEUE_DESTINATION))
                 .addHeader("type", message.getClass().getSimpleName())
                 .asJson();
 
@@ -146,7 +150,7 @@ class JMSSenderIT
         //Act
         objectUnderTest
                 .send(message)
-                .to(JMSQueue.of(QUEUE_DESTINATION))
+                .to(JQueue.of(QUEUE_DESTINATION))
                 .addHeader("type", message.getClass().getSimpleName())
                 .asString();
 
@@ -164,7 +168,7 @@ class JMSSenderIT
         //Act
         objectUnderTest
                 .send(message)
-                .to(JMSTopic.of(TOPIC_DESTINATION))
+                .to(JTopic.of(TOPIC_DESTINATION))
                 .addHeader("type", message.getClass().getSimpleName())
                 .as(message::toString);
 
@@ -181,7 +185,7 @@ class JMSSenderIT
 
         //Act (simulate an error in between sending two messages
         objectUnderTest.sendToQueue(message, QUEUE_DESTINATION);
-        simulateConnectionException(objectUnderTest.getConnection());
+        simulateConnectionException(((JMSSender) (objectUnderTest)).getConnection());
         objectUnderTest.sendToQueue(message, QUEUE_DESTINATION);
 
         //Assert

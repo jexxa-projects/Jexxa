@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
+package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 
 import java.util.Objects;
 import java.util.Properties;
@@ -6,15 +6,18 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.google.gson.Gson;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JMessage;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JQueue;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JTopic;
 import org.apache.commons.lang3.Validate;
 
-public class JMSMessage
+public class JMSMessage implements JMessage
 {
     private Properties properties;
     private final Object message;
     private final JMSSender jmsSender;
-    private JMSQueue queueDestination;
-    private JMSTopic topicDestination;
+    private JQueue queueDestination;
+    private JTopic topicDestination;
 
     <T> JMSMessage(T message, JMSSender jmsSender)
     {
@@ -25,13 +28,13 @@ public class JMSMessage
         this.jmsSender = jmsSender;
     }
 
-    public JMSMessage to(JMSQueue queue)
+    public JMSMessage to(JQueue queue)
     {
         this.queueDestination = queue;
         return this;
     }
 
-    public JMSMessage to(JMSTopic topic)
+    public JMSMessage to(JTopic topic)
     {
         this.topicDestination = topic;
         return this;

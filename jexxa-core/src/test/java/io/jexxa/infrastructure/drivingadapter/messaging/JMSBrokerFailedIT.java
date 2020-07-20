@@ -11,7 +11,7 @@ import javax.jms.Connection;
 import javax.jms.JMSException;
 
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.utils.messaging.MessageSender;
+import io.jexxa.infrastructure.utils.messaging.ITMessageSender;
 import io.jexxa.infrastructure.utils.messaging.TopicListener;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +27,7 @@ class JMSBrokerFailedIT
         var messageListener = new TopicListener();
         var jmsAdapter = new JMSAdapter(jexxaMain.getProperties());
         
-        var myProducer = new MessageSender(jexxaMain.getProperties(), TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+        var myProducer = new ITMessageSender(jexxaMain.getProperties(), TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
 
         jmsAdapter.register(messageListener);
         jmsAdapter.start();

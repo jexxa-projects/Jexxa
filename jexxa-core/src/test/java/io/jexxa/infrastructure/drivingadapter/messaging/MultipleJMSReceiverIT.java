@@ -17,7 +17,7 @@ import javax.jms.MessageListener;
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.IncrementApplicationService;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.utils.messaging.MessageSender;
+import io.jexxa.infrastructure.utils.messaging.ITMessageSender;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -83,7 +83,7 @@ class MultipleJMSReceiverIT
 
     private void incrementService(Properties properties)
     {
-        MessageSender myProducer = new MessageSender(properties, DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+        ITMessageSender myProducer = new ITMessageSender(properties, DESTINATION, JMSConfiguration.MessagingType.TOPIC);
         while ( incrementApplicationService.getCounter() < MAX_COUNTER )
         {
             //Act

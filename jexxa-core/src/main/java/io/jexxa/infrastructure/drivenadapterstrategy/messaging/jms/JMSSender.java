@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
+package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 
 
 import java.util.Map;
@@ -15,12 +15,13 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import com.google.gson.Gson;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
 
 @SuppressWarnings({"unused", "java:S1133"})
-public class JMSSender implements AutoCloseable
+public class JMSSender implements AutoCloseable, MessageSender
 {
     public static final String JNDI_PROVIDER_URL_KEY = "java.naming.provider.url";
     public static final String JNDI_USER_KEY = "java.naming.user";

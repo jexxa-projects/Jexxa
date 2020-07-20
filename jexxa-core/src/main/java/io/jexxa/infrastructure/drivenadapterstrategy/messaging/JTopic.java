@@ -1,21 +1,21 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
-public class JMSTopic
+public class JTopic
 {
     private final String destination;
 
-    JMSTopic(String destination)
+    private JTopic(String destination)
     {
         this.destination = destination;
     }
 
-    String getDestination()
+    public String getDestination()
     {
         return destination;
     }
 
-    static JMSTopic of(String destination)
+    public static JTopic of(String destination)
     {
-        return new JMSTopic(destination);
+        return new JTopic(destination);
     }
 }

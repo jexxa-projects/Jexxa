@@ -16,13 +16,13 @@ import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.ThrowingConsumer;
 
-public class MessageSender implements AutoCloseable
+public class ITMessageSender implements AutoCloseable
 {
     private final Connection connection;
     private final Session session;
     private final MessageProducer producer;
 
-    public MessageSender(Properties properties, String messageDestination, JMSConfiguration.MessagingType messagingType)
+    public ITMessageSender(Properties properties, String messageDestination, JMSConfiguration.MessagingType messagingType)
     {
         try
         {
@@ -59,7 +59,7 @@ public class MessageSender implements AutoCloseable
         }
         catch (JMSException e)
         {
-            JexxaLogger.getLogger(MessageSender.class).error(e.getMessage());
+            JexxaLogger.getLogger(ITMessageSender.class).error(e.getMessage());
         }
     }
 
