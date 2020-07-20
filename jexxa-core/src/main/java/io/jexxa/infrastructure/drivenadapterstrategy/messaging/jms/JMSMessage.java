@@ -52,6 +52,12 @@ public class JMSMessage implements Message
         return this;
     }
 
+    @Override
+    public Message withHeader(String key, String value)
+    {
+        return addHeader(key, value);
+    }
+
     public void asJson()
     {
         Validate.isTrue((queueDestination == null) ^ (topicDestination== null)); // exact one destination is set  

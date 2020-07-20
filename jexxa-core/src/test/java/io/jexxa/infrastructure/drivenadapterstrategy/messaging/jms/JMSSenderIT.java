@@ -109,7 +109,7 @@ class JMSSenderIT
         objectUnderTest
                 .send(message)
                 .to(topicOf(TOPIC_DESTINATION))
-                .addHeader("type", message.getClass().getSimpleName())
+                .withHeader("type", message.getClass().getSimpleName())
                 .as(gson::toJson);
 
         //Assert

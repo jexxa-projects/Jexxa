@@ -10,6 +10,8 @@ public interface Message
     Message to(Topic topic);
 
     Message addHeader(String key, String value);
+    Message withHeader(String key, String value);
+
 
     void asJson();
 
