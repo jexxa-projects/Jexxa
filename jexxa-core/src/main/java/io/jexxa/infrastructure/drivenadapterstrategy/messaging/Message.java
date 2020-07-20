@@ -3,13 +3,13 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public interface JMessage
+public interface Message
 {
-    JMessage to(JQueue queue);
+    Message to(Queue queue);
 
-    JMessage to(JTopic topic);
+    Message to(Topic topic);
 
-    JMessage addHeader(String key, String value);
+    Message addHeader(String key, String value);
 
     void asJson();
 

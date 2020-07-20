@@ -6,18 +6,18 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.google.gson.Gson;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JMessage;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JQueue;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JTopic;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.Message;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.Queue;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.Topic;
 import org.apache.commons.lang3.Validate;
 
-public class JMSMessage implements JMessage
+public class JMSMessage implements Message
 {
     private Properties properties;
     private final Object message;
     private final JMSSender jmsSender;
-    private JQueue queueDestination;
-    private JTopic topicDestination;
+    private Queue queueDestination;
+    private Topic topicDestination;
 
     <T> JMSMessage(T message, JMSSender jmsSender)
     {
@@ -28,13 +28,13 @@ public class JMSMessage implements JMessage
         this.jmsSender = jmsSender;
     }
 
-    public JMSMessage to(JQueue queue)
+    public JMSMessage to(Queue queue)
     {
         this.queueDestination = queue;
         return this;
     }
 
-    public JMSMessage to(JTopic topic)
+    public JMSMessage to(Topic topic)
     {
         this.topicDestination = topic;
         return this;

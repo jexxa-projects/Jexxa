@@ -1,10 +1,10 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
-public class JTopic
+public class Topic
 {
     private final String destination;
 
-    private JTopic(String destination)
+    private Topic(String destination)
     {
         this.destination = destination;
     }
@@ -14,8 +14,8 @@ public class JTopic
         return destination;
     }
 
-    public static JTopic of(String destination)
+    public static Topic topicOf(String destination)
     {
-        return new JTopic(destination);
+        return new Topic(destination);
     }
 }

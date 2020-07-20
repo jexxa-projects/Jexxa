@@ -3,6 +3,8 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.Queue.queueOf;
+import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.Topic.topicOf;
 import static io.jexxa.infrastructure.utils.messaging.QueueListener.QUEUE_DESTINATION;
 import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTINATION;
 import static org.awaitility.Awaitility.await;
@@ -18,8 +20,8 @@ import com.google.gson.Gson;
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JQueue;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.JTopic;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.Queue;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.Topic;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
@@ -80,7 +82,14 @@ class JMSSenderIT
         //Act
         objectUnderTest
                 .send(message)
-                .to(JTopic.of(TOPIC_DESTINATION))
+                .to(topicOf(TOPIC_DESTINATION))
+                .addHeader("type", message.getClass().getSimpleName())
+                .asJson();
+
+        //Act
+        objectUnderTest
+                .send(message)
+                .to(topicOf(TOPIC_DESTINATION))
                 .addHeader("type", message.getClass().getSimpleName())
                 .asJson();
 
@@ -99,7 +108,7 @@ class JMSSenderIT
         //Act
         objectUnderTest
                 .send(message)
-                .to(JTopic.of(TOPIC_DESTINATION))
+                .to(topicOf(TOPIC_DESTINATION))
                 .addHeader("type", message.getClass().getSimpleName())
                 .as(gson::toJson);
 
@@ -131,7 +140,7 @@ class JMSSenderIT
         //Act
         objectUnderTest
                 .send(message)
-                .to(JQueue.of(QUEUE_DESTINATION))
+                .to(queueOf(QUEUE_DESTINATION))
                 .addHeader("type", message.getClass().getSimpleName())
                 .asJson();
 
@@ -150,7 +159,7 @@ class JMSSenderIT
         //Act
         objectUnderTest
                 .send(message)
-                .to(JQueue.of(QUEUE_DESTINATION))
+                .to(queueOf(QUEUE_DESTINATION))
                 .addHeader("type", message.getClass().getSimpleName())
                 .asString();
 
@@ -168,7 +177,7 @@ class JMSSenderIT
         //Act
         objectUnderTest
                 .send(message)
-                .to(JTopic.of(TOPIC_DESTINATION))
+                .to(topicOf(TOPIC_DESTINATION))
                 .addHeader("type", message.getClass().getSimpleName())
                 .as(message::toString);
 

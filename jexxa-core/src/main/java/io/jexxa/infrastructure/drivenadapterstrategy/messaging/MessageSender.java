@@ -2,7 +2,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
 public interface MessageSender
 {
-    <T> JMessage send(T message);
+    <T> Message send(T message);
 
     
     <T> void sendToTopic(T message, String topicName);

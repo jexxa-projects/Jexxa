@@ -1,10 +1,10 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
-public class JQueue
+public class Queue
 {
     private final String destination;
 
-    private JQueue(String destination)
+    private Queue(String destination)
     {
         this.destination = destination;
     }
@@ -13,9 +13,9 @@ public class JQueue
     {
         return destination;
     }
-
-    public static JQueue of(String destination)
+    
+    public static Queue queueOf(String destination)
     {
-        return new JQueue(destination);
+        return new Queue(destination);
     }
 }
