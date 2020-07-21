@@ -46,14 +46,14 @@ class JexxaAggregateRepositoryIT
         h2Properties.put(JDBCKeyValueRepository.JDBC_URL, "jdbc:h2:mem:jexxa;DB_CLOSE_DELAY=-1");
         h2Properties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_TABLE, "true");
 
-        return Stream.of(postgresProperties, h2Properties);
+        return Stream.of(new Properties(), postgresProperties, h2Properties);
     }
 
 
     @BeforeEach
     void initTests()
     {
-        RepositoryManager.getInstance().setStrategy(JDBCKeyValueRepository.class, null);
+        RepositoryManager.getInstance().setStrategy(null, JexxaAggregate.class);
         RepositoryManager.getInstance().setDefaultStrategy(null);
         
         aggregateList = Stream.of(100)
