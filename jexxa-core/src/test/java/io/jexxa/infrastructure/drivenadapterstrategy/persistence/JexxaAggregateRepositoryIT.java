@@ -54,7 +54,8 @@ class JexxaAggregateRepositoryIT
     void initTests()
     {
         RepositoryManager.getInstance().setStrategy(JDBCKeyValueRepository.class, null);
-
+        RepositoryManager.getInstance().setDefaultStrategy(null);
+        
         aggregateList = Stream.of(100)
                 .map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) )
                 .collect( toList() );
