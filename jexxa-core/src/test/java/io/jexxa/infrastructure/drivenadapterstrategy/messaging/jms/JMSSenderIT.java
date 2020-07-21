@@ -3,8 +3,8 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
-import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.Queue.queueOf;
-import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.Topic.topicOf;
+import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer.queueOf;
+import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer.topicOf;
 import static io.jexxa.infrastructure.utils.messaging.QueueListener.QUEUE_DESTINATION;
 import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTINATION;
 import static org.awaitility.Awaitility.await;
@@ -64,7 +64,7 @@ class JMSSenderIT
         //Arrange --
 
         //Act
-        objectUnderTest.sendToTopic(message, TOPIC_DESTINATION);
+        ((JMSSender)objectUnderTest).sendToTopic(message, TOPIC_DESTINATION);
 
         //Assert
         await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
@@ -76,13 +76,6 @@ class JMSSenderIT
     void sendMessageToTopicFluentAPI()
     {
         //Arrange --
-
-        //Act
-        objectUnderTest
-                .send(message)
-                .to(topicOf(TOPIC_DESTINATION))
-                .addHeader("type", message.getClass().getSimpleName())
-                .asJson();
 
         //Act
         objectUnderTest
@@ -122,7 +115,7 @@ class JMSSenderIT
         //Arrange --
 
         //Act
-        objectUnderTest.sendToQueue(message, QUEUE_DESTINATION);
+        ((JMSSender)objectUnderTest).sendToQueue(message, QUEUE_DESTINATION);
 
         //Assert
         await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
@@ -191,9 +184,9 @@ class JMSSenderIT
         //Arrange --
 
         //Act (simulate an error in between sending two messages
-        objectUnderTest.sendToQueue(message, QUEUE_DESTINATION);
+        ((JMSSender)objectUnderTest).sendToQueue(message, QUEUE_DESTINATION);
         simulateConnectionException(((JMSSender) (objectUnderTest)).getConnection());
-        objectUnderTest.sendToQueue(message, QUEUE_DESTINATION);
+        ((JMSSender)objectUnderTest).sendToQueue(message, QUEUE_DESTINATION);
 
         //Assert
         await().atMost(1, TimeUnit.SECONDS).until(() -> queueListener.getMessages().size() >= 2);

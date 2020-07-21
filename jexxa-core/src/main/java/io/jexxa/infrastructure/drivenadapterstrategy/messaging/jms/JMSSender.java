@@ -1,6 +1,9 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 
 
+import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer.queueOf;
+import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer.topicOf;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
@@ -21,7 +24,7 @@ import io.jexxa.utils.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
 
 @SuppressWarnings({"unused", "java:S1133"})
-public class JMSSender implements AutoCloseable, MessageSender
+public class JMSSender extends MessageSender implements AutoCloseable
 {
     public static final String JNDI_PROVIDER_URL_KEY = "java.naming.provider.url";
     public static final String JNDI_USER_KEY = "java.naming.user";
@@ -43,12 +46,7 @@ public class JMSSender implements AutoCloseable, MessageSender
         this.properties = properties;
         Validate.notNull(getConnection()); //Try create a connection to ensure fail fast
     }
-
-    public <T> JMSMessage send(T message)
-    {
-        return new JMSMessage(message, this);
-    }
-
+    
     /**
      * @deprecated Please use {@link #send(Object)}
      * @param message to be send
@@ -72,14 +70,14 @@ public class JMSSender implements AutoCloseable, MessageSender
     public <T> void sendToTopic(T message, String topicName, Properties messageProperties)
     {
         var gson = new Gson();
-        sendTextToTopic(gson.toJson(message), topicName, messageProperties);
+        sendMessage(gson.toJson(message), topicOf(topicName), messageProperties);
     }
 
-    void sendTextToTopic(String message, String topicName, Properties messageProperties)
+    protected void sendMessage(String message, io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer.Topic topicName, Properties messageProperties)
     {
         try
         {
-            var destination = getSession().createTopic(topicName);
+            var destination = getSession().createTopic(topicName.getDestination());
             try (var producer = getSession().createProducer(destination) )
             {
                 sendTextMessage(message, producer, messageProperties);
@@ -88,7 +86,7 @@ public class JMSSender implements AutoCloseable, MessageSender
         catch (JMSException e)
         {
             close();
-            throw new IllegalStateException("Could not send message", e);
+            throw new IllegalStateException("Could not send message", e);                         
         }
     }
 
@@ -97,6 +95,7 @@ public class JMSSender implements AutoCloseable, MessageSender
      * @deprecated Please use {@link #send(Object)}
      * @param message to be send
      * @param queue name of the queue
+     * @param <T> Type of the message
      */
     @Deprecated(forRemoval = true)
     public <T> void sendToQueue(T message, String queue)
@@ -115,14 +114,14 @@ public class JMSSender implements AutoCloseable, MessageSender
     public <T> void sendToQueue(T message, String queueName, Properties messageProperties)
     {
         var gson = new Gson();
-        sendTextToQueue(gson.toJson(message), queueName, messageProperties);
+        sendMessage(gson.toJson(message), queueOf(queueName), messageProperties);
     }
 
-    void sendTextToQueue(String message, String queueName, Properties messageProperties)
+    protected void sendMessage(String message, io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer.Queue queueName, Properties messageProperties)
     {
         try
         {
-            var destination = getSession().createQueue(queueName);
+            var destination = getSession().createQueue(queueName.getDestination());
             try (var producer = getSession().createProducer(destination) )
             {
                 sendTextMessage(message, producer, messageProperties);

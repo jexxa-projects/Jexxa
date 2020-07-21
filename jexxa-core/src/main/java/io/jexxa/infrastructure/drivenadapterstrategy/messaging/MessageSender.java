@@ -1,11 +1,19 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
-public interface MessageSender
+import java.util.Properties;
+
+import jdk.jfr.Experimental;
+
+@Experimental
+public abstract class MessageSender
 {
-    <T> Message send(T message);
+    public <T> MessageProducer send(T message)
+    {
+        return new MessageProducer(message, this);
+    }
 
     
-    <T> void sendToTopic(T message, String topicName);
+    protected abstract void sendMessage(String message, MessageProducer.Queue queue, Properties properties);
 
-    <T> void sendToQueue(T message, String queueName);
+    protected abstract void sendMessage(String message, MessageProducer.Topic topic, Properties properties);
 }
