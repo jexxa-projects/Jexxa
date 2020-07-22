@@ -10,6 +10,8 @@ public final class MessageSenderManager
 {
     private static final MessageSenderManager MESSAGE_SENDER_MANAGER = new MessageSenderManager();
 
+    private Class<?> defaultStrategy = JMSSender.class;
+
     private MessageSenderManager()
     {
         //Private constructor
@@ -17,7 +19,25 @@ public final class MessageSenderManager
 
     public MessageSender getStrategy(Properties properties)
     {
-        return new JMSSender(properties);
+        try {
+            var constructor = defaultStrategy.getConstructor(Properties.class);
+
+            return (MessageSender)constructor.newInstance(properties);
+        }
+        catch (ReflectiveOperationException e)
+        {
+            if ( e.getCause() != null)
+            {
+                throw new IllegalArgumentException(e.getCause().getMessage(), e);
+            }
+
+            throw new IllegalArgumentException("No suitable default IRepository available", e);
+        }
+    }
+
+    public void setDefaultStrategy(Class<?> defaultStrategy)
+    {
+        this.defaultStrategy = defaultStrategy;
     }
 
     public static MessageSenderManager getInstance()
