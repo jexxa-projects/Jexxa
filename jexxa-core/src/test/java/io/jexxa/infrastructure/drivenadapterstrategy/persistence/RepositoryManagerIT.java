@@ -9,6 +9,7 @@ import java.util.Properties;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -18,6 +19,13 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(INTEGRATION_TEST)
 class RepositoryManagerIT
 {
+
+    @AfterEach
+    void cleanup()
+    {
+        RepositoryManager.getInstance().defaultSettings();
+    }
+
     @Test
     void validateIMDBFallbackStrategy( )
     {

@@ -57,6 +57,12 @@ public final class RepositoryManager
         }
     }
 
+    public void defaultSettings( )
+    {
+        defaultStrategy = null;
+        strategyMap.clear();
+    }
+
     
     private RepositoryManager()
     {

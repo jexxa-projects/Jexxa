@@ -53,9 +53,6 @@ class JexxaAggregateRepositoryIT
     @BeforeEach
     void initTests()
     {
-        RepositoryManager.getInstance().setStrategy(null, JexxaAggregate.class);
-        RepositoryManager.getInstance().setDefaultStrategy(null);
-        
         aggregateList = Stream.of(100)
                 .map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) )
                 .collect( toList() );
