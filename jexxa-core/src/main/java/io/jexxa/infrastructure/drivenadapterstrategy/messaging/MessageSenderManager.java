@@ -2,7 +2,6 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
 import java.util.Optional;
 import java.util.Properties;
-import java.util.stream.Stream;
 
 import io.jexxa.core.factory.ClassFactory;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
@@ -23,19 +22,14 @@ public final class MessageSenderManager
     public MessageSender getStrategy(Properties properties)
     {
         try {
-            Optional<MessageSender> strategy = ClassFactory.newInstanceOf(defaultStrategy, Stream.of(properties).toArray());
+            Optional<MessageSender> strategy = ClassFactory.newInstanceOf(defaultStrategy, new Object[]{properties});
 
-            if ( strategy.isEmpty() )
+            if (strategy.isPresent())
             {
-                strategy = ClassFactory.newInstanceOf(defaultStrategy);
+                return strategy.get();
             }
 
-            if (strategy.isEmpty())
-            {
-                throw new IllegalArgumentException("No suitable constructor for " + defaultStrategy.getName());
-            }
-
-            return strategy.get();
+            return ClassFactory.newInstanceOf(defaultStrategy).orElseThrow();
         }
         catch (ReflectiveOperationException e)
         {

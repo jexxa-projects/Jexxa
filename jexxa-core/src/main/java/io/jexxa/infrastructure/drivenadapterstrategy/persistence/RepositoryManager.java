@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
+import io.jexxa.core.factory.ClassFactory;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 
@@ -40,11 +41,13 @@ public final class RepositoryManager
             Properties properties
     )
     {
-        try {
-            var constructor = getStrategy(aggregateClazz, properties)
-                    .getConstructor(Class.class, Function.class, Properties.class);
+        try
+        {
+            var strategy = getStrategy(aggregateClazz, properties);
+            
+            var result = ClassFactory.newInstanceOf(strategy, new Object[]{aggregateClazz, keyFunction, properties});
 
-            return (IRepository<T,K>)constructor.newInstance(aggregateClazz, keyFunction, properties);
+            return (IRepository<T, K>) result.orElseThrow();
         }
         catch (ReflectiveOperationException e)
         {
