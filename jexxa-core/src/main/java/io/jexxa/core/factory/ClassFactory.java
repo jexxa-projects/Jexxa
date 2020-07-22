@@ -11,7 +11,7 @@ import org.apache.commons.lang3.Validate;
 
 public final class ClassFactory
 {
-    static <T> Optional<T> newInstanceOf(Class<T> clazz) throws ReflectiveOperationException
+    public static <T> Optional<T> newInstanceOf(Class<? extends T> clazz) throws ReflectiveOperationException
     {
         Validate.notNull(clazz);
 
@@ -23,7 +23,7 @@ public final class ClassFactory
         return Optional.empty();
     }
 
-    static <T> Optional<T> newInstanceOf(Class<T> clazz, Object[] parameter) throws ReflectiveOperationException
+    public static <T> Optional<T> newInstanceOf(Class<? extends T> clazz, Object[] parameter) throws ReflectiveOperationException
     {
         Validate.notNull(clazz);
         Validate.notNull(parameter);
