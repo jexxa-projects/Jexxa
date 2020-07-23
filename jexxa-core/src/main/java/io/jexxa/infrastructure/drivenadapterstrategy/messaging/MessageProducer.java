@@ -1,6 +1,5 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
-import java.util.Objects;
 import java.util.Properties;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -10,11 +9,13 @@ import org.apache.commons.lang3.Validate;
 
 public class MessageProducer
 {
+    enum DestinationType { TOPIC, QUEUE }
     private Properties properties;
     private final Object message;
     private final MessageSender jmsSender;
-    private Queue queueDestination;
-    private Topic topicDestination;
+
+    private DestinationType destinationType;
+    private String destination;
 
     <T> MessageProducer(T message, MessageSender jmsSender)
     {
@@ -25,23 +26,22 @@ public class MessageProducer
         this.jmsSender = jmsSender;
     }
 
-    public MessageProducer to(Queue queue)
+    public MessageProducer toQueue(String destination)
     {
-        Validate.notNull(queue);
-        Validate.isTrue(Objects.isNull(topicDestination)); // exact one destination is set
+        this.destination = destination;
+        this.destinationType = DestinationType.QUEUE;
 
-        this.queueDestination = queue;
         return this;
     }
 
-    public MessageProducer to(Topic topic)
+    public MessageProducer toTopic(String destination)
     {
-        Validate.notNull(topic);
-        Validate.isTrue(Objects.isNull(queueDestination)); // exact one destination is set
+        this.destination = destination;
+        this.destinationType = DestinationType.TOPIC;
 
-        this.topicDestination = topic;
         return this;
     }
+
 
     public MessageProducer addHeader(String key, String value)
     {
@@ -70,69 +70,25 @@ public class MessageProducer
 
     public void as( Function<Object, String> serializer )
     {
-        Validate.isTrue((queueDestination == null) ^ (topicDestination== null)); // exact one destination is set
+        Validate.notNull(message);
+        Validate.notNull(destination);
 
-        if (Objects.nonNull(queueDestination))
-        {
-            jmsSender.sendMessage(serializer.apply(message), queueDestination, properties);
-        }
-        else
-        {
-            jmsSender.sendMessage(serializer.apply(message), topicDestination, properties);
+        switch (destinationType) {
+            case QUEUE: jmsSender.sendMessageToQueue(serializer.apply(message), destination, properties); break;
+            case TOPIC: jmsSender.sendMessageToTopic(serializer.apply(message), destination, properties); break;
         }
     }
 
     public void as( Supplier<String> serializer )
     {
-        Validate.isTrue((queueDestination == null) ^ (topicDestination== null)); // exact one destination is set
+        Validate.notNull(message);
+        Validate.notNull(destination);
 
-        if (Objects.nonNull(queueDestination))
-        {
-            jmsSender.sendMessage(serializer.get(), queueDestination, properties);
-        }
-        else
-        {
-            jmsSender.sendMessage(serializer.get(), topicDestination, properties);
+        switch (destinationType) {
+            case QUEUE: jmsSender.sendMessageToQueue(serializer.get(), destination, properties); break;
+            case TOPIC: jmsSender.sendMessageToTopic(serializer.get(), destination, properties); break;
         }
     }
 
-    public static Topic topicOf(String destination)
-    {
-        return new Topic(destination);
-    }
 
-    public static Queue queueOf(String destination)
-    {
-        return new Queue(destination);
-    }
-
-    public static class Queue
-    {
-        private final String destination;
-
-        private Queue(String destination)
-        {
-            this.destination = destination;
-        }
-
-        public String getDestination()
-        {
-            return destination;
-        }
-    }
-
-    public static class Topic
-    {
-        private final String destination;
-
-        private Topic(String destination)
-        {
-            this.destination = destination;
-        }
-
-        public String getDestination()
-        {
-            return destination;
-        }
-    }
 }

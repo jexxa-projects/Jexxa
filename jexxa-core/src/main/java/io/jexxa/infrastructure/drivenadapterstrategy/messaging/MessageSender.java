@@ -10,7 +10,7 @@ public abstract class MessageSender
     }
 
     
-    protected abstract void sendMessage(String message, MessageProducer.Queue queue, Properties properties);
+    protected abstract void sendMessageToQueue(String message, String destination, Properties properties);
 
-    protected abstract void sendMessage(String message, MessageProducer.Topic topic, Properties properties);
+    protected abstract void sendMessageToTopic(String message, String destination, Properties properties);
 }

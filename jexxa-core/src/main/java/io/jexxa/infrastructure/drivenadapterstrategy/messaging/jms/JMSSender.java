@@ -1,9 +1,5 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 
-
-import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer.queueOf;
-import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer.topicOf;
-
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
@@ -70,14 +66,14 @@ public class JMSSender extends MessageSender implements AutoCloseable
     public <T> void sendToTopic(T message, String topicName, Properties messageProperties)
     {
         var gson = new Gson();
-        sendMessage(gson.toJson(message), topicOf(topicName), messageProperties);
+        sendMessageToTopic(gson.toJson(message), topicName, messageProperties);
     }
 
-    protected void sendMessage(String message, io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer.Topic topicName, Properties messageProperties)
+    protected void sendMessageToTopic(String message, String topicName, Properties messageProperties)
     {
         try
         {
-            var destination = getSession().createTopic(topicName.getDestination());
+            var destination = getSession().createTopic(topicName);
             try (var producer = getSession().createProducer(destination) )
             {
                 sendTextMessage(message, producer, messageProperties);
@@ -114,14 +110,14 @@ public class JMSSender extends MessageSender implements AutoCloseable
     public <T> void sendToQueue(T message, String queueName, Properties messageProperties)
     {
         var gson = new Gson();
-        sendMessage(gson.toJson(message), queueOf(queueName), messageProperties);
+        sendMessageToQueue(gson.toJson(message), queueName, messageProperties);
     }
 
-    protected void sendMessage(String message, io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer.Queue queueName, Properties messageProperties)
+    protected void sendMessageToQueue(String message, String queueName, Properties messageProperties)
     {
         try
         {
-            var destination = getSession().createQueue(queueName.getDestination());
+            var destination = getSession().createQueue(queueName);
             try (var producer = getSession().createProducer(destination) )
             {
                 sendTextMessage(message, producer, messageProperties);

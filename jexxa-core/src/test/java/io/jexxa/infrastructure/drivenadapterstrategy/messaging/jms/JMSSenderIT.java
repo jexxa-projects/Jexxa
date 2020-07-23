@@ -3,8 +3,6 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
-import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer.queueOf;
-import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer.topicOf;
 import static io.jexxa.infrastructure.utils.messaging.QueueListener.QUEUE_DESTINATION;
 import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTINATION;
 import static org.awaitility.Awaitility.await;
@@ -65,7 +63,7 @@ class JMSSenderIT
         //Act
         objectUnderTest
                 .send(message)
-                .to(topicOf(TOPIC_DESTINATION))
+                .toTopic(TOPIC_DESTINATION)
                 .addHeader("type", message.getClass().getSimpleName())
                 .asJson();
 
@@ -85,7 +83,7 @@ class JMSSenderIT
         //Act
         objectUnderTest
                 .send(message)
-                .to(queueOf(QUEUE_DESTINATION))
+                .toQueue(QUEUE_DESTINATION)
                 .addHeader("type", message.getClass().getSimpleName())
                 .asJson();
 
@@ -95,7 +93,24 @@ class JMSSenderIT
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
-    
+    @Test
+    void sendMessageToQueue2()
+    {
+        //Arrange --
+
+        //Act
+        objectUnderTest
+                .send(message)
+                .toQueue(QUEUE_DESTINATION)
+                .addHeader("type", message.getClass().getSimpleName())
+                .asJson();
+
+        //Assert
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
+
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
     @Test
     void sendMessageReconnectQueue() throws JMSException
     {
@@ -104,7 +119,7 @@ class JMSSenderIT
         //Act (simulate an error in between sending two messages
         objectUnderTest
                 .send(message)
-                .to(queueOf(QUEUE_DESTINATION))
+                .toQueue(QUEUE_DESTINATION)
                 .asJson();
 
         //Simulate the error 
@@ -112,7 +127,7 @@ class JMSSenderIT
 
         objectUnderTest
                 .send(message)
-                .to(queueOf(QUEUE_DESTINATION))
+                .toQueue(QUEUE_DESTINATION)
                 .asJson();
 
         //Assert
