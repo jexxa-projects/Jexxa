@@ -2,9 +2,6 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
 import java.util.Properties;
 
-import jdk.jfr.Experimental;
-
-@Experimental
 public abstract class MessageSender
 {
     public <T> MessageProducer send(T message)

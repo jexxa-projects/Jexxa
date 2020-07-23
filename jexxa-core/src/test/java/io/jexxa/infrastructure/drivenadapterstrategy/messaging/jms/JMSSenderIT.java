@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 import javax.jms.Connection;
 import javax.jms.JMSException;
 
-import com.google.gson.Gson;
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
@@ -57,23 +56,9 @@ class JMSSenderIT
                 .bind(JMSAdapter.class).to(topicListener)
                 .start();
     }
-
+    
     @Test
     void sendMessageToTopic()
-    {
-        //Arrange --
-
-        //Act
-        ((JMSSender)objectUnderTest).sendToTopic(message, TOPIC_DESTINATION);
-
-        //Assert
-        await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
-
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
-    }
-
-    @Test
-    void sendMessageToTopicFluentAPI()
     {
         //Arrange --
 
@@ -89,25 +74,8 @@ class JMSSenderIT
 
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
+    
 
-    @Test
-    void sendMessageToTopicFluentAPI2()
-    {
-        //Arrange
-        var gson = new Gson();
-
-        //Act
-        objectUnderTest
-                .send(message)
-                .to(topicOf(TOPIC_DESTINATION))
-                .withHeader("type", message.getClass().getSimpleName())
-                .as(gson::toJson);
-
-        //Assert
-        await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
-
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
-    }
 
     @Test
     void sendMessageToQueue()
@@ -115,20 +83,6 @@ class JMSSenderIT
         //Arrange --
 
         //Act
-        ((JMSSender)objectUnderTest).sendToQueue(message, QUEUE_DESTINATION);
-
-        //Assert
-        await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
-
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
-    }
-
-    @Test
-    void sendMessageToQueueFluentAPI()
-    {
-        //Arrange --
-
-        //Act
         objectUnderTest
                 .send(message)
                 .to(queueOf(QUEUE_DESTINATION))
@@ -141,52 +95,25 @@ class JMSSenderIT
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
-
-    @Test
-    void sendTextToQueueFluentAPI()
-    {
-        //Arrange --
-
-        //Act
-        objectUnderTest
-                .send(message)
-                .to(queueOf(QUEUE_DESTINATION))
-                .addHeader("type", message.getClass().getSimpleName())
-                .asString();
-
-        //Assert
-        await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
-
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
-    }
-
-    @Test
-    void sendTextToTopicFluentAPI2()
-    {
-        //Arrange
-
-        //Act
-        objectUnderTest
-                .send(message)
-                .to(topicOf(TOPIC_DESTINATION))
-                .addHeader("type", message.getClass().getSimpleName())
-                .as(message::toString);
-
-        //Assert
-        await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
-
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
-    }
-
+    
     @Test
     void sendMessageReconnectQueue() throws JMSException
     {
         //Arrange --
 
         //Act (simulate an error in between sending two messages
-        ((JMSSender)objectUnderTest).sendToQueue(message, QUEUE_DESTINATION);
+        objectUnderTest
+                .send(message)
+                .to(queueOf(QUEUE_DESTINATION))
+                .asJson();
+
+        //Simulate the error 
         simulateConnectionException(((JMSSender) (objectUnderTest)).getConnection());
-        ((JMSSender)objectUnderTest).sendToQueue(message, QUEUE_DESTINATION);
+
+        objectUnderTest
+                .send(message)
+                .to(queueOf(QUEUE_DESTINATION))
+                .asJson();
 
         //Assert
         await().atMost(1, TimeUnit.SECONDS).until(() -> queueListener.getMessages().size() >= 2);

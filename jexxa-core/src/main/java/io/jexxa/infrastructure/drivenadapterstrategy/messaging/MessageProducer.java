@@ -6,10 +6,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.google.gson.Gson;
-import jdk.jfr.Experimental;
 import org.apache.commons.lang3.Validate;
 
-@Experimental
 public class MessageProducer
 {
     private Properties properties;
@@ -56,12 +54,7 @@ public class MessageProducer
 
         return this;
     }
-
-    public MessageProducer withHeader(String key, String value)
-    {
-        return addHeader(key, value);
-    }
-
+    
     public void asJson()
     {
         Gson gson = new Gson();
@@ -75,7 +68,6 @@ public class MessageProducer
     }
 
 
-    //Experimental
     public void as( Function<Object, String> serializer )
     {
         Validate.isTrue((queueDestination == null) ^ (topicDestination== null)); // exact one destination is set

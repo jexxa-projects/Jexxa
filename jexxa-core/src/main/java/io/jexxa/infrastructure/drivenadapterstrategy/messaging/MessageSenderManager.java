@@ -5,9 +5,7 @@ import java.util.Properties;
 
 import io.jexxa.core.factory.ClassFactory;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
-import jdk.jfr.Experimental;
 
-@Experimental
 public final class MessageSenderManager
 {
     private static final MessageSenderManager MESSAGE_SENDER_MANAGER = new MessageSenderManager();
