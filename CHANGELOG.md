@@ -7,13 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[2.x.x] - yyyy-mm-dd
 ### Added                                       
 -   Added new fluent API for sending JMS messages  
+
 -   Added MessageSenderManager to configure default message strategy for the application   
       
 ### Fixed
 -   JexxaMain::getInstanceOfPort validates port conventions to throw a meaningful exception 
 
 ### Changed
--   Old JMS API is declared as deprecated
+-   Jexxa's Interface for integrating JMS API is declared as deprecated
 
 ## \[2.1.1] - 2020-07-18
 ### Added                                       
