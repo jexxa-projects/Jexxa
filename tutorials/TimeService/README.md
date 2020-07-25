@@ -156,7 +156,7 @@ java.naming.password=admin
 ```                       
 
 ## 3. Implement the port adapter to receive JMS messages
-Implementing a port adapter is quite similar to the correspinding driven adapter.  
+Implementing a port adapter is quite similar to the corresponding driven adapter.  
   
 ```java
 @SuppressWarnings("unused")
@@ -165,7 +165,7 @@ public class PublishTimeListener implements MessageListener
     private final TimeService timeService;
     private static final String TIME_TOPIC = "TimeService";
 
-    //To implement a so called PortAdapter we need a public constructor which expects a single argument that must be a InboundPort.
+    //To implement a so called PortAdapter we need a public constructor which expects a single argument that must be an InboundPort.
     public PublishTimeListener(TimeService timeService)
     {
         this.timeService = timeService;
