@@ -18,6 +18,7 @@ public class JMSPublisher implements ITimePublisher
     // enable implicit constructor injection
     public JMSPublisher(Properties properties)
     {
+        //Request a default message Sender from corresponding strategy manager  
         this.messageSender = MessageSenderManager.getInstance().getStrategy(properties);
     }
 
