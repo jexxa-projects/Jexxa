@@ -14,7 +14,7 @@ public class MessageProducer
     private final Object message;
     private final MessageSender jmsSender;
 
-    private DestinationType destinationType = null;
+    private DestinationType destinationType;
     private String destination;
 
     <T> MessageProducer(T message, MessageSender jmsSender)
@@ -70,7 +70,7 @@ public class MessageProducer
 
     public void as( Function<Object, String> serializer )
     {
-        validateConfiguration();
+        Validate.notNull(destination, "No destination in MessageProducer set");
         
         if (destinationType == DestinationType.QUEUE)
         {
@@ -84,7 +84,7 @@ public class MessageProducer
 
     public void as( Supplier<String> serializer )
     {
-        validateConfiguration();
+        Validate.notNull(destination,  "No destination in MessageProducer set");
 
         if (destinationType == DestinationType.QUEUE)
         {
@@ -94,13 +94,6 @@ public class MessageProducer
         {
             jmsSender.sendMessageToTopic(serializer.get(), destination, properties);
         }
-    }
-
-    private void validateConfiguration()
-    {
-        Validate.notNull(message);
-        Validate.notNull(destination);
-        Validate.notNull(destinationType);
     }
 
 }

@@ -93,7 +93,24 @@ class JMSSenderIT
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
-    
+    @Test
+    void sendMessageToQueueAsString()
+    {
+        //Arrange --
+
+        //Act
+        objectUnderTest
+                .send(message)
+                .toQueue(QUEUE_DESTINATION)
+                .addHeader("type", message.getClass().getSimpleName())
+                .asString();
+
+        //Assert
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
+
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
     @Test
     void sendMessageReconnectQueue() throws JMSException
     {
