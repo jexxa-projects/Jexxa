@@ -13,9 +13,9 @@
   <properties>
     <main.class>io.jexxa.tutorials.bookstorej.BookStoreJApplication</main.class>
     <addendj.version>1.0.0</addendj.version>
-    <aspectj.version>1.9.5</aspectj.version>
-    <aspectjtools.version>1.9.5</aspectjtools.version>
-    <aspectjrt.version>1.9.5</aspectjrt.version>
+    <aspectj.version>1.9.6</aspectj.version>
+    <aspectjtools.version>1.9.6</aspectjtools.version>
+    <aspectjrt.version>1.9.6</aspectjrt.version>
     <aspectj.maven.plugin.version>1.12.6</aspectj.maven.plugin.version>
   </properties>
 
