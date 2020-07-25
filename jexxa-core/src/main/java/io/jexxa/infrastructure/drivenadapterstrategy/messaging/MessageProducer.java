@@ -14,7 +14,7 @@ public class MessageProducer
     private final Object message;
     private final MessageSender jmsSender;
 
-    private DestinationType destinationType;
+    private DestinationType destinationType = null;
     private String destination;
 
     <T> MessageProducer(T message, MessageSender jmsSender)
@@ -70,25 +70,37 @@ public class MessageProducer
 
     public void as( Function<Object, String> serializer )
     {
-        Validate.notNull(message);
-        Validate.notNull(destination);
-
-        switch (destinationType) {
-            case QUEUE: jmsSender.sendMessageToQueue(serializer.apply(message), destination, properties); break;
-            case TOPIC: jmsSender.sendMessageToTopic(serializer.apply(message), destination, properties); break;
+        validateConfiguration();
+        
+        if (destinationType == DestinationType.QUEUE)
+        {
+            jmsSender.sendMessageToQueue(serializer.apply(message), destination, properties);
+        }
+        else
+        {
+            jmsSender.sendMessageToTopic(serializer.apply(message), destination, properties);
         }
     }
 
     public void as( Supplier<String> serializer )
     {
-        Validate.notNull(message);
-        Validate.notNull(destination);
+        validateConfiguration();
 
-        switch (destinationType) {
-            case QUEUE: jmsSender.sendMessageToQueue(serializer.get(), destination, properties); break;
-            case TOPIC: jmsSender.sendMessageToTopic(serializer.get(), destination, properties); break;
+        if (destinationType == DestinationType.QUEUE)
+        {
+            jmsSender.sendMessageToQueue(serializer.get(), destination, properties);
+        }
+        else
+        {
+            jmsSender.sendMessageToTopic(serializer.get(), destination, properties);
         }
     }
 
+    private void validateConfiguration()
+    {
+        Validate.notNull(message);
+        Validate.notNull(destination);
+        Validate.notNull(destinationType);
+    }
 
 }
