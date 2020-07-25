@@ -78,8 +78,8 @@ public final class RepositoryManager
         var result = strategyMap
                 .entrySet()
                 .stream()
-                .filter( element -> element.getKey().equals(aggregateClazz)
-                        && element.getValue() != null)
+                .filter( element -> element.getKey().equals(aggregateClazz))
+                .filter( element -> element.getValue() != null )
                 .findFirst();
 
         if (result.isPresent())

@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import io.jexxa.core.factory.ClassFactory;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
+import org.apache.commons.lang3.Validate;
 
 public final class MessageSenderManager
 {
@@ -42,6 +43,8 @@ public final class MessageSenderManager
 
     public void setDefaultStrategy(Class<? extends MessageSender>  defaultStrategy)
     {
+        Validate.notNull(defaultStrategy);
+        
         this.defaultStrategy = defaultStrategy;
     }
 
