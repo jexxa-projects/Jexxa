@@ -12,7 +12,7 @@
 
   <properties>
     <main.class>io.jexxa.tutorials.bookstorej.BookStoreJApplication</main.class>
-    <addendj.version>1.0.0</addendj.version>
+    <addendj.version>1.0.1</addendj.version>
     <aspectj.version>1.9.6</aspectj.version>
     <aspectjtools.version>1.9.6</aspectjtools.version>
     <aspectjrt.version>1.9.6</aspectjrt.version>
