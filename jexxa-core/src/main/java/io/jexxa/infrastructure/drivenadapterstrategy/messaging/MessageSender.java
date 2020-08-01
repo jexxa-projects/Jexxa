@@ -2,8 +2,11 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
 import java.util.Properties;
 
+import io.jexxa.utils.CheckReturnValue;
+
 public abstract class MessageSender
 {
+    @CheckReturnValue
     public <T> MessageProducer send(T message)
     {
         return new MessageProducer(message, this);

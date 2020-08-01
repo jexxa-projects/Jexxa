@@ -5,5 +5,5 @@ package io.jexxa.tutorials.bookstore.domain.businessexception;
  */
 public class BookNotInStockException extends Exception
 {
-
+    private static final long serialVersionUID = 1L;
 }

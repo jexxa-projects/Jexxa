@@ -160,6 +160,8 @@ public class AdapterFactory
 
     static class InvalidAdapterConfigurationException extends RuntimeException
     {
+        private static final long serialVersionUID = 1L;
+
         private final String errorMessage;
 
         public <T> InvalidAdapterConfigurationException(Class<T> adapter, Exception exception)

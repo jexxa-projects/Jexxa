@@ -8,5 +8,5 @@ import io.jexxa.addend.applicationcore.BusinessException;
 @BusinessException
 public class BookNotInStockException extends Exception
 {
-
+    private static final long serialVersionUID = 1L;
 }

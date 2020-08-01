@@ -224,6 +224,8 @@ public class PortFactory
 
     static class InvalidPortConfigurationException extends RuntimeException
     {
+        private static final long serialVersionUID = 1L;
+
         private final String errorMessage;
 
         public <T> InvalidPortConfigurationException(Class<T> port, Exception exception)

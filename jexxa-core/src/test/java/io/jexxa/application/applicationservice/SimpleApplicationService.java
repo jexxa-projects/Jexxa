@@ -12,6 +12,8 @@ public class SimpleApplicationService
 
     public static class SimpleApplicationException extends Exception
     {
+        private static final long serialVersionUID = 1L;
+
         public SimpleApplicationException(String information)
         {
             super(information);
