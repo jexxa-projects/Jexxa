@@ -4,6 +4,8 @@ import java.util.List;
 
 public class AmbiguousAdapterException extends RuntimeException
 {
+    private static final long serialVersionUID = 1L;
+
     private final String internalMessage;
 
     public <T> AmbiguousAdapterException(Class<T> clazz, List<Class<?>> implementationList)

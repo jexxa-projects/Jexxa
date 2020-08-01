@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 public class MissingAdapterException extends RuntimeException
 {
+    private static final long serialVersionUID = 1L;
+
     private final String internalMessage;
 
     public MissingAdapterException(Class<?> port, AdapterFactory drivenAdapterFactory)
