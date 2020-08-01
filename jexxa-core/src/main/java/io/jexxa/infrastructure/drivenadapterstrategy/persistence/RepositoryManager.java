@@ -9,6 +9,7 @@ import java.util.function.Function;
 import io.jexxa.core.factory.ClassFactory;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
+import io.jexxa.utils.CheckReturnValue;
 
 
 public final class RepositoryManager
@@ -35,6 +36,7 @@ public final class RepositoryManager
     }
 
     @SuppressWarnings("unchecked")
+    @CheckReturnValue
     public <T,K> IRepository<T,K> getStrategy(
             Class<T> aggregateClazz,
             Function<T,K> keyFunction,

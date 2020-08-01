@@ -2,7 +2,6 @@ package io.jexxa.core;
 
 import java.util.function.Consumer;
 
-@SuppressWarnings("UnusedReturnValue")
 public class BootstrapService<T>
 {
     private final Class<T> bootstrapServiceClass;

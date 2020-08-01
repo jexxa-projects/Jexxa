@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 class DrivingAdapterTest
 {
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void throwOnInvalidPortConvention()
     {
@@ -26,6 +27,7 @@ class DrivingAdapterTest
         assertThrows(PortConventionViolation.class, () -> drivingAdapter.to(InvalidApplicationService.class));
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void throwOnInvalidAdapterConvention()
     {

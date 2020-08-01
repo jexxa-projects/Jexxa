@@ -5,8 +5,10 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.google.gson.Gson;
+import io.jexxa.utils.CheckReturnValue;
 import org.apache.commons.lang3.Validate;
 
+@CheckReturnValue
 public class MessageProducer
 {
     enum DestinationType { TOPIC, QUEUE }
@@ -26,6 +28,7 @@ public class MessageProducer
         this.jmsSender = jmsSender;
     }
 
+    @CheckReturnValue
     public MessageProducer toQueue(String destination)
     {
         this.destination = destination;
@@ -34,6 +37,7 @@ public class MessageProducer
         return this;
     }
 
+    @CheckReturnValue
     public MessageProducer toTopic(String destination)
     {
         this.destination = destination;
@@ -42,7 +46,7 @@ public class MessageProducer
         return this;
     }
 
-
+    @CheckReturnValue
     public MessageProducer addHeader(String key, String value)
     {
         if (properties == null)

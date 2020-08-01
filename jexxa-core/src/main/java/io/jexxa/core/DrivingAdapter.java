@@ -5,6 +5,7 @@ import java.lang.annotation.Annotation;
 import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.utils.CheckReturnValue;
 import org.apache.commons.lang3.Validate;
 
 public class  DrivingAdapter<T extends IDrivingAdapter>
@@ -23,6 +24,7 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
         this.jexxaMain = jexxaMain;
     }
 
+    @CheckReturnValue
     public <P> JexxaMain to(Class<P> port)
     {
         Validate.notNull(port);
@@ -37,6 +39,7 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
         return jexxaMain;
     }
 
+    @CheckReturnValue
     public JexxaMain to(Object port)
     {
         Validate.notNull(port);
@@ -44,6 +47,7 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
         return jexxaMain.bindToPort(drivingAdapterClass, port);
     }
 
+    @CheckReturnValue
     public <P extends Annotation> JexxaMain toAnnotation(Class<P> annotation)
     {
         Validate.notNull(annotation);

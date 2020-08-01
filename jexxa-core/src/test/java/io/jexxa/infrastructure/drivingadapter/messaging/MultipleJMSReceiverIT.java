@@ -52,6 +52,7 @@ class MultipleJMSReceiverIT
 
 
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void synchronizeMultipleClients()
     {

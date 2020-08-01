@@ -105,7 +105,6 @@ class IMDBRepositoryTest
         newConnection.add(new JexxaValueObject(42));
 
         //Assert that connections are different but refer to the same repository
-        assertNotEquals(objectUnderTest, newConnection);
         assertEquals(1, objectUnderTest.get().size());
         assertEquals(1, newConnection.get().size());
 

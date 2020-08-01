@@ -124,10 +124,9 @@ class JexxaMainTest
         RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);
         objectUnderTest = new JexxaMain(CONTEXT_NAME);
         objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
+                .addToApplicationCore(JEXXA_APPLICATION_SERVICE)
 
         //Act
-        objectUnderTest
                 .bootstrap(InitializeJexxaAggregates.class).with(InitializeJexxaAggregates::initDomainData);
 
         var jexxaApplicationService = objectUnderTest.getInstanceOfPort(JexxaApplicationService.class);
@@ -136,6 +135,7 @@ class JexxaMainTest
         assertTrue(jexxaApplicationService.getAggregateCount() > 0);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void getInstanceOfInvalidPort()
     {

@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import io.jexxa.core.factory.ClassFactory;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
+import io.jexxa.utils.CheckReturnValue;
 import org.apache.commons.lang3.Validate;
 
 public final class MessageSenderManager
@@ -18,6 +19,7 @@ public final class MessageSenderManager
         //Private constructor
     }
 
+    @CheckReturnValue
     public MessageSender getStrategy(Properties properties)
     {
         try {

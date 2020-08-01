@@ -12,12 +12,12 @@ import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.utils.CheckReturnValue;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 
-@SuppressWarnings("UnusedReturnValue")
 public class JexxaMain
 {
 
@@ -71,29 +71,33 @@ public class JexxaMain
         return this;
     }
 
+    @CheckReturnValue
     public <T, K> K addBootstrapService(Class<T> bootstrapService, Function< T, K > initFunction)
     {
         T instance = portFactory.getInstanceOf(bootstrapService, properties);
         return initFunction.apply(instance);
     }
 
+    @CheckReturnValue
     public <T> BootstrapService<T> bootstrap(Class<T> bootstrapService)
     {
         return new BootstrapService<>(bootstrapService, this);
     }
 
+    @CheckReturnValue
     public <T extends IDrivingAdapter> DrivingAdapter<T>  bind(Class<T> clazz)
     {
         return new DrivingAdapter<>(clazz, this);
     }
 
-
+    @CheckReturnValue
     public <T> T getInstanceOfPort(Class<T> port)
     {
         PortConvention.validate(port);
         return port.cast(portFactory.getInstanceOf(port, properties));
     }
 
+    @CheckReturnValue
     public <T> T getDrivingAdapter(Class<T> adapter)
     {
         return drivingAdapterFactory.getInstanceOf(adapter, getProperties());
@@ -128,11 +132,13 @@ public class JexxaMain
         }
     }
 
+    @CheckReturnValue
     public BoundedContext getBoundedContext()
     {
         return boundedContext;
     }
 
+    @CheckReturnValue
     public Properties getProperties()
     {
         return properties;
