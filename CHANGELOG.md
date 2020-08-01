@@ -4,11 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.2.0] - yyyy-mm-dd
+## \[2.2.0] - 2020-07-25
 ### Added                                       
 -   Added new fluent API for sending JMS messages  
 
--   Added MessageSenderManager to configure default message strategy for the application   
+-   Added MessageSenderManager to configure default message strategy for the application
       
 ### Fixed
 -   JexxaMain::getInstanceOfPort validates port conventions to throw a meaningful exception 
