@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[2.2.1] - yyyy-mm-dd
+### Added                                       
+-   Annotation @CheckReturnValue to fluent API for better IDE support 
+      
+### Fixed
+
+### Changed
+
 ## \[2.2.0] - 2020-07-25
 ### Added                                       
 -   Added new fluent API for sending JMS messages  
