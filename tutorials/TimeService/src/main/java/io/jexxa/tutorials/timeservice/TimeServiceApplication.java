@@ -49,7 +49,6 @@ public final class TimeServiceApplication
                 .bind(JMXAdapter.class).to(TimeService.class)
 
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
-                .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
 
                 .start()
 

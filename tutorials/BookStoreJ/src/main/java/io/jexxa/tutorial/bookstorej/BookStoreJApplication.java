@@ -47,7 +47,6 @@ public final class BookStoreJApplication
                 .bind(JMXAdapter.class).toAnnotation(ApplicationService.class)
 
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
-                .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
 
                 .start()
 
