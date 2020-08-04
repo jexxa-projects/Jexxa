@@ -18,6 +18,7 @@ public final class HelloJexxa
 
                 // Bind a REST adapter to same business object.
                 // It allows to access the public methods of the business object via RMI over REST
+                // !!! NOTE: Since following call enables stopping your application via REST, it should not be used in production code !!!
                 .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
 
                 //Start Jexxa and all bindings 
