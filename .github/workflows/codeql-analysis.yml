@@ -36,8 +36,8 @@ jobs:
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v1
+    #- name: Autobuild
+    #  uses: github/codeql-action/autobuild@v1
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
@@ -49,6 +49,50 @@ jobs:
     #- run: |
     #   make bootstrap
     #   make release
+  build:
 
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # test against LTS Java version:
+        java: [ 1.11 ]
+
+    # Service containers to run with `runner-job`
+    services:
+      # Label used to access the service container
+      activemq:
+        # Docker Hub image
+        image: rmohr/activemq
+        #
+        ports:
+          # Opens tcp port 6379 on the host and service container
+          - 61616:61616
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # setup default ports
+        ports:
+          # Opens tcp port 5432 on the host and service container
+          - 5432:5432
+        # setup default user for testing 
+        env: 
+          POSTGRES_PASSWORD: admin
+          POSTGRES_USER: admin
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK ${{ matrix.java }} 
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.java }} 
+            
+    - name: Maven build      
+      env:
+        GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}  
+        GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}
+        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml -B package --file pom.xml
+      
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
