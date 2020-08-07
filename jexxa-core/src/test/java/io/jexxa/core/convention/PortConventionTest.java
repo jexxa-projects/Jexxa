@@ -6,12 +6,13 @@ import java.util.Properties;
 
 import io.jexxa.application.applicationservice.InvalidApplicationService;
 import io.jexxa.application.domainservice.IJexxaAggregateRepository;
+import org.apache.commons.lang3.Validate;
 import org.junit.jupiter.api.Test;
 
 class PortConventionTest
 {
     @Test
-    void invalidPortConsturctor()
+    void invalidPortConstructor()
     {
         //Act/Assert
         assertThrows(PortConventionViolation.class, () -> PortConvention.validate(InvalidApplicationService.class)); // Violation: No public constructor
@@ -19,26 +20,26 @@ class PortConventionTest
         assertThrows(PortConventionViolation.class, () -> PortConvention.validate(InvalidApplicationServiceMultipleConstructor.class)); // Violation: multiple constructor available
     }
 
-    @SuppressWarnings("unused")
     public static class InvalidApplicationServiceMultipleConstructor
     {
+        @SuppressWarnings("unused")
         public InvalidApplicationServiceMultipleConstructor()
         {
             //Empty constructor for testing purpose
         }
 
+        @SuppressWarnings("unused")
         public InvalidApplicationServiceMultipleConstructor(IJexxaAggregateRepository jexxaAggregateRepository)
         {
-            //Empty constructor for testing purpose
+            Validate.notNull(jexxaAggregateRepository);
         }
     }
 
-    @SuppressWarnings("unused")
     public static class InvalidApplicationServiceNoInterface
     {
         public InvalidApplicationServiceNoInterface(Properties properties)
         {
-            //Empty constructor for testing purpose
+            Validate.notNull(properties);
         }
 
     }
