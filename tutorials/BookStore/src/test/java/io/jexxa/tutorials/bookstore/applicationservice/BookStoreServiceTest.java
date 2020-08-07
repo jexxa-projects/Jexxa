@@ -18,6 +18,8 @@ class BookStoreServiceTest
     private static final String DRIVEN_ADAPTER_PERSISTENCE = "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.persistence";
     private static final String DRIVEN_ADAPTER_MESSAGING =   "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.stub";
 
+    private static final String isbn13 = "978-3-86490-387-8";
+
     private JexxaMain jexxaMain;
 
     @BeforeEach
@@ -39,7 +41,6 @@ class BookStoreServiceTest
     {
         //Arrange
         var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
-        var isbn13 = "978-3-86490-387-8";
         var amount = 5;
 
         //Act
@@ -55,7 +56,6 @@ class BookStoreServiceTest
     {
         //Arrange
         var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
-        var isbn13 = "978-3-86490-387-8";
         var amount = 5;
         objectUnderTest.addToStock(isbn13, amount);
 
@@ -71,7 +71,6 @@ class BookStoreServiceTest
     {
         //Arrange
         var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
-        var isbn13 = "978-3-86490-387-8";
 
         //Act/Assert
         assertThrows(BookNotInStockException.class, () -> objectUnderTest.sell(isbn13));
@@ -82,15 +81,13 @@ class BookStoreServiceTest
     {
         //Arrange
         var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
-        var isbn13 = "978-3-86490-387-8";
-        var amount = 1;
-        objectUnderTest.addToStock(isbn13, amount);
+        objectUnderTest.addToStock(isbn13, 1);
 
         //Act
         objectUnderTest.sell(isbn13);
 
         //Assert
-        assertEquals( amount - 1, objectUnderTest.amountInStock(isbn13) );
+        assertEquals( 0 , objectUnderTest.amountInStock(isbn13) );
         assertEquals(1, DomainEventStubPublisher.eventCount() );
     }
 
