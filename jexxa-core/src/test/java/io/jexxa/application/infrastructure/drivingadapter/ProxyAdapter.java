@@ -18,13 +18,13 @@ public class ProxyAdapter implements IDrivingAdapter
     @Override
     public void start()
     {
-        // No opreation required
+        // No operation required
     }
 
     @Override
     public void stop()
     {
-        // No opreation required
+        // No operation required
     }
 
     public List<Object> getPortList()

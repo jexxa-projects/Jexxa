@@ -4,8 +4,8 @@ import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.domainservice.IDefaultConstructorService;
 import io.jexxa.application.domainservice.IFactoryMethodService;
 import io.jexxa.application.domainservice.IPropertiesConstructorService;
+import org.apache.commons.lang3.Validate;
 
-@SuppressWarnings("unused")
 @ApplicationService
 public class ApplicationServiceWithDrivenAdapters
 {
@@ -15,6 +15,8 @@ public class ApplicationServiceWithDrivenAdapters
             IPropertiesConstructorService propertiesConstructorService
     )
     {
-        //Empty constructor since class is for testing purpose only
+        Validate.notNull(defaultConstructorService);
+        Validate.notNull(factoryMethodService);
+        Validate.notNull(propertiesConstructorService);
     }
 }

@@ -105,7 +105,7 @@ For the sake of completeness we use a static factory method in this implementati
 ```java
   
 @SuppressWarnings("unused")
-public final class BookRepository implements IBookRepository
+public final class DDHBookRepository implements IBookRepository
 {
     private final IRepository<Book, ISBN13> repository;
 
