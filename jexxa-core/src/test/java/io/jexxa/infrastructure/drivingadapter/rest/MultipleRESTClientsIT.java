@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.IncrementApplicationService;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.utils.ThrowingConsumer;
+import io.jexxa.utils.function.ThrowingConsumer;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

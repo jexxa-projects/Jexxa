@@ -3,7 +3,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 import java.util.Optional;
 import java.util.Properties;
 
-import io.jexxa.core.factory.ClassFactory;
+import io.jexxa.utils.factory.ClassFactory;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import org.apache.commons.lang3.Validate;

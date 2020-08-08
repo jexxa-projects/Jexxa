@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
+import io.jexxa.utils.factory.ClassFactory;
 import org.apache.commons.lang3.Validate;
 
 /**

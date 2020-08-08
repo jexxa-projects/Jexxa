@@ -14,7 +14,7 @@ import io.jexxa.core.factory.PortFactory;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.ThrowingConsumer;
+import io.jexxa.utils.function.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 

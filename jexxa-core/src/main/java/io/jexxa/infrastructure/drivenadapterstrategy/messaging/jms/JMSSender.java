@@ -16,7 +16,7 @@ import javax.naming.NamingException;
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.ThrowingConsumer;
+import io.jexxa.utils.function.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
 
 @SuppressWarnings({"unused", "java:S1133"})

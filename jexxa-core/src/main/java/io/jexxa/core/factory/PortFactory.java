@@ -8,8 +8,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
+import io.jexxa.utils.factory.ClassFactory;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.ThrowingConsumer;
+import io.jexxa.utils.function.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
 
 /**

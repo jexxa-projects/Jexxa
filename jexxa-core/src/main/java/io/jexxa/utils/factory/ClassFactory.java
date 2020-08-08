@@ -1,4 +1,4 @@
-package io.jexxa.core.factory;
+package io.jexxa.utils.factory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -38,7 +38,7 @@ public final class ClassFactory
     }
 
 
-    static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory) throws ReflectiveOperationException
+    public static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory) throws ReflectiveOperationException
     {
         Validate.notNull(factory);
 
@@ -53,7 +53,7 @@ public final class ClassFactory
     }
 
 
-    static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory, Object[] parameters) throws ReflectiveOperationException
+    public static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory, Object[] parameters) throws ReflectiveOperationException
     {
         Validate.notNull(factory);
         Validate.notNull(interfaceType);

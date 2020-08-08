@@ -14,7 +14,7 @@ import javax.jms.TextMessage;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.ThrowingConsumer;
+import io.jexxa.utils.function.ThrowingConsumer;
 
 public class ITMessageSender implements AutoCloseable
 {

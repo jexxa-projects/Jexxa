@@ -14,7 +14,7 @@ import java.util.function.Function;
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.ThrowingConsumer;
+import io.jexxa.utils.function.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 
