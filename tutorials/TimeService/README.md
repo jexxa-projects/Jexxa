@@ -156,7 +156,12 @@ java.naming.password=admin
 ```                       
 
 ## 3. Implement the port adapter to receive JMS messages
-Implementing a port adapter is quite similar to the corresponding driven adapter.  
+When receiving asynchronous messages we have to convert it into business data which is defined in the application core and forward it to a specific method within the application core. Since this cannot be done by convention in a meaningfull way, we have to use a configuration approach. As described in [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa.html), we have to implement a so called port adapter.   
+  
+Implementing a port adapter for JMS is quite easy.
+*   Within the constructor we define our class from the application core that will be called. Jexxa automatically injects this object when creating the port adapter. By convention, this is the only object defined in the constructor.  
+*   In case of JMS we have to implement the `MessageListener` interface and the corresponding `onMessage` method. 
+*   Then we have to pass the configuration parameter the specific driving adapter. In this case it is called `JMSConfiguration` and allows to define all JMS related information, such as destination, messaging type and a messaging selector if required.            
   
 ```java
 @SuppressWarnings("unused")
