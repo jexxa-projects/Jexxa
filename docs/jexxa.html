@@ -550,13 +550,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application built on Jexxa provides components that belong either to the <em>application core</em> or to the  <em>infrastructure</em>. The <em>application core</em> includes the business logic, whereas the <em>infrastructure</em> provides the required technology stacks.</p>
 </div>
 <div class="paragraph">
-<p><a href="#JexxaComponents">Figure 1</a> shows the separation of a Jexxa application into packages, the included components, and the relationship of the components among each other.</p>
+<p><a href="#JexxaComponents">[JexxaComponents]</a> shows the separation of a Jexxa application into packages, the included components, and the relationship of the components among each other.</p>
 </div>
-<div id="JexxaComponents" class="imageblock text-center">
-<div class="content">
-<img src="images/JexxaComponents.svg" alt="JexxaComponents" width="657" height="973">
-</div>
-<div class="title">Figure 1. This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages labeled with <code>&lt;&lt;Jexxa&gt;&gt;</code> are provided by Jexxa. Packages labeled with <code>&lt;&lt;Application&gt;&gt;</code> have to be realized by the application.</div>
+<div class="paragraph">
+<p>Unable to render diagram. To render diagrams, go to the AsciiDoc plugin&#8217;s settings and download extensions or enable Kroki.</p>
 </div>
 <div class="paragraph">
 <p><a href="#JexxaPackagetDescription">Table 1</a> describes the packages of an application based on Jexxa.</p>
@@ -717,7 +714,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>A <em>generic</em> driving adapter automatically exposes methods from connected inbound ports by using a convention. For example this can be used for an RPC mechanism.</p>
 </div>
 <div class="paragraph">
-<p>A <em>specific</em> driving adapter is used if a convention cannot be applied. Instead you have to implement a configuration within the infrastructure of your application in form of a <em>port adapter</em>. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP.</p>
+<p>A <em>specific</em> driving adapter is used if a convention cannot be applied. Instead you have to implement a configuration within the infrastructure of your application in form of a <em>port adapter</em>. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the <em>port adapter</em>.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -806,7 +803,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div>
 <div class="paragraph">
-<p>Within Jexxa we use conventions described in <a href="#JexxaConventions">Table 6</a> to explicitly limit the direction of dependencies as described in <a href="#JexxaComponents">Figure 1</a>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.</p>
+<p>Within Jexxa we use conventions described in <a href="#JexxaConventions">Table 6</a> to explicitly limit the direction of dependencies as described in <a href="#JexxaComponents">[JexxaComponents]</a>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.</p>
 </div>
 <table id="JexxaConventions" class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 6. Conventions used to realize implicit constructor injection.</caption>
@@ -1096,7 +1093,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-07-11 06:36:42 +0200
+Last updated 2020-08-08 18:27:45 +0200
 </div>
 </div>
 </body>

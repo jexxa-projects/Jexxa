@@ -213,7 +213,7 @@ a| Jexxa provides a convention and configuration approach for driving adapters.
 
 A __generic__ driving adapter automatically exposes methods from connected inbound ports by using a convention. For example this can be used for an RPC mechanism.
 
-A __specific__ driving adapter is used if a convention cannot be applied. Instead you have to implement a configuration within the infrastructure of your application in form of a __port adapter__. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP.
+A __specific__ driving adapter is used if a convention cannot be applied. Instead you have to implement a configuration within the infrastructure of your application in form of a __port adapter__. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the __port adapter__.  
 
 
 |Driven Adapter Strategies
