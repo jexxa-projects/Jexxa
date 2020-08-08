@@ -1,4 +1,4 @@
-package io.jexxa.utils;
+package io.jexxa.utils.annotations;
 
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;

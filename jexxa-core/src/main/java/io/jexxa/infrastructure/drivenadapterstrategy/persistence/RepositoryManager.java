@@ -9,7 +9,7 @@ import java.util.function.Function;
 import io.jexxa.core.factory.ClassFactory;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
-import io.jexxa.utils.CheckReturnValue;
+import io.jexxa.utils.annotations.CheckReturnValue;
 
 
 public final class RepositoryManager

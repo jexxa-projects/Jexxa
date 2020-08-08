@@ -5,7 +5,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.google.gson.Gson;
-import io.jexxa.utils.CheckReturnValue;
+import io.jexxa.utils.annotations.CheckReturnValue;
 import org.apache.commons.lang3.Validate;
 
 @CheckReturnValue

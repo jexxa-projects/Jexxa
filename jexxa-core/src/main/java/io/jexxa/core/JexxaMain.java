@@ -12,7 +12,7 @@ import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.jexxa.utils.CheckReturnValue;
+import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
