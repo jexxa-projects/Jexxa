@@ -49,6 +49,8 @@
     <maven.reports.plugin>3.1.0</maven.reports.plugin>
     <maven.enforcer.plugin>3.0.0-M3</maven.enforcer.plugin>
     <maven.javadoc.plugin>3.2.0</maven.javadoc.plugin>
+    <maven.jib.plugin>2.5.0</maven.jib.plugin>
+    <maven.assembly.plugin>3.3.0</maven.assembly.plugin>
 
     <!-- target/compiler configuration  -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

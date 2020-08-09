@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 ### Changed
--   Updated dependencies 
+-   Updated dependencies
+-   Package structure of utils   
 
 ## \[2.2.0] - 2020-07-25
 ### Added                                       
