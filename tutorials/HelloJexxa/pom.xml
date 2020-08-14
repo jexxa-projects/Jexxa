@@ -14,9 +14,66 @@
     <main.class>io.jexxa.tutorials.HelloJexxa</main.class>
   </properties>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-shade-plugin</artifactId>
+      <version>3.2.4</version>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
-
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.4</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+                <filters>
+                  <filter>
+                    <artifact>*:*</artifact>
+                    <excludes>
+                      <exclude>module-info.class</exclude>
+                      <exclude>about.html</exclude>
+                      <exclude>META-INF/**</exclude>
+                    </excludes>
+                  </filter>
+                  <filter>
+                    <artifact>io.jexxa:jexxa-core</artifact>
+                    <excludes>
+                      <exclude>*.properties</exclude>
+                    </excludes>
+                  </filter>
+                  <filter>
+                    <artifact>io.jexxa:jexxa-core</artifact>
+                    <excludes>
+                      <exclude>*.properties</exclude>
+                    </excludes>
+                  </filter>
+                  <filter>
+                    <artifact>org.eclipse.jetty:*</artifact>
+                    <excludes>
+                      <exclude>**/encoding.properties</exclude>
+                    </excludes>
+                  </filter>
+                </filters>
+                <finalName>${project.artifactId}-jar-with-dependencies</finalName>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>${main.class}</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -29,30 +86,7 @@
           </archive>
         </configuration>
       </plugin>
-
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>${maven.assembly.plugin}</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <archive>
-                <manifest>
-                  <mainClass>${main.class}</mainClass>
-                </manifest>
-              </archive>
-              <descriptorRefs>
-                <descriptorRef>jar-with-dependencies</descriptorRef>
-              </descriptorRefs>
-              <finalName>${project.artifactId}</finalName>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
+
 </project>
