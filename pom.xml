@@ -311,7 +311,7 @@
             <artifactId>jacoco-maven-plugin</artifactId>
             <configuration>
               <excludes>
-                <exclude>io.jexxa.sample.*</exclude>
+                <exclude>io.jexxa.tutorials.*</exclude>
               </excludes>
             </configuration>
 
