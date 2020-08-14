@@ -72,6 +72,7 @@ public class JexxaMain
     }
 
     @CheckReturnValue
+    @SuppressWarnings("unused")
     public <T, K> K addBootstrapService(Class<T> bootstrapService, Function< T, K > initFunction)
     {
         T instance = portFactory.getInstanceOf(bootstrapService, properties);
