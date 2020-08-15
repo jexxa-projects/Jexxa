@@ -30,7 +30,60 @@
   </dependencies>
 
   <build>
-    <plugins>
+
+      <plugins>
+        <plugin>
+          <artifactId>maven-shade-plugin</artifactId>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>shade</goal>
+              </goals>
+              <configuration>
+
+                <finalName>${project.artifactId}-jar-with-dependencies</finalName>
+
+                <filters>
+                  <filter>
+                    <artifact>*:*</artifact>
+                    <excludes>
+                      <exclude>module-info.class</exclude>
+                      <exclude>about.html</exclude>
+                      <exclude>META-INF/**</exclude>
+                    </excludes>
+                  </filter>
+                  <filter>
+                    <artifact>io.jexxa:jexxa-core</artifact>
+                    <excludes>
+                      <exclude>*.properties</exclude>
+                    </excludes>
+                  </filter>
+                  <filter>
+                    <artifact>io.jexxa.addendj:*</artifact>
+                    <excludes>
+                      <exclude>**/**</exclude>
+                    </excludes>
+                  </filter>
+                  <filter>
+                    <artifact>io.jexxa:jexxa-core</artifact>
+                    <excludes>
+                      <exclude>*.properties</exclude>
+                    </excludes>
+                  </filter>
+                  <filter>
+                    <artifact>org.eclipse.jetty:*</artifact>
+                    <excludes>
+                      <exclude>**/encoding.properties</exclude>
+                    </excludes>
+                  </filter>
+                </filters>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+
+
       <plugin>
         <groupId>com.google.cloud.tools</groupId>
         <artifactId>jib-maven-plugin</artifactId>
