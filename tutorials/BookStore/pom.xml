@@ -123,15 +123,18 @@
               <jvmFlag>
                 -Djava.rmi.server.hostname=localhost
               </jvmFlag>
+              <jvmFlag>
+                -Dio.jexxa.jdbc.url=jdbc:postgresql://172.17.0.4:5432/bookstore
+              </jvmFlag>
             </jvmFlags>
 
-            <!--- Enable for jdbc support
+            <!--- Enable for jdbc support  -->
             <args>
               <arg>
                 -jdbc
               </arg>
             </args>
-            -->
+            
             <ports>
               <port>7000</port>
               <port>1091</port>
