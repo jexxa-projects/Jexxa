@@ -1,4 +1,4 @@
-package io.jexxa.tutorial.bookstorej.domain.valueobject;
+package io.jexxa.tutorials.bookstorej.domain.valueobject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

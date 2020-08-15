@@ -1,4 +1,4 @@
-package io.jexxa.tutorial.bookstorej.domain.businessexception;
+package io.jexxa.tutorials.bookstorej.domain.businessexception;
 
 import io.jexxa.addend.applicationcore.BusinessException;
 

@@ -1,4 +1,4 @@
-package io.jexxa.tutorial.bookstorej.infrastructure.drivenadapter.persistence;
+package io.jexxa.tutorials.bookstorej.infrastructure.drivenadapter.persistence;
 
 
 import java.util.List;
@@ -8,9 +8,9 @@ import java.util.Properties;
 import io.jexxa.addend.infrastructure.DrivenAdapter;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
-import io.jexxa.tutorial.bookstorej.domain.aggregate.Book;
-import io.jexxa.tutorial.bookstorej.domain.valueobject.ISBN13;
-import io.jexxa.tutorial.bookstorej.domainservice.IBookRepository;
+import io.jexxa.tutorials.bookstorej.domain.aggregate.Book;
+import io.jexxa.tutorials.bookstorej.domain.valueobject.ISBN13;
+import io.jexxa.tutorials.bookstorej.domainservice.IBookRepository;
 
 @SuppressWarnings("unused")
 @DrivenAdapter

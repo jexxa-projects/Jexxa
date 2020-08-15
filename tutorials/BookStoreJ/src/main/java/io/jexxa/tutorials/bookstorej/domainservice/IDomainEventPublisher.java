@@ -1,4 +1,4 @@
-package io.jexxa.tutorial.bookstorej.domainservice;
+package io.jexxa.tutorials.bookstorej.domainservice;
 
 
 import io.jexxa.addend.applicationcore.InfrastructureService;

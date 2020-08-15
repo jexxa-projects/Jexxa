@@ -1,8 +1,8 @@
-package io.jexxa.tutorial.bookstorej.infrastructure.drivenadapter.console;
+package io.jexxa.tutorials.bookstorej.infrastructure.drivenadapter.console;
 
 import io.jexxa.addend.applicationcore.DomainEvent;
 import io.jexxa.addend.infrastructure.DrivenAdapter;
-import io.jexxa.tutorial.bookstorej.domainservice.IDomainEventPublisher;
+import io.jexxa.tutorials.bookstorej.domainservice.IDomainEventPublisher;
 import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;

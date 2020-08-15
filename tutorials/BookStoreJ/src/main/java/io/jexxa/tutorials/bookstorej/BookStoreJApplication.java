@@ -1,4 +1,4 @@
-package io.jexxa.tutorial.bookstorej;
+package io.jexxa.tutorials.bookstorej;
 
 
 import io.jexxa.addend.applicationcore.ApplicationService;
@@ -9,7 +9,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBReposi
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
-import io.jexxa.tutorial.bookstorej.domainservice.ReferenceLibrary;
+import io.jexxa.tutorials.bookstorej.domainservice.ReferenceLibrary;
 import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -22,6 +22,7 @@ public final class BookStoreJApplication
     //Declare the packages that should be used by Jexxa
     private static final String DRIVEN_ADAPTER  = BookStoreJApplication.class.getPackageName() + ".infrastructure.drivenadapter";
     private static final String OUTBOUND_PORTS  = BookStoreJApplication.class.getPackageName() + ".domainservice";
+    private static final String INBOUND_PORTS   = BookStoreJApplication.class.getPackageName() + ".applicationservice";
 
     public static void main(String[] args)
     {
@@ -36,6 +37,7 @@ public final class BookStoreJApplication
         jexxaMain
                 //Define which outbound ports should be managed by Jexxa
                 .addToApplicationCore(OUTBOUND_PORTS)
+                .addToApplicationCore(INBOUND_PORTS)
                 .addToInfrastructure(DRIVEN_ADAPTER)
 
                 //Get the latest books when starting the application
