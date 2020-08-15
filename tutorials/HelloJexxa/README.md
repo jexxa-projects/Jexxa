@@ -5,13 +5,15 @@
 *   How to write a simple application using Jexxa
 *   How to bind different driving adapter to the `BoundedContext` object which allow to control your application from outside
 *   How to control the running application from outside via `BoundedContext` object 
-*   How to use the `jexxa-application.properties` to configure the driving adapters    
+*   How to use the `jexxa-application.properties` to configure the driving adapters
+*   How to build a docker image with this tutorial    
 
 ## What you need
 
 *   15 minutes
 *   JDK 11 (or higher) installed 
 *   Maven 3.6 (or higher) installed
+*   Docker installed (optional)
 
 ## Write the application
 The source code of the main method is quite obvious. Each line include comments to explain the meaning.  
@@ -90,7 +92,33 @@ The most interesting one here is `io.jexxa.rest.port` that allows to define the 
 
 ```properties                                                          
 #Settings for RESTfulRPCAdapter
-io.jexxa.rest.host=localhost
+#Note: Setting host to 0.0.0.0 starts listening on all network devices 
+io.jexxa.rest.host=0.0.0.0
 io.jexxa.rest.port=7000
 ```
-                                                          
+
+## Build a docker image 
+In order to build a docker image with this tutorial we use the maven-jib-plugin. For the sake of simplicity we assume
+that docker is installed on your local machine so that we do not need to configure any external docker registry.
+
+Note: All tutorials can be build as docker image with the following steps.      
+
+To create the docker image with maven enter: 
+```console                                                          
+mvn jib:dockerBuild
+``` 
+
+After this check available docker images:                                                
+```console                                                          
+docker images
+``` 
+
+You will see following (or similar) output
+```console                                                          
+REPOSITORY                                    TAG                 IMAGE ID            CREATED             SIZE
+...
+io.jexxa.tutorials/hellojexxa                 2.2.1-SNAPSHOT      18e39628a651        5 days ago          157MB
+...
+``` 
+In order to create a container from the image please refer [docker manual](https://docs.docker.com/)               
+              

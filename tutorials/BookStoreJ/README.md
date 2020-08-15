@@ -27,7 +27,7 @@ Therefore, we strongly recommend annotating all classes within the application c
 
 For the pattern langauge of DDD we recommend project [Addend](https://addend.jexxa.io/).     
 
-The following shows the annotation of an 'Aggregate'. Apart from the obvious annoatation, it also uses two other annotations: 
+The following shows the annotation of an 'Aggregate'. Apart from the obvious annotation, it also uses two other annotations: 
 *   `AggregateID` to explicitly document the unique key
 *   `AggregateFactory` to explicitly document the factory method for the `Aggregate`     
 
@@ -61,15 +61,15 @@ public final class Book
  
 ### Cross-cutting concerns   
 
-When applying the tactical patterns of DDD and map the ubiquituous language into the application core, it can happen that you get a lot of small classes. Especially `ValueObject` classes are affected you have to implement valid cross-cutting concerns for these objects such as `equals()`, `hashCode()` and `toString()`.
+When applying the tactical patterns of DDD and map the ubiquitous language into the application core, it can happen that you get a lot of small classes. Especially `ValueObject` classes are affected. For all these classes you have to implement valid cross-cutting concerns for these objects such as `equals()`, `hashCode()` and `toString()`.
 
-These methods can bloat your source code and much worse hide the domain specific aspects. To resolve this issue we recommend AspectJ for realizing cross-cutting concerns. Especially if we already annotate all our classes, we can use these annotations. 
+Even though today's IDE's can automatically generate these methods they can bloat your source code and much worse hide the domain specific aspects. To resolve this issue we recommend AspectJ for realizing cross-cutting concerns so that are not visible in the source code of your application core. Since we already annotated all our classes with our pattern language, we can reuse these annotations. 
 
-Important note: This is weighing up between using some kind of technology-stack on the one side to hide technology specific issues and to make the ubiquituos language more explicit on the other side.     
+Important note: This is weighing up between using some kind of technology-stack on the one side to hide technology specific issues and to make the ubiquitous language more explicit on the other side. So you should discuss this within your team or software architects and document your decision.      
 
 In case you would like to use AspectJ together with pattern language of DDD we recommend project [AddendJ](https://addendj.jexxa.io/).     
 
-In the following you see the implementation of class `ISBN13` without an implementation of equals and hashcode. Theses methods are weaved into the source code during compile time.    
+In the following you see the implementation of class `ISBN13` without an implementation of equals and hashcode. These methods are weaved into the source code during compile time.    
  
 ```java
 @ValueObject
@@ -220,3 +220,5 @@ Response:
 ```Console
 true
 ```
+
+    

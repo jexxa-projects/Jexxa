@@ -14,7 +14,7 @@
 *   JDK 11 (or higher) installed 
 *   Maven 3.6 (or higher) installed
 *   curl or jconsole to trigger the application
-*   A postgres DB (if you start the application with option `-jdbc')  
+*   A postgres DB (if you start the application with option `-jdbc`)  
 
 ## Requirements to the application core
 This application core should provide following functionality:
@@ -39,22 +39,22 @@ General note: There are several books, courses, tutorials available describing h
 ### 1. Mapping to DDD patterns  
 First we map the functionality of the application to DDD patterns   
 
-*   `Aggregate`: Elements that change over time and include our business logic 
+*   `Aggregate:` Elements that change over time and include our business logic 
     *   `Book` which manages available copies of a book.       
 
-*   `ValueObject`: Elements that represent a state and are immutable
+*   `ValueObject:` Elements that represent a state and are immutable
     *   `ISBN13` which identifies a book     
 
-*   `DomainEvent`: Business events that happened in the past 
+*   `DomainEvent:` Business events that happened in the past 
     *   `BookSoldOut` when copies of a book are no longer in stock   
 
-*   'DomainService': 
-    *   `IDomainEventPublisher`: We need to publish our domain events in some way. Since the implementation requires a technology stack we can only define an interface.   
-    *   `IBookRepository`: Interface to manage `Book` instances. Since the implementation requires a technology stack we can only define an interface.  
-    *   `ReferenceLibrary`: Return latest books. For simplicity, we assume that it is a service which does not related to our domain core directly.             
+*   `DomainService:` 
+    *   `IDomainEventPublisher:` We need to publish our domain events in some way. Since the implementation requires a technology stack we can only define an interface.   
+    *   `IBookRepository:` Interface to manage `Book` instances. Since the implementation requires a technology stack we can only define an interface.  
+    *   `ReferenceLibrary:` Return latest books. For simplicity, we assume that it is a service which does not related to our domain core directly.             
 
-*   `BusinessException`:
-    *   `BookNotInStockException`: In case we try to sell a book that is currently not available   
+*   `BusinessException:`
+    *   `BookNotInStockException:` In case we try to sell a book that is currently not available   
      
        
 ### Package structure 
