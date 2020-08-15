@@ -100,16 +100,18 @@ public class ISBN13
 
 ## Implement the Application
 
-If your application core is annotated with your pattern language, you can use it together wih Jexxa. Instead of binding a 
-driving adapter to each inbound port explicitly, you can also use mehtod `bindToAnnotation`. In this case alle inbound ports annotated 
-with given annotation are bind to the driving adapter.    
+If your application core is annotated with your pattern language, you can use it together wih Jexxa. This requires to changes in contrast to initial `BookStore` application.
+1.   You have to add package names providing your annotated classes to Jexxa by using method `addToApplicationCore`. This is required because Jexxa scans only the specified package names.    
+2.   You have to bind driving adapters using method `bindToAnnotation`. In this case alle inbound ports annotated with given annotation are bind to the driving adapter.    
 
-```java
+```java 
 public final class BookStoreJApplication
 {
     //Declare the packages that should be used by Jexxa
     private static final String DRIVEN_ADAPTER  = BookStoreJApplication.class.getPackageName() + ".infrastructure.drivenadapter";
     private static final String OUTBOUND_PORTS  = BookStoreJApplication.class.getPackageName() + ".domainservice";
+    //Add also package name with inbound ports so that they are scanned by Jexxa
+    private static final String INBOUND_PORTS   = BookStoreJApplication.class.getPackageName() + ".applicationservice";
 
     public static void main(String[] args)
     {
@@ -122,7 +124,9 @@ public final class BookStoreJApplication
         JexxaMain jexxaMain = new JexxaMain(BookStoreJApplication.class.getSimpleName());
 
         jexxaMain
-                //Define which outbound ports should be managed by Jexxa
+                // In order to find ports by annotation we must add packages that are searched by Jexxa.
+                // Therefore, we must also add inbound ports to application core 
+                .addToApplicationCore(INBOUND_PORTS)
                 .addToApplicationCore(OUTBOUND_PORTS)
                 .addToInfrastructure(DRIVEN_ADAPTER)
 
@@ -135,7 +139,6 @@ public final class BookStoreJApplication
                 .bind(JMXAdapter.class).toAnnotation(ApplicationService.class)
 
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
-                .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
 
                 .start()
 
@@ -143,5 +146,77 @@ public final class BookStoreJApplication
 
                 .stop();
     }
+
 }  
+```
+
+## Compile & Start the Application with console output 
+
+```console                                                          
+mvn clean install
+java -jar target/bookstorej-jar-with-dependencies.jar 
+```
+You will see following (or similar) output
+```console
+[main] INFO io.jexxa.tutorials.bookstorej.BookStoreApplication - Use persistence strategy: IMDBRepository 
+[main] INFO io.jexxa.core.JexxaMain - Start BoundedContext 'BookStoreApplication' with 2 Driving Adapter 
+[main] INFO org.eclipse.jetty.util.log - Logging initialized @474ms to org.eclipse.jetty.util.log.Slf4jLog
+[main] INFO io.javalin.Javalin - Starting Javalin ...
+[main] INFO io.javalin.Javalin - Listening on http://localhost:7000/
+[main] INFO io.javalin.Javalin - Javalin started in 148ms \o/
+[main] INFO io.jexxa.core.JexxaMain - BoundedContext 'BookStoreApplication' successfully started in 0.484 seconds
+```          
+
+### Execute some commands using curl 
+
+#### Get list of books
+
+Command: 
+```Console
+curl -X GET  http://localhost:7000/BookStoreService/getBooks
+```
+
+Response: 
+```Console
+[{"value":"978-1-891830-85-3"},{"value":"978-1-60309-025-4"},{"value":"978-1-60309-016-2"},{"value":"978-1-60309-265-4"},{"value":"978-1-60309-047-6"},{"value":"978-1-60309-322-4"}]
+```
+
+#### Ask if a specific book is in stock**
+
+Command:
+```Console
+curl -X POST -H "Content-Type: application/json" \
+    -d '"978-1-891830-85-3"' \
+    http://localhost:7000/BookStoreService/inStock                 
+```
+
+Response: 
+```Console
+false
+```
+
+#### Add some books
+
+Command:
+```Console
+curl -X POST -H "Content-Type: application/json" \
+    -d '["978-1-891830-85-3", 5]' \
+    http://localhost:7000/BookStoreService/addToStock                 
+```
+Response: No output  
+```Console
+```
+
+#### Ask again if a specific book is in stock
+
+Command:
+```Console
+curl -X POST -H "Content-Type: application/json" \
+    -d '"978-1-891830-85-3"' \
+    http://localhost:7000/BookStoreService/inStock                 
+```
+
+Response: 
+```Console
+true
 ```
