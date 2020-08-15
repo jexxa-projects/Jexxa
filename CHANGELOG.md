@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -   Annotation @CheckReturnValue to fluent API for better IDE support 
       
 ### Fixed
+-   Tutorial BookStoreJ 
 
 ### Changed
 -   Updated dependencies
