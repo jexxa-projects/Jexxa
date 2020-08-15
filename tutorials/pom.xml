@@ -14,16 +14,19 @@
   <name>Tutorials</name>
     
   <dependencies>
+
     <dependency>
       <groupId>io.jexxa</groupId>
       <artifactId>jexxa-core</artifactId>
-      <version>2.2.0</version>
+      <version>${jexxa-core.version}</version>
     </dependency>
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>${slf4j.simple.version}</version>
     </dependency>
+
   </dependencies>
 
   <build>

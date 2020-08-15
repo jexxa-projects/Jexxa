@@ -82,6 +82,7 @@
     <junit.jupiter.params.version>5.7.0-M1</junit.jupiter.params.version>
     <slf4j.simple.version>1.7.30</slf4j.simple.version>
     <awaitility.version>4.0.3</awaitility.version>
+    <jexxa-core.version>2.2.0</jexxa-core.version>
   </properties>
 
 
@@ -121,6 +122,10 @@
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
           <version>${maven.install.plugin}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${maven.assembly.plugin}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -282,7 +287,6 @@
         <filtering>true</filtering>
       </testResource>
     </testResources>
-
   </build>
 
   <reporting>
