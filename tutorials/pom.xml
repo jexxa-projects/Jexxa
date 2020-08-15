@@ -71,6 +71,16 @@
                       <exclude>*.properties</exclude>
                     </excludes>
                   </filter>
+
+                  <filter> <!-- filter aspectj related duplications -->
+                    <artifact>org.aspectj:aspectjtools</artifact>
+                    <excludes>
+                      <exclude>org/aspectj/internal/**</exclude>
+                      <exclude>org/aspectj/lang/**</exclude>
+                      <exclude>org/aspectj/runtime/**</exclude>
+                    </excludes>
+                  </filter>
+
                   <filter>
                     <artifact>org.eclipse.jetty:*</artifact>
                     <excludes>
