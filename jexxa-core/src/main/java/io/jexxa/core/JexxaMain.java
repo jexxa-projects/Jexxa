@@ -221,7 +221,15 @@ public class JexxaMain
         @Override
         public void start()
         {
-            drivingAdapters.forEach(ThrowingConsumer.exceptionLogger(IDrivingAdapter::start));
+            try {
+                drivingAdapters.forEach(IDrivingAdapter::start);
+            }
+            catch (RuntimeException e)
+            {
+                //In case of any error we stop all driving adapter for proper cleanup and rethrow the exception 
+                stop();
+                throw e;
+            }
         }
 
         @Override

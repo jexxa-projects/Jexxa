@@ -4,12 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.2.1] - yyyy-mm-dd
+## \[2.2.1] - 2020-08-16
 ### Added                                       
 -   Annotation @CheckReturnValue to fluent API for better IDE support 
       
 ### Fixed
--   Tutorial BookStoreJ 
+-   Fixed fast fail approach in JexxaMain::start. Now, this method directly fails if any driving adapter throws an exception during its start method.  
+-   Correctly set package which is scanned for inbound ports in tutorial BookStoreJ 
 
 ### Changed
 -   Updated dependencies
