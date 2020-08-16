@@ -12,6 +12,7 @@
 
   <properties>
     <main.class>io.jexxa.tutorials.bookstorej.BookStoreJApplication</main.class>
+    <jmx.port>1090</jmx.port>
   </properties>
 
 
@@ -155,17 +156,20 @@
               USE_CURRENT_TIMESTAMP
             </creationTime>
 
-            <!--- Enable for JMX support -->
+            <!--- Enable for JMX support.
+            Notes:  - jmxremote.rmi.port and jmxremote.port must be identical in order to access application in docker container
+                    - exposed port in section <ports> must be identical to jmxremote.port. Otherwise port forwarding will not work with jmx
+             -->
             <jvmFlags>
               -Dcom.sun.management.jmxremote.local.only=false
               <jvmFlag>
                 -Dcom.sun.management.jmxremote
               </jvmFlag>
               <jvmFlag>
-                -Dcom.sun.management.jmxremote.port=1090
+                -Dcom.sun.management.jmxremote.port=${jmx.port}
               </jvmFlag>
               <jvmFlag>
-                -Dcom.sun.management.jmxremote.rmi.port=1090
+                -Dcom.sun.management.jmxremote.rmi.port=${jmx.port}
               </jvmFlag>
               <jvmFlag>
                 -Dcom.sun.management.jmxremote.local.only=false
@@ -193,7 +197,7 @@
             
             <ports>
               <port>7000</port>
-              <port>1090</port>
+              <port>${jmx.port}</port>
             </ports>
           </container>
         </configuration>
