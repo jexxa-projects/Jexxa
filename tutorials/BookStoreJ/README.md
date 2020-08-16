@@ -101,8 +101,8 @@ public class ISBN13
 ## Implement the Application
 
 If your application core is annotated with your pattern language, you can use it together wih Jexxa. This requires to changes in contrast to initial `BookStore` application.
-1.   You have to add package names providing your annotated classes to Jexxa by using method `addToApplicationCore`. This is required because Jexxa scans only the specified package names.    
-2.   You have to bind driving adapters using method `bindToAnnotation`. In this case alle inbound ports annotated with given annotation are bind to the driving adapter.    
+1.  You have to add package names providing your annotated classes to Jexxa by using method `addToApplicationCore`. This is required because Jexxa scans only the specified package names.    
+2.  You have to bind driving adapters using method `bindToAnnotation`. In this case alle inbound ports annotated with given annotation are bind to the driving adapter.    
 
 ```java 
 public final class BookStoreJApplication
