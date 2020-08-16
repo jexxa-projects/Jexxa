@@ -220,5 +220,3 @@ Response:
 ```Console
 true
 ```
-
-    
