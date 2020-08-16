@@ -17,8 +17,8 @@
 Jexxa is a lightweight framework to implement business applications based on a https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/[ports and adapters] architecture. It shows how to easily connect technology stacks, called adapters, to interfaces of a technology agnostic application core which are called ports. For this purpose Jexxa offers:
 
 * A lightweight core which manages the lifecycle of both ports and adapters.
-* A well-defined interface to integrate arbitrary technology stacks.
-* A fluent API that explicitly represents the binding between technology stacks and interfaces of the application core within the main method of an application.
+* A well-defined interface to integrate arbitrary technology stacks as adapters.
+* A fluent API to connect your application core to available adapters. The main methods explicitly represents the binding between ports and adapters so that you can exchange technology stacks individually.
 
 Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus, especially on  following paradigms:
 
@@ -26,15 +26,14 @@ Even though Jexxa is used within lightweight business applications and microserv
 
 * _Simplicity_: Be aware of what technology stacks you really need to realize the customers' use cases. Usually they are much less than expected. Keep different technology stacks loosely coupled to facilitate their exchange. Finally, prefer a convention over configuration approach to standardize the integration of technology stacks and to reduce the complexity of their configuration.
 
-
 * _Inversion of Control_(IoC): Find the required degree of IoC for your software projects. Control aspects that are technically required but not important for your business application should be hidden by a framework. The remaining required aspects should be explicitly represented.
 
 Even if you use real powerful frameworks for good reason within your application I hope that you find Jexxa helpful in some way.
 
 == Motivation
-The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for this application.
+The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for an application.
 
-Existing frameworks such as the https://spring.io[Spring Framework] or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into the domain logic.
+Existing frameworks such as the https://spring.io[Spring Framework] or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into the application core.
 
 When developing applications with a high durability as used in production, financial or insurance sector, it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers shall only use standard language features. Available frameworks shall be used to attach the latest technology stacks to the application core.
 

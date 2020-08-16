@@ -482,10 +482,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>A lightweight core which manages the lifecycle of both ports and adapters.</p>
 </li>
 <li>
-<p>A well-defined interface to integrate arbitrary technology stacks.</p>
+<p>A well-defined interface to integrate arbitrary technology stacks as adapters.</p>
 </li>
 <li>
-<p>A fluent API that explicitly represents the binding between technology stacks and interfaces of the application core within the main method of an application.</p>
+<p>A fluent API to connect your application core to available adapters. The main methods explicitly represents the binding between ports and adapters so that you can exchange technology stacks individually.</p>
 </li>
 </ul>
 </div>
@@ -514,10 +514,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_motivation"><a class="anchor" href="#_motivation"></a>2. Motivation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for this application.</p>
+<p>The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for an application.</p>
 </div>
 <div class="paragraph">
-<p>Existing frameworks such as the <a href="https://spring.io">Spring Framework</a> or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into the domain logic.</p>
+<p>Existing frameworks such as the <a href="https://spring.io">Spring Framework</a> or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into the application core.</p>
 </div>
 <div class="paragraph">
 <p>When developing applications with a high durability as used in production, financial or insurance sector, it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers shall only use standard language features. Available frameworks shall be used to attach the latest technology stacks to the application core.</p>
@@ -550,13 +550,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application built on Jexxa provides components that belong either to the <em>application core</em> or to the  <em>infrastructure</em>. The <em>application core</em> includes the business logic, whereas the <em>infrastructure</em> provides the required technology stacks.</p>
 </div>
 <div class="paragraph">
-<p><a href="#JexxaComponents">Figure 1</a> shows the separation of a Jexxa application into packages, the included components, and the relationship of the components among each other.</p>
+<p><a href="#JexxaComponents">[JexxaComponents]</a> shows the separation of a Jexxa application into packages, the included components, and the relationship of the components among each other.</p>
 </div>
-<div id="JexxaComponents" class="imageblock text-center">
-<div class="content">
-<img src="images/JexxaComponents.svg" alt="JexxaComponents" width="657" height="973">
-</div>
-<div class="title">Figure 1. This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages labeled with <code>&lt;&lt;Jexxa&gt;&gt;</code> are provided by Jexxa. Packages labeled with <code>&lt;&lt;Application&gt;&gt;</code> have to be realized by the application.</div>
+<div class="paragraph">
+<p>Unable to render diagram. To render diagrams, go to the AsciiDoc plugin&#8217;s settings and download extensions or enable Kroki.</p>
 </div>
 <div class="paragraph">
 <p><a href="#JexxaPackagetDescription">Table 1</a> describes the packages of an application based on Jexxa.</p>
@@ -806,7 +803,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div>
 <div class="paragraph">
-<p>Within Jexxa we use conventions described in <a href="#JexxaConventions">Table 6</a> to explicitly limit the direction of dependencies as described in <a href="#JexxaComponents">Figure 1</a>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.</p>
+<p>Within Jexxa we use conventions described in <a href="#JexxaConventions">Table 6</a> to explicitly limit the direction of dependencies as described in <a href="#JexxaComponents">[JexxaComponents]</a>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.</p>
 </div>
 <table id="JexxaConventions" class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 6. Conventions used to realize implicit constructor injection.</caption>
@@ -1096,7 +1093,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-10 06:44:13 +0200
+Last updated 2020-08-16 09:48:33 +0200
 </div>
 </div>
 </body>
