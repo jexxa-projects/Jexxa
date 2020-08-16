@@ -83,7 +83,11 @@ class RESTfulRPCAdapterIT
     void testWithRandomPort()
     {
         //Arrange
-        var secondAdapter = new RESTfulRPCAdapter("localhost",0);
+        Properties properties = new Properties();
+        properties.setProperty(RESTfulRPCAdapter.HOST_PROPERTY, "localhost");
+        properties.setProperty(RESTfulRPCAdapter.PORT_PROPERTY, String.valueOf(0));
+
+        var secondAdapter = new RESTfulRPCAdapter(properties);
         secondAdapter.register(simpleApplicationService);
         secondAdapter.start();
         var secondRestPath = "http://localhost:" + secondAdapter.getPort() + "/SimpleApplicationService/";

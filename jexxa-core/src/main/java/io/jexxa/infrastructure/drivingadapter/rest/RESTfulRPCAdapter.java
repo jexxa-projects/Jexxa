@@ -22,19 +22,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private final Javalin javalin = Javalin.create();
     private String hostname;
     private int port;
-
-    public RESTfulRPCAdapter(String hostname, int port)
-    {
-        Validate.notNull(hostname);
-        Validate.isTrue(port >= 0);
-
-        this.hostname = hostname;
-        this.port = port;
-        this.javalin.config.showJavalinBanner = false;
-
-        registerExceptionHandler();
-    }
-
+    
     public RESTfulRPCAdapter(Properties properties)
     {
         readProperties(properties);
@@ -180,7 +168,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void readProperties(Properties properties)
     {
-        this.hostname = properties.getProperty(HOST_PROPERTY, "localhost");
+        this.hostname = properties.getProperty(HOST_PROPERTY, "0.0.0.0");
         this.port = Integer.parseInt(properties.getProperty(PORT_PROPERTY, "0"));
     }
 }
