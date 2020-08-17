@@ -18,6 +18,8 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +38,8 @@ class HTTPSTest
     void testHTTPSConnection() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException
     {
         //Arrange -> Nothing to do
+        Unirest.shutDown();
+
         SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustSelfSignedStrategy()
         {
             public boolean isTrusted(X509Certificate[] chain, String authType)
@@ -45,10 +49,16 @@ class HTTPSTest
         }).build();
         CloseableHttpClient customHttpClient = HttpClients.custom().setSSLContext(sslContext)
                 .setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
+
+        CloseableHttpAsyncClient client = HttpAsyncClients.custom()
+                .setSSLHostnameVerifier(new NoopHostnameVerifier())
+                .setSSLContext(sslContext).build();
+
         Unirest.config().httpClient(customHttpClient);
+        Unirest.config().asyncClient(client);
 
         Unirest.config().verifySsl(false);
-        Unirest.config().hostnameVerifier(SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+        Unirest.config().hostnameVerifier(new NoopHostnameVerifier());
         
 
         var properties = new Properties();
