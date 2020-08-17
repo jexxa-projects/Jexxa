@@ -22,6 +22,7 @@ import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class HTTPSTest
@@ -35,6 +36,7 @@ class HTTPSTest
     private final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
 
     @Test
+    @Disabled
     void testHTTPSConnection() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException
     {
         //Arrange -> Nothing to do
@@ -62,7 +64,7 @@ class HTTPSTest
         
 
         var properties = new Properties();
-        var defaultHost = "localhost";
+        var defaultHost = "0.0.0.0";
         var defaultPort = 7001;
         var defaultHTTPSPort = 8080;
 
