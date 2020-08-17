@@ -14,6 +14,7 @@ import javax.net.ssl.SSLContext;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import kong.unirest.Unirest;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -35,9 +36,6 @@ class HTTPSTest
     void testHTTPSConnection() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException
     {
         //Arrange -> Nothing to do
-        Unirest.config().verifySsl(false);
-        Unirest.config().hostnameVerifier(null);
-
         SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustSelfSignedStrategy()
         {
             public boolean isTrusted(X509Certificate[] chain, String authType)
@@ -49,6 +47,9 @@ class HTTPSTest
                 .setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
         Unirest.config().httpClient(customHttpClient);
 
+        Unirest.config().verifySsl(false);
+        Unirest.config().hostnameVerifier(SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+        
 
         var properties = new Properties();
         var defaultHost = "localhost";
