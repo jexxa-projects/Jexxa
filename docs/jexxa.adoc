@@ -14,11 +14,12 @@
 //Hinweis: Die counter:local-table-number und counter:local-figure-number werden verwendet, damit im Fliesstext als Referenz die Nummer der Tabelle bzw. Abbildung angezeigt wird, also z.B. "wie in Abbildung 5 zu sehen ist"
 
 == Vision
-Jexxa is a lightweight framework to implement business applications based on a https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/[ports and adapters] architecture. It shows how to easily connect technology stacks, called adapters, to interfaces of a technology agnostic application core which are called ports. For this purpose Jexxa offers:
+Jexxa is a lightweight framework to implement business applications based on a https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/[ports and adapters] architecture. It allows for easily connecting technology stacks, called adapters, to interfaces of a technology agnostic application core which are called ports. For this purpose Jexxa offers:
 
 * A lightweight core which manages the lifecycle of both ports and adapters.
 * A well-defined interface to integrate arbitrary technology stacks as adapters.
-* A fluent API to connect your application core to available adapters. The main method explicitly represents the binding between ports and adapters so that you can exchange technology stacks independently.
+* A fluent API to connect your application core to available adapters.
+* Explicit representation of the binding between ports and adapters in the main method so that you can exchange technology stacks independently.
 
 Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus, especially on  following paradigms:
 
