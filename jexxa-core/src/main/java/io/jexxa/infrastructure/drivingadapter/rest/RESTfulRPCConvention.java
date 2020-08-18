@@ -11,13 +11,20 @@ import java.util.List;
  * This class generates uniform IDs (URIs) for resources to be offered via REST
  *
  * This implementation uses following convention over configuration approach:
- *  * An object must have unique method names. Any method overloading is not supported
- *  * Methods from base class Object are ignored
- *  GET:
- *  * If a method has a return value != 'void' and no parameter then it is mapped to a GET method
- *  POST:
- *  * If a method has no return 'void' then it is mapped to a POST method
- *  * If a method has at least one parameter then it is mapped to a POST method
+ *
+ * URI: http://<specified hostname>:<specified port>/<java simple class name>/<method name></method>
+ *  - Example URI: http://localhost:7000/MyApplicationService/myMethod
+ *
+ *  - This implies following conventions:
+ *  - Simple name of a class must be unique within a single application
+ *  - Each class must have unique method names. Any method overloading is not supported
+ *  - Methods from base class `Object` are ignored
+ *
+ *  GET - mapping:
+ *  - If a method returns a value != 'void' and has no arguments then it is mapped to a GET method
+ *
+ *  POST - mapping:
+ *  - In all other cases 
  */
 class RESTfulRPCConvention
 {
