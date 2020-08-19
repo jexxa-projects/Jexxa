@@ -14,6 +14,7 @@ import javax.net.ssl.SSLContext;
 
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import kong.unirest.Unirest;
+import kong.unirest.apache.ApacheClient;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -49,7 +50,8 @@ class HTTPSTest
         CloseableHttpClient customHttpClient = HttpClients.custom().setSSLContext(sslContext)
                 .setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
 
-        Unirest.config().httpClient(customHttpClient);
+        //Unirest.config().httpClient(customHttpClient);
+        Unirest.config().httpClient(ApacheClient.builder(customHttpClient));
 
         Unirest.config().sslContext(sslContext);
         Unirest.config().hostnameVerifier(new NoopHostnameVerifier());
