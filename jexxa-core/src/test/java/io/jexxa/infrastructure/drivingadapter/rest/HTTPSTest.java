@@ -46,7 +46,11 @@ class HTTPSTest
                 new TrustSelfSignedStrategy() //will trust own CA and all self-signed certs
         ).build();
 
-       
+        CloseableHttpClient customHttpClient = HttpClients.custom().setSSLContext(sslContext)
+                .setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
+
+        Unirest.config().httpClient(customHttpClient);
+
         Unirest.config().sslContext(sslContext);
         Unirest.config().hostnameVerifier(new NoopHostnameVerifier());
 
