@@ -3,7 +3,6 @@ package io.jexxa.infrastructure.drivingadapter.rest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -39,11 +38,7 @@ class HTTPSTest
     void testHTTPSConnection() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException, CertificateException, IOException
     {
         // NOTE: To run this test we need to create a truststore has described here https://magicmonster.com/kb/prg/java/ssl/pkix_path_building_failed/
-        //Arrange -> Nothing to do
-        Unirest.shutDown();
-
-        //System.out.println(HTTPSTest.class.getResource("trustStore.jks").getFile());
-       // System.out.println(HTTPSTest.class.getResource("/").getFile());
+        //Arrange
 
         SSLContext sslContext =  new SSLContextBuilder().loadTrustMaterial(
                 HTTPSTest.class.getResource("/trustStore.jks"), //path to jks file
@@ -51,21 +46,9 @@ class HTTPSTest
                 new TrustSelfSignedStrategy() //will trust own CA and all self-signed certs
         ).build();
 
-
-       CloseableHttpClient customHttpClient = HttpClients.custom().setSSLContext(sslContext)
-                .setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
-
-        CloseableHttpAsyncClient client = HttpAsyncClients.custom()
-                .setSSLHostnameVerifier(new NoopHostnameVerifier())
-                .setSSLContext(sslContext).build();
-
-        Unirest.config().httpClient(customHttpClient);
-        Unirest.config().asyncClient(client); 
-
-        /*Unirest.config().verifySsl(false);
+       
+        Unirest.config().sslContext(sslContext);
         Unirest.config().hostnameVerifier(new NoopHostnameVerifier());
-          */
-
 
         var properties = new Properties();
         var defaultHost = "0.0.0.0";
