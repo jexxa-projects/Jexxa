@@ -23,8 +23,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public static final String HOST_PROPERTY = "io.jexxa.rest.host";
     public static final String PORT_PROPERTY = "io.jexxa.rest.port";
     public static final String HTTPS_PORT_PROPERTY = "io.jexxa.rest.https_port";
-    public static final String KEY_STORE = "io.jexxa.rest.key_store";
-    public static final String KEY_STORE_PASSWORD = "io.jexxa.rest.key_store_password";
+    public static final String KEYSTORE = "io.jexxa.rest.keystore";
+    public static final String KEYSTORE_PASSWORD = "io.jexxa.rest.keystore_password";
 
     private Javalin javalin;
     private String hostname;
@@ -227,7 +227,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         this.port = Integer.parseInt(properties.getProperty(PORT_PROPERTY, "0"));
 
         this.httpsPort = Integer.parseInt(properties.getProperty(HTTPS_PORT_PROPERTY, "0"));
-        this.keyStore = properties.getProperty(KEY_STORE, "");
-        this.keyStorePassword = properties.getProperty(KEY_STORE_PASSWORD, "");
+        this.keyStore = properties.getProperty(KEYSTORE, "");
+        this.keyStorePassword = properties.getProperty(KEYSTORE_PASSWORD, "");
     }
 }
