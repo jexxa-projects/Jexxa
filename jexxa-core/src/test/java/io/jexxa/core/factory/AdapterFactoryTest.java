@@ -66,8 +66,8 @@ class AdapterFactoryTest
     @Test
     void validateSingletonScopeOfDrivenAdapter() {
         //Act
-        var first = objectUnderTest.getInstanceOf(IDefaultConstructorService.class);
-        var second = objectUnderTest.getInstanceOf(IDefaultConstructorService.class);
+        var first = objectUnderTest.getInstanceOf(IDefaultConstructorService.class, new Properties());
+        var second = objectUnderTest.getInstanceOf(IDefaultConstructorService.class, new Properties());
 
 
         //Act

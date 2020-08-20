@@ -31,86 +31,73 @@ public class AdapterFactory
         return this;
     }
 
-    public <T> T newInstanceOf(Class<T> interfaceType) {
-        Validate.notNull(interfaceType);
+    public <T> T newInstanceOf(Class<T> adapterInterface) {
+        Validate.notNull(adapterInterface);
 
-        Class<?> factory = getImplementationOf(interfaceType).
-                orElseThrow(() -> new IllegalArgumentException("No implementation found for interface " + interfaceType.getName()));
+        Class<?> adapterImpl = getImplementationOf(adapterInterface).
+                orElseThrow(() -> new IllegalArgumentException("No implementation found for interface " + adapterInterface.getName()));
 
         try
         {
             //Apply 1. convention and try to use default constructor
-            var instance = ClassFactory.newInstanceOf(factory);
+            var adapterInstance = ClassFactory.newInstanceOf(adapterImpl);
 
             //Apply 2. convention and try to use a factory method
-            if (instance.isEmpty())
+            if (adapterInstance.isEmpty())
             {
-                instance = ClassFactory.newInstanceOf(interfaceType, factory);
+                adapterInstance = ClassFactory.newInstanceOf(adapterInterface, adapterImpl);
             }
-            return interfaceType.cast(instance.orElseThrow());
+            return adapterInterface.cast(adapterInstance.orElseThrow());
         }
         catch (ReflectiveOperationException e)
         {
-            throw new InvalidAdapterConfigurationException(interfaceType, e);
+            throw new InvalidAdapterConfigurationException(adapterInterface, e);
         }
 
     }
 
-    public <T> T newInstanceOf(Class<T> interfaceType, Properties properties) {
-        Validate.notNull(interfaceType);
+    public <T> T newInstanceOf(Class<T> adapterInterface, Properties properties) {
+        Validate.notNull(adapterInterface);
 
-        Class<?> implementation = getImplementationOf(interfaceType).
-                orElseThrow(() -> new IllegalArgumentException("No implementation found for interface " + interfaceType.getName()));
+        Class<?> adapterImpl = getImplementationOf(adapterInterface).
+                orElseThrow(() -> new IllegalArgumentException("No implementation found for interface " + adapterInterface.getName()));
 
         try
         {
             //Apply 1. convention and try to use a constructor accepting properties
-            var instance = ClassFactory.newInstanceOf(implementation, new Object[]{properties});
+            var adapterInstance = ClassFactory.newInstanceOf(adapterImpl, new Object[]{properties});
 
             //Apply 2. convention and try to use a factory method accepting properties
-            if (instance.isEmpty())
+            if (adapterInstance.isEmpty())
             {
-                instance = ClassFactory.newInstanceOf(interfaceType, implementation, new Object[]{properties});
+                adapterInstance = ClassFactory.newInstanceOf(adapterInterface, adapterImpl, new Object[]{properties});
             }
 
             //Try to create without properties
-            if (instance.isEmpty())
+            if (adapterInstance.isEmpty())
             {
-                return newInstanceOf(interfaceType);
+                return newInstanceOf(adapterInterface);
             }
 
-            return interfaceType.cast(instance.orElseThrow());
+            return adapterInterface.cast(adapterInstance.orElseThrow());
 
         }
         catch (ReflectiveOperationException e)
         {
-            throw new InvalidAdapterConfigurationException(interfaceType, e);
+            throw new InvalidAdapterConfigurationException(adapterInterface, e);
         }
     }
+    
 
-
-    public <T> T getInstanceOf(Class<T> interfaceType)
+    public <T> T getInstanceOf(Class<T> adapterInterace, Properties properties)
     {
-        var existingInstance = objectPool.getInstance(interfaceType);
+        var existingInstance = objectPool.getInstance(adapterInterace);
 
         if (existingInstance.isPresent()) {
             return existingInstance.get();
         }
 
-        T newInstance = newInstanceOf(interfaceType);
-        objectPool.add(newInstance);
-        return newInstance;
-    }
-
-    public <T> T getInstanceOf(Class<T> interfaceType, Properties properties)
-    {
-        var existingInstance = objectPool.getInstance(interfaceType);
-
-        if (existingInstance.isPresent()) {
-            return existingInstance.get();
-        }
-
-        T newInstance = newInstanceOf(interfaceType, properties);
+        T newInstance = newInstanceOf(adapterInterace, properties);
         objectPool.add(newInstance);
         return newInstance;
     }
