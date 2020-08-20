@@ -26,12 +26,12 @@ public class JexxaMain
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JexxaMain.class);
 
-    private final CompositeDrivingAdapter compositeDrivingAdapter;
+    private final CompositeDrivingAdapter compositeDrivingAdapter = new CompositeDrivingAdapter();
     private final Properties properties = new Properties();
 
-    private final AdapterFactory drivingAdapterFactory;
-    private final AdapterFactory drivenAdapterFactory;
-    private final PortFactory portFactory;
+    private final AdapterFactory drivingAdapterFactory  = new AdapterFactory();
+    private final AdapterFactory drivenAdapterFactory   = new AdapterFactory();
+    private final PortFactory portFactory               = new PortFactory(drivenAdapterFactory);
 
     private final BoundedContext boundedContext;
 
@@ -47,15 +47,10 @@ public class JexxaMain
 
         this.boundedContext = new BoundedContext(contextName, this);
 
-        loadJexxaProperties(this.properties);
-        this.properties.putAll( properties );
+        loadProperties(this.properties);
+        this.properties.putAll( properties );  //add/overwrite given properties 
         this.properties.put(JEXXA_CONTEXT_NAME, contextName);
 
-        this.compositeDrivingAdapter = new CompositeDrivingAdapter();
-
-        this.drivingAdapterFactory = new AdapterFactory();
-        this.drivenAdapterFactory = new AdapterFactory();
-        this.portFactory = new PortFactory(drivenAdapterFactory);
         setExceptionHandler();
     }
 
@@ -194,7 +189,7 @@ public class JexxaMain
     }
 
 
-    private void loadJexxaProperties(Properties properties)
+    private void loadProperties(Properties properties)
     {
         Optional.ofNullable(JexxaMain.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES))
                 .ifPresentOrElse(
