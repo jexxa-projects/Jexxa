@@ -89,15 +89,15 @@ public class AdapterFactory
     }
     
 
-    public <T> T getInstanceOf(Class<T> adapterInterace, Properties properties)
+    public <T> T getInstanceOf(Class<T> adapterInterface, Properties properties)
     {
-        var existingInstance = objectPool.getInstance(adapterInterace);
+        var existingInstance = objectPool.getInstance(adapterInterface);
 
         if (existingInstance.isPresent()) {
             return existingInstance.get();
         }
 
-        T newInstance = newInstanceOf(adapterInterace, properties);
+        T newInstance = newInstanceOf(adapterInterface, properties);
         objectPool.add(newInstance);
         return newInstance;
     }
