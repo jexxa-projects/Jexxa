@@ -8,7 +8,7 @@ public class AmbiguousAdapterException extends RuntimeException
 
     private final String internalMessage;
 
-    public <T> AmbiguousAdapterException(Class<T> clazz, List<Class<?>> implementationList)
+    <T> AmbiguousAdapterException(Class<T> clazz, List<Class<?>> implementationList)
     {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("AmbiguousAdapterException: Outbound port ")

@@ -9,7 +9,7 @@ public class MissingAdapterException extends RuntimeException
 
     private final String internalMessage;
 
-    public MissingAdapterException(Class<?> port, AdapterFactory drivenAdapterFactory)
+    MissingAdapterException(Class<?> port, AdapterFactory drivenAdapterFactory)
     {
         internalMessage = getInternalMessage(port, drivenAdapterFactory);
     }
