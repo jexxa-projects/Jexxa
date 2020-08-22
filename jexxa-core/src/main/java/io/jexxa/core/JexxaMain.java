@@ -204,7 +204,7 @@ public class JexxaMain
         Optional.ofNullable(Thread.getDefaultUncaughtExceptionHandler())
                 .ifPresentOrElse(
                         value -> LOGGER.warn("Uncaught Exception Handler already set => Don't register Jexxa's uncaught exception handler"),
-                        () -> Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler())
+                        () -> Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler( this ))
                 );
 
     }
@@ -254,9 +254,16 @@ public class JexxaMain
 
 
     static class ExceptionHandler implements Thread.UncaughtExceptionHandler {
+        private final JexxaMain jexxaMain;
 
+        ExceptionHandler(JexxaMain jexxaMain)
+        {
+            this.jexxaMain = jexxaMain;
+        }
+        
         public void uncaughtException(Thread t, Throwable e) {
             LOGGER.error("\nCould not startup Jexxa! {}", e.getMessage());
+            jexxaMain.stop();
         }
     }
 }
