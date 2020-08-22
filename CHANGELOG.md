@@ -4,12 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.x.x] - yyyy-mm-dd
+## \[2.3.x] - yyyy-mm-dd
 ### Added                                       
       
 ### Fixed
 
 ### Changed
+-   Removed deprecated Jexxa's old JMS API integration   
 
 ## \[2.2.1] - 2020-08-16
 ### Added                                       

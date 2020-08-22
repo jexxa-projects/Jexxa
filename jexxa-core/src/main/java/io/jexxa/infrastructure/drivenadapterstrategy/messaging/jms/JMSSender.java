@@ -13,7 +13,6 @@ import javax.jms.Session;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
@@ -43,32 +42,6 @@ public class JMSSender extends MessageSender implements AutoCloseable
         Validate.notNull(getConnection()); //Try create a connection to ensure fail fast
     }
     
-    /**
-     * @deprecated Please use {@link #send(Object)}
-     * @param message to be send
-     * @param topicName name of the topic
-     * @param <T> Type of the message
-     */
-    @Deprecated(forRemoval = true)
-    public <T> void sendToTopic(T message, String topicName)
-    {
-        sendToTopic(message, topicName, null);
-    }
-
-    /**
-     * @deprecated Please use {@link #send(Object)}
-     * @param message to be send
-     * @param topicName name of the topic
-     * @param messageProperties properties added to message header 
-     * @param <T> Type of the message
-     */
-    @Deprecated(forRemoval = true)
-    public <T> void sendToTopic(T message, String topicName, Properties messageProperties)
-    {
-        var gson = new Gson();
-        sendMessageToTopic(gson.toJson(message), topicName, messageProperties);
-    }
-
     protected void sendMessageToTopic(String message, String topicName, Properties messageProperties)
     {
         try
@@ -85,34 +58,7 @@ public class JMSSender extends MessageSender implements AutoCloseable
             throw new IllegalStateException("Could not send message", e);                         
         }
     }
-
-
-    /**
-     * @deprecated Please use {@link #send(Object)}
-     * @param message to be send
-     * @param queue name of the queue
-     * @param <T> Type of the message
-     */
-    @Deprecated(forRemoval = true)
-    public <T> void sendToQueue(T message, String queue)
-    {
-        sendToQueue(message, queue, null);
-    }
-
-    /**
-     * @deprecated Please use {@link #send(Object)}
-     * @param message to be send
-     * @param queueName name of the queue
-     * @param messageProperties properties added to message header
-     * @param <T> Type of the message
-     */
-    @Deprecated(forRemoval = true)
-    public <T> void sendToQueue(T message, String queueName, Properties messageProperties)
-    {
-        var gson = new Gson();
-        sendMessageToQueue(gson.toJson(message), queueName, messageProperties);
-    }
-
+    
     protected void sendMessageToQueue(String message, String queueName, Properties messageProperties)
     {
         try
