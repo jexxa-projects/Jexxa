@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -46,7 +47,7 @@ class RESTfulRPCAdapterIT
         var defaultPort = 7000;
 
         properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
-        properties.put(RESTfulRPCAdapter.HTTP_PORT_PROPERTY, Integer.toString(defaultPort));
+        properties.put(HTTP_PORT_PROPERTY, Integer.toString(defaultPort));
 
         objectUnderTest = new RESTfulRPCAdapter(properties);
         objectUnderTest.register(simpleApplicationService);
@@ -85,12 +86,12 @@ class RESTfulRPCAdapterIT
         //Arrange
         Properties properties = new Properties();
         properties.setProperty(RESTfulRPCAdapter.HOST_PROPERTY, "localhost");
-        properties.setProperty(RESTfulRPCAdapter.HTTP_PORT_PROPERTY, String.valueOf(0));
+        properties.setProperty(HTTP_PORT_PROPERTY, String.valueOf(0));
 
         var secondAdapter = new RESTfulRPCAdapter(properties);
         secondAdapter.register(simpleApplicationService);
         secondAdapter.start();
-        var secondRestPath = "http://localhost:" + secondAdapter.getPort() + "/SimpleApplicationService/";
+        var secondRestPath = "http://localhost:" + secondAdapter.getHTTPPort() + "/SimpleApplicationService/";
 
 
         //Act using secondAdapter 
@@ -112,10 +113,23 @@ class RESTfulRPCAdapterIT
     void testUnsetProperties()
     {
         //Arrange
-        var secondAdapter = new RESTfulRPCAdapter(new Properties());
+        var properties = new Properties();
+
+        //Act and Assert 
+        assertThrows(IllegalArgumentException.class, () -> new RESTfulRPCAdapter(properties));
+    }
+
+    @Test
+    void testUnsetHTTPPort()
+    {
+        //Arrange
+        var properties = new Properties();
+        properties.put(HTTP_PORT_PROPERTY, Integer.toString(0));
+
+        var secondAdapter = new RESTfulRPCAdapter(properties);
         secondAdapter.register(simpleApplicationService);
         secondAdapter.start();
-        var secondRestPath = "http://localhost:" + secondAdapter.getPort() + "/SimpleApplicationService/";
+        var secondRestPath = "http://localhost:" + secondAdapter.getHTTPPort() + "/SimpleApplicationService/";
 
 
         //Act using secondAdapter

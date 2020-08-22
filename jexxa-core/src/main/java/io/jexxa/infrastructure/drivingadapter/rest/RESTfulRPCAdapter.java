@@ -2,6 +2,7 @@ package io.jexxa.infrastructure.drivingadapter.rest;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.Properties;
 
 import com.google.gson.Gson;
@@ -25,25 +26,24 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public static final String KEYSTORE = "io.jexxa.rest.keystore";
     public static final String KEYSTORE_PASSWORD = "io.jexxa.rest.keystore_password";
 
-    private Javalin javalin;
-    private String hostname;
-    private int port;
-
-    private int httpsPort;
-    private String keyStore;
-    private String keyStorePassword;
-
     private final Properties properties;
-    
-    public RESTfulRPCAdapter(final Properties properties)
+    private Javalin javalin;
+    private Server server;
+    private ServerConnector sslConnector;
+    private ServerConnector httpConnector;
+
+    public RESTfulRPCAdapter(Properties properties)
     {
         this.properties = properties;
 
-        readProperties(properties);
+        Validate.isTrue(isHTTPEnabled() || isHTTPSEnabled(), "Neither HTTP (" + HTTP_PORT_PROPERTY + ") nor HTTPS (" + HTTPS_PORT_PROPERTY + ") is enabled!");
 
-        Validate.notNull(hostname);
-        Validate.isTrue(port >= 0);
-        
+        if ( isHTTPSEnabled() )
+        {
+            Validate.isTrue( properties.containsKey( KEYSTORE ));
+            Validate.isTrue( properties.containsKey( KEYSTORE_PASSWORD ));
+        }
+
         setupJavalin();
 
         registerExceptionHandler();
@@ -62,16 +62,70 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     {
         javalin.start();
     }
-    
+
     @Override
     public void stop()
     {
         javalin.stop();
+        Optional.ofNullable(httpConnector).ifPresent(ServerConnector::close);
+        Optional.ofNullable(sslConnector).ifPresent(ServerConnector::close);
     }
 
-    public int getPort()
+    @SuppressWarnings("unused")
+    public int getHTTPSPort()
     {
-        return javalin.port();
+        if (sslConnector != null)
+        {
+            return sslConnector.getLocalPort();
+        }
+        
+        return getHTTPSPortFromProperties();
+    }
+
+    public int getHTTPPort()
+    {
+        if (httpConnector != null)
+        {
+            return httpConnector.getLocalPort();
+        }
+
+        return getHTTPPortFromProperties();
+    }
+
+    boolean isHTTPEnabled()
+    {
+        return properties.containsKey(HTTP_PORT_PROPERTY);
+    }
+
+    boolean isHTTPSEnabled()
+    {
+        return properties.containsKey(HTTPS_PORT_PROPERTY);
+    }
+
+    String getHostname()
+    {
+        return properties.getProperty(HOST_PROPERTY, "0.0.0.0");
+    }
+
+    String getKeystore()
+    {
+        return properties.getProperty(KEYSTORE, "");
+    }
+
+    String getKeystorePassword()
+    {
+        return properties.getProperty(KEYSTORE_PASSWORD, "");
+    }
+
+
+    private int getHTTPPortFromProperties()
+    {
+        return Integer.parseInt(properties.getProperty(HTTP_PORT_PROPERTY, "0"));
+    }
+
+    private int getHTTPSPortFromProperties()
+    {
+        return Integer.parseInt(properties.getProperty(HTTPS_PORT_PROPERTY, "0"));
     }
 
     /**
@@ -185,47 +239,43 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void setupJavalin()
     {
-        this.javalin = Javalin.create(config -> config.server(this::getServer));
-        this.javalin.config.showJavalinBanner = false;
+        this.javalin = Javalin.create(config ->
+                {
+                    config.server(this::getServer);
+                    config.showJavalinBanner = false;
+                }
+        );
     }
 
-    Server getServer( )
+    private Server getServer()
     {
-        Server server = new Server();
-
-        if ( properties.containsKey(HTTPS_PORT_PROPERTY) )
+        if ( server == null )
         {
-            ServerConnector sslConnector = new ServerConnector(server, getSslContextFactory());
-            sslConnector.setHost(hostname);
-            sslConnector.setPort(httpsPort);
-            server.addConnector(sslConnector);
+            server = new Server();
+            if (isHTTPEnabled())
+            {
+                httpConnector = new ServerConnector(server);
+                httpConnector.setHost(getHostname());
+                httpConnector.setPort(getHTTPPortFromProperties());
+                server.addConnector(httpConnector);
+            }
+
+            if (isHTTPSEnabled())
+            {
+                sslConnector = new ServerConnector(server, getSslContextFactory());
+                sslConnector.setHost(getHostname());
+                sslConnector.setPort(getHTTPSPortFromProperties());
+                server.addConnector(sslConnector);
+            }
         }
 
-        if ( properties.containsKey(HTTP_PORT_PROPERTY) )
-        {
-            ServerConnector connector = new ServerConnector(server);
-            connector.setHost(hostname);
-            connector.setPort(port);
-            server.addConnector(connector);
-        }
-        
         return server;
     }
 
     private SslContextFactory getSslContextFactory() {
-        SslContextFactory sslContextFactory = new SslContextFactory.Server();
-        sslContextFactory.setKeyStorePath(RESTfulRPCAdapter.class.getResource("/"+ keyStore ).toExternalForm());
-        sslContextFactory.setKeyStorePassword(keyStorePassword);
+        var sslContextFactory = new SslContextFactory.Server();
+        sslContextFactory.setKeyStorePath(RESTfulRPCAdapter.class.getResource("/"+ getKeystore() ).toExternalForm());
+        sslContextFactory.setKeyStorePassword(getKeystorePassword());
         return sslContextFactory;
-    }
-
-    private void readProperties(Properties properties)
-    {
-        this.hostname = properties.getProperty(HOST_PROPERTY, "0.0.0.0");
-        this.port = Integer.parseInt(properties.getProperty(HTTP_PORT_PROPERTY, "0"));
-
-        this.httpsPort = Integer.parseInt(properties.getProperty(HTTPS_PORT_PROPERTY, "0"));
-        this.keyStore = properties.getProperty(KEYSTORE, "");
-        this.keyStorePassword = properties.getProperty(KEYSTORE_PASSWORD, "");
     }
 }
