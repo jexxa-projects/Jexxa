@@ -3,6 +3,7 @@ package io.jexxa.core.factory;
 
 import static java.util.stream.Collectors.toList;
 
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -120,22 +121,22 @@ public class AdapterFactory
     /**
      * Returns a class which implements given interface type. In case given type is not an interface the given type is returned
      **
-     * @param interfaceType class of the interface for which an implementation is required
+     * @param adapterInterface class of the interface for which an implementation is required
      * @param <T> Type information of the given interface
      * @return 1. Given interface type if interfaceType is not an interface. 2. An implementation of the interface if available 
      */
-    private <T> Optional<Class<?>> getImplementationOf(Class<T> interfaceType) {
-        if (!interfaceType.isInterface())
+    private <T> Optional<Class<?>> getImplementationOf(Class<T> adapterInterface) {
+        if ( !Modifier.isInterface(adapterInterface.getModifiers()) &&
+             !Modifier.isAbstract(adapterInterface.getModifiers()) )
         {
-            return Optional.of(interfaceType);
+            return Optional.of(adapterInterface);
         }
 
-        var implementationList = dependencyScanner.getClassesImplementing(interfaceType);
+        var implementationList = dependencyScanner.getClassesImplementing(adapterInterface);
 
-        Validate.notNull(implementationList);
         if (implementationList.size() > 1) // If more than one implementation is available our convention is violated
         {
-            throw new AmbiguousAdapterException(interfaceType, implementationList);
+            throw new AmbiguousAdapterException(adapterInterface, implementationList);
         }
 
         if ( implementationList.isEmpty() )
