@@ -12,7 +12,7 @@ import io.jexxa.utils.factory.ClassFactory;
 import org.apache.commons.lang3.Validate;
 
 /**
- * Creates a driving or driving adapter which fulfills one of the following requirements:
+ * Creates all kind of adapters (driving and driving) which fulfill one of the following conventions:
  * <ol>
  *   <li>Public Default constructor available</li>
  *   <li>Public constructor with one Properties as attribute is available</li>
