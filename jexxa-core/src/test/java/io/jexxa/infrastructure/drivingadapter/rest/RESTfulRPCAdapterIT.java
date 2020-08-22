@@ -46,7 +46,7 @@ class RESTfulRPCAdapterIT
         var defaultPort = 7000;
 
         properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
-        properties.put(RESTfulRPCAdapter.PORT_PROPERTY, Integer.toString(defaultPort));
+        properties.put(RESTfulRPCAdapter.HTTP_PORT_PROPERTY, Integer.toString(defaultPort));
 
         objectUnderTest = new RESTfulRPCAdapter(properties);
         objectUnderTest.register(simpleApplicationService);
@@ -85,7 +85,7 @@ class RESTfulRPCAdapterIT
         //Arrange
         Properties properties = new Properties();
         properties.setProperty(RESTfulRPCAdapter.HOST_PROPERTY, "localhost");
-        properties.setProperty(RESTfulRPCAdapter.PORT_PROPERTY, String.valueOf(0));
+        properties.setProperty(RESTfulRPCAdapter.HTTP_PORT_PROPERTY, String.valueOf(0));
 
         var secondAdapter = new RESTfulRPCAdapter(properties);
         secondAdapter.register(simpleApplicationService);

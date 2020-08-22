@@ -19,8 +19,6 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -62,7 +60,7 @@ class HTTPSTest
         var defaultHTTPSPort = 8080;
 
         properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
-        properties.put(RESTfulRPCAdapter.PORT_PROPERTY, Integer.toString(defaultPort));
+        properties.put(RESTfulRPCAdapter.HTTP_PORT_PROPERTY, Integer.toString(defaultPort));
         properties.put(RESTfulRPCAdapter.HTTPS_PORT_PROPERTY, Integer.toString(defaultHTTPSPort));
         properties.put(RESTfulRPCAdapter.KEYSTORE_PASSWORD, "test123");
         properties.put(RESTfulRPCAdapter.KEYSTORE, "keystore.jks");
