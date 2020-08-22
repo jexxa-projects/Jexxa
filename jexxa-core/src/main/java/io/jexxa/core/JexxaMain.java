@@ -142,7 +142,6 @@ public class JexxaMain
     
     protected void bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port)
     {
-
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
         var inboundPort    = portFactory.getInstanceOf(port, properties);
         Validate.notNull(inboundPort);
@@ -153,7 +152,6 @@ public class JexxaMain
 
     protected JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Object port)
     {
-
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
         drivingAdapter.register(port);
 
@@ -201,12 +199,10 @@ public class JexxaMain
 
     private void setExceptionHandler()
     {
-        Optional.ofNullable(Thread.getDefaultUncaughtExceptionHandler())
-                .ifPresentOrElse(
-                        value -> LOGGER.warn("Uncaught Exception Handler already set => Don't register Jexxa's uncaught exception handler"),
-                        () -> Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler( this ))
-                );
-
+        if (Thread.getDefaultUncaughtExceptionHandler() == null)
+        {
+            Thread.setDefaultUncaughtExceptionHandler(new JexxaExceptionHandler(this));
+        }
     }
 
     static class CompositeDrivingAdapter implements IDrivingAdapter
@@ -253,10 +249,10 @@ public class JexxaMain
     }
 
 
-    static class ExceptionHandler implements Thread.UncaughtExceptionHandler {
+    static class JexxaExceptionHandler implements Thread.UncaughtExceptionHandler {
         private final JexxaMain jexxaMain;
 
-        ExceptionHandler(JexxaMain jexxaMain)
+        JexxaExceptionHandler(JexxaMain jexxaMain)
         {
             this.jexxaMain = jexxaMain;
         }
