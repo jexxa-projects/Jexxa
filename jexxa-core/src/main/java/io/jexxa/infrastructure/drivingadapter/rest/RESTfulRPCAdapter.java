@@ -40,8 +40,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
         if ( isHTTPSEnabled() )
         {
-            Validate.isTrue( properties.containsKey( KEYSTORE ));
-            Validate.isTrue( properties.containsKey( KEYSTORE_PASSWORD ));
+            Validate.isTrue( properties.containsKey( KEYSTORE ), "You need to define a location for keystore ("+ KEYSTORE+ ")");
+            Validate.isTrue( properties.containsKey( KEYSTORE_PASSWORD ) , "You need to define a location for keystore-password ("+ KEYSTORE_PASSWORD+ ")");
         }
 
         setupJavalin();
