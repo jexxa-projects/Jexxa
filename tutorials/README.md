@@ -7,6 +7,7 @@ All tutorials focus on the usage of Jexxa. Therefore, the business logic in thes
 *   A general understanding of the used technology stacks such as a messaging system or a database
 *   A general understanding of [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/)
 *   Perform the steps in Jexxa‘s [README.md](../README.md)    
+*   All tutorials use the latest public release of Jexxa and not the SNAPSHOT version of the current trunk. In case you want to make some changes in Jexxa itself replace `${jexxa-core.version}` with `${project.version}` in [parent-pom](pom.xml).    
 
 ## HelloJexxa
 See documentation [HelloJexxa](HelloJexxa/)
