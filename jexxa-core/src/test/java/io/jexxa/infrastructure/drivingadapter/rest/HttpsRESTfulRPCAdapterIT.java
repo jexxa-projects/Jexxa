@@ -35,6 +35,11 @@ class HttpsRESTfulRPCAdapterIT
     private static final int DEFAULT_VALUE = 42;
     private final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
 
+    // Run the tests with Port 0 (random port and port 8080) 
+    static Stream<Integer> httpsPorts() {
+        return Stream.of(0,8080);
+    }
+
     @BeforeEach
     void initTest() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException, CertificateException, IOException
     {
@@ -55,11 +60,7 @@ class HttpsRESTfulRPCAdapterIT
         Unirest.config().sslContext(sslContext);
         Unirest.config().hostnameVerifier(new NoopHostnameVerifier());
     }
-
-    static Stream<Integer> httpsPorts() {
-        return Stream.of(0,8080);
-    }
-
+    
     @ParameterizedTest
     @MethodSource("httpsPorts")
     void testHTTPSConnectionRandomPort(Integer httpsPort)
@@ -77,10 +78,9 @@ class HttpsRESTfulRPCAdapterIT
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
-
-        //Act
         String restPath = "https://localhost:" + objectUnderTest.getHTTPSPort() + "/SimpleApplicationService/";
 
+        //Act
         Integer result = Unirest.get(restPath + METHOD_GET_SIMPLE_VALUE)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
