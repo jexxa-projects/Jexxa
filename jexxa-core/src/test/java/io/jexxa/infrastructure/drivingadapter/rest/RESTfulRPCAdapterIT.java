@@ -85,7 +85,6 @@ class RESTfulRPCAdapterIT
     {
         //Arrange
         Properties properties = new Properties();
-        properties.setProperty(RESTfulRPCAdapter.HOST_PROPERTY, "localhost");
         properties.setProperty(HTTP_PORT_PROPERTY, String.valueOf(0));
 
         var secondAdapter = new RESTfulRPCAdapter(properties);
@@ -119,33 +118,7 @@ class RESTfulRPCAdapterIT
         assertThrows(IllegalArgumentException.class, () -> new RESTfulRPCAdapter(properties));
     }
 
-    @Test
-    void testUnsetHTTPPort()
-    {
-        //Arrange
-        var properties = new Properties();
-        properties.put(HTTP_PORT_PROPERTY, Integer.toString(0));
-
-        var secondAdapter = new RESTfulRPCAdapter(properties);
-        secondAdapter.register(simpleApplicationService);
-        secondAdapter.start();
-        var secondRestPath = "http://localhost:" + secondAdapter.getHTTPPort() + "/SimpleApplicationService/";
-
-
-        //Act using secondAdapter
-        Integer result = Unirest.get(secondRestPath + METHOD_GET_SIMPLE_VALUE)
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
-                .asObject(Integer.class).getBody();
-
-
-        secondAdapter.stop();
-
-        //Assert
-        assertNotNull(result);
-        assertEquals(DEFAULT_VALUE, simpleApplicationService.getSimpleValue());
-        assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
-    }
-
+   
     @Test  // RPC call test: void setSimpleValue(44)
     void testPOSTCommandWithOneAttribute()
     {
