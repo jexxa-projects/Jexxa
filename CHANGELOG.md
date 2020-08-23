@@ -5,12 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[2.3.x] - yyyy-mm-dd
-### Added                                       
-      
+### Added
+-   Added HTTPS support in RESTfulRPCAdapter (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/main/resources/jexxa-application.properties) for more information).                                             
 ### Fixed
 
 ### Changed
--   Removed deprecated Jexxa's old JMS API integration   
+-   Removed deprecated Jexxa's old JMS API integration 
+
+-   Updated dependencies   
 
 ## \[2.2.1] - 2020-08-16
 ### Added                                       
