@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.3.x] - yyyy-mm-dd
+## \[2.3.0] - yyyy-mm-dd
 ### Added
 -   Added HTTPS support in RESTfulRPCAdapter (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/main/resources/jexxa-application.properties) for more information).                                             
 ### Fixed
+-   Fixed Issue with including correct jexxa-application.properties in tutorials jar with all dependencies. Switched from jar-plugin to maven-shade plugin to define correct jexxa-application.properties.   
 
 ### Changed
 -   Removed deprecated Jexxa's old JMS API integration 
