@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.3.0] - yyyy-mm-dd
+## \[2.3.0] - 2020-08-23
 ### Added
 -   Added HTTPS support in RESTfulRPCAdapter (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/main/resources/jexxa-application.properties) for more information).                                             
 ### Fixed
