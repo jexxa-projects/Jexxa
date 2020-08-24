@@ -5,7 +5,7 @@
 
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa</artifactId>
-  <version>2.2.2-SNAPSHOT</version>
+  <version>2.3.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <!-- Project Information -->
@@ -38,12 +38,12 @@
     <maven.clean.plugin>3.1.0</maven.clean.plugin>
     <maven.compiler.plugin>3.8.1</maven.compiler.plugin>
     <maven.deploy.plugin>3.0.0-M1</maven.deploy.plugin>
-    <maven.failsafe.plugin>3.0.0-M4</maven.failsafe.plugin>
+    <maven.failsafe.plugin>3.0.0-M5</maven.failsafe.plugin>
     <maven.install.plugin>3.0.0-M1</maven.install.plugin>
     <maven.jar.plugin>3.2.0</maven.jar.plugin>
-    <maven.resources.plugin>3.1.0</maven.resources.plugin>
-    <maven.site.plugin>3.9.0</maven.site.plugin>
-    <maven.surefire.plugin>3.0.0-M4</maven.surefire.plugin>
+    <maven.resources.plugin>3.2.0</maven.resources.plugin>
+    <maven.site.plugin>3.9.1</maven.site.plugin>
+    <maven.surefire.plugin>3.0.0-M5</maven.surefire.plugin>
     <maven.release.plugin>3.0.0-M1</maven.release.plugin>
     <maven.jacoco.plugin>0.8.5</maven.jacoco.plugin>
     <maven.reports.plugin>3.1.0</maven.reports.plugin>
@@ -73,16 +73,16 @@
 
     <!-- version of test dependencies -->
     <activemq.client.version>5.16.0</activemq.client.version>
-    <postgres.version>42.2.14</postgres.version>
-    <unirest.java.version>3.9.00</unirest.java.version>
-    <junit.platform.launcher.version>1.7.0-M1</junit.platform.launcher.version>
-    <junit.jupiter.engine.version>5.7.0-M1</junit.jupiter.engine.version>
-    <junit.jupiter.params.version>5.7.0-M1</junit.jupiter.params.version>
+    <postgres.version>42.2.16</postgres.version>
+    <unirest.java.version>3.10.00</unirest.java.version>
+    <junit.platform.launcher.version>1.7.0-RC1</junit.platform.launcher.version>
+    <junit.jupiter.engine.version>5.7.0-RC1</junit.jupiter.engine.version>
+    <junit.jupiter.params.version>5.7.0-RC1</junit.jupiter.params.version>
     <slf4j.simple.version>1.7.30</slf4j.simple.version>
     <awaitility.version>4.0.3</awaitility.version>
 
     <!-- version of tutorials dependencies -->
-    <jexxa-core.version>2.2.2-SNAPSHOT</jexxa-core.version>
+    <jexxa-core.version>2.3.0</jexxa-core.version>
     <addendj.version>1.0.1</addendj.version>
     <aspectj.version>1.9.6</aspectj.version>
     <aspectjtools.version>1.9.6</aspectjtools.version>

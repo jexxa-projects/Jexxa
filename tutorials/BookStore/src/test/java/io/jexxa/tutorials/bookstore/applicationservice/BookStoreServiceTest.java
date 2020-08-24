@@ -18,7 +18,7 @@ class BookStoreServiceTest
     private static final String DRIVEN_ADAPTER_PERSISTENCE = "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.persistence";
     private static final String DRIVEN_ADAPTER_MESSAGING =   "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.stub";
 
-    private static final String isbn13 = "978-3-86490-387-8";
+    private static final String ISBN_13 = "978-3-86490-387-8";
 
     private JexxaMain jexxaMain;
 
@@ -44,10 +44,10 @@ class BookStoreServiceTest
         var amount = 5;
 
         //Act
-        objectUnderTest.addToStock(isbn13, amount);
+        objectUnderTest.addToStock(ISBN_13, amount);
 
         //Assert
-        assertEquals( amount, objectUnderTest.amountInStock(isbn13) );
+        assertEquals( amount, objectUnderTest.amountInStock(ISBN_13) );
     }
 
 
@@ -57,13 +57,13 @@ class BookStoreServiceTest
         //Arrange
         var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
         var amount = 5;
-        objectUnderTest.addToStock(isbn13, amount);
+        objectUnderTest.addToStock(ISBN_13, amount);
 
         //Act
-        objectUnderTest.sell(isbn13);
+        objectUnderTest.sell(ISBN_13);
 
         //Assert
-        assertEquals( amount - 1, objectUnderTest.amountInStock(isbn13) );
+        assertEquals( amount - 1, objectUnderTest.amountInStock(ISBN_13) );
     }
 
     @Test
@@ -73,7 +73,7 @@ class BookStoreServiceTest
         var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
 
         //Act/Assert
-        assertThrows(BookNotInStockException.class, () -> objectUnderTest.sell(isbn13));
+        assertThrows(BookNotInStockException.class, () -> objectUnderTest.sell(ISBN_13));
     }
 
     @Test
@@ -81,13 +81,13 @@ class BookStoreServiceTest
     {
         //Arrange
         var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
-        objectUnderTest.addToStock(isbn13, 1);
+        objectUnderTest.addToStock(ISBN_13, 1);
 
         //Act
-        objectUnderTest.sell(isbn13);
+        objectUnderTest.sell(ISBN_13);
 
         //Assert
-        assertEquals( 0 , objectUnderTest.amountInStock(isbn13) );
+        assertEquals( 0 , objectUnderTest.amountInStock(ISBN_13) );
         assertEquals(1, DomainEventStubPublisher.eventCount() );
     }
 

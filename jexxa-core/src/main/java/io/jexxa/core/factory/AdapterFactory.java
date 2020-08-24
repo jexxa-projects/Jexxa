@@ -3,6 +3,7 @@ package io.jexxa.core.factory;
 
 import static java.util.stream.Collectors.toList;
 
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -11,7 +12,7 @@ import io.jexxa.utils.factory.ClassFactory;
 import org.apache.commons.lang3.Validate;
 
 /**
- * Creates a driving or driving adapter which fulfills one of the following requirements:
+ * Creates all kind of adapters (driving and driving) which fulfill one of the following conventions:
  * <ol>
  *   <li>Public Default constructor available</li>
  *   <li>Public constructor with one Properties as attribute is available</li>
@@ -31,86 +32,73 @@ public class AdapterFactory
         return this;
     }
 
-    public <T> T newInstanceOf(Class<T> interfaceType) {
-        Validate.notNull(interfaceType);
+    public <T> T newInstanceOf(Class<T> adapterInterface) {
+        Validate.notNull(adapterInterface);
 
-        Class<?> factory = getImplementationOf(interfaceType).
-                orElseThrow(() -> new IllegalArgumentException("No implementation found for interface " + interfaceType.getName()));
+        Class<?> adapterImpl = getImplementationOf(adapterInterface).
+                orElseThrow(() -> new IllegalArgumentException("No implementation found for interface " + adapterInterface.getName()));
 
         try
         {
             //Apply 1. convention and try to use default constructor
-            var instance = ClassFactory.newInstanceOf(factory);
+            var adapterInstance = ClassFactory.newInstanceOf(adapterImpl);
 
             //Apply 2. convention and try to use a factory method
-            if (instance.isEmpty())
+            if (adapterInstance.isEmpty())
             {
-                instance = ClassFactory.newInstanceOf(interfaceType, factory);
+                adapterInstance = ClassFactory.newInstanceOf(adapterInterface, adapterImpl);
             }
-            return interfaceType.cast(instance.orElseThrow());
+            return adapterInterface.cast(adapterInstance.orElseThrow());
         }
         catch (ReflectiveOperationException e)
         {
-            throw new InvalidAdapterConfigurationException(interfaceType, e);
+            throw new InvalidAdapterConfigurationException(adapterInterface, e);
         }
 
     }
 
-    public <T> T newInstanceOf(Class<T> interfaceType, Properties properties) {
-        Validate.notNull(interfaceType);
+    public <T> T newInstanceOf(Class<T> adapterInterface, Properties properties) {
+        Validate.notNull(adapterInterface);
 
-        Class<?> implementation = getImplementationOf(interfaceType).
-                orElseThrow(() -> new IllegalArgumentException("No implementation found for interface " + interfaceType.getName()));
+        Class<?> adapterImpl = getImplementationOf(adapterInterface).
+                orElseThrow(() -> new IllegalArgumentException("No implementation found for interface " + adapterInterface.getName()));
 
         try
         {
             //Apply 1. convention and try to use a constructor accepting properties
-            var instance = ClassFactory.newInstanceOf(implementation, new Object[]{properties});
+            var adapterInstance = ClassFactory.newInstanceOf(adapterImpl, new Object[]{properties});
 
             //Apply 2. convention and try to use a factory method accepting properties
-            if (instance.isEmpty())
+            if (adapterInstance.isEmpty())
             {
-                instance = ClassFactory.newInstanceOf(interfaceType, implementation, new Object[]{properties});
+                adapterInstance = ClassFactory.newInstanceOf(adapterInterface, adapterImpl, new Object[]{properties});
             }
 
             //Try to create without properties
-            if (instance.isEmpty())
+            if (adapterInstance.isEmpty())
             {
-                return newInstanceOf(interfaceType);
+                return newInstanceOf(adapterInterface);
             }
 
-            return interfaceType.cast(instance.orElseThrow());
+            return adapterInterface.cast(adapterInstance.orElseThrow());
 
         }
         catch (ReflectiveOperationException e)
         {
-            throw new InvalidAdapterConfigurationException(interfaceType, e);
+            throw new InvalidAdapterConfigurationException(adapterInterface, e);
         }
     }
+    
 
-
-    public <T> T getInstanceOf(Class<T> interfaceType)
+    public <T> T getInstanceOf(Class<T> adapterInterface, Properties properties)
     {
-        var existingInstance = objectPool.getInstance(interfaceType);
+        var existingInstance = objectPool.getInstance(adapterInterface);
 
         if (existingInstance.isPresent()) {
             return existingInstance.get();
         }
 
-        T newInstance = newInstanceOf(interfaceType);
-        objectPool.add(newInstance);
-        return newInstance;
-    }
-
-    public <T> T getInstanceOf(Class<T> interfaceType, Properties properties)
-    {
-        var existingInstance = objectPool.getInstance(interfaceType);
-
-        if (existingInstance.isPresent()) {
-            return existingInstance.get();
-        }
-
-        T newInstance = newInstanceOf(interfaceType, properties);
+        T newInstance = newInstanceOf(adapterInterface, properties);
         objectPool.add(newInstance);
         return newInstance;
     }
@@ -133,22 +121,22 @@ public class AdapterFactory
     /**
      * Returns a class which implements given interface type. In case given type is not an interface the given type is returned
      **
-     * @param interfaceType class of the interface for which an implementation is required
+     * @param adapterInterface class of the interface for which an implementation is required
      * @param <T> Type information of the given interface
      * @return 1. Given interface type if interfaceType is not an interface. 2. An implementation of the interface if available 
      */
-    private <T> Optional<Class<?>> getImplementationOf(Class<T> interfaceType) {
-        if (!interfaceType.isInterface())
+    private <T> Optional<Class<?>> getImplementationOf(Class<T> adapterInterface) {
+        if ( !Modifier.isInterface(adapterInterface.getModifiers()) &&
+             !Modifier.isAbstract(adapterInterface.getModifiers()) )
         {
-            return Optional.of(interfaceType);
+            return Optional.of(adapterInterface);
         }
 
-        var implementationList = dependencyScanner.getClassesImplementing(interfaceType);
+        var implementationList = dependencyScanner.getClassesImplementing(adapterInterface);
 
-        Validate.notNull(implementationList);
         if (implementationList.size() > 1) // If more than one implementation is available our convention is violated
         {
-            throw new AmbiguousAdapterException(interfaceType, implementationList);
+            throw new AmbiguousAdapterException(adapterInterface, implementationList);
         }
 
         if ( implementationList.isEmpty() )

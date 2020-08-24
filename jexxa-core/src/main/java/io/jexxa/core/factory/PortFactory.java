@@ -139,7 +139,7 @@ public class PortFactory
         {
             throw new InvalidPortConfigurationException(portAdapter, e);
         }
-}
+    }
 
     /**
      * Creates a new instance of given inbound port each time this method is called

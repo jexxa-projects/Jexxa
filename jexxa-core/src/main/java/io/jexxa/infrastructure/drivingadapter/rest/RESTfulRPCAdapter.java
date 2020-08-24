@@ -2,6 +2,7 @@ package io.jexxa.infrastructure.drivingadapter.rest;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.Properties;
 
 import com.google.gson.Gson;
@@ -12,7 +13,6 @@ import com.google.gson.JsonParser;
 import io.javalin.Javalin;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import org.apache.commons.lang3.Validate;
-import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -21,26 +21,29 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 public class RESTfulRPCAdapter implements IDrivingAdapter
 {
     public static final String HOST_PROPERTY = "io.jexxa.rest.host";
-    public static final String PORT_PROPERTY = "io.jexxa.rest.port";
+    public static final String HTTP_PORT_PROPERTY = "io.jexxa.rest.port";
     public static final String HTTPS_PORT_PROPERTY = "io.jexxa.rest.https_port";
     public static final String KEYSTORE = "io.jexxa.rest.keystore";
     public static final String KEYSTORE_PASSWORD = "io.jexxa.rest.keystore_password";
 
+    private final Properties properties;
     private Javalin javalin;
-    private String hostname;
-    private int port;
+    private Server server;
+    private ServerConnector sslConnector;
+    private ServerConnector httpConnector;
 
-    private int httpsPort;
-    private String keyStore;
-    private String keyStorePassword;
-    
     public RESTfulRPCAdapter(Properties properties)
     {
-        readProperties(properties);
+        this.properties = properties;
 
-        Validate.notNull(hostname);
-        Validate.isTrue(port >= 0);
-        
+        Validate.isTrue(isHTTPEnabled() || isHTTPSEnabled(), "Neither HTTP (" + HTTP_PORT_PROPERTY + ") nor HTTPS (" + HTTPS_PORT_PROPERTY + ") is enabled!");
+
+        if ( isHTTPSEnabled() )
+        {
+            Validate.isTrue( properties.containsKey( KEYSTORE ), "You need to define a location for keystore ("+ KEYSTORE+ ")");
+            Validate.isTrue( properties.containsKey( KEYSTORE_PASSWORD ) , "You need to define a location for keystore-password ("+ KEYSTORE_PASSWORD+ ")");
+        }
+
         setupJavalin();
 
         registerExceptionHandler();
@@ -57,24 +60,72 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     @Override
     public void start()
     {
-        if (httpsPort == 0)
-        {
-            javalin.start(hostname, port);
-        }
-        else {
-            javalin.start();
-        }
+        javalin.start();
     }
 
     @Override
     public void stop()
     {
         javalin.stop();
+        Optional.ofNullable(httpConnector).ifPresent(ServerConnector::close);
+        Optional.ofNullable(sslConnector).ifPresent(ServerConnector::close);
     }
 
-    public int getPort()
+    @SuppressWarnings("unused")
+    public int getHTTPSPort()
     {
-        return javalin.port();
+        if (sslConnector != null)
+        {
+            return sslConnector.getLocalPort();
+        }
+        
+        return getHTTPSPortFromProperties();
+    }
+
+    public int getHTTPPort()
+    {
+        if (httpConnector != null)
+        {
+            return httpConnector.getLocalPort();
+        }
+
+        return getHTTPPortFromProperties();
+    }
+
+    boolean isHTTPEnabled()
+    {
+        return properties.containsKey(HTTP_PORT_PROPERTY);
+    }
+
+    boolean isHTTPSEnabled()
+    {
+        return properties.containsKey(HTTPS_PORT_PROPERTY);
+    }
+
+    String getHostname()
+    {
+        return properties.getProperty(HOST_PROPERTY, "0.0.0.0");
+    }
+
+    String getKeystore()
+    {
+        return properties.getProperty(KEYSTORE, "");
+    }
+
+    String getKeystorePassword()
+    {
+        return properties.getProperty(KEYSTORE_PASSWORD, "");
+    }
+
+
+    private int getHTTPPortFromProperties()
+    {
+        return Integer.parseInt(properties.getProperty(HTTP_PORT_PROPERTY, "0"));
+    }
+
+    private int getHTTPSPortFromProperties()
+    {
+        return Integer.parseInt(properties.getProperty(HTTPS_PORT_PROPERTY, "0"));
     }
 
     /**
@@ -188,46 +239,43 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void setupJavalin()
     {
-        if (httpsPort == 0)
-        {
-            this.javalin = Javalin.create();
-        }
-        else
-        {
-            this.javalin = Javalin.create(config -> {
-                config.server(() -> {
-                    Server server = new Server();
-                    ServerConnector sslConnector = new ServerConnector(server, getSslContextFactory());
-                    sslConnector.setHost(hostname);
-                    sslConnector.setPort(httpsPort);
+        this.javalin = Javalin.create(config ->
+                {
+                    config.server(this::getServer);
+                    config.showJavalinBanner = false;
+                }
+        );
+    }
 
-                    ServerConnector connector = new ServerConnector(server);
-                    connector.setHost(hostname);
-                    connector.setPort(port);
-                    server.setConnectors(new Connector[]{sslConnector, connector});
-                    return server;
-                });
-            });
+    private Server getServer()
+    {
+        if ( server == null )
+        {
+            server = new Server();
+            if (isHTTPEnabled())
+            {
+                httpConnector = new ServerConnector(server);
+                httpConnector.setHost(getHostname());
+                httpConnector.setPort(getHTTPPortFromProperties());
+                server.addConnector(httpConnector);
+            }
+
+            if (isHTTPSEnabled())
+            {
+                sslConnector = new ServerConnector(server, getSslContextFactory());
+                sslConnector.setHost(getHostname());
+                sslConnector.setPort(getHTTPSPortFromProperties());
+                server.addConnector(sslConnector);
+            }
         }
-        
-        this.javalin.config.showJavalinBanner = false;
+
+        return server;
     }
 
     private SslContextFactory getSslContextFactory() {
-        SslContextFactory sslContextFactory = new SslContextFactory();
-        System.out.println("PATH : " + RESTfulRPCAdapter.class.getResource("/"+ keyStore ).toExternalForm());
-        sslContextFactory.setKeyStorePath(RESTfulRPCAdapter.class.getResource("/"+ keyStore ).toExternalForm());
-        sslContextFactory.setKeyStorePassword(keyStorePassword);
+        var sslContextFactory = new SslContextFactory.Server();
+        sslContextFactory.setKeyStorePath(RESTfulRPCAdapter.class.getResource("/"+ getKeystore() ).toExternalForm());
+        sslContextFactory.setKeyStorePassword(getKeystorePassword());
         return sslContextFactory;
-    }
-
-    private void readProperties(Properties properties)
-    {
-        this.hostname = properties.getProperty(HOST_PROPERTY, "0.0.0.0");
-        this.port = Integer.parseInt(properties.getProperty(PORT_PROPERTY, "0"));
-
-        this.httpsPort = Integer.parseInt(properties.getProperty(HTTPS_PORT_PROPERTY, "0"));
-        this.keyStore = properties.getProperty(KEYSTORE, "");
-        this.keyStorePassword = properties.getProperty(KEYSTORE_PASSWORD, "");
     }
 }
