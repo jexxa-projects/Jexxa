@@ -22,7 +22,9 @@
 The application core consists of following two classes:
 
 *   `TimeService:` Provides use cases of the domain and is a `ApplicationService` in terms of the pattern language of DDD
-*   `ITimePublisher:` Allows for publishing current time and is a `DomainService` in terms of the pattern language of DDD        
+*   `ITimePublisher:` Allows for publishing current time and is a `DomainService` in terms of the pattern language of DDD
+*   `IMessageDisplay:` Shows a message and is a `DomainService` in terms of the pattern language of DDD        
+        
 
 ### Implement class `TimeService` 
 
@@ -72,7 +74,17 @@ public interface ITimePublisher
 {
     void publish(LocalTime localTime);
 }
-```                  
+```                 
+
+### Declare interface `IMessageDisplay`
+
+```java
+public interface IMessageDisplay
+{
+    void show(String message);
+}
+```                 
+ 
 
 ## 2. Implement the Infrastructure
 
@@ -107,6 +119,17 @@ public class ConsolePublisher implements ITimePublisher
         var logMessage = localTime.format(DateTimeFormatter.ISO_TIME);
 
         LOGGER.info(logMessage);
+    }
+}
+```
+```java
+@SuppressWarnings("unused")
+public class MessageDisplay implements IMessageDisplay
+{
+    @Override
+    public void show(String message)
+    {
+        JexxaLogger.getLogger(MessageDisplay.class).info(message);
     }
 }
 ```
