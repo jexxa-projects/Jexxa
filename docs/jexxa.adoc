@@ -288,7 +288,9 @@ a| One of the following constructors must be available (checked in this order).
 
 
 a|
-Using constructors or factory methods do not require any special annotations. Using `Properties` is a standard approach in Java to provide configuration information. Note: A driving adapter gets the same `Properties` object as `JexxaMain`.
+Using constructors or factory methods do not require any special annotations. Using `Properties` is a standard approach in Java to provide configuration information.
+
+NOTE: A driving adapter gets the same `Properties` object as `JexxaMain`.
 
 a|Inbound Port
 a|
@@ -320,6 +322,7 @@ a| 1. Avoids ambiguity when choosing a Driven Adapter. At the moment you can onl
 
 2. Using constructors or factory methods do not require any special annotations.
 
+NOTE: A driven adapter gets the same `Properties` object as `JexxaMain`.
 
 
 | Port Adapter
@@ -327,6 +330,9 @@ a| 1. A single public constructor with a single attribute. The attribute is the 
 a| 1. A port adapter is tightly coupled to a specific port. Therefore, it gets its concrete type injected.
 
 |===
+
+NOTE: `Constructor vs. static factory method`: In most cases implementing a constructor is the preferred approach when realizing an adapter. Using a static factory method
+is only recommended if the adapter needs special or more complex configuration which should be done before creating the adapter itself.
 
 === Scope
 
