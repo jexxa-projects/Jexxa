@@ -17,7 +17,7 @@
 *   A running ActiveMQ instance (at least if you start the application with option `-jms`)
 *   curl or jconsole to trigger the application  
 
-## 1. Implementing Application Core 
+## Implement the Application Core 
 
 The application core consists of following two classes:
 
@@ -102,7 +102,7 @@ public interface IMessageDisplay
 }
 ```                 
  
-## 2. Implement the Infrastructure
+## Implement the Infrastructure
 
 ### Driven Adapter with console output 
 The implementation is quite simple and just prints given time to a logger.  
@@ -239,7 +239,7 @@ public class PublishTimeListener implements MessageListener
 }
 ```
 
-## 4. Implement the Application 
+## Implement the Application 
 
 Finally, we have to write our application. As you can see in the code below there are two main differences compared to `HelloJexxa`:
 
