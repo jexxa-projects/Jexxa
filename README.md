@@ -91,7 +91,8 @@ public final class HelloJexxa
 }
 ```    
 
-### Adding a logger 
+### Adding a logger
+ 
 Jexxa does not include a logger, which means that you have to add your own logger to your application. If you do not add a logger, you will get a warning message to your console. In case your application has not any special requirements you can add the following dependency to your project:
 
 ```maven
@@ -103,7 +104,9 @@ Jexxa does not include a logger, which means that you have to add your own logge
 ```                                   
 
 ### Configure your Jexxa application  
+
 By default, a JexxaMain instance looks for the following properties file
+
 ```maven
 resources/jexxa-application.properties
 ```                                   
@@ -119,14 +122,18 @@ mvn clean install -DskipITs
 ```  
 
 ### Dependencies for integration tests 
+
 For running integration tests we recommend using local docker containers to provide following dependencies:
+
 *   An ActiveMQ instance with default settings: See [here](https://hub.docker.com/r/rmohr/activemq/).   
 *   A PostgresDB database with default settings. Default user/password should be admin/admin: See [here](https://hub.docker.com/_/postgres).   
   
 Check the status of the running containers:
+
 ```docker
 docker ps  -f status=running --format "{{.Names}}" 
-```
+```    
+
 Output should look as follows
 
 ```docker
@@ -137,11 +144,13 @@ activemq
 ```
   
 To build Jexxa with integration tests call: 
+
 ```maven
 mvn clean install 
 ```  
 
 ## Contributing
+
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
