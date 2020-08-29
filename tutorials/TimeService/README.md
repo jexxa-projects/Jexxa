@@ -314,7 +314,7 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'TimeService' successfully started in 0.649 seconds
 ```          
 
-### Publish the time 
+### Publish the time  with console output 
 
 You can use curl to publish the time.  
 ```Console
@@ -343,7 +343,7 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'TimeService' successfully started in 0.649 seconds
 ```          
 
-### Publish the time
+### Publish the time with JMS 
  
 You can use curl to publish the time.  
 ```Console
