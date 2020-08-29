@@ -102,7 +102,6 @@ public interface IMessageDisplay
 }
 ```                 
  
-
 ## 2. Implement the Infrastructure
 
 ### Driven Adapter with console output 
