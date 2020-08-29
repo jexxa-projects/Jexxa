@@ -194,7 +194,7 @@ java.naming.user=admin
 java.naming.password=admin
 ```                       
 
-## 3. Implement the port adapter to receive JMS messages
+## Implement the port adapter to receive JMS messages
 When receiving asynchronous messages we have to convert it into business data which is defined in the application core and forward it to a specific method within the application core. Since this cannot be done by convention meaningful, we have to use a configuration approach. As described in [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa.html), we have to implement a so called port adapter.   
   
 Implementing a port adapter for JMS is quite easy.
