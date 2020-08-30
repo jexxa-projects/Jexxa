@@ -49,7 +49,7 @@ compile "io.Jexxa:jexxa-core:2.3.0"
 A simple ``Hello World`` example can be found [here](https://github.com/repplix/Jexxa/tree/master/tutorials/HelloJexxa):  
 
 ```java     
-package io.jexxa.sample;
+package io.jexxa.tutorials;
 
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
@@ -57,6 +57,7 @@ import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 
 public final class HelloJexxa
 {
+    @SuppressWarnings({"java:S3400", "unused"})
     public String greetings()
     {
         return "Hello Jexxa";
