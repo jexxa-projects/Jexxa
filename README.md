@@ -57,7 +57,6 @@ import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 
 public final class HelloJexxa
 {
-    @SuppressWarnings({"java:S3400", "unused"})
     public String greetings()
     {
         return "Hello Jexxa";
