@@ -25,7 +25,7 @@ class ClassFactoryTest
     {
         //Arrange
         var annotationScanner = new DependencyScanner();
-        annotationScanner.whiteListPackage(JEXXA_APPLICATION_SERVICE);
+        annotationScanner.acceptPackage(JEXXA_APPLICATION_SERVICE);
         var collectedException = new ArrayList<Throwable>();
 
         var factoryResults = new ArrayList<>();

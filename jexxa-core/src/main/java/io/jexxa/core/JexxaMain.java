@@ -87,7 +87,7 @@ public class JexxaMain
      */
     public JexxaMain addToInfrastructure(String packageName)
     {
-        drivenAdapterFactory.whiteListPackage(packageName);
+        drivenAdapterFactory.acceptPackage(packageName);
         return this;
     }
 
@@ -100,7 +100,7 @@ public class JexxaMain
      */
     public JexxaMain addToApplicationCore(String packageName)
     {
-        portFactory.whiteListPackage(packageName);
+        portFactory.acceptPackage(packageName);
         return this;
     }
 

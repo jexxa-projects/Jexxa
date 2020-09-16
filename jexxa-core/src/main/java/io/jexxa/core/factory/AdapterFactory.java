@@ -26,9 +26,9 @@ public class AdapterFactory
     private final ObjectPool objectPool = new ObjectPool();
     private final DependencyScanner dependencyScanner = new DependencyScanner();
 
-    public AdapterFactory whiteListPackage(String packageName)
+    public AdapterFactory acceptPackage(String packageName)
     {
-        dependencyScanner.whiteListPackage(packageName);
+        dependencyScanner.acceptPackage(packageName);
         return this;
     }
 
@@ -88,7 +88,7 @@ public class AdapterFactory
             throw new InvalidAdapterConfigurationException(adapterInterface, e);
         }
     }
-    
+
 
     public <T> T getInstanceOf(Class<T> adapterInterface, Properties properties)
     {
@@ -123,7 +123,7 @@ public class AdapterFactory
      **
      * @param adapterInterface class of the interface for which an implementation is required
      * @param <T> Type information of the given interface
-     * @return 1. Given interface type if interfaceType is not an interface. 2. An implementation of the interface if available 
+     * @return 1. Given interface type if interfaceType is not an interface. 2. An implementation of the interface if available
      */
     private <T> Optional<Class<?>> getImplementationOf(Class<T> adapterInterface) {
         if ( !Modifier.isInterface(adapterInterface.getModifiers()) &&

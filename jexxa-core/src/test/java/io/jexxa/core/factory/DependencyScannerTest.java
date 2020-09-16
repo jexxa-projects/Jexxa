@@ -30,7 +30,7 @@ class DependencyScannerTest
 
         //Act
         var applicationServiceList = objectUnderTest.
-                whiteListPackage(JEXXA_APPLICATION_SERVICE).
+                acceptPackage(JEXXA_APPLICATION_SERVICE).
                 getClassesWithAnnotation(ApplicationService.class);
 
         //Assert
@@ -40,7 +40,7 @@ class DependencyScannerTest
                 .anyMatch(SimpleApplicationService.class::isAssignableFrom));
 
     }
-    
+
 
     @Test
     void findAnnotatedClassesFailsWithinPackage() {
@@ -50,7 +50,7 @@ class DependencyScannerTest
 
         //Act
         var applicationServiceList = objectUnderTest.
-                whiteListPackage(invalidPackageName).
+                acceptPackage(invalidPackageName).
                 getClassesWithAnnotation(ApplicationService.class);
 
         //Assert
@@ -61,7 +61,7 @@ class DependencyScannerTest
     void getClassesImplementingInterface() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
-        objectUnderTest.whiteListPackage(JEXXA_DRIVING_ADAPTER);
+        objectUnderTest.acceptPackage(JEXXA_DRIVING_ADAPTER);
 
 
         //Act
@@ -80,7 +80,7 @@ class DependencyScannerTest
 
         //Act
         List<Class<?>> drivingAdapters = objectUnderTest.
-                whiteListPackage(packageName).
+                acceptPackage(packageName).
                 getClassesImplementing(IDrivingAdapter.class);
 
         //Assert
@@ -88,7 +88,7 @@ class DependencyScannerTest
         assertEquals(1, drivingAdapters.size());
     }
 
-    @Test 
+    @Test
     void handleAnnotationUnavailableDuringRuntime()
     {
         //Arrange

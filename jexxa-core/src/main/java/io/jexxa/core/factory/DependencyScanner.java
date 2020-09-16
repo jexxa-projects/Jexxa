@@ -15,14 +15,14 @@ final class DependencyScanner
     private final List<String> whiteListPackages = new ArrayList<>();
     private ScanResult scanResult;
 
-    DependencyScanner whiteListPackage(String packageName)
+    DependencyScanner acceptPackage(String packageName)
     {
         whiteListPackages.add(packageName);
         scanResult = null; //Reset scan result so that it is recreated with new white listed packages
         return this;
     }
 
-    DependencyScanner whiteListPackages(List<String> packageList)
+    DependencyScanner acceptPackages(List<String> packageList)
     {
         whiteListPackages.addAll(packageList);
         scanResult = null; //Reset scan result so that it is recreated with new white listed packages
@@ -47,7 +47,7 @@ final class DependencyScanner
                     .getClassesImplementing(interfaceType.getName())
                     .loadClasses();
     }
-    
+
 
 
     private void validateRetentionRuntime(final Class<? extends Annotation> annotation) {
