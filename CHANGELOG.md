@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed  
 -   Updated dependencies
+-   Improved error message in case of missing adapters 
 
 ## \[2.3.0] - 2020-08-23
 ### Added
