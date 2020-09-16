@@ -35,7 +35,16 @@ public class MissingAdapterException extends RuntimeException
                         missingAdapters.addAll(drivenAdapterFactory.getMissingAdapter(Arrays.asList(element.getParameterTypes())))
                 );
 
-        missingAdapters.forEach( missingAdapter -> stringBuilder.append("    * ").append(missingAdapter.getName()).append("\n") );
+        if ( missingAdapters.isEmpty() )
+        {
+            stringBuilder.append("    * <NONE>").append("\n");
+        } else {
+            missingAdapters.forEach( missingAdapter -> stringBuilder.append("    * ").append(missingAdapter.getName()).append("\n") );
+        }
+
+        stringBuilder.append("\n Please check accepted packages. Current accepted packages: \n");
+        var acceptedPackages = drivenAdapterFactory.getAcceptPackages();
+        acceptedPackages.forEach( element ->  stringBuilder.append("    * ").append(element).append("\n") );
 
         return stringBuilder.toString();
     }

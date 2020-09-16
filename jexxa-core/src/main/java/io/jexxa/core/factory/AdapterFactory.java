@@ -32,6 +32,11 @@ public class AdapterFactory
         return this;
     }
 
+    public List<String> getAcceptPackages()
+    {
+        return dependencyScanner.getAcceptPackages();
+    }
+
     public <T> T newInstanceOf(Class<T> adapterInterface) {
         Validate.notNull(adapterInterface);
 

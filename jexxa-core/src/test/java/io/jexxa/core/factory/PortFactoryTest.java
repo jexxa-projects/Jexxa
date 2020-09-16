@@ -49,12 +49,14 @@ class PortFactoryTest
                 acceptPackage("invalid.package");
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
                 acceptPackage(JEXXA_APPLICATION_SERVICE);
+        var properties = new Properties();
 
         //Act
         boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenAdapters.class);
 
         //Assert
         assertFalse(result);
+        assertThrows(MissingAdapterException.class, () -> objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenAdapters.class, properties));
     }
 
 
@@ -126,9 +128,9 @@ class PortFactoryTest
                 acceptPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act / Assert
-        var excetpion = assertThrows(PortFactory.InvalidPortConfigurationException.class,
+        var exception = assertThrows(PortFactory.InvalidPortConfigurationException.class,
                 () -> objectUnderTest.getPortAdapterOf(InvalidPortAdapter.class, new Properties()) );
 
-        assertNotNull(excetpion.getMessage());
+        assertNotNull(exception.getMessage());
     }
 }
