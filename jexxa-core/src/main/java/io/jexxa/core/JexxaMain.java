@@ -243,6 +243,10 @@ public class JexxaMain
         }
     }
 
+    /**
+     * CompositeDrivingAdapter starts all registered IDrivingAdapter
+     * In case of an failure starting a single IDrivingAdapter all registered and already started IDrivingAdapter are stopped
+     */
     static class CompositeDrivingAdapter implements IDrivingAdapter
     {
         private final Set<IDrivingAdapter> drivingAdapters = new HashSet<>();
@@ -255,7 +259,7 @@ public class JexxaMain
             }
             catch (RuntimeException e)
             {
-                //In case of any error we stop all driving adapter for proper cleanup and rethrow the exception
+                //In case of any error we stop ALL driving adapter for proper cleanup and rethrow the exception
                 stop();
                 throw e;
             }
