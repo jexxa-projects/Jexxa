@@ -5,9 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[2.3.x] - yyyy-mm-dd
-### Added
-
 ### Fixed
+-   JexxaMain::getInstanceOfPort now also creates outbound ports correctly    
 
 ### Changed  
 -   Updated dependencies
