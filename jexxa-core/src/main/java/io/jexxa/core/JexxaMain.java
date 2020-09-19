@@ -12,8 +12,8 @@ import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.JexxaLogger;
+import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.function.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -124,11 +124,22 @@ public class JexxaMain
         return new DrivingAdapter<>(clazz, this);
     }
 
+    /**
+     * Returns an instance of a Port and creates one if it not already exist.
+     *
+     * @param port Class information of the port. In case of an interface Jexxa tries to create an outbound port otherwise an inbound port
+     * @param <T> Type of the port.
+     * @return Instance of requested port. If an instance already exist it is returned otherwise a new one is created.
+     */
     @CheckReturnValue
     public <T> T getInstanceOfPort(Class<T> port)
     {
-        PortConvention.validate(port);
-        return port.cast(portFactory.getInstanceOf(port, properties));
+        if ( port.isInterface() )
+        {
+            return getInstanceOfOutboundPort(port);
+        }
+
+        return getInstanceOfInboundPort(port);
     }
 
     @CheckReturnValue
@@ -222,6 +233,18 @@ public class JexxaMain
     {
         T instance = portFactory.getInstanceOf(bootstrapService, properties);
         initFunction.accept(instance);
+    }
+
+
+    private <T> T getInstanceOfInboundPort(Class<T> port)
+    {
+        PortConvention.validate(port);
+        return port.cast(portFactory.getInstanceOf(port, properties));
+    }
+
+    private <T> T getInstanceOfOutboundPort(Class<T> port)
+    {
+        return drivenAdapterFactory.getInstanceOf(port, properties);
     }
 
 
