@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
@@ -102,14 +101,6 @@ public class JexxaMain
     {
         portFactory.acceptPackage(packageName);
         return this;
-    }
-
-    @CheckReturnValue
-    @SuppressWarnings("unused")
-    public <T, K> K addBootstrapService(Class<T> bootstrapService, Function< T, K > initFunction)
-    {
-        T instance = portFactory.getInstanceOf(bootstrapService, properties);
-        return initFunction.apply(instance);
     }
 
     @CheckReturnValue
