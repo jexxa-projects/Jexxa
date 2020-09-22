@@ -54,7 +54,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
         try
         {
-            initConnection(); 
+            initConnection();
         }
         catch (JMSException e)
         {
@@ -82,7 +82,6 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         Optional.ofNullable( jmsConnectionExceptionHandler )
                 .ifPresent(JMSConnectionExceptionHandler::stopFailover);
         close();
-        registeredListener.clear();
     }
 
     @SuppressWarnings("java:S2095") // We must not close the connection
@@ -132,6 +131,8 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         consumerList.forEach(consumer -> Optional.ofNullable(consumer).ifPresent(ThrowingConsumer.exceptionLogger(MessageConsumer::close)));
         Optional.ofNullable(session).ifPresent(ThrowingConsumer.exceptionLogger(Session::close));
         Optional.ofNullable(connection).ifPresent(ThrowingConsumer.exceptionLogger(Connection::close));
+        registeredListener.clear();
+        consumerList.clear();
     }
 
 
@@ -157,6 +158,11 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     protected Connection getConnection()
     {
         return connection;
+    }
+
+    List<MessageConsumer> getConsumerList()
+    {
+        return consumerList;
     }
 
     private JMSConfiguration getConfiguration(Object object)
@@ -212,7 +218,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     }
 
     /**
-     * Handles Exceptions in a JMS connection by starting a new connection and re-register all JMSListener   
+     * Handles Exceptions in a JMS connection by starting a new connection and re-register all JMSListener
      */
     private static class JMSConnectionExceptionHandler
     {
