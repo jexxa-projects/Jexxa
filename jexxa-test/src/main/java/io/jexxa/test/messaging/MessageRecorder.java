@@ -72,4 +72,16 @@ public class MessageRecorder
     {
         return recordedMessageList;
     }
+
+    public RecordedMessage pop()
+    {
+        if (recordedMessageList.isEmpty())
+        {
+            return null;
+        }
+
+        var latestElement = recordedMessageList.get(0);
+        recordedMessageList.remove(0);
+        return latestElement;
+    }
 }

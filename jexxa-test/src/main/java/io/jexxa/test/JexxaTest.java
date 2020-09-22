@@ -5,7 +5,6 @@ import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderMana
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 import io.jexxa.test.messaging.MessageRecorder;
-import io.jexxa.test.messaging.MessageRecorderProducer;
 import io.jexxa.test.messaging.MessageRecorderStrategy;
 import io.jexxa.test.messaging.MessageRecordingSystem;
 import org.apache.commons.lang3.Validate;
@@ -40,7 +39,8 @@ public class JexxaTest
 
     public <T> MessageRecorder getMessageRecorder(Class<T> outboundPort)
     {
-        return  MessageRecordingSystem.getInstance().getMessageRecorder(outboundPort);
+        var realImplementation = jexxaMain.getInstanceOfPort(outboundPort);
+        return  MessageRecordingSystem.getInstance().getMessageRecorder(realImplementation.getClass());
     }
 
 }
