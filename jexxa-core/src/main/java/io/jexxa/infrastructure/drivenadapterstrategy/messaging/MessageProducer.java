@@ -11,7 +11,7 @@ import org.apache.commons.lang3.Validate;
 @CheckReturnValue
 public class MessageProducer
 {
-    enum DestinationType { TOPIC, QUEUE }
+    public enum DestinationType { TOPIC, QUEUE }
     private Properties properties;
     private final Object message;
     private final MessageSender jmsSender;

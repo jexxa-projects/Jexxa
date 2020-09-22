@@ -1,8 +1,13 @@
 package io.jexxa.test;
 
 import io.jexxa.core.JexxaMain;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
+import io.jexxa.test.messaging.MessageRecorder;
+import io.jexxa.test.messaging.MessageRecorderProducer;
+import io.jexxa.test.messaging.MessageRecorderStrategy;
+import io.jexxa.test.messaging.MessageRecordingSystem;
 import org.apache.commons.lang3.Validate;
 
 public class JexxaTest
@@ -25,5 +30,17 @@ public class JexxaTest
     private void initForUnitTests( )
     {
         RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);
+        MessageSenderManager.getInstance().setDefaultStrategy(MessageRecorderStrategy.class);
     }
+
+    public <T> T getInstanceOfPort(Class<T> inboundPort)
+    {
+        return jexxaMain.getInstanceOfPort(inboundPort);
+    }
+
+    public <T> MessageRecorder getMessageRecorder(Class<T> outboundPort)
+    {
+        return  MessageRecordingSystem.getInstance().getMessageRecorder(outboundPort);
+    }
+
 }
