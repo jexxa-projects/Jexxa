@@ -4,6 +4,7 @@ package io.jexxa.core;
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,6 +14,7 @@ import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapt
 import io.jexxa.application.applicationservice.InvalidApplicationService;
 import io.jexxa.application.applicationservice.JexxaApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
+import io.jexxa.application.domainservice.IJexxaAggregateRepository;
 import io.jexxa.application.domainservice.InitializeJexxaAggregates;
 import io.jexxa.application.infrastructure.drivingadapter.ProxyAdapter;
 import io.jexxa.core.convention.PortConventionViolation;
@@ -51,12 +53,12 @@ class JexxaMainTest
     }
 
 
-    
+
     @Test
     void bindToPort()
     {
         //Arrange - All done in initTests
-        
+
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
                 .bind(ProxyAdapter.class).to(SimpleApplicationService.class)
@@ -95,13 +97,13 @@ class JexxaMainTest
 
         assertTrue(result.isPresent());
     }
-    
+
 
     @Test
     void bindToAnnotatedPorts()
     {
         //Arrange - All done in initTests
-        
+
         //Act: Bind all DrivingAdapter to all ApplicationServices
         objectUnderTest
                 .bind(ProxyAdapter.class).toAnnotation(ApplicationService.class)
@@ -131,7 +133,7 @@ class JexxaMainTest
 
         var jexxaApplicationService = objectUnderTest.getInstanceOfPort(JexxaApplicationService.class);
 
-        //Assert 
+        //Assert
         assertTrue(jexxaApplicationService.getAggregateCount() > 0);
     }
 
@@ -143,6 +145,15 @@ class JexxaMainTest
 
         //Act/Assert
         assertThrows(PortConventionViolation.class, () -> objectUnderTest.getInstanceOfPort(InvalidApplicationService.class));
+    }
+
+    @Test
+    void getInstanceOfOutboundPort()
+    {
+        //Arrange --
+
+        //Act/Assert
+        assertNotNull( objectUnderTest.getInstanceOfPort(IJexxaAggregateRepository.class));
     }
 
 }

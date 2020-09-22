@@ -3,23 +3,30 @@ package io.jexxa.tutorials.timeservice.applicationservice;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import io.jexxa.tutorials.timeservice.domainservice.IMessageDisplay;
 import io.jexxa.tutorials.timeservice.domainservice.ITimePublisher;
-import io.jexxa.utils.JexxaLogger;
+import org.apache.commons.lang3.Validate;
 
 @SuppressWarnings("unused")
 public class TimeService
 {
     private final ITimePublisher timePublisher;
+    private final IMessageDisplay messageDisplay;
 
     /**
      * Note: Jexxa supports only implicit constructor injection. Therefore, we must
      * declare all required interfaces in the constructor.  
      *
      * @param timePublisher required outbound port for this application service
+     * @param messageDisplay required outbound port for this application service
      */
-    public TimeService(ITimePublisher timePublisher)
+    public TimeService(ITimePublisher timePublisher, IMessageDisplay messageDisplay)
     {
+        Validate.notNull(timePublisher);
+        Validate.notNull(messageDisplay);
+
         this.timePublisher = timePublisher;
+        this.messageDisplay = messageDisplay;
     }
 
     public LocalTime getTime()
@@ -32,10 +39,15 @@ public class TimeService
         timePublisher.publish(getTime());
     }
 
-    public void timePublished(LocalTime localTime)
+
+    /**
+     * This method shows the previously published time.
+     * @param localTime the previously published time
+     */
+    public void displayPublishedTimed(LocalTime localTime)
     {
-        var logMessage = localTime.format(DateTimeFormatter.ISO_TIME);
-        JexxaLogger.getLogger(TimeService.class).info("New Time was published time {} ", logMessage);
+        var messageWithPublishedTime = "New Time was published, time: " + localTime.format(DateTimeFormatter.ISO_TIME);
+        messageDisplay.show(messageWithPublishedTime);
     }
 
 }

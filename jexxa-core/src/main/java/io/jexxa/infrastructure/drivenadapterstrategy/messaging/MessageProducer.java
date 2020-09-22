@@ -11,7 +11,7 @@ import org.apache.commons.lang3.Validate;
 @CheckReturnValue
 public class MessageProducer
 {
-    enum DestinationType { TOPIC, QUEUE }
+    public enum DestinationType { TOPIC, QUEUE }
     private Properties properties;
     private final Object message;
     private final MessageSender jmsSender;
@@ -19,7 +19,7 @@ public class MessageProducer
     private DestinationType destinationType;
     private String destination;
 
-    <T> MessageProducer(T message, MessageSender jmsSender)
+    protected <T> MessageProducer(T message, MessageSender jmsSender)
     {
         Validate.notNull(message);
         Validate.notNull(jmsSender);
@@ -58,7 +58,7 @@ public class MessageProducer
 
         return this;
     }
-    
+
     public void asJson()
     {
         Gson gson = new Gson();
@@ -75,7 +75,7 @@ public class MessageProducer
     public void as( Function<Object, String> serializer )
     {
         Validate.notNull(destination, "No destination in MessageProducer set");
-        
+
         if (destinationType == DestinationType.QUEUE)
         {
             jmsSender.sendMessageToQueue(serializer.apply(message), destination, properties);

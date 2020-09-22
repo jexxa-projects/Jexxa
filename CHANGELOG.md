@@ -4,12 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.3.x] - yyyy-mm-dd
+## \[2.x.x] - yyyy-mm-dd
 ### Added
 
 ### Fixed
 
-### Changed
+### Changed  
+
+## \[2.3.1] - 2020-09-20
+### Fixed
+-   JexxaMain::getInstanceOfPort() now also creates outbound ports correctly    
+
+### Changed  
+-   Updated dependencies
+-   Improved error message in case of missing adapters 
 
 ## \[2.3.0] - 2020-08-23
 ### Added

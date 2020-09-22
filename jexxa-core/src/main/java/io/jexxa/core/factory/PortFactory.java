@@ -37,13 +37,13 @@ public class PortFactory
     private CreationPolicy drivenAdapterPolicy = CreationPolicy.REUSE;
 
     public enum CreationPolicy{REUSE,NEW_INSTANCE}
-    
+
     public PortFactory(AdapterFactory adapterFactory)
     {
         this.adapterFactory = adapterFactory;
     }
 
-    public PortFactory whiteListPackage(String packageName)
+    public PortFactory acceptPackage(String packageName)
     {
         whiteListPackages.add(packageName);
         return this;
@@ -59,7 +59,7 @@ public class PortFactory
      * Check if an inbound port including all required driven adapter can be created
      *
      * @param inboundPort type of the port to check if it is in general available
-     * @return true in case a constructor fulfilling conventions is available, otherwise false 
+     * @return true in case a constructor fulfilling conventions is available, otherwise false
      */
     public boolean isAvailable(Class<?> inboundPort)
     {
@@ -71,11 +71,11 @@ public class PortFactory
      * Checks if an instance of given inbound port was already created using this methods and returns this instance.
      * Only if no instance was created so far using this method a new one is created.
      *
-     * @see #newInstanceOf(Class, Properties) 
+     * @see #newInstanceOf(Class, Properties)
      * @param inboundPort type of the inbound port
      * @param adapterProperties properties required to create and configure driven adapter
      * @param <T> Type of the object that should be created
-     * @return Either a new instance of inbound port or an instance that was previously created 
+     * @return Either a new instance of inbound port or an instance that was previously created
      */
     public <T> T getInstanceOf(Class<T> inboundPort, Properties adapterProperties)
     {
@@ -96,7 +96,7 @@ public class PortFactory
 
     public List<Object> getInstanceOfPorts(Class <? extends Annotation> portAnnotation, Properties adapterProperties) {
         var annotationScanner = new DependencyScanner().
-                whiteListPackages(whiteListPackages);
+                acceptPackages(whiteListPackages);
 
         var scannedInboundPorts = annotationScanner.getClassesWithAnnotation(portAnnotation);
 
@@ -125,7 +125,7 @@ public class PortFactory
      *                    which takes exactly one port as argument.
      * @param properties properties required to initialize the driven adapter of the port
      * @param <T> type of the port-adapter
-     * @return the created port-adapter including its port 
+     * @return the created port-adapter including its port
      */
     public <T> T getPortAdapterOf(Class<T> portAdapter, Properties properties)
     {
@@ -172,15 +172,15 @@ public class PortFactory
 
 
     /**
-     * Find a constructor whose parameter can be instantiated an adapterFactory 
+     * Find a constructor whose parameter can be instantiated an adapterFactory
      *
      * @param inboundPort class information of the inbound port
-     * @return a constructor that can be used to create a port or an empty Optional 
+     * @return a constructor that can be used to create a port or an empty Optional
      */
     private Optional<Constructor<?>> findConstructor(Class<?> inboundPort)
     {
         var constructorList = Arrays.asList(inboundPort.getConstructors());
-        
+
         return constructorList.stream()
                 .filter(constructor -> adapterFactory.isAvailable(Arrays.asList(constructor.getParameterTypes())))
                 .findFirst();

@@ -6,40 +6,64 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.JexxaLogger;
+import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.function.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 
+/**
+ * JexxaMain is the main entry point for your application to use Jexxa. Within each application only a single instance
+ * of this class must exist.
+ *
+ * In order to control your application (start / shutdown) from within your application and also from outside
+ * JexxaMain provides a so called {@link BoundedContext}.
+ *
+ * To see how to use this class please refer to the tutorials.
+ */
 public class JexxaMain
 {
-
     public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
     private static final String JEXXA_CONTEXT_NAME =  "io.jexxa.context.name";
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JexxaMain.class);
 
     private final CompositeDrivingAdapter compositeDrivingAdapter = new CompositeDrivingAdapter();
-    private final Properties properties = new Properties();
-
+    private final Properties properties                 = new Properties();
     private final AdapterFactory drivingAdapterFactory  = new AdapterFactory();
     private final AdapterFactory drivenAdapterFactory   = new AdapterFactory();
     private final PortFactory portFactory               = new PortFactory(drivenAdapterFactory);
 
     private final BoundedContext boundedContext;
 
+    /**
+     * Creates the JexxaMain instance for your application with given context name.
+     * In addition the properties file jexxa-application.properties is load if available in class path.
+     *
+     * Note: When a driving or driven adapter is created, it gets the properties read from properties file.
+     *
+     * @param contextName Name of the BoundedContext. Typically, you should use the name of your application.
+     */
     public JexxaMain(String contextName)
     {
         this(contextName, System.getProperties());
     }
 
+    /**
+     * Creates the JexxaMain instance for your application with given context name.
+     *
+     * Note: The file jexxa-application.properties is loaded if available in class path. Then the
+     * properties are extended by the given properties object. So if you define the same properties in
+     * jexxa-application.properties and the given properties object, the one from properties object is used.
+     *
+     * @param contextName Name of the BoundedContext. Typically, you should use the name of your application.
+     * @param properties Properties that are defined by your application.
+     */
     public JexxaMain(String contextName, Properties properties)
     {
         Validate.notNull(properties);
@@ -48,30 +72,35 @@ public class JexxaMain
         this.boundedContext = new BoundedContext(contextName, this);
 
         loadProperties(this.properties);
-        this.properties.putAll( properties );  //add/overwrite given properties 
+        this.properties.putAll( properties );  //add/overwrite given properties
         this.properties.put(JEXXA_CONTEXT_NAME, contextName);
 
         setExceptionHandler();
     }
 
+    /**
+     * Adds a package that is searched by Jexxa's dependency injection mechanism for creating infrastructure
+     * objects such as driven adapters.
+     * @param packageName name of the package
+     * @return JexxaMain object to call additional methods
+     */
     public JexxaMain addToInfrastructure(String packageName)
     {
-        drivenAdapterFactory.whiteListPackage(packageName);
+        drivenAdapterFactory.acceptPackage(packageName);
         return this;
     }
 
+    /**
+     * Adds a package that is searched by Jexxa's dependency injection mechanism for creating objects of the
+     * application core such as in- and outbound ports.
+     *
+     * @param packageName name of the package
+     * @return JexxaMain object to call additional methods
+     */
     public JexxaMain addToApplicationCore(String packageName)
     {
-        portFactory.whiteListPackage(packageName);
+        portFactory.acceptPackage(packageName);
         return this;
-    }
-
-    @CheckReturnValue
-    @SuppressWarnings("unused")
-    public <T, K> K addBootstrapService(Class<T> bootstrapService, Function< T, K > initFunction)
-    {
-        T instance = portFactory.getInstanceOf(bootstrapService, properties);
-        return initFunction.apply(instance);
     }
 
     @CheckReturnValue
@@ -86,11 +115,22 @@ public class JexxaMain
         return new DrivingAdapter<>(clazz, this);
     }
 
+    /**
+     * Returns an instance of a Port and creates one if it not already exist.
+     *
+     * @param port Class information of the port. In case of an interface Jexxa tries to create an outbound port otherwise an inbound port
+     * @param <T> Type of the port.
+     * @return Instance of requested port. If an instance already exist it is returned otherwise a new one is created.
+     */
     @CheckReturnValue
     public <T> T getInstanceOfPort(Class<T> port)
     {
-        PortConvention.validate(port);
-        return port.cast(portFactory.getInstanceOf(port, properties));
+        if ( port.isInterface() )
+        {
+            return getInstanceOfOutboundPort(port);
+        }
+
+        return getInstanceOfInboundPort(port);
     }
 
     @CheckReturnValue
@@ -107,7 +147,7 @@ public class JexxaMain
             LOGGER.warn("BoundedContext '{}' already started", getBoundedContext().contextName());
             return boundedContext;
         }
-        
+
         LOGGER.info("Start BoundedContext '{}' with {} Driving Adapter ", getBoundedContext().contextName(), compositeDrivingAdapter.size());
         compositeDrivingAdapter.start();
         boundedContext.start();
@@ -139,7 +179,7 @@ public class JexxaMain
     {
         return properties;
     }
-    
+
     protected void bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port)
     {
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
@@ -176,7 +216,7 @@ public class JexxaMain
 
         var portList = portFactory.getInstanceOfPorts(portAnnotation, properties);
         portList.forEach(drivingAdapter::register);
-        
+
         compositeDrivingAdapter.add(drivingAdapter);
     }
 
@@ -187,6 +227,18 @@ public class JexxaMain
     }
 
 
+    private <T> T getInstanceOfInboundPort(Class<T> port)
+    {
+        PortConvention.validate(port);
+        return port.cast(portFactory.getInstanceOf(port, properties));
+    }
+
+    private <T> T getInstanceOfOutboundPort(Class<T> port)
+    {
+        return drivenAdapterFactory.getInstanceOf(port, properties);
+    }
+
+
     private void loadProperties(Properties properties)
     {
         Optional.ofNullable(JexxaMain.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES))
@@ -194,7 +246,7 @@ public class JexxaMain
                         ThrowingConsumer.exceptionLogger(properties::load),
                         () -> LOGGER.warn("NO PROPERTIES FILE FOUND {}", JEXXA_APPLICATION_PROPERTIES)
                 );
-        
+
     }
 
     private void setExceptionHandler()
@@ -205,6 +257,10 @@ public class JexxaMain
         }
     }
 
+    /**
+     * CompositeDrivingAdapter starts all registered IDrivingAdapter
+     * In case of an failure starting a single IDrivingAdapter all registered and already started IDrivingAdapter are stopped
+     */
     static class CompositeDrivingAdapter implements IDrivingAdapter
     {
         private final Set<IDrivingAdapter> drivingAdapters = new HashSet<>();
@@ -217,7 +273,7 @@ public class JexxaMain
             }
             catch (RuntimeException e)
             {
-                //In case of any error we stop all driving adapter for proper cleanup and rethrow the exception 
+                //In case of any error we stop ALL driving adapter for proper cleanup and rethrow the exception
                 stop();
                 throw e;
             }
@@ -256,7 +312,7 @@ public class JexxaMain
         {
             this.jexxaMain = jexxaMain;
         }
-        
+
         public void uncaughtException(Thread t, Throwable e) {
             LOGGER.error("\nCould not startup Jexxa! {}", e.getMessage());
             jexxaMain.stop();

@@ -5,7 +5,7 @@
 
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa</artifactId>
-  <version>2.3.1-SNAPSHOT</version>
+  <version>2.3.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <!-- Project Information -->
@@ -31,7 +31,7 @@
     <developerConnection>scm:git:https://github.com/repplix/Jexxa.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
-  
+
   <properties>
     <!--version of  maven plugins  -->
     <gpg.plugin.version>1.6</gpg.plugin.version>
@@ -63,11 +63,11 @@
     <argLine>-Xmx2048m -Xms1024m</argLine>
 
     <!-- version of compile dependencies -->
-    <classgraph.version>4.8.87</classgraph.version>
+    <classgraph.version>4.8.90</classgraph.version>
     <commons.lang3.version>3.11</commons.lang3.version>
     <commons.cli.version>1.4</commons.cli.version>
     <gson.version>2.8.6</gson.version>
-    <javalin.version>3.9.1</javalin.version>
+    <javalin.version>3.10.1</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
     <jackson.databind.version>2.11.2</jackson.databind.version>
 
@@ -75,14 +75,14 @@
     <activemq.client.version>5.16.0</activemq.client.version>
     <postgres.version>42.2.16</postgres.version>
     <unirest.java.version>3.10.00</unirest.java.version>
-    <junit.platform.launcher.version>1.7.0-RC1</junit.platform.launcher.version>
-    <junit.jupiter.engine.version>5.7.0-RC1</junit.jupiter.engine.version>
-    <junit.jupiter.params.version>5.7.0-RC1</junit.jupiter.params.version>
+    <junit.platform.launcher.version>1.7.0</junit.platform.launcher.version>
+    <junit.jupiter.engine.version>5.7.0</junit.jupiter.engine.version>
+    <junit.jupiter.params.version>5.7.0</junit.jupiter.params.version>
     <slf4j.simple.version>1.7.30</slf4j.simple.version>
     <awaitility.version>4.0.3</awaitility.version>
 
     <!-- version of tutorials dependencies -->
-    <jexxa-core.version>2.3.0</jexxa-core.version>
+    <jexxa-core.version>2.3.1</jexxa-core.version>
     <addendj.version>1.0.1</addendj.version>
     <aspectj.version>1.9.6</aspectj.version>
     <aspectjtools.version>1.9.6</aspectjtools.version>
@@ -206,7 +206,7 @@
           <showDeprecation>true</showDeprecation>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
@@ -322,7 +322,7 @@
       </plugin>
     </plugins>
   </reporting>
-  
+
   <profiles>
     <profile>
       <id>jacoco</id>
@@ -495,7 +495,8 @@
   <modules>
     <module>jexxa-core</module>
     <module>jexxa-adapter-api</module>
+    <module>jexxa-test</module>
     <module>tutorials</module>
   </modules>
-  
+
 </project>

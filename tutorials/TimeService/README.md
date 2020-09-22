@@ -17,13 +17,14 @@
 *   A running ActiveMQ instance (at least if you start the application with option `-jms`)
 *   curl or jconsole to trigger the application  
 
-## 1. Implementing Application Core 
+## Implement the Application Core 
 
 The application core consists of following two classes:
 
 *   `TimeService:` Provides use cases of the domain and is a `ApplicationService` in terms of the pattern language of DDD
-*   `ITimePublisher:` Allows for publishing current time and is a `DomainService` in terms of the pattern language of DDD        
-
+*   `ITimePublisher:` Allows for publishing current time and is a `DomainService` in terms of the pattern language of DDD
+*   `IMessageDisplay:` Shows a message and is a `DomainService` in terms of the pattern language of DDD        
+  
 ### Implement class `TimeService` 
 
 This class provides the supports the main two very simple use cases of this application: 
@@ -39,27 +40,45 @@ Since Jexxa only supports implicit constructor injection, we have to declare all
 public class TimeService
 {
     private final ITimePublisher timePublisher;
+    private final IMessageDisplay messageDisplay;
 
     /**
      * Note: Jexxa supports only implicit constructor injection. Therefore, we must
      * declare all required interfaces in the constructor.  
      *
      * @param timePublisher required outbound port for this application service
+     * @param messageDisplay required outbound port for this application service
      */
-    public TimeService(ITimePublisher timePublisher)
+    public TimeService(ITimePublisher timePublisher, IMessageDisplay messageDisplay)
     {
+        Validate.notNull(timePublisher);
+        Validate.notNull(messageDisplay);
+
         this.timePublisher = timePublisher;
+        this.messageDisplay = messageDisplay;
     }
 
     public LocalTime getTime()
     {
         return LocalTime.now();
     }
-    
+
     public void publishTime()
     {
         timePublisher.publish(getTime());
     }
+
+
+    /**
+     * This method shows the previously published time.
+     * @param localTime the previously published time
+     */
+    public void displayPublishedTimed(LocalTime localTime)
+    {
+        var messageWithPublishedTime = "New Time was published, time: " + localTime.format(DateTimeFormatter.ISO_TIME);
+        messageDisplay.show(messageWithPublishedTime);
+    }
+
 }
 ```                  
 
@@ -72,9 +91,18 @@ public interface ITimePublisher
 {
     void publish(LocalTime localTime);
 }
-```                  
+```                 
 
-## 2. Implement the Infrastructure
+### Declare interface `IMessageDisplay`
+
+```java
+public interface IMessageDisplay
+{
+    void show(String message);
+}
+```                 
+ 
+## Implement the Infrastructure
 
 ### Driven Adapter with console output 
 The implementation is quite simple and just prints given time to a logger.  
@@ -107,6 +135,17 @@ public class ConsolePublisher implements ITimePublisher
         var logMessage = localTime.format(DateTimeFormatter.ISO_TIME);
 
         LOGGER.info(logMessage);
+    }
+}
+```
+```java
+@SuppressWarnings("unused")
+public class MessageDisplay implements IMessageDisplay
+{
+    @Override
+    public void show(String message)
+    {
+        JexxaLogger.getLogger(MessageDisplay.class).info(message);
     }
 }
 ```
@@ -155,7 +194,7 @@ java.naming.user=admin
 java.naming.password=admin
 ```                       
 
-## 3. Implement the port adapter to receive JMS messages
+## Implement the port adapter to receive JMS messages
 When receiving asynchronous messages we have to convert it into business data which is defined in the application core and forward it to a specific method within the application core. Since this cannot be done by convention meaningful, we have to use a configuration approach. As described in [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa.html), we have to implement a so called port adapter.   
   
 Implementing a port adapter for JMS is quite easy.
@@ -200,7 +239,7 @@ public class PublishTimeListener implements MessageListener
 }
 ```
 
-## 4. Implement the Application 
+## Implement the Application 
 
 Finally, we have to write our application. As you can see in the code below there are two main differences compared to `HelloJexxa`:
 
@@ -275,7 +314,7 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'TimeService' successfully started in 0.649 seconds
 ```          
 
-### Publish the time 
+### Publish the time  with console output 
 
 You can use curl to publish the time.  
 ```Console
@@ -304,7 +343,7 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'TimeService' successfully started in 0.649 seconds
 ```          
 
-### Publish the time
+### Publish the time with JMS 
  
 You can use curl to publish the time.  
 ```Console

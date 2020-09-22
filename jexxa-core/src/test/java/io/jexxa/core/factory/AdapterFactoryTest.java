@@ -27,7 +27,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 /**
- * @see AdapterFactory for conventions to create an adapter 
+ * @see AdapterFactory for conventions to create an adapter
  */
 @Execution(ExecutionMode.CONCURRENT)
 @Tag(TestConstants.UNIT_TEST)
@@ -39,7 +39,7 @@ class AdapterFactoryTest
     static void initFactory()
     {
         objectUnderTest = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
+                acceptPackage(JEXXA_DRIVEN_ADAPTER);
     }
 
     @Test

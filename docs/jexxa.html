@@ -850,7 +850,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Using constructors or factory methods do not require any special annotations. Using <code>Properties</code> is a standard approach in Java to provide configuration information. Note: A driving adapter gets the same <code>Properties</code> object as <code>JexxaMain</code>.</p>
+<p>Using constructors or factory methods do not require any special annotations. Using <code>Properties</code> is a standard approach in Java to provide configuration information.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title=":information_source:"></i>
+</td>
+<td class="content">
+A driving adapter gets the same <code>Properties</code> object as <code>JexxaMain</code>.
+</td>
+</tr>
+</table>
 </div></div></td>
 </tr>
 <tr>
@@ -932,6 +944,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Using constructors or factory methods do not require any special annotations.</p>
 </li>
 </ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title=":information_source:"></i>
+</td>
+<td class="content">
+A driven adapter gets the same <code>Properties</code> object as <code>JexxaMain</code>.
+</td>
+</tr>
+</table>
 </div></div></td>
 </tr>
 <tr>
@@ -953,6 +977,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 </tbody>
 </table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title=":information_source:"></i>
+</td>
+<td class="content">
+<code>Constructor vs. static factory method</code>: In most cases implementing a constructor is the preferred approach when realizing an adapter. Using a static factory method
+is only recommended if the adapter needs special or more complex configuration which should be done before creating the adapter itself.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_scope"><a class="anchor" href="#_scope"></a>4.2. Scope</h3>
@@ -1099,7 +1136,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-18 06:43:08 +0200
+Last updated 2020-08-28 15:29:24 +0200
 </div>
 </div>
 </body>

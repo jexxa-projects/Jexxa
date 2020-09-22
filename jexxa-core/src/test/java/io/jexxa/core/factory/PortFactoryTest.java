@@ -30,9 +30,9 @@ class PortFactoryTest
     {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
+                acceptPackage(JEXXA_DRIVEN_ADAPTER);
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
-                whiteListPackage(JEXXA_APPLICATION_SERVICE);
+                acceptPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act
         boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenAdapters.class);
@@ -46,15 +46,17 @@ class PortFactoryTest
     {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
-                whiteListPackage("invalid.package");
+                acceptPackage("invalid.package");
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
-                whiteListPackage(JEXXA_APPLICATION_SERVICE);
+                acceptPackage(JEXXA_APPLICATION_SERVICE);
+        var properties = new Properties();
 
         //Act
         boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenAdapters.class);
 
         //Assert
         assertFalse(result);
+        assertThrows(MissingAdapterException.class, () -> objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenAdapters.class, properties));
     }
 
 
@@ -63,9 +65,9 @@ class PortFactoryTest
     {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
+                acceptPackage(JEXXA_DRIVEN_ADAPTER);
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
-                whiteListPackage(JEXXA_APPLICATION_SERVICE);
+                acceptPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act
         var first = objectUnderTest.newInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
@@ -79,18 +81,18 @@ class PortFactoryTest
 
     @Test
     void getInstanceOfPort()
-    {                                                                                
+    {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
+                acceptPackage(JEXXA_DRIVEN_ADAPTER);
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
-                whiteListPackage(JEXXA_APPLICATION_SERVICE);
+                acceptPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act
         var first = objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
         var second = objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
 
-        //Assert that first and second adapter are equal 
+        //Assert that first and second adapter are equal
         assertNotNull(first);
         assertNotNull(second);
         assertEquals(first, second);
@@ -102,9 +104,9 @@ class PortFactoryTest
     {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
+                acceptPackage(JEXXA_DRIVEN_ADAPTER);
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
-                whiteListPackage(JEXXA_APPLICATION_SERVICE);
+                acceptPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act
         var first = objectUnderTest.getPortAdapterOf(SimpleApplicationServiceAdapter.class, new Properties());
@@ -121,14 +123,14 @@ class PortFactoryTest
     {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
-                whiteListPackage(JEXXA_DRIVEN_ADAPTER);
+                acceptPackage(JEXXA_DRIVEN_ADAPTER);
         var objectUnderTest = new PortFactory(drivenAdapterFactory).
-                whiteListPackage(JEXXA_APPLICATION_SERVICE);
+                acceptPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act / Assert
-        var excetpion = assertThrows(PortFactory.InvalidPortConfigurationException.class,
+        var exception = assertThrows(PortFactory.InvalidPortConfigurationException.class,
                 () -> objectUnderTest.getPortAdapterOf(InvalidPortAdapter.class, new Properties()) );
 
-        assertNotNull(excetpion.getMessage());
+        assertNotNull(exception.getMessage());
     }
 }

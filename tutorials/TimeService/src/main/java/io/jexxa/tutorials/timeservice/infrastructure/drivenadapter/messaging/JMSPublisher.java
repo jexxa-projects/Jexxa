@@ -10,7 +10,7 @@ import io.jexxa.tutorials.timeservice.domainservice.ITimePublisher;
 @SuppressWarnings("unused")
 public class JMSPublisher implements ITimePublisher
 {
-    private static final String TIME_TOPIC = "TimeService";
+    public static final String TIME_TOPIC = "TimeService";
 
     private final MessageSender messageSender;
 
@@ -18,7 +18,7 @@ public class JMSPublisher implements ITimePublisher
     // enable implicit constructor injection
     public JMSPublisher(Properties properties)
     {
-        //Request a default message Sender from corresponding strategy manager  
+        //Request a default message Sender from corresponding strategy manager
         this.messageSender = MessageSenderManager.getInstance().getStrategy(properties);
     }
 
