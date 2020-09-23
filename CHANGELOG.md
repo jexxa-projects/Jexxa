@@ -4,13 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.3.2] - yyyy-mm-dd
-### Added
-
+## \[2.3.2] - 2020-09-23
 ### Fixed
 -   JMSAdapter: Correctly cleanup internal data structure in case of reconnect. This avoids registering objects multiple times an in case of reconnect.
-
-### Changed  
 
 ## \[2.3.1] - 2020-09-20
 ### Fixed
