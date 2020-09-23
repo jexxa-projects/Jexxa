@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.x.x] - yyyy-mm-dd
+## \[2.3.2] - yyyy-mm-dd
 ### Added
 
 ### Fixed
+-   JMSAdapter: Correctly cleanup internal data structure in case of reconnect. This avoids registering objects multiple times an in case of reconnect.
 
 ### Changed  
 

@@ -41,6 +41,8 @@ class JMSBrokerFailedIT
 
         //Assert
         await().atMost(Duration.ofSeconds(2,0)).until(() -> !messageListener.getMessages().isEmpty());
+
+        //Assert that still only a single consumer is registered
         assertEquals(1, jmsAdapter.getConsumerList().size());
 
         service.shutdown();
