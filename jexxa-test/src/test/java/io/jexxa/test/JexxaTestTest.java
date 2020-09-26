@@ -23,7 +23,7 @@ class JexxaTestTest
 {
 
     @Test
-    public void validateRepository()
+    void validateRepository()
     {
         //Arrange
         JexxaMain jexxaMain = new JexxaMain(JexxaTestTest.class.getSimpleName(), new Properties());
@@ -39,7 +39,7 @@ class JexxaTestTest
 
 
     @Test
-    public void validateMessages()
+    void validateMessages()
     {
         //Arrange
         String jmsDrivenAdapter      = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter.messaging";
