@@ -5,16 +5,12 @@ import java.util.List;
 
 import io.jexxa.utils.annotations.CheckReturnValue;
 
-
+/**
+ * This class is the API for unit test to access and validate recorded messages.
+ */
 public class MessageRecorder
 {
-    private final List<RecordedMessage> recordedMessageList= new ArrayList<>();
-
-
-    void putMessage(RecordedMessage recordedMessage)
-    {
-        recordedMessageList.add(recordedMessage);
-    }
+    private final List<RecordedMessage> recordedMessageList = new ArrayList<>();
 
     @CheckReturnValue
     public List<RecordedMessage> getMessages()
@@ -56,6 +52,11 @@ public class MessageRecorder
     public void clear()
     {
         recordedMessageList.clear();
+    }
+
+    void putMessage(RecordedMessage recordedMessage)
+    {
+        recordedMessageList.add(recordedMessage);
     }
 
 }

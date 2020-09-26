@@ -5,8 +5,9 @@ import java.util.Properties;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.utils.annotations.CheckReturnValue;
+import org.apache.commons.lang3.Validate;
 
-public class MessageRecorderStrategy  extends MessageSender
+public class MessageRecordingStrategy extends MessageSender
 {
     private Object currentMessage;
     private MessageRecorder messageRecorder;
@@ -15,14 +16,15 @@ public class MessageRecorderStrategy  extends MessageSender
     @Override
     public <T> MessageProducer send(T message)
     {
+        Validate.notNull(message);
+
+        //Get caller object of this class. Here we assume that it is the implementation of a driven adapter
         StackWalker walker = StackWalker
                 .getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
-
         Class<?> callerClass = walker.getCallerClass();
 
         currentMessage = message;
         messageRecorder = MessageRecorderManager.getInstance().getMessageRecorder(callerClass);
-
         return new RecordableMessageProducer(message, this);
     }
 
@@ -52,7 +54,7 @@ public class MessageRecorderStrategy  extends MessageSender
 
     private static class RecordableMessageProducer extends MessageProducer
     {
-        protected <T> RecordableMessageProducer(T message, MessageRecorderStrategy jmsSender)
+        protected <T> RecordableMessageProducer(T message, MessageRecordingStrategy jmsSender)
         {
             super(message, jmsSender);
         }

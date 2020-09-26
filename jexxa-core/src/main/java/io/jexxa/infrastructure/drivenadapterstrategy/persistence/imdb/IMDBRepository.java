@@ -87,7 +87,7 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
      *
      * So this method should only be used when writing tests to ensure a clean data setup!
      */
-    public static void reset()
+    public static void clear()
     {
         REPOSITORY_MAP.forEach( (key, value) -> value.clear());
         REPOSITORY_MAP.clear();
