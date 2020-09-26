@@ -23,7 +23,7 @@ public class MessageRecorderStrategy  extends MessageSender
         currentMessage = message;
         messageRecorder = MessageRecordingSystem.getInstance().getMessageRecorder(callerClass);
 
-        return new MessageRecorderProducer(message, this);
+        return new RecordableMessageProducer(message, this);
     }
 
     @Override

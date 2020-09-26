@@ -3,6 +3,9 @@ package io.jexxa.test.messaging;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Singleton which manages all instances of MessageRecorder
+ */
 public final class MessageRecordingSystem
 {
     private static final MessageRecordingSystem MESSAGE_RECORDING_SYSTEM = new MessageRecordingSystem();
@@ -25,8 +28,9 @@ public final class MessageRecordingSystem
         return MESSAGE_RECORDING_SYSTEM;
     }
 
-    public static void reset()
+    public static void clear()
     {
+        MESSAGE_RECORDER_MAP.forEach(( key, value) -> value.clear() );
         MESSAGE_RECORDER_MAP.clear();
     }
 

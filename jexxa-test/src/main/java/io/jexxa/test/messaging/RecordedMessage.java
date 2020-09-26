@@ -4,6 +4,9 @@ import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
 
+/**
+ * Stores a message that is send via JMS messaging API
+ */
 public class RecordedMessage
 {
     private final String serializedMessage;

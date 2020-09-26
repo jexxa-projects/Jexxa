@@ -26,14 +26,6 @@ public class JexxaTest
         return jexxaMain.getInstanceOfPort(repository);
     }
 
-    private void initForUnitTests( )
-    {
-        RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);
-        MessageSenderManager.getInstance().setDefaultStrategy(MessageRecorderStrategy.class);
-
-        IMDBRepository.reset();
-    }
-
     public <T> T getInstanceOfPort(Class<T> inboundPort)
     {
         return jexxaMain.getInstanceOfPort(inboundPort);
@@ -45,4 +37,12 @@ public class JexxaTest
         return  MessageRecordingSystem.getInstance().getMessageRecorder(realImplementation.getClass());
     }
 
+    private void initForUnitTests( )
+    {
+        RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);
+        MessageSenderManager.getInstance().setDefaultStrategy(MessageRecorderStrategy.class);
+
+        IMDBRepository.reset();
+        MessageRecordingSystem.clear();
+    }
 }

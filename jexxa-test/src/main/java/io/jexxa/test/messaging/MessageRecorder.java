@@ -53,4 +53,9 @@ public class MessageRecorder
         return classType.cast(pop());
     }
 
+    public void clear()
+    {
+        recordedMessageList.clear();
+    }
+
 }
