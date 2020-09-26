@@ -2,6 +2,8 @@ package io.jexxa.tutorials.bookstore;
 
 
 import io.jexxa.core.JexxaMain;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
@@ -30,6 +32,7 @@ public final class BookStoreApplication
         // Using json strings might be very inconvenient if you come from typical relational databases but in terms
         // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
         RepositoryManager.getInstance().setDefaultStrategy(getDrivenAdapterStrategy(args));
+        MessageSenderManager.getInstance().setDefaultStrategy(MessageLogger.class);
 
         JexxaMain jexxaMain = new JexxaMain(BookStoreApplication.class.getSimpleName());
 
@@ -89,5 +92,5 @@ public final class BookStoreApplication
         //Private constructor since we only offer main
     }
 
-    
+
 }

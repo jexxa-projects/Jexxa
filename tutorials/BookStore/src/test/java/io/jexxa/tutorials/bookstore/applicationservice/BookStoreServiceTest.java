@@ -3,10 +3,13 @@ package io.jexxa.tutorials.bookstore.applicationservice;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.jexxa.core.JexxaMain;
 import io.jexxa.test.JexxaTest;
+import io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
 import io.jexxa.tutorials.bookstore.domain.businessexception.BookNotInStockException;
+import io.jexxa.tutorials.bookstore.domainservice.IDomainEventPublisher;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +21,10 @@ class BookStoreServiceTest
 
     private static final String ISBN_13 = "978-3-86490-387-8";
     private static JexxaMain jexxaMain;
+    private JexxaTest jexxaTest;
     private BookStoreService objectUnderTest;
+
+    private MessageRecorder publishedDomainEvents;
 
 
     @BeforeAll
@@ -32,7 +38,8 @@ class BookStoreServiceTest
     @BeforeEach
     void initTest()
     {
-        JexxaTest jexxaTest = new JexxaTest(jexxaMain);
+        jexxaTest = new JexxaTest(jexxaMain);
+        publishedDomainEvents = jexxaTest.getMessageRecorder(IDomainEventPublisher.class);
         objectUnderTest = jexxaTest.getInstanceOfPort(BookStoreService.class);
     }
 
@@ -47,6 +54,7 @@ class BookStoreServiceTest
 
         //Assert
         assertEquals( amount, objectUnderTest.amountInStock(ISBN_13) );
+        assertTrue( publishedDomainEvents.isEmpty() );
     }
 
 
@@ -62,6 +70,7 @@ class BookStoreServiceTest
 
         //Assert
         assertEquals( amount - 1, objectUnderTest.amountInStock(ISBN_13) );
+        assertTrue( publishedDomainEvents.isEmpty() );
     }
 
     @Test
@@ -84,6 +93,7 @@ class BookStoreServiceTest
 
         //Assert
         assertEquals( 0 , objectUnderTest.amountInStock(ISBN_13) );
+        assertEquals( 1 , publishedDomainEvents.size() );
     }
 
 }
