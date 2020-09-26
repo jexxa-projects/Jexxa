@@ -21,7 +21,6 @@ class BookStoreServiceTest
 
     private static final String ISBN_13 = "978-3-86490-387-8";
     private static JexxaMain jexxaMain;
-    private JexxaTest jexxaTest;
     private BookStoreService objectUnderTest;
 
     private MessageRecorder publishedDomainEvents;
@@ -38,7 +37,7 @@ class BookStoreServiceTest
     @BeforeEach
     void initTest()
     {
-        jexxaTest = new JexxaTest(jexxaMain);
+        JexxaTest jexxaTest = new JexxaTest(jexxaMain);
         publishedDomainEvents = jexxaTest.getMessageRecorder(IDomainEventPublisher.class);
         objectUnderTest = jexxaTest.getInstanceOfPort(BookStoreService.class);
     }
