@@ -12,6 +12,13 @@
 
 
     <dependencies>
+        <dependency>
+            <groupId>io.jexxa</groupId>
+            <artifactId>jexxa-core</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- dependencies for tests -->
         <dependency>
             <groupId>org.junit.platform</groupId>
@@ -38,21 +45,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.jexxa.tutorials</groupId>
-            <artifactId>bookstorej</artifactId>
-            <version>2.3.3-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>io.jexxa</groupId>
             <artifactId>jexxa-core</artifactId>
-            <version>2.3.3-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.jexxa.tutorials</groupId>
-            <artifactId>timeservice</artifactId>
-            <version>2.3.3-SNAPSHOT</version>
+            <version>${project.version}</version>
+            <type>test-jar</type>
             <scope>test</scope>
         </dependency>
     </dependencies>
