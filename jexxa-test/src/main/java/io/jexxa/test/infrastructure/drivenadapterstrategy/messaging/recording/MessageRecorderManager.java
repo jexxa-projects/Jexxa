@@ -1,4 +1,4 @@
-package io.jexxa.test.messaging;
+package io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,9 +6,9 @@ import java.util.Map;
 /**
  * Singleton which manages all instances of MessageRecorder
  */
-public final class MessageRecordingSystem
+public final class MessageRecorderManager
 {
-    private static final MessageRecordingSystem MESSAGE_RECORDING_SYSTEM = new MessageRecordingSystem();
+    private static final MessageRecorderManager MESSAGE_RECORDING_SYSTEM = new MessageRecorderManager();
 
     private static final Map<Class<?>, MessageRecorder> MESSAGE_RECORDER_MAP = new HashMap<>();
 
@@ -23,7 +23,7 @@ public final class MessageRecordingSystem
         return MESSAGE_RECORDER_MAP.get(type);
     }
 
-    public static MessageRecordingSystem getInstance()
+    public static MessageRecorderManager getInstance()
     {
         return MESSAGE_RECORDING_SYSTEM;
     }
@@ -34,7 +34,7 @@ public final class MessageRecordingSystem
         MESSAGE_RECORDER_MAP.clear();
     }
 
-    private MessageRecordingSystem()
+    private MessageRecorderManager()
     {
         //Private constructor
     }

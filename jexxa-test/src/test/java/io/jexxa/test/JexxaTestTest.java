@@ -11,7 +11,7 @@ import java.util.Properties;
 
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
-import io.jexxa.test.messaging.MessageRecorder;
+import io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
 import io.jexxa.tutorials.bookstorej.domainservice.IBookRepository;
 import io.jexxa.tutorials.bookstorej.domainservice.ReferenceLibrary;
 import io.jexxa.tutorials.timeservice.TimeServiceApplication;

@@ -1,4 +1,4 @@
-package io.jexxa.test.messaging;
+package io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording;
 
 import java.util.Properties;
 
@@ -21,7 +21,7 @@ public class MessageRecorderStrategy  extends MessageSender
         Class<?> callerClass = walker.getCallerClass();
 
         currentMessage = message;
-        messageRecorder = MessageRecordingSystem.getInstance().getMessageRecorder(callerClass);
+        messageRecorder = MessageRecorderManager.getInstance().getMessageRecorder(callerClass);
 
         return new RecordableMessageProducer(message, this);
     }
@@ -48,5 +48,13 @@ public class MessageRecorderStrategy  extends MessageSender
                 destination,
                 messageProperties)
         );
+    }
+
+    private static class RecordableMessageProducer extends MessageProducer
+    {
+        protected <T> RecordableMessageProducer(T message, MessageRecorderStrategy jmsSender)
+        {
+            super(message, jmsSender);
+        }
     }
 }

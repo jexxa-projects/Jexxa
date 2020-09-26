@@ -1,4 +1,4 @@
-package io.jexxa.test.messaging;
+package io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording;
 
 import java.util.ArrayList;
 import java.util.List;
