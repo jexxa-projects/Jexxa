@@ -16,6 +16,7 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
 {
     // Each IMDB repository is represented by a map for a specific type.
     private static final Map< Class<?>, Map<?,?> > REPOSITORY_MAP = new ConcurrentHashMap<>();
+    private static final Map< Class<?>, IMDBRepository<?,?> > IMDB_REPOSITORY_MAP = new ConcurrentHashMap<>();
 
 
     private final Map<K, T> aggregateMap;
@@ -26,6 +27,7 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     {
         aggregateMap = getAggregateMap(aggregateClazz);
         this.keyFunction = keyFunction;
+        IMDB_REPOSITORY_MAP.put(aggregateClazz, this);
     }
 
     @Override
@@ -89,7 +91,8 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
      */
     public static void clear()
     {
-        REPOSITORY_MAP.forEach( (key, value) -> value.clear());
+        IMDB_REPOSITORY_MAP.forEach( (key, value) -> value.removeAll() );
+        REPOSITORY_MAP.forEach( (key, value) -> value.clear() );
         REPOSITORY_MAP.clear();
     }
 }

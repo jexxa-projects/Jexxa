@@ -19,6 +19,12 @@
   <dependencies>
     <!-- dependencies for tests -->
     <dependency>
+      <groupId>io.jexxa.test</groupId>
+      <artifactId>Jexxa-Test</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-launcher</artifactId>
       <version>${junit.platform.launcher.version}</version>
@@ -37,7 +43,7 @@
       <scope>test</scope>
     </dependency>
 
-    
+
     <!-- dependencies for tests with JDBCAdapter -->
     <dependency>
       <groupId>org.postgresql</groupId>
@@ -83,7 +89,7 @@
           </execution>
         </executions>
       </plugin>
-      
+
       <plugin> <!-- build a docker image -->
         <groupId>com.google.cloud.tools</groupId>
         <artifactId>jib-maven-plugin</artifactId>
@@ -138,7 +144,7 @@
                 -jdbc
               </arg>
             </args>
-            
+
             <ports>
               <port>7000</port>
               <port>${jmx.port}</port>
