@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import io.jexxa.core.JexxaMain;
 import io.jexxa.test.JexxaTest;
-import io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
 import io.jexxa.tutorials.bookstore.applicationservice.BookStoreService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
