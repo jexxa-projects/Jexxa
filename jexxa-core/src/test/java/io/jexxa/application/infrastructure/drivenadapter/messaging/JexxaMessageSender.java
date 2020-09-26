@@ -1,6 +1,5 @@
 package io.jexxa.application.infrastructure.drivenadapter.messaging;
 
-import java.time.LocalTime;
 import java.util.Properties;
 
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
@@ -8,6 +7,7 @@ import io.jexxa.application.domainservice.IJexxaPublisher;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 
+@SuppressWarnings("unused")
 public class JexxaMessageSender implements IJexxaPublisher
 {
     public static final String JEXXA_TOPIC = "JexxaTopic";
@@ -17,7 +17,6 @@ public class JexxaMessageSender implements IJexxaPublisher
 
     public JexxaMessageSender(Properties properties)
     {
-        //Request a default message Sender from corresponding strategy manager
         this.messageSender = MessageSenderManager.getInstance().getStrategy(properties);
     }
 
