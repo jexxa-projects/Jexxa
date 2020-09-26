@@ -17,6 +17,7 @@ Even though Jexxa has strong educational focus it is used within lightweight bus
 *   Bind driving adapters to your application core and expose its methods to remote clients.
 *   Integrated driving adapters: RMI over REST, JMX, and JMS. 
 *   Integrated strategies for driven adapters: JDBC, in memory DB (IMDB), and JMS based messaging. 
+*   Support unit-tests: Jexxa automatically provides stubs for application specific driven adapters when using integrated drivenadapter strategies. 
 
 ## General information   
 
