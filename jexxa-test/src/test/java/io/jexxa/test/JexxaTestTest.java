@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Properties;
 
@@ -56,10 +57,15 @@ class JexxaTestTest
         objectUnderTest.sendToTopic(testMessage);
 
 
-        //Assert
+        //Assert MessageRecorder
         assertFalse(messageRecorder.isEmpty());
+        assertEquals(1, messageRecorder.size());
 
-        var recordedMessage = messageRecorder.pop();
+        //Assert RecordedMessage
+        var tempMessage = messageRecorder.pop();
+        assertTrue(tempMessage.isPresent());
+
+        var recordedMessage = tempMessage.get();
         assertNotNull(recordedMessage);
         assertEquals("JexxaTopic", recordedMessage.getDestinationName());
         assertEquals(MessageProducer.DestinationType.TOPIC, recordedMessage.getDestinationType());
@@ -84,15 +90,13 @@ class JexxaTestTest
         objectUnderTest.sendToQueue(testMessage);
 
 
-        //Assert
+        //Assert MessageRecorder
         assertFalse(messageRecorder.isEmpty());
+        assertEquals(1, messageRecorder.size());
 
-        var recordedMessage = messageRecorder.pop();
+        //Assert RecordedMessage
+        var recordedMessage = messageRecorder.getMessage(JexxaValueObject.class);
         assertNotNull(recordedMessage);
-        assertEquals("JexxaQueue", recordedMessage.getDestinationName());
-        assertEquals(MessageProducer.DestinationType.QUEUE, recordedMessage.getDestinationType());
-        assertNull(recordedMessage.getMessageProperties());
-        assertEquals(new Gson().toJson(testMessage), recordedMessage.getSerializedMessage());
     }
 
 }

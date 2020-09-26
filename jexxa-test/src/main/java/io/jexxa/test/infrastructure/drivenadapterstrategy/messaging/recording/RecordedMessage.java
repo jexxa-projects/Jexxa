@@ -42,7 +42,7 @@ public class RecordedMessage
 
     public <T> T getMessage(Class<T> type)
     {
-        return type.cast( message );
+        return type.cast( getMessage() );
     }
 
     public MessageProducer.DestinationType getDestinationType()

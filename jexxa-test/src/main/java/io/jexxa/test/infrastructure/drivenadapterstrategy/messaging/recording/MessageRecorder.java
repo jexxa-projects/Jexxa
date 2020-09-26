@@ -2,6 +2,7 @@ package io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import io.jexxa.utils.annotations.CheckReturnValue;
 
@@ -19,16 +20,16 @@ public class MessageRecorder
     }
 
     @CheckReturnValue
-    public RecordedMessage pop()
+    public Optional<RecordedMessage> pop()
     {
         if (recordedMessageList.isEmpty())
         {
-            return null;
+            return Optional.empty();
         }
 
         var latestElement = recordedMessageList.get(0);
         recordedMessageList.remove(0);
-        return latestElement;
+        return Optional.ofNullable(latestElement);
     }
 
     @CheckReturnValue
@@ -46,7 +47,7 @@ public class MessageRecorder
     @CheckReturnValue
     public <T> T getMessage(Class<T> classType)
     {
-        return classType.cast(pop());
+        return  pop().orElseThrow().getMessage(classType);
     }
 
     public void clear()
@@ -54,7 +55,7 @@ public class MessageRecorder
         recordedMessageList.clear();
     }
 
-    void putMessage(RecordedMessage recordedMessage)
+    void put(RecordedMessage recordedMessage)
     {
         recordedMessageList.add(recordedMessage);
     }
