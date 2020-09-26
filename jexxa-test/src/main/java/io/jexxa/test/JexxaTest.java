@@ -30,6 +30,8 @@ public class JexxaTest
     {
         RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);
         MessageSenderManager.getInstance().setDefaultStrategy(MessageRecorderStrategy.class);
+
+        IMDBRepository.reset();
     }
 
     public <T> T getInstanceOfPort(Class<T> inboundPort)

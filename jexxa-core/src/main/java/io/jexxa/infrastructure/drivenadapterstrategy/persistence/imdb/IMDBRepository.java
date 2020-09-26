@@ -12,7 +12,6 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 
 /**
  */
-@SuppressWarnings("unused")
 public class IMDBRepository<T, K>  implements IRepository<T, K>
 {
     // Each IMDB repository is represented by a map for a specific type.
@@ -32,7 +31,7 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     @Override
     public void update(T aggregate)
     {
-        // Nothing to do here because operations are performed on the aggregate 
+        // Nothing to do here because operations are performed on the aggregate
     }
 
     @Override
@@ -81,5 +80,16 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
         var newRepository = new ConcurrentHashMap<T,K>();
         REPOSITORY_MAP.put(aggregateClazz, newRepository);
         return newRepository;
+    }
+
+    /**
+     * This method resets all IMDBRepositories instance within an application and removes all stored objects!
+     *
+     * So this method should only be used when writing tests to ensure a clean data setup!
+     */
+    public static void reset()
+    {
+        REPOSITORY_MAP.forEach( (key, value) -> value.clear());
+        REPOSITORY_MAP.clear();
     }
 }
