@@ -4,12 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.4.0] - yyyy-mm-dd
+## \[2.4.0] - 2020-09-27
 ### Added
 -   New driven adapter strategy **MessageLogger** which writes messages to a logger
 -   New module **Jexxa-Test** which simplifies writing unit tests. **Jexxa-Test** automatically provides stubs for application specific driven adapters as soon as they use Jexxa's drivenadapter strategies. 
-
-### Fixed
 
 ### Changed
 -   Updated dependencies  
