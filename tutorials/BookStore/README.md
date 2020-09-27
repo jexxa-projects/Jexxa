@@ -288,6 +288,17 @@ package **Jexxa-Test**. It automatically provides stubs so that you do not need 
 *   Your tests are much easier to read. 
 *   You can write your tests first without considering the implementation.   
 
+First, add the following dependency to your tests. 
+
+```maven
+    <dependency>
+      <groupId>io.jexxa.test</groupId>
+      <artifactId>Jexxa-Test</artifactId>
+      <version>2.4.0</version>
+      <scope>test</scope>
+    </dependency>
+```
+
 Following code shows a simple validation of our BookStoreService. Some additional tests can be found [here](https://github.com/repplix/Jexxa/blob/master/tutorials/BookStore/src/test/java/io/jexxa/tutorials/bookstore/applicationservice/BookStoreServiceTest.java).       
 
 ```java
@@ -363,3 +374,4 @@ class BookStoreServiceTest
 
 } 
 ```
+
