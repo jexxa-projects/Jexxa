@@ -8,25 +8,25 @@ import org.slf4j.Logger;
 
 public class MessageLogger extends MessageSender
 {
-    private static final Logger jexxaLogger = JexxaLogger.getLogger(MessageLogger.class);
+    private static final Logger MESSAGE_LOGGER = JexxaLogger.getLogger(MessageLogger.class);
 
     @Override
     protected void sendMessageToQueue(String message, String destination, Properties messageProperties)
     {
-        jexxaLogger.info("Begin> Send message");
-        jexxaLogger.info("Message           : {}", message);
-        jexxaLogger.info("Destination       : {}", destination);
-        jexxaLogger.info("Destination-Type  : QUEUE");
-        jexxaLogger.info("End> Send message");
+        MESSAGE_LOGGER.info("Begin> Send message");
+        MESSAGE_LOGGER.info("Message           : {}", message);
+        MESSAGE_LOGGER.info("Destination       : {}", destination);
+        MESSAGE_LOGGER.info("Destination-Type  : QUEUE");
+        MESSAGE_LOGGER.info("End> Send message");
     }
 
     @Override
     protected void sendMessageToTopic(String message, String destination, Properties messageProperties)
     {
-        jexxaLogger.info("Begin> Send message");
-        jexxaLogger.info("Message           : {}", message);
-        jexxaLogger.info("Destination       : {}", destination);
-        jexxaLogger.info("Destination-Type  : TOPIC");
-        jexxaLogger.info("End> Send message");
+        MESSAGE_LOGGER.info("Begin> Send message");
+        MESSAGE_LOGGER.info("Message           : {}", message);
+        MESSAGE_LOGGER.info("Destination       : {}", destination);
+        MESSAGE_LOGGER.info("Destination-Type  : TOPIC");
+        MESSAGE_LOGGER.info("End> Send message");
     }
 }
