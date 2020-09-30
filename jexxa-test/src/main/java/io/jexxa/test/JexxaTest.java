@@ -5,10 +5,20 @@ import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderMana
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 import io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
-import io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
 import io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorderManager;
+import io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
 import org.apache.commons.lang3.Validate;
 
+/**
+ * This class supports unit testing of your application core, at least if you use driven adapter strategies
+ * provided by Jexxa. To do so, this class performs following steps:
+ * <ul>
+ * <li> Configuring an IMDB database for repositories </li>
+ * <li> Configuring a message recorder for sending messages </li>
+ * </ul>
+ * An example how to use this class can be found in tutorial <a href="https://github.com/repplix/Jexxa/tree/master/tutorials/BookStore">Bookstore</a>
+ *
+ */
 public class JexxaTest
 {
     private final JexxaMain jexxaMain;
