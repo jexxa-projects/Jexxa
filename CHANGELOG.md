@@ -9,7 +9,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-### Changed  
+### Changed
+
+## \[2.4.0] - 2020-09-27
+### Added
+-   New driven adapter strategy **MessageLogger** which writes messages to a logger
+-   New module **Jexxa-Test** which simplifies writing unit tests. **Jexxa-Test** automatically provides stubs for application specific driven adapters as soon as they use Jexxa's drivenadapter strategies. 
+
+### Changed
+-   Updated dependencies  
+
+## \[2.3.2] - 2020-09-23
+### Fixed
+-   JMSAdapter: Correctly cleanup internal data structure in case of reconnect. This avoids registering objects multiple 
+times in case of reconnect.
 
 ## \[2.3.1] - 2020-09-20
 ### Fixed
@@ -23,7 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 -   [Issue #6](https://github.com/repplix/Jexxa/issues/6) Added HTTPS support in RESTfulRPCAdapter (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/main/resources/jexxa-application.properties) for more information).                                             
 ### Fixed
--   [Issue #5](https://github.com/repplix/Jexxa/issues/5) Avoid warn message "Uncaught Exception Handler already set" with JUnit 
+-   [Issue #5](https://github.com/repplix/Jexxa/issues/5) Avoid warn a message "Uncaught Exception Handler already set" with JUnit 
 -   Fixed Issue with including correct jexxa-application.properties in tutorials jar with all dependencies. Switched from jar-plugin to maven-shade plugin to define correct jexxa-application.properties.   
 
 ### Changed

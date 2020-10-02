@@ -6,68 +6,97 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalTime;
 import java.util.Properties;
 
+import com.google.gson.Gson;
+import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.domainservice.IJexxaAggregateRepository;
+import io.jexxa.application.domainservice.IJexxaPublisher;
+import io.jexxa.application.domainservice.InitializeJexxaAggregates;
+import io.jexxa.application.domainservice.PublishJexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
-import io.jexxa.test.messaging.MessageRecorder;
-import io.jexxa.tutorials.bookstorej.domainservice.IBookRepository;
-import io.jexxa.tutorials.bookstorej.domainservice.ReferenceLibrary;
-import io.jexxa.tutorials.timeservice.TimeServiceApplication;
-import io.jexxa.tutorials.timeservice.applicationservice.TimeService;
-import io.jexxa.tutorials.timeservice.domainservice.ITimePublisher;
 import org.junit.jupiter.api.Test;
+
 
 class JexxaTestTest
 {
 
     @Test
-    public void validateRepository()
+    void validateRepository()
     {
         //Arrange
         JexxaMain jexxaMain = new JexxaMain(JexxaTestTest.class.getSimpleName(), new Properties());
+        jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
+                .addToInfrastructure("io.jexxa.application.infrastructure");
+
         JexxaTest jexxaTest = new JexxaTest(jexxaMain);
-        IBookRepository bookRepository = jexxaTest.getRepository(IBookRepository.class);
+        var jexxaRepository = jexxaTest.getRepository(IJexxaAggregateRepository.class);
 
         //Act
-        jexxaMain.bootstrap(ReferenceLibrary.class).with(ReferenceLibrary::addLatestBooks);
+        jexxaTest.getInstanceOfPort(InitializeJexxaAggregates.class).initDomainData();
 
         //Assert
-        assertTrue(bookRepository.getAll().size() > 0);
+        assertFalse(jexxaRepository.get().isEmpty());
     }
 
-
-    @Test
-    public void validateMessages()
+    @Test void validateMessageToTopic()
     {
         //Arrange
-        String jmsDrivenAdapter      = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter.messaging";
-        String displayDrivenAdapter  = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter.display";
-
         JexxaMain jexxaMain = new JexxaMain(JexxaTestTest.class.getSimpleName(), new Properties());
+        jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
+                .addToInfrastructure("io.jexxa.application.infrastructure");
         JexxaTest jexxaTest = new JexxaTest(jexxaMain);
 
-        jexxaMain.addToInfrastructure(jmsDrivenAdapter)
-                .addToInfrastructure(displayDrivenAdapter);
+        var testMessage = new JexxaValueObject(1);
+        var messageRecorder = jexxaTest.getMessageRecorder(IJexxaPublisher.class);
 
-        TimeService objectUnderTest = jexxaTest.getInstanceOfPort(TimeService.class);
-        MessageRecorder messageRecorder = jexxaTest.getMessageRecorder(ITimePublisher.class);
+        var objectUnderTest = jexxaTest.getInstanceOfPort(PublishJexxaValueObject.class);
 
         //Act
-        objectUnderTest.publishTime();
+        objectUnderTest.sendToTopic(testMessage);
 
 
-        //Assert
-        assertFalse(messageRecorder.getMessages().isEmpty());
+        //Assert MessageRecorder
+        assertFalse(messageRecorder.isEmpty());
+        assertEquals(1, messageRecorder.size());
 
-        var recordedMessage = messageRecorder.pop();
+        //Assert RecordedMessage
+        var tempMessage = messageRecorder.pop();
+        assertTrue(tempMessage.isPresent());
+
+        var recordedMessage = tempMessage.get();
         assertNotNull(recordedMessage);
-        assertNotNull(recordedMessage.getMessage(LocalTime.class));
-        assertEquals("TimeService", recordedMessage.getDestinationName());
+        assertEquals("JexxaTopic", recordedMessage.getDestinationName());
         assertEquals(MessageProducer.DestinationType.TOPIC, recordedMessage.getDestinationType());
         assertNull(recordedMessage.getMessageProperties());
-        assertTrue(recordedMessage.getSerializedMessage().contains("hour"));
+        assertEquals(new Gson().toJson(testMessage), recordedMessage.getSerializedMessage());
+    }
+
+    @Test void validateMessageToQueue()
+    {
+        //Arrange
+        JexxaMain jexxaMain = new JexxaMain(JexxaTestTest.class.getSimpleName(), new Properties());
+        jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
+                .addToInfrastructure("io.jexxa.application.infrastructure");
+        JexxaTest jexxaTest = new JexxaTest(jexxaMain);
+
+        var testMessage = new JexxaValueObject(1);
+        var messageRecorder = jexxaTest.getMessageRecorder(IJexxaPublisher.class);
+
+        var objectUnderTest = jexxaTest.getInstanceOfPort(PublishJexxaValueObject.class);
+
+        //Act
+        objectUnderTest.sendToQueue(testMessage);
+
+
+        //Assert MessageRecorder
+        assertFalse(messageRecorder.isEmpty());
+        assertEquals(1, messageRecorder.size());
+
+        //Assert RecordedMessage
+        var recordedMessage = messageRecorder.getMessage(JexxaValueObject.class);
+        assertNotNull(recordedMessage);
     }
 
 }

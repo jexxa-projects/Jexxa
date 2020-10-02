@@ -280,56 +280,98 @@ Response:
 true
 ```
 ## 4. Write some tests
-Writing some tests with Jexxa is quite easy. Main advantages are: 
+Writing some tests with Jexxa is quite easy. If you implement your driven adapters using Jexxa's driven adapter strategies you can use 
+package **Jexxa-Test**. It automatically provides stubs so that you do not need any mock framework. Main advantages are: 
 
 *   You can focus on domain logic within your tests.
 *   You don't need to use mocks which can lead to validating execution steps within the domain core instead of validating the use cases
-*   In case of repositories you can easily configure different technology stacks or run same tests using multiple different technology stacks
+*   Your tests are much easier to read. 
+*   You can write your tests first without considering the implementation.   
 
-Following code shows a simple validation of our reference library      
+First, add the following dependency to your tests. 
+
+```maven
+    <dependency>
+      <groupId>io.jexxa.test</groupId>
+      <artifactId>Jexxa-Test</artifactId>
+      <version>2.4.0</version>
+      <scope>test</scope>
+    </dependency>
+```
+
+Following code shows a simple validation of our BookStoreService. Some additional tests can be found [here](https://github.com/repplix/Jexxa/blob/master/tutorials/BookStore/src/test/java/io/jexxa/tutorials/bookstore/applicationservice/BookStoreServiceTest.java).       
 
 ```java
-class ReferenceLibraryTest
+class BookStoreServiceTest
 {
-    private static final String DRIVEN_ADAPTER_PERSISTENCE = "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.persistence";
-    private static final String DRIVEN_ADAPTER_MESSAGING =   "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.stub";
+    private static final String DRIVEN_ADAPTER = "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter";
+    private static final String DOMAIN_SERVICE = "io.jexxa.tutorials.bookstore.domainservice";
+
+    private static final ISBN13 ISBN_13 = new ISBN13( "978-3-86490-387-8" );
+    private static JexxaMain jexxaMain;
     
-    private JexxaMain jexxaMain;
+    private BookStoreService objectUnderTest;
+    private MessageRecorder publishedDomainEvents;
+    private IBookRepository bookRepository;
+
+
+    @BeforeAll
+    static void initBeforeAll()
+    {
+        // We recommend to instantiate JexxaMain only once for each test class.
+        // If you have larger tests this speeds up Jexxa's dependency injection 
+        // Note: For unit-tests you just need to bind any driving adapter  
+        jexxaMain = new JexxaMain(BookStoreServiceTest.class.getSimpleName());
+        jexxaMain.addToInfrastructure(DRIVEN_ADAPTER)
+                .addToApplicationCore(DOMAIN_SERVICE);
+    }
 
     @BeforeEach
     void initTest()
     {
-        // Here you can define the desired DB strategy without adjusting your tests
-        // Within your tests you can completely focus on the domain logic which allows
-        // you to run the tests as unit tests within daily development or as integration
-        // tests on a build server
-        RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);
+        // JexxaTest is created for each tests. It provides and cleans up stubs before each test
+        // Actually, JexxaTest provides stubs for repositories and send messages
+        JexxaTest jexxaTest = new JexxaTest(jexxaMain);
 
-        jexxaMain = new JexxaMain(ReferenceLibraryTest.class.getSimpleName());
-        jexxaMain.addToInfrastructure(DRIVEN_ADAPTER_PERSISTENCE)
-                .addToInfrastructure(DRIVEN_ADAPTER_MESSAGING);
+        // Query a message recorder for an interface which is defines in your application core.
+        publishedDomainEvents = jexxaTest.getMessageRecorder(IDomainEventPublisher.class);
+        // Query the repository that is internally used.
+        bookRepository = jexxaTest.getRepository(IBookRepository.class);
+        // Query the application service we want to test.
+        objectUnderTest = jexxaTest.getInstanceOfPort(BookStoreService.class);
+    }
 
-        DomainEventStubPublisher.clear();
+    @Test
+    void receiveBook()
+    {
+        //Arrange
+        var amount = 5;
 
-        //Clean up the repository 
-        RepositoryManager.getInstance()
-                .getStrategy(Book.class, Book::getISBN13, jexxaMain.getProperties())
-                .removeAll();
+        //Act
+        objectUnderTest.addToStock(ISBN_13.getValue(), amount);
+
+        //Assert - Here you can also use all the interfaces for driven adapters defined in your application without running the infrastructure
+        assertEquals( amount, objectUnderTest.amountInStock(ISBN_13) );
+        assertEquals( amount, bookRepository.get( ISBN_13 ).amountInStock() );
+        assertTrue( publishedDomainEvents.isEmpty() );
     }
 
 
     @Test
-    void validateAddLatestBooks()
+    void sellLastBook() throws BookNotInStockException
     {
-        //Arrange : Get the inbound port that we would like to test
-        var objectUnderTest = jexxaMain.getInstanceOfPort(ReferenceLibrary.class);
-        var bookStore = jexxaMain.getInstanceOfPort(BookStoreService.class);
+        //Arrange
+        objectUnderTest.addToStock(ISBN_13.getValue(), 1);
 
         //Act
-        objectUnderTest.addLatestBooks();
+        objectUnderTest.sell(ISBN_13);
 
-        //Assert: After adding books via our service, our bookstore must know theses books
-        assertFalse( bookStore.getBooks().isEmpty() );
+        //Assert - Here you can also use all the interfaces for driven adapters defined in your application without running the infrastructure
+        assertEquals( 0 , objectUnderTest.amountInStock(ISBN_13) );
+        assertEquals( 1 , publishedDomainEvents.size() );
+        assertEquals( bookSoldOut(ISBN_13), publishedDomainEvents.getMessage(BookSoldOut.class));
     }
+
 } 
 ```
+

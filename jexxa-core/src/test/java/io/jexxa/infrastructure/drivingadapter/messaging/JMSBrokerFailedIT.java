@@ -1,6 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.Duration;
@@ -26,7 +27,7 @@ class JMSBrokerFailedIT
         var jexxaMain = new JexxaMain(JMSBrokerFailedIT.class.getSimpleName());
         var messageListener = new TopicListener();
         var jmsAdapter = new JMSAdapter(jexxaMain.getProperties());
-        
+
         var myProducer = new ITMessageSender(jexxaMain.getProperties(), TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
 
         jmsAdapter.register(messageListener);
@@ -40,6 +41,9 @@ class JMSBrokerFailedIT
 
         //Assert
         await().atMost(Duration.ofSeconds(2,0)).until(() -> !messageListener.getMessages().isEmpty());
+
+        //Assert that still only a single consumer is registered
+        assertEquals(1, jmsAdapter.getConsumerList().size());
 
         service.shutdown();
         jmsAdapter.stop();

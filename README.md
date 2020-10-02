@@ -17,6 +17,7 @@ Even though Jexxa has strong educational focus it is used within lightweight bus
 *   Bind driving adapters to your application core and expose its methods to remote clients.
 *   Integrated driving adapters: RMI over REST, JMX, and JMS. 
 *   Integrated strategies for driven adapters: JDBC, in memory DB (IMDB), and JMS based messaging. 
+*   Support for unit-tests: Provide stubs for application specific driven adapters when using integrated strategies so that no mock framework is required.  
 
 ## General information   
 
@@ -34,14 +35,14 @@ Even though Jexxa has strong educational focus it is used within lightweight bus
 <dependency>
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa-core</artifactId>
-  <version>2.3.1</version>
+  <version>2.4.0</version>
 </dependency> 
 ```
 
 #### Gradle
 
 ```groovy
-compile "io.Jexxa:jexxa-core:2.3.1"
+compile "io.Jexxa:jexxa-core:2.4.0"
 ``` 
 
 ### Start programming 

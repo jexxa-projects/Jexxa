@@ -1,9 +1,12 @@
-package io.jexxa.test.messaging;
+package io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording;
 
 import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
 
+/**
+ * Stores a message that is send via JMS messaging API
+ */
 public class RecordedMessage
 {
     private final String serializedMessage;
@@ -13,7 +16,7 @@ public class RecordedMessage
     private final String destinationName;
 
 
-    public RecordedMessage(
+    RecordedMessage(
             Object message,
             String serializedMessage,
             MessageProducer.DestinationType destinationType,
@@ -39,7 +42,7 @@ public class RecordedMessage
 
     public <T> T getMessage(Class<T> type)
     {
-        return type.cast( message );
+        return type.cast( getMessage() );
     }
 
     public MessageProducer.DestinationType getDestinationType()

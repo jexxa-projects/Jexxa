@@ -3,6 +3,8 @@ package io.jexxa.tutorials.bookstorej;
 
 import io.jexxa.addend.applicationcore.ApplicationService;
 import io.jexxa.core.JexxaMain;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
@@ -32,12 +34,13 @@ public final class BookStoreJApplication
         // Using json strings might be very inconvenient if you come from typical relational databases but in terms
         // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
         RepositoryManager.getInstance().setDefaultStrategy(getDrivenAdapterStrategy(args));
+        MessageSenderManager.getInstance().setDefaultStrategy(MessageLogger.class);
 
         JexxaMain jexxaMain = new JexxaMain(BookStoreJApplication.class.getSimpleName());
 
         jexxaMain
                 // In order to find ports by annotation we must add packages that are searched by Jexxa.
-                // Therefore, we must also add inbound ports to application core 
+                // Therefore, we must also add inbound ports to application core
                 .addToApplicationCore(INBOUND_PORTS)
                 .addToApplicationCore(OUTBOUND_PORTS)
                 .addToInfrastructure(DRIVEN_ADAPTER)
@@ -95,5 +98,5 @@ public final class BookStoreJApplication
         //Private constructor since we only offer main
     }
 
-    
+
 }

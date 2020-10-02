@@ -1,12 +1,13 @@
-package io.jexxa.test.messaging;
+package io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording;
 
 import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.utils.annotations.CheckReturnValue;
+import org.apache.commons.lang3.Validate;
 
-public class MessageRecorderStrategy  extends MessageSender
+public class MessageRecordingStrategy extends MessageSender
 {
     private Object currentMessage;
     private MessageRecorder messageRecorder;
@@ -15,21 +16,22 @@ public class MessageRecorderStrategy  extends MessageSender
     @Override
     public <T> MessageProducer send(T message)
     {
+        Validate.notNull(message);
+
+        //Get caller object of this class. Here we assume that it is the implementation of a driven adapter
         StackWalker walker = StackWalker
                 .getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
-
         Class<?> callerClass = walker.getCallerClass();
 
         currentMessage = message;
-        messageRecorder = MessageRecordingSystem.getInstance().getMessageRecorder(callerClass);
-
-        return new MessageRecorderProducer(message, this);
+        messageRecorder = MessageRecorderManager.getInstance().getMessageRecorder(callerClass);
+        return new RecordableMessageProducer(message, this);
     }
 
     @Override
     protected void sendMessageToQueue(String message, String destination, Properties messageProperties)
     {
-        messageRecorder.putMessage(new RecordedMessage(
+        messageRecorder.put(new RecordedMessage(
                 currentMessage,
                 message,
                 MessageProducer.DestinationType.QUEUE,
@@ -41,12 +43,20 @@ public class MessageRecorderStrategy  extends MessageSender
     @Override
     protected void sendMessageToTopic(String message, String destination, Properties messageProperties)
     {
-        messageRecorder.putMessage(new RecordedMessage(
+        messageRecorder.put(new RecordedMessage(
                 currentMessage,
                 message,
                 MessageProducer.DestinationType.TOPIC,
                 destination,
                 messageProperties)
         );
+    }
+
+    private static class RecordableMessageProducer extends MessageProducer
+    {
+        protected <T> RecordableMessageProducer(T message, MessageRecordingStrategy jmsSender)
+        {
+            super(message, jmsSender);
+        }
     }
 }

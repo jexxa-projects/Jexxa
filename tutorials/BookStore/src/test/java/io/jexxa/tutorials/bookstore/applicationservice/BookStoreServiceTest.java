@@ -1,53 +1,75 @@
 package io.jexxa.tutorials.bookstore.applicationservice;
 
 
+import static io.jexxa.tutorials.bookstore.domain.domainevent.BookSoldOut.bookSoldOut;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
-import io.jexxa.tutorials.bookstore.domain.aggregate.Book;
+import io.jexxa.test.JexxaTest;
+import io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
 import io.jexxa.tutorials.bookstore.domain.businessexception.BookNotInStockException;
-import io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.stub.DomainEventStubPublisher;
+import io.jexxa.tutorials.bookstore.domain.domainevent.BookSoldOut;
+import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
+import io.jexxa.tutorials.bookstore.domainservice.IBookRepository;
+import io.jexxa.tutorials.bookstore.domainservice.IDomainEventPublisher;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class BookStoreServiceTest
 {
-    private static final String DRIVEN_ADAPTER_PERSISTENCE = "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.persistence";
-    private static final String DRIVEN_ADAPTER_MESSAGING =   "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.stub";
+    private static final String DRIVEN_ADAPTER = "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter";
+    private static final String DOMAIN_SERVICE = "io.jexxa.tutorials.bookstore.domainservice";
 
-    private static final String ISBN_13 = "978-3-86490-387-8";
+    private static final ISBN13 ISBN_13 = new ISBN13( "978-3-86490-387-8" );
+    private static JexxaMain jexxaMain;
+    private BookStoreService objectUnderTest;
 
-    private JexxaMain jexxaMain;
+    private MessageRecorder publishedDomainEvents;
+    private IBookRepository bookRepository;
+
+
+    @BeforeAll
+    static void initBeforeAll()
+    {
+        // We recommend to instantiate JexxaMain only once for each test class.
+        // If you have larger tests this speeds up Jexxa's dependency injection
+        // Note: For unit-tests you just need to bind any driving adapter
+        jexxaMain = new JexxaMain(BookStoreServiceTest.class.getSimpleName());
+        jexxaMain.addToInfrastructure(DRIVEN_ADAPTER)
+                .addToApplicationCore(DOMAIN_SERVICE);
+    }
 
     @BeforeEach
     void initTest()
     {
-        RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);
-        
-        jexxaMain = new JexxaMain(BookStoreServiceTest.class.getSimpleName());
-        jexxaMain.addToInfrastructure(DRIVEN_ADAPTER_MESSAGING)
-                .addToInfrastructure(DRIVEN_ADAPTER_PERSISTENCE);
+        // JexxaTest is created for each tests. It provides and cleans up stubs before each test
+        // Actually, JexxaTest provides stubs for repositories and send messages
+        JexxaTest jexxaTest = new JexxaTest(jexxaMain);
 
-        DomainEventStubPublisher.clear();
-
-        RepositoryManager.getInstance().getStrategy(Book.class, Book::getISBN13, jexxaMain.getProperties()).removeAll();
+        // Query a message recorder for an interface which is defines in your application core.
+        publishedDomainEvents = jexxaTest.getMessageRecorder(IDomainEventPublisher.class);
+        // Query the repository that is internally used.
+        bookRepository = jexxaTest.getRepository(IBookRepository.class);
+        // Query the application service we want to test.
+        objectUnderTest = jexxaTest.getInstanceOfPort(BookStoreService.class);
     }
 
     @Test
     void receiveBook()
     {
         //Arrange
-        var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
         var amount = 5;
 
         //Act
-        objectUnderTest.addToStock(ISBN_13, amount);
+        objectUnderTest.addToStock(ISBN_13.getValue(), amount);
 
-        //Assert
+        //Assert - Here you can also use all the interfaces for driven adapters defined in your application without running the infrastructure
         assertEquals( amount, objectUnderTest.amountInStock(ISBN_13) );
+        assertEquals( amount, bookRepository.get( ISBN_13 ).amountInStock() );
+        assertTrue( publishedDomainEvents.isEmpty() );
     }
 
 
@@ -55,22 +77,22 @@ class BookStoreServiceTest
     void sellBook() throws BookNotInStockException
     {
         //Arrange
-        var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
         var amount = 5;
-        objectUnderTest.addToStock(ISBN_13, amount);
+        objectUnderTest.addToStock(ISBN_13.getValue(), amount);
 
         //Act
         objectUnderTest.sell(ISBN_13);
 
-        //Assert
+        //Assert - Here you can also use all the interfaces for driven adapters defined in your application without running the infrastructure
         assertEquals( amount - 1, objectUnderTest.amountInStock(ISBN_13) );
+        assertEquals( amount - 1, bookRepository.get(ISBN_13).amountInStock() );
+        assertTrue( publishedDomainEvents.isEmpty() );
     }
 
     @Test
-    void sellBookNotInStock() 
+    void sellBookNotInStock()
     {
-        //Arrange
-        var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
+        //Arrange - Nothing
 
         //Act/Assert
         assertThrows(BookNotInStockException.class, () -> objectUnderTest.sell(ISBN_13));
@@ -80,15 +102,15 @@ class BookStoreServiceTest
     void sellLastBook() throws BookNotInStockException
     {
         //Arrange
-        var objectUnderTest = jexxaMain.getInstanceOfPort(BookStoreService.class);
-        objectUnderTest.addToStock(ISBN_13, 1);
+        objectUnderTest.addToStock(ISBN_13.getValue(), 1);
 
         //Act
         objectUnderTest.sell(ISBN_13);
 
-        //Assert
+        //Assert - Here you can also use all the interfaces for driven adapters defined in your application without running the infrastructure
         assertEquals( 0 , objectUnderTest.amountInStock(ISBN_13) );
-        assertEquals(1, DomainEventStubPublisher.eventCount() );
+        assertEquals( 1 , publishedDomainEvents.size() );
+        assertEquals( bookSoldOut(ISBN_13), publishedDomainEvents.getMessage(BookSoldOut.class));
     }
 
 }
