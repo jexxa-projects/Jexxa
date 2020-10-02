@@ -20,7 +20,7 @@
     <!-- dependencies for tests -->
     <dependency>
       <groupId>io.jexxa.test</groupId>
-      <artifactId>Jexxa-Test</artifactId>
+      <artifactId>jexxa-test</artifactId>
       <version>${jexxa-core.version}</version>
       <scope>test</scope>
     </dependency>

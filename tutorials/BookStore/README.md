@@ -293,7 +293,7 @@ First, add the following dependency to your tests.
 ```maven
     <dependency>
       <groupId>io.jexxa.test</groupId>
-      <artifactId>Jexxa-Test</artifactId>
+      <artifactId>jexxa-test</artifactId>
       <version>2.4.0</version>
       <scope>test</scope>
     </dependency>
