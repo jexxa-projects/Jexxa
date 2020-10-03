@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[2.4.1] - 2020-10-03
 ### Fixed
--   Corrected artifact-id of module Jexxa-Test to lower cases
+-   Corrected artifact-id of module Jexxa-Test to lower cases. Changed package to jexxatest to avoid conflicts with main package jexxa(.test)  
 
 ### Changed
 -   Improved javadoc 
