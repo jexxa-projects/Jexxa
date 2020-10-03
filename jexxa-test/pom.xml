@@ -7,8 +7,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.jexxa.test</groupId>
+    <groupId>io.jexxa.jexxatest</groupId>
     <artifactId>jexxa-test</artifactId>
+    <name>Jexxa-Test</name>
 
 
     <dependencies>

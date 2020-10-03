@@ -7,8 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.jexxa.core.JexxaMain;
-import io.jexxa.test.JexxaTest;
-import io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
+import io.jexxa.jexxatest.JexxaTest;
+import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
+import io.jexxa.tutorials.bookstore.BookStoreApplication;
 import io.jexxa.tutorials.bookstore.domain.businessexception.BookNotInStockException;
 import io.jexxa.tutorials.bookstore.domain.domainevent.BookSoldOut;
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
@@ -20,8 +21,8 @@ import org.junit.jupiter.api.Test;
 
 class BookStoreServiceTest
 {
-    private static final String DRIVEN_ADAPTER = "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter";
-    private static final String DOMAIN_SERVICE = "io.jexxa.tutorials.bookstore.domainservice";
+    private static final String DRIVEN_ADAPTER = BookStoreApplication.class.getPackageName() + ".infrastructure.drivenadapter";
+    private static final String DOMAIN_SERVICE = BookStoreApplication.class.getPackageName() + ".domainservice";
 
     private static final ISBN13 ISBN_13 = new ISBN13( "978-3-86490-387-8" );
     private static JexxaMain jexxaMain;
