@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[2.4.1] - 2020-10-03
 ### Fixed
--   Corrected artifact-id of module Jexxa-Test to lower cases. Changed package to jexxatest to avoid conflicts with main package jexxa(.test)  
+-   Corrected artifact-id of module **jexxa-test** to lower cases. Changed package to jexxatest to avoid conflicts with main package jexxa(.test)  
 
 ### Changed
 -   Improved javadoc 
@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[2.4.0] - 2020-09-27
 ### Added
 -   New driven adapter strategy **MessageLogger** which writes messages to a logger
--   New module **Jexxa-Test** which simplifies writing unit tests. **Jexxa-Test** automatically provides stubs for application specific driven adapters as soon as they use Jexxa's drivenadapter strategies. 
+-   New module **jexxa-test** which simplifies writing unit tests. **jexxa-test** automatically provides stubs for application specific driven adapters as soon as they use Jexxa's drivenadapter strategies. 
 
 ### Changed
 -   Updated dependencies  
