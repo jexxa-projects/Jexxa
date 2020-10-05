@@ -15,6 +15,16 @@ public class JexxaAggregate
         this.jexxaValueObject = jexxaValueObject;
     }
 
+    public void setInternalValue(int value)
+    {
+        jexxaEntity.setInternalValue(value);
+    }
+
+    public int getInternalValue()
+    {
+        return jexxaEntity.getInternalValue();
+    }
+
     public JexxaValueObject getKey()
     {
         return jexxaValueObject;
