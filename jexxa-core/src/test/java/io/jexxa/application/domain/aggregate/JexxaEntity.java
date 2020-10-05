@@ -5,15 +5,15 @@ import io.jexxa.application.annotation.AggregateID;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 
 @Aggregate
-public final class JexxaAggregate
+public final class JexxaEntity
 {
     private final JexxaValueObject jexxaValueObject;
 
     private int internalValue;
 
-    public static JexxaAggregate create(JexxaValueObject key)
+    public static JexxaEntity create(JexxaValueObject key)
     {
-        return new JexxaAggregate(key);
+        return new JexxaEntity(key);
     }
 
     public void setInternalValue(int value)
@@ -33,7 +33,7 @@ public final class JexxaAggregate
         return jexxaValueObject;
     }
 
-    private JexxaAggregate(JexxaValueObject jexxaValueObject)
+    private JexxaEntity(JexxaValueObject jexxaValueObject)
     {
         this.jexxaValueObject = jexxaValueObject;
     }

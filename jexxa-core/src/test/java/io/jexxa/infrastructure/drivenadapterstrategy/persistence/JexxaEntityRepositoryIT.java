@@ -9,7 +9,7 @@ import java.util.Properties;
 import java.util.stream.Stream;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domain.aggregate.JexxaAggregate;
+import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaAggregateRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
@@ -23,11 +23,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
-class JexxaAggregateRepositoryIT
+class JexxaEntityRepositoryIT
 {
     private static final String REPOSITORY_CONFIG = "repositoryConfig";
 
-    private List<JexxaAggregate> aggregateList;
+    private List<JexxaEntity> aggregateList;
 
     @SuppressWarnings("unused")
     static Stream<Properties> repositoryConfig() {
@@ -54,7 +54,7 @@ class JexxaAggregateRepositoryIT
     void initTests()
     {
         aggregateList = Stream.of(100)
-                .map( counter -> JexxaAggregate.create(new JexxaValueObject(counter)) )
+                .map( counter -> JexxaEntity.create(new JexxaValueObject(counter)) )
                 .collect( toList() );
     }
 
@@ -127,7 +127,7 @@ class JexxaAggregateRepositoryIT
         aggregateList.forEach(element -> element.setInternalValue(aggregateValue));
         aggregateList.forEach(objectUnderTest::update);
 
-        //Assert internal value is correctly set 
+        //Assert internal value is correctly set
         objectUnderTest.get().forEach( element -> assertEquals(aggregateValue, element.getInternalValue()) );
     }
 

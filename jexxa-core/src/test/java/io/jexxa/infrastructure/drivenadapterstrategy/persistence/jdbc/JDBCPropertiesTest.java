@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Properties;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domain.aggregate.JexxaAggregate;
+import io.jexxa.application.domain.aggregate.JexxaEntity;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -18,8 +18,8 @@ class JDBCPropertiesTest
         //1.Assert missing properties
         var emptyProperties = new Properties();
         assertThrows(IllegalArgumentException.class, () -> new JDBCKeyValueRepository<>(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
+                JexxaEntity.class,
+                JexxaEntity::getKey,
                 emptyProperties
         ));
 
@@ -30,8 +30,8 @@ class JDBCPropertiesTest
 
         //2.Assert invalid properties: Invalid Driver
         assertThrows(IllegalArgumentException.class, () -> new JDBCKeyValueRepository<>(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
+                JexxaEntity.class,
+                JexxaEntity::getKey,
                 propertiesInvalidDriver
         ));
 
@@ -42,8 +42,8 @@ class JDBCPropertiesTest
 
         //3.Assert invalid properties: Invalid URL
         assertThrows(IllegalArgumentException.class, () -> new JDBCKeyValueRepository<>(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
+                JexxaEntity.class,
+                JexxaEntity::getKey,
                 propertiesInvalidURL
         ));
     }

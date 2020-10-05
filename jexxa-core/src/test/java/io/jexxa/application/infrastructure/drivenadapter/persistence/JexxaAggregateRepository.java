@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-import io.jexxa.application.domain.aggregate.JexxaAggregate;
+import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.domainservice.IJexxaAggregateRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
@@ -12,49 +12,49 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManag
 
 public final class JexxaAggregateRepository implements IJexxaAggregateRepository
 {
-    private final IRepository<JexxaAggregate, JexxaValueObject> repositoryConnection;
+    private final IRepository<JexxaEntity, JexxaValueObject> repositoryConnection;
 
-    private JexxaAggregateRepository(IRepository<JexxaAggregate, JexxaValueObject> repositoryConnection)
+    private JexxaAggregateRepository(IRepository<JexxaEntity, JexxaValueObject> repositoryConnection)
     {
         this.repositoryConnection = repositoryConnection;
     }
 
     @Override
-    public void add(JexxaAggregate jexxaAggregate)
+    public void add(JexxaEntity jexxaEntity)
     {
-        repositoryConnection.add(jexxaAggregate);
+        repositoryConnection.add(jexxaEntity);
     }
 
     @Override
-    public JexxaAggregate get(JexxaValueObject aggregateID)
+    public JexxaEntity get(JexxaValueObject aggregateID)
     {
         return repositoryConnection.get(aggregateID).orElseThrow();
     }
 
     @Override
-    public Optional<JexxaAggregate> find(JexxaValueObject aggregateID)
+    public Optional<JexxaEntity> find(JexxaValueObject aggregateID)
     {
         return repositoryConnection.get(aggregateID);
     }
 
     @Override
-    public List<JexxaAggregate> get()
+    public List<JexxaEntity> get()
     {
         return repositoryConnection.get();
     }
 
     @Override
-    public void update(JexxaAggregate aggregate)
+    public void update(JexxaEntity aggregate)
     {
         repositoryConnection.update(aggregate);
     }
 
     @Override
-    public void remove(JexxaAggregate aggregate)
+    public void remove(JexxaEntity aggregate)
     {
         repositoryConnection.remove(aggregate.getKey());
     }
-    
+
     @Override
     public void removeAll()
     {
@@ -64,8 +64,8 @@ public final class JexxaAggregateRepository implements IJexxaAggregateRepository
     public static IJexxaAggregateRepository create(Properties properties)
     {
         return new JexxaAggregateRepository(RepositoryManager.getInstance().getStrategy(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
+                JexxaEntity.class,
+                JexxaEntity::getKey,
                 properties)
         );
     }

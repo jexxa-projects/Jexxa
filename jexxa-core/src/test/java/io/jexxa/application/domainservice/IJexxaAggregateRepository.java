@@ -3,16 +3,16 @@ package io.jexxa.application.domainservice;
 import java.util.List;
 import java.util.Optional;
 
-import io.jexxa.application.domain.aggregate.JexxaAggregate;
+import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 
 public interface IJexxaAggregateRepository
 {
-    void add(JexxaAggregate jexxaAggregate);
-    JexxaAggregate get(JexxaValueObject aggregateID);
-    Optional<JexxaAggregate> find( JexxaValueObject aggregateID);
-    List<JexxaAggregate> get();
-    void update(JexxaAggregate aggregate);
-    void remove(JexxaAggregate aggregate);
+    void add(JexxaEntity jexxaEntity);
+    JexxaEntity get(JexxaValueObject aggregateID);
+    Optional<JexxaEntity> find(JexxaValueObject aggregateID);
+    List<JexxaEntity> get();
+    void update(JexxaEntity aggregate);
+    void remove(JexxaEntity aggregate);
     void removeAll();
 }
