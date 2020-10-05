@@ -5,13 +5,13 @@ import java.util.stream.IntStream;
 import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 
-public class InitializeJexxaAggregates
+public class InitializeJexxaEntities
 {
-    private final IJexxaAggregateRepository jexxaAggregateRepository;
+    private final IJexxaEntityRepository jexxaEntityRepository;
 
-    public InitializeJexxaAggregates(IJexxaAggregateRepository jexxaAggregateRepository)
+    public InitializeJexxaEntities(IJexxaEntityRepository jexxaEntityRepository)
     {
-        this.jexxaAggregateRepository = jexxaAggregateRepository;
+        this.jexxaEntityRepository = jexxaEntityRepository;
     }
 
     public void initDomainData()
@@ -22,9 +22,9 @@ public class InitializeJexxaAggregates
     }
 
     private void addIfNotAvailable(JexxaValueObject aggregateID) {
-        if (jexxaAggregateRepository.find(aggregateID).isEmpty())
+        if (jexxaEntityRepository.find(aggregateID).isEmpty())
         {
-            jexxaAggregateRepository.add(JexxaEntity.create(aggregateID));
+            jexxaEntityRepository.add(JexxaEntity.create(aggregateID));
         }
     }
 }

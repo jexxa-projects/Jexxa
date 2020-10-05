@@ -6,7 +6,7 @@ import java.util.Optional;
 import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 
-public interface IJexxaAggregateRepository
+public interface IJexxaEntityRepository
 {
     void add(JexxaEntity jexxaEntity);
     JexxaEntity get(JexxaValueObject aggregateID);

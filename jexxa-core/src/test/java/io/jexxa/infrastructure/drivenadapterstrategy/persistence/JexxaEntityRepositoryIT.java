@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaAggregateRepository;
+import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaEntityRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -63,7 +63,7 @@ class JexxaEntityRepositoryIT
     void addAggregate(Properties repositoryProperties)
     {
         //Arrange
-        var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
+        var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
 
         //Act
@@ -79,7 +79,7 @@ class JexxaEntityRepositoryIT
     void getAggregateByID(Properties repositoryProperties)
     {
         //Arrange
-        var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
+        var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
 
@@ -97,7 +97,7 @@ class JexxaEntityRepositoryIT
     void removeAggregate(Properties repositoryProperties)
     {
         //Arrange
-        var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
+        var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
 
@@ -117,7 +117,7 @@ class JexxaEntityRepositoryIT
     void updateAggregate(Properties repositoryProperties)
     {
         //Arrange
-        var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
+        var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
 

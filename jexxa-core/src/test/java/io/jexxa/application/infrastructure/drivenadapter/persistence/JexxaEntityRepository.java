@@ -6,15 +6,15 @@ import java.util.Properties;
 
 import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.application.domainservice.IJexxaAggregateRepository;
+import io.jexxa.application.domainservice.IJexxaEntityRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 
-public final class JexxaAggregateRepository implements IJexxaAggregateRepository
+public final class JexxaEntityRepository implements IJexxaEntityRepository
 {
     private final IRepository<JexxaEntity, JexxaValueObject> repositoryConnection;
 
-    private JexxaAggregateRepository(IRepository<JexxaEntity, JexxaValueObject> repositoryConnection)
+    private JexxaEntityRepository(IRepository<JexxaEntity, JexxaValueObject> repositoryConnection)
     {
         this.repositoryConnection = repositoryConnection;
     }
@@ -61,9 +61,9 @@ public final class JexxaAggregateRepository implements IJexxaAggregateRepository
         repositoryConnection.removeAll();
     }
 
-    public static IJexxaAggregateRepository create(Properties properties)
+    public static IJexxaEntityRepository create(Properties properties)
     {
-        return new JexxaAggregateRepository(RepositoryManager.getInstance().getStrategy(
+        return new JexxaEntityRepository(RepositoryManager.getInstance().getStrategy(
                 JexxaEntity.class,
                 JexxaEntity::getKey,
                 properties)
