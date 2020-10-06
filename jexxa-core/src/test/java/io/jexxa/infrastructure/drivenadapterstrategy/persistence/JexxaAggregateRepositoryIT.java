@@ -123,8 +123,6 @@ class JexxaAggregateRepositoryIT
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
 
-        System.out.println(aggregateList.size());
-
         int aggregateValue = 42;
 
         //Act
