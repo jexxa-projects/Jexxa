@@ -3,6 +3,7 @@ package io.jexxa.application.applicationservice;
 
 import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.domain.valueobject.SpecialCasesValueObject;
 
 @SuppressWarnings("unused")
 @ApplicationService
@@ -24,7 +25,7 @@ public class SimpleApplicationService
     {
         firstValue = 42;
     }
-    
+
     public int getSimpleValue()
     {
       return firstValue;
@@ -57,11 +58,17 @@ public class SimpleApplicationService
         setSimpleValue(first.getValue());
         setSimpleValue(second.getValue());
     }
-    
+
 
     public JexxaValueObject getSimpleValueObject()
     {
         return  new JexxaValueObject(firstValue);
     }
+
+    public SpecialCasesValueObject getSpecialCasesValueObject()
+    {
+        return  SpecialCasesValueObject.SPECIAL_CASES_VALUE_OBJECT;
+    }
+
 
 }

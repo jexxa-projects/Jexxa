@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.domain.valueobject.SpecialCasesValueObject;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,7 +67,7 @@ class RESTfulRPCAdapterIT
     @Test // RPC call test: int getSimpleValue()
     void testGETCommand()
     {
-        //Arrange -> Nothing to do  
+        //Arrange -> Nothing to do
 
         //Act
         Integer result = Unirest.get(REST_PATH + METHOD_GET_SIMPLE_VALUE)
@@ -93,7 +94,7 @@ class RESTfulRPCAdapterIT
         var secondRestPath = "http://localhost:" + secondAdapter.getHTTPPort() + "/SimpleApplicationService/";
 
 
-        //Act using secondAdapter 
+        //Act using secondAdapter
         Integer result = Unirest.get(secondRestPath + METHOD_GET_SIMPLE_VALUE)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
@@ -114,11 +115,11 @@ class RESTfulRPCAdapterIT
         //Arrange
         var properties = new Properties();
 
-        //Act and Assert 
+        //Act and Assert
         assertThrows(IllegalArgumentException.class, () -> new RESTfulRPCAdapter(properties));
     }
 
-   
+
     @Test  // RPC call test: void setSimpleValue(44)
     void testPOSTCommandWithOneAttribute()
     {
@@ -232,4 +233,21 @@ class RESTfulRPCAdapterIT
             throw gson.fromJson(jsonString, SimpleApplicationService.SimpleApplicationException.class);
         });
     }
+
+    @Test // RPC call test: int getSimpleValue()
+    void testGETCommandWithSpecialCasesValueObject()
+    {
+        //Arrange -> Nothing to do
+
+        //Act
+        SpecialCasesValueObject result = Unirest.get(REST_PATH + "getSpecialCasesValueObject")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(SpecialCasesValueObject.class).getBody();
+
+
+        //Assert
+        assertNotNull(result);
+        assertEquals(SpecialCasesValueObject.SPECIAL_CASES_VALUE_OBJECT, result);
+    }
 }
+

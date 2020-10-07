@@ -6,11 +6,13 @@ import java.util.Optional;
 import java.util.Properties;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.javalin.Javalin;
+import io.javalin.plugin.json.JavalinJson;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import org.apache.commons.lang3.Validate;
 import org.eclipse.jetty.server.Server;
@@ -25,6 +27,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public static final String HTTPS_PORT_PROPERTY = "io.jexxa.rest.https_port";
     public static final String KEYSTORE = "io.jexxa.rest.keystore";
     public static final String KEYSTORE_PASSWORD = "io.jexxa.rest.keystore_password";
+
+    private static final Gson GSON = new GsonBuilder().create();
 
     private final Properties properties;
     private Javalin javalin;
@@ -78,7 +82,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         {
             return sslConnector.getLocalPort();
         }
-        
+
         return getHTTPSPortFromProperties();
     }
 
@@ -138,7 +142,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
      *   }
      * }
      * </pre>
-     * 
+     *
      */
     private void registerExceptionHandler()
     {
@@ -185,7 +189,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                     Object result = IDrivingAdapter
                             .acquireLock()
                             .invoke(element.getMethod(), object, methodParameters);
-                    
+
                     if (result != null)
                     {
                         ctx.json(result);
@@ -239,6 +243,9 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void setupJavalin()
     {
+        JavalinJson.setFromJsonMapper(GSON::fromJson);
+        JavalinJson.setToJsonMapper(GSON::toJson);
+
         this.javalin = Javalin.create(config ->
                 {
                     config.server(this::getServer);
