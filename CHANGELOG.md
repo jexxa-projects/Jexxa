@@ -8,8 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Fixed
+-   RESTFullRPCAdapter: Fixed serialization with objects containing private fields wihtout public getter 
 
 ### Changed
+-   RESTFullRPCAdapter: Changed serialization strategy from Jackson to Gson 
 -   Updated dependencies
 
 ## \[2.4.1] - 2020-10-03
