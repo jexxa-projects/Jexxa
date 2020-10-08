@@ -52,7 +52,10 @@
                     <excludes>
                       <exclude>module-info.class</exclude>
                       <exclude>about.html</exclude>
-                      <exclude>META-INF/**</exclude>
+                      <exclude>META-INF/MANIFEST.MF</exclude>
+                      <exclude>META-INF/*.txt</exclude>
+                      <exclude>META-INF/NOTICE</exclude>
+                      <exclude>META-INF/LICENSE</exclude>
                     </excludes>
                   </filter>
                   <filter>
