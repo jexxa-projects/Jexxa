@@ -35,14 +35,14 @@ Even though Jexxa has strong educational focus it is used within lightweight bus
 <dependency>
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa-core</artifactId>
-  <version>2.4.1</version>
+  <version>2.4.2</version>
 </dependency> 
 ```
 
 #### Gradle
 
 ```groovy
-compile "io.Jexxa:jexxa-core:2.4.1"
+compile "io.Jexxa:jexxa-core:2.4.2"
 ``` 
 
 ### Start programming 
