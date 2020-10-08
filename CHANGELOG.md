@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.x.x] - yyyy-mm-dd
+## \[2.4.x] - yyyy-mm-dd
 ### Added
 
 ### Fixed
--   RESTFullRPCAdapter: Fixed serialization with objects containing private fields wihtout public getter 
+-   RESTFullRPCAdapter: Fixed serialization with objects containing private fields without public getter 
+-   Tutorial TimeService: Corrected maven shade plugin filters so that active MQ works as expected. 
 
 ### Changed
 -   RESTFullRPCAdapter: Changed serialization strategy from Jackson to Gson 
