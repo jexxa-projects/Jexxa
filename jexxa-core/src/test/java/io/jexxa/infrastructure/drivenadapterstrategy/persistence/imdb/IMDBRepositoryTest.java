@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Properties;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domain.aggregate.JexxaAggregate;
+import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -21,17 +21,17 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestConstants.UNIT_TEST)
 class IMDBRepositoryTest
 {
-    private JexxaAggregate aggregate;
-    private IMDBRepository<JexxaAggregate, JexxaValueObject> objectUnderTest;
+    private JexxaEntity aggregate;
+    private IMDBRepository<JexxaEntity, JexxaValueObject> objectUnderTest;
 
     @BeforeEach
     void initTest()
     {
         //Arrange
-        aggregate = JexxaAggregate.create(new JexxaValueObject(42));
+        aggregate = JexxaEntity.create(new JexxaValueObject(42));
         objectUnderTest = new IMDBRepository<>(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
+                JexxaEntity.class,
+                JexxaEntity::getKey,
                 new Properties()
         );
         objectUnderTest.removeAll();
@@ -78,12 +78,12 @@ class IMDBRepositoryTest
 
         //act
         var newConnection = new IMDBRepository<>(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
+                JexxaEntity.class,
+                JexxaEntity::getKey,
                 new Properties()
         );
 
-        //Assert that connections are different but refer to the same repository 
+        //Assert that connections are different but refer to the same repository
         assertNotEquals(objectUnderTest, newConnection);
         assertFalse(objectUnderTest.get().isEmpty());
         assertFalse(newConnection.get().isEmpty());

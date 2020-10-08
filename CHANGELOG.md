@@ -8,13 +8,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Fixed
+-   RESTFullRPCAdapter: Fixed serialization with objects containing private fields wihtout public getter 
 
 ### Changed
+-   RESTFullRPCAdapter: Changed serialization strategy from Jackson to Gson 
+-   Updated dependencies
+
+## \[2.4.1] - 2020-10-03
+### Fixed
+-   Corrected artifact-id of module **jexxa-test** to lower cases. Changed package to jexxatest to avoid conflicts with main package jexxa(.test)  
+
+### Changed
+-   Improved javadoc
+-   Updated dependencies on minor level 
 
 ## \[2.4.0] - 2020-09-27
 ### Added
 -   New driven adapter strategy **MessageLogger** which writes messages to a logger
--   New module **Jexxa-Test** which simplifies writing unit tests. **Jexxa-Test** automatically provides stubs for application specific driven adapters as soon as they use Jexxa's drivenadapter strategies. 
+-   New module **jexxa-test** which simplifies writing unit tests. **jexxa-test** automatically provides stubs for application specific driven adapters as soon as they use Jexxa's drivenadapter strategies. 
 
 ### Changed
 -   Updated dependencies  

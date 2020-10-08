@@ -22,7 +22,7 @@ class ISBN13Test
     void testInvalidISBN13()
     {
         //Arrange
-        var isbn13 = "978-3-86490-387-0"; //Invalid cehcksum 
+        var isbn13 = "978-3-86490-387-0"; //Invalid checksum
 
         //Act/Assert
         assertThrows(IllegalArgumentException.class, () -> new ISBN13(isbn13));

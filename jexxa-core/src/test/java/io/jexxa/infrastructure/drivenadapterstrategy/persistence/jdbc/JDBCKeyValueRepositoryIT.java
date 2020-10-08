@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domain.aggregate.JexxaAggregate;
+import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import org.junit.jupiter.api.AfterEach;
@@ -20,20 +20,20 @@ import org.junit.jupiter.api.Test;
 @Tag(TestConstants.INTEGRATION_TEST)
 class JDBCKeyValueRepositoryIT
 {
-    private JexxaAggregate aggregate;
-    private JDBCKeyValueRepository<JexxaAggregate, JexxaValueObject> objectUnderTest;
+    private JexxaEntity aggregate;
+    private JDBCKeyValueRepository<JexxaEntity, JexxaValueObject> objectUnderTest;
 
     @BeforeEach
     void initTests() throws IOException
     {
         //Arrange
-        aggregate = JexxaAggregate.create(new JexxaValueObject(42));
+        aggregate = JexxaEntity.create(new JexxaValueObject(42));
         var properties = new Properties();
         properties.load(getClass().getResourceAsStream(JexxaMain.JEXXA_APPLICATION_PROPERTIES));
 
         objectUnderTest = new JDBCKeyValueRepository<>(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
+                JexxaEntity.class,
+                JexxaEntity::getKey,
                 properties
         );
         objectUnderTest.removeAll();
@@ -62,7 +62,7 @@ class JDBCKeyValueRepositoryIT
     void getUnknownAggregate()
     {
         //arrange
-        var unknownAggregate = JexxaAggregate.create(new JexxaValueObject(42));
+        var unknownAggregate = JexxaEntity.create(new JexxaValueObject(42));
 
 
         //act

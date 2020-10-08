@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Properties;
 
 import io.jexxa.application.applicationservice.InvalidApplicationService;
-import io.jexxa.application.domainservice.IJexxaAggregateRepository;
+import io.jexxa.application.domainservice.IJexxaEntityRepository;
 import org.apache.commons.lang3.Validate;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +29,7 @@ class PortConventionTest
         }
 
         @SuppressWarnings("unused")
-        public InvalidApplicationServiceMultipleConstructor(IJexxaAggregateRepository jexxaAggregateRepository)
+        public InvalidApplicationServiceMultipleConstructor(IJexxaEntityRepository jexxaAggregateRepository)
         {
             Validate.notNull(jexxaAggregateRepository);
         }

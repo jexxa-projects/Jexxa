@@ -16,6 +16,7 @@ import io.jexxa.application.domainservice.InitializeJexxaAggregates;
 import io.jexxa.application.domainservice.PublishJexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
+import io.jexxa.jexxatest.JexxaTest;
 import org.junit.jupiter.api.Test;
 
 

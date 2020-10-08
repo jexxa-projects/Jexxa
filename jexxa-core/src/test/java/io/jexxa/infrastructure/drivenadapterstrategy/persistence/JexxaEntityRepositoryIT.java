@@ -11,9 +11,9 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domain.aggregate.JexxaAggregate;
+import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaAggregateRepository;
+import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaEntityRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -25,11 +25,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
-class JexxaAggregateRepositoryIT
+class JexxaEntityRepositoryIT
 {
     private static final String REPOSITORY_CONFIG = "repositoryConfig";
 
-    private List<JexxaAggregate> aggregateList;
+    private List<JexxaEntity> aggregateList;
 
     @SuppressWarnings("unused")
     static Stream<Properties> repositoryConfig() {
@@ -55,9 +55,9 @@ class JexxaAggregateRepositoryIT
     @BeforeEach
     void initTests()
     {
-       aggregateList= IntStream.range(1,100)
-               .mapToObj( element -> JexxaAggregate.create(new JexxaValueObject(element)))
-               .collect(Collectors.toUnmodifiableList());
+        aggregateList= IntStream.range(1,100)
+                .mapToObj( element -> JexxaEntity.create(new JexxaValueObject(element)))
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @ParameterizedTest
@@ -65,7 +65,7 @@ class JexxaAggregateRepositoryIT
     void addAggregate(Properties repositoryProperties)
     {
         //Arrange
-        var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
+        var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
 
         //Act
@@ -81,7 +81,7 @@ class JexxaAggregateRepositoryIT
     void getAggregateByID(Properties repositoryProperties)
     {
         //Arrange
-        var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
+        var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
 
@@ -99,7 +99,7 @@ class JexxaAggregateRepositoryIT
     void removeAggregate(Properties repositoryProperties)
     {
         //Arrange
-        var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
+        var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
 
@@ -119,7 +119,7 @@ class JexxaAggregateRepositoryIT
     void updateAggregate(Properties repositoryProperties)
     {
         //Arrange
-        var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
+        var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
 
@@ -134,4 +134,3 @@ class JexxaAggregateRepositoryIT
     }
 
 }
-

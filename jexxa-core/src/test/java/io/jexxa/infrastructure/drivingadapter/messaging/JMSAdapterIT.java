@@ -13,7 +13,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domain.aggregate.JexxaAggregate;
+import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.utils.messaging.ITMessageSender;
@@ -127,8 +127,8 @@ class JMSAdapterIT
 
         //2.Assert invalid properties: Invalid Driver
         assertThrows(IllegalArgumentException.class, () -> new JDBCKeyValueRepository<>(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
+                JexxaEntity.class,
+                JexxaEntity::getKey,
                 propertiesInvalidProvider
         ));
 
@@ -139,8 +139,8 @@ class JMSAdapterIT
 
         //3.Assert invalid properties: Invalid URL
         assertThrows(IllegalArgumentException.class, () -> new JDBCKeyValueRepository<>(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
+                JexxaEntity.class,
+                JexxaEntity::getKey,
                 propertiesInvalidFactory
         ));
     }

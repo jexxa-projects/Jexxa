@@ -281,7 +281,7 @@ true
 ```
 ## 4. Write some tests
 Writing some tests with Jexxa is quite easy. If you implement your driven adapters using Jexxa's driven adapter strategies you can use 
-package **Jexxa-Test**. It automatically provides stubs so that you do not need any mock framework. Main advantages are: 
+package **jexxa-test**. It automatically provides stubs so that you do not need any mock framework. Main advantages are: 
 
 *   You can focus on domain logic within your tests.
 *   You don't need to use mocks which can lead to validating execution steps within the domain core instead of validating the use cases
@@ -292,9 +292,9 @@ First, add the following dependency to your tests.
 
 ```maven
     <dependency>
-      <groupId>io.jexxa.test</groupId>
-      <artifactId>Jexxa-Test</artifactId>
-      <version>2.4.0</version>
+      <groupId>io.jexxa.jexxatest</groupId>
+      <artifactId>jexxa-test</artifactId>
+      <version>2.4.1</version>
       <scope>test</scope>
     </dependency>
 ```
@@ -304,8 +304,8 @@ Following code shows a simple validation of our BookStoreService. Some additiona
 ```java
 class BookStoreServiceTest
 {
-    private static final String DRIVEN_ADAPTER = "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter";
-    private static final String DOMAIN_SERVICE = "io.jexxa.tutorials.bookstore.domainservice";
+    private static final String DRIVEN_ADAPTER = BookStoreApplication.class.getPackageName() + ".infrastructure.drivenadapter";
+    private static final String DOMAIN_SERVICE = BookStoreApplication.class.getPackageName() + ".domainservice";
 
     private static final ISBN13 ISBN_13 = new ISBN13( "978-3-86490-387-8" );
     private static JexxaMain jexxaMain;
@@ -374,4 +374,3 @@ class BookStoreServiceTest
 
 } 
 ```
-

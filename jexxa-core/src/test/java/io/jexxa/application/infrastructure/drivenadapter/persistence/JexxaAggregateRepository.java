@@ -10,63 +10,65 @@ import io.jexxa.application.domainservice.IJexxaAggregateRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 
-public final class JexxaAggregateRepository implements IJexxaAggregateRepository
+@SuppressWarnings("unsused")
+public class JexxaAggregateRepository implements IJexxaAggregateRepository
 {
-    private final IRepository<JexxaAggregate, JexxaValueObject> repositoryConnection;
 
-    private JexxaAggregateRepository(IRepository<JexxaAggregate, JexxaValueObject> repositoryConnection)
+    private final IRepository<JexxaAggregate, JexxaValueObject> repository;
+
+    private JexxaAggregateRepository(IRepository<JexxaAggregate, JexxaValueObject> repository)
     {
-        this.repositoryConnection = repositoryConnection;
+        this.repository = repository;
     }
 
     @Override
-    public void add(JexxaAggregate jexxaAggregate)
+    public void add(JexxaAggregate jexxaEntity)
     {
-        repositoryConnection.add(jexxaAggregate);
+        repository.add(jexxaEntity);
     }
 
     @Override
     public JexxaAggregate get(JexxaValueObject aggregateID)
     {
-        return repositoryConnection.get(aggregateID).orElseThrow();
+        return repository.get(aggregateID).orElseThrow();
     }
 
     @Override
     public Optional<JexxaAggregate> find(JexxaValueObject aggregateID)
     {
-        return repositoryConnection.get(aggregateID);
+        return repository.get(aggregateID);
     }
 
     @Override
     public List<JexxaAggregate> get()
     {
-        return repositoryConnection.get();
+        return repository.get();
     }
 
     @Override
     public void update(JexxaAggregate aggregate)
     {
-        repositoryConnection.update(aggregate);
+        repository.update(aggregate);
     }
 
     @Override
     public void remove(JexxaAggregate aggregate)
     {
-        repositoryConnection.remove(aggregate.getKey());
+        repository.remove(aggregate.getKey());
     }
-    
+
     @Override
     public void removeAll()
     {
-        repositoryConnection.removeAll();
+        repository.removeAll();
     }
 
     public static IJexxaAggregateRepository create(Properties properties)
     {
-        return new JexxaAggregateRepository(RepositoryManager.getInstance().getStrategy(
+        return new JexxaAggregateRepository((RepositoryManager.getInstance().getStrategy(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 properties)
-        );
+        ));
     }
 }

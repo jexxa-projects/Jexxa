@@ -1,4 +1,4 @@
-package io.jexxa.test.infrastructure.drivenadapterstrategy.messaging.recording;
+package io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording;
 
 import java.util.HashMap;
 import java.util.Map;

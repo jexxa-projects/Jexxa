@@ -4,15 +4,16 @@ package io.jexxa.tutorials.bookstore.domainservice;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import io.jexxa.core.JexxaMain;
-import io.jexxa.test.JexxaTest;
+import io.jexxa.jexxatest.JexxaTest;
+import io.jexxa.tutorials.bookstore.BookStoreApplication;
 import io.jexxa.tutorials.bookstore.applicationservice.BookStoreService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ReferenceLibraryTest
 {
-    private static final String DRIVEN_ADAPTER = "io.jexxa.tutorials.bookstore.infrastructure.drivenadapter";
-    private static final String DOMAIN_SERVICE = "io.jexxa.tutorials.bookstore.domainservice";
+    private static final String DRIVEN_ADAPTER = BookStoreApplication.class.getPackageName() + ".infrastructure.drivenadapter";
+    private static final String DOMAIN_SERVICE = BookStoreApplication.class.getPackageName() + ".domainservice";
 
     private static JexxaMain jexxaMain;
 

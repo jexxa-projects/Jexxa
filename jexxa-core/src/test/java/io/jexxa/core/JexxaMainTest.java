@@ -14,8 +14,8 @@ import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapt
 import io.jexxa.application.applicationservice.InvalidApplicationService;
 import io.jexxa.application.applicationservice.JexxaApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
-import io.jexxa.application.domainservice.IJexxaAggregateRepository;
-import io.jexxa.application.domainservice.InitializeJexxaAggregates;
+import io.jexxa.application.domainservice.IJexxaEntityRepository;
+import io.jexxa.application.domainservice.InitializeJexxaEntities;
 import io.jexxa.application.infrastructure.drivingadapter.ProxyAdapter;
 import io.jexxa.core.convention.PortConventionViolation;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
@@ -129,7 +129,7 @@ class JexxaMainTest
                 .addToApplicationCore(JEXXA_APPLICATION_SERVICE)
 
         //Act
-                .bootstrap(InitializeJexxaAggregates.class).with(InitializeJexxaAggregates::initDomainData);
+                .bootstrap(InitializeJexxaEntities.class).with(InitializeJexxaEntities::initDomainData);
 
         var jexxaApplicationService = objectUnderTest.getInstanceOfPort(JexxaApplicationService.class);
 
@@ -153,7 +153,7 @@ class JexxaMainTest
         //Arrange --
 
         //Act/Assert
-        assertNotNull( objectUnderTest.getInstanceOfPort(IJexxaAggregateRepository.class));
+        assertNotNull( objectUnderTest.getInstanceOfPort(IJexxaEntityRepository.class));
     }
 
 }
