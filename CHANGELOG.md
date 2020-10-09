@@ -8,7 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Fixed
--   RESTFullRPCAdapter: Fixed serialization with objects containing private fields wihtout public getter 
+
+### Changed
+
+## \[2.4.2] - 2020-10-08
+### Fixed
+-   RESTFullRPCAdapter: Fixed serialization with objects containing private fields without public getter 
+-   Tutorial TimeService: Corrected maven shade plugin filters so that active MQ works as expected. 
 
 ### Changed
 -   RESTFullRPCAdapter: Changed serialization strategy from Jackson to Gson 
