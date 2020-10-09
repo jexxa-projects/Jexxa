@@ -124,7 +124,7 @@ mvn clean install -DskipITs
 
 ### Dependencies for integration tests 
 
-For running integration tests we recommend using local docker containers to provide following dependencies:
+For running integration tests we recommend using local docker containers to provide following infrastructure:
 
 *   An ActiveMQ instance with default settings: See [here](https://hub.docker.com/r/rmohr/activemq/).   
 *   A PostgresDB database with default settings. Default user/password should be admin/admin: See [here](https://hub.docker.com/_/postgres).   
