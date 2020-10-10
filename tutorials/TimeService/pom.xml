@@ -106,13 +106,13 @@
               </jvmFlag>
             </jvmFlags>
 
-            <!--- Enable for JMS support
+            <!--- Enable for JMS support -->
             <args>
               <arg>
                 -jms
               </arg>
             </args>
-            -->
+            <!--- -->
             <ports>
               <port>7000</port>
               <port>${jmx.port}</port>
