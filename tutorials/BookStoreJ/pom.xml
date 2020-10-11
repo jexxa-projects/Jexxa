@@ -163,9 +163,11 @@
             <jvmFlags>
               <!--- Set URL to database -->
               <jvmFlag>
-                -Dio.jexxa.jdbc.url=jdbc:postgresql://172.17.0.4:5432/bookstore
+                -Dio.jexxa.jdbc.url=jdbc:postgresql://172.17.0.4:5432/bookstorej
               </jvmFlag>
-
+              <jvmFlag>
+                -Dio.jexxa.jdbc.autocreate.database=jdbc:postgresql://172.17.0.4:5432/postgres
+              </jvmFlag>
               <!--- Enable for JMX support.
               Notes:  - jmxremote.rmi.port and jmxremote.port must be identical in order to access application in docker container
                       - exposed port in section <ports> must be identical to jmxremote.port. Otherwise port forwarding will not work with jmx
@@ -193,9 +195,6 @@
               </jvmFlag>
               <jvmFlag>
                 -Djava.rmi.server.hostname=localhost
-              </jvmFlag>
-              <jvmFlag>
-                -Dio.jexxa.jdbc.url=jdbc:postgresql://172.17.0.4:5432/bookstore
               </jvmFlag>
             </jvmFlags>
 
