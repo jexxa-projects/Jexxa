@@ -1,0 +1,26 @@
+= Jexxa - Reference Guide
+:source-highlighter: coderay
+:toc:
+:toclevels: 4
+:icons: font
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+:sectanchors:
+:numbered:
+
+== Jexxa Features
+
+=== Jexxa Application
+
+=== Configuration
+
+
+Jexxa allows you to externalize your configuration, so you can work with the same application code in different environments. By default, you can use properties files and set properties as command-line arguments to externalize the configuration. Properties are considered in the following order:
+
+1. Java System properties (`System.getProperties()`)
+2. Properties file inside the jar archive
+
+== Conventions of Adapters
