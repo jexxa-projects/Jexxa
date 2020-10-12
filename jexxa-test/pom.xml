@@ -45,6 +45,8 @@
             <version>${slf4j.simple.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- We us the objects defined in jexxa-core tests -->
         <dependency>
             <groupId>io.jexxa</groupId>
             <artifactId>jexxa-core</artifactId>

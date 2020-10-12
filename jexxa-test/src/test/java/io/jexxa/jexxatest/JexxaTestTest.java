@@ -1,4 +1,4 @@
-package io.jexxa.test;
+package io.jexxa.jexxatest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -16,7 +16,6 @@ import io.jexxa.application.domainservice.InitializeJexxaAggregates;
 import io.jexxa.application.domainservice.PublishJexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
-import io.jexxa.jexxatest.JexxaTest;
 import org.junit.jupiter.api.Test;
 
 
@@ -50,7 +49,7 @@ class JexxaTestTest
         JexxaTest jexxaTest = new JexxaTest(jexxaMain);
 
         var testMessage = new JexxaValueObject(1);
-        var messageRecorder = jexxaTest.getMessageRecorder(IJexxaPublisher.class);
+        var messageRecorder= jexxaTest.getMessageRecorder(IJexxaPublisher.class);
 
         var objectUnderTest = jexxaTest.getInstanceOfPort(PublishJexxaValueObject.class);
 
