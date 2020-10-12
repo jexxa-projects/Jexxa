@@ -19,15 +19,18 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     private static final Map< Class<?>, IMDBRepository<?,?> > IMDB_REPOSITORY_MAP = new ConcurrentHashMap<>();
 
 
-    private final Map<K, T> aggregateMap;
+    private Map<K, T> aggregateMap;
     private final Function<T,K> keyFunction;
+    private final Class<T> aggregateClazz;
 
     @SuppressWarnings("java:S1172")
     public IMDBRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
     {
-        aggregateMap = getAggregateMap(aggregateClazz);
+        this.aggregateClazz = aggregateClazz;
         this.keyFunction = keyFunction;
         IMDB_REPOSITORY_MAP.put(aggregateClazz, this);
+
+        aggregateMap = getOwnAggregateMap();
     }
 
     @Override
@@ -39,36 +42,58 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     @Override
     public void remove(K key)
     {
-        aggregateMap.remove( key );
+        getOwnAggregateMap().remove( key );
     }
 
     @Override
     public void removeAll()
     {
-        aggregateMap.clear();
+        getOwnAggregateMap().clear();
     }
 
     @Override
     public void add(T aggregate)
     {
-        if (aggregateMap.containsKey( keyFunction.apply(aggregate)))
+        if (getOwnAggregateMap().containsKey( keyFunction.apply(aggregate)))
         {
             throw new IllegalArgumentException("An object with given key already exists");
         }
-        aggregateMap.put(keyFunction.apply(aggregate), aggregate);
+        getOwnAggregateMap().put(keyFunction.apply(aggregate), aggregate);
     }
 
     @Override
     public Optional<T> get(K primaryKey)
     {
-        return Optional.ofNullable(aggregateMap.get( primaryKey));
+        return Optional.ofNullable(getOwnAggregateMap().get( primaryKey));
     }
 
 
     @Override
     public List<T> get()
     {
-        return new ArrayList<>(aggregateMap.values());
+        return new ArrayList<>(getOwnAggregateMap().values());
+    }
+
+    private Map<K, T> getOwnAggregateMap()
+    {
+        if ( aggregateMap == null ) {
+            aggregateMap = getAggregateMap(aggregateClazz);
+        }
+
+        return aggregateMap;
+    }
+
+    /**
+     * This method resets all IMDBRepositories instance within an application and removes all stored objects!
+     *
+     * So this method should only be used when writing tests to ensure a clean data setup!
+     */
+    public static synchronized void clear()
+    {
+        IMDB_REPOSITORY_MAP.forEach( (aggregateType, repository) -> repository.removeAll() );
+        IMDB_REPOSITORY_MAP.forEach( (aggregateType, repository) -> repository.resetIMDBInstance() );
+        REPOSITORY_MAP.forEach( (aggregateType, imdbMap) -> imdbMap.clear() );
+        REPOSITORY_MAP.clear();
     }
 
     @SuppressWarnings("unchecked")
@@ -84,15 +109,9 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
         return newRepository;
     }
 
-    /**
-     * This method resets all IMDBRepositories instance within an application and removes all stored objects!
-     *
-     * So this method should only be used when writing tests to ensure a clean data setup!
-     */
-    public static void clear()
+    protected void resetIMDBInstance()
     {
-        IMDB_REPOSITORY_MAP.forEach( (key, value) -> value.removeAll() );
-        REPOSITORY_MAP.forEach( (key, value) -> value.clear() );
-        REPOSITORY_MAP.clear();
+        aggregateMap = null;
     }
+
 }

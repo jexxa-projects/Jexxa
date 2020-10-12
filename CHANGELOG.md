@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Fixed
+-   IMDBRepository: When reset all IMDBRepositories, the internal reference to specific map is also reset. This allows reusing references to IRepository instances.  
 
 ### Changed
 

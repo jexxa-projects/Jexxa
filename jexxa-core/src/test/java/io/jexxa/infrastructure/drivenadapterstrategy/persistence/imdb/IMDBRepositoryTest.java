@@ -110,5 +110,39 @@ class IMDBRepositoryTest
 
     }
 
+    @Test
+    void resetIMDBRepositories()
+    {
+        //Arrange
+        objectUnderTest.add(aggregate);
+
+        //act
+        IMDBRepository.clear();
+
+        //Assert that repository is empty
+        assertTrue( objectUnderTest.get().isEmpty() );
+    }
+
+    @Test
+    void reuseRepositoryAfterReset()
+    {
+        //Arrange
+        objectUnderTest.add(aggregate);
+        IMDBRepository.clear();
+
+        //Act - Add entry and get new Connection
+        objectUnderTest.add(aggregate);
+
+        var newConnection = new IMDBRepository<>(
+                JexxaEntity.class,
+                JexxaEntity::getKey,
+                new Properties()
+        );
+
+        //Assert
+        assertEquals(1, objectUnderTest.get().size());
+        assertEquals(1, newConnection.get().size());
+    }
+
 
 }
