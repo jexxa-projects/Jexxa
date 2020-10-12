@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -   IMDBRepository: When reset all IMDBRepositories, the internal reference to specific map is also reset. This allows reusing references to IRepository instances.  
 
 ### Changed
+-   Updated dependencies
 
 ## \[2.4.2] - 2020-10-08
 ### Fixed
