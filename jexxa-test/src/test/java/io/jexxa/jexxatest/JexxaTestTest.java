@@ -16,21 +16,29 @@ import io.jexxa.application.domainservice.InitializeJexxaAggregates;
 import io.jexxa.application.domainservice.PublishJexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
 class JexxaTestTest
 {
+    private JexxaTest jexxaTest;
+
+    @BeforeEach
+    void setUp()
+    {
+        //Arrange
+        var jexxaMain = new JexxaMain(JexxaTestTest.class.getSimpleName(), new Properties());
+        jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
+                .addToInfrastructure("io.jexxa.application.infrastructure");
+
+        jexxaTest = new JexxaTest(jexxaMain);
+    }
 
     @Test
     void validateRepository()
     {
         //Arrange
-        JexxaMain jexxaMain = new JexxaMain(JexxaTestTest.class.getSimpleName(), new Properties());
-        jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
-                .addToInfrastructure("io.jexxa.application.infrastructure");
-
-        JexxaTest jexxaTest = new JexxaTest(jexxaMain);
         var jexxaRepository = jexxaTest.getRepository(IJexxaAggregateRepository.class);
 
         //Act
@@ -43,11 +51,6 @@ class JexxaTestTest
     @Test void validateMessageToTopic()
     {
         //Arrange
-        JexxaMain jexxaMain = new JexxaMain(JexxaTestTest.class.getSimpleName(), new Properties());
-        jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
-                .addToInfrastructure("io.jexxa.application.infrastructure");
-        JexxaTest jexxaTest = new JexxaTest(jexxaMain);
-
         var testMessage = new JexxaValueObject(1);
         var messageRecorder= jexxaTest.getMessageRecorder(IJexxaPublisher.class);
 
@@ -76,11 +79,6 @@ class JexxaTestTest
     @Test void validateMessageToQueue()
     {
         //Arrange
-        JexxaMain jexxaMain = new JexxaMain(JexxaTestTest.class.getSimpleName(), new Properties());
-        jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
-                .addToInfrastructure("io.jexxa.application.infrastructure");
-        JexxaTest jexxaTest = new JexxaTest(jexxaMain);
-
         var testMessage = new JexxaValueObject(1);
         var messageRecorder = jexxaTest.getMessageRecorder(IJexxaPublisher.class);
 
