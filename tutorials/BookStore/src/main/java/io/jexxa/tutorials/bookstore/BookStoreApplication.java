@@ -33,7 +33,7 @@ public final class BookStoreApplication
         // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
         RepositoryManager.getInstance().setDefaultStrategy(getRepositoryStrategy(args));
 
-        // Define the default strategy for messaging which is either a simple logger or `JMSSender.class` for JMS messages
+        // Define the default strategy for messaging which is either a simple logger called `MessageLogger.class` or `JMSSender.class` for JMS messages
         MessageSenderManager.getInstance().setDefaultStrategy(MessageLogger.class);
 
         JexxaMain jexxaMain = new JexxaMain(BookStoreApplication.class.getSimpleName());
