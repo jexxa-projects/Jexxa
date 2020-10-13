@@ -27,11 +27,13 @@ public final class BookStoreApplication
 
     public static void main(String[] args)
     {
-        // Define the default strategy which is either an IMDB database or a JDBC based repository
+        // Define the default strategy for repositories which is either an IMDB database or a JDBC based repository
         // In case of JDBC we use a simple key value approach which stores the key and the value as json strings.
         // Using json strings might be very inconvenient if you come from typical relational databases but in terms
         // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
-        RepositoryManager.getInstance().setDefaultStrategy(getDrivenAdapterStrategy(args));
+        RepositoryManager.getInstance().setDefaultStrategy(getRepositoryStrategy(args));
+
+        // Define the default strategy for messaging which is either a simple logger or `JMSSender.class` for JMS messages
         MessageSenderManager.getInstance().setDefaultStrategy(MessageLogger.class);
 
         JexxaMain jexxaMain = new JexxaMain(BookStoreApplication.class.getSimpleName());
@@ -58,7 +60,7 @@ public final class BookStoreApplication
 
 
     @SuppressWarnings("rawtypes")
-    private static Class<? extends IRepository> getDrivenAdapterStrategy(String[] args)
+    private static Class<? extends IRepository> getRepositoryStrategy(String[] args)
     {
         Options options = new Options();
         options.addOption("j", "jdbc", false, "jdbc driven adapter strategy");

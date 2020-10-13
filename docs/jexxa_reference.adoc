@@ -42,10 +42,8 @@ Jexxa allows you to externalize your configuration. This allows you to run the s
 2. Java System properties (`System.getProperties()`)
 3. Properties file inside the jar archive
 
-== Conventions of Adapters
+== Conventions of Driving Adapters
 
-=== Driving Adapter
-
-==== RESTFulRPCAdapter
+=== RESTFulRPCAdapter
 
 
