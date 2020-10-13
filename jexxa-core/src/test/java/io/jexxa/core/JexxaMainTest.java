@@ -76,6 +76,23 @@ class JexxaMainTest
     }
 
     @Test
+    void conditionalBindToPort()
+    {
+        //Arrange - All done in initTests
+
+        //Act: Conditional bind (evaluating to false) a concrete type of DrivingAdapter to a concrete type of port
+        objectUnderTest
+                .conditionalBind(() -> false, ProxyAdapter.class).to(SimpleApplicationService.class)
+                .start();
+
+        //Assert that no binding has been performed
+        var result = objectUnderTest.getDrivingAdapter(ProxyAdapter.class);
+
+        assertTrue(result.getPortList().isEmpty());
+    }
+
+
+    @Test
     void bindToPortWithDrivenAdapter()
     {
         //Arrange - All done in initTests

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 import io.jexxa.core.convention.PortConvention;
@@ -119,6 +120,11 @@ public class JexxaMain
     public <T extends IDrivingAdapter> DrivingAdapter<T>  bind(Class<T> clazz)
     {
         return new DrivingAdapter<>(clazz, this);
+    }
+    @CheckReturnValue
+    public <T extends IDrivingAdapter> DrivingAdapter<T>  conditionalBind(BooleanSupplier booleanSupplier, Class<T> clazz)
+    {
+        return new DrivingAdapter<>(booleanSupplier, clazz, this);
     }
 
     /**
