@@ -13,14 +13,39 @@
 
 == Jexxa Features
 
-=== Jexxa Application
+=== JexxaMain
+
+The `JexxaMain` class provides a convenient way to bootstrap your application. In contrast to other
+frameworks, Jexxa requires some code to explicitly configure your application for following reason:
+
+* Explicitly bind technology stacks (called adapters) to parts of the application core (called ports) so that the entry points of your application core are visible.
+* Fine grained control of your technology stacks so that they can be exchanged independently without updating the entire framework.
+
+The steps for configuring your application are always similar as you can see in all https://github.com/repplix/Jexxa/blob/master/tutorials/README.md[tutorials]:
+
+
+1. Define packages with your application core with `JexxaMain.addToApplicationCore()`. In general this is only required if you access them by annotations instead of defining the type.
+
+2. Define packages with your application specific driven adapter with `JexxaMain.addToInfrastructure()`.
+
+3. Bind technology stacks to application core with `JexxaMain.bind(<DrivingAdapter>.class).to(<port>.class)`.
+
+4. Startup your application using `JexxaMain.start()`. At this point your application is up and running and accepts requests from outside.
+
+5. The two commands `waitForShutdown()` and `stop()` are just for convenience purpose and allow you to manage the main thread and point in time for cleanup Jexxa resources of your application. In case your application needs the main thread for any other purpose just don't call `waitForShutdown()`
 
 === Configuration
 
+Jexxa allows you to externalize your configuration. This allows you to run the same application in different environments. By default, Jexxa use properties files. In addition, you can set system properties to externalize the configuration. Jexxa considers properties in the following order:
 
-Jexxa allows you to externalize your configuration, so you can work with the same application code in different environments. By default, you can use properties files and set properties as command-line arguments to externalize the configuration. Properties are considered in the following order:
-
-1. Java System properties (`System.getProperties()`)
-2. Properties file inside the jar archive
+1. Properties that are directly passed as argument to `JexxaMain`
+2. Java System properties (`System.getProperties()`)
+3. Properties file inside the jar archive
 
 == Conventions of Adapters
+
+=== Driving Adapter
+
+==== RESTFulRPCAdapter
+
+
