@@ -71,8 +71,14 @@ public class JexxaMain
 
         this.boundedContext = new BoundedContext(contextName, this);
 
-        loadProperties(this.properties);
+        // Handle properties in following forder:
+        // 1. Load properties from application.properties because they have lowest priority
+        loadJexxaApplicationProperties(this.properties);
+        // 2. Use System properties because they have mid priority
+        this.properties.putAll( System.getProperties() );  //add/overwrite system properties
+        // 3. Use given properties because they have highest priority
         this.properties.putAll( properties );  //add/overwrite given properties
+
         this.properties.put(JEXXA_CONTEXT_NAME, contextName);
 
         setExceptionHandler();
@@ -239,7 +245,7 @@ public class JexxaMain
     }
 
 
-    private void loadProperties(Properties properties)
+    private void loadJexxaApplicationProperties(Properties properties)
     {
         Optional.ofNullable(JexxaMain.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES))
                 .ifPresentOrElse(
