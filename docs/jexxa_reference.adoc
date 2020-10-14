@@ -34,6 +34,12 @@ The steps for configuring your application are always similar as you can see in 
 
 5. The two commands `waitForShutdown()` and `stop()` are just for convenience purpose and allow you to manage the main thread and point in time for cleanup Jexxa resources of your application. In case your application needs the main thread for any other purpose just don't call `waitForShutdown()`
 
+=== BoundedContext
+
+As described in https://repplix.github.io/Jexxa/jexxa_architecture.html[architecture of Jexxa] this framework has a strong focus on domain driven design. Therefore, each application provides a so called `BoundedContext` object which provides status information and control methods about the running application.
+
+IMPORTANT: The `BoundedContext` objects provides methods to stop you running application. So it is recommended to expose this object to dedicated adapters such as `JMXAdapter`.
+
 === Application Configuration
 
 Jexxa allows you to externalize your configuration. This allows you to run the same application in different environments. By default, Jexxa use properties files. In addition, you can set system properties to externalize the configuration. Jexxa considers properties in the following order:
@@ -42,7 +48,10 @@ Jexxa allows you to externalize your configuration. This allows you to run the s
 2. Java System properties (`System.getProperties()`)
 3. Properties file inside the jar archive
 
-== Conventions of Driving Adapters
+== Conventions
+
+=== General Conventions
+The general conventions for ports and adapters in Jexxa are described in https://repplix.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di[here].
 
 === RESTfulRPCAdapter
 
@@ -60,7 +69,7 @@ a|*Convention*
 
 a|URI
 a|
-URIs for a Java object is generated as follows:
+URIs for a Java object is generated as follows for all `public` methods:
 
 * http://<hostname>:<port>/<Java's simple class name>/<method name>
 * Example URI: http://localhost:7000/MyApplicationService/myMethod
@@ -112,9 +121,35 @@ a| HTML Response code: URI not found
 a|
 *  HTTP status code: 404
 
-
 |===
 
+=== JMXAdapter
+
+The `JMXAdapter` allows to control your application and access all objects that are registered.
 
 
+[cols="1,3"]
+[reftext="Table {counter:local-table-number}"]
+.Describes the conventions used in `JMXAdapter`.
+[[ApplicationCoreComponentDescription]]
+|===
+a|*JMXAdapter*
+a|*Convention*
+
+a| Methods
+a| Only `public` methods are exposed
+
+a| Method attributes
+a|
+* All attributes must be send as Json object
+* The `MBeanParameterInfo` includes a Json template for each attribute in its description section. The placeholder for the
+value is marked by `<TYPE of value>`. +
+For example, the Json template for `LocalTime` looks as follows: +
+`{"hour":"<byte>","minute":"<byte>","second":"<byte>","nano":"<int>"}`
+
+a| Return values
+a| A return value is send as Json object
+
+
+|===
 
