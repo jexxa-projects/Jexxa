@@ -12,11 +12,16 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
 {
     private final JexxaMain jexxaMain;
     private final Class<T> drivingAdapterClass;
-    private final BooleanSupplier booleanSupplier;
+    private final BooleanSupplier conditionalBind;
 
-    DrivingAdapter(BooleanSupplier booleanSupplier, Class<T> drivingAdapterClass, JexxaMain jexxaMain)
+    DrivingAdapter(Class<T> drivingAdapterClass, JexxaMain jexxaMain)
     {
-        Validate.notNull(booleanSupplier);
+        this(() -> true, drivingAdapterClass, jexxaMain);
+    }
+
+    DrivingAdapter(BooleanSupplier condictionalBind, Class<T> drivingAdapterClass, JexxaMain jexxaMain)
+    {
+        Validate.notNull(condictionalBind);
         Validate.notNull(drivingAdapterClass);
         Validate.notNull(jexxaMain);
 
@@ -24,19 +29,14 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
 
         this.drivingAdapterClass = drivingAdapterClass;
         this.jexxaMain = jexxaMain;
-        this.booleanSupplier = booleanSupplier;
-    }
-
-    DrivingAdapter(Class<T> drivingAdapterClass, JexxaMain jexxaMain)
-    {
-        this(() -> true, drivingAdapterClass, jexxaMain);
+        this.conditionalBind = condictionalBind;
     }
 
     public <P> JexxaMain to(Class<P> port)
     {
         Validate.notNull(port);
 
-        if ( !booleanSupplier.getAsBoolean())
+        if ( !conditionalBind.getAsBoolean())
         {
             return jexxaMain;
         }
@@ -58,7 +58,7 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
     {
         Validate.notNull(port);
 
-        if ( !booleanSupplier.getAsBoolean())
+        if ( !conditionalBind.getAsBoolean())
         {
             return jexxaMain;
         }
@@ -70,7 +70,7 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
     {
         Validate.notNull(annotation);
 
-        if ( !booleanSupplier.getAsBoolean())
+        if ( !conditionalBind.getAsBoolean())
         {
             return jexxaMain;
         }

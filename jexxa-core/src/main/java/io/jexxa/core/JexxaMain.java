@@ -121,10 +121,11 @@ public class JexxaMain
     {
         return new DrivingAdapter<>(clazz, this);
     }
+
     @CheckReturnValue
-    public <T extends IDrivingAdapter> DrivingAdapter<T>  conditionalBind(BooleanSupplier booleanSupplier, Class<T> clazz)
+    public <T extends IDrivingAdapter> DrivingAdapter<T>  conditionalBind(BooleanSupplier conditional, Class<T> clazz)
     {
-        return new DrivingAdapter<>(booleanSupplier, clazz, this);
+        return new DrivingAdapter<>(conditional, clazz, this);
     }
 
     /**
