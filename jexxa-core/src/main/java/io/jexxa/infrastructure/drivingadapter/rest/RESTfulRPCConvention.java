@@ -9,22 +9,30 @@ import java.util.List;
 
 /**
  * This class generates uniform IDs (URIs) for resources to be offered via REST
- *
- * This implementation uses following convention over configuration approach:
- *
- * URI: http://<specified hostname>:<specified port>/<java simple class name>/<method name></method>
- *  - Example URI: http://localhost:7000/MyApplicationService/myMethod
- *
- *  - This implies following conventions:
- *  - Simple name of a class must be unique within a single application
- *  - Each class must have unique method names. Any method overloading is not supported
- *  - Methods from base class `Object` are ignored
- *
+ * using a convention over configuration approach:
+ * <br>
+ * Used conventions for URI:
+ * <br>
+ * {@code URI: http://<hostname>:<port>/<java simple class name>/<method name>}
+ *  <br>
+ * Example URI: http://localhost:7000/MyApplicationService/myMethod
+ *  <br>
+ *  This implies following conventions:
+ *  <ul>
+ *  <li> Simple name of a class must be unique within a single application </li>
+ *  <li> Each class must have unique method names. Any method overloading is not supported </li>
+ *  <li> Methods from base class `Object` are ignored </li>
+ *  </ul>
  *  GET - mapping:
- *  - If a method returns a value != 'void' and has no arguments then it is mapped to a GET method
- *
+ *  <br>
+ *  <ul>
+ *  <li> If a method returns a type != 'void' and has no arguments then it is mapped to a GET method </li>
+ *  </ul>
+ * <br>
  *  POST - mapping:
- *  - In all other cases 
+ *  <ul>
+ *  <li> In all other cases </li>
+ *  </ul>
  */
 class RESTfulRPCConvention
 {
@@ -36,11 +44,11 @@ class RESTfulRPCConvention
         validateUniqueURI();
     }
 
-    
+
     public static class RESTfulRPCMethod
     {
         enum HTTPCommand {GET, POST}
-        
+
         private final String resourcePath;
         private final Method method;
         private final HTTPCommand httpCommand;
