@@ -62,7 +62,7 @@ This adapter uses following conventions:
 [cols="1,3"]
 [reftext="Table {counter:local-table-number}"]
 .Describes the conventions used in `RESTfulRPCAdapter`.
-[[ApplicationCoreComponentDescription]]
+[[RESTfulRPCAdapterConvention]]
 |===
 a|*RESTfulRPCAdapter*
 a|*Convention*
@@ -131,7 +131,7 @@ The `JMXAdapter` allows to control your application and access all objects that 
 [cols="1,3"]
 [reftext="Table {counter:local-table-number}"]
 .Describes the conventions used in `JMXAdapter`.
-[[ApplicationCoreComponentDescription]]
+[[JMXAdapterConvention]]
 |===
 a|*JMXAdapter*
 a|*Convention*

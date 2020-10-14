@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[2.x.x] - yyyy-mm-dd
 ### Added
--   `JexxaMain`: Improved fluent API in `JexxaMain` whith `conditionalBind()` which performs a binding only if a condition statement evaluates to true. See tutorial [`TimeService`](https://github.com/repplix/Jexxa/tree/master/tutorials/TimeService) for example.  
+-   `JexxaMain`: Improved fluent API in `JexxaMain` whith `conditionalBind()` which performs a binding only if a condition statement evaluates to true. See tutorial [`TimeService`](https://github.com/repplix/Jexxa/tree/master/tutorials/TimeService) for example.
+-   Added a [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html)       
   
 ### Fixed
 -   `IMDBRepository`: When reset all IMDBRepositories, the internal reference to specific map is also reset. This allows reusing references to IRepository instances.  
