@@ -75,7 +75,7 @@ public class MBeanConvention implements DynamicMBean
     {
         var method = getMethod(actionName).
                 orElseThrow(UnsupportedOperationException::new);
-        
+
         try
         {
             Object[] parameter = deserializeObjects(method.getParameterTypes(), params);
@@ -190,10 +190,10 @@ public class MBeanConvention implements DynamicMBean
             return "<"+clazz.getSimpleName()+">";
         }
 
-        return complexTypetoJsonTemplate(clazz);
+        return complexTypeToJsonTemplate(clazz);
     }
 
-    private String complexTypetoJsonTemplate(Class<?> clazz)
+    private String complexTypeToJsonTemplate(Class<?> clazz)
     {
         JsonObject jsonObject = new JsonObject();
 
@@ -269,7 +269,7 @@ public class MBeanConvention implements DynamicMBean
         }
 
     }
-    
+
 
     private Optional<Method> getMethod(String name)
     {
