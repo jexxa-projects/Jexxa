@@ -50,8 +50,8 @@ Jexxa allows you to externalize your configuration. This allows you to run the s
 
 == Conventions
 
-=== General Conventions
-The general conventions for ports and adapters in Jexxa are described in https://repplix.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di[here].
+=== General Conventions in Jexxa
+Jexxa defines several conventions when implementing ports or adapters. These conventions are described https://repplix.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di[here].
 
 === RESTfulRPCAdapter
 
