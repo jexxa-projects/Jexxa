@@ -36,8 +36,8 @@ public class PublishTimeListener implements MessageListener
             // Deserialize the message which is of type 'LocalTime'
             var time = new Gson().fromJson(textMessage.getText(), LocalTime.class);
 
-            // Forward this information to corresponding application service. 
-            timeService.displayPublishedTimed(time);
+            // Forward this information to corresponding application service.
+            timeService.displayPublishedTime(time);
         }
         catch (JMSException jmsException)
         {

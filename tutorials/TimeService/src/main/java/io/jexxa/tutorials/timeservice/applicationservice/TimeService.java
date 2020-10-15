@@ -15,7 +15,7 @@ public class TimeService
 
     /**
      * Note: Jexxa supports only implicit constructor injection. Therefore, we must
-     * declare all required interfaces in the constructor.  
+     * declare all required interfaces in the constructor.
      *
      * @param timePublisher required outbound port for this application service
      * @param messageDisplay required outbound port for this application service
@@ -44,7 +44,7 @@ public class TimeService
      * This method shows the previously published time.
      * @param localTime the previously published time
      */
-    public void displayPublishedTimed(LocalTime localTime)
+    public void displayPublishedTime(LocalTime localTime)
     {
         var messageWithPublishedTime = "New Time was published, time: " + localTime.format(DateTimeFormatter.ISO_TIME);
         messageDisplay.show(messageWithPublishedTime);
