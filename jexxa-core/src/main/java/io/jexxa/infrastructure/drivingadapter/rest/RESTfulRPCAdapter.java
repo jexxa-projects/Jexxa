@@ -185,6 +185,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                             .acquireLock()
                             .invoke(element.getMethod(), object, methodParameters);
 
+                    ctx.header("Access-Control-Allow-Origin", "*");
                     ctx.json(result);
                 }));
 
@@ -196,8 +197,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                         .operation( openApiOperation -> {
                             openApiOperation.operationId(element.getMethod().getName());
                         })
-                        .json("200", element.getMethod().getReturnType())
-                        .html("200");
+                        .json("200", element.getMethod().getReturnType());
 
                 openApiOptions.setDocumentation(element.getResourcePath(), HttpMethod.GET, openApiDocumentation);
             });
