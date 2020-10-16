@@ -171,6 +171,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void registerGETMethods(Object object)
     {
+        //TODO: Check if this method should be refactored using IOSP
         var methodList = new RESTfulRPCConvention(object).getGETCommands();
 
         methodList.forEach(element -> javalin.get(element.getResourcePath(),
@@ -187,6 +188,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
                     //TODO: Replace wildcard with correct/limited value
                     ctx.header("Access-Control-Allow-Origin", "*");
+                    ctx.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                     ctx.json(result);
                 }));
 
@@ -208,6 +210,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void registerPOSTMethods(Object object)
     {
+        //TODO: Check if this method should be refactored using IOSP
         var methodList = new RESTfulRPCConvention(object).getPOSTCommands();
 
         methodList.forEach(element -> javalin.post(element.getResourcePath(),
@@ -226,6 +229,10 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                     {
                         ctx.json(result);
                     }
+
+                    //TODO: Replace wildcard with correct/limited value
+                    ctx.header("Access-Control-Allow-Origin", "*");
+                    ctx.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                 }));
 
         //TODO: move to separate method
@@ -308,6 +315,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                     config.showJavalinBanner = false;
                     //TODO: Make it configurable via properties
                     config.registerPlugin(new OpenApiPlugin(getOpenApiOptions()));
+                    config.enableCorsForAllOrigins();
                 }
         );
     }
