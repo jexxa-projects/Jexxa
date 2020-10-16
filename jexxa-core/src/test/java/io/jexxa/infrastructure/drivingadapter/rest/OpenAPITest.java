@@ -1,7 +1,6 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Properties;
@@ -23,7 +22,6 @@ class OpenAPITest
 {
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String APPLICATION_TYPE = "application/json";
-    private static final String METHOD_GET_SIMPLE_VALUE = "getSimpleValue";
 
     private static final String OPENAPI_PATH = "http://localhost:7000/swagger-docs/";
     private final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
