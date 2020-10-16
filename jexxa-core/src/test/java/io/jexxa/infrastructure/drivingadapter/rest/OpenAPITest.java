@@ -54,7 +54,6 @@ class OpenAPITest
 
 
     @Test
-    // RPC call test: int getSimpleValue()
     void testBasicStructure()
     {
         //Arrange -> Nothing to do
@@ -64,7 +63,7 @@ class OpenAPITest
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
 
-        //Assert - Basic structure
+        //Assert - Fields of basic openAPI structure
         assertNotNull(result);
         assertNotNull(result.get("openapi"));
         assertNotNull(result.get("info"));
