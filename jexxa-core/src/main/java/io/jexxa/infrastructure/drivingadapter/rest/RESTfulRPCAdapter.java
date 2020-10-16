@@ -185,10 +185,12 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                             .acquireLock()
                             .invoke(element.getMethod(), object, methodParameters);
 
+                    //TODO: Replace wildcard with correct/limited value
                     ctx.header("Access-Control-Allow-Origin", "*");
                     ctx.json(result);
                 }));
 
+        //TODO: move to separate method
         if (openApiOptions != null)
         {
             methodList.forEach( element -> {
@@ -226,6 +228,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                     }
                 }));
 
+        //TODO: move to separate method
         if (openApiOptions != null)
         {
             var attributeListe = new ArrayList<DocumentedContent>();
@@ -303,13 +306,14 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                 {
                     config.server(this::getServer);
                     config.showJavalinBanner = false;
+                    //TODO: Make it configurable via properties
                     config.registerPlugin(new OpenApiPlugin(getOpenApiOptions()));
-
                 }
         );
     }
 
     private OpenApiOptions getOpenApiOptions() {
+        //TODO: Make it configurable via properties
         Info applicationInfo = new Info()
                 .version("1.0")
                 .description(properties.getProperty("io.jexxa.context.name", "Unknown Context"));
