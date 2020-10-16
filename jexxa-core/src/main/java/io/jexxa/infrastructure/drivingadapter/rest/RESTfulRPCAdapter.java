@@ -2,8 +2,10 @@ package io.jexxa.infrastructure.drivingadapter.rest;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,7 +15,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.javalin.Javalin;
 import io.javalin.plugin.json.JavalinJson;
+import io.javalin.plugin.openapi.OpenApiOptions;
+import io.javalin.plugin.openapi.OpenApiPlugin;
+import io.javalin.plugin.openapi.annotations.HttpMethod;
+import io.javalin.plugin.openapi.dsl.DocumentedContent;
+import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
+import io.javalin.plugin.openapi.dsl.OpenApiDocumentation;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.infrastructure.drivingadapter.rest.openapi.BadRequestResponse;
+import io.swagger.v3.oas.models.info.Info;
 import org.apache.commons.lang3.Validate;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -35,6 +45,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private Server server;
     private ServerConnector sslConnector;
     private ServerConnector httpConnector;
+    private OpenApiOptions openApiOptions;
 
     public RESTfulRPCAdapter(Properties properties)
     {
@@ -164,6 +175,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
         methodList.forEach(element -> javalin.get(element.getResourcePath(),
                 ctx -> {
+                    System.out.println("EXECUTE GET Method : " + element.getResourcePath());
+
                     String htmlBody = ctx.body();
 
                     Object[] methodParameters = deserializeParameters(htmlBody, element.getMethod());
@@ -174,6 +187,21 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
                     ctx.json(result);
                 }));
+
+        if (openApiOptions != null)
+        {
+            methodList.forEach( element -> {
+                OpenApiDocumentation openApiDocumentation = OpenApiBuilder
+                        .document()
+                        .operation( openApiOperation -> {
+                            openApiOperation.operationId(element.getMethod().getName());
+                        })
+                        .json("200", element.getMethod().getReturnType())
+                        .html("200");
+
+                openApiOptions.setDocumentation(element.getResourcePath(), HttpMethod.GET, openApiDocumentation);
+            });
+        }
     }
 
     private void registerPOSTMethods(Object object)
@@ -182,6 +210,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
         methodList.forEach(element -> javalin.post(element.getResourcePath(),
                 ctx -> {
+                    System.out.println("EXECUTE POST Method : " + element.getResourcePath());
+
                     String htmlBody = ctx.body();
 
                     Object[] methodParameters = deserializeParameters(htmlBody, element.getMethod());
@@ -195,6 +225,29 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                         ctx.json(result);
                     }
                 }));
+
+        if (openApiOptions != null)
+        {
+            var attributeListe = new ArrayList<DocumentedContent>();
+            methodList.forEach( element -> {
+                OpenApiDocumentation openApiDocumentation = new OpenApiDocumentation();
+                if (element.getMethod().getReturnType() != void.class )
+                {
+                    openApiDocumentation.json("200", element.getMethod().getReturnType());
+                } else
+                {
+                    openApiDocumentation.result("200");
+                }
+
+                Stream
+                        .of(element.getMethod().getParameterTypes())
+                        .forEach( attribute -> attributeListe.add(new DocumentedContent(attribute))  );
+
+                openApiDocumentation.body(attributeListe);
+
+                openApiOptions.setDocumentation(element.getResourcePath(), HttpMethod.POST, openApiDocumentation);
+            });
+        }
     }
 
     private Object[] deserializeParameters(String jsonString, Method method)
@@ -250,9 +303,26 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                 {
                     config.server(this::getServer);
                     config.showJavalinBanner = false;
+                    config.registerPlugin(new OpenApiPlugin(getOpenApiOptions()));
+
                 }
         );
     }
+
+    private OpenApiOptions getOpenApiOptions() {
+        Info applicationInfo = new Info()
+                .version("1.0")
+                .description(properties.getProperty("io.jexxa.context.name", "Unknown Context"));
+
+        openApiOptions = new OpenApiOptions(applicationInfo)
+                .path("/swagger-docs")
+                .defaultDocumentation(doc ->    {
+                    doc.json("400", BadRequestResponse.class);
+                });
+
+        return openApiOptions;
+    }
+
 
     private Server getServer()
     {

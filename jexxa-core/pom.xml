@@ -54,6 +54,16 @@
       <version>${javalin.version}</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>io.javalin</groupId>
+      <artifactId>javalin-openapi</artifactId>
+      <version>${javalin.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.11.3</version>
+    </dependency>
 
     <!-- dependencies for JMSAdapter -->
     <dependency>
