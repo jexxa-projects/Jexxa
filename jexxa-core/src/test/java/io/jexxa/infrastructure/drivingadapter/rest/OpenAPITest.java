@@ -1,6 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.OPEN_API_PATH;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Properties;
@@ -38,6 +39,7 @@ class OpenAPITest
 
         properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
         properties.put(HTTP_PORT_PROPERTY, Integer.toString(defaultPort));
+        properties.put(OPEN_API_PATH, "swagger-docs");
 
         objectUnderTest = new RESTfulRPCAdapter(properties);
         objectUnderTest.register(simpleApplicationService);
@@ -65,6 +67,8 @@ class OpenAPITest
 
         //Assert - Fields of basic openAPI structure
         assertNotNull(result);
+        System.out.println(result);
+
         assertNotNull(result.get("openapi"));
         assertNotNull(result.get("info"));
         assertNotNull(result.get("paths"));
