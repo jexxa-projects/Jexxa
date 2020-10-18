@@ -149,6 +149,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
      *   {
      *     "Exception": "<exception as json>",
      *     "ExceptionType": "<Type of the exception>",
+     *     "ApplicationType": "application/json"
      *   }
      * }
      * </pre>
@@ -162,6 +163,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
             JsonObject exceptionWrapper = new JsonObject();
             exceptionWrapper.addProperty("ExceptionType", e.getCause().getClass().getName());
             exceptionWrapper.addProperty("Exception", gson.toJson(e));
+            exceptionWrapper.addProperty("ApplicationType", gson.toJson("application/json"));
 
             ctx.result(exceptionWrapper.toString());
             ctx.status(400);

@@ -1,10 +1,12 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -76,39 +78,34 @@ class RESTfulRPCConvention
     }
 
     protected List<RESTfulRPCMethod> getGETCommands() {
-       var result = new ArrayList<RESTfulRPCMethod>();
 
-       List<Method> publicMethods = getPublicMethods(object.getClass());
-       publicMethods
+        return getPublicMethods(object.getClass())
                .stream()
+               .filter( element -> !Modifier.isStatic( element.getModifiers() )) //Convention for all exposed methods
                .filter( element -> !(element.getReturnType().equals(void.class)) &&
                                      element.getParameterCount() == 0) // Convention for GET method
-               .forEach( element -> result.add(
+               .map( element ->
                        new RESTfulRPCMethod(
                                RESTfulRPCMethod.HTTPCommand.GET,
                                generateURI(element),
-                               element)
-                       ));
-
-       return result;
+                               element))
+               .collect(Collectors.toUnmodifiableList());
     }
 
 
     protected List<RESTfulRPCMethod> getPOSTCommands() {
-        var result = new ArrayList<RESTfulRPCMethod>();
 
-        List<Method> publicMethods = getPublicMethods(object.getClass());
-        publicMethods.stream()
+        return getPublicMethods(object.getClass())
+                .stream()
+                .filter( element -> !Modifier.isStatic( element.getModifiers() )) //Convention for all exposed methods
                 .filter( element -> (element.getReturnType().equals(void.class) ||
                                      element.getParameterCount() > 0)) // Convention for POST method
-                .forEach( element -> result.add(
+                .map( element ->
                         new RESTfulRPCMethod(
                                 RESTfulRPCMethod.HTTPCommand.POST,
                                 generateURI(element),
-                                element)
-                ));
-
-        return result;
+                                element))
+                .collect(Collectors.toUnmodifiableList());
     }
 
 

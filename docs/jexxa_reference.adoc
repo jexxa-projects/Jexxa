@@ -84,13 +84,13 @@ URIs for a Java object is generated as follows for all `public` methods:
 
 
 a|HTTP-GET
-a| Methods of an object are exposed via HTTP GET if following conditions are fulfilled:
+a| All public non-static Methods of an object are exposed via HTTP GET if following conditions are fulfilled:
 
 * Return type is not `void` AND
 * Method has no attributes
 
 a|HTTP-POST
-a| Methods of an object are exposed via HTTP POST if they are not exposed as HTTP-GET. The conditions are:
+a| All public non-static methods of an object are exposed via HTTP POST if they are not exposed as HTTP-GET. The conditions are:
 
 * Return type is `void` OR
 * Method has attributes

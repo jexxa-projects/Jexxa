@@ -3,6 +3,11 @@ package io.jexxa.infrastructure.drivingadapter.rest.openapi;
 
 public class BadRequestResponse
 {
-    public String Exception;
-    public String ExceptionType;
+    public static final String Exception = new String();
+    public static final String ExceptionType = new String();
+    public static final String ApplicationType = "application/json";
+    private BadRequestResponse()
+    {
+        //private constructor
+    }
 }
