@@ -17,13 +17,8 @@ import io.javalin.Javalin;
 import io.javalin.core.JavalinConfig;
 import io.javalin.http.Context;
 import io.javalin.plugin.json.JavalinJson;
-import io.javalin.plugin.openapi.OpenApiOptions;
-import io.javalin.plugin.openapi.OpenApiPlugin;
-import io.javalin.plugin.openapi.annotations.HttpMethod;
-import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.jexxa.infrastructure.drivingadapter.rest.openapi.BadRequestResponse;
-import io.swagger.v3.oas.models.info.Info;
+import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIFacade;
 import org.apache.commons.lang3.Validate;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -46,7 +41,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private Server server;
     private ServerConnector sslConnector;
     private ServerConnector httpConnector;
-    private Optional<OpenApiOptions> openApiOptions = Optional.empty();
+    private OpenAPIFacade openAPIFacade;
 
     public RESTfulRPCAdapter(Properties properties)
     {
@@ -70,7 +65,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         Validate.notNull(object);
         registerGETMethods(object);
         registerPOSTMethods(object);
-        addOpenAPIDocumentation(object);
+        openAPIFacade.addOpenAPIDocumentation(object);
     }
 
 
@@ -197,22 +192,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                 );
     }
 
-    private void addOpenAPIDocumentation(Object object)
-    {
-        openApiOptions.ifPresent(
-                apiOptions -> createRPCConvention(object)
-                        .getGETCommands()
-                        .forEach(resTfulRPCMethod -> {
-                            var openApiDocumentation = OpenApiBuilder
-                                    .document()
-                                    .operation(openApiOperation -> {
-                                        openApiOperation.operationId(resTfulRPCMethod.getMethod().getName());
-                                    })
-                                    .json("200", resTfulRPCMethod.getMethod().getReturnType());
-                            apiOptions.setDocumentation(resTfulRPCMethod.getResourcePath(), HttpMethod.GET, openApiDocumentation);
-                        })
-        );
-    }
+
 
     private void invokeMethod(Object object, RESTfulRPCConvention.RESTfulRPCMethod method, Context httpContext ) throws InvocationTargetException, IllegalAccessException
     {
@@ -289,32 +269,10 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         javalinConfig.server(this::getServer);
         javalinConfig.showJavalinBanner = false;
 
-        initOpenAPI();
-        if (openApiOptions.isPresent())
-        {
-            javalinConfig.registerPlugin(new OpenApiPlugin(openApiOptions.get()));
-            javalinConfig.enableCorsForAllOrigins();
-        }
+        this.openAPIFacade = new OpenAPIFacade(properties, javalinConfig );
     }
 
-    private void initOpenAPI()
-    {
-        if (properties.containsKey(OPEN_API_PATH))
-        {
-            Info applicationInfo = new Info()
-                    .version("1.0")
-                    .description(properties.getProperty("io.jexxa.context.name", "Unknown Context"))
-                    .title(properties.getProperty("io.jexxa.context.name", "Unknown Context"));
 
-            openApiOptions = Optional.of(
-                    new OpenApiOptions(applicationInfo)
-                            .path("/" + properties.getProperty(OPEN_API_PATH))
-                            .defaultDocumentation(doc -> {
-                                doc.json("400", BadRequestResponse.class);
-                            })
-            );
-        }
-    }
 
 
     private Server getServer()
