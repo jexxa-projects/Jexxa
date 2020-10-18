@@ -65,7 +65,6 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         Validate.notNull(object);
         registerGETMethods(object);
         registerPOSTMethods(object);
-        openAPIFacade.addOpenAPIDocumentation(object);
     }
 
 
@@ -170,26 +169,30 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void registerGETMethods(Object object)
     {
-        createRPCConvention(object)
-                .getGETCommands()
-                .forEach(
-                        method -> javalin.get(
-                                method.getResourcePath(),
-                                httpCtx -> invokeMethod(object, method, httpCtx)
-                        )
-                );
+        var getCommands = createRPCConvention(object).getGETCommands();
+
+        getCommands.forEach(
+                method -> javalin.get(
+                        method.getResourcePath(),
+                        httpCtx -> invokeMethod(object, method, httpCtx)
+                )
+        );
+
+        getCommands.forEach( method -> openAPIFacade.addGETDocumentation(method.getMethod(), method.getResourcePath()));
     }
 
     private void registerPOSTMethods(Object object)
     {
-        createRPCConvention(object)
-                .getPOSTCommands()
-                .forEach(
-                        method -> javalin.post(
-                                method.getResourcePath(),
-                                httpCtx -> invokeMethod(object, method, httpCtx)
-                        )
-                );
+        var postCommands = createRPCConvention(object).getPOSTCommands();
+
+        postCommands.forEach(
+                method -> javalin.post(
+                        method.getResourcePath(),
+                        httpCtx -> invokeMethod(object, method, httpCtx)
+                )
+        );
+
+        postCommands.forEach( method -> openAPIFacade.addPOSTDocumentation(method.getMethod(), method.getResourcePath()));
     }
 
 
