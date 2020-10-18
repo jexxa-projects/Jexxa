@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 -   `IMDBRepository`: When reset all IMDBRepositories, the internal reference to specific map is also reset. This allows reusing references to IRepository instances.  
 
+-   `RESTfulRPCAdapter`: Public static methods are no longer exposed.  
+
+
 ### Changed
 -   Updated dependencies
 
