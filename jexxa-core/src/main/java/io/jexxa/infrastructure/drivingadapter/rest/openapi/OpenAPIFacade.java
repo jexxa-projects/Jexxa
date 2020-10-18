@@ -47,7 +47,7 @@ public class OpenAPIFacade
         }
     }
 
-    public void addGETDocumentation(Method method, String resourcePath)
+    public void documentGET(Method method, String resourcePath)
     {
         if ( openApiOptions != null )
         {
@@ -61,7 +61,7 @@ public class OpenAPIFacade
         }
     }
 
-    public void addPOSTDocumentation(Method method, String resourcePath)
+    public void documentPOST(Method method, String resourcePath)
     {
         if ( openApiOptions != null )
         {

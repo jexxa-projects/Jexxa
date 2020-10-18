@@ -178,7 +178,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                 )
         );
 
-        getCommands.forEach( method -> openAPIFacade.addGETDocumentation(method.getMethod(), method.getResourcePath()));
+        getCommands.forEach( method -> openAPIFacade.documentGET(method.getMethod(), method.getResourcePath()));
     }
 
     private void registerPOSTMethods(Object object)
@@ -192,7 +192,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                 )
         );
 
-        postCommands.forEach( method -> openAPIFacade.addPOSTDocumentation(method.getMethod(), method.getResourcePath()));
+        postCommands.forEach( method -> openAPIFacade.documentPOST(method.getMethod(), method.getResourcePath()));
     }
 
 
