@@ -65,12 +65,21 @@ public class OpenAPIFacade
                         .operation(openApiOperation -> {
                             openApiOperation.operationId(resTfulRPCMethod.getMethod().getName());
                         });
+
+                if (resTfulRPCMethod.getMethod().getParameters().length == 1 )
+                {
+                    openApiDocumentation.body(resTfulRPCMethod.getMethod().getParameters()[0].getType());
+                }  else if ( resTfulRPCMethod.getMethod().getParameters().length > 1 )
+                {
+                    //TODO: Implement for more than one argument
+                }
+
                 if ( resTfulRPCMethod.getMethod().getReturnType() != void.class )
                 {
                     openApiDocumentation.json("200", resTfulRPCMethod.getMethod().getReturnType());
                 }
                 else {
-                    openApiDocumentation.html("200");
+                    openApiDocumentation.result("200");
                 }
 
 
