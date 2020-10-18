@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -12,6 +14,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.javalin.Javalin;
+import io.javalin.http.Context;
 import io.javalin.plugin.json.JavalinJson;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import org.apache.commons.lang3.Validate;
@@ -160,41 +163,39 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void registerGETMethods(Object object)
     {
-        var methodList = new RESTfulRPCConvention(object).getGETCommands();
-
-        methodList.forEach(element -> javalin.get(element.getResourcePath(),
-                ctx -> {
-                    String htmlBody = ctx.body();
-
-                    Object[] methodParameters = deserializeParameters(htmlBody, element.getMethod());
-
-                    Object result = IDrivingAdapter
-                            .acquireLock()
-                            .invoke(element.getMethod(), object, methodParameters);
-
-                    ctx.json(result);
-                }));
+        createRPCConvention(object)
+                .getGETCommands()
+                .forEach(
+                        method -> javalin.get(
+                                method.getResourcePath(),
+                                httpCtx -> invokeMethod(object, method, httpCtx)
+                        )
+                );
     }
 
     private void registerPOSTMethods(Object object)
     {
-        var methodList = new RESTfulRPCConvention(object).getPOSTCommands();
+        createRPCConvention(object)
+                .getPOSTCommands()
+                .forEach(
+                        method -> javalin.post(
+                                method.getResourcePath(),
+                                httpCtx -> invokeMethod(object, method, httpCtx)
+                        )
+                );
+    }
 
-        methodList.forEach(element -> javalin.post(element.getResourcePath(),
-                ctx -> {
-                    String htmlBody = ctx.body();
+    private void invokeMethod(Object object, RESTfulRPCConvention.RESTfulRPCMethod method, Context httpContext ) throws InvocationTargetException, IllegalAccessException
+    {
+        Object[] methodParameters = deserializeParameters(httpContext.body(), method.getMethod());
 
-                    Object[] methodParameters = deserializeParameters(htmlBody, element.getMethod());
+        var result = Optional.ofNullable(
+                IDrivingAdapter
+                        .acquireLock()
+                        .invoke(method.getMethod(), object, methodParameters)
+        );
 
-                    Object result = IDrivingAdapter
-                            .acquireLock()
-                            .invoke(element.getMethod(), object, methodParameters);
-
-                    if (result != null)
-                    {
-                        ctx.json(result);
-                    }
-                }));
+        result.ifPresent(httpContext::json);
     }
 
     private Object[] deserializeParameters(String jsonString, Method method)
@@ -241,6 +242,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         return paramArray;
     }
 
+    @SuppressWarnings("NullableProblems") // setToJsonMapper(GSON::toJson) causes this warning because toJson is not annotated
     private void setupJavalin()
     {
         JavalinJson.setFromJsonMapper(GSON::fromJson);

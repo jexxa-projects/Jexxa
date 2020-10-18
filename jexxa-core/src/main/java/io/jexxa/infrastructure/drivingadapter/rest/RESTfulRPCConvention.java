@@ -38,7 +38,7 @@ class RESTfulRPCConvention
 {
     private final Object object;
 
-    public RESTfulRPCConvention(Object object)
+    RESTfulRPCConvention(Object object)
     {
         this.object = object;
         validateUniqueURI();
@@ -138,5 +138,10 @@ class RESTfulRPCConvention
         if (uniqueNames.size() != methodNames.size() ) {
             throw new IllegalArgumentException("Method names are not unique of Object " + object.getClass().getSimpleName());
         }
+    }
+
+    static RESTfulRPCConvention createRPCConvention( Object object)
+    {
+        return new RESTfulRPCConvention(object);
     }
 }
