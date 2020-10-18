@@ -19,6 +19,8 @@ import io.javalin.http.Context;
 import io.javalin.plugin.json.JavalinJson;
 import io.javalin.plugin.openapi.OpenApiOptions;
 import io.javalin.plugin.openapi.OpenApiPlugin;
+import io.javalin.plugin.openapi.annotations.HttpMethod;
+import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.openapi.BadRequestResponse;
 import io.swagger.v3.oas.models.info.Info;
@@ -44,7 +46,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private Server server;
     private ServerConnector sslConnector;
     private ServerConnector httpConnector;
-    private OpenApiOptions openApiOptions;
+    private Optional<OpenApiOptions> openApiOptions = Optional.empty();
 
     public RESTfulRPCAdapter(Properties properties)
     {
@@ -68,6 +70,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         Validate.notNull(object);
         registerGETMethods(object);
         registerPOSTMethods(object);
+        addOpenAPIDocumentation(object);
     }
 
 
@@ -194,6 +197,23 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                 );
     }
 
+    private void addOpenAPIDocumentation(Object object)
+    {
+        openApiOptions.ifPresent(
+                apiOptions -> createRPCConvention(object)
+                        .getGETCommands()
+                        .forEach(resTfulRPCMethod -> {
+                            var openApiDocumentation = OpenApiBuilder
+                                    .document()
+                                    .operation(openApiOperation -> {
+                                        openApiOperation.operationId(resTfulRPCMethod.getMethod().getName());
+                                    })
+                                    .json("200", resTfulRPCMethod.getMethod().getReturnType());
+                            apiOptions.setDocumentation(resTfulRPCMethod.getResourcePath(), HttpMethod.GET, openApiDocumentation);
+                        })
+        );
+    }
+
     private void invokeMethod(Object object, RESTfulRPCConvention.RESTfulRPCMethod method, Context httpContext ) throws InvocationTargetException, IllegalAccessException
     {
         Object[] methodParameters = deserializeParameters(httpContext.body(), method.getMethod());
@@ -203,6 +223,10 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                         .acquireLock()
                         .invoke(method.getMethod(), object, methodParameters)
         );
+
+        //At the moment we do not handle any credentials
+        httpContext.header("Access-Control-Allow-Origin", "*");
+        httpContext.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
         result.ifPresent(httpContext::json);
     }
@@ -265,27 +289,31 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         javalinConfig.server(this::getServer);
         javalinConfig.showJavalinBanner = false;
 
-        if (properties.containsKey(OPEN_API_PATH))
+        initOpenAPI();
+        if (openApiOptions.isPresent())
         {
-            javalinConfig.registerPlugin(new OpenApiPlugin(getOpenApiOptions()));
+            javalinConfig.registerPlugin(new OpenApiPlugin(openApiOptions.get()));
             javalinConfig.enableCorsForAllOrigins();
         }
     }
 
-    private OpenApiOptions getOpenApiOptions() {
-        //TODO: Make it configurable via properties
-        Info applicationInfo = new Info()
-                .version("1.0")
-                .description(properties.getProperty("io.jexxa.context.name", "Unknown Context"))
-                .title(properties.getProperty("io.jexxa.context.name", "Unknown Context"));
+    private void initOpenAPI()
+    {
+        if (properties.containsKey(OPEN_API_PATH))
+        {
+            Info applicationInfo = new Info()
+                    .version("1.0")
+                    .description(properties.getProperty("io.jexxa.context.name", "Unknown Context"))
+                    .title(properties.getProperty("io.jexxa.context.name", "Unknown Context"));
 
-        openApiOptions = new OpenApiOptions(applicationInfo)
-                .path("/" + properties.getProperty(OPEN_API_PATH))
-                .defaultDocumentation(doc ->    {
-                    doc.json("400", BadRequestResponse.class);
-                });
-
-        return openApiOptions;
+            openApiOptions = Optional.of(
+                    new OpenApiOptions(applicationInfo)
+                            .path("/" + properties.getProperty(OPEN_API_PATH))
+                            .defaultDocumentation(doc -> {
+                                doc.json("400", BadRequestResponse.class);
+                            })
+            );
+        }
     }
 
 
