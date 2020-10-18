@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  *  <li> In all other cases </li>
  *  </ul>
  */
-public class RESTfulRPCConvention
+class RESTfulRPCConvention
 {
     private final Object object;
 
@@ -47,7 +47,7 @@ public class RESTfulRPCConvention
     }
 
 
-    public static class RESTfulRPCMethod
+    static class RESTfulRPCMethod
     {
         enum HTTPCommand {GET, POST}
 
@@ -61,23 +61,23 @@ public class RESTfulRPCConvention
             this.method = method;
         }
 
-        public String getResourcePath()
+        String getResourcePath()
         {
             return resourcePath;
         }
 
-        public Method getMethod()
+        Method getMethod()
         {
             return method;
         }
 
-        public HTTPCommand getHTTPCommand()
+        HTTPCommand getHTTPCommand()
         {
             return httpCommand;
         }
     }
 
-    public List<RESTfulRPCMethod> getGETCommands() {
+    List<RESTfulRPCMethod> getGETCommands() {
 
         return getPublicMethods(object.getClass())
                .stream()
@@ -93,7 +93,7 @@ public class RESTfulRPCConvention
     }
 
 
-    public List<RESTfulRPCMethod> getPOSTCommands() {
+    List<RESTfulRPCMethod> getPOSTCommands() {
 
         return getPublicMethods(object.getClass())
                 .stream()
