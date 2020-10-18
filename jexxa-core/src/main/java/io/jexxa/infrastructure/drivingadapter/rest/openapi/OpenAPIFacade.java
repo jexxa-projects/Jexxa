@@ -13,6 +13,7 @@ import io.javalin.plugin.openapi.annotations.HttpMethod;
 import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
 import io.swagger.v3.oas.models.info.Info;
 
+@SuppressWarnings("java:S1602") // required to avoid ambiguous warnings
 public class OpenAPIFacade
 {
     private final Properties properties;
@@ -43,7 +44,6 @@ public class OpenAPIFacade
             openApiOptions.defaultDocumentation(doc -> {
                 doc.json("400", BadRequestResponse.class);
             });
-
         }
     }
 
