@@ -4,6 +4,8 @@ import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.c
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -16,7 +18,16 @@ import com.google.gson.JsonParser;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.plugin.json.JavalinJson;
+import io.javalin.plugin.openapi.OpenApiOptions;
+import io.javalin.plugin.openapi.OpenApiPlugin;
+import io.javalin.plugin.openapi.annotations.HttpMethod;
+import io.javalin.plugin.openapi.dsl.DocumentedContent;
+import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
+import io.javalin.plugin.openapi.dsl.OpenApiDocumentation;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.infrastructure.drivingadapter.rest.openapi.BadRequestResponse;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.media.Schema;
 import org.apache.commons.lang3.Validate;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -30,6 +41,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public static final String HTTPS_PORT_PROPERTY = "io.jexxa.rest.https_port";
     public static final String KEYSTORE = "io.jexxa.rest.keystore";
     public static final String KEYSTORE_PASSWORD = "io.jexxa.rest.keystore_password";
+    public static final String OPEN_API_PATH = "io.jexxa.rest.open_api_path";
 
     private static final Gson GSON = new GsonBuilder().create();
 
@@ -38,6 +50,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private Server server;
     private ServerConnector sslConnector;
     private ServerConnector httpConnector;
+    private OpenApiOptions openApiOptions;
 
     public RESTfulRPCAdapter(Properties properties)
     {
@@ -252,9 +265,33 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                 {
                     config.server(this::getServer);
                     config.showJavalinBanner = false;
+
+                    // TODO: Code cleanup
+                    if (properties.containsKey(OPEN_API_PATH))
+                    {
+                        config.registerPlugin(new OpenApiPlugin(getOpenApiOptions()));
+                        config.enableCorsForAllOrigins();
+                    }
                 }
         );
     }
+
+    private OpenApiOptions getOpenApiOptions() {
+        //TODO: Make it configurable via properties
+        Info applicationInfo = new Info()
+                .version("1.0")
+                .description(properties.getProperty("io.jexxa.context.name", "Unknown Context"))
+                .title(properties.getProperty("io.jexxa.context.name", "Unknown Context"));
+
+        openApiOptions = new OpenApiOptions(applicationInfo)
+                .path("/" + properties.getProperty(OPEN_API_PATH))
+                .defaultDocumentation(doc ->    {
+                    doc.json("400", BadRequestResponse.class);
+                });
+
+        return openApiOptions;
+    }
+
 
     private Server getServer()
     {
