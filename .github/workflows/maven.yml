@@ -70,3 +70,8 @@ jobs:
         SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
         SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
       run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml sonar:sonar
+      
+    - name: codecov update
+      env: 
+        CODECOV_SECRET: ${{ secrets.CODECOV_TOKEN }}
+      run: bash <(curl -s https://codecov.io/bash) -t $CODECOV_SECRET
