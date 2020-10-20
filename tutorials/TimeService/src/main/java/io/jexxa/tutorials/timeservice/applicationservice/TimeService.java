@@ -50,4 +50,11 @@ public class TimeService
         messageDisplay.show(messageWithPublishedTime);
     }
 
+    public void displayPublishedTimeMultipleTime(LocalTime localTime, int amount)
+    {
+        for(int i = 0; i < amount; ++i)
+        {
+            displayPublishedTime(localTime);
+        }
+    }
 }
