@@ -29,7 +29,7 @@ public class TimeService
         this.messageDisplay = messageDisplay;
     }
 
-    private LocalTime getTime()
+    public LocalTime getTime()
     {
         return LocalTime.now();
     }
@@ -44,7 +44,7 @@ public class TimeService
      * This method shows the previously published time.
      * @param localTime the previously published time
      */
-    private void displayPublishedTime(LocalTime localTime)
+    public void displayPublishedTime(LocalTime localTime)
     {
         var messageWithPublishedTime = "New Time was published, time: " + localTime.format(DateTimeFormatter.ISO_TIME);
         messageDisplay.show(messageWithPublishedTime);
