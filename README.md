@@ -29,10 +29,9 @@ Even though Jexxa has strong educational focus it is used within lightweight bus
 
 ## Quickstart
 
-### Add dependency
+### Download
 
-#### Maven
-
+Maven:
 ```xml
 <dependency>
   <groupId>io.jexxa</groupId>
@@ -41,7 +40,7 @@ Even though Jexxa has strong educational focus it is used within lightweight bus
 </dependency> 
 ```
 
-#### Gradle
+Gradle:
 
 ```groovy
 compile "io.Jexxa:jexxa-core:2.4.2"
