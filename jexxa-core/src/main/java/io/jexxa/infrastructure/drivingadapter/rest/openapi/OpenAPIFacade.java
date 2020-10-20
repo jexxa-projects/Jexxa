@@ -161,9 +161,7 @@ public class OpenAPIFacade
 
     private Object createPrimitive(Class<?> clazz)
     {
-        if (clazz.equals(Byte.class) ||
-                clazz.equals(Integer.class) ||
-                clazz.equals(Long.class) ||
+        if (Number.class.isAssignableFrom(clazz) ||
                 clazz.equals(byte.class) ||
                 clazz.equals(int.class) ||
                 clazz.equals(long.class))
@@ -171,9 +169,7 @@ public class OpenAPIFacade
             return 0;
         }
 
-        if ( clazz.equals( Short.class ) ||
-                clazz.equals( Float.class ) ||
-                clazz.equals( Double.class ) ||
+        if ( Number.class.isAssignableFrom(clazz) ||
                 clazz.equals( short.class ) ||
                 clazz.equals( float.class ) ||
                 clazz.equals( double.class ))
@@ -205,11 +201,7 @@ public class OpenAPIFacade
             return new IntegerSchema();
         }
 
-        if (clazz.equals( Byte.class ) ||
-                clazz.equals( Long.class ) ||
-                clazz.equals( Float.class ) ||
-                clazz.equals( Double.class) ||
-
+        if (Number.class.isAssignableFrom(clazz) ||
                 clazz.equals( byte.class ) ||
                 clazz.equals( long.class ) ||
                 clazz.equals( float.class ) ||
