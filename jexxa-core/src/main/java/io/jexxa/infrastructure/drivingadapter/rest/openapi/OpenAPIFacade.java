@@ -3,7 +3,6 @@ package io.jexxa.infrastructure.drivingadapter.rest.openapi;
 
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_ENUMS_USING_TO_STRING;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.OPEN_API_PATH;
-import static org.apache.commons.lang3.ClassUtils.primitiveToWrapper;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import java.util.Properties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -23,10 +21,13 @@ import io.javalin.plugin.openapi.dsl.DocumentedContent;
 import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
 import io.jexxa.utils.JexxaLogger;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.media.BooleanSchema;
 import io.swagger.v3.oas.models.media.ComposedSchema;
 import io.swagger.v3.oas.models.media.IntegerSchema;
+import io.swagger.v3.oas.models.media.NumberSchema;
 import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.media.StringSchema;
 
 @SuppressWarnings("java:S1602") // required to avoid ambiguous warnings
 public class OpenAPIFacade
@@ -130,9 +131,7 @@ public class OpenAPIFacade
         //There are other configuration options you can set.  This is the one I needed.
         mapper.configure(WRITE_ENUMS_USING_TO_STRING, true);
 
-        JsonSchema schema = mapper.generateJsonSchema(clazz);
-
-        System.out.println(schema.toString());
+        var schema = mapper.generateJsonSchema(clazz);
 
         return schema.toString();
     }
@@ -147,13 +146,10 @@ public class OpenAPIFacade
             Gson gson = new Gson();
             if (!schemaString.contains("\"type\":\"object\""))
             {
-                System.out.println("here PRIMITIVE : " + clazz.getSimpleName());
-                //TODO replace with static mapping to all primitives
-                return primitiveToWrapper(clazz).getConstructor(clazz).newInstance(0);
+                return createPrimitive(clazz);
             }
             if (element.isJsonObject())
             {
-                System.out.println("here OBJECT : " + clazz.getSimpleName());
                 return gson.fromJson(element, clazz);
             }
         } catch (Exception e) {
@@ -162,12 +158,77 @@ public class OpenAPIFacade
         return null;
     }
 
+
+    private Object createPrimitive(Class<?> clazz)
+    {
+        if (clazz.equals(Byte.class) ||
+                clazz.equals(Integer.class) ||
+                clazz.equals(Long.class) ||
+                clazz.equals(byte.class) ||
+                clazz.equals(int.class) ||
+                clazz.equals(long.class))
+        {
+            return 0;
+        }
+
+        if ( clazz.equals( Short.class ) ||
+                clazz.equals( Float.class ) ||
+                clazz.equals( Double.class ) ||
+                clazz.equals( short.class ) ||
+                clazz.equals( float.class ) ||
+                clazz.equals( double.class ))
+        {
+            return 0.0;
+        }
+
+        if (clazz.equals(Boolean.class) ||
+                clazz.equals(boolean.class))
+        {
+            return true;
+        }
+        if (clazz.equals( String.class ) ||
+                clazz.equals( char.class ))
+        {
+            return "";
+        }
+
+        return null;
+    }
+
     private Schema<?> createSchema(Class<?> clazz)
     {
-        if (clazz.equals( Integer.class ) ||
-            clazz.equals( int.class ))
+        if (clazz.equals(Short.class) ||
+                clazz.equals( Integer.class ) ||
+                clazz.equals( short.class ) ||
+                clazz.equals( int.class ))
         {
             return new IntegerSchema();
+        }
+
+        if (clazz.equals( Byte.class ) ||
+                clazz.equals( Long.class ) ||
+                clazz.equals( Float.class ) ||
+                clazz.equals( Double.class) ||
+
+                clazz.equals( byte.class ) ||
+                clazz.equals( long.class ) ||
+                clazz.equals( float.class ) ||
+                clazz.equals( double.class )
+        )
+        {
+            return new NumberSchema();
+        }
+
+        if (clazz.equals( Boolean.class ) ||
+                clazz.equals( boolean.class ))
+        {
+            return new BooleanSchema();
+        }
+
+        if (clazz.equals( String.class ) ||
+                clazz.equals( char.class ))
+        {
+            return new StringSchema();
         }
 
         var result = new ObjectSchema();
