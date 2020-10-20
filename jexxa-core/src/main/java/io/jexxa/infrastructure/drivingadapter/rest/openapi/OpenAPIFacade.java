@@ -6,7 +6,7 @@ import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.OPEN
 import static org.apache.commons.lang3.ClassUtils.primitiveToWrapper;
 
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +21,7 @@ import io.javalin.plugin.openapi.OpenApiPlugin;
 import io.javalin.plugin.openapi.annotations.HttpMethod;
 import io.javalin.plugin.openapi.dsl.DocumentedContent;
 import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
+import io.swagger.v3.oas.models.examples.Example;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Schema;
 
@@ -89,18 +90,44 @@ public class OpenAPIFacade
             {
                 try
                 {
+
                     var schema = new Schema<>();
                     var arguments = new Object[method.getParameterTypes().length];
 
+                    var documentedObjects = new ArrayList<DocumentedContent>();
                     for (int i = 0; i < method.getParameterTypes().length; ++i)
                     {
                         arguments[i] = createObject(createSchema(method.getParameterTypes()[i]), method.getParameterTypes()[i]);
+                        var argSchema = new Schema<>();
+
+                        if (arguments[i].getClass().equals(  Integer.class))
+                        {
+                            argSchema.setType("integer");
+                            schema.addProperties(arguments[i].getClass().getSimpleName(), argSchema);
+                        } else
+                        {
+                            argSchema.setType("object");
+                            argSchema.set$ref(arguments[i].getClass().getSimpleName());
+                            argSchema.setName(arguments[i].getClass().getSimpleName());
+                            schema.addProperties(arguments[i].getClass().getSimpleName(), argSchema);
+                            var example = new Example();
+                            //example.setValue(arguments[i]);
+                            example.set$ref(arguments[i].getClass().getSimpleName());
+                        }
+                        documentedObjects.add(new DocumentedContent(arguments[i].getClass()));
                     }
 
+                    schema.setType("object");
+                    schema.setTitle("Array");
                     schema.setExample(arguments);
+                    //schema.setName(arguments.getClass().getSimpleName());
+                    schema.setMaxProperties(arguments.length);
+                    schema.setMinProperties(arguments.length);
 
-                    DocumentedContent documentedContent = new DocumentedContent(schema, "application/json");
-                    openApiDocumentation.body(List.of(documentedContent));
+                    openApiDocumentation.body(documentedObjects);
+                    openApiDocumentation.body(schema, "application/json");
+
+
                 } catch (Exception e)
                 {
                     System.out.println(e);
