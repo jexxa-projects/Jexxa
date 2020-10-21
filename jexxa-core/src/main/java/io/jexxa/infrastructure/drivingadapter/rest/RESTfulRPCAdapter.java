@@ -275,9 +275,6 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         this.openAPIFacade = new OpenAPIFacade(properties, javalinConfig );
     }
 
-
-
-
     private Server getServer()
     {
         if ( server == null )
