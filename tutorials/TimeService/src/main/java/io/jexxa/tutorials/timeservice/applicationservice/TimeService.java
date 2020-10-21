@@ -49,12 +49,4 @@ public class TimeService
         var messageWithPublishedTime = "New Time was published, time: " + localTime.format(DateTimeFormatter.ISO_TIME);
         messageDisplay.show(messageWithPublishedTime);
     }
-
-    public void displayPublishedTimeMultipleTime(LocalTime localTime, int amount)
-    {
-        for(int i = 0; i < amount; ++i)
-        {
-            displayPublishedTime(localTime);
-        }
-    }
 }
