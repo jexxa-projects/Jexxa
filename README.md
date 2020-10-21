@@ -10,9 +10,9 @@
 Jexxa is a lightweight framework to implement business applications based on a [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/) architecture. 
 
 Goal of this framework is to support the development of _durable_ business applications as good as possible. Therefore, Jexxa stresses the following aspects in particular:
-*   Explicitly represent binding between driving adapters and application core so that they can be exchanged individually. 
-*   Simplify implementation of application specific driven adapters by providing strategies with well-defined APIs. 
-*   Write unit tests without a mock framework so that they not only test but also _explain_ a specific use case.
+*   Explicitly represent binding between driving adapters and ports so that they can be exchanged individually. 
+*   Simplify implementation of driven adapters by providing strategies with well-defined APIs. 
+*   Write unit tests so that they not only test but also _explain_ domain specific use cases.
 
 To achieve these goals, Jexxa provides following features:          
 *   Dependency injection without any framework specific @Annotations. 
