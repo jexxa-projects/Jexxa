@@ -21,8 +21,7 @@ Even though Jexxa has strong educational focus it is used within lightweight bus
 
 ## General information   
 
-*   Supported Java environments: Java 11 (or higher)
-   
+*   Supported Java environments: Java 11 (or higher)   
 *   Documentation: 
     *   [Tutorials](tutorials/README.md)
     *   [Reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html)    
