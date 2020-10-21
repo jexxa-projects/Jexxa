@@ -84,8 +84,8 @@
     <awaitility.version>4.0.3</awaitility.version>
 
     <!-- version of tutorials dependencies -->
-    <jexxa-core.release.version>2.4.2</jexxa-core.release.version>
-    <jexxa-test.release.version>2.4.2</jexxa-test.release.version>
+    <jexxa-core.release.version>2.5.0</jexxa-core.release.version>
+    <jexxa-test.release.version>2.5.0</jexxa-test.release.version>
     <addendj.version>1.0.1</addendj.version>
     <aspectj.version>1.9.6</aspectj.version>
     <aspectjtools.version>1.9.6</aspectjtools.version>

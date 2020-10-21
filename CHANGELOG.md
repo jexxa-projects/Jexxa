@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[2.5.x] - yyyy-mm-dd
+### Added
+  
+### Fixed
+
+### Changed
+
 ## \[2.5.0] - 2020-10-21
 ### Added
 -   `RESTfulRPCAdapter`: Added OpenAPI support (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/main/resources/jexxa-application.properties) for more information).  
