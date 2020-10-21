@@ -19,6 +19,7 @@ import io.javalin.plugin.openapi.OpenApiPlugin;
 import io.javalin.plugin.openapi.annotations.HttpMethod;
 import io.javalin.plugin.openapi.dsl.DocumentedContent;
 import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
+import io.javalin.plugin.openapi.dsl.OpenApiDocumentation;
 import io.jexxa.utils.JexxaLogger;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.BooleanSchema;
@@ -87,45 +88,54 @@ public class OpenAPIFacade
                         openApiOperation.operationId(method.getName());
                     });
 
-            if (method.getParameters().length == 1 )
-            {
-                openApiDocumentation.body(method.getParameters()[0].getType());
-            }  else if ( method.getParameters().length > 1 )
-            {
-                var schema = new ComposedSchema();
-                var arguments = new Object[method.getParameterTypes().length];
+            documentParameters(method, openApiDocumentation);
 
-                var documentedObjects = new ArrayList<DocumentedContent>();
-
-                for (int i = 0; i < method.getParameterTypes().length; ++i)
-                {
-                    arguments[i] = createObject(method.getParameterTypes()[i]);
-
-                    documentedObjects.add(new DocumentedContent(method.getParameterTypes()[i]));
-
-                    schema.addAnyOfItem(createSchema(method.getParameterTypes()[i]));
-                }
-
-                schema.setExample(arguments);
-
-                openApiDocumentation.body(documentedObjects);
-                openApiDocumentation.body(schema, "application/json");
-            }
-
-            if ( method.getReturnType() != void.class )
-            {
-                openApiDocumentation.json("200", method.getReturnType());
-            }
-            else {
-                openApiDocumentation.result("200");
-            }
+            documentReturnType(method, openApiDocumentation);
 
             openApiOptions.setDocumentation(resourcePath, HttpMethod.POST, openApiDocumentation);
         }
     }
 
+    private static void documentReturnType(Method method, OpenApiDocumentation openApiDocumentation)
+    {
+        if ( method.getReturnType() != void.class )
+        {
+            openApiDocumentation.json("200", method.getReturnType());
+        }
+        else {
+            openApiDocumentation.result("200");
+        }
+    }
 
-    private String createSchemaAsString(Class<?> clazz) throws JsonProcessingException
+    private static void documentParameters(Method method, OpenApiDocumentation openApiDocumentation)
+    {
+        if (method.getParameters().length == 1 )
+        {
+            openApiDocumentation.body(method.getParameters()[0].getType());
+        }  else if ( method.getParameters().length > 1 )
+        {
+            var schema = new ComposedSchema();
+            var arguments = new Object[method.getParameterTypes().length];
+
+            var documentedObjects = new ArrayList<DocumentedContent>();
+
+            for (int i = 0; i < method.getParameterTypes().length; ++i)
+            {
+                arguments[i] = createObject(method.getParameterTypes()[i]);
+
+                documentedObjects.add(new DocumentedContent(method.getParameterTypes()[i]));
+
+                schema.addAnyOfItem(createSchema(method.getParameterTypes()[i]));
+            }
+
+            schema.setExample(arguments);
+
+            openApiDocumentation.body(documentedObjects);
+            openApiDocumentation.body(schema, "application/json");
+        }
+    }
+
+    private static String createSchemaAsString(Class<?> clazz) throws JsonProcessingException
     {
         var mapper = new ObjectMapper();
         //There are other configuration options you can set.  This is the one I needed.
@@ -137,7 +147,7 @@ public class OpenAPIFacade
     }
 
 
-    private Object createObject(Class<?> clazz)
+    private static Object createObject(Class<?> clazz)
     {
         try
         {
@@ -153,37 +163,25 @@ public class OpenAPIFacade
                 return gson.fromJson(element, clazz);
             }
         } catch (Exception e) {
-            JexxaLogger.getLogger(getClass()).warn( "Could not create Object {}" , clazz.getName() , e );
+            JexxaLogger.getLogger(OpenAPIFacade.class).warn( "Could not create Object {}" , clazz.getName() , e );
         }
         return null;
     }
 
 
-    private Object createPrimitive(Class<?> clazz)
+    private static Object createPrimitive(Class<?> clazz)
     {
-        if (Number.class.isAssignableFrom(clazz) ||
-                clazz.equals(byte.class) ||
-                clazz.equals(int.class) ||
-                clazz.equals(long.class))
+        if (isInteger(clazz) || isNumber(clazz))
         {
             return 0;
         }
 
-        if ( Number.class.isAssignableFrom(clazz) ||
-                clazz.equals( short.class ) ||
-                clazz.equals( float.class ) ||
-                clazz.equals( double.class ))
-        {
-            return 0.0;
-        }
-
-        if (clazz.equals(Boolean.class) ||
-                clazz.equals(boolean.class))
+        if (isBoolean( clazz))
         {
             return true;
         }
-        if (clazz.equals( String.class ) ||
-                clazz.equals( char.class ))
+
+        if (isString(clazz))
         {
             return "";
         }
@@ -191,34 +189,24 @@ public class OpenAPIFacade
         return null;
     }
 
-    private Schema<?> createSchema(Class<?> clazz)
+    private static Schema<?> createSchema(Class<?> clazz)
     {
-        if (clazz.equals(Short.class) ||
-                clazz.equals( Integer.class ) ||
-                clazz.equals( short.class ) ||
-                clazz.equals( int.class ))
+        if ( isInteger(clazz) )
         {
             return new IntegerSchema();
         }
 
-        if (Number.class.isAssignableFrom(clazz) ||
-                clazz.equals( byte.class ) ||
-                clazz.equals( long.class ) ||
-                clazz.equals( float.class ) ||
-                clazz.equals( double.class )
-        )
+        if ( isNumber(clazz) )
         {
             return new NumberSchema();
         }
 
-        if (clazz.equals( Boolean.class ) ||
-                clazz.equals( boolean.class ))
+        if ( isBoolean(clazz) )
         {
             return new BooleanSchema();
         }
 
-        if (clazz.equals( String.class ) ||
-                clazz.equals( char.class ))
+        if ( isString(clazz) )
         {
             return new StringSchema();
         }
@@ -228,4 +216,33 @@ public class OpenAPIFacade
         return result;
     }
 
+
+    private static boolean isInteger(Class<?> clazz)
+    {
+        return clazz.equals(Short.class) ||
+                clazz.equals(Integer.class) ||
+                clazz.equals(short.class) ||
+                clazz.equals(int.class);
+    }
+
+    private static boolean isNumber(Class<?> clazz)
+    {
+        return Number.class.isAssignableFrom(clazz) ||
+                clazz.equals(byte.class) ||
+                clazz.equals(long.class) ||
+                clazz.equals(float.class) ||
+                clazz.equals(double.class);
+    }
+
+    private static boolean isBoolean(Class<?> clazz)
+    {
+        return clazz.equals( Boolean.class ) ||
+                clazz.equals( boolean.class );
+    }
+
+    private static boolean isString(Class<?> clazz)
+    {
+        return clazz.equals( String.class ) ||
+                clazz.equals( char.class );
+    }
 }
