@@ -5,7 +5,9 @@ import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_ENUMS_US
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.OPEN_API_PATH;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Properties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -72,8 +74,10 @@ public class OpenAPIFacade
                     .document()
                     .operation(openApiOperation -> {
                         openApiOperation.operationId(method.getName());
-                    })
-                    .json("200", method.getReturnType());
+                    });
+
+            documentReturnType(method, openApiDocumentation);
+
             openApiOptions.setDocumentation(resourcePath, HttpMethod.GET, openApiDocumentation);
         }
     }
@@ -98,7 +102,11 @@ public class OpenAPIFacade
 
     private static void documentReturnType(Method method, OpenApiDocumentation openApiDocumentation)
     {
-        if ( method.getReturnType() != void.class )
+        if ( method.getReturnType().isArray() || Collection.class.isAssignableFrom(method.getReturnType()))
+        {
+            var parameterType = (ParameterizedType) method.getGenericReturnType();
+            openApiDocumentation.jsonArray("200", (Class<?>)parameterType.getActualTypeArguments()[0]);
+        } else if ( method.getReturnType() != void.class )
         {
             openApiDocumentation.json("200", method.getReturnType());
         }
