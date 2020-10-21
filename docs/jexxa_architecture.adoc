@@ -16,10 +16,10 @@
 == Vision
 Jexxa is a lightweight framework to implement business applications based on a https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/[ports and adapters] architecture. It allows for easily connecting technology stacks, called adapters, to interfaces of a technology agnostic application core which are called ports. For this purpose Jexxa offers:
 
+* A fluent API to connect available adapters to your application core.
+* Explicit representation of the binding between ports and adapters in the main method so that you can exchange technology stacks independently.
 * A lightweight core which manages the lifecycle of both ports and adapters.
 * A well-defined interface to integrate arbitrary technology stacks as adapters.
-* A fluent API to connect your application core to available adapters.
-* Explicit representation of the binding between ports and adapters in the main method so that you can exchange technology stacks independently.
 
 Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus, especially on  following paradigms:
 
@@ -46,7 +46,7 @@ Applications without well-defined boundaries between technology stacks and appli
 
 * Changes on the application core itself takes much longer time as in the beginning. In the end you need senior developers who have a deep understanding of the specific business domain, the used technology stacks and the convoluted structures of the entire application.
 
-* In the long term, such structural issues could (and in reality will) affect your enterprise architecture, so neighboring systems need to be aware and take special actions for legacy systems.  
+* In the long term, such structural issues could (and in reality will) affect your enterprise architecture, so neighboring systems need to be aware and take special actions for legacy systems.
 
 
 == General Building Blocks
@@ -114,7 +114,7 @@ package Infrastructure <<Application>> {
 
 [cols="1,2"]
 [reftext="Table {counter:local-table-number}"]
-.Describes the packages of a typical application build with Jexxa.    
+.Describes the packages of a typical application build with Jexxa.
 [[JexxaPackagetDescription]]
 |===
 a|Package
@@ -213,7 +213,7 @@ a| Jexxa provides a convention and configuration approach for driving adapters.
 
 A __generic__ driving adapter automatically exposes methods from connected inbound ports by using a convention. For example this can be used for an RPC mechanism.
 
-A __specific__ driving adapter is used if a convention cannot be applied. Instead you have to implement a configuration within the infrastructure of your application in form of a __port adapter__. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the __port adapter__.  
+A __specific__ driving adapter is used if a convention cannot be applied. Instead you have to implement a configuration within the infrastructure of your application in form of a __port adapter__. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the __port adapter__.
 
 
 |Driven Adapter Strategies
@@ -263,7 +263,7 @@ Jexxa provides a simple DI mechanism to instantiate inbound ports of a business 
 
 * Fields assigned in the constructor can be final. Thus, the object can be immutable or at least protect the corresponding fields.
 
-* No special annotations or configuration files are required so that the application core remains completely decoupled from Jexxa. 
+* No special annotations or configuration files are required so that the application core remains completely decoupled from Jexxa.
 
 Within Jexxa we use conventions described in <<JexxaConventions>> to explicitly limit the direction of dependencies as described in <<JexxaComponents>>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.
 
@@ -299,7 +299,7 @@ a|
 3. A unique implementation of each interface exists in the search scope of Jexxa. This scope is defined on a package level by method `JexxaMain::addToInfrastructure`.
 
 a|
-1. Avoids ambiguity when choosing the constructor.  
+1. Avoids ambiguity when choosing the constructor.
 2. Ports should be self-contained as much as possible. Therefore, only outbound ports should be hand in. This ensures that the infrastructure is agnostic to domain logic and knows only the __interfaces__ required by the application core but not any other inner components.
 3. Each package should only include a single implementation of a specific interface to achieve the common-closure principle.
 
@@ -342,7 +342,7 @@ Jexxa provides some simple mechanisms to define and control the scopes of ports 
 
 By default, you have to tell Jexxa the location of your driven adapter and ports on a package level so that they can be created by Jexxa's DI mechanism. This allows an application to specify used ports and adapters on a very fine-grained level.
 
-==== Threading 
+==== Threading
 Currently, Jexxa ensures that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to following reasons:
 
 * Multi threading is typically essential within technology stacks and not within the application core itself.
@@ -395,7 +395,7 @@ The singleton scope supports designing stateless outbound ports which is in gene
 
 | Port Adapter
 a| Is always created new and not reused.
-a| Allows fine grained control of how a driving adapter should expose the included port. For example you can define that specific ports are only available via a management IP address. 
+a| Allows fine grained control of how a driving adapter should expose the included port. For example you can define that specific ports are only available via a management IP address.
 |===
 
 === Transactions

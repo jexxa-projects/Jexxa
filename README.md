@@ -9,19 +9,20 @@
 
 Jexxa is a lightweight framework to implement business applications based on a [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/) architecture. 
 
-Goal of this framework is to easily connect technology stacks to your technology agnostic business application. These connections are explicitly represented in the main-method of your application and can be independently exchanged.      
+Goal of this framework is to support the development of _durable_ business applications as good as possible. Therefore, Jexxa stresses the following aspects in particular:
+*   Explicitly represent binding between driving adapters and application core so that they can be exchanged individually. 
+*   Simplify implementation of application specific driven adapters by providing strategies with well-defined APIs. 
+*   Write unit tests without a mock framework so that they not only test but also _explain_ a specific use case.
 
-Even though Jexxa has strong educational focus it is used within lightweight business applications and microservices. At the moment it provides following features:
- 
-*   Inject driven adapters into the application core without any framework specific @Annotations. 
-*   Bind driving adapters to your application core and expose its methods to remote clients.
-*   Integrated driving adapters: RMI over REST, JMX, and JMS. 
+To achieve these goals, Jexxa provides following features:          
+*   Dependency injection without any framework specific @Annotations. 
+*   Super simple API to integrate arbitrary driving adapter: Integrated driving adapters: RMI over REST, JMX, and JMS. 
 *   Integrated strategies for driven adapters: JDBC, in memory DB (IMDB), and JMS based messaging. 
-*   Support for unit-tests: Provide stubs for application specific driven adapters when using integrated strategies so that no mock framework is required.  
+*   Stubs for driven adapter strategies to write unit-tests without mock frameworks.  
 
-## General information   
+## General Information    
 
-*   Supported Java environments: Java 11 (or higher)   
+*   Supported Java environments: Java 11 (or higher)
 *   Documentation: 
     *   [Tutorials](tutorials/README.md)
     *   [Reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html)    
@@ -45,7 +46,7 @@ Gradle:
 ```groovy
 compile "io.Jexxa:jexxa-core:2.5.0"
 ``` 
-
+ 
 ### Start programming 
 
 A simple ``Hello World`` example can be found [here](https://github.com/repplix/Jexxa/tree/master/tutorials/HelloJexxa):  
@@ -94,16 +95,22 @@ public final class HelloJexxa
 ```    
 
 ### Adding a logger
- 
+
 Jexxa does not include a logger, which means that you have to add your own logger to your application. If you do not add a logger, you will get a warning message to your console. In case your application has not any special requirements you can add the following dependency to your project:
 
-```maven
- <dependency>
-   <groupId>org.slf4j</groupId>
-   <artifactId>slf4j-simple</artifactId>
-   <version>1.7.30</version>
- </dependency>
+Maven: 
+```xml
+<dependency>
+  <groupId>org.slf4j</groupId>
+  <artifactId>slf4j-simple</artifactId>
+  <version>1.7.30</version>
+</dependency>
 ```                                   
+
+Gradle:
+```groovy
+compile "org.slf4j:slf4j-simple:1.7.30"
+``` 
 
 ### Configure your Jexxa application  
 
