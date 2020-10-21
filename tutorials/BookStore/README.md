@@ -294,7 +294,7 @@ First, add the following dependency to your tests.
     <dependency>
       <groupId>io.jexxa.jexxatest</groupId>
       <artifactId>jexxa-test</artifactId>
-      <version>2.4.2</version>
+      <version>2.5.0</version>
       <scope>test</scope>
     </dependency>
 ```
