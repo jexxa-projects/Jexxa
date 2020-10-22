@@ -11,17 +11,17 @@ Jexxa is a lightweight framework to implement business applications based on a [
 
 Goal of this framework is to support the development of _durable_ business applications as good as possible. Therefore, Jexxa stresses the following aspects in particular:
 *   Explicitly represent binding between driving adapters and ports so that they can be exchanged individually. 
-*   Simplify implementation of driven adapters by providing strategies with well-defined APIs. 
-*   Write unit tests so that they not only test but also _explain_ domain specific use cases.
+*   Simplify implementation of driven adapters by using strategies with well-defined APIs. 
+*   Writing unit tests that not only test a domain specific use cases but also _explain_ them.
 
 To achieve these goals, Jexxa provides following features:          
 *   Dependency injection without any framework specific @Annotations. 
 *   Super simple API to integrate arbitrary driving adapter
-*   Integrated driving adapters: RMI over REST, JMX, and JMS. 
-*   Integrated strategies for driven adapters: JDBC, in memory DB (IMDB), and JMS based messaging. 
-*   Integrated Stubs for driven adapter strategies to write unit-tests without mock frameworks.  
+*   Integrated most common driving adapters: RMI over REST, JMX, and JMS. 
+*   Integrated strategies for most common driven adapters: JDBC, in memory DB (IMDB), and JMS based messaging. 
+*   Integrated stubs for driven adapter strategies to write unit-tests without mock frameworks.  
 
-## General Information    
+## General information
 
 *   Supported Java environments: Java 11 (or higher)
 *   Documentation: 
