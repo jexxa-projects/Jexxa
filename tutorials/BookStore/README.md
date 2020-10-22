@@ -24,11 +24,11 @@ This application core should provide following super simplified functionality:
 *   All books should be identified by their ISBN13
 
 *   For each book the store the umber of available copies
-   
+
 *   Publish `DomainEvent` `BookSoldOut` if last copy of a book is sold
 
 *   A service which gets the latest books from our reference library. For this tutorial it is sufficient that: 
-    *   Service provides a hardcoded list      
+    *   Service provides a hardcoded list
     *   Service is triggered when starting the application     
 
 ## Implementing Application Core 
