@@ -92,7 +92,7 @@ In our tutorials we use following package structure:
 Implementation of `IDomainEventPublisher` just prints the `DomainEvent` to the console. So we can just use the implementation from tutorial `TimeService`.    
 
 ### Implement the Repository 
-When using Jexxa's `RepositoryManager` implementing a repository is just a mapping to the `IRepository` interface which provides typical CRUD operations.  
+When using Jexxa's `RepositoryManager` implementing a repository is just a mapping to the `IRepository` interface which provides typical CRUD operations.   
   
 The requirement are: 
 
@@ -106,7 +106,7 @@ For the sake of completeness we use a static factory method in this implementati
 ```java
   
 @SuppressWarnings("unused")
-public final class DDHBookRepository implements IBookRepository
+public final class BookRepository implements IBookRepository
 {
     private final IRepository<Book, ISBN13> repository;
 
