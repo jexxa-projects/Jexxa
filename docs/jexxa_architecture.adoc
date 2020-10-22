@@ -19,7 +19,7 @@ Jexxa is a lightweight framework to implement business applications based on a h
 * A fluent API to connect available adapters to your application core.
 * Explicit representation of the binding between ports and adapters in the main method so that you can exchange technology stacks independently.
 * A lightweight core which manages the lifecycle of both ports and adapters.
-* A well-defined interface to integrate arbitrary technology stacks as adapters.
+* A Super simple API to integrate arbitrary technology stacks as adapters.
 
 Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus, especially on  following paradigms:
 
@@ -46,7 +46,7 @@ Applications without well-defined boundaries between technology stacks and appli
 
 * Changes on the application core itself takes much longer time as in the beginning. In the end you need senior developers who have a deep understanding of the specific business domain, the used technology stacks and the convoluted structures of the entire application.
 
-* In the long term, such structural issues could (and in reality will) affect your enterprise architecture, so neighboring systems need to be aware and take special actions for legacy systems.
+* In the long term, such structural issues could (and in reality will) affect your enterprise architecture, so neighboring systems need to be aware of and take special actions for legacy systems.
 
 
 == General Building Blocks
