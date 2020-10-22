@@ -20,7 +20,7 @@
 This application core should provide following super simplified functionality:
 
 *   Manage available books in store which means to add, sell, and query books
- 
+
 *   All books should be identified by their ISBN13
 
 *   For each book the store the umber of available copies
