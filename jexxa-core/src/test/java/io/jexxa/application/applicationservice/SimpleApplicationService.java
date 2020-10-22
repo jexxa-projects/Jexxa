@@ -1,6 +1,9 @@
 package io.jexxa.application.applicationservice;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.domain.valueobject.SpecialCasesValueObject;
@@ -10,6 +13,8 @@ import io.jexxa.application.domain.valueobject.SpecialCasesValueObject;
 public class SimpleApplicationService
 {
     private int firstValue;
+    private List<String> messages = new ArrayList<>();
+    private List<JexxaValueObject> valueObjects = new ArrayList<>();
 
     public static class SimpleApplicationException extends Exception
     {
@@ -59,6 +64,31 @@ public class SimpleApplicationService
         setSimpleValue(second.getValue());
     }
 
+    public void addMessage(String message)
+    {
+        messages.add(message);
+    }
+
+    public void setMessages(List<String> messages)
+    {
+        this.messages = messages;
+    }
+
+    public void setValueObjectsAndMessages(List<JexxaValueObject> valueObjects, List<String> messages)
+    {
+        this.messages = messages;
+        this.valueObjects = valueObjects;
+    }
+
+    public List<String> getMessages()
+    {
+        return messages;
+    }
+
+    public List<JexxaValueObject> getValueObjects()
+    {
+        return valueObjects;
+    }
 
     public JexxaValueObject getSimpleValueObject()
     {

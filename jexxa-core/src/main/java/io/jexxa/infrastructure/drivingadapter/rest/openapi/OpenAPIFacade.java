@@ -6,6 +6,7 @@ import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.OPEN
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
@@ -24,6 +25,7 @@ import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
 import io.javalin.plugin.openapi.dsl.OpenApiDocumentation;
 import io.jexxa.utils.JexxaLogger;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.BooleanSchema;
 import io.swagger.v3.oas.models.media.ComposedSchema;
 import io.swagger.v3.oas.models.media.IntegerSchema;
@@ -35,6 +37,7 @@ import io.swagger.v3.oas.models.media.StringSchema;
 @SuppressWarnings("java:S1602") // required to avoid ambiguous warnings
 public class OpenAPIFacade
 {
+    private static final String APPLICATION_TYPE_JSON = "application/json";
     private final Properties properties;
     private final JavalinConfig javalinConfig;
     private OpenApiOptions openApiOptions;
@@ -102,10 +105,9 @@ public class OpenAPIFacade
 
     private static void documentReturnType(Method method, OpenApiDocumentation openApiDocumentation)
     {
-        if ( method.getReturnType().isArray() || Collection.class.isAssignableFrom(method.getReturnType()))
+        if ( isJsonArray(method.getReturnType()) )
         {
-            var parameterType = (ParameterizedType) method.getGenericReturnType();
-            openApiDocumentation.jsonArray("200", (Class<?>)parameterType.getActualTypeArguments()[0]);
+            openApiDocumentation.jsonArray("200", extractTypeFromArray(method.getGenericReturnType()));
         } else if ( method.getReturnType() != void.class )
         {
             openApiDocumentation.json("200", method.getReturnType());
@@ -119,10 +121,19 @@ public class OpenAPIFacade
     {
         if (method.getParameters().length == 1 )
         {
-            openApiDocumentation.body(method.getParameters()[0].getType());
+            if (isJsonArray(method.getParameterTypes()[0]))
+            {
+                var schema = (ArraySchema)createSchema(method.getParameterTypes()[0]);
+                schema.setItems(createSchema(extractTypeFromArray(method.getGenericParameterTypes()[0])));
+                openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
+            } else
+            {
+                openApiDocumentation.body(method.getParameters()[0].getType(), APPLICATION_TYPE_JSON);
+            }
         }  else if ( method.getParameters().length > 1 )
         {
             var schema = new ComposedSchema();
+
             var arguments = new Object[method.getParameterTypes().length];
 
             var documentedObjects = new ArrayList<DocumentedContent>();
@@ -131,7 +142,16 @@ public class OpenAPIFacade
             {
                 arguments[i] = createObject(method.getParameterTypes()[i]);
 
-                documentedObjects.add(new DocumentedContent(method.getParameterTypes()[i]));
+                if ( isJsonArray(method.getParameterTypes()[i]) )
+                {
+                    var arraySchema = (ArraySchema)createSchema(method.getParameterTypes()[i]);
+                    arraySchema.setItems(createSchema(extractTypeFromArray(method.getGenericParameterTypes()[0])));
+                    openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
+                    documentedObjects.add(new DocumentedContent(extractTypeFromArray(method.getGenericParameterTypes()[0]), true, APPLICATION_TYPE_JSON));
+                } else
+                {
+                    documentedObjects.add(new DocumentedContent(method.getParameterTypes()[i], false, APPLICATION_TYPE_JSON));
+                }
 
                 schema.addAnyOfItem(createSchema(method.getParameterTypes()[i]));
             }
@@ -139,7 +159,7 @@ public class OpenAPIFacade
             schema.setExample(arguments);
 
             openApiDocumentation.body(documentedObjects);
-            openApiDocumentation.body(schema, "application/json");
+            openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
         }
     }
 
@@ -191,7 +211,7 @@ public class OpenAPIFacade
 
         if (isString(clazz))
         {
-            return "";
+            return "string";
         }
 
         return null;
@@ -219,8 +239,15 @@ public class OpenAPIFacade
             return new StringSchema();
         }
 
+        if ( isJsonArray(clazz) )
+        {
+            return new ArraySchema();
+        }
+
         var result = new ObjectSchema();
+
         result.set$ref(clazz.getSimpleName());
+
         return result;
     }
 
@@ -252,5 +279,16 @@ public class OpenAPIFacade
     {
         return clazz.equals( String.class ) ||
                 clazz.equals( char.class );
+    }
+
+    private static boolean isJsonArray(Class<?> clazz)
+    {
+        return clazz.isArray() || Collection.class.isAssignableFrom(clazz);
+    }
+
+    private static Class<?> extractTypeFromArray(Type type)
+    {
+        var parameterType = (ParameterizedType) type;
+        return (Class<?>)parameterType.getActualTypeArguments()[0];
     }
 }
