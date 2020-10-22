@@ -17,24 +17,21 @@
 *   A postgres DB (if you start the application with option `-jdbc`)  
 
 ## Requirements to the application core
-This application core should provide following functionality:
+This application core should provide following super simplified functionality:
 
-*   Manage available books in store which means
-    *   add new books, sell books, query operations 
-
+*   Manage available books in store which means to add, sell, and query books 
 *   All books should be identified by their ISBN13
-
 *   For each book the store the umber of available copies   
-
 *   Publish `DomainEvent` `BookSoldOut` if last copy of a book is sold
-
 *   A service which gets the latest books from our reference library. For this tutorial it is sufficient that: 
     *   Service provides a hardcoded list  
     *   Service is triggered when starting the application     
 
 ## Implementing Application Core 
 
-General note: There are several books, courses, tutorials available describing how to implement an application core using the patterns of DDD. The approach used in this tutorial should not be considered as reference but just as one meaningful approach.   
+General note: There are several books, courses, tutorials available describing how to implement an application core using the patterns of DDD. 
+The approach used in this tutorial should not be considered as reference. It serves only for demonstration purpose how to realize your decisions 
+with Jexxa.       
 
 ### 1. Mapping to DDD patterns  
 First we map the functionality of the application to DDD patterns   
@@ -209,7 +206,7 @@ public final class BookStoreApplication
 
 That's it. 
 
-## Compile & Start the Application with console output 
+## Run the application with an in memory database
 
 ```console                                                          
 mvn clean install
@@ -240,7 +237,7 @@ Response:
 [{"value":"978-1-891830-85-3"},{"value":"978-1-60309-025-4"},{"value":"978-1-60309-016-2"},{"value":"978-1-60309-265-4"},{"value":"978-1-60309-047-6"},{"value":"978-1-60309-322-4"}]
 ```
 
-#### Ask if a specific book is in stock**
+#### Query available books
 
 Command:
 ```Console

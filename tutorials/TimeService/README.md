@@ -276,7 +276,7 @@ public final class TimeServiceApplication
 
 That's it. 
 
-## Compile & Start the Application with console output 
+## Run the Application with console output 
 
 ```console                                                          
 mvn clean install
@@ -309,7 +309,7 @@ Each time you execute curl you should see following output on the console:
 [qtp380242442-31] INFO io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger - End> Send message
 ```
 
-## Compile & Start the Application with JMS 
+## Run the Application with JMS 
 
 ```console                                                          
 mvn clean install
