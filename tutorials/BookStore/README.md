@@ -210,7 +210,9 @@ public final class BookStoreApplication
 
 That's it. 
 
-## Run the application with an in memory database
+## Run the application
+ 
+### Use an in memory database
 
 ```console                                                          
 mvn clean install
@@ -226,6 +228,26 @@ You will see following (or similar) output
 [main] INFO io.javalin.Javalin - Javalin started in 148ms \o/
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'BookStoreApplication' successfully started in 0.484 seconds
 ```          
+
+### Use a Postgres database
+
+You can run this application using a Postgres database because the corresponding driver is included in the pom file. The 
+configured username and password is `admin`/`admin`. You can change it in the [jexxa-application.properties](src/main/resources/jexxa-application.properties) 
+file if required.       
+
+```console                                                          
+mvn clean install
+java -jar target/bookstore-jar-with-dependencies.jar -jdbc 
+```
+In contrast to the above output Jexxa will state that you use JDBC persistence strategy now:
+```console
+[main] INFO io.jexxa.tutorials.bookstore.BookStoreApplication - Use persistence strategy: JDBCKeyValueRepository 
+```
+
+Note: In case you want to use a difference database, you have to: 
+
+1.  Add the corresponding jdbc driver to [pom.xml](pom.xml) to dependencies section.
+2.  Adjust the section `#Settings for JDBCConnection to postgres DB` in [jexxa-application.properties](src/main/resources/jexxa-application.properties).
 
 ### Execute some commands using curl 
 
@@ -285,9 +307,9 @@ Writing some tests with Jexxa is quite easy. If you implement your driven adapte
 package **jexxa-test**. It automatically provides stubs so that you do not need any mock framework. Main advantages are: 
 
 *   You can focus on domain logic within your tests.
-*   You don't need to use mocks which can lead to validating execution steps within the domain core instead of validating the use cases
-*   Your tests are much easier to read. 
-*   You can write your tests first without considering the implementation.   
+*   You don't need to use mocks which can lead to validating execution steps within the domain core instead of validating the domain specific use cases
+*   Your tests are much easier to read and can teach new developers the use cases of your domain. 
+*   You can write your tests first without considering the infrastructure first.   
 
 First, add the following dependency to your tests. 
 
