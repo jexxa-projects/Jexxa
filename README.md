@@ -18,7 +18,7 @@ To achieve these goals, Jexxa provides following features:
 *   Dependency injection without any framework specific @Annotations. 
 *   Super simple API to integrate arbitrary driving adapter.
 *   Integrated most common driving adapters: RMI over REST, JMX, and JMS. 
-*   Integrated strategies for most common driven adapters: JDBC, in memory DB (IMDB), and JMS based messaging. 
+*   Integrated strategies for most common driven adapters: JDBC, in memory DB (IMDB), and JMS. 
 *   Integrated stubs for driven adapter strategies to write unit-tests without mock frameworks.  
 
 ## General information
