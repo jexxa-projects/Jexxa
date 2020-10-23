@@ -2,6 +2,7 @@ package io.jexxa.infrastructure.drivingadapter.rest;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.OPEN_API_PATH;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -82,18 +83,46 @@ class OpenAPITest
     void testContentTypeIsJson()
     {
         //Arrange
-        var result = new ArrayList<JsonElement>();
+        JsonObject openAPI = Unirest.get(OPENAPI_PATH)
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(JsonObject.class).getBody();
+
+        //Act
+        var result = deepSearchKeys(openAPI, "content");
+
+        //Assert - Fields of basic openAPI structure
+        assertFalse( result.isEmpty() );
+        result.forEach( element -> assertNotNull( element.getAsJsonObject().get(APPLICATION_TYPE) ) );
+    }
+
+    @Test
+    void testHTTPRequestMapping()
+    {
+        //Arrange
+        var resTfulRPCConvention = new RESTfulRPCConvention(simpleApplicationService);
 
         JsonObject openAPI = Unirest.get(OPENAPI_PATH)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
 
         //Act
-        deepSearchKeys(openAPI, "content", result);
+        var postResults = deepSearchKeys(openAPI, "post");
+        var getResults = deepSearchKeys(openAPI, "get");
 
-        //Assert - Fields of basic openAPI structure
-        assertFalse( result.isEmpty() );
-        result.forEach( element -> assertNotNull( element.getAsJsonObject().get(APPLICATION_TYPE) ) );
+        //Assert -- POST mapping
+        assertFalse(postResults.isEmpty());
+        assertEquals(resTfulRPCConvention.getPOSTCommands().size(), postResults.size());
+
+        //Assert -- GET mapping
+        assertFalse(getResults.isEmpty());
+        assertEquals(resTfulRPCConvention.getGETCommands().size(), getResults.size());
+    }
+
+    private List<JsonElement> deepSearchKeys(JsonElement jsonElement, String key)
+    {
+        List<JsonElement> result = new ArrayList<>();
+        deepSearchKeys(jsonElement, key, result);
+        return result;
     }
 
 
