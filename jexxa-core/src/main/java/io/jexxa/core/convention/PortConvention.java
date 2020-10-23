@@ -26,13 +26,14 @@ public final class PortConvention
 
         if (!result.isEmpty())
         {
-            throw new PortConventionViolation("Public constructor of Port " + clazz.getName() + " has non-interfaces as arguments.");
+            throw new PortConventionViolation("Public constructor of Port " + clazz.getName() + " has non-interfaces as arguments.\n " +
+                    "If this class a is port-adapter, please check that it is added to the infrastructure using JexxaMain.addToInfrastructure(). ");
         }
     }
 
     private PortConvention()
     {
-        //Private Constructor  
+        //Private Constructor
     }
 
 }

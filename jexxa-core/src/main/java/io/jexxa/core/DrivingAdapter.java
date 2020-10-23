@@ -41,7 +41,7 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
             return jexxaMain;
         }
 
-        if ( AdapterConvention.isPortAdapter(port))
+        if ( AdapterConvention.isPortAdapter(port, jexxaMain.getInfrastructure()))
         {
             jexxaMain.bindToPortAdapter(drivingAdapterClass, port);
             return jexxaMain;

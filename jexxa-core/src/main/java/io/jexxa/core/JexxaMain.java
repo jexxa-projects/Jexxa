@@ -2,6 +2,7 @@ package io.jexxa.core;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
@@ -27,7 +28,7 @@ import org.slf4j.Logger;
  *
  * To see how to use this class please refer to the tutorials.
  */
-public class JexxaMain
+public final class JexxaMain
 {
     public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
     private static final String JEXXA_CONTEXT_NAME =  "io.jexxa.context.name";
@@ -193,7 +194,12 @@ public class JexxaMain
         return properties;
     }
 
-    protected void bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port)
+    List<String> getInfrastructure()
+    {
+        return drivenAdapterFactory.getAcceptPackages();
+    }
+
+    void bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port)
     {
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
         var inboundPort    = portFactory.getInstanceOf(port, properties);
@@ -203,7 +209,7 @@ public class JexxaMain
         compositeDrivingAdapter.add(drivingAdapter);
     }
 
-    protected JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Object port)
+    JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Object port)
     {
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
         drivingAdapter.register(port);
@@ -213,7 +219,7 @@ public class JexxaMain
         return this;
     }
 
-    protected void bindToPortAdapter(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
+    void bindToPortAdapter(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
     {
         var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
 
@@ -224,7 +230,7 @@ public class JexxaMain
         compositeDrivingAdapter.add(drivingAdapter);
     }
 
-    protected void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
+    void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
 
         var portList = portFactory.getInstanceOfPorts(portAnnotation, properties);
@@ -233,7 +239,7 @@ public class JexxaMain
         compositeDrivingAdapter.add(drivingAdapter);
     }
 
-    protected <T> void addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
+    <T> void addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
     {
         T instance = portFactory.getInstanceOf(bootstrapService, properties);
         initFunction.accept(instance);

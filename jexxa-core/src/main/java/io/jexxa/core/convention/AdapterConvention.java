@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 public final class AdapterConvention
@@ -24,11 +25,17 @@ public final class AdapterConvention
     }
 
 
-    public static <P> boolean isPortAdapter(Class<P> port)
+    public static <P> boolean isPortAdapter(Class<P> port, List<String> acceptedInfrastructure)
     {
+
         return Arrays.stream(port.getConstructors())
                 .filter(constructor -> constructor.getParameterTypes().length == 1)
-                .anyMatch(constructor -> !constructor.getParameterTypes()[0].isInterface());
+                .anyMatch(constructor -> !constructor.getParameterTypes()[0].isInterface())
+                &&
+                acceptedInfrastructure
+                        .stream()
+                        .anyMatch( element -> port.getPackage().toString().contains( element) );
+
     }
 
     private static <T> boolean isDefaultConstructorAvailable(Class<T> clazz)
