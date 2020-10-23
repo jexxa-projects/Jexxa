@@ -10,11 +10,6 @@ public final class PortConvention
 
     public static <T> void validate(Class<T> clazz, List<String> acceptedApplicationCore)
     {
-        if ( !isInApplicationCore(clazz, acceptedApplicationCore) )
-        {
-            throw new PortConventionViolation("Port " + clazz.getName() + " is not in accepted package list of ApplicationCore");
-        }
-
         if ( clazz.getConstructors().length == 0)
         {
             throw new PortConventionViolation("No public constructor available for Port : " + clazz.getName());
@@ -34,6 +29,11 @@ public final class PortConvention
         {
             throw new PortConventionViolation("Public constructor of Port " + clazz.getName() + " has non-interfaces as arguments.\n " +
                     "If this class a is port-adapter, please check that it is added to the infrastructure using JexxaMain.addToInfrastructure(). ");
+        }
+
+        if ( !isInApplicationCore(clazz, acceptedApplicationCore) )
+        {
+            throw new PortConventionViolation("Port " + clazz.getName() + " is not in accepted package list of ApplicationCore. Please add the package to JexxaMain.addToApplicationCore()");
         }
     }
 
