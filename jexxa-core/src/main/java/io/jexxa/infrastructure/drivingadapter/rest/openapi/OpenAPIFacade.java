@@ -7,7 +7,6 @@ import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.OPEN
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
 
@@ -20,7 +19,6 @@ import io.javalin.core.JavalinConfig;
 import io.javalin.plugin.openapi.OpenApiOptions;
 import io.javalin.plugin.openapi.OpenApiPlugin;
 import io.javalin.plugin.openapi.annotations.HttpMethod;
-import io.javalin.plugin.openapi.dsl.DocumentedContent;
 import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
 import io.javalin.plugin.openapi.dsl.OpenApiDocumentation;
 import io.jexxa.utils.JexxaLogger;
@@ -38,6 +36,9 @@ import io.swagger.v3.oas.models.media.StringSchema;
 public class OpenAPIFacade
 {
     private static final String APPLICATION_TYPE_JSON = "application/json";
+    private static final String OBJET_TYPE_AS_JSON = "\"type\":\"object\"";
+    private static final String ARRAY_TYPE_AS_JSON = "\"type\":\"array\"";
+
     private final Properties properties;
     private final JavalinConfig javalinConfig;
     private OpenApiOptions openApiOptions;
@@ -121,44 +122,25 @@ public class OpenAPIFacade
     {
         if (method.getParameters().length == 1 )
         {
-            if (isJsonArray(method.getParameterTypes()[0]))
-            {
-                var schema = (ArraySchema)createSchema(method.getParameterTypes()[0]);
-                schema.setItems(createSchema(extractTypeFromArray(method.getGenericParameterTypes()[0])));
-                openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
-            } else
-            {
-                openApiDocumentation.body(method.getParameters()[0].getType(), APPLICATION_TYPE_JSON);
-            }
+            var schema = createSchema(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]);
+            schema.setExample(createObject(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]));
+            openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
         }  else if ( method.getParameters().length > 1 )
         {
             var schema = new ComposedSchema();
-
-            var arguments = new Object[method.getParameterTypes().length];
-
-            var documentedObjects = new ArrayList<DocumentedContent>();
+            var exampleObjects = new Object[method.getParameterTypes().length];
 
             for (int i = 0; i < method.getParameterTypes().length; ++i)
             {
-                arguments[i] = createObject(method.getParameterTypes()[i]);
+                exampleObjects[i] = createObject(method.getParameterTypes()[i],method.getGenericParameterTypes()[i]);
+                var parameterSchema = createSchema(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]);
+                parameterSchema.setExample(exampleObjects[i]);
 
-                if ( isJsonArray(method.getParameterTypes()[i]) )
-                {
-                    var arraySchema = (ArraySchema)createSchema(method.getParameterTypes()[i]);
-                    arraySchema.setItems(createSchema(extractTypeFromArray(method.getGenericParameterTypes()[0])));
-                    openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
-                    documentedObjects.add(new DocumentedContent(extractTypeFromArray(method.getGenericParameterTypes()[0]), true, APPLICATION_TYPE_JSON));
-                } else
-                {
-                    documentedObjects.add(new DocumentedContent(method.getParameterTypes()[i], false, APPLICATION_TYPE_JSON));
-                }
-
-                schema.addAnyOfItem(createSchema(method.getParameterTypes()[i]));
+                openApiDocumentation.body(parameterSchema, APPLICATION_TYPE_JSON);
+                schema.addAnyOfItem(parameterSchema);
             }
 
-            schema.setExample(arguments);
-
-            openApiDocumentation.body(documentedObjects);
+            schema.setExample(exampleObjects);
             openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
         }
     }
@@ -171,25 +153,32 @@ public class OpenAPIFacade
 
         var schema = mapper.generateJsonSchema(clazz);
 
+
         return schema.toString();
     }
 
-
-    private static Object createObject(Class<?> clazz)
+    private static Object createObject(Class<?> clazz, Type genericType)
     {
         try
         {
             var schemaString = createSchemaAsString(clazz);
             JsonElement element = JsonParser.parseString(schemaString);
             Gson gson = new Gson();
-            if (!schemaString.contains("\"type\":\"object\""))
+            if ( !schemaString.contains(OBJET_TYPE_AS_JSON) && !schemaString.contains(ARRAY_TYPE_AS_JSON) )
             {
                 return createPrimitive(clazz);
             }
-            if (element.isJsonObject())
+            if (!schemaString.contains(ARRAY_TYPE_AS_JSON))
             {
                 return gson.fromJson(element, clazz);
             }
+            if (schemaString.contains(ARRAY_TYPE_AS_JSON))
+            {
+                var result = new Object[1];
+                result[0] = createObject(extractTypeFromArray(genericType), null);
+                return result;
+            }
+
         } catch (Exception e) {
             JexxaLogger.getLogger(OpenAPIFacade.class).warn( "Could not create Object {}" , clazz.getName() , e );
         }
@@ -201,7 +190,7 @@ public class OpenAPIFacade
     {
         if (isInteger(clazz) || isNumber(clazz))
         {
-            return 0;
+            return 1;
         }
 
         if (isBoolean( clazz))
@@ -217,7 +206,7 @@ public class OpenAPIFacade
         return null;
     }
 
-    private static Schema<?> createSchema(Class<?> clazz)
+    private static Schema<?> createSchema(Class<?> clazz, Type genericType)
     {
         if ( isInteger(clazz) )
         {
@@ -241,7 +230,9 @@ public class OpenAPIFacade
 
         if ( isJsonArray(clazz) )
         {
-            return new ArraySchema();
+            var schema = new ArraySchema();
+            schema.setItems(createSchema(extractTypeFromArray(genericType), null));
+            return schema;
         }
 
         var result = new ObjectSchema();
