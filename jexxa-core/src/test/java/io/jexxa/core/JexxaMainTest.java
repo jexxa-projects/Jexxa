@@ -4,6 +4,7 @@ package io.jexxa.core;
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static io.jexxa.TestConstants.JEXXA_DRIVING_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,7 +41,9 @@ class JexxaMainTest
     {
         objectUnderTest = new JexxaMain(CONTEXT_NAME);
         objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);    }
+                .addToInfrastructure(JEXXA_DRIVING_ADAPTER)
+                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
+    }
 
     @AfterEach
     void tearDownTests()

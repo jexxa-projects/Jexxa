@@ -25,7 +25,7 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
         Validate.notNull(drivingAdapterClass);
         Validate.notNull(jexxaMain);
 
-        AdapterConvention.validate(drivingAdapterClass);
+        AdapterConvention.validate(drivingAdapterClass, jexxaMain.getInfrastructure());
 
         this.drivingAdapterClass = drivingAdapterClass;
         this.jexxaMain = jexxaMain;
@@ -47,7 +47,7 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
             return jexxaMain;
         }
 
-        PortConvention.validate(port);
+        PortConvention.validate(port, jexxaMain.getApplicationCore());
 
         jexxaMain.bindToPort(drivingAdapterClass, port);
 

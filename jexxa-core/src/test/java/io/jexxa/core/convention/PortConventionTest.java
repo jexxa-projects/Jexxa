@@ -2,6 +2,7 @@ package io.jexxa.core.convention;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.List;
 import java.util.Properties;
 
 import io.jexxa.application.applicationservice.InvalidApplicationService;
@@ -14,10 +15,13 @@ class PortConventionTest
     @Test
     void invalidPortConstructor()
     {
+        //Arrange
+        var acceptedApplicationCore = List.of("io.jexxa.application");
+
         //Act/Assert
-        assertThrows(PortConventionViolation.class, () -> PortConvention.validate(InvalidApplicationService.class)); // Violation: No public constructor
-        assertThrows(PortConventionViolation.class, () -> PortConvention.validate(InvalidApplicationServiceNoInterface.class)); // Violation: Constructor does not take interfaces as argument
-        assertThrows(PortConventionViolation.class, () -> PortConvention.validate(InvalidApplicationServiceMultipleConstructor.class)); // Violation: multiple constructor available
+        assertThrows(PortConventionViolation.class, () -> PortConvention.validate(InvalidApplicationService.class, acceptedApplicationCore)); // Violation: No public constructor
+        assertThrows(PortConventionViolation.class, () -> PortConvention.validate(InvalidApplicationServiceNoInterface.class, acceptedApplicationCore)); // Violation: Constructor does not take interfaces as argument
+        assertThrows(PortConventionViolation.class, () -> PortConvention.validate(InvalidApplicationServiceMultipleConstructor.class, acceptedApplicationCore)); // Violation: multiple constructor available
     }
 
     public static class InvalidApplicationServiceMultipleConstructor

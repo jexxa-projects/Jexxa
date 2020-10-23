@@ -23,6 +23,7 @@ class BookStoreServiceTest
 {
     private static final String DRIVEN_ADAPTER = BookStoreApplication.class.getPackageName() + ".infrastructure.drivenadapter";
     private static final String DOMAIN_SERVICE = BookStoreApplication.class.getPackageName() + ".domainservice";
+    private static final String APPLICATION_SERVICE = BookStoreApplication.class.getPackageName() + ".applicationservice";
 
     private static final ISBN13 ISBN_13 = new ISBN13( "978-3-86490-387-8" );
     private static JexxaMain jexxaMain;
@@ -40,6 +41,7 @@ class BookStoreServiceTest
         // Note: For unit-tests you just need to bind any driving adapter
         jexxaMain = new JexxaMain(BookStoreServiceTest.class.getSimpleName());
         jexxaMain.addToInfrastructure(DRIVEN_ADAPTER)
+                .addToApplicationCore(APPLICATION_SERVICE)
                 .addToApplicationCore(DOMAIN_SERVICE);
     }
 

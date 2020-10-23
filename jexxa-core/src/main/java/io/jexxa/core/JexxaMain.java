@@ -82,6 +82,7 @@ public final class JexxaMain
         this.properties.putAll( properties );  //add/overwrite given properties
 
         this.properties.put(JEXXA_CONTEXT_NAME, contextName);
+        this.addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
 
         setExceptionHandler();
     }
@@ -198,6 +199,7 @@ public final class JexxaMain
     {
         return drivenAdapterFactory.getAcceptPackages();
     }
+    List<String> getApplicationCore() { return portFactory.getAcceptPackages(); }
 
     void bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port)
     {
@@ -248,7 +250,7 @@ public final class JexxaMain
 
     private <T> T getInstanceOfInboundPort(Class<T> port)
     {
-        PortConvention.validate(port);
+        PortConvention.validate(port, getApplicationCore());
         return port.cast(portFactory.getInstanceOf(port, properties));
     }
 

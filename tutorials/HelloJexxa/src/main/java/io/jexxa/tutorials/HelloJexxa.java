@@ -6,6 +6,8 @@ import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 
 public final class HelloJexxa
 {
+    private static final String APPLICATION_SERVICE = "io.jexxa.tutorials";
+
     @SuppressWarnings({"java:S3400", "unused"})
     public String greetings()
     {
@@ -18,6 +20,9 @@ public final class HelloJexxa
         JexxaMain jexxaMain = new JexxaMain("HelloJexxa");
 
         jexxaMain
+                // Register allowed application services
+                .addToApplicationCore(APPLICATION_SERVICE)
+
                 // Bind a JMX adapter to our BoundedContext object.
                 // It allows to access the public methods of the object via `jconsole`
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())

@@ -19,14 +19,17 @@ class AdapterConventionTest
     @Test
     void validateAdapterConvention()
     {
+        //Arrange
+        var acceptedInfrastructure = List.of("io.jexxa.application.infrastructure.drivenadapter");
+
         //Assert all Adapter conventions
-        AdapterConvention.validate(DefaultConstructorAdapter.class);
+        AdapterConvention.validate(DefaultConstructorAdapter.class, acceptedInfrastructure);
 
-        AdapterConvention.validate(FactoryMethodAdapter.class);
+        AdapterConvention.validate(FactoryMethodAdapter.class, acceptedInfrastructure);
 
-        AdapterConvention.validate(PropertiesConstructorAdapter.class);
+        AdapterConvention.validate(PropertiesConstructorAdapter.class, acceptedInfrastructure);
 
-        assertThrows(AdapterConventionViolation.class, () -> AdapterConvention.validate(InvalidAdapter.class));
+        assertThrows(AdapterConventionViolation.class, () -> AdapterConvention.validate(InvalidAdapter.class, acceptedInfrastructure));
     }
 
     @Test

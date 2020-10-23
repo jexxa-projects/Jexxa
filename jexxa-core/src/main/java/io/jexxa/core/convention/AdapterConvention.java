@@ -9,8 +9,13 @@ import java.util.Properties;
 
 public final class AdapterConvention
 {
-    public static <T> void validate(Class<T> clazz)
+    public static <T> void validate(Class<T> clazz,List<String> acceptedInfrastructure)
     {
+        if ( ! isInInfrastructurePackage(clazz, acceptedInfrastructure) )
+        {
+            throw new AdapterConventionViolation("Adapter is not in registered infrastructure package : " + clazz.getName());
+        }
+
         if (
                 isDefaultConstructorAvailable(clazz)
                 || isPropertiesConstructorAvailable(clazz)
@@ -32,9 +37,7 @@ public final class AdapterConvention
                 .filter(constructor -> constructor.getParameterTypes().length == 1)
                 .anyMatch(constructor -> !constructor.getParameterTypes()[0].isInterface())
                 &&
-                acceptedInfrastructure
-                        .stream()
-                        .anyMatch( element -> port.getPackage().toString().contains( element) );
+                isInInfrastructurePackage(port, acceptedInfrastructure);
 
     }
 
@@ -89,6 +92,13 @@ public final class AdapterConvention
         return factoryMethods.stream().anyMatch(method -> (
                 method.getParameterCount() == 1 &&
                         method.getParameterTypes()[0].isAssignableFrom(Properties.class))); //Factory method with Properties argument available
+    }
+
+    private static <T> boolean isInInfrastructurePackage( Class<T> clazz, List<String> acceptedInfrastructure)
+    {
+        return acceptedInfrastructure
+                .stream()
+                .anyMatch( element -> clazz.getPackage().toString().contains( element ) );
     }
 
 

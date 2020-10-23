@@ -31,7 +31,7 @@ import org.apache.commons.lang3.Validate;
  */
 public class PortFactory
 {
-    private final List<String> whiteListPackages = new ArrayList<>();
+    private final List<String> acceptedPackages = new ArrayList<>();
     private final ObjectPool objectPool = new ObjectPool();
     private final AdapterFactory adapterFactory;
     private CreationPolicy drivenAdapterPolicy = CreationPolicy.REUSE;
@@ -45,8 +45,12 @@ public class PortFactory
 
     public PortFactory acceptPackage(String packageName)
     {
-        whiteListPackages.add(packageName);
+        acceptedPackages.add(packageName);
         return this;
+    }
+    public List<String> getAcceptPackages()
+    {
+        return acceptedPackages;
     }
 
     @SuppressWarnings("unused")
@@ -96,7 +100,7 @@ public class PortFactory
 
     public List<Object> getInstanceOfPorts(Class <? extends Annotation> portAnnotation, Properties adapterProperties) {
         var annotationScanner = new DependencyScanner().
-                acceptPackages(whiteListPackages);
+                acceptPackages(acceptedPackages);
 
         var scannedInboundPorts = annotationScanner.getClassesWithAnnotation(portAnnotation);
 
