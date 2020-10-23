@@ -226,8 +226,13 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         Gson gson = new Gson();
         JsonElement jsonElement = JsonParser.parseString(jsonString);
 
-        if (jsonElement.isJsonArray())
+        // In case we have more than one attribute, we assume a JSonArray
+        if ( method.getParameterCount() > 1)
         {
+            if ( !jsonElement.isJsonArray() )
+            {
+                throw new IllegalArgumentException("Multiple method attributes musst be passed inside a JSonArray");
+            }
             return readArray(jsonElement.getAsJsonArray(), method);
         }
         else

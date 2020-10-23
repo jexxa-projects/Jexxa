@@ -6,9 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.Properties;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
@@ -162,6 +164,46 @@ class RESTfulRPCAdapterIT
         assertTrue(response.isSuccess());
         assertEquals(newValue.getValue(), simpleApplicationService.getSimpleValueObject().getValue());
         assertEquals(newValue.getValue(), newResult.intValue());
+    }
+
+    @Test // RPC call test: void setMessages(List<String>)
+    void testPOSTCommandWithList()
+    {
+        //Arrange
+        var messageList = List.of("message1", "message2", "message3");
+
+        //Act
+        var response = Unirest.post(REST_PATH + "setMessages")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .body(messageList)
+                .asEmpty();
+
+        //Assert
+        assertTrue(response.isSuccess());
+        assertEquals(messageList, simpleApplicationService.getMessages());
+    }
+
+    @Test // RPC call test: void setValueObjectsAndMessages
+    void testPOSTCommandWithMultipleLists()
+    {
+        //Arrange
+        var valueObjectList = List.of(new JexxaValueObject(1), new JexxaValueObject(2), new JexxaValueObject(3));
+        var messageList = List.of("message1", "message2", "message3");
+
+        //Act
+        Gson gson = new Gson();
+        var jsonArray = new JsonArray();
+        jsonArray.add(gson.toJsonTree(valueObjectList));
+        jsonArray.add(gson.toJsonTree(messageList));
+
+        var response = Unirest.post(REST_PATH + "setValueObjectsAndMessages")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .body(jsonArray)
+                .asEmpty();
+
+        //Assert
+        assertTrue(response.isSuccess());
+        assertEquals(messageList, simpleApplicationService.getMessages());
     }
 
     @Test // RPC call test: void setSimpleValueObjectTwice(SimpleValueObject(44), SimpleValueObject(88))
