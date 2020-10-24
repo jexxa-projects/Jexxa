@@ -1,11 +1,17 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Properties;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.management.Attribute;
 import javax.management.AttributeList;
@@ -189,6 +195,32 @@ class MBeanConventionTest
         //Assert that we can not set any parameter
         var attributeList = new AttributeList();
         assertThrows(UnsupportedOperationException.class,  () -> objectUnderTest.setAttributes(attributeList));
+    }
+
+    @Test
+    void noStaticMethods()
+    {
+        //Arrange
+        var applicationService = new SimpleApplicationService();
+        var properties = new Properties();
+        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        var staticMethods = Arrays.stream(applicationService.getClass().getMethods())
+                .filter( method -> Modifier.isStatic(method.getModifiers()))
+                .collect(Collectors.toUnmodifiableList());
+
+        //Act
+        var objectUnderTest = new MBeanConvention(applicationService, properties);
+        var mbeanMethods = objectUnderTest.getMBeanInfo().getOperations();
+
+        //Assert - that we get mbean methods without static methods
+        assertNotNull(mbeanMethods);
+        assertTrue ( staticMethods.stream().allMatch(
+                staticMethod -> Arrays.stream(mbeanMethods)
+                        .noneMatch( mbeanInfo -> mbeanInfo.getName().equals(staticMethod.getName()))
+                )
+        );
+
+
     }
 
 }

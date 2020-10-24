@@ -770,8 +770,18 @@ The order of the attributes in the Json array must match to the order of attribu
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>Methods</p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Only <code>public</code> methods are exposed</p>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>Method must be <code>public</code></p>
+</li>
+<li>
+<p>Method must not be <code>static</code></p>
+</li>
+<li>
+<p>Methods from base class <code>Object</code> are not exposed</p>
+</li>
+</ul>
 </div></div></td>
 </tr>
 <tr>
@@ -808,7 +818,7 @@ For example, the Json template for <code>LocalTime</code> looks as follows:<br>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-10-24 17:31:37 +0200
+Last updated 2020-10-24 19:14:59 +0200
 </div>
 </div>
 </body>

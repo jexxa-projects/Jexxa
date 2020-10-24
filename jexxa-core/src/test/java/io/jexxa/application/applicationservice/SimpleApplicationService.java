@@ -100,5 +100,15 @@ public class SimpleApplicationService
         return  SpecialCasesValueObject.SPECIAL_CASES_VALUE_OBJECT;
     }
 
+    public static SpecialCasesValueObject testStaticGetMethod()
+    {
+        return SpecialCasesValueObject.SPECIAL_CASES_VALUE_OBJECT;
+    }
+
+    public static void testStaticSetMethod(JexxaValueObject jexxaValueObject)
+    {
+
+    }
+
 
 }

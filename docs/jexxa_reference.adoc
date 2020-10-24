@@ -138,7 +138,9 @@ a|*JMXAdapter*
 a|*Convention*
 
 a| Methods
-a| Only `public` methods are exposed
+a| * Method must be `public`
+* Method must not be `static`
+* Methods from base class `Object` are not exposed
 
 a| Method attributes
 a|

@@ -142,22 +142,23 @@ public class MBeanConvention implements DynamicMBean
 
     private MBeanOperationInfo[] getMBeanOperation()
     {
-        var methodList = Arrays.stream(object.getClass().getMethods()).
-                collect(toList());
+        var methodList = Arrays.stream(object.getClass().getMethods())
+                .filter( method -> !Modifier.isStatic(method.getModifiers())) //Filter all static methods
+                .collect(toList());
 
         //Get methods only from concrete type => Exclude all methods from Object
         methodList.removeAll(Arrays.asList(Object.class.getMethods()));
 
         return methodList.
-                stream().
-                map(method -> new MBeanOperationInfo(
+                stream()
+                .map(method -> new MBeanOperationInfo(
                         method.getName(),
                         method.getName(),
                         getMBeanParameterInfo(method),
                         method.getReturnType().getName(),
                         UNKNOWN,
-                        null)).
-                toArray(MBeanOperationInfo[]::new);
+                        null))
+                .toArray(MBeanOperationInfo[]::new);
     }
 
     protected String getDomainPath()
@@ -184,7 +185,8 @@ public class MBeanConvention implements DynamicMBean
         return stringBuilder.toString();
     }
 
-    protected String toJsonTemplate(Class<?> clazz) {
+    protected String toJsonTemplate(Class<?> clazz)
+    {
         if ( clazz.isPrimitive() || clazz.isAssignableFrom(String.class))
         {
             return "<"+clazz.getSimpleName()+">";
@@ -274,6 +276,7 @@ public class MBeanConvention implements DynamicMBean
     private Optional<Method> getMethod(String name)
     {
         return Arrays.stream(object.getClass().getMethods())
+                .filter( method -> !Modifier.isStatic(method.getModifiers()))
                 .filter(method -> method.getName().equals(name))
                 .findFirst();
     }
