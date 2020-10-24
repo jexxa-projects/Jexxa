@@ -250,7 +250,7 @@ public final class JexxaMain
 
     private <T> T getInstanceOfInboundPort(Class<T> port)
     {
-        PortConvention.validate(port, getApplicationCore());
+        PortConvention.validate(port);
         return port.cast(portFactory.getInstanceOf(port, properties));
     }
 

@@ -4,7 +4,6 @@ package io.jexxa.core;
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
-import static io.jexxa.TestConstants.JEXXA_DRIVING_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,6 +17,7 @@ import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domainservice.IJexxaEntityRepository;
 import io.jexxa.application.domainservice.InitializeJexxaEntities;
 import io.jexxa.application.infrastructure.drivingadapter.ProxyAdapter;
+import io.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
 import io.jexxa.core.convention.PortConventionViolation;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
@@ -41,7 +41,6 @@ class JexxaMainTest
     {
         objectUnderTest = new JexxaMain(CONTEXT_NAME);
         objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToInfrastructure(JEXXA_DRIVING_ADAPTER)
                 .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
     }
 
@@ -95,7 +94,7 @@ class JexxaMainTest
     }
 
 
-    @Test
+    @Test   // Support of dependency injection
     void bindToPortWithDrivenAdapter()
     {
         //Arrange - All done in initTests
@@ -136,7 +135,19 @@ class JexxaMainTest
                 .filter( element -> SimpleApplicationService.class.equals(element.getClass()) )
                 .findFirst();
 
-        assertTrue(result.isPresent());    }
+        assertTrue(result.isPresent());
+    }
+
+    @Test
+    void invalidBindToPortAdapter()
+    {
+        //Arrange - All done in initTests
+        var drivingAdapter = objectUnderTest
+                .bind(ProxyAdapter.class);
+
+        //Act /Assert
+        assertThrows(PortConventionViolation.class, () -> drivingAdapter.to(SimpleApplicationServiceAdapter.class));
+    }
 
 
     @Test

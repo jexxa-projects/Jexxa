@@ -23,7 +23,6 @@ public final class TimeServiceApplication
     private static final String DRIVEN_ADAPTER  = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter";
     private static final String DRIVING_ADAPTER  = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivingadapter";
     private static final String OUTBOUND_PORTS  = TimeServiceApplication.class.getPackageName() + ".domainservice";
-    private static final String APPLICATION_SERVICES  = TimeServiceApplication.class.getPackageName() + ".applicationservice";
 
     private static String[] args;
 
@@ -40,9 +39,9 @@ public final class TimeServiceApplication
 
         jexxaMain
                 //Define which outbound ports should be managed by Jexxa
-                .addToApplicationCore(APPLICATION_SERVICES)
                 .addToApplicationCore(OUTBOUND_PORTS)
                 .addToInfrastructure(DRIVEN_ADAPTER)
+                //Note: Since we provide our own special driving adapters, we have to add it to the infrastructure
                 .addToInfrastructure(DRIVING_ADAPTER)
 
                 // Bind RESTfulRPCAdapter and JMXAdapter to TimeService class so that we can invoke its method

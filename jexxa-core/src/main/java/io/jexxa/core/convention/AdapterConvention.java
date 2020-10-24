@@ -9,13 +9,8 @@ import java.util.Properties;
 
 public final class AdapterConvention
 {
-    public static <T> void validate(Class<T> clazz,List<String> acceptedInfrastructure)
+    public static <T> void validate(Class<T> clazz)
     {
-        if ( ! isInInfrastructurePackage(clazz, acceptedInfrastructure) )
-        {
-            throw new AdapterConventionViolation("Adapter is not in registered infrastructure package : " + clazz.getName());
-        }
-
         if (
                 isDefaultConstructorAvailable(clazz)
                 || isPropertiesConstructorAvailable(clazz)

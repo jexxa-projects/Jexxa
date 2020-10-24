@@ -24,7 +24,6 @@ public final class BookStoreApplication
     //Declare the packages that should be used by Jexxa
     private static final String DRIVEN_ADAPTER  = BookStoreApplication.class.getPackageName() + ".infrastructure.drivenadapter";
     private static final String OUTBOUND_PORTS  = BookStoreApplication.class.getPackageName() + ".domainservice";
-    private static final String APPLICATION_SERVICE = BookStoreApplication.class.getPackageName() + ".applicationservice";
 
     public static void main(String[] args)
     {
@@ -42,7 +41,6 @@ public final class BookStoreApplication
         jexxaMain
                 //Define which outbound ports should be managed by Jexxa
                 .addToApplicationCore(OUTBOUND_PORTS)
-                .addToApplicationCore(APPLICATION_SERVICE)
                 .addToInfrastructure(DRIVEN_ADAPTER)
 
                 //Get the latest books when starting the application
