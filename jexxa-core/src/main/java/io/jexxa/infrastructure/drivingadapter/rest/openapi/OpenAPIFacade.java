@@ -8,7 +8,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Properties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,6 +22,7 @@ import io.javalin.core.JavalinConfig;
 import io.javalin.plugin.openapi.OpenApiOptions;
 import io.javalin.plugin.openapi.OpenApiPlugin;
 import io.javalin.plugin.openapi.annotations.HttpMethod;
+import io.javalin.plugin.openapi.dsl.DocumentedContent;
 import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
 import io.javalin.plugin.openapi.dsl.OpenApiDocumentation;
 import io.jexxa.utils.JexxaLogger;
@@ -129,11 +132,15 @@ public class OpenAPIFacade
         {
             var schema = createSchema(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]);
             schema.setExample(createExampleInstance(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]));
+
+            //For some reason I have to add requests as DocumentedContent. Otherwise components seems to be not correctly created
+            openApiDocumentation.body(List.of(new DocumentedContent(method.getParameterTypes()[0], isJsonArray(method.getParameterTypes()[0]), APPLICATION_TYPE_JSON )));
             openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
         }  else if ( method.getParameters().length > 1 )
         {
             var schema = new ComposedSchema();
             var exampleObjects = new Object[method.getParameterTypes().length];
+            var documentedContend = new ArrayList<DocumentedContent>();
 
             for (int i = 0; i < method.getParameterTypes().length; ++i)
             {
@@ -141,11 +148,13 @@ public class OpenAPIFacade
                 var parameterSchema = createSchema(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]);
                 parameterSchema.setExample(exampleObjects[i]);
 
-                openApiDocumentation.body(parameterSchema, APPLICATION_TYPE_JSON);
+                documentedContend.add( new DocumentedContent(method.getParameterTypes()[i], isJsonArray(method.getParameterTypes()[i]), APPLICATION_TYPE_JSON ));
                 schema.addAnyOfItem(parameterSchema);
             }
 
             schema.setExample(exampleObjects);
+            //For some reason I have to add requests as DocumentedContent. Otherwise components seems to be not correctly created
+            openApiDocumentation.body(documentedContend);
             openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
         }
     }
