@@ -219,8 +219,6 @@ class MBeanConventionTest
                         .noneMatch( mbeanInfo -> mbeanInfo.getName().equals(staticMethod.getName()))
                 )
         );
-
-
     }
 
 }
