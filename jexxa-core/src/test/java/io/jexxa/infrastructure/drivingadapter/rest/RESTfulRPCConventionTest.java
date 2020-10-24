@@ -3,8 +3,14 @@ package io.jexxa.infrastructure.drivingadapter.rest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
@@ -19,12 +25,12 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 class RESTfulRPCConventionTest
 {
     private RESTfulRPCConvention objectUnderTest;
-
+    private SimpleApplicationService simpleApplicationService;
 
     @BeforeEach
     void setupTests()
     {
-        SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
+        simpleApplicationService = new SimpleApplicationService();
         simpleApplicationService.setSimpleValue(42);
         objectUnderTest = new RESTfulRPCConvention(simpleApplicationService);
     }
@@ -57,7 +63,7 @@ class RESTfulRPCConventionTest
         //Act
         var result = objectUnderTest.getPOSTCommands();
 
-        //Assert 
+        //Assert
         //1.Check all conventions as defined in {@link RESTfulRPCGenerator}.
         assertFalse(result.isEmpty());
 
@@ -73,6 +79,30 @@ class RESTfulRPCConventionTest
         result.forEach(element -> assertTrue( (void.class.equals(element.getMethod().getReturnType())
                                             || element.getMethod().getParameterCount() > 0 )));
 
+    }
+
+    @Test
+    void noStaticMethods()
+    {
+        //Arrange
+        var staticMethods = Arrays.stream(simpleApplicationService.getClass().getMethods())
+                .filter( method -> Modifier.isStatic(method.getModifiers()))
+                .collect(Collectors.toUnmodifiableList());
+
+
+
+        //Act - get All methods
+        var methods = new ArrayList<RESTfulRPCConvention.RESTfulRPCMethod>();
+        methods.addAll(objectUnderTest.getPOSTCommands());
+        methods.addAll(objectUnderTest.getGETCommands());
+
+        //Assert - that we get mbean methods without static methods
+        assertNotNull(methods);
+        assertTrue ( staticMethods.stream().allMatch(
+                staticMethod -> methods.stream()
+                        .noneMatch( method -> method.getMethod().getName().equals(staticMethod.getName()))
+                )
+        );
     }
 
     @Test
