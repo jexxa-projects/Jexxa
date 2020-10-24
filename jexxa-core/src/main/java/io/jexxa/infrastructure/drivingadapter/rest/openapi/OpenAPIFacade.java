@@ -5,6 +5,7 @@ import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_ENUMS_US
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.OPEN_API_PATH;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -72,36 +73,40 @@ public class OpenAPIFacade
 
     public void documentGET(Method method, String resourcePath)
     {
-        if ( openApiOptions != null )
+        if ( openApiOptions == null )
         {
-            var openApiDocumentation = OpenApiBuilder
-                    .document()
-                    .operation(openApiOperation -> {
-                        openApiOperation.operationId(method.getName());
-                    });
-
-            documentReturnType(method, openApiDocumentation);
-
-            openApiOptions.setDocumentation(resourcePath, HttpMethod.GET, openApiDocumentation);
+            return;
         }
+
+        var openApiDocumentation = OpenApiBuilder
+                .document()
+                .operation(openApiOperation -> {
+                    openApiOperation.operationId(method.getName());
+                });
+
+        documentReturnType(method, openApiDocumentation);
+
+        openApiOptions.setDocumentation(resourcePath, HttpMethod.GET, openApiDocumentation);
     }
 
     public void documentPOST(Method method, String resourcePath)
     {
-        if ( openApiOptions != null )
+        if ( openApiOptions == null )
         {
-            var openApiDocumentation = OpenApiBuilder
-                    .document()
-                    .operation(openApiOperation -> {
-                        openApiOperation.operationId(method.getName());
-                    });
-
-            documentParameters(method, openApiDocumentation);
-
-            documentReturnType(method, openApiDocumentation);
-
-            openApiOptions.setDocumentation(resourcePath, HttpMethod.POST, openApiDocumentation);
+            return;
         }
+
+        var openApiDocumentation = OpenApiBuilder
+                .document()
+                .operation(openApiOperation -> {
+                    openApiOperation.operationId(method.getName());
+                });
+
+        documentParameters(method, openApiDocumentation);
+
+        documentReturnType(method, openApiDocumentation);
+
+        openApiOptions.setDocumentation(resourcePath, HttpMethod.POST, openApiDocumentation);
     }
 
     private static void documentReturnType(Method method, OpenApiDocumentation openApiDocumentation)
@@ -123,7 +128,7 @@ public class OpenAPIFacade
         if (method.getParameters().length == 1 )
         {
             var schema = createSchema(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]);
-            schema.setExample(createObject(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]));
+            schema.setExample(createExampleInstance(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]));
             openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
         }  else if ( method.getParameters().length > 1 )
         {
@@ -132,7 +137,7 @@ public class OpenAPIFacade
 
             for (int i = 0; i < method.getParameterTypes().length; ++i)
             {
-                exampleObjects[i] = createObject(method.getParameterTypes()[i],method.getGenericParameterTypes()[i]);
+                exampleObjects[i] = createExampleInstance(method.getParameterTypes()[i],method.getGenericParameterTypes()[i]);
                 var parameterSchema = createSchema(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]);
                 parameterSchema.setExample(exampleObjects[i]);
 
@@ -145,7 +150,7 @@ public class OpenAPIFacade
         }
     }
 
-    private static String createSchemaAsString(Class<?> clazz) throws JsonProcessingException
+    private static String createJsonSchema(Class<?> clazz) throws JsonProcessingException
     {
         var mapper = new ObjectMapper();
         //There are other configuration options you can set.  This is the one I needed.
@@ -153,29 +158,32 @@ public class OpenAPIFacade
 
         var schema = mapper.generateJsonSchema(clazz);
 
-
         return schema.toString();
     }
 
-    private static Object createObject(Class<?> clazz, Type genericType)
+    private static Object createExampleInstance(Class<?> clazz, Type genericType)
     {
+        if (Modifier.isAbstract( clazz.getModifiers()) || Modifier.isInterface( clazz.getModifiers() ) )
+        {
+            JexxaLogger.getLogger(OpenAPIFacade.class).warn("Given class {} is abstract or an interface => Can not create an example object for OpenAPI", clazz.getName());
+            return null;
+        }
+
         try
         {
-            var schemaString = createSchemaAsString(clazz);
+            var schemaString = createJsonSchema(clazz);
             JsonElement element = JsonParser.parseString(schemaString);
-            Gson gson = new Gson();
             if ( !schemaString.contains(OBJET_TYPE_AS_JSON) && !schemaString.contains(ARRAY_TYPE_AS_JSON) )
             {
                 return createPrimitive(clazz);
-            }
-            if (!schemaString.contains(ARRAY_TYPE_AS_JSON))
+            } else if (!schemaString.contains(ARRAY_TYPE_AS_JSON))
             {
+                Gson gson = new Gson();
                 return gson.fromJson(element, clazz);
-            }
-            if (schemaString.contains(ARRAY_TYPE_AS_JSON))
+            } else if (schemaString.contains(ARRAY_TYPE_AS_JSON))
             {
                 var result = new Object[1];
-                result[0] = createObject(extractTypeFromArray(genericType), null);
+                result[0] = createExampleInstance(extractTypeFromArray(genericType), null);
                 return result;
             }
 
