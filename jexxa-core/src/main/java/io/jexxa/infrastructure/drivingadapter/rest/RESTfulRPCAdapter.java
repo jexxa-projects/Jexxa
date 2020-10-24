@@ -88,7 +88,22 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     @Override
     public void start()
     {
-        javalin.start();
+        try
+        {
+            javalin.start();
+        } catch (RuntimeException e)
+        {
+            if (e.getMessage().contains("Port already in use.")) // Javalin states its default port of the server. Therefore we correct the error message here"
+            {
+                throw new IllegalStateException(
+                        RESTfulRPCAdapter.class.getSimpleName()
+                        + ": "
+                        + e.getCause().getMessage()
+                        + ". Please check that IP address is correct and port is not in use."
+                );
+            }
+            throw e;
+        }
     }
 
     @Override
