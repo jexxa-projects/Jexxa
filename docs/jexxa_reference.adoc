@@ -69,7 +69,7 @@ a|*Convention*
 
 a|URI
 a|
-URIs for a Java object is generated as follows for all `public` methods:
+URIs for Java objects are generated as follows for all `public` methods:
 
 * http://<hostname>:<port>/<Java's simple class name>/<method name>
 * Example URI: http://localhost:7000/MyApplicationService/myMethod
@@ -102,6 +102,7 @@ a| HTML Request: Method attributes
 a|
 * Json object in case of a single attribute.
 * Json array for multiple attributes.
+* All attributes are treated as `in` values in terms of RPC. This means that they are not included in the HTML response.
 
 IMPORTANT: The order of the attributes in the Json array must match to the order of attributes of the method!
 
