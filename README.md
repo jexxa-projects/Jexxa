@@ -14,7 +14,7 @@ Goal of this framework is to support the development of _durable_ business appli
 *   Simplify implementation of driven adapters by using strategies with well-defined APIs. 
 *   Writing unit tests that not only test a domain specific use cases but also _explain_ them.
 
-To achieve these goals, Jexxa provides following features:          
+For this purpose, Jexxa provides following features:          
 *   Dependency injection without any framework specific @Annotations. 
 *   Super simple API to integrate arbitrary driving adapter.
 *   Integrated most common driving adapters: RMI over REST, JMX, and JMS. 

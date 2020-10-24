@@ -4,13 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.5.x] - yyyy-mm-dd
-### Added
-  
+## \[2.5.x] - yyyy-mm-dd  
 ### Fixed
 
-### Changed
+-   OpenAPI-Support in `RESTfulRPCAdapter`: 
+    -   Array-types are now correctly handled as method attributes
+    -   Corrected handling of abstract and interface parameters. For these parameters no example object can be set.           
+    -   Set application type to `application/json` in all cases
+    
+-   `RESTfulRPCAdapter`: 
+    -   Static methods are no longer exposed
+    -   Only a single instance of a `RESTfulRPCAdapter` per Properties can be created 
+    -   Fixed error message so that correct host and port is stated in exception if binding fails
+ 
+-   `JMXAdapter`:       
+    -   Static methods are no longer exposed
 
+-   `JexxaMain`:
+    -   Corrected validation of port-adapters to ensure that binding between a generic driving adapter and a port adapter causes an exception.
+         
+    
 ## \[2.5.0] - 2020-10-21
 ### Added
 -   `RESTfulRPCAdapter`: Added OpenAPI support (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/main/resources/jexxa-application.properties) for more information).  
