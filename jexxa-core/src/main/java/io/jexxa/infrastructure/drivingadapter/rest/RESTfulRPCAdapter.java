@@ -4,6 +4,8 @@ import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.c
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -19,6 +21,7 @@ import io.javalin.http.Context;
 import io.javalin.plugin.json.JavalinJson;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIFacade;
+import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang3.Validate;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -43,7 +46,9 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private ServerConnector httpConnector;
     private OpenAPIFacade openAPIFacade;
 
-    public RESTfulRPCAdapter(Properties properties)
+    private static final Map<Properties, RESTfulRPCAdapter> rpcAdapterMap = new HashMap<>();
+
+    private RESTfulRPCAdapter(Properties properties)
     {
         this.properties = properties;
 
@@ -58,6 +63,18 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         setupJavalin();
 
         registerExceptionHandler();
+    }
+
+    public static RESTfulRPCAdapter createAdapter(Properties properties)
+    {
+        if ( rpcAdapterMap.containsKey(properties) )
+        {
+            JexxaLogger.getLogger(RESTfulRPCAdapter.class).warn("Tried to create an RESTfulRPCAdapter with same properties twice! Return already instantiated adapter.");
+        } else {
+            rpcAdapterMap.put(properties, new RESTfulRPCAdapter(properties));
+        }
+
+        return rpcAdapterMap.get(properties);
     }
 
     public void register(Object object)
@@ -77,6 +94,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     @Override
     public void stop()
     {
+        rpcAdapterMap.remove(properties);
+
         javalin.stop();
         Optional.ofNullable(httpConnector).ifPresent(ServerConnector::close);
         Optional.ofNullable(sslConnector).ifPresent(ServerConnector::close);

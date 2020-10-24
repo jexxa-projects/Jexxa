@@ -47,7 +47,7 @@ class OpenAPITest
         properties.put(HTTP_PORT_PROPERTY, Integer.toString(defaultPort));
         properties.put(OPEN_API_PATH, "swagger-docs");
 
-        objectUnderTest = new RESTfulRPCAdapter(properties);
+        objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
     }

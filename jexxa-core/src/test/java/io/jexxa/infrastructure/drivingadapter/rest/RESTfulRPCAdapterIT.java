@@ -52,7 +52,7 @@ class RESTfulRPCAdapterIT
         properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
         properties.put(HTTP_PORT_PROPERTY, Integer.toString(defaultPort));
 
-        objectUnderTest = new RESTfulRPCAdapter(properties);
+        objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
     }
@@ -90,7 +90,7 @@ class RESTfulRPCAdapterIT
         Properties properties = new Properties();
         properties.setProperty(HTTP_PORT_PROPERTY, String.valueOf(0));
 
-        var secondAdapter = new RESTfulRPCAdapter(properties);
+        var secondAdapter = RESTfulRPCAdapter.createAdapter(properties);
         secondAdapter.register(simpleApplicationService);
         secondAdapter.start();
         var secondRestPath = "http://localhost:" + secondAdapter.getHTTPPort() + "/SimpleApplicationService/";
@@ -118,7 +118,7 @@ class RESTfulRPCAdapterIT
         var properties = new Properties();
 
         //Act and Assert
-        assertThrows(IllegalArgumentException.class, () -> new RESTfulRPCAdapter(properties));
+        assertThrows(IllegalArgumentException.class, () -> RESTfulRPCAdapter.createAdapter(properties));
     }
 
 

@@ -74,7 +74,7 @@ class HttpsRESTfulRPCAdapterIT
         properties.put(RESTfulRPCAdapter.KEYSTORE_PASSWORD, "test123");
         properties.put(RESTfulRPCAdapter.KEYSTORE, "keystore.jks");
 
-        var objectUnderTest = new RESTfulRPCAdapter(properties);
+        var objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 
