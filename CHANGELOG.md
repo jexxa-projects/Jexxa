@@ -22,7 +22,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 -   `JexxaMain`:
     -   Corrected validation of port-adapters to ensure that binding between a generic driving adapter and a port adapter causes an exception.
-         
+
+### Added
+
+-   Added [tutorial](tutorials/BookStoreJ/README-OPENAPI.md) explaining how to enable and use OpenAPI support.          
     
 ## \[2.5.0] - 2020-10-21
 ### Added
