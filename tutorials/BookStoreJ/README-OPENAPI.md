@@ -59,6 +59,6 @@ Now, you can execute the method `getBooks` and Swagger-UI will show you all avai
 
 ![OpenAPI-getBooksResult](images/OpenAPI-getBooksResult.png) 
 
-From these results you can play around with additional methods provided by this application. 
+From these results you can play around with remaining methods provided by this application. 
 
 That’s it! 
