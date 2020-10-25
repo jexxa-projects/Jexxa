@@ -2,7 +2,6 @@ package io.jexxa.tutorials.bookstorej;
 
 
 import io.jexxa.addend.applicationcore.ApplicationService;
-import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger;
@@ -52,7 +51,6 @@ public final class BookStoreJApplication
                 // In case you annotate your domain core with your pattern language,
                 // You can also bind DrivingAdapter to annotated classes.
                 .bind(RESTfulRPCAdapter.class).toAnnotation(ApplicationService.class)
-                .bind(RESTfulRPCAdapter.class).to(SimpleApplicationService.class)
                 .bind(JMXAdapter.class).toAnnotation(ApplicationService.class)
 
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
