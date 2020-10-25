@@ -2,23 +2,26 @@
 
 ## What You Learn
 
+*   How to enable OpenAPI support for an application 
 *   How to access application from outside using OpenAPI        
 
 ## What you need
 
 *   Understand tutorial `BookStoreJ` because we explain only new aspects 
-*   60 minutes
+*   30 minutes
 *   JDK 11 (or higher) installed
 *   [Swagger UI](https://swagger.io/tools/swagger-ui/)    
 *   Maven 3.6 (or higher) installed
 *   curl or jconsole to trigger the application
 *   A postgres DB (if you start the application with option `-jdbc')  
 
-## Benefits with strict separation  
-
 ## Run the application  
 
-### Use an in memory database
+In general OpenAPI support can be enabled for all objects that can be accessed via the `RESTfulRPCAdapter`. 
+To enable OpenAPI support, you just need to define an OpenAPI-path either in the properties or when starting the application. 
+The corresponding parameter is `io.jexxa.rest.open_api_path`.
+
+### Enable OpenAPI via console
 
 ```console                                                          
 mvn clean install
@@ -26,68 +29,36 @@ java -Dio.jexxa.rest.open_api_path=swagger-docs -jar target/bookstorej-jar-with-
 ```
 You will see following (or similar) output
 ```console
-main] INFO io.jexxa.tutorials.bookstorej.BookStoreJApplication - Use persistence strategy: IMDBRepository 
-[main] INFO org.eclipse.jetty.util.log - Logging initialized @459ms to org.eclipse.jetty.util.log.Slf4jLog
-[main] INFO io.jexxa.core.JexxaMain - Start BoundedContext 'BookStoreJApplication' with 2 Driving Adapter 
-[main] INFO io.javalin.Javalin - Starting Javalin ...
-[main] INFO org.eclipse.jetty.server.Server - jetty-9.4.31.v20200723; built: 2020-07-23T17:57:36.812Z; git: 450ba27947e13e66baa8cd1ce7e85a4461cacc1d; jvm 11.0.2+9
-[main] INFO org.eclipse.jetty.server.AbstractConnector - Started ServerConnector@73a1e9a9{HTTP/1.1, (http/1.1)}{0.0.0.0:7000}
-[main] INFO org.eclipse.jetty.server.Server - Started @1054ms
+...
 [main] INFO io.javalin.Javalin - Listening on http://0.0.0.0:7000/
-[main] INFO io.javalin.Javalin - Javalin started in 134ms \o/
-[main] INFO io.jexxa.core.JexxaMain - BoundedContext 'BookStoreJApplication' successfully started in 0.894 seconds
+[main] INFO io.javalin.Javalin - Javalin started in 188ms \o/
+[main] INFO io.javalin.Javalin - OpenAPI documentation available at: http://0.0.0.0:7000/swagger-docs
+[main] INFO io.jexxa.core.JexxaMain - BoundedContext 'BookStoreJApplication' successfully started in 1.299 seconds
+
 ```          
 
-### Execute some commands using curl 
+### Explore OpenAPI
 
+You can use [Swagger UI](https://swagger.io/tools/swagger-ui/) to explore the documentation. Just start Swagger UI, enter the URL and press explore button. 
+
+Note: In case you start Swagger UI not on the same machine as your BookStoreJ-application, or from a docker image you have to use the public IP address of the machine running BookStoreJ-application. 
+
+As result, you should get following overview with available operations: 
+
+![OpenAPI-Docu](images/OpenAPI-Docu.png) 
+
+Now, lets start execute some methods.
+       
 #### Get list of books
 
-Command: 
-```Console
-curl -X GET  http://localhost:7000/BookStoreService/getBooks
-```
+To get a list of available books, you first have to select the corresponding methods. As soon as you pressed it, you will get detailed information such as including parameters and responses. 
 
-Response: 
-```Console
-[{"value":"978-1-891830-85-3"},{"value":"978-1-60309-025-4"},{"value":"978-1-60309-016-2"},{"value":"978-1-60309-265-4"},{"value":"978-1-60309-047-6"},{"value":"978-1-60309-322-4"}]
-```
+![OpenAPI-getBooks](images/OpenAPI-getBooks.png) 
 
-#### Ask if a specific book is in stock**
+Now, you can execute the method `getBooks` and Swagger-UI will show you all available books. 
 
-Command:
-```Console
-curl -X POST -H "Content-Type: application/json" \
-    -d '"978-1-891830-85-3"' \
-    http://localhost:7000/BookStoreService/inStock                 
-```
+![OpenAPI-getBooksResult](images/OpenAPI-getBooksResult.png) 
 
-Response: 
-```Console
-false
-```
+From these results you can play around with additional methods provided by this application. 
 
-#### Add some books
-
-Command:
-```Console
-curl -X POST -H "Content-Type: application/json" \
-    -d '["978-1-891830-85-3", 5]' \
-    http://localhost:7000/BookStoreService/addToStock                 
-```
-Response: No output  
-```Console
-```
-
-#### Ask again if a specific book is in stock
-
-Command:
-```Console
-curl -X POST -H "Content-Type: application/json" \
-    -d '"978-1-891830-85-3"' \
-    http://localhost:7000/BookStoreService/inStock                 
-```
-
-Response: 
-```Console
-true
-```
+That’s it! 

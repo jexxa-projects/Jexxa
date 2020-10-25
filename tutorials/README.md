@@ -20,3 +20,6 @@ See documentation [BookStore](BookStore/)
 
 ## BookStoreJ
 See documentation [BookStoreJ](BookStoreJ/)
+
+## BookStoreJ - With OpenAPI support 
+See documentation [BookStoreJ](BookStoreJ/README-OPENAPI.md)
