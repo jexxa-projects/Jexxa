@@ -22,4 +22,4 @@ See documentation [BookStore](BookStore/)
 See documentation [BookStoreJ](BookStoreJ/)
 
 ## BookStoreJ - With OpenAPI support 
-See documentation [BookStoreJ](BookStoreJ/README-OPENAPI.md)
+See documentation [BookStoreJ - With OpenAPI support](BookStoreJ/README-OPENAPI.md)
