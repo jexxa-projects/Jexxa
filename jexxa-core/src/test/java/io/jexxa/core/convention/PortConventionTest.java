@@ -2,7 +2,6 @@ package io.jexxa.core.convention;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.List;
 import java.util.Properties;
 
 import io.jexxa.application.applicationservice.InvalidApplicationService;

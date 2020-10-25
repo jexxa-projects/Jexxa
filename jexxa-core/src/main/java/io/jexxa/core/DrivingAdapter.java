@@ -19,9 +19,9 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
         this(() -> true, drivingAdapterClass, jexxaMain);
     }
 
-    DrivingAdapter(BooleanSupplier condictionalBind, Class<T> drivingAdapterClass, JexxaMain jexxaMain)
+    DrivingAdapter(BooleanSupplier conditionalBind, Class<T> drivingAdapterClass, JexxaMain jexxaMain)
     {
-        Validate.notNull(condictionalBind);
+        Validate.notNull(conditionalBind);
         Validate.notNull(drivingAdapterClass);
         Validate.notNull(jexxaMain);
 
@@ -29,7 +29,7 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
 
         this.drivingAdapterClass = drivingAdapterClass;
         this.jexxaMain = jexxaMain;
-        this.conditionalBind = condictionalBind;
+        this.conditionalBind = conditionalBind;
     }
 
     public <P> JexxaMain to(Class<P> port)

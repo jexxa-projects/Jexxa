@@ -107,7 +107,7 @@ public class SimpleApplicationService
 
     public static void testStaticSetMethod(JexxaValueObject jexxaValueObject)
     {
-
+        //This method is just for testing static behavior => So no code is required
     }
 
 
