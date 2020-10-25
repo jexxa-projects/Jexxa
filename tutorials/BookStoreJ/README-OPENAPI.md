@@ -16,9 +16,6 @@
 
 ## Benefits with strict separation  
 
- 
-
-
 ## Run the application  
 
 ### Use an in memory database
