@@ -16,7 +16,6 @@ import java.util.Properties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.javalin.core.JavalinConfig;
 import io.javalin.plugin.openapi.OpenApiOptions;
@@ -40,8 +39,8 @@ import io.swagger.v3.oas.models.media.StringSchema;
 public class OpenAPIFacade
 {
     private static final String APPLICATION_TYPE_JSON = "application/json";
-    private static final String OBJET_TYPE_AS_JSON = "\"type\":\"object\"";
-    private static final String ARRAY_TYPE_AS_JSON = "\"type\":\"array\"";
+    private static final String JSON_OBJECT_TYPE = "object";
+    private static final String JSON_ARRAY_TYPE = "array";
 
     private final Properties properties;
     private final JavalinConfig javalinConfig;
@@ -172,31 +171,45 @@ public class OpenAPIFacade
 
     private static Object createExampleInstance(Class<?> clazz, Type genericType)
     {
-        if (Modifier.isAbstract( clazz.getModifiers()) || Modifier.isInterface( clazz.getModifiers() ) )
-        {
-            JexxaLogger.getLogger(OpenAPIFacade.class).warn("Given class {} is abstract or an interface => Can not create an example object for OpenAPI", clazz.getName());
-            return null;
-        }
-
         try
         {
+            // We create a JsonSchema and try to create an instance from it
+            // Motivation is that if we cannot create an Object via class -> JsonSchema -> Object it is most unlikely that we can handle attribute in some meaningful way
             var schemaString = createJsonSchema(clazz);
-            JsonElement element = JsonParser.parseString(schemaString);
-            if ( !schemaString.contains(OBJET_TYPE_AS_JSON) && !schemaString.contains(ARRAY_TYPE_AS_JSON) )
+            var jsonObject = JsonParser.parseString(schemaString).getAsJsonObject();
+            if (jsonObject == null || jsonObject.get("type") == null )
             {
-                return createPrimitive(clazz);
-            } else if (!schemaString.contains(ARRAY_TYPE_AS_JSON))
+                JexxaLogger.getLogger(OpenAPIFacade.class).warn("Could not create Json schema for given class `{}`", clazz.getName());
+                return null;
+            }
+
+            var typeInformation = jsonObject.get("type");
+
+            //Handle JsonObject
+            if (typeInformation.getAsString().equals(JSON_OBJECT_TYPE))
             {
+                if (Modifier.isAbstract( clazz.getModifiers()) || Modifier.isInterface( clazz.getModifiers() ) )
+                {
+                    JexxaLogger.getLogger(OpenAPIFacade.class).warn("Given class `{}` is abstract or an interface => Can not create an example object for OpenAPI", clazz.getName());
+                    return null;
+                }
+
                 Gson gson = new Gson();
-                return gson.fromJson(element, clazz);
-            } else if (schemaString.contains(ARRAY_TYPE_AS_JSON))
+                return gson.fromJson(jsonObject, clazz);
+            }
+
+            //Handle JsonArray
+            if (typeInformation.getAsString().equals(JSON_ARRAY_TYPE))
             {
                 var result = new Object[1];
                 result[0] = createExampleInstance(extractTypeFromArray(genericType), null);
                 return result;
             }
 
+            //Handle primitive values
+            return createPrimitive(clazz);
         } catch (Exception e) {
+            JexxaLogger.getLogger(OpenAPIFacade.class).warn(e.getMessage(), e);
             JexxaLogger.getLogger(OpenAPIFacade.class).warn( "Could not create Object {}" , clazz.getName() , e );
         }
         return null;
