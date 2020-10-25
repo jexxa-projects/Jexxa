@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -71,6 +72,20 @@ public class OpenAPIFacade
                 doc.json("400", BadRequestResponse.class);
             });
         }
+    }
+
+    public boolean isEnabled()
+    {
+        return openApiOptions != null;
+    }
+
+    public Optional<String> getPath()
+    {
+        if (isEnabled()) {
+            return Optional.of("/" + properties.getProperty(OPEN_API_PATH));
+        }
+
+        return Optional.empty();
     }
 
     public void documentGET(Method method, String resourcePath)

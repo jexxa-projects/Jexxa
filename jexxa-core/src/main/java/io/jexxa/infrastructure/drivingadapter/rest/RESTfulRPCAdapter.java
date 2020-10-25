@@ -91,6 +91,15 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         try
         {
             javalin.start();
+
+            if (httpConnector != null ) {
+                openAPIFacade.getPath().ifPresent( path -> Javalin.log.info("OpenAPI documentation available at: {}"
+                        , "http://" + httpConnector.getHost() + ":" + httpConnector.getPort() +  path ) );
+            }
+            if (sslConnector != null ) {
+                openAPIFacade.getPath().ifPresent( path -> Javalin.log.info("OpenAPI documentation available at: {}"
+                        , "http://" + sslConnector.getHost() + ":" + sslConnector.getPort() + path ) );
+            }
         } catch (RuntimeException e)
         {
             if (e.getMessage().contains("Port already in use.")) // Javalin states its default port of the server. Therefore we correct the error message here"
