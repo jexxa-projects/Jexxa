@@ -18,9 +18,9 @@
     <dependency>
       <groupId>io.jexxa</groupId>
       <artifactId>jexxa-core</artifactId>
-      <!--<version>${jexxa-core.release.version}</version> -->
+      <version>${jexxa-core.release.version}</version>
       <!-- In case you want to run your tutorials with SNAPSHOT version of Jexxa uncomment line below and remove line above -->
-      <version>${project.version}</version>
+      <!--<version>${project.version}</version> -->
     </dependency>
 
     <dependency>
