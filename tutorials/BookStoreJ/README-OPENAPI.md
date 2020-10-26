@@ -12,7 +12,6 @@
 *   JDK 11 (or higher) installed
 *   [Swagger UI](https://swagger.io/tools/swagger-ui/)    
 *   Maven 3.6 (or higher) installed
-*   curl or jconsole to trigger the application
 *   A postgres DB (if you start the application with option `-jdbc')  
 
 ## Run the application  
