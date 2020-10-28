@@ -2,6 +2,7 @@ package io.jexxa.infrastructure.drivingadapter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 public class SynchronizationFacade
 {
@@ -20,9 +21,9 @@ public class SynchronizationFacade
      */
     public Object invoke(Method method, Object object, Object[] args ) throws InvocationTargetException, IllegalAccessException
     {
-        validateNotNull(method);
-        validateNotNull(object);
-        validateNotNull(args);
+        Objects.requireNonNull(method, "Method in SynchronizationFacade must not be null ");
+        Objects.requireNonNull(object, "Object in SynchronizationFacade must not be null ");
+        Objects.requireNonNull(args, "Args in SynchronizationFacade must not be null ");
 
         synchronized (GLOBAL_SYNCHRONIZATION_OBJECT)
         {
@@ -43,13 +44,5 @@ public class SynchronizationFacade
     SynchronizationFacade()
     {
         //Package protected constructor
-    }
-
-    private static void validateNotNull(Object object) //Own implementation to avoid additional dependencies
-    {
-        if (object == null)
-        {
-            throw new IllegalArgumentException("Given parameter in SynchronizationFacade is null ");
-        }
     }
 }

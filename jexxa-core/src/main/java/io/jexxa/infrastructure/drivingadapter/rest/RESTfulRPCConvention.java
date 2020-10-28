@@ -1,46 +1,56 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
  * This class generates uniform IDs (URIs) for resources to be offered via REST
- *
- * This implementation uses following convention over configuration approach:
- *
- * URI: http://<specified hostname>:<specified port>/<java simple class name>/<method name></method>
- *  - Example URI: http://localhost:7000/MyApplicationService/myMethod
- *
- *  - This implies following conventions:
- *  - Simple name of a class must be unique within a single application
- *  - Each class must have unique method names. Any method overloading is not supported
- *  - Methods from base class `Object` are ignored
- *
+ * using a convention over configuration approach:
+ * <br>
+ * Used conventions for URI:
+ * <br>
+ * {@code URI: http://<hostname>:<port>/<java simple class name>/<method name>}
+ *  <br>
+ * Example URI: http://localhost:7000/MyApplicationService/myMethod
+ *  <br>
+ *  This implies following conventions:
+ *  <ul>
+ *  <li> Simple name of a class must be unique within a single application </li>
+ *  <li> Each class must have unique method names. Any method overloading is not supported </li>
+ *  <li> Methods from base class `Object` are ignored </li>
+ *  </ul>
  *  GET - mapping:
- *  - If a method returns a value != 'void' and has no arguments then it is mapped to a GET method
- *
+ *  <br>
+ *  <ul>
+ *  <li> If a method returns a type != 'void' and has no arguments then it is mapped to a GET method </li>
+ *  </ul>
+ * <br>
  *  POST - mapping:
- *  - In all other cases 
+ *  <ul>
+ *  <li> In all other cases </li>
+ *  </ul>
  */
 class RESTfulRPCConvention
 {
     private final Object object;
 
-    public RESTfulRPCConvention(Object object)
+    RESTfulRPCConvention(Object object)
     {
         this.object = object;
         validateUniqueURI();
     }
 
-    
-    public static class RESTfulRPCMethod
+
+    static class RESTfulRPCMethod
     {
         enum HTTPCommand {GET, POST}
-        
+
         private final String resourcePath;
         private final Method method;
         private final HTTPCommand httpCommand;
@@ -51,56 +61,51 @@ class RESTfulRPCConvention
             this.method = method;
         }
 
-        protected String getResourcePath()
+        String getResourcePath()
         {
             return resourcePath;
         }
 
-        protected Method getMethod()
+        Method getMethod()
         {
             return method;
         }
 
-        protected HTTPCommand getHTTPCommand()
+        HTTPCommand getHTTPCommand()
         {
             return httpCommand;
         }
     }
 
-    protected List<RESTfulRPCMethod> getGETCommands() {
-       var result = new ArrayList<RESTfulRPCMethod>();
+    List<RESTfulRPCMethod> getGETCommands() {
 
-       List<Method> publicMethods = getPublicMethods(object.getClass());
-       publicMethods
+        return getPublicMethods(object.getClass())
                .stream()
+               .filter( element -> !Modifier.isStatic( element.getModifiers() )) //Convention for all exposed methods
                .filter( element -> !(element.getReturnType().equals(void.class)) &&
                                      element.getParameterCount() == 0) // Convention for GET method
-               .forEach( element -> result.add(
+               .map( element ->
                        new RESTfulRPCMethod(
                                RESTfulRPCMethod.HTTPCommand.GET,
                                generateURI(element),
-                               element)
-                       ));
-
-       return result;
+                               element))
+               .collect(Collectors.toUnmodifiableList());
     }
 
 
-    protected List<RESTfulRPCMethod> getPOSTCommands() {
-        var result = new ArrayList<RESTfulRPCMethod>();
+    List<RESTfulRPCMethod> getPOSTCommands() {
 
-        List<Method> publicMethods = getPublicMethods(object.getClass());
-        publicMethods.stream()
+        return getPublicMethods(object.getClass())
+                .stream()
+                .filter( element -> !Modifier.isStatic( element.getModifiers() )) //Convention for all exposed methods
                 .filter( element -> (element.getReturnType().equals(void.class) ||
                                      element.getParameterCount() > 0)) // Convention for POST method
-                .forEach( element -> result.add(
+                .map( element ->
                         new RESTfulRPCMethod(
                                 RESTfulRPCMethod.HTTPCommand.POST,
                                 generateURI(element),
-                                element)
-                ));
-
-        return result;
+                                element))
+                .collect(Collectors.toUnmodifiableList());
     }
 
 
@@ -130,5 +135,10 @@ class RESTfulRPCConvention
         if (uniqueNames.size() != methodNames.size() ) {
             throw new IllegalArgumentException("Method names are not unique of Object " + object.getClass().getSimpleName());
         }
+    }
+
+    public static RESTfulRPCConvention createRPCConvention(Object object)
+    {
+        return new RESTfulRPCConvention(object);
     }
 }

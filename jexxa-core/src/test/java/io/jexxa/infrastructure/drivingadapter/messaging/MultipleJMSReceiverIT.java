@@ -52,7 +52,6 @@ class MultipleJMSReceiverIT
 
 
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void synchronizeMultipleClients()
     {
@@ -60,7 +59,8 @@ class MultipleJMSReceiverIT
         JexxaMain jexxaMain = new JexxaMain("MultiThreading");
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER);
+                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+                .addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
 
         for ( int i = 0; i < MAX_THREADS; ++i)
         {
@@ -75,7 +75,7 @@ class MultipleJMSReceiverIT
 
         //Act
         assertTimeout(Duration.ofSeconds(10), () -> incrementService(jexxaMain.getProperties()));
-        
+
         //Assert
         jexxaMain.stop();
 

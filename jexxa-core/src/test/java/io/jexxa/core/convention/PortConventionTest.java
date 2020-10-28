@@ -14,6 +14,8 @@ class PortConventionTest
     @Test
     void invalidPortConstructor()
     {
+        //Arrange - Nothing
+
         //Act/Assert
         assertThrows(PortConventionViolation.class, () -> PortConvention.validate(InvalidApplicationService.class)); // Violation: No public constructor
         assertThrows(PortConventionViolation.class, () -> PortConvention.validate(InvalidApplicationServiceNoInterface.class)); // Violation: Constructor does not take interfaces as argument

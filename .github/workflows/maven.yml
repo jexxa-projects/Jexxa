@@ -32,30 +32,30 @@ jobs:
         ports:
           # Opens tcp port 5432 on the host and service container
           - 5432:5432
-        # setup default user for testing 
-        env: 
+        # setup default user for testing
+        env:
           POSTGRES_PASSWORD: admin
           POSTGRES_USER: admin
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK ${{ matrix.java }} 
+    - name: Set up JDK ${{ matrix.java }}
       uses: actions/setup-java@v1
       with:
-        java-version: ${{ matrix.java }} 
-            
-    - name: Maven build      
+        java-version: ${{ matrix.java }}
+
+    - name: Maven build
       env:
-        GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}  
+        GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}
         GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}
         SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
         SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
       run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml -B package --file pom.xml
-    
+
     - name: Publish to GitHub Packages Apache Maven
       env:
-        GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}  
-        GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}  
+        GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}
+        GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}
         GITHUB_TOKEN: ${{ github.token }}
         SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
         SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}

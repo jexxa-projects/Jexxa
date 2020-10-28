@@ -17,24 +17,25 @@
 *   A postgres DB (if you start the application with option `-jdbc`)  
 
 ## Requirements to the application core
-This application core should provide following functionality:
+This application core should provide following super simplified functionality:
 
-*   Manage available books in store which means
-    *   add new books, sell books, query operations 
+*   Manage available books in store which means to add, sell, and query books
 
 *   All books should be identified by their ISBN13
 
-*   For each book the store the umber of available copies   
+*   For each book the store the umber of available copies
 
 *   Publish `DomainEvent` `BookSoldOut` if last copy of a book is sold
 
 *   A service which gets the latest books from our reference library. For this tutorial it is sufficient that: 
-    *   Service provides a hardcoded list  
+    *   Service provides a hardcoded list
     *   Service is triggered when starting the application     
 
 ## Implementing Application Core 
 
-General note: There are several books, courses, tutorials available describing how to implement an application core using the patterns of DDD. The approach used in this tutorial should not be considered as reference but just as one meaningful approach.   
+General note: There are several books, courses, tutorials available describing how to implement an application core using the patterns of DDD. 
+The approach used in this tutorial should not be considered as reference. It serves only for demonstration purpose how to realize your decisions 
+with Jexxa.       
 
 ### 1. Mapping to DDD patterns  
 First we map the functionality of the application to DDD patterns   
@@ -91,7 +92,7 @@ In our tutorials we use following package structure:
 Implementation of `IDomainEventPublisher` just prints the `DomainEvent` to the console. So we can just use the implementation from tutorial `TimeService`.    
 
 ### Implement the Repository 
-When using Jexxa's `RepositoryManager` implementing a repository is just a mapping to the `IRepository` interface which provides typical CRUD operations.  
+When using Jexxa's `RepositoryManager` implementing a repository is just a mapping to the `IRepository` interface which provides typical CRUD operations.   
   
 The requirement are: 
 
@@ -105,7 +106,7 @@ For the sake of completeness we use a static factory method in this implementati
 ```java
   
 @SuppressWarnings("unused")
-public final class DDHBookRepository implements IBookRepository
+public final class BookRepository implements IBookRepository
 {
     private final IRepository<Book, ISBN13> repository;
 
@@ -209,7 +210,9 @@ public final class BookStoreApplication
 
 That's it. 
 
-## Compile & Start the Application with console output 
+## Run the application
+ 
+### Use an in memory database
 
 ```console                                                          
 mvn clean install
@@ -226,6 +229,26 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'BookStoreApplication' successfully started in 0.484 seconds
 ```          
 
+### Use a Postgres database
+
+You can run this application using a Postgres database because the corresponding driver is included in the pom file. The 
+configured username and password is `admin`/`admin`. You can change it in the [jexxa-application.properties](src/main/resources/jexxa-application.properties) 
+file if required.       
+
+```console                                                          
+mvn clean install
+java -jar target/bookstore-jar-with-dependencies.jar -jdbc 
+```
+In contrast to the above output Jexxa will state that you use JDBC persistence strategy now:
+```console
+[main] INFO io.jexxa.tutorials.bookstore.BookStoreApplication - Use persistence strategy: JDBCKeyValueRepository 
+```
+
+Note: In case you want to use a difference database, you have to: 
+
+1.  Add the corresponding jdbc driver to [pom.xml](pom.xml) to dependencies section.
+2.  Adjust the section `#Settings for JDBCConnection to postgres DB` in [jexxa-application.properties](src/main/resources/jexxa-application.properties).
+
 ### Execute some commands using curl 
 
 #### Get list of books
@@ -240,7 +263,7 @@ Response:
 [{"value":"978-1-891830-85-3"},{"value":"978-1-60309-025-4"},{"value":"978-1-60309-016-2"},{"value":"978-1-60309-265-4"},{"value":"978-1-60309-047-6"},{"value":"978-1-60309-322-4"}]
 ```
 
-#### Ask if a specific book is in stock**
+#### Query available books
 
 Command:
 ```Console
@@ -284,9 +307,9 @@ Writing some tests with Jexxa is quite easy. If you implement your driven adapte
 package **jexxa-test**. It automatically provides stubs so that you do not need any mock framework. Main advantages are: 
 
 *   You can focus on domain logic within your tests.
-*   You don't need to use mocks which can lead to validating execution steps within the domain core instead of validating the use cases
-*   Your tests are much easier to read. 
-*   You can write your tests first without considering the implementation.   
+*   You don't need to use mocks which can lead to validating execution steps within the domain core instead of validating the domain specific use cases
+*   Your tests are much easier to read and can teach new developers the use cases of your domain. 
+*   You can write your tests first without considering the infrastructure first.   
 
 First, add the following dependency to your tests. 
 
@@ -294,7 +317,7 @@ First, add the following dependency to your tests.
     <dependency>
       <groupId>io.jexxa.jexxatest</groupId>
       <artifactId>jexxa-test</artifactId>
-      <version>2.4.2</version>
+      <version>2.5.1</version>
       <scope>test</scope>
     </dependency>
 ```

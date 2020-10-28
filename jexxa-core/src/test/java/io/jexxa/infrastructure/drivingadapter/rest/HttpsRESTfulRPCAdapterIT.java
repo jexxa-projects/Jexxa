@@ -35,16 +35,16 @@ class HttpsRESTfulRPCAdapterIT
     private static final int DEFAULT_VALUE = 42;
     private final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
 
-    // Run the tests with Port 0 (random port and port 8080) 
+    // Run the tests with Port 0 (random port and port 8080)
     static Stream<Integer> httpsPorts() {
-        return Stream.of(0,8080);
+        return Stream.of(0,8081);
     }
 
     @BeforeEach
     void initTest() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException, CertificateException, IOException
     {
         // NOTE: To run this test we need to create a truststore has described here https://magicmonster.com/kb/prg/java/ssl/pkix_path_building_failed/
-        
+
         //Arrange
         SSLContext sslContext =  new SSLContextBuilder().loadTrustMaterial(
                 HttpsRESTfulRPCAdapterIT.class.getResource("/trustStore.jks"), //path to jks file
@@ -60,12 +60,12 @@ class HttpsRESTfulRPCAdapterIT
         Unirest.config().sslContext(sslContext);
         Unirest.config().hostnameVerifier(new NoopHostnameVerifier());
     }
-    
+
     @ParameterizedTest
     @MethodSource("httpsPorts")
     void testHTTPSConnectionRandomPort(Integer httpsPort)
     {
-        //Arrange 
+        //Arrange
         var properties = new Properties();
         var defaultHost = "0.0.0.0";
 
@@ -74,7 +74,7 @@ class HttpsRESTfulRPCAdapterIT
         properties.put(RESTfulRPCAdapter.KEYSTORE_PASSWORD, "test123");
         properties.put(RESTfulRPCAdapter.KEYSTORE, "keystore.jks");
 
-        var objectUnderTest = new RESTfulRPCAdapter(properties);
+        var objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
         objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
 

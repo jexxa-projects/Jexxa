@@ -1,0 +1,158 @@
+= Jexxa - Reference Guide
+:source-highlighter: coderay
+:toc:
+:toclevels: 4
+:icons: font
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+:sectanchors:
+:numbered:
+
+== Jexxa Features
+
+=== JexxaMain
+
+The `JexxaMain` class provides a convenient way to bootstrap your application. In contrast to other
+frameworks, Jexxa requires some code to explicitly configure your application for following reason:
+
+* Explicitly bind technology stacks (called adapters) to parts of the application core (called ports) so that the entry points of your application core are visible.
+* Fine grained control of your technology stacks so that they can be exchanged independently without updating the entire framework.
+
+The steps for configuring your application are always similar as you can see in all https://github.com/repplix/Jexxa/blob/master/tutorials/README.md[tutorials]:
+
+
+1. Define packages with your application core with `JexxaMain.addToApplicationCore()`. In general this is only required if you access them by annotations instead of defining the type.
+
+2. Define packages with your application specific driven adapter with `JexxaMain.addToInfrastructure()`.
+
+3. Bind technology stacks to application core with `JexxaMain.bind(<DrivingAdapter>.class).to(<port>.class)`.
+
+4. Startup your application using `JexxaMain.start()`. At this point your application is up and running and accepts requests from outside.
+
+5. The two commands `waitForShutdown()` and `stop()` are just for convenience purpose and allow you to manage the main thread and point in time for cleanup Jexxa resources of your application. In case your application needs the main thread for any other purpose just don't call `waitForShutdown()`
+
+=== BoundedContext
+
+As described in https://repplix.github.io/Jexxa/jexxa_architecture.html[architecture of Jexxa] this framework has a strong focus on domain driven design. Therefore, each application provides a so called `BoundedContext` object which provides status information and control methods about the running application.
+
+IMPORTANT: The `BoundedContext` objects provides methods to stop you running application. So it is recommended to expose this object to dedicated adapters such as `JMXAdapter`.
+
+=== Application Configuration
+
+Jexxa allows you to externalize your configuration. This allows you to run the same application in different environments. By default, Jexxa use properties files. In addition, you can set system properties to externalize the configuration. Jexxa considers properties in the following order:
+
+1. Properties that are directly passed as argument to `JexxaMain`
+2. Java System properties (`System.getProperties()`)
+3. Properties file inside the jar archive
+
+== Conventions
+
+=== General Conventions in Jexxa
+Jexxa defines several conventions when implementing ports or adapters. These conventions are described https://repplix.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di[here].
+
+=== RESTfulRPCAdapter
+
+The `RESTfulRPCAdapter` is a simple RPC mechanism utilizing REST. Based on the https://martinfowler.com/articles/richardsonMaturityModel.html[REST maturity model] from Richardson it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST on a higher maturity level.
+
+This adapter uses following conventions:
+
+[cols="1,3"]
+[reftext="Table {counter:local-table-number}"]
+.Describes the conventions used in `RESTfulRPCAdapter`.
+[[RESTfulRPCAdapterConvention]]
+|===
+a|*RESTfulRPCAdapter*
+a|*Convention*
+
+a|URI
+a|
+URIs for Java objects are generated as follows for all `public` methods:
+
+* http://<hostname>:<port>/<Java's simple class name>/<method name>
+* Example URI: http://localhost:7000/MyApplicationService/myMethod
+
+[IMPORTANT]
+.This implies following consequences:
+====
+* Simple name of a class must be unique within a single application +
+* Each class must have unique method names. Any method overloading is not supported. +
+* Methods from base class `Object` are ignored
+====
+
+
+a|HTTP-GET
+a| All public non-static Methods of an object are exposed via HTTP GET if following conditions are fulfilled:
+
+* Return type is not `void` AND
+* Method has no attributes
+
+a|HTTP-POST
+a| All public non-static methods of an object are exposed via HTTP POST if they are not exposed as HTTP-GET. The conditions are:
+
+* Return type is `void` OR
+* Method has attributes
+
+a| HTML Header
+a| Content-type: application/json
+
+a| HTML Request: Method attributes
+a|
+* Json object in case of a single attribute.
+* Json array for multiple attributes.
+* All attributes are treated as `in` values in terms of RPC. This means that they are not included in the HTML response.
+
+IMPORTANT: The order of the attributes in the Json array must match to the order of attributes of the method!
+
+a| HTML Response: Return value
+a|
+* HTTP status code: 200
+* Return value as a singe Json object
+
+a| HTML Response: Exception
+a|
+* HTTP status code: 400
+* Return value as a single Json object including following properties:
+** `ExceptionType`: Full type name of the exception
+** `Exception`: Json representation of the exception
+
+a| HTML Response code: URI not found
+a|
+*  HTTP status code: 404
+
+|===
+
+=== JMXAdapter
+
+The `JMXAdapter` allows to control your application and access all objects that are registered.
+
+
+[cols="1,3"]
+[reftext="Table {counter:local-table-number}"]
+.Describes the conventions used in `JMXAdapter`.
+[[JMXAdapterConvention]]
+|===
+a|*JMXAdapter*
+a|*Convention*
+
+a| Methods
+a| * Method must be `public`
+* Method must not be `static`
+* Methods from base class `Object` are not exposed
+
+a| Method attributes
+a|
+* All attributes must be send as Json object
+* The `MBeanParameterInfo` includes a Json template for each attribute in its description section. The placeholder for the
+value is marked by `<TYPE of value>`. +
+For example, the Json template for `LocalTime` looks as follows: +
+`{"hour":"<byte>","minute":"<byte>","second":"<byte>","nano":"<int>"}`
+
+a| Return values
+a| A return value is send as Json object
+
+
+|===
+

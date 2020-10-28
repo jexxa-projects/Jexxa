@@ -17,6 +17,7 @@ import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domainservice.IJexxaEntityRepository;
 import io.jexxa.application.domainservice.InitializeJexxaEntities;
 import io.jexxa.application.infrastructure.drivingadapter.ProxyAdapter;
+import io.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
 import io.jexxa.core.convention.PortConventionViolation;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
@@ -40,7 +41,8 @@ class JexxaMainTest
     {
         objectUnderTest = new JexxaMain(CONTEXT_NAME);
         objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);    }
+                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
+    }
 
     @AfterEach
     void tearDownTests()
@@ -76,6 +78,23 @@ class JexxaMainTest
     }
 
     @Test
+    void conditionalBindToPort()
+    {
+        //Arrange - All done in initTests
+
+        //Act: Conditional bind (evaluating to false) a concrete type of DrivingAdapter to a concrete type of port
+        objectUnderTest
+                .conditionalBind(() -> false, ProxyAdapter.class).to(SimpleApplicationService.class)
+                .start();
+
+        //Assert that no binding has been performed
+        var result = objectUnderTest.getDrivingAdapter(ProxyAdapter.class);
+
+        assertTrue(result.getPortList().isEmpty());
+    }
+
+
+    @Test   // Support of dependency injection
     void bindToPortWithDrivenAdapter()
     {
         //Arrange - All done in initTests
@@ -116,7 +135,19 @@ class JexxaMainTest
                 .filter( element -> SimpleApplicationService.class.equals(element.getClass()) )
                 .findFirst();
 
-        assertTrue(result.isPresent());    }
+        assertTrue(result.isPresent());
+    }
+
+    @Test
+    void invalidBindToPortAdapter()
+    {
+        //Arrange - All done in initTests
+        var drivingAdapter = objectUnderTest
+                .bind(ProxyAdapter.class);
+
+        //Act /Assert
+        assertThrows(PortConventionViolation.class, () -> drivingAdapter.to(SimpleApplicationServiceAdapter.class));
+    }
 
 
     @Test

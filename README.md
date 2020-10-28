@@ -9,42 +9,46 @@
 
 Jexxa is a lightweight framework to implement business applications based on a [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/) architecture. 
 
-Goal of this framework is to easily connect technology stacks to your technology agnostic business application. These connections are explicitly represented in the main-method of your application and can be independently exchanged.      
+Goal of this framework is to support the development of _durable_ business applications as good as possible. Therefore, Jexxa stresses the following aspects in particular:
+*   Explicitly represent binding between driving adapters and ports so that they can be exchanged individually. 
+*   Simplify implementation of driven adapters by using strategies with well-defined APIs. 
+*   Writing unit tests that not only test a domain specific use cases but also _explain_ them.
 
-Even though Jexxa has strong educational focus it is used within lightweight business applications and microservices. At the moment it provides following features:
- 
-*   Inject driven adapters into the application core without any framework specific @Annotations. 
-*   Bind driving adapters to your application core and expose its methods to remote clients.
-*   Integrated driving adapters: RMI over REST, JMX, and JMS. 
-*   Integrated strategies for driven adapters: JDBC, in memory DB (IMDB), and JMS based messaging. 
-*   Support for unit-tests: Provide stubs for application specific driven adapters when using integrated strategies so that no mock framework is required.  
+For this purpose, Jexxa provides following features:          
+*   Dependency injection without any framework specific @Annotations. 
+*   Super simple API to integrate arbitrary driving adapter.
+*   Integrated most common driving adapters: RMI over REST, JMX, and JMS. 
+*   Integrated strategies for most common driven adapters: JDBC, in memory DB (IMDB), and JMS. 
+*   Integrated stubs for driven adapter strategies to write unit-tests without mock frameworks.  
 
-## General information   
+## General information
 
-*   Supported Java environments: Java 11 (or higher)   
-*   Documentation: [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa.html) 
-*   Tutorials: [Available here](tutorials/README.md) 
+*   Supported Java environments: Java 11 (or higher)
+
+*   Documentation: 
+    *   [Tutorials](tutorials/README.md)
+    *   [Reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html)    
+    *   [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa_architecture.html)
 
 ## Quickstart
 
-### Add dependency
+### Download
 
-#### Maven
-
+Maven:
 ```xml
 <dependency>
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa-core</artifactId>
-  <version>2.4.2</version>
+  <version>2.5.1</version>
 </dependency> 
 ```
 
-#### Gradle
+Gradle:
 
 ```groovy
-compile "io.Jexxa:jexxa-core:2.4.2"
+compile "io.Jexxa:jexxa-core:2.5.1"
 ``` 
-
+ 
 ### Start programming 
 
 A simple ``Hello World`` example can be found [here](https://github.com/repplix/Jexxa/tree/master/tutorials/HelloJexxa):  
@@ -93,16 +97,22 @@ public final class HelloJexxa
 ```    
 
 ### Adding a logger
- 
+
 Jexxa does not include a logger, which means that you have to add your own logger to your application. If you do not add a logger, you will get a warning message to your console. In case your application has not any special requirements you can add the following dependency to your project:
 
-```maven
- <dependency>
-   <groupId>org.slf4j</groupId>
-   <artifactId>slf4j-simple</artifactId>
-   <version>1.7.30</version>
- </dependency>
+Maven: 
+```xml
+<dependency>
+  <groupId>org.slf4j</groupId>
+  <artifactId>slf4j-simple</artifactId>
+  <version>1.7.30</version>
+</dependency>
 ```                                   
+
+Gradle:
+```groovy
+compile "org.slf4j:slf4j-simple:1.7.30"
+``` 
 
 ### Configure your Jexxa application  
 
@@ -124,7 +134,7 @@ mvn clean install -DskipITs
 
 ### Dependencies for integration tests 
 
-For running integration tests we recommend using local docker containers to provide following dependencies:
+For running integration tests we recommend using local docker containers to provide following infrastructure:
 
 *   An ActiveMQ instance with default settings: See [here](https://hub.docker.com/r/rmohr/activemq/).   
 *   A PostgresDB database with default settings. Default user/password should be admin/admin: See [here](https://hub.docker.com/_/postgres).   

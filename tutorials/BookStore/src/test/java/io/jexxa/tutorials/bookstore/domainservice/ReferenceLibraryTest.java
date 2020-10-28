@@ -14,6 +14,7 @@ class ReferenceLibraryTest
 {
     private static final String DRIVEN_ADAPTER = BookStoreApplication.class.getPackageName() + ".infrastructure.drivenadapter";
     private static final String DOMAIN_SERVICE = BookStoreApplication.class.getPackageName() + ".domainservice";
+    private static final String APPLICATION_SERVICE = BookStoreApplication.class.getPackageName() + ".applicationservice";
 
     private static JexxaMain jexxaMain;
 
@@ -22,6 +23,7 @@ class ReferenceLibraryTest
     {
         jexxaMain = new JexxaMain(ReferenceLibraryTest.class.getSimpleName());
         jexxaMain.addToInfrastructure(DRIVEN_ADAPTER)
+                .addToApplicationCore(APPLICATION_SERVICE)
                 .addToApplicationCore(DOMAIN_SERVICE);
     }
 

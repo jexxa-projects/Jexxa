@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 public final class AdapterConvention
@@ -24,11 +25,15 @@ public final class AdapterConvention
     }
 
 
-    public static <P> boolean isPortAdapter(Class<P> port)
+    public static <P> boolean isPortAdapter(Class<P> port, List<String> acceptedInfrastructure)
     {
+
         return Arrays.stream(port.getConstructors())
                 .filter(constructor -> constructor.getParameterTypes().length == 1)
-                .anyMatch(constructor -> !constructor.getParameterTypes()[0].isInterface());
+                .anyMatch(constructor -> !constructor.getParameterTypes()[0].isInterface())
+                &&
+                isInInfrastructurePackage(port, acceptedInfrastructure);
+
     }
 
     private static <T> boolean isDefaultConstructorAvailable(Class<T> clazz)
@@ -82,6 +87,13 @@ public final class AdapterConvention
         return factoryMethods.stream().anyMatch(method -> (
                 method.getParameterCount() == 1 &&
                         method.getParameterTypes()[0].isAssignableFrom(Properties.class))); //Factory method with Properties argument available
+    }
+
+    private static <T> boolean isInInfrastructurePackage( Class<T> clazz, List<String> acceptedInfrastructure)
+    {
+        return acceptedInfrastructure
+                .stream()
+                .anyMatch( element -> clazz.getPackage().toString().contains( element ) );
     }
 
 

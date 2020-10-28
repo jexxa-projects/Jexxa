@@ -4,7 +4,7 @@
   <parent>
     <artifactId>tutorials</artifactId>
     <groupId>io.jexxa.tutorials</groupId>
-    <version>2.4.3-SNAPSHOT</version>
+    <version>2.5.2-SNAPSHOT</version>
   </parent>
 
   <artifactId>timeservice</artifactId>
@@ -77,12 +77,24 @@
               USE_CURRENT_TIMESTAMP
             </creationTime>
 
-            <!--- Enable for JMX support.
-                      Notes:  - jmxremote.rmi.port and jmxremote.port must be identical in order to access application in docker container
-                              - exposed port in section <ports> must be identical to jmxremote.port. Otherwise port forwarding will not work with jmx
-            -->
+            <!--- The jexxa-application.properties used in this tutorial is fine for local execution. Within a container,
+                  we have to define URLs to external infrastructure such as ActiveMQ or the database. To overwrite jexxa-application.properties
+                  you can use java system properties which can be set as JVM flags.
+              -->
             <jvmFlags>
+              <!--- Set URL to ActiveMQ provider -->
+              <jvmFlag>
+                -Djava.naming.provider.url=tcp://172.17.0.5:61616
+              </jvmFlag>
+
+              <!--- Enable for JMX support.
+                        Notes:  - jmxremote.rmi.port and jmxremote.port must be identical in order to access application in docker container
+                                - exposed port in section <ports> must be identical to jmxremote.port. Otherwise port forwarding will not work with jmx
+              -->
+
+              <jvmFlag>
               -Dcom.sun.management.jmxremote.local.only=false
+              </jvmFlag>
               <jvmFlag>
                 -Dcom.sun.management.jmxremote
               </jvmFlag>
@@ -106,13 +118,13 @@
               </jvmFlag>
             </jvmFlags>
 
-            <!--- Enable for JMS support
+            <!--- Enable for JMS support -->
             <args>
               <arg>
                 -jms
               </arg>
             </args>
-            -->
+            <!--- -->
             <ports>
               <port>7000</port>
               <port>${jmx.port}</port>

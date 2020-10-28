@@ -2,9 +2,11 @@ package io.jexxa.core;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 import io.jexxa.core.convention.PortConvention;
@@ -26,7 +28,7 @@ import org.slf4j.Logger;
  *
  * To see how to use this class please refer to the tutorials.
  */
-public class JexxaMain
+public final class JexxaMain
 {
     public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
     private static final String JEXXA_CONTEXT_NAME =  "io.jexxa.context.name";
@@ -71,9 +73,16 @@ public class JexxaMain
 
         this.boundedContext = new BoundedContext(contextName, this);
 
-        loadProperties(this.properties);
+        // Handle properties in following forder:
+        // 1. Load properties from application.properties because they have lowest priority
+        loadJexxaApplicationProperties(this.properties);
+        // 2. Use System properties because they have mid priority
+        this.properties.putAll( System.getProperties() );  //add/overwrite system properties
+        // 3. Use given properties because they have highest priority
         this.properties.putAll( properties );  //add/overwrite given properties
+
         this.properties.put(JEXXA_CONTEXT_NAME, contextName);
+        this.addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
 
         setExceptionHandler();
     }
@@ -113,6 +122,12 @@ public class JexxaMain
     public <T extends IDrivingAdapter> DrivingAdapter<T>  bind(Class<T> clazz)
     {
         return new DrivingAdapter<>(clazz, this);
+    }
+
+    @CheckReturnValue
+    public <T extends IDrivingAdapter> DrivingAdapter<T>  conditionalBind(BooleanSupplier conditional, Class<T> clazz)
+    {
+        return new DrivingAdapter<>(conditional, clazz, this);
     }
 
     /**
@@ -180,7 +195,13 @@ public class JexxaMain
         return properties;
     }
 
-    protected void bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port)
+    List<String> getInfrastructure()
+    {
+        return drivenAdapterFactory.getAcceptPackages();
+    }
+    List<String> getApplicationCore() { return portFactory.getAcceptPackages(); }
+
+    void bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port)
     {
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
         var inboundPort    = portFactory.getInstanceOf(port, properties);
@@ -190,7 +211,7 @@ public class JexxaMain
         compositeDrivingAdapter.add(drivingAdapter);
     }
 
-    protected JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Object port)
+    JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Object port)
     {
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
         drivingAdapter.register(port);
@@ -200,7 +221,7 @@ public class JexxaMain
         return this;
     }
 
-    protected void bindToPortAdapter(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
+    void bindToPortAdapter(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
     {
         var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
 
@@ -211,7 +232,7 @@ public class JexxaMain
         compositeDrivingAdapter.add(drivingAdapter);
     }
 
-    protected void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
+    void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
 
         var portList = portFactory.getInstanceOfPorts(portAnnotation, properties);
@@ -220,7 +241,7 @@ public class JexxaMain
         compositeDrivingAdapter.add(drivingAdapter);
     }
 
-    protected <T> void addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
+    <T> void addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
     {
         T instance = portFactory.getInstanceOf(bootstrapService, properties);
         initFunction.accept(instance);
@@ -239,7 +260,7 @@ public class JexxaMain
     }
 
 
-    private void loadProperties(Properties properties)
+    private void loadJexxaApplicationProperties(Properties properties)
     {
         Optional.ofNullable(JexxaMain.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES))
                 .ifPresentOrElse(

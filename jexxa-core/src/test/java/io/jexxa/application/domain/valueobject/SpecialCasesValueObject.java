@@ -42,13 +42,12 @@ public class SpecialCasesValueObject
             return false;
         }
         SpecialCasesValueObject that = (SpecialCasesValueObject) o;
-        return valueWithoutGetter == that.valueWithoutGetter &&
-                Objects.equals(nullValue, that.nullValue);
+        return valueWithoutGetter == that.valueWithoutGetter;
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(valueWithoutGetter, nullValue);
+        return Objects.hash(valueWithoutGetter);
     }
 }

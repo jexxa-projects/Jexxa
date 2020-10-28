@@ -1,4 +1,4 @@
-package io.jexxa.tutorials.bookstorej.infrastructure.drivenadapter.console;
+package io.jexxa.tutorials.bookstorej.infrastructure.drivenadapter.messaging;
 
 import java.util.Properties;
 
@@ -10,11 +10,11 @@ import org.apache.commons.lang3.Validate;
 
 @SuppressWarnings("unused")
 @DrivenAdapter
-public class ConsolePublisher implements IDomainEventPublisher
+public class DomainEventPublisher implements IDomainEventPublisher
 {
     private final MessageSender messageSender;
 
-    public ConsolePublisher(Properties properties)
+    public DomainEventPublisher(Properties properties)
     {
         messageSender = MessageSenderManager.getInstance().getStrategy(properties);
     }
@@ -23,6 +23,9 @@ public class ConsolePublisher implements IDomainEventPublisher
     public <T> void publish(T domainEvent)
     {
         Validate.notNull(domainEvent);
-        messageSender.send(domainEvent).toTopic("BookStoreTopic").asJson();
+        messageSender
+                .send(domainEvent)
+                .toTopic("BookStoreTopic")
+                .asJson();
     }
 }

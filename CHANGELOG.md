@@ -4,16 +4,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.x.x] - yyyy-mm-dd
+## \[2.x.x] - yyyy-mm-dd  
 ### Added
 
 ### Fixed
 
 ### Changed
 
+## \[2.5.1] - 2020-10-25  
+### Fixed
+
+-   OpenAPI-Support in `RESTfulRPCAdapter`: 
+    -   Array-types are now correctly handled as method attributes
+    -   Corrected handling of abstract and interface parameters. For these parameters no example object can be set.           
+    -   Set application type to `application/json` in all cases
+    
+-   `RESTfulRPCAdapter`: 
+    -   Static methods are no longer exposed
+    -   Only a single instance of a `RESTfulRPCAdapter` per Properties can be created 
+    -   Fixed error message so that correct host and port is stated in exception if binding fails
+ 
+-   `JMXAdapter`:       
+    -   Static methods are no longer exposed
+
+-   `JexxaMain`:
+    -   Corrected validation of port-adapters to ensure that binding between a generic driving adapter and a port adapter causes an exception.
+
+### Added
+
+-   Added [tutorial](tutorials/BookStoreJ/README-OPENAPI.md) explaining how to enable and use OpenAPI support.          
+    
+## \[2.5.0] - 2020-10-21
+### Added
+-   `RESTfulRPCAdapter`: Added OpenAPI support (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/main/resources/jexxa-application.properties) for more information).  
+-   `JexxaMain`: Improved fluent API in `JexxaMain` with `conditionalBind()` which performs a binding only if a condition statement evaluates to true. See tutorial [`TimeService`](https://github.com/repplix/Jexxa/tree/master/tutorials/TimeService) for example.
+-   Added a [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html).   
+  
+### Fixed
+-   `IMDBRepository`: When reset all IMDBRepositories, the internal reference to specific map is also reset. This allows reusing references to IRepository instances.  
+
+-   `RESTfulRPCAdapter`: Public static methods are no longer exposed.  
+
+### Changed
+-   Updated dependencies
+
 ## \[2.4.2] - 2020-10-08
 ### Fixed
--   RESTFullRPCAdapter: Fixed serialization with objects containing private fields without public getter 
+-   `RESTFullRPCAdapter`: Fixed serialization with objects containing private fields without public getter 
 -   Tutorial TimeService: Corrected maven shade plugin filters so that active MQ works as expected. 
 
 ### Changed
@@ -30,15 +67,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[2.4.0] - 2020-09-27
 ### Added
--   New driven adapter strategy **MessageLogger** which writes messages to a logger
--   New module **jexxa-test** which simplifies writing unit tests. **jexxa-test** automatically provides stubs for application specific driven adapters as soon as they use Jexxa's drivenadapter strategies. 
+-   New driven adapter strategy `MessageLogger` which writes messages to a logger
+-   New module `jexxa-test` which simplifies writing unit tests. `jexxa-test` automatically provides stubs for application specific driven adapters as soon as they use Jexxa's drivenadapter strategies. See tutorial [`BookStore`](https://github.com/repplix/Jexxa/tree/master/tutorials/BookStore) for example.  
 
 ### Changed
 -   Updated dependencies  
 
 ## \[2.3.2] - 2020-09-23
 ### Fixed
--   JMSAdapter: Correctly cleanup internal data structure in case of reconnect. This avoids registering objects multiple 
+-   `JMSAdapter`: Correctly cleanup internal data structure in case of reconnect. This avoids registering objects multiple 
 times in case of reconnect.
 
 ## \[2.3.1] - 2020-09-20

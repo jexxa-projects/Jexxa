@@ -105,7 +105,7 @@ public interface IMessageDisplay
 ## Implement the Infrastructure
 
 ### Driven Adapter with console output 
-The implementation is quite simple and just prints given time to a logger.  
+The implementation is quite simple and just prints given arguments to a logger.  
 
 Note: Jexxa uses implicit constructor injection together with a strict convention over configuration approach.
 
@@ -122,24 +122,6 @@ Note: In case you use any static code analysis tools such as SonarCube you can a
 
 ```java
 @SuppressWarnings("unused")
-public class ConsolePublisher implements ITimePublisher
-{
-
-    private static final Logger LOGGER = JexxaLogger.getLogger(ConsolePublisher.class);
-
-    @Override
-    public void publish(LocalTime localTime)
-    {
-        Validate.notNull(localTime);
-
-        var logMessage = localTime.format(DateTimeFormatter.ISO_TIME);
-
-        LOGGER.info(logMessage);
-    }
-}
-```
-```java
-@SuppressWarnings("unused")
 public class MessageDisplay implements IMessageDisplay
 {
     @Override
@@ -150,25 +132,27 @@ public class MessageDisplay implements IMessageDisplay
 }
 ```
 
-### Driven Adapter with JMS
+### Driven Adapter for messaging
 
-Jexxa provides so called `DrivenAdapterStrategy` for various Java-APIs such as JMS. When using these strategies the implementation of a driven adapter is just a facade and maps domain specific methods to the technology stack. In the following implementation we use the `JMSSender` provided by Jexxa.   
+Jexxa provides so called `DrivenAdapterStrategy` for various Java-APIs such as JMS. When using these strategies the implementation of a driven adapter 
+is just a facade and maps domain specific methods to the technology stack. In the main application we can adjust the default strategy so that we can 
+define either to use JMS or a simple logger. Moreover, within tests, we can define a MessageRecorder and uint-test our infrastructure as well.  
 
-Note: Since `JMSSender` requires information from a `Properties` we must provide a constructor or static factory method with a `Properties` attribute. By default, Jexxa hands in all information from jexxa-application.properties file. This file can extended by application specific information such as the topic name if required.        
+Note: Since `TimePublisher` requires information from a `Properties` we must provide a constructor or static factory method with a `Properties` attribute. By default, Jexxa hands in all information from jexxa-application.properties file. This file can extended by application specific information such as the topic name if required.        
 
 ```java
 @SuppressWarnings("unused")
-public class JMSPublisher implements ITimePublisher
+public class TimePublisher implements ITimePublisher
 {
-    private static final String TIME_TOPIC = "TimeService";
+    public static final String TIME_TOPIC = "TimeService";
 
     private final MessageSender messageSender;
 
     // For all driven adapter we have to provide either a static factory or a public constructor to
     // enable implicit constructor injection
-    public JMSPublisher(Properties properties)
+    public TimePublisher(Properties properties)
     {
-        //Request a default message Sender from corresponding strategy manager  
+        //Request a default message Sender from corresponding strategy manager
         this.messageSender = MessageSenderManager.getInstance().getStrategy(properties);
     }
 
@@ -252,40 +236,34 @@ Finally, we have to write our application. As you can see in the code below ther
 public final class TimeServiceApplication
 {
     //Declare the packages that should be used by Jexxa
-    private static final String JMS_DRIVEN_ADAPTER      = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter.messaging";
-    private static final String CONSOLE_DRIVEN_ADAPTER  = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter.console";
-    private static final String OUTBOUND_PORTS          = TimeServiceApplication.class.getPackageName() + ".domainservice";
+    private static final String DRIVEN_ADAPTER  = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter";
+    private static final String OUTBOUND_PORTS  = TimeServiceApplication.class.getPackageName() + ".domainservice";
+    private static String[] args;
 
     public static void main(String[] args)
     {
+        //Store the arguments for internal use
+        TimeServiceApplication.args = args;
+
+        // Define the default strategy for messaging which is either a simple logger called `MessageLogger.class` or `JMSSender.class` for JMS messages
+        MessageSenderManager.getInstance().setDefaultStrategy(getMessageSenderStrategy());
+
+        //Create your jexxaMain for this application
         JexxaMain jexxaMain = new JexxaMain("TimeService");
 
         jexxaMain
                 //Define which outbound ports should be managed by Jexxa
                 .addToApplicationCore(OUTBOUND_PORTS)
-                
-                //Define the driving adapter that should which implementation of the outbound port should be used by Jexxa.
-                //Note: We must only register a single driven adapter for the outbound port
-                .addToInfrastructure(getDrivenAdapter(args));
+                .addToInfrastructure(DRIVEN_ADAPTER)
 
-                // If JMS is enabled bind 'JMSAdapter' to our application 
-                // Note: Jexxa's JMSAdapter is a so called specific driving adapter which cannot be directly connected directly
-                // to an inbound port because we cannot apply any convention. In this case bind Jexxa's specific driving adapter
-                // 'JMSAdapter' to an application specific DrivingAdapter which is `PublishTimeListener`
-                if ( isJMSEnabled(args) )
-                {
-                    jexxaMain.bind(JMSAdapter.class).to(PublishTimeListener.class);
-                }
-
-
-        //The rest of main is similar to tutorial HelloJexxa
-        jexxaMain
                 // Bind RESTfulRPCAdapter and JMXAdapter to TimeService class so that we can invoke its method
                 .bind(RESTfulRPCAdapter.class).to(TimeService.class)
                 .bind(JMXAdapter.class).to(TimeService.class)
 
+                // Conditional bind is only executed if given expression evaluates to true
+                .conditionalBind( TimeServiceApplication::isJMSEnabled, JMSAdapter.class).to(PublishTimeListener.class)
+
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
-                .bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
 
                 .start()
 
@@ -298,7 +276,7 @@ public final class TimeServiceApplication
 
 That's it. 
 
-## Compile & Start the Application with console output 
+## Run the Application with console output 
 
 ```console                                                          
 mvn clean install
@@ -324,10 +302,14 @@ curl -X POST http://localhost:7000/TimeService/publishTime
 Each time you execute curl you should see following output on the console: 
 
 ```console                                                          
-[qtp2095064787-31] INFO io.jexxa.tutorials.timeservice.infrastructure.drivenadapter.console.ConsolePublisher - 19:17:12.998278
+[qtp380242442-31] INFO io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger - Begin> Send message
+[qtp380242442-31] INFO io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger - Message           : {"hour":17,"minute":12,"second":34,"nano":873658000}
+[qtp380242442-31] INFO io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger - Destination       : TimeService
+[qtp380242442-31] INFO io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger - Destination-Type  : TOPIC
+[qtp380242442-31] INFO io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger - End> Send message
 ```
 
-## Compile & Start the Application with JMS 
+## Run the Application with JMS 
 
 ```console                                                          
 mvn clean install
@@ -353,5 +335,5 @@ curl -X POST http://localhost:7000/TimeService/publishTime
 Each time you execute curl you should see following output on the console: 
 
 ```console                                                          
-[qtp26757919-34] INFO io.jexxa.tutorials.timeservice.infrastructure.drivenadapter.messaging.JMSPublisher - Successfully published time 19:18:52.992826 to topic TimeService
+[ActiveMQ Session Task-1] INFO io.jexxa.tutorials.timeservice.infrastructure.drivenadapter.display.MessageDisplay - New Time was published, time: 17:15:18.743772
 ```

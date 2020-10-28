@@ -1,7 +1,11 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -12,8 +16,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.javalin.Javalin;
+import io.javalin.core.JavalinConfig;
+import io.javalin.http.Context;
 import io.javalin.plugin.json.JavalinJson;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIFacade;
+import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang3.Validate;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -27,6 +35,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public static final String HTTPS_PORT_PROPERTY = "io.jexxa.rest.https_port";
     public static final String KEYSTORE = "io.jexxa.rest.keystore";
     public static final String KEYSTORE_PASSWORD = "io.jexxa.rest.keystore_password";
+    public static final String OPEN_API_PATH = "io.jexxa.rest.open_api_path";
 
     private static final Gson GSON = new GsonBuilder().create();
 
@@ -35,8 +44,11 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private Server server;
     private ServerConnector sslConnector;
     private ServerConnector httpConnector;
+    private OpenAPIFacade openAPIFacade;
 
-    public RESTfulRPCAdapter(Properties properties)
+    private static final Map<Properties, RESTfulRPCAdapter> rpcAdapterMap = new HashMap<>();
+
+    private RESTfulRPCAdapter(Properties properties)
     {
         this.properties = properties;
 
@@ -53,6 +65,18 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         registerExceptionHandler();
     }
 
+    public static RESTfulRPCAdapter createAdapter(Properties properties)
+    {
+        if ( rpcAdapterMap.containsKey(properties) )
+        {
+            JexxaLogger.getLogger(RESTfulRPCAdapter.class).warn("Tried to create an RESTfulRPCAdapter with same properties twice! Return already instantiated adapter.");
+        } else {
+            rpcAdapterMap.put(properties, new RESTfulRPCAdapter(properties));
+        }
+
+        return rpcAdapterMap.get(properties);
+    }
+
     public void register(Object object)
     {
         Validate.notNull(object);
@@ -64,12 +88,38 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     @Override
     public void start()
     {
-        javalin.start();
+        try
+        {
+            javalin.start();
+
+            if (httpConnector != null ) {
+                openAPIFacade.getPath().ifPresent( path -> Javalin.log.info("OpenAPI documentation available at: {}"
+                        , "http://" + httpConnector.getHost() + ":" + httpConnector.getPort() +  path ) );
+            }
+            if (sslConnector != null ) {
+                openAPIFacade.getPath().ifPresent( path -> Javalin.log.info("OpenAPI documentation available at: {}"
+                        , "http://" + sslConnector.getHost() + ":" + sslConnector.getPort() + path ) );
+            }
+        } catch (RuntimeException e)
+        {
+            if (e.getMessage().contains("Port already in use.")) // Javalin states its default port of the server. Therefore we correct the error message here"
+            {
+                throw new IllegalStateException(
+                        RESTfulRPCAdapter.class.getSimpleName()
+                        + ": "
+                        + e.getCause().getMessage()
+                        + ". Please check that IP address is correct and port is not in use."
+                );
+            }
+            throw e;
+        }
     }
 
     @Override
     public void stop()
     {
+        rpcAdapterMap.remove(properties);
+
         javalin.stop();
         Optional.ofNullable(httpConnector).ifPresent(ServerConnector::close);
         Optional.ofNullable(sslConnector).ifPresent(ServerConnector::close);
@@ -139,6 +189,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
      *   {
      *     "Exception": "<exception as json>",
      *     "ExceptionType": "<Type of the exception>",
+     *     "ApplicationType": "application/json"
      *   }
      * }
      * </pre>
@@ -152,6 +203,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
             JsonObject exceptionWrapper = new JsonObject();
             exceptionWrapper.addProperty("ExceptionType", e.getCause().getClass().getName());
             exceptionWrapper.addProperty("Exception", gson.toJson(e));
+            exceptionWrapper.addProperty("ApplicationType", gson.toJson("application/json"));
 
             ctx.result(exceptionWrapper.toString());
             ctx.status(400);
@@ -160,41 +212,49 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void registerGETMethods(Object object)
     {
-        var methodList = new RESTfulRPCConvention(object).getGETCommands();
+        var getCommands = createRPCConvention(object).getGETCommands();
 
-        methodList.forEach(element -> javalin.get(element.getResourcePath(),
-                ctx -> {
-                    String htmlBody = ctx.body();
+        getCommands.forEach(
+                method -> javalin.get(
+                        method.getResourcePath(),
+                        httpCtx -> invokeMethod(object, method, httpCtx)
+                )
+        );
 
-                    Object[] methodParameters = deserializeParameters(htmlBody, element.getMethod());
-
-                    Object result = IDrivingAdapter
-                            .acquireLock()
-                            .invoke(element.getMethod(), object, methodParameters);
-
-                    ctx.json(result);
-                }));
+        getCommands.forEach( method -> openAPIFacade.documentGET(method.getMethod(), method.getResourcePath()));
     }
 
     private void registerPOSTMethods(Object object)
     {
-        var methodList = new RESTfulRPCConvention(object).getPOSTCommands();
+        var postCommands = createRPCConvention(object).getPOSTCommands();
 
-        methodList.forEach(element -> javalin.post(element.getResourcePath(),
-                ctx -> {
-                    String htmlBody = ctx.body();
+        postCommands.forEach(
+                method -> javalin.post(
+                        method.getResourcePath(),
+                        httpCtx -> invokeMethod(object, method, httpCtx)
+                )
+        );
 
-                    Object[] methodParameters = deserializeParameters(htmlBody, element.getMethod());
+        postCommands.forEach( method -> openAPIFacade.documentPOST(method.getMethod(), method.getResourcePath()));
+    }
 
-                    Object result = IDrivingAdapter
-                            .acquireLock()
-                            .invoke(element.getMethod(), object, methodParameters);
 
-                    if (result != null)
-                    {
-                        ctx.json(result);
-                    }
-                }));
+
+    private void invokeMethod(Object object, RESTfulRPCConvention.RESTfulRPCMethod method, Context httpContext ) throws InvocationTargetException, IllegalAccessException
+    {
+        Object[] methodParameters = deserializeParameters(httpContext.body(), method.getMethod());
+
+        var result = Optional.ofNullable(
+                IDrivingAdapter
+                        .acquireLock()
+                        .invoke(method.getMethod(), object, methodParameters)
+        );
+
+        //At the moment we do not handle any credentials
+        httpContext.header("Access-Control-Allow-Origin", "*");
+        httpContext.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+        result.ifPresent(httpContext::json);
     }
 
     private Object[] deserializeParameters(String jsonString, Method method)
@@ -209,8 +269,13 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         Gson gson = new Gson();
         JsonElement jsonElement = JsonParser.parseString(jsonString);
 
-        if (jsonElement.isJsonArray())
+        // In case we have more than one attribute, we assume a JSonArray
+        if ( method.getParameterCount() > 1)
         {
+            if ( !jsonElement.isJsonArray() )
+            {
+                throw new IllegalArgumentException("Multiple method attributes musst be passed inside a JSonArray");
+            }
             return readArray(jsonElement.getAsJsonArray(), method);
         }
         else
@@ -241,17 +306,21 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         return paramArray;
     }
 
+    @SuppressWarnings("NullableProblems") // setToJsonMapper(GSON::toJson) causes this warning because toJson is not annotated
     private void setupJavalin()
     {
         JavalinJson.setFromJsonMapper(GSON::fromJson);
         JavalinJson.setToJsonMapper(GSON::toJson);
 
-        this.javalin = Javalin.create(config ->
-                {
-                    config.server(this::getServer);
-                    config.showJavalinBanner = false;
-                }
-        );
+        this.javalin = Javalin.create(this::getJavalinConfig);
+    }
+
+    private void getJavalinConfig(JavalinConfig javalinConfig)
+    {
+        javalinConfig.server(this::getServer);
+        javalinConfig.showJavalinBanner = false;
+
+        this.openAPIFacade = new OpenAPIFacade(properties, javalinConfig );
     }
 
     private Server getServer()

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Jexxa - A hexagonal software architecture for your application</title>
+<title>Jexxa - Reference Guide</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -439,31 +439,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article">
 <div id="header">
-<h1>Jexxa - A hexagonal software architecture for your application</h1>
+<h1>Jexxa - Reference Guide</h1>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_vision">1. Vision</a></li>
-<li><a href="#_motivation">2. Motivation</a></li>
-<li><a href="#_general_building_blocks">3. General Building Blocks</a>
+<li><a href="#_jexxa_features">1. Jexxa Features</a>
 <ul class="sectlevel2">
-<li><a href="#_package_applicationcore">3.1. Package <code>ApplicationCore</code></a></li>
-<li><a href="#_package_infrastructure">3.2. Package <code>Infrastructure</code></a></li>
-<li><a href="#_package_jexxainfrastructure">3.3. Package <code>JexxaInfrastructure</code></a></li>
-<li><a href="#_package_jexxacore">3.4. Package <code>JexxaCore</code></a></li>
+<li><a href="#_jexxamain">1.1. JexxaMain</a></li>
+<li><a href="#_boundedcontext">1.2. BoundedContext</a></li>
+<li><a href="#_application_configuration">1.3. Application Configuration</a></li>
 </ul>
 </li>
-<li><a href="#_inversion_of_control_ioc">4. Inversion of Control (IoC)</a>
+<li><a href="#_conventions">2. Conventions</a>
 <ul class="sectlevel2">
-<li><a href="#_dependency_injection_di">4.1. Dependency Injection (DI)</a></li>
-<li><a href="#_scope">4.2. Scope</a>
-<ul class="sectlevel3">
-<li><a href="#_visibility_of_ports_and_adapters">4.2.1. Visibility of Ports and Adapters</a></li>
-<li><a href="#_threading">4.2.2. Threading</a></li>
-<li><a href="#_allocation_scope_of_dependencies">4.2.3. Allocation scope of Dependencies</a></li>
-</ul>
-</li>
-<li><a href="#_transactions">4.3. Transactions</a></li>
+<li><a href="#_general_conventions_in_jexxa">2.1. General Conventions in Jexxa</a></li>
+<li><a href="#_restfulrpcadapter">2.2. RESTfulRPCAdapter</a></li>
+<li><a href="#_jmxadapter">2.3. JMXAdapter</a></li>
 </ul>
 </li>
 </ul>
@@ -471,395 +462,230 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_vision"><a class="anchor" href="#_vision"></a>1. Vision</h2>
+<h2 id="_jexxa_features"><a class="anchor" href="#_jexxa_features"></a>1. Jexxa Features</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Jexxa is a lightweight framework to implement business applications based on a <a href="https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/">ports and adapters</a> architecture. It allows for easily connecting technology stacks, called adapters, to interfaces of a technology agnostic application core which are called ports. For this purpose Jexxa offers:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>A lightweight core which manages the lifecycle of both ports and adapters.</p>
-</li>
-<li>
-<p>A well-defined interface to integrate arbitrary technology stacks as adapters.</p>
-</li>
-<li>
-<p>A fluent API to connect your application core to available adapters.</p>
-</li>
-<li>
-<p>Explicit representation of the binding between ports and adapters in the main method so that you can exchange technology stacks independently.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus, especially on  following paradigms:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><em>Dependency Inversion</em>: Get an idea how to strictly separate between technology stacks and domain logic on a code basis which is essential for durable business applications.</p>
-</li>
-<li>
-<p><em>Simplicity</em>: Be aware of what technology stacks you really need to realize the customers' use cases. Usually they are much less than expected. Keep different technology stacks loosely coupled to facilitate their exchange. Finally, prefer a convention over configuration approach to standardize the integration of technology stacks and to reduce the complexity of their configuration.</p>
-</li>
-<li>
-<p><em>Inversion of Control</em>(IoC): Find the required degree of IoC for your software projects. Control aspects that are technically required but not important for your business application should be hidden by a framework. The remaining required aspects should be explicitly represented.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Even if you use real powerful frameworks for good reason within your application I hope that you find Jexxa helpful in some way.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_motivation"><a class="anchor" href="#_motivation"></a>2. Motivation</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for an application.</p>
-</div>
-<div class="paragraph">
-<p>Existing frameworks such as the <a href="https://spring.io">Spring Framework</a> or the J2EE standard provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into the application core.</p>
-</div>
-<div class="paragraph">
-<p>When developing applications with a high durability as used in production, financial or insurance sector, it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers shall only use standard language features. Available frameworks shall be used to attach the latest technology stacks to the application core.</p>
-</div>
-<div class="paragraph">
-<p>Applications without well-defined boundaries between technology stacks and application core become difficult to maintain because changes on one side could (and in reality will) affect the other side. Typical symptoms are:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Updating to a newer version of a technology stack is difficult or even impossible so that it is much safer to use the old one. Of course new developed applications use this old version as well because your team 'trusts' it, and you avoid maintaining a zoo of different versions.</p>
-</li>
-<li>
-<p>Adding or replacing a technology stack is difficult or even impossible, so a disruptive technology will cause your application core to become legacy as well. A common example are database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs &#8594; relational DBs &#8594; a zoo of NoSQL DBs. Because database technologies can become crucial for your business, your company employs senior-grade developers who have deep knowledge of both legacy and new technology stacks and synchronize your business data.</p>
-</li>
-<li>
-<p>Changes on the application core itself takes much longer time as in the beginning. In the end you need senior developers who have a deep understanding of the specific business domain, the used technology stacks and the convoluted structures of the entire application.</p>
-</li>
-<li>
-<p>In the long term, such structural issues could (and in reality will) affect your enterprise architecture, so neighboring systems need to be aware and take special actions for legacy systems.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_general_building_blocks"><a class="anchor" href="#_general_building_blocks"></a>3. General Building Blocks</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application built on Jexxa provides components that belong either to the <em>application core</em> or to the  <em>infrastructure</em>. The <em>application core</em> includes the business logic, whereas the <em>infrastructure</em> provides the required technology stacks.</p>
-</div>
-<div class="paragraph">
-<p><a href="#JexxaComponents">Figure 1</a> shows the separation of a Jexxa application into packages, the included components, and the relationship of the components among each other.</p>
-</div>
-<div id="JexxaComponents" class="imageblock text-center">
-<div class="content">
-<img src="images/JexxaComponents.svg" alt="JexxaComponents" width="657" height="973">
-</div>
-<div class="title">Figure 1. This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages labeled with <code>&lt;&lt;Jexxa&gt;&gt;</code> are provided by Jexxa. Packages labeled with <code>&lt;&lt;Application&gt;&gt;</code> have to be realized by the application.</div>
-</div>
-<div class="paragraph">
-<p><a href="#JexxaPackagetDescription">Table 1</a> describes the packages of an application based on Jexxa.</p>
-</div>
-<table id="JexxaPackagetDescription" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. Describes the packages of a typical application build with Jexxa.</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 66.6667%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Package</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>ApplicationCore</code></p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">This package includes your technology agnostic business application.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>Infrastructure</code></p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>This package includes the glue code to bind your technology agnostic business application to the package <code>JexxaInfrastructure</code>.</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JexxaInfrastructure</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">This package includes the provided driving adapter of Jexxa as well as the driven adapter strategies which simplify the application specific driven adapter</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>JexxaCore</code></p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">This package includes the core of Jexxa and manages the lifecycle of both ports and adapters. The details are described in Section <a href="#_inversion_of_control_ioc">Inversion of Control (IoC)</a>. The functionality of this package is used via a fluent API within the main method of your application.</p></td>
-</tr>
-</tbody>
-</table>
 <div class="sect2">
-<h3 id="_package_applicationcore"><a class="anchor" href="#_package_applicationcore"></a>3.1. Package <code>ApplicationCore</code></h3>
+<h3 id="_jexxamain"><a class="anchor" href="#_jexxamain"></a>1.1. JexxaMain</h3>
 <div class="paragraph">
-<p>The components of package <code>ApplicationCore</code> are:</p>
+<p>The <code>JexxaMain</code> class provides a convenient way to bootstrap your application. In contrast to other
+frameworks, Jexxa requires some code to explicitly configure your application for following reason:</p>
 </div>
-<table id="ApplicationCoreComponentDescription" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. Describes the components of package <code>ApplicationCore</code>.</caption>
+<div class="ulist">
+<ul>
+<li>
+<p>Explicitly bind technology stacks (called adapters) to parts of the application core (called ports) so that the entry points of your application core are visible.</p>
+</li>
+<li>
+<p>Fine grained control of your technology stacks so that they can be exchanged independently without updating the entire framework.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The steps for configuring your application are always similar as you can see in all <a href="https://github.com/repplix/Jexxa/blob/master/tutorials/README.md">tutorials</a>:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Define packages with your application core with <code>JexxaMain.addToApplicationCore()</code>. In general this is only required if you access them by annotations instead of defining the type.</p>
+</li>
+<li>
+<p>Define packages with your application specific driven adapter with <code>JexxaMain.addToInfrastructure()</code>.</p>
+</li>
+<li>
+<p>Bind technology stacks to application core with <code>JexxaMain.bind(&lt;DrivingAdapter&gt;.class).to(&lt;port&gt;.class)</code>.</p>
+</li>
+<li>
+<p>Startup your application using <code>JexxaMain.start()</code>. At this point your application is up and running and accepts requests from outside.</p>
+</li>
+<li>
+<p>The two commands <code>waitForShutdown()</code> and <code>stop()</code> are just for convenience purpose and allow you to manage the main thread and point in time for cleanup Jexxa resources of your application. In case your application needs the main thread for any other purpose just don&#8217;t call <code>waitForShutdown()</code></p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_boundedcontext"><a class="anchor" href="#_boundedcontext"></a>1.2. BoundedContext</h3>
+<div class="paragraph">
+<p>As described in <a href="https://repplix.github.io/Jexxa/jexxa_architecture.html">architecture of Jexxa</a> this framework has a strong focus on domain driven design. Therefore, each application provides a so called <code>BoundedContext</code> object which provides status information and control methods about the running application.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
+</td>
+<td class="content">
+The <code>BoundedContext</code> objects provides methods to stop you running application. So it is recommended to expose this object to dedicated adapters such as <code>JMXAdapter</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_application_configuration"><a class="anchor" href="#_application_configuration"></a>1.3. Application Configuration</h3>
+<div class="paragraph">
+<p>Jexxa allows you to externalize your configuration. This allows you to run the same application in different environments. By default, Jexxa use properties files. In addition, you can set system properties to externalize the configuration. Jexxa considers properties in the following order:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Properties that are directly passed as argument to <code>JexxaMain</code></p>
+</li>
+<li>
+<p>Java System properties (<code>System.getProperties()</code>)</p>
+</li>
+<li>
+<p>Properties file inside the jar archive</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conventions"><a class="anchor" href="#_conventions"></a>2. Conventions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_general_conventions_in_jexxa"><a class="anchor" href="#_general_conventions_in_jexxa"></a>2.1. General Conventions in Jexxa</h3>
+<div class="paragraph">
+<p>Jexxa defines several conventions when implementing ports or adapters. These conventions are described <a href="https://repplix.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di">here</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_restfulrpcadapter"><a class="anchor" href="#_restfulrpcadapter"></a>2.2. RESTfulRPCAdapter</h3>
+<div class="paragraph">
+<p>The <code>RESTfulRPCAdapter</code> is a simple RPC mechanism utilizing REST. Based on the <a href="https://martinfowler.com/articles/richardsonMaturityModel.html">REST maturity model</a> from Richardson it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST on a higher maturity level.</p>
+</div>
+<div class="paragraph">
+<p>This adapter uses following conventions:</p>
+</div>
+<table id="RESTfulRPCAdapterConvention" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Describes the conventions used in <code>RESTfulRPCAdapter</code>.</caption>
 <colgroup>
-<col style="width: 20%;">
-<col style="width: 40%;">
-<col style="width: 40%;">
+<col style="width: 25%;">
+<col style="width: 75%;">
 </colgroup>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Components</p>
+<p><strong>RESTfulRPCAdapter</strong></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">General Description</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Support by Jexxa</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Convention</strong></p>
+</div></div></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>Inbound Ports</code></p>
+<p>URI</p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Inbound ports belong to the application core and provide use cases that can be started by a driving adapter. Depending on the design of your application core a port might be an interface or a specific implementation of a set of use cases.</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>URIs for Java objects are generated as follows for all <code>public</code> methods:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://&lt;hostname&gt;:&lt;port&gt;/&lt;Java&#8217;s" class="bare">http://&lt;hostname&gt;:&lt;port&gt;/&lt;Java&#8217;s</a> simple class name&gt;/&lt;method name&gt;</p>
+</li>
+<li>
+<p>Example URI: <a href="http://localhost:7000/MyApplicationService/myMethod" class="bare">http://localhost:7000/MyApplicationService/myMethod</a></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
+</td>
+<td class="content">
+<div class="title">This implies following consequences:</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Simple name of a class must be unique within a single application<br></p>
+</li>
+<li>
+<p>Each class must have unique method names. Any method overloading is not supported.<br></p>
+</li>
+<li>
+<p>Methods from base class <code>Object</code> are ignored</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>HTTP-GET</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>All public non-static Methods of an object are exposed via HTTP GET if following conditions are fulfilled:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Return type is not <code>void</code> AND</p>
+</li>
+<li>
+<p>Method has no attributes</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>HTTP-POST</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>All public non-static methods of an object are exposed via HTTP POST if they are not exposed as HTTP-GET. The conditions are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Return type is <code>void</code> OR</p>
+</li>
+<li>
+<p>Method has attributes</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>HTML Header</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Content-type: application/json</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>HTML Request: Method attributes</p>
+</div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
 <ul>
 <li>
-<p>Jexxa provides implicit constructor injection for your inbound ports which is described in <a href="#_dependency_injection_di">Dependency Injection (DI)</a>.</p>
+<p>Json object in case of a single attribute.</p>
 </li>
 <li>
-<p>Jexxa also allows to instantiate and manage ports yourself using the provided driving adapters and driven adapter strategies.</p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Outbound Ports</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Outbound ports belong to the application core but only as interface. These interfaces are implemented in package <code>Infrastructure</code> by a driving adapter which provides access to a specific technology stack such as a database driver.</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Outbound ports are 'just' interfaces that must be defined by your application core. Jexxa provides support to implement these interfaces by so called <em>driven adapter strategies</em>.</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_package_infrastructure"><a class="anchor" href="#_package_infrastructure"></a>3.2. Package <code>Infrastructure</code></h3>
-<div class="paragraph">
-<p>The components of package <code>Infrastructure</code> are:</p>
-</div>
-<table id="InfrastructureComponentDescription" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. Describes the components of package <code>Infrastructure</code>.</caption>
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 40%;">
-<col style="width: 40%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Components</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">General Description</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Support by Jexxa</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapters</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Driven adapters implement the outbound ports and can be injected into the inbound ports which in turn operates on these interfaces. Typically they map domain objects to a specific technology stack.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Jexxa provides <em>driven adapter strategies</em> to simplify the development of driven adapters of an application.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Port Adapters</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Port adapters enable mapping between different representational styles of a specific port. For example this is required if a port should be exposed via a RESTful API. A port adapter belongs to the infrastructure of the application and is bound to a <em>specific driving adapter</em>.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Providing receiving driving adapters that simplify the development of the port adapters.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_package_jexxainfrastructure"><a class="anchor" href="#_package_jexxainfrastructure"></a>3.3. Package <code>JexxaInfrastructure</code></h3>
-<div class="paragraph">
-<p>The components of <code>JexxaInfrastructure</code> are:</p>
-</div>
-<table id="JexxaComponentDescription" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. Describes the components of package <code>JexxaInfrastructure</code>.</caption>
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 40%;">
-<col style="width: 40%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Components</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">General Description</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Realization in Jexxa</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Generic/Specific Driving Adapters</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Driving adapters belong to the infrastructure and receive commands from a specific client such as a UI or a console and forwards them to connected ports.</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Jexxa provides a convention and configuration approach for driving adapters.</p>
-</div>
-<div class="paragraph">
-<p>A <em>generic</em> driving adapter automatically exposes methods from connected inbound ports by using a convention. For example this can be used for an RPC mechanism.</p>
-</div>
-<div class="paragraph">
-<p>A <em>specific</em> driving adapter is used if a convention cannot be applied. Instead you have to implement a configuration within the infrastructure of your application in form of a <em>port adapter</em>. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the <em>port adapter</em>.</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapter Strategies</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Driven adapter strategies provide how to map objects from the application core to a specific technology stack. For example if you use a database for persisting your data, the strategy decides the ORM mapping of your objects.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Jexxa provides some <em>driven adapter strategies</em> to simplify development of driven adapters. If such a strategy is suitable for your application, the implementation of a driven adapter is just a facade which maps the interface of the outbound port to the methods of the strategy.</p>
-<p class="tableblock">Available strategies in Jexxa are based on the standard javax interfaces (e.g. JMS or JDBC) and can be configured via <code>Properties</code>. This allows you to adjust the configuration to your development process. For example, you can easily switch your database technology between in memory or JDBC, or the used URL.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_package_jexxacore"><a class="anchor" href="#_package_jexxacore"></a>3.4. Package <code>JexxaCore</code></h3>
-<table id="JexxaCoreComponentDescription" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. Describes the components of package <code>JexxaCore</code>.</caption>
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 40%;">
-<col style="width: 40%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Components</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">General Description</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Realization in Jexxa</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Core</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>This component includes class <code>JexxaMain</code> which is the entry point in the main-method of your application to use Jexxa.</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>JexxaMain</code> provides a fluent API to explicitly show the binding of technology stacks to your inbound ports. In addition it provides a <code>BoundedContext</code> which allows to control your application in your environment.</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Factory</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Instantiates ports and adapters and manages their life cycle.</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Jexxa supports implicit constructor injection which is described in <a href="#_dependency_injection_di">Dependency Injection (DI)</a>.</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Convention</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Provides classes to validate the compliance with conventions of ports and adapters.</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Jexxa provides a fast fail approach regarding conventions. The conventions are described in <a href="#_dependency_injection_di">Dependency Injection (DI)</a>.</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_inversion_of_control_ioc"><a class="anchor" href="#_inversion_of_control_ioc"></a>4. Inversion of Control (IoC)</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_dependency_injection_di"><a class="anchor" href="#_dependency_injection_di"></a>4.1. Dependency Injection (DI)</h3>
-<div class="paragraph">
-<p>Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support <em>implicit constructor injection</em> for following reason:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Constructor injection ensures that the dependencies required for the object to function properly are available immediately after creating the object.</p>
+<p>Json array for multiple attributes.</p>
 </li>
 <li>
-<p>Fields assigned in the constructor can be final. Thus, the object can be immutable or at least protect the corresponding fields.</p>
-</li>
-<li>
-<p>No special annotations or configuration files are required so that the application core remains completely decoupled from Jexxa.</p>
+<p>All attributes are treated as <code>in</code> values in terms of RPC. This means that they are not included in the HTML response.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>Within Jexxa we use conventions described in <a href="#JexxaConventions">Table 6</a> to explicitly limit the direction of dependencies as described in <a href="#JexxaComponents">Figure 1</a>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.</p>
-</div>
-<table id="JexxaConventions" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. Conventions used to realize implicit constructor injection.</caption>
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 40%;">
-<col style="width: 40%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Components</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Conventions</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Reason</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Driving Adapter</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>One of the following constructors must be available (checked in this order).</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Public Default constructor</p>
-</li>
-<li>
-<p>Public constructor with a single <code>Properties</code> attribute</p>
-</li>
-<li>
-<p>Public static factory method that gets no parameters and returns the type of the driving adapter</p>
-</li>
-<li>
-<p>Public static factory method with a single <code>Properties</code> parameter and returns the type of the requested driving adapter</p>
-</li>
-</ul>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Using constructors or factory methods do not require any special annotations. Using <code>Properties</code> is a standard approach in Java to provide configuration information.</p>
-</div>
-<div class="admonitionblock note">
+<div class="admonitionblock important">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title=":information_source:"></i>
+<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
 </td>
 <td class="content">
-A driving adapter gets the same <code>Properties</code> object as <code>JexxaMain</code>.
+The order of the attributes in the Json array must match to the order of attributes of the method!
 </td>
 </tr>
 </table>
@@ -867,276 +693,132 @@ A driving adapter gets the same <code>Properties</code> object as <code>JexxaMai
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Inbound Port</p>
+<p>HTML Response: Return value</p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
 <li>
-<p>A single public constructor.</p>
+<p>HTTP status code: 200</p>
 </li>
 <li>
-<p>Parameters of the constructor must be interfaces of required outbound ports.</p>
+<p>Return value as a singe Json object</p>
 </li>
-<li>
-<p>A unique implementation of each interface exists in the search scope of Jexxa. This scope is defined on a package level by method <code>JexxaMain::addToInfrastructure</code>.</p>
-</li>
-</ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Avoids ambiguity when choosing the constructor.</p>
-</li>
-<li>
-<p>Ports should be self-contained as much as possible. Therefore, only outbound ports should be hand in. This ensures that the infrastructure is agnostic to domain logic and knows only the <em>interfaces</em> required by the application core but not any other inner components.</p>
-</li>
-<li>
-<p>Each package should only include a single implementation of a specific interface to achieve the common-closure principle.</p>
-</li>
-</ol>
+</ul>
 </div></div></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Outbound Port</p>
+<p>HTML Response: Exception</p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>None</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>None</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapter</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
 <li>
-<p>Only a single driven adapter implements a specific outbound port.</p>
+<p>HTTP status code: 400</p>
 </li>
 <li>
-<p>One of the following constructors must be available (checked in this order):</p>
+<p>Return value as a single Json object including following properties:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Public default constructor</p>
+<p><code>ExceptionType</code>: Full type name of the exception</p>
 </li>
 <li>
-<p>Public constructor with a single <code>Properties</code> attribute</p>
-</li>
-<li>
-<p>Public static factory method that gets no parameters and returns the type of the Outbound Port (and not the type of the driven adapter)</p>
-</li>
-<li>
-<p>Public static factory method with a single <code>Properties</code> parameter and returns the type of the outbound port (and not the type of the driven adapter).</p>
+<p><code>Exception</code>: Json representation of the exception</p>
 </li>
 </ul>
 </div>
 </li>
-</ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Avoids ambiguity when choosing a Driven Adapter. At the moment you can only limit the search space of driven adapters on a package level.</p>
-</li>
-<li>
-<p>Using constructors or factory methods do not require any special annotations.</p>
-</li>
-</ol>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title=":information_source:"></i>
-</td>
-<td class="content">
-A driven adapter gets the same <code>Properties</code> object as <code>JexxaMain</code>.
-</td>
-</tr>
-</table>
+</ul>
 </div></div></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Port Adapter</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>A single public constructor with a single attribute. The attribute is the concrete type of a specific port.</p>
-</li>
-</ol>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>HTML Response code: URI not found</p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
 <li>
-<p>A port adapter is tightly coupled to a specific port. Therefore, it gets its concrete type injected.</p>
+<p>HTTP status code: 404</p>
 </li>
-</ol>
+</ul>
 </div></div></td>
 </tr>
 </tbody>
 </table>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title=":information_source:"></i>
-</td>
-<td class="content">
-<code>Constructor vs. static factory method</code>: In most cases implementing a constructor is the preferred approach when realizing an adapter. Using a static factory method
-is only recommended if the adapter needs special or more complex configuration which should be done before creating the adapter itself.
-</td>
-</tr>
-</table>
-</div>
 </div>
 <div class="sect2">
-<h3 id="_scope"><a class="anchor" href="#_scope"></a>4.2. Scope</h3>
+<h3 id="_jmxadapter"><a class="anchor" href="#_jmxadapter"></a>2.3. JMXAdapter</h3>
 <div class="paragraph">
-<p>Jexxa provides some simple mechanisms to define and control the scopes of ports and adapters which are described in this section.</p>
+<p>The <code>JMXAdapter</code> allows to control your application and access all objects that are registered.</p>
 </div>
-<div class="sect3">
-<h4 id="_visibility_of_ports_and_adapters"><a class="anchor" href="#_visibility_of_ports_and_adapters"></a>4.2.1. Visibility of Ports and Adapters</h4>
-<div class="paragraph">
-<p>By default, you have to tell Jexxa the location of your driven adapter and ports on a package level so that they can be created by Jexxa&#8217;s DI mechanism. This allows an application to specify used ports and adapters on a very fine-grained level.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_threading"><a class="anchor" href="#_threading"></a>4.2.2. Threading</h4>
-<div class="paragraph">
-<p>Currently, Jexxa ensures that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to following reasons:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Multi threading is typically essential within technology stacks and not within the application core itself.</p>
-</li>
-<li>
-<p>When you start developing your application, you have typically only a limited number of users.</p>
-</li>
-<li>
-<p>When your application becomes a huge success and must scale to a lot of users, you should scale it by running multiple instances of the application. Today&#8217;s container solutions offer a much better scaling and managing approach.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_allocation_scope_of_dependencies"><a class="anchor" href="#_allocation_scope_of_dependencies"></a>4.2.3. Allocation scope of Dependencies</h4>
-<div class="paragraph">
-<p>The allocation scope defines how many instances of components are created by Jexxa. This is described in <a href="#JexxaScope">Table 7</a>.</p>
-</div>
-<table id="JexxaScope" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. Allocation scope for the components in a Jexxa application.</caption>
+<table id="JMXAdapterConvention" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Describes the conventions used in <code>JMXAdapter</code>.</caption>
 <colgroup>
-<col style="width: 20%;">
-<col style="width: 40%;">
-<col style="width: 40%;">
+<col style="width: 25%;">
+<col style="width: 75%;">
 </colgroup>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Components</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Scope</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Reason</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Driving Adapter</p>
+<p><strong>JMXAdapter</strong></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Is managed as singleton and reused when it is bind to different ports.</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Simplifies managing technical resources like network ports or IP addresses.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title=":information_source:"></i>
-</td>
-<td class="content">
-In case you need a strict control how objects are exposed for example to different IP addresses, you have to use a specific driving adapter combined with port-adapter.
-</td>
-</tr>
-</table>
+<p><strong>Convention</strong></p>
 </div></div></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Inbound Port</p>
+<p>Methods</p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
 <li>
-<p>Inbound ports created by Jexxa are managed as singleton and reused if they are connected to different driving adapters.</p>
+<p>Method must be <code>public</code></p>
 </li>
 <li>
-<p>Inbound ports created by the application can be bound to adapters. In this case the application has full control of the number of instances.</p>
-</li>
-</ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>The singleton scope supports designing stateless ports which is in general recommended.</p>
+<p>Method must not be <code>static</code></p>
 </li>
 <li>
-<p>This is only recommended if your application core cannot fulfill the conventions of Jexxa (see <a href="#JexxaConventions">Table 6</a>).</p>
+<p>Methods from base class <code>Object</code> are not exposed</p>
 </li>
-</ol>
+</ul>
 </div></div></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Outbound Port</p>
+<p>Method attributes</p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>None</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>None</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapter</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Is managed as singleton and reused when it is injected into different ports.</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>The singleton scope supports designing stateless outbound ports which is in general recommended.</p>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>All attributes must be send as Json object</p>
+</li>
+<li>
+<p>The <code>MBeanParameterInfo</code> includes a Json template for each attribute in its description section. The placeholder for the
+value is marked by <code>&lt;TYPE of value&gt;</code>.<br>
+For example, the Json template for <code>LocalTime</code> looks as follows:<br>
+<code>{"hour":"&lt;byte&gt;","minute":"&lt;byte&gt;","second":"&lt;byte&gt;","nano":"&lt;int&gt;"}</code></p>
+</li>
+</ul>
 </div></div></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Port Adapter</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Is always created new and not reused.</p>
+<p>Return values</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Allows fine grained control of how a driving adapter should expose the included port. For example you can define that specific ports are only available via a management IP address.</p>
+<p>A return value is send as Json object</p>
 </div></div></td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_transactions"><a class="anchor" href="#_transactions"></a>4.3. Transactions</h3>
-<div class="paragraph">
-<p>Jexxa does not support any transaction when using multiple driven adapters in a single use case. Traditional enterprise frameworks for example spawn (often by default) a transaction between the used technology stacks, such as a database and a messaging system, to ensure that data is only written into the database when publishing it to a messaging bus is successful. This is a great feature if you really need it. Unfortunately, it is also often used to compensate programming errors or even a bad software design.</p>
-</div>
-<div class="paragraph">
-<p>Instead, we recommend building your ports of the application core so that they provide an idempotent semantic.</p>
-</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-28 15:29:24 +0200
+Last updated 2020-10-24 19:14:59 +0200
 </div>
 </div>
 </body>

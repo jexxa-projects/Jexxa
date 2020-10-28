@@ -12,26 +12,26 @@ import org.apache.commons.lang3.Validate;
 
 final class DependencyScanner
 {
-    private final List<String> acceptedPacakages = new ArrayList<>();
+    private final List<String> acceptedPackages = new ArrayList<>();
     private ScanResult scanResult;
 
     DependencyScanner acceptPackage(String packageName)
     {
-        acceptedPacakages.add(packageName);
+        acceptedPackages.add(packageName);
         scanResult = null; //Reset scan result so that it is recreated with new white listed packages
         return this;
     }
 
     DependencyScanner acceptPackages(List<String> packageList)
     {
-        acceptedPacakages.addAll(packageList);
+        acceptedPackages.addAll(packageList);
         scanResult = null; //Reset scan result so that it is recreated with new white listed packages
         return this;
     }
 
     List<String> getAcceptPackages()
     {
-        return acceptedPacakages;
+        return acceptedPackages;
     }
 
     List<Class<?>> getClassesWithAnnotation(final Class<? extends Annotation> annotation)
@@ -63,7 +63,7 @@ final class DependencyScanner
     {
         if ( scanResult == null )
         {
-            if (acceptedPacakages.isEmpty())
+            if (acceptedPackages.isEmpty())
             {
                 scanResult = new ClassGraph()
                         .enableAnnotationInfo()
@@ -75,7 +75,7 @@ final class DependencyScanner
                 scanResult = new ClassGraph()
                         .enableAnnotationInfo()
                         .enableClassInfo()
-                        .acceptPackages(acceptedPacakages.toArray(new String[0]))
+                        .acceptPackages(acceptedPackages.toArray(new String[0]))
                         .scan();
 
             }
