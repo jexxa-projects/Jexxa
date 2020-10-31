@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 -   RESTfulRPCAdapter: 
-    -   [Issue #7](https://github.com/repplix/Jexxa/issues/7) Stack trace is lost when serializing an Exception  
+    -   [Issue #7](https://github.com/repplix/Jexxa/issues/7) Stack trace is now included when serializing an Exception  
 
 ### Changed
 
