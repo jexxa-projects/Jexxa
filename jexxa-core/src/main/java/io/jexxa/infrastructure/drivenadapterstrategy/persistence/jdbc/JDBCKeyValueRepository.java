@@ -33,7 +33,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
-    private Connection connection;
+    private final Connection connection;
 
 
     public JDBCKeyValueRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
@@ -199,11 +199,11 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         return result;
     }
 
-    private Connection initJDBCConnection(final Properties properties)
+    private static Connection initJDBCConnection(final Properties properties)
     {
 
         try {
-            connection = DriverManager.getConnection(
+            var connection = DriverManager.getConnection(
                           properties.getProperty(JDBC_URL),
                           properties.getProperty(JDBC_USERNAME),
                           properties.getProperty(JDBC_PASSWORD)
@@ -213,7 +213,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
             return connection;
         }
         catch (SQLException e)
-        {                              
+        {
             throw new IllegalArgumentException(e);
         }
     }
@@ -257,7 +257,10 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
                             properties.getProperty(JDBC_PASSWORD));
                  Statement statement = setupConnection.createStatement())
             {
-                var command = String.format("CREATE TABLE IF NOT EXISTS %s ( key VARCHAR(255) PRIMARY KEY, value text) ", aggregateClazz.getSimpleName());
+                var command = String.format("CREATE TABLE IF NOT EXISTS %s ( key VARCHAR %s PRIMARY KEY, value text) "
+                        , aggregateClazz.getSimpleName()
+                        , getMaxVarChar(properties.getProperty(JDBC_URL))
+                );
                 statement.executeUpdate(command);
             }
             catch (SQLException e)
@@ -267,7 +270,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         }
     }
 
-    private void initDBDriver(Properties properties)
+    private static void initDBDriver(Properties properties)
     {
         try
         {
@@ -280,7 +283,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
 
     }
 
-    private void validateProperties(Properties properties)
+    private static void validateProperties(Properties properties)
     {
         Validate.isTrue(properties.containsKey(JDBC_URL), "Parameter " + JDBC_URL + " is missing");
         Validate.isTrue(properties.containsKey(JDBC_DRIVER), "Parameter " + JDBC_DRIVER + " is missing");
@@ -290,5 +293,30 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     {
         Optional.ofNullable(connection)
                 .ifPresent(ThrowingConsumer.exceptionLogger(Connection::close));
+    }
+
+    private static String getMaxVarChar(String jdbcDriver)
+    {
+        if ( jdbcDriver.toLowerCase().contains("oracle") )
+        {
+            return "(4000)";
+        }
+
+        if ( jdbcDriver.toLowerCase().contains("postgres") )
+        {
+            return ""; // Note in general Postgres does not have a real upper limit.
+        }
+
+        if ( jdbcDriver.toLowerCase().contains("h2") )
+        {
+            return "(" + Integer.MAX_VALUE + ")";
+        }
+
+        if ( jdbcDriver.toLowerCase().contains("mysql") )
+        {
+            return "(65535)";
+        }
+
+        return "(255)";
     }
 }
