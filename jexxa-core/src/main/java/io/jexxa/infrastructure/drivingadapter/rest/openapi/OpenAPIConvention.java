@@ -37,7 +37,7 @@ import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
 
 @SuppressWarnings("java:S1602") // required to avoid ambiguous warnings
-public class OpenAPIFacade
+public class OpenAPIConvention
 {
     private static final String APPLICATION_TYPE_JSON = "application/json";
     private static final String JSON_OBJECT_TYPE = "object";
@@ -47,7 +47,7 @@ public class OpenAPIFacade
     private final JavalinConfig javalinConfig;
     private OpenApiOptions openApiOptions;
 
-    public OpenAPIFacade(Properties properties, JavalinConfig javalinConfig)
+    public OpenAPIConvention(Properties properties, JavalinConfig javalinConfig)
     {
         this.properties = properties;
         this.javalinConfig = javalinConfig;
@@ -74,7 +74,7 @@ public class OpenAPIFacade
         }
     }
 
-    public boolean isEnabled()
+    boolean isEnabled()
     {
         return openApiOptions != null;
     }
@@ -194,7 +194,7 @@ public class OpenAPIFacade
             var jsonObject = JsonParser.parseString(schemaString).getAsJsonObject();
             if (jsonObject == null || jsonObject.get("type") == null )
             {
-                JexxaLogger.getLogger(OpenAPIFacade.class).warn("Could not create Json schema for given class `{}`", clazz.getName());
+                JexxaLogger.getLogger(OpenAPIConvention.class).warn("Could not create Json schema for given class `{}`", clazz.getName());
                 return null;
             }
 
@@ -205,7 +205,7 @@ public class OpenAPIFacade
             {
                 if (Modifier.isAbstract( clazz.getModifiers()) || Modifier.isInterface( clazz.getModifiers() ) )
                 {
-                    JexxaLogger.getLogger(OpenAPIFacade.class).warn("Given class `{}` is abstract or an interface => Can not create an example object for OpenAPI", clazz.getName());
+                    JexxaLogger.getLogger(OpenAPIConvention.class).warn("Given class `{}` is abstract or an interface => Can not create an example object for OpenAPI", clazz.getName());
                     return null;
                 }
 
@@ -224,8 +224,8 @@ public class OpenAPIFacade
             //Handle primitive values
             return createPrimitive(clazz);
         } catch (Exception e) {
-            JexxaLogger.getLogger(OpenAPIFacade.class).warn(e.getMessage(), e);
-            JexxaLogger.getLogger(OpenAPIFacade.class).warn( "Could not create Object {}" , clazz.getName() , e );
+            JexxaLogger.getLogger(OpenAPIConvention.class).warn(e.getMessage(), e);
+            JexxaLogger.getLogger(OpenAPIConvention.class).warn( "Could not create Object {}" , clazz.getName() , e );
         }
         return null;
     }
@@ -326,5 +326,17 @@ public class OpenAPIFacade
     {
         var parameterType = (ParameterizedType) type;
         return (Class<?>)parameterType.getActualTypeArguments()[0];
+    }
+
+    @SuppressWarnings({"java:S1104", "java:S116"})
+    public static class BadRequestResponse
+    {
+        public String Exception;
+        public String ExceptionType;
+        public String ApplicationType = "application/json";
+        BadRequestResponse()
+        {
+            //private constructor
+        }
     }
 }
