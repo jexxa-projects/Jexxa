@@ -103,7 +103,7 @@ that docker is installed on your local machine so that we do not need to configu
 
 Note: All tutorials can be build as docker image with the following steps.      
 
-*   Within a container, we have to define URLs to external infrastructure such as ActiveMQ or the database. As described in [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html#_application_configuration) you have to adjust either jexxa-application.properties, or you can use java system properties which can be set as JVM flags in [pom.xml](pom.xml). 
+*   Within a container, we have to define URLs to external infrastructure such as ActiveMQ or the database. As described in [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html#_application_configuration) you have to adjust either jexxa-application.properties, or you can use java system properties which can be set as JVM flags in [pom.xml](pom.xml) (see section `jvmFlags`). 
 
 *   Create the docker image with maven enter: 
     ```console                                                          
