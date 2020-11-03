@@ -76,7 +76,7 @@
     <!-- version of test dependencies -->
     <activemq.client.version>5.16.0</activemq.client.version>
     <postgres.version>42.2.18</postgres.version>
-    <unirest.java.version>3.11.02</unirest.java.version>
+    <unirest.java.version>3.11.03</unirest.java.version>
     <junit.platform.launcher.version>1.7.0</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.7.0</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.7.0</junit.jupiter.params.version>
