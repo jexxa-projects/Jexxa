@@ -35,7 +35,6 @@
     <dependency>
       <groupId>io.jexxa.jexxatest</groupId>
       <artifactId>jexxa-test</artifactId>
-      <version>${jexxa-test.release.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
