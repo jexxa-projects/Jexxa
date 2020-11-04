@@ -48,6 +48,13 @@ public class SimpleApplicationService
         throw new SimpleApplicationException("TestException");
     }
 
+    public int throwNullPointerException()   // Test runtime exception
+    {
+        JexxaValueObject jexxaValueObject = null;
+        return jexxaValueObject.getValue();
+    }
+
+
     public void setSimpleValue(int simpleValue)
     {
         this.firstValue = simpleValue;

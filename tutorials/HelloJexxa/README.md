@@ -103,22 +103,24 @@ that docker is installed on your local machine so that we do not need to configu
 
 Note: All tutorials can be build as docker image with the following steps.      
 
-To create the docker image with maven enter: 
-```console                                                          
-mvn jib:dockerBuild
-``` 
+*   Within a container, we have to define URLs to external infrastructure such as ActiveMQ or the database. As described in [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html#_application_configuration) you have to adjust either jexxa-application.properties, or you can use java system properties which can be set as JVM flags in [pom.xml](pom.xml) (see section `jvmFlags`). 
 
-After this check available docker images:                                                
-```console                                                          
-docker images
-``` 
+*   Create the docker image with maven enter: 
+    ```console                                                          
+    mvn jib:dockerBuild
+    ``` 
 
-You will see following (or similar) output
-```console                                                          
-REPOSITORY                                    TAG                 IMAGE ID            CREATED             SIZE
-...
-io.jexxa.tutorials/hellojexxa                 2.2.1-SNAPSHOT      18e39628a651        5 days ago          157MB
-...
-``` 
-In order to create a container from the image please refer [docker manual](https://docs.docker.com/)               
+*   Check available docker images:                                                
+    ```console                                                          
+    docker images
+    ``` 
+    You will see following (or similar) output
+    ```console                                                          
+    REPOSITORY                                    TAG                 IMAGE ID            CREATED             SIZE
+    ...
+    io.jexxa.tutorials/hellojexxa                 2.2.1-SNAPSHOT      18e39628a651        5 days ago          157MB
+    ...
+    ``` 
+
+*   In order to create a container from the image please refer [docker manual](https://docs.docker.com/)               
               

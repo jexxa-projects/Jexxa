@@ -162,13 +162,14 @@
                             you can use java system properties which can be set as JVM flags.
                         -->
             <jvmFlags>
-              <!--- Set URL to database -->
-              <jvmFlag>
+              <!--- Uncomment following lines to configure jdbc parameters -->
+              <!--- <jvmFlag>
                 -Dio.jexxa.jdbc.url=jdbc:postgresql://172.17.0.4:5432/bookstorej
               </jvmFlag>
               <jvmFlag>
                 -Dio.jexxa.jdbc.autocreate.database=jdbc:postgresql://172.17.0.4:5432/postgres
-              </jvmFlag>
+              </jvmFlag> -->
+
               <!--- Enable for JMX support.
               Notes:  - jmxremote.rmi.port and jmxremote.port must be identical in order to access application in docker container
                       - exposed port in section <ports> must be identical to jmxremote.port. Otherwise port forwarding will not work with jmx

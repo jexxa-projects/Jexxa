@@ -20,7 +20,7 @@ import io.javalin.core.JavalinConfig;
 import io.javalin.http.Context;
 import io.javalin.plugin.json.JavalinJson;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIFacade;
+import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
 import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.lang3.Validate;
 import org.eclipse.jetty.server.Server;
@@ -44,7 +44,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private Server server;
     private ServerConnector sslConnector;
     private ServerConnector httpConnector;
-    private OpenAPIFacade openAPIFacade;
+    private OpenAPIConvention openAPIConvention;
 
     private static final Map<Properties, RESTfulRPCAdapter> rpcAdapterMap = new HashMap<>();
 
@@ -93,11 +93,11 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
             javalin.start();
 
             if (httpConnector != null ) {
-                openAPIFacade.getPath().ifPresent( path -> Javalin.log.info("OpenAPI documentation available at: {}"
+                openAPIConvention.getPath().ifPresent(path -> Javalin.log.info("OpenAPI documentation available at: {}"
                         , "http://" + httpConnector.getHost() + ":" + httpConnector.getPort() +  path ) );
             }
             if (sslConnector != null ) {
-                openAPIFacade.getPath().ifPresent( path -> Javalin.log.info("OpenAPI documentation available at: {}"
+                openAPIConvention.getPath().ifPresent(path -> Javalin.log.info("OpenAPI documentation available at: {}"
                         , "http://" + sslConnector.getHost() + ":" + sslConnector.getPort() + path ) );
             }
         } catch (RuntimeException e)
@@ -199,10 +199,13 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     {
         //Exception Handler for thrown Exception from methods
         javalin.exception(InvocationTargetException.class, (e, ctx) -> {
+            var targetException = e.getTargetException();
+            targetException.getStackTrace(); // Ensures that stack trace is filled in
+
             Gson gson = new Gson();
             JsonObject exceptionWrapper = new JsonObject();
-            exceptionWrapper.addProperty("ExceptionType", e.getCause().getClass().getName());
-            exceptionWrapper.addProperty("Exception", gson.toJson(e));
+            exceptionWrapper.addProperty("ExceptionType", targetException.getClass().getName());
+            exceptionWrapper.addProperty("Exception", gson.toJson(targetException));
             exceptionWrapper.addProperty("ApplicationType", gson.toJson("application/json"));
 
             ctx.result(exceptionWrapper.toString());
@@ -221,7 +224,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                 )
         );
 
-        getCommands.forEach( method -> openAPIFacade.documentGET(method.getMethod(), method.getResourcePath()));
+        getCommands.forEach( method -> openAPIConvention.documentGET(method.getMethod(), method.getResourcePath()));
     }
 
     private void registerPOSTMethods(Object object)
@@ -235,7 +238,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                 )
         );
 
-        postCommands.forEach( method -> openAPIFacade.documentPOST(method.getMethod(), method.getResourcePath()));
+        postCommands.forEach( method -> openAPIConvention.documentPOST(method.getMethod(), method.getResourcePath()));
     }
 
 
@@ -320,7 +323,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         javalinConfig.server(this::getServer);
         javalinConfig.showJavalinBanner = false;
 
-        this.openAPIFacade = new OpenAPIFacade(properties, javalinConfig );
+        this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig );
     }
 
     private Server getServer()

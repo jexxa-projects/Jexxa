@@ -82,10 +82,10 @@
                   you can use java system properties which can be set as JVM flags.
               -->
             <jvmFlags>
-              <!--- Set URL to ActiveMQ provider -->
-              <jvmFlag>
+              <!--- uncomment following lines to configure URL of ActiveMQ provider via jvm flag -->
+              <!--- <jvmFlag>
                 -Djava.naming.provider.url=tcp://172.17.0.5:61616
-              </jvmFlag>
+              </jvmFlag>  -->
 
               <!--- Enable for JMX support.
                         Notes:  - jmxremote.rmi.port and jmxremote.port must be identical in order to access application in docker container

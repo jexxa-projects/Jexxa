@@ -76,7 +76,7 @@
     <!-- version of test dependencies -->
     <activemq.client.version>5.16.0</activemq.client.version>
     <postgres.version>42.2.18</postgres.version>
-    <unirest.java.version>3.11.02</unirest.java.version>
+    <unirest.java.version>3.11.03</unirest.java.version>
     <junit.platform.launcher.version>1.7.0</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.7.0</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.7.0</junit.jupiter.params.version>
@@ -97,6 +97,24 @@
     <maven.shade.plugin>3.2.4</maven.shade.plugin>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.jexxa.jexxatest</groupId>
+        <artifactId>jexxa-test</artifactId>
+        <version>${jexxa-test.release.version}</version>
+        <!-- In case you want to run your tutorials with SNAPSHOT version of Jexxa uncomment line below and remove line above -->
+        <!--<version>${project.version}</version> -->
+      </dependency>
+      <dependency>
+        <groupId>io.jexxa</groupId>
+        <artifactId>jexxa-core</artifactId>
+        <version>${jexxa-core.release.version}</version>
+        <!-- In case you want to run your tutorials with SNAPSHOT version of Jexxa uncomment line below and remove line above -->
+        <!--<version>${project.version}</version> -->
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
@@ -181,6 +199,8 @@
         </plugin>
       </plugins>
     </pluginManagement>
+
+
 
     <!-- Plugin specific configuration -->
     <plugins>

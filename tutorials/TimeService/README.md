@@ -204,21 +204,21 @@ public class PublishTimeListener implements MessageListener
     @JMSConfiguration(destination = TIME_TOPIC, messagingType = JMSConfiguration.MessagingType.TOPIC)
     public void onMessage(Message message)
     {
-        // The JMSSender sends all messages as TextMessage in Json encoding
-        var textMessage = (TextMessage)message;
         try
         {
+            // The JMSSender sends all messages as TextMessage in Json encoding
+            var textMessage = (TextMessage)message;
+        
             // Deserialize the message which is of type 'LocalTime'
             var time = new Gson().fromJson(textMessage.getText(), LocalTime.class);
-
-            // Forward this information to corresponding application service. 
-            timeService.timePublished(time);
+        
+            // Forward this information to corresponding application service.
+            timeService.displayPublishedTime(time);
         }
-        catch (JMSException jmsException)
+        catch (RuntimeException | JMSException exception)
         {
-            JexxaLogger.getLogger(PublishTimeListener.class).error(jmsException.getMessage());
+            JexxaLogger.getLogger(PublishTimeListener.class).error(exception.getMessage());
         }
-
     }
 }
 ```

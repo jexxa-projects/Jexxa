@@ -291,5 +291,31 @@ class RESTfulRPCAdapterIT
         assertNotNull(result);
         assertEquals(SpecialCasesValueObject.SPECIAL_CASES_VALUE_OBJECT, result);
     }
+
+    @Test // RPC call test: int getSimpleValue()
+    void testGETCommandWithNullPointerException()
+    {
+        //Arrange -> Nothing to do
+        var gson = new Gson();
+
+        //Act
+        var response = Unirest.get(REST_PATH + "throwNullPointerException")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asJson();
+        JsonObject error = response.mapError(JsonObject.class);
+
+        var exceptionType = error.get("ExceptionType").getAsString();
+        var exception =  error.get("Exception").getAsString();
+        var nullPointerException = gson.fromJson(exception, NullPointerException.class);
+
+        //Assert
+        assertNotNull(error);
+        assertNotNull(exceptionType);
+        assertNotNull(exception);
+
+        assertEquals(NullPointerException.class.getName(), exceptionType);
+        assertNotNull(nullPointerException.getStackTrace());
+        assertTrue(nullPointerException.getStackTrace().length > 0);
+    }
 }
 
