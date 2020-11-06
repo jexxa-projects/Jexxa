@@ -333,7 +333,7 @@ public class OpenAPIConvention
     {
         public String Exception;
         public String ExceptionType;
-        public String ApplicationType = "application/json";
+        public String ApplicationType = APPLICATION_TYPE_JSON;
         BadRequestResponse()
         {
             //private constructor
