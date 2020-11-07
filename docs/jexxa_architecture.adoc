@@ -48,6 +48,55 @@ Applications without well-defined boundaries between technology stacks and appli
 
 * In the long term, such structural issues could (and in reality will) affect your enterprise architecture, so neighboring systems need to be aware of and take special actions for legacy systems.
 
+== General Design Decisions
+The challenges described in motivation
+
+Problem scope is typically not on the technical side. The big challenge is to understand the domain and what our customers or users want to achieve.
+
+The consequences are:
+* Your best senior developers should focus on the application core and support your customers to map a specific domain to a suitable structure for the application core. This is typically done for new projects.
+* Since your senior developers focus on the application core, your junior developers have to focus on the infrastructure. Which should be as simple as possible and not an `egg-laying wool-milk sow`.
+* To teach a junior to an intermediate developer, you can give him tasks to extend an existing application.
+
+Jexxa is especially developed to support these team structures.
+
+=== No framework specific annotations
+Framework specific annotations bind your application core to a specific technology. Therefore, Jexxa does not use annotations for all IoC aspects such as dependency inversion. Instead, conventions are used.
+
+Discussion: Based on my experiences I think that conventions are more suitable for IoC aspects for the following reason:
+
+* If you start developing an application with a new framework, you have to learn these things. Similar to other frameworks, Jexxa provides a small set of tutorials that supports/guide your learning process.
+* If you have to extend TODO: Link to tutorials
+
+In case you have to extend the application core (which us typically )
+
+===  Explicit binding for driving adapter
+
+Most today's frameworks bind a new technology stack automatically to your application core. At most, you have to add a new dependency and rebuild the application.
+
+Typically, updating technology stacks is done very rarely. In the beginning phase of new project you don't get the time because your focus is on new domain features. Later on you don't get the time because no new domain features are required. So updating technology stacks is typically done every 3-5 years (that's why your company pays for long time support of technology stacks).
+
+The problem is that if a team has to update a technology stack after several years
+
+This leads to three major decisions:
+
+* A super simple API to include arbitrary technology stacks without updating the core library
+
+* An explicit binding so that the developer directly sees after a couple of years which technology stacks are used. So it is not necessary to learn the conventions of an outdated library.
+
+* The possibility to bind driving technology stacks on a per object level. This supports following cases:
+** You should migrate a legacy system but during ths phase your new developed application must communicate with the legacy system using some real old communication mechanism. In this case you should only expose the realy required objects and not all. Otherwise, there is a fair chance that the developers maintaining the legacy system will use the new cool features from the new application and you will end in a neverending migration process.
+** You can evaluate new technology stacks, or if the application itself is legacy you can add some required external binding but only to objects theirs functionality is realy required.
+
+* You make flow of control more visible, which is especially much better for junior developer to understand ports and adapter. Please remember that your senior developers are focused on the application core itself.
+
+Due to these reasons, Jexxa requires an explicit binding for driving adapters in all cases.
+
+=== Strategy pattern for Driven Adapter
+
+To enable this functionality as well for driven adapter which are only interfaces and must be implemented, Jexxa uses strategy pattern, so that implementing a driven adapter means
+* querying a strategy for a specific object
+* mapping methods from application by forwarding it to interface of the startegy similiar to a facade.
 
 == General Building Blocks
 

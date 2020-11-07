@@ -14,7 +14,7 @@ public @interface JMSConfiguration
 {
     enum MessagingType {QUEUE, TOPIC}
 
-    String destination() default "";
+    String destination() ;
     String selector() default "";
-    MessagingType messagingType() default MessagingType.TOPIC;
+    MessagingType messagingType() ;
 }
