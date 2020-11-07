@@ -452,9 +452,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_conventions">2. Conventions</a>
 <ul class="sectlevel2">
-<li><a href="#_general_conventions_in_jexxa">2.1. General Conventions in Jexxa</a></li>
-<li><a href="#_restfulrpcadapter">2.2. RESTfulRPCAdapter</a></li>
-<li><a href="#_jmxadapter">2.3. JMXAdapter</a></li>
+<li><a href="#_restfulrpcadapter">2.1. RESTfulRPCAdapter</a></li>
+<li><a href="#_jmxadapter">2.2. JMXAdapter</a></li>
+</ul>
+</li>
+<li><a href="#_configuration">3. Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#_jmsadapter">3.1. JMSAdapter</a></li>
 </ul>
 </li>
 </ul>
@@ -545,14 +549,11 @@ The <code>BoundedContext</code> objects provides methods to stop you running app
 <div class="sect1">
 <h2 id="_conventions"><a class="anchor" href="#_conventions"></a>2. Conventions</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_general_conventions_in_jexxa"><a class="anchor" href="#_general_conventions_in_jexxa"></a>2.1. General Conventions in Jexxa</h3>
 <div class="paragraph">
-<p>Jexxa defines several conventions when implementing ports or adapters. These conventions are described <a href="https://repplix.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di">here</a>.</p>
-</div>
+<p>Jexxa defines some conventions for realizing implicit constructor injection which are described <a href="https://repplix.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di">here</a>. In addition, driving adapter can define their own conventions to automatically expose ports via a specific technology stack. Within Jexxa, these driving adapter are called <code>generic driving adapter</code>. In the rest of this Section you find a description of conventions used by these generic driving adapter.</p>
 </div>
 <div class="sect2">
-<h3 id="_restfulrpcadapter"><a class="anchor" href="#_restfulrpcadapter"></a>2.2. RESTfulRPCAdapter</h3>
+<h3 id="_restfulrpcadapter"><a class="anchor" href="#_restfulrpcadapter"></a>2.1. RESTfulRPCAdapter</h3>
 <div class="paragraph">
 <p>The <code>RESTfulRPCAdapter</code> is a simple RPC mechanism utilizing REST. Based on the <a href="https://martinfowler.com/articles/richardsonMaturityModel.html">REST maturity model</a> from Richardson it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST on a higher maturity level.</p>
 </div>
@@ -747,7 +748,7 @@ The order of the attributes in the Json array must match to the order of attribu
 </table>
 </div>
 <div class="sect2">
-<h3 id="_jmxadapter"><a class="anchor" href="#_jmxadapter"></a>2.3. JMXAdapter</h3>
+<h3 id="_jmxadapter"><a class="anchor" href="#_jmxadapter"></a>2.2. JMXAdapter</h3>
 <div class="paragraph">
 <p>The <code>JMXAdapter</code> allows to control your application and access all objects that are registered.</p>
 </div>
@@ -815,10 +816,106 @@ For example, the Json template for <code>LocalTime</code> looks as follows:<br>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>3. Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Some driving adapter cannot automatically expose a port via conventions. These driving adapters are called <code>specific driving adapters</code>. A specific driving adapter is required for integrating technology stacks that require a mapping to the interface of a port. Typical examples are mapping a RESTfulHTTP API to the public interface of a java object, or mapping an asynchronous message to a specific method of an object.</p>
+</div>
+<div class="paragraph">
+<p>In Jexxa we split this kind of driving adapter into two parts:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>specific driving adapter</code> provides the reusable part of the driving adapter, such as connecting to a messaging system or listening on a network port.</p>
+</li>
+<li>
+<p>The <code>port adapter</code> must be implemented by the application developer and describes how to map incoming requests to the used port</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To describe the mapping of the port adapter within Jexxa, we recommend using Java annotations for the following reason:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Using annotations between a specific driving adapter and port adapter is not a problem because these two components belong to the infrastructure and are tightly coupled.</p>
+</li>
+<li>
+<p>The configuration is documented within the source code so that it is directly visible to the developer.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_jmsadapter"><a class="anchor" href="#_jmsadapter"></a>3.1. JMSAdapter</h3>
+<div class="paragraph">
+<p>When implementing a port adapter for <code>JMSAdapter</code>, you have to implement the <code>MessageListener</code> interface of JMS and annotate the class with <code>@JMSConfiguration</code>.</p>
+</div>
+<div class="paragraph">
+<p>Here you have to provide following information:</p>
+</div>
+<table id="JMSAdapterConfiguration" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. Describes the configuration used in <code>JMSAdapter</code>.</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Configuration</strong></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Description</strong></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>destination</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Name of the jms topic or queue.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>selector</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Defines a message selector to filter messages. Default value is <code>""</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>messagingType</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Must be either <code>TOPIC</code> or <code>QUEUE</code> depending on the used messaging type.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title=":bulb:"></i>
+</td>
+<td class="content">
+Please check the tutorial <a href="https://github.com/repplix/Jexxa/tree/master/tutorials/TimeService"><code>TimeService</code></a> for an example.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-10-24 19:14:59 +0200
+Last updated 2020-11-07 20:00:37 +0100
 </div>
 </div>
 </body>

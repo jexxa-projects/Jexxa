@@ -170,3 +170,28 @@ To describe the mapping of the port adapter within Jexxa, we recommend using Jav
 * The configuration is documented within the source code so that it is directly visible to the developer.
 
 === JMSAdapter
+
+When implementing a port adapter for `JMSAdapter`, you have to implement the `MessageListener` interface of JMS and annotate the class with `@JMSConfiguration`.
+
+Here you have to provide following information:
+
+[cols="1,3"]
+[reftext="Table {counter:local-table-number}"]
+.Describes the configuration used in `JMSAdapter`.
+[[JMSAdapterConfiguration]]
+|===
+a|*Configuration*
+a|*Description*
+
+a|`destination`
+a| Name of the jms topic or queue.
+
+a|`selector`
+a| Defines a message selector to filter messages. Default value is `""`.
+
+a|`messagingType`
+a| Must be either `TOPIC` or `QUEUE` depending on the used messaging type.
+
+|===
+
+TIP: Please check the tutorial https://github.com/repplix/Jexxa/tree/master/tutorials/TimeService[`TimeService`] for an example.
