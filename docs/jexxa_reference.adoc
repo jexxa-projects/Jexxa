@@ -155,3 +155,18 @@ a| A return value is send as Json object
 
 |===
 
+== Configuration
+
+Some driving adapter cannot automatically expose a port via conventions. These driving adapters are called `specific driving adapters`. A specific driving adapter is required for integrating technology stacks that require a mapping to the interface of a port. Typical examples are mapping a RESTfulHTTP API to the public interface of a java object, or mapping an asynchronous message to a specific method of an object.
+
+In Jexxa we split this kind of driving adapter into two parts:
+
+* The `specific driving adapter` provides the reusable part of the driving adapter, such as connecting to a messaging system or listening on a network port.
+* The `port adapter` must be implemented by the application developer and describes how to map incoming requests to the used port
+
+To describe the mapping of the port adapter within Jexxa, we recommend using Java annotations for the following reason:
+
+* Using annotations between a specific driving adapter and port adapter is not a problem because these two components belong to the infrastructure and are tightly coupled.
+* The configuration is documented within the source code so that it is directly visible to the developer.
+
+=== JMSAdapter
