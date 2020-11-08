@@ -107,33 +107,22 @@ This seems to be so obvious so we directly agree. Therefore, I would like to exp
 * From an architectural point of view your junior developer gets familiar with the principal of dependency inversion.
 * Finally, your developers learn that they can persist data within a database without thinking about the database layout. Using a strategy pattern instead makes the database to a plugin.
 
-As soon as your junior developers feel that they are not challenged with implementing driven adapters as described above, give them one of these points to study.
+As soon as your junior developers feel that they are not challenged with implementing driven adapters, give them one of the above points to study.
 
-=== Super simple API
+// === Integration of arbitrary technology stacks
 
-The implementation of In order to enforce dependency inversion, all driven adapter must implement an interface which resides inside the application core.
+// One of the key aspects for durable software systems is the ability to use arbitrary technology stacks which do not exist at the point in time the application was developed. A major issue is to use the latest features iThis requires a balance between using a
 
-using strategy patterns.
 
-In case the technology stacks of your application becomes legacy, a developer has to analyze which technology stacks are used by the application. Since
-he has only to switch
-
-This leads to three major decisions:
-
-* A super simple API to include arbitrary technology stacks without updating the core library
+// * A super simple API to include arbitrary technology stacks without updating the core library
 
 
 
-* The possibility to bind driving technology stacks on a per object level. This supports following cases:
-** You should migrate a legacy system but during ths phase your new developed application must communicate with the legacy system using some real old communication mechanism. In this case you should only expose the realy required objects and not all. Otherwise, there is a fair chance that the developers maintaining the legacy system will use the new cool features from the new application and you will end in a neverending migration process.
-** You can evaluate new technology stacks, or if the application itself is legacy you can add some required external binding but only to objects theirs functionality is realy required.
+// * The possibility to bind driving technology stacks on a per object level. This supports following cases:
+// ** You should migrate a legacy system but during ths phase your new developed application must communicate with the legacy system using some real old communication mechanism. In this case you should only expose the realy required objects and not all. Otherwise, there is a fair chance that the developers maintaining the legacy system will use the new cool features from the new application and you will end in a neverending migration process.
+// ** You can evaluate new technology stacks, or if the application itself is legacy you can add some required external binding but only to objects theirs functionality is realy required.
 
 
-Due to these reasons, Jexxa requires an explicit binding for driving adapters in all cases.
-
-To enable this functionality as well for driven adapter which are only interfaces and must be implemented, Jexxa uses strategy pattern, so that implementing a driven adapter means
-* querying a strategy for a specific object
-* mapping methods from application by forwarding it to interface of the startegy similiar to a facade.
 
 == General Building Blocks
 
@@ -212,7 +201,7 @@ a|`ApplicationCore`
 a|`Infrastructure`
 a| This package includes the glue code to bind your technology agnostic business application to the package `JexxaInfrastructure`.
 
-|`JexxaInfrastructure`
+a|`JexxaInfrastructure`
 | This package includes the provided driving adapter of Jexxa as well as the driven adapter strategies which simplify the application specific driven adapter
 
 a|`JexxaCore`

@@ -447,8 +447,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_motivation">2. Motivation</a></li>
 <li><a href="#_general_design_decisions">3. General Design Decisions</a>
 <ul class="sectlevel2">
-<li><a href="#_no_framework_specific_annotations">3.1. No framework specific annotations</a></li>
-<li><a href="#_explicit_binding_vs_implicit_binding">3.2. Explicit binding vs. implicit binding</a></li>
+<li><a href="#_ioc_without_annotations">3.1. IoC without annotations</a></li>
+<li><a href="#_visible_flow_of_control">3.2. Visible flow of control</a></li>
 <li><a href="#_strategy_pattern_for_driven_adapter">3.3. Strategy pattern for Driven Adapter</a></li>
 </ul>
 </li>
@@ -578,7 +578,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>An additional advantage is that the training time of new developers is drastically reduced until they can be productive.
 The training period for a new business domain typically takes 1-2 years, whereas the training period for a simple framework is a couple of weeks.
-Therefore, they can support their colleagues very quickly in implementing the infrastructure part.</p>
+Therefore, they can support their colleagues very quickly by implementing the infrastructure part.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -587,91 +587,115 @@ Therefore, they can support their colleagues very quickly in implementing the in
 <i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
 </td>
 <td class="content">
-Much more important is that junior developer get the time to learn the craftsmanship of software development, methods of software
-architecture and the domain language step by step.
+Much more important is that junior developers get the time to learn the craftsmanship of software development, methods of software
+architecture and the domain language step by step from the intermediate and senior developers.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Unfortunately, I have often experienced in the past that companies expect a graduate to already know the craftsmanship of software engineering and
-methods of software architecture and therefore only need to get used to a business domain.</p>
+<p>Unfortunately, I have often experienced in the past that companies expect a graduate or junior developer to already know the craftsmanship of software engineering and
+methods of software architecture so that they only need to learn a business domain.</p>
 </div>
 <div class="paragraph">
-<p>Jexxa was developed to ideally support this kind of team structures. The rest of this section describes the resulting design consequences.</p>
+<p>Jexxa was developed to ideally support the described team structure. The rest of this section described the resulting design consequences and
+why conventions or configurations are used.</p>
 </div>
 <div class="sect2">
-<h3 id="_no_framework_specific_annotations"><a class="anchor" href="#_no_framework_specific_annotations"></a>3.1. No framework specific annotations</h3>
+<h3 id="_ioc_without_annotations"><a class="anchor" href="#_ioc_without_annotations"></a>3.1. IoC without annotations</h3>
 <div class="paragraph">
-<p>Framework specific annotations bind your application core to a specific technology. Therefore, Jexxa does not use annotations for all IoC aspects such as dependency inversion. Instead, conventions are used.</p>
+<p>Like any other framework, Jexxa takes control about part of your application core. Especially in Java this is often done with framework specific
+annotations. The bad thing is that these annotations tightly couple your application core to a specific technology stack.</p>
 </div>
 <div class="paragraph">
-<p>Discussion: Based on my experiences I think that conventions are more suitable for IoC aspects for the following reason:</p>
+<p>Based on my experience, I can only recommend annotations within the application core for the following reasons:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>If you start developing an application with a new framework, you have to learn these things. Similar to other frameworks, Jexxa provides a small set of tutorials that supports/guide your learning process.</p>
+<p>Annotate your classes with the used pattern language of your application core.</p>
 </li>
 <li>
-<p>If you have to extend TODO: Link to tutorials</p>
+<p>Use annotations for cross-cutting concerns on a homeopathic level. This can be useful to make the domain language more explicit  by hiding methods such as equals and hash code.</p>
 </li>
 </ul>
 </div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
+</td>
+<td class="content">
+Jexxa does not use annotations for all IoC aspects such as dependency injection. Instead, conventions are used.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>In case you have to extend the application core (which us typically )</p>
+<p>Section <a href="#_inversion_of_control_ioc">Inversion of Control (IoC)</a> describes the used conventions in detail.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_explicit_binding_vs_implicit_binding"><a class="anchor" href="#_explicit_binding_vs_implicit_binding"></a>3.2. Explicit binding vs. implicit binding</h3>
+<h3 id="_visible_flow_of_control"><a class="anchor" href="#_visible_flow_of_control"></a>3.2. Visible flow of control</h3>
 <div class="paragraph">
-<p>Most today&#8217;s frameworks bind a new technology stack automatically to your application core. If at all, you have to add a new dependency and rebuild the application.</p>
-</div>
-<div class="paragraph">
-<p>Typically, updating technology stacks is done very rarely. In the beginning phase of new project you don&#8217;t get the time because your focus is on new domain features. Later on you don&#8217;t get the time because no new domain features are required. So updating technology stacks is typically done every 3-5 years (that&#8217;s why your company pays for long time support of technology stacks).</p>
+<p>Most today&#8217;s frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and
+adapters architecture. This is especially true for the entry points of your application.</p>
 </div>
 <div class="paragraph">
-<p>The problem is that if a team has to update a technology stack after several years</p>
+<p>This might be obvious to incoming synchronous calls (RMI), but can be hard to see for incoming asynchronous messaging.</p>
 </div>
-<div class="paragraph">
-<p>This leads to three major decisions:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>A super simple API to include arbitrary technology stacks without updating the core library</p>
-</li>
-<li>
-<p>An explicit binding so that the developer directly sees after a couple of years which technology stacks are used. So it is not necessary to learn the conventions of an outdated library.</p>
-</li>
-<li>
-<p>The possibility to bind driving technology stacks on a per object level. This supports following cases:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>You should migrate a legacy system but during ths phase your new developed application must communicate with the legacy system using some real old communication mechanism. In this case you should only expose the realy required objects and not all. Otherwise, there is a fair chance that the developers maintaining the legacy system will use the new cool features from the new application and you will end in a neverending migration process.</p>
-</li>
-<li>
-<p>You can evaluate new technology stacks, or if the application itself is legacy you can add some required external binding but only to objects theirs functionality is realy required.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>You make flow of control more visible, which is especially much better for junior developer to understand ports and adapter. Please remember that your senior developers are focused on the application core itself.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Due to these reasons, Jexxa requires an explicit binding for driving adapters in all cases.</p>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
+</td>
+<td class="content">
+Jexxa uses explicit binding for driving adapters so that developers directly see from the main method which incoming messages are handled by which object.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_strategy_pattern_for_driven_adapter"><a class="anchor" href="#_strategy_pattern_for_driven_adapter"></a>3.3. Strategy pattern for Driven Adapter</h3>
 <div class="paragraph">
-<p>To enable this functionality as well for driven adapter which are only interfaces and must be implemented, Jexxa uses strategy pattern, so that implementing a driven adapter means
-* querying a strategy for a specific object
-* mapping methods from application by forwarding it to interface of the startegy similiar to a facade.</p>
+<p>Driven adapters belong to the infrastructure and are application specific because the implement outbound ports. Thus, their implementation should be as simple as possible so that they can be implemented by junior developers.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
+</td>
+<td class="content">
+Jexxa provides <code>driven adapter strategies</code> to implement driven adapters so that their implementation is just a simple facade, which maps between the API of outbound ports to corresponding API of the strategy.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This seems to be so obvious so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so called aggregates:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Regarding your business domain, your junior developers will learn at least the name of the most important business objects, because <code>Aggregates</code> include the business logic of this domain.</p>
+</li>
+<li>
+<p>From a software engineering point of view your junior developer gets familiar with the strategy design pattern.</p>
+</li>
+<li>
+<p>From an architectural point of view your junior developer gets familiar with the principal of dependency inversion.</p>
+</li>
+<li>
+<p>Finally, your developers learn that they can persist data within a database without thinking about the database layout. Using a strategy pattern instead makes the database to a plugin.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>As soon as your junior developers feel that they are not challenged with implementing driven adapters, give them one of the above points to study.</p>
 </div>
 </div>
 </div>
@@ -722,7 +746,9 @@ methods of software architecture and therefore only need to get used to a busine
 </div></div></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JexxaInfrastructure</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>JexxaInfrastructure</code></p>
+</div></div></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">This package includes the provided driving adapter of Jexxa as well as the driven adapter strategies which simplify the application specific driven adapter</p></td>
 </tr>
 <tr>
@@ -1266,7 +1292,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-11-08 17:25:36 +0100
+Last updated 2020-11-08 20:09:51 +0100
 </div>
 </div>
 </body>
