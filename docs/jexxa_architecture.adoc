@@ -96,7 +96,24 @@ IMPORTANT: Jexxa uses explicit binding for driving adapters so that developers d
 
 === Strategy pattern for Driven Adapter
 
-Dependency inversion using strategy patterns.
+Driven adapters belong to the infrastructure and are application specific because the implement outbound ports. Thus, their implementation should be as simple as possible so that they can be implemented by junior developers.
+
+IMPORTANT: Jexxa provides `driven adapter strategies` to implement driven adapters so that their implementation is just a simple facade, which maps between the API of outbound ports to corresponding API of the strategy.
+
+This seems to be so obvious so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so called aggregates:
+
+* Regarding your business domain, your junior developers will learn at least the name of the most important business objects, because `Aggregates` include the business logic of this domain.
+* From a software engineering point of view your junior developer gets familiar with the strategy design pattern.
+* From an architectural point of view your junior developer gets familiar with the principal of dependency inversion.
+* Finally, your developers learn that they can persist data within a database without thinking about the database layout. Using a strategy pattern instead makes the database to a plugin.
+
+As soon as your junior developers feel that they are not challenged with implementing driven adapters as described above, give them one of these points to study.
+
+=== Super simple API
+
+The implementation of In order to enforce dependency inversion, all driven adapter must implement an interface which resides inside the application core.
+
+using strategy patterns.
 
 In case the technology stacks of your application becomes legacy, a developer has to analyze which technology stacks are used by the application. Since
 he has only to switch
