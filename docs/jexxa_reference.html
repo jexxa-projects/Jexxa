@@ -831,7 +831,7 @@ For example, the Json template for <code>LocalTime</code> looks as follows:<br>
 <p>The <code>specific driving adapter</code> provides the reusable part of the driving adapter, such as connecting to a messaging system or listening on a network port.</p>
 </li>
 <li>
-<p>The <code>port adapter</code> must be implemented by the application developer and describes how to map incoming requests to the used port</p>
+<p>The <code>port adapter</code> must be implemented by the application developer and describes how to map incoming requests to the used port.</p>
 </li>
 </ul>
 </div>
@@ -845,6 +845,9 @@ For example, the Json template for <code>LocalTime</code> looks as follows:<br>
 </li>
 <li>
 <p>The configuration is documented within the source code so that it is directly visible to the developer.</p>
+</li>
+<li>
+<p>The configuration can only be changed during compile time. This is a conscious restriction of the configuration options to ensure that the development environment must be identical with the production environment.</p>
 </li>
 </ul>
 </div>
@@ -876,15 +879,7 @@ For example, the Json template for <code>LocalTime</code> looks as follows:<br>
 <p><code>destination</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Name of the jms topic or queue.</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>selector</code></p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Defines a message selector to filter messages. Default value is <code>""</code>.</p>
+<p>A Required parameter describing the name of the jms topic or queue.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -892,7 +887,15 @@ For example, the Json template for <code>LocalTime</code> looks as follows:<br>
 <p><code>messagingType</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Must be either <code>TOPIC</code> or <code>QUEUE</code> depending on the used messaging type.</p>
+<p>A required parameter which must be either <code>TOPIC</code> or <code>QUEUE</code> depending on the used messaging type.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>selector</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>An optional parameter which defines a message selector to filter messages.</p>
 </div></div></td>
 </tr>
 </tbody>
@@ -915,7 +918,7 @@ Please check the tutorial <a href="https://github.com/repplix/Jexxa/tree/master/
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-11-07 20:00:37 +0100
+Last updated 2020-11-08 16:10:25 +0100
 </div>
 </div>
 </body>

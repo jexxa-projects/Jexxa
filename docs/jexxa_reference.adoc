@@ -162,12 +162,13 @@ Some driving adapter cannot automatically expose a port via conventions. These d
 In Jexxa we split this kind of driving adapter into two parts:
 
 * The `specific driving adapter` provides the reusable part of the driving adapter, such as connecting to a messaging system or listening on a network port.
-* The `port adapter` must be implemented by the application developer and describes how to map incoming requests to the used port
+* The `port adapter` must be implemented by the application developer and describes how to map incoming requests to the used port.
 
 To describe the mapping of the port adapter within Jexxa, we recommend using Java annotations for the following reason:
 
 * Using annotations between a specific driving adapter and port adapter is not a problem because these two components belong to the infrastructure and are tightly coupled.
 * The configuration is documented within the source code so that it is directly visible to the developer.
+* The configuration can only be changed during compile time. This is a conscious restriction of the configuration options to ensure that the development environment must be identical with the production environment.
 
 === JMSAdapter
 
@@ -184,13 +185,13 @@ a|*Configuration*
 a|*Description*
 
 a|`destination`
-a| Name of the jms topic or queue.
-
-a|`selector`
-a| Defines a message selector to filter messages. Default value is `""`.
+a| A Required parameter describing the name of the jms topic or queue.
 
 a|`messagingType`
-a| Must be either `TOPIC` or `QUEUE` depending on the used messaging type.
+a| A required parameter which must be either `TOPIC` or `QUEUE` depending on the used messaging type.
+
+a|`selector`
+a| An optional parameter which defines a message selector to filter messages.
 
 |===
 
