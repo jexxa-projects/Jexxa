@@ -1,5 +1,7 @@
 package io.jexxa.tutorials.timeservice.infrastructure.drivingadapter.messaging;
 
+import static io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration.MessagingType.TOPIC;
+
 import java.time.LocalTime;
 
 import javax.jms.JMSException;
@@ -26,7 +28,7 @@ public class PublishTimeListener implements MessageListener
 
     @Override
     // The JMS specific configuration is defined via annotation.
-    @JMSConfiguration(destination = TIME_TOPIC, messagingType = JMSConfiguration.MessagingType.TOPIC)
+    @JMSConfiguration(destination = TIME_TOPIC,  messagingType = TOPIC)
     public void onMessage(Message message)
     {
         try
