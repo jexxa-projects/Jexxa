@@ -49,50 +49,70 @@ Applications without well-defined boundaries between technology stacks and appli
 * In the long term, such structural issues could (and in reality will) affect your enterprise architecture, so neighboring systems need to be aware of and take special actions for legacy systems.
 
 == General Design Decisions
-The challenges described in motivation
+As described in Section <<Motivation>>, the problem scope is typically not on the technical side. The big challenge is to understand the business domain and what our customers or users want to achieve which is called `value`. In contrast to technology companies, companies from production, financial or insurance sector do not create `value` by using different technology stacks without changing their business model and thus their business applications. At most, they can reduce their costs by using different technology stacks or technology provider.
 
-Problem scope is typically not on the technical side. The big challenge is to understand the domain and what our customers or users want to achieve.
+This actually leads to a rather obvious conclusion about team structures, which in my experience is often ignored:
 
-The consequences are:
-* Your best senior developers should focus on the application core and support your customers to map a specific domain to a suitable structure for the application core. This is typically done for new projects.
-* Since your senior developers focus on the application core, your junior developers have to focus on the infrastructure. Which should be as simple as possible and not an `egg-laying wool-milk sow`.
-* To teach a junior to an intermediate developer, you can give him tasks to extend an existing application.
+* Your senior developers should focus on the application core and support your customers to map a specific domain to a suitable structure for the application core.
+* The intermediate developers then support implementing the application core.
+* Since your senior and intermediate developers focus on the application core, your junior developers have to focus on the technology stack. Therefore, your framework should be as simple as possible and not an `egg-laying wool-milk sow`.
 
-Jexxa is especially developed to support these team structures.
+An additional advantage is that the training time of new developers is drastically reduced until they can be productive.
+The training period for a new business domain typically takes 1-2 years, whereas the training period for a simple framework is a couple of weeks.
+Therefore, they can support their colleagues very quickly by implementing the infrastructure part.
 
-=== No framework specific annotations
-Framework specific annotations bind your application core to a specific technology. Therefore, Jexxa does not use annotations for all IoC aspects such as dependency inversion. Instead, conventions are used.
+IMPORTANT: Much more important is that junior developers get the time to learn the craftsmanship of software development, methods of software
+architecture and the domain language step by step from the intermediate and senior developers.
 
-Discussion: Based on my experiences I think that conventions are more suitable for IoC aspects for the following reason:
+Unfortunately, I have often experienced in the past that companies expect a graduate or junior developer to already know the craftsmanship of software engineering and
+methods of software architecture so that they only need to learn a business domain.
 
-* If you start developing an application with a new framework, you have to learn these things. Similar to other frameworks, Jexxa provides a small set of tutorials that supports/guide your learning process.
-* If you have to extend TODO: Link to tutorials
+Jexxa was developed to ideally support the described team structure. The rest of this section described the resulting design consequences and
+why conventions or configurations are used.
 
-In case you have to extend the application core (which us typically )
+=== IoC without annotations
 
-===  Explicit binding for driving adapter
+Like any other framework, Jexxa takes control about part of your application core. Especially in Java this is often done with framework specific
+annotations. The bad thing is that these annotations tightly couple your application core to a specific technology stack.
 
-Most today's frameworks bind a new technology stack automatically to your application core. At most, you have to add a new dependency and rebuild the application.
+Based on my experience, I can only recommend annotations within the application core for the following reasons:
 
-Typically, updating technology stacks is done very rarely. In the beginning phase of new project you don't get the time because your focus is on new domain features. Later on you don't get the time because no new domain features are required. So updating technology stacks is typically done every 3-5 years (that's why your company pays for long time support of technology stacks).
+* Annotate your classes with the used pattern language of your application core.
+* Use annotations for cross-cutting concerns on a homeopathic level. This can be useful to make the domain language more explicit  by hiding methods such as equals and hash code.
 
-The problem is that if a team has to update a technology stack after several years
+IMPORTANT: Jexxa does not use annotations for all IoC aspects such as dependency injection. Instead, conventions are used.
+
+Section <<Inversion of Control (IoC)>> describes the used conventions in detail.
+
+===  Visible flow of control
+
+Most today's frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and
+adapters architecture. This is especially true for the entry points of your application.
+
+This might be obvious to incoming synchronous calls (RMI), but can be hard to see for incoming asynchronous messaging.
+
+IMPORTANT: Jexxa uses explicit binding for driving adapters so that developers directly see from the main method which incoming messages are handled by which object.
+
+
+=== Strategy pattern for Driven Adapter
+
+Dependency inversion using strategy patterns.
+
+In case the technology stacks of your application becomes legacy, a developer has to analyze which technology stacks are used by the application. Since
+he has only to switch
 
 This leads to three major decisions:
 
 * A super simple API to include arbitrary technology stacks without updating the core library
 
-* An explicit binding so that the developer directly sees after a couple of years which technology stacks are used. So it is not necessary to learn the conventions of an outdated library.
+
 
 * The possibility to bind driving technology stacks on a per object level. This supports following cases:
 ** You should migrate a legacy system but during ths phase your new developed application must communicate with the legacy system using some real old communication mechanism. In this case you should only expose the realy required objects and not all. Otherwise, there is a fair chance that the developers maintaining the legacy system will use the new cool features from the new application and you will end in a neverending migration process.
 ** You can evaluate new technology stacks, or if the application itself is legacy you can add some required external binding but only to objects theirs functionality is realy required.
 
-* You make flow of control more visible, which is especially much better for junior developer to understand ports and adapter. Please remember that your senior developers are focused on the application core itself.
 
 Due to these reasons, Jexxa requires an explicit binding for driving adapters in all cases.
-
-=== Strategy pattern for Driven Adapter
 
 To enable this functionality as well for driven adapter which are only interfaces and must be implemented, Jexxa uses strategy pattern, so that implementing a driven adapter means
 * querying a strategy for a specific object
