@@ -447,9 +447,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_motivation">2. Motivation</a></li>
 <li><a href="#_general_design_decisions">3. General Design Decisions</a>
 <ul class="sectlevel2">
-<li><a href="#_ioc_without_annotations">3.1. IoC without annotations</a></li>
-<li><a href="#_visible_flow_of_control">3.2. Visible flow of control</a></li>
-<li><a href="#_strategy_pattern_for_driven_adapter">3.3. Strategy pattern for Driven Adapter</a></li>
+<li><a href="#_visible_flow_of_control">3.1. Visible flow of control</a></li>
+<li><a href="#_simple_interface_for_driving_adapters">3.2. Simple Interface for Driving Adapters</a></li>
+<li><a href="#_ioc_without_annotations">3.3. IoC without annotations</a></li>
+<li><a href="#_strategy_pattern_for_driven_adapters">3.4. Strategy pattern for Driven Adapters</a></li>
 </ul>
 </li>
 <li><a href="#_general_building_blocks">4. General Building Blocks</a>
@@ -565,20 +566,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>Your senior developers should focus on the application core and support your customers to map a specific domain to a suitable structure for the application core.</p>
+<p>Your senior developers should focus on the application core and support your customers to map a specific domain to a suitable structure for the
+application core.</p>
 </li>
 <li>
 <p>The intermediate developers then support implementing the application core.</p>
 </li>
 <li>
-<p>Since your senior and intermediate developers focus on the application core, your junior developers have to focus on the technology stack. Therefore, your framework should be as simple as possible and not an <code>egg-laying wool-milk sow</code>.</p>
+<p>Since your senior and intermediate developers focus on the application core, your junior developers have to focus on the technology stack. Therefore,
+your framework should be as simple as possible and not an <code>egg-laying wool-milk sow</code>.</p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>An additional advantage is that the training time of new developers is drastically reduced until they can be productive.
-The training period for a new business domain typically takes 1-2 years, whereas the training period for a simple framework is a couple of weeks.
-Therefore, they can support their colleagues very quickly by implementing the infrastructure part.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -587,22 +585,77 @@ Therefore, they can support their colleagues very quickly by implementing the in
 <i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
 </td>
 <td class="content">
-Much more important is that junior developers get the time to learn the craftsmanship of software development, methods of software
+Using a simple framework ensures that junior developers get the time to learn the craftsmanship of software development, methods of software
 architecture and the domain language step by step from the intermediate and senior developers.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Unfortunately, I have often experienced in the past that companies expect a graduate or junior developer to already know the craftsmanship of software engineering and
-methods of software architecture so that they only need to learn a business domain.</p>
+<p>Unfortunately, I have often experienced in the past that companies expect a graduate or junior developer to already know the craftsmanship of software
+engineering and methods of software architecture so that they only need to learn a business domain.</p>
 </div>
 <div class="paragraph">
-<p>Jexxa was developed to ideally support the described team structure. The rest of this section described the resulting design consequences and
-why conventions or configurations are used.</p>
+<p>Jexxa was developed to ideally support the above team structure. Even though if you have complex application scenarios that requires a sophisticated
+framework, you should use some lightwight frameworks to support the integration of new developers. The rest of this section described the resulting
+design consequences and why conventions or configurations are used.</p>
 </div>
 <div class="sect2">
-<h3 id="_ioc_without_annotations"><a class="anchor" href="#_ioc_without_annotations"></a>3.1. IoC without annotations</h3>
+<h3 id="_visible_flow_of_control"><a class="anchor" href="#_visible_flow_of_control"></a>3.1. Visible flow of control</h3>
+<div class="paragraph">
+<p>Most today&#8217;s frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and
+adapters architecture. This is especially true for the entry points of your application.</p>
+</div>
+<div class="paragraph">
+<p>This might be obvious to incoming synchronous calls (RMI), but can be hard to see for incoming asynchronous messaging.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
+</td>
+<td class="content">
+Jexxa uses explicit binding for driving adapters so that developers directly see from the main method which incoming messages are handled by which object.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_simple_interface_for_driving_adapters"><a class="anchor" href="#_simple_interface_for_driving_adapters"></a>3.2. Simple Interface for Driving Adapters</h3>
+<div class="paragraph">
+<p>One of the key aspects for durable software systems is the ability to use arbitrary technology stacks which do not exist at the point in time the
+application was developed.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
+</td>
+<td class="content">
+Jexxa provides a super simple <a href="https://github.com/repplix/Jexxa/blob/master/jexxa-adapter-api/src/main/java/io/jexxa/infrastructure/drivingadapter/IDrivingAdapter.java">API</a> that allows for the integration of arbitrary technology stacks as driving adapters.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Together with the ability of an explicit binding on an object level, this supports following use cases:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Students can support your teams with the evaluation and integration of new technology stacks as part of their bachelor or master thesis.</p>
+</li>
+<li>
+<p>The possibility to bind driving adapter on an object level supports security aspects so that admin functionality is just offered via JMX.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ioc_without_annotations"><a class="anchor" href="#_ioc_without_annotations"></a>3.3. IoC without annotations</h3>
 <div class="paragraph">
 <p>Like any other framework, Jexxa takes control about part of your application core. Especially in Java this is often done with framework specific
 annotations. The bad thing is that these annotations tightly couple your application core to a specific technology stack.</p>
@@ -637,13 +690,10 @@ Jexxa does not use annotations for all IoC aspects such as dependency injection.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_visible_flow_of_control"><a class="anchor" href="#_visible_flow_of_control"></a>3.2. Visible flow of control</h3>
+<h3 id="_strategy_pattern_for_driven_adapters"><a class="anchor" href="#_strategy_pattern_for_driven_adapters"></a>3.4. Strategy pattern for Driven Adapters</h3>
 <div class="paragraph">
-<p>Most today&#8217;s frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and
-adapters architecture. This is especially true for the entry points of your application.</p>
-</div>
-<div class="paragraph">
-<p>This might be obvious to incoming synchronous calls (RMI), but can be hard to see for incoming asynchronous messaging.</p>
+<p>Driven adapters belong to the infrastructure of an application. Thus, their implementation should be as simple as possible so that they can be
+implemented by junior developers.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -652,31 +702,16 @@ adapters architecture. This is especially true for the entry points of your appl
 <i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
 </td>
 <td class="content">
-Jexxa uses explicit binding for driving adapters so that developers directly see from the main method which incoming messages are handled by which object.
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_strategy_pattern_for_driven_adapter"><a class="anchor" href="#_strategy_pattern_for_driven_adapter"></a>3.3. Strategy pattern for Driven Adapter</h3>
-<div class="paragraph">
-<p>Driven adapters belong to the infrastructure and are application specific because the implement outbound ports. Thus, their implementation should be as simple as possible so that they can be implemented by junior developers.</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
-</td>
-<td class="content">
-Jexxa provides <code>driven adapter strategies</code> to implement driven adapters so that their implementation is just a simple facade, which maps between the API of outbound ports to corresponding API of the strategy.
+Jexxa provides <code>driven adapter strategies</code> so that the implementation of driven adapters is just a simple facade, which maps
+between the API of outbound ports to corresponding API of the strategy.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>This seems to be so obvious so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so called aggregates:</p>
+<p>This approach seems to be so obvious, so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern
+especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so
+called aggregates (please refer to tutorial <a href="https://jexxa.io/tree/master/tutorials/BookStore">BookStore</a> to see the source code):</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1292,7 +1327,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-11-08 20:09:51 +0100
+Last updated 2020-11-09 20:03:32 +0100
 </div>
 </div>
 </body>

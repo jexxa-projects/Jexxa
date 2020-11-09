@@ -53,22 +53,42 @@ As described in Section <<Motivation>>, the problem scope is typically not on th
 
 This actually leads to a rather obvious conclusion about team structures, which in my experience is often ignored:
 
-* Your senior developers should focus on the application core and support your customers to map a specific domain to a suitable structure for the application core.
+* Your senior developers should focus on the application core and support your customers to map a specific domain to a suitable structure for the
+application core.
 * The intermediate developers then support implementing the application core.
-* Since your senior and intermediate developers focus on the application core, your junior developers have to focus on the technology stack. Therefore, your framework should be as simple as possible and not an `egg-laying wool-milk sow`.
+* Since your senior and intermediate developers focus on the application core, your junior developers have to focus on the technology stack. Therefore,
+your framework should be as simple as possible and not an `egg-laying wool-milk sow`.
 
-An additional advantage is that the training time of new developers is drastically reduced until they can be productive.
-The training period for a new business domain typically takes 1-2 years, whereas the training period for a simple framework is a couple of weeks.
-Therefore, they can support their colleagues very quickly by implementing the infrastructure part.
-
-IMPORTANT: Much more important is that junior developers get the time to learn the craftsmanship of software development, methods of software
+IMPORTANT: Using a simple framework ensures that junior developers get the time to learn the craftsmanship of software development, methods of software
 architecture and the domain language step by step from the intermediate and senior developers.
 
-Unfortunately, I have often experienced in the past that companies expect a graduate or junior developer to already know the craftsmanship of software engineering and
-methods of software architecture so that they only need to learn a business domain.
+Unfortunately, I have often experienced in the past that companies expect a graduate or junior developer to already know the craftsmanship of software
+engineering and methods of software architecture so that they only need to learn a business domain.
 
-Jexxa was developed to ideally support the described team structure. The rest of this section described the resulting design consequences and
-why conventions or configurations are used.
+Jexxa was developed to ideally support the above team structure. Even though if you have complex application scenarios that requires a sophisticated
+framework, you should use some lightwight frameworks to support the integration of new developers. The rest of this section described the resulting
+design consequences and why conventions or configurations are used.
+
+===  Visible flow of control
+
+Most today's frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and
+adapters architecture. This is especially true for the entry points of your application.
+
+This might be obvious to incoming synchronous calls (RMI), but can be hard to see for incoming asynchronous messaging.
+
+IMPORTANT: Jexxa uses explicit binding for driving adapters so that developers directly see from the main method which incoming messages are handled by which object.
+
+=== Simple Interface for Driving Adapters
+
+One of the key aspects for durable software systems is the ability to use arbitrary technology stacks which do not exist at the point in time the
+application was developed.
+
+IMPORTANT: Jexxa provides a super simple https://github.com/repplix/Jexxa/blob/master/jexxa-adapter-api/src/main/java/io/jexxa/infrastructure/drivingadapter/IDrivingAdapter.java[API] that allows for the integration of arbitrary technology stacks as driving adapters.
+
+Together with the ability of an explicit binding on an object level, this supports following use cases:
+
+* Students can support your teams with the evaluation and integration of new technology stacks as part of their bachelor or master thesis.
+* The possibility to bind driving adapter on an object level supports security aspects so that admin functionality is just offered via JMX.
 
 === IoC without annotations
 
@@ -84,23 +104,17 @@ IMPORTANT: Jexxa does not use annotations for all IoC aspects such as dependency
 
 Section <<Inversion of Control (IoC)>> describes the used conventions in detail.
 
-===  Visible flow of control
+=== Strategy pattern for Driven Adapters
 
-Most today's frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and
-adapters architecture. This is especially true for the entry points of your application.
+Driven adapters belong to the infrastructure of an application. Thus, their implementation should be as simple as possible so that they can be
+implemented by junior developers.
 
-This might be obvious to incoming synchronous calls (RMI), but can be hard to see for incoming asynchronous messaging.
+IMPORTANT: Jexxa provides `driven adapter strategies` so that the implementation of driven adapters is just a simple facade, which maps
+between the API of outbound ports to corresponding API of the strategy.
 
-IMPORTANT: Jexxa uses explicit binding for driving adapters so that developers directly see from the main method which incoming messages are handled by which object.
-
-
-=== Strategy pattern for Driven Adapter
-
-Driven adapters belong to the infrastructure and are application specific because the implement outbound ports. Thus, their implementation should be as simple as possible so that they can be implemented by junior developers.
-
-IMPORTANT: Jexxa provides `driven adapter strategies` to implement driven adapters so that their implementation is just a simple facade, which maps between the API of outbound ports to corresponding API of the strategy.
-
-This seems to be so obvious so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so called aggregates:
+This approach seems to be so obvious, so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern
+especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so
+called aggregates (please refer to tutorial https://jexxa.io/tree/master/tutorials/BookStore[BookStore] to see the source code):
 
 * Regarding your business domain, your junior developers will learn at least the name of the most important business objects, because `Aggregates` include the business logic of this domain.
 * From a software engineering point of view your junior developer gets familiar with the strategy design pattern.
@@ -108,20 +122,6 @@ This seems to be so obvious so we directly agree. Therefore, I would like to exp
 * Finally, your developers learn that they can persist data within a database without thinking about the database layout. Using a strategy pattern instead makes the database to a plugin.
 
 As soon as your junior developers feel that they are not challenged with implementing driven adapters, give them one of the above points to study.
-
-// === Integration of arbitrary technology stacks
-
-// One of the key aspects for durable software systems is the ability to use arbitrary technology stacks which do not exist at the point in time the application was developed. A major issue is to use the latest features iThis requires a balance between using a
-
-
-// * A super simple API to include arbitrary technology stacks without updating the core library
-
-
-
-// * The possibility to bind driving technology stacks on a per object level. This supports following cases:
-// ** You should migrate a legacy system but during ths phase your new developed application must communicate with the legacy system using some real old communication mechanism. In this case you should only expose the realy required objects and not all. Otherwise, there is a fair chance that the developers maintaining the legacy system will use the new cool features from the new application and you will end in a neverending migration process.
-// ** You can evaluate new technology stacks, or if the application itself is legacy you can add some required external binding but only to objects theirs functionality is realy required.
-
 
 
 == General Building Blocks
