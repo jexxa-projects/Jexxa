@@ -49,29 +49,39 @@ Applications without well-defined boundaries between technology stacks and appli
 * In the long term, such structural issues could (and in reality will) affect your enterprise architecture, so neighboring systems need to be aware of and take special actions for legacy systems.
 
 == General Design Decisions
-As described in Section <<Motivation>>, the problem scope is typically not on the technical side. The big challenge is to understand the business domain and what our customers or users want to achieve which is called `value`. In contrast to technology companies, companies from production, financial or insurance sector do not create `value` by using different technology stacks without changing their business model and thus their business applications. At most, they can reduce their costs by using different technology stacks or technology provider.
+In contrast to technology companies, the focus of special software development at companies from the production, finance or insurance sectors is
+generally not on the technical side.  The big challenge is to understand the business domain and how to achieve added value for the customer. The
+use of technology stacks itself does not add value as long as the business domain itself is not changed. At best, costs can be reduced.
 
-This actually leads to a rather obvious conclusion about team structures, which in my experience is often ignored:
+This actually leads to a rather obvious conclusion about team structures within IT, which in my experience is often ignored:
 
-* Your senior developers should focus on the application core and support your customers to map a specific domain to a suitable structure for the
-application core.
-* The intermediate developers then support implementing the application core.
-* Since your senior and intermediate developers focus on the application core, your junior developers have to focus on the technology stack. Therefore,
-your framework should be as simple as possible and not an `egg-laying wool-milk sow`.
+* Senior developers should focus on the application core. By working with the business experts, you can learn enough domain knowledge to map the
+business domain to a suitable application core.
+
+* The intermediate developers then support the implementation of the application core.
+
+* Because your senior and intermediate developers focus on the application core, your younger developers must focus on the technology stack.
+Therefore, your framework should be as simple as possible and not an `egg-laying wool-milk sow`.
+
 
 IMPORTANT: Using a simple framework ensures that junior developers get the time to learn the craftsmanship of software development, methods of software
 architecture and the domain language step by step from the intermediate and senior developers.
 
-Unfortunately, I have often experienced in the past that companies expect a graduate or junior developer to already know the craftsmanship of software
-engineering and methods of software architecture so that they only need to learn a business domain.
+Unfortunately, I have often experienced in the past companies expect a graduate or junior developer to already know the craftsmanship of software
+engineering, and methods of software architecture so that they only need to learn a business domain. Finally, he or she has applied for the position
+of a full-stack developer...
 
-Jexxa was developed to ideally support the above team structure. Even though if you have complex application scenarios that requires a sophisticated
-framework, you should use some lightwight frameworks to support the integration of new developers. The rest of this section described the resulting
-design consequences and why conventions or configurations are used.
+
+Jexxa was developed to ideally support the above team structure as well as the learning process. Therefore, the development of Jexxa is very much
+driven by which aspects should be made explicit or hidden.
+
+To make certain aspects explicit, typically a certain design pattern or a fluent API is used. If certain aspects are to be hidden, conventions are used.
+In the rest of this section the design decisions of the most important aspects are explained.
 
 ===  Visible flow of control
 
-Most today's frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and
+Most today's frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency and rebuild the
+application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and
 adapters architecture. This is especially true for the entry points of your application.
 
 This might be obvious to incoming synchronous calls (RMI), but can be hard to see for incoming asynchronous messaging.

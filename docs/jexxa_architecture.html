@@ -558,23 +558,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_general_design_decisions"><a class="anchor" href="#_general_design_decisions"></a>3. General Design Decisions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As described in Section <a href="#_motivation">Motivation</a>, the problem scope is typically not on the technical side. The big challenge is to understand the business domain and what our customers or users want to achieve which is called <code>value</code>. In contrast to technology companies, companies from production, financial or insurance sector do not create <code>value</code> by using different technology stacks without changing their business model and thus their business applications. At most, they can reduce their costs by using different technology stacks or technology provider.</p>
+<p>In contrast to technology companies, the focus of special software development at companies from the production, finance or insurance sectors is
+generally not on the technical side.  The big challenge is to understand the business domain and how to achieve added value for the customer. The
+use of technology stacks itself does not add value as long as the business domain itself is not changed. At best, costs can be reduced.</p>
 </div>
 <div class="paragraph">
-<p>This actually leads to a rather obvious conclusion about team structures, which in my experience is often ignored:</p>
+<p>This actually leads to a rather obvious conclusion about team structures within IT, which in my experience is often ignored:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Your senior developers should focus on the application core and support your customers to map a specific domain to a suitable structure for the
-application core.</p>
+<p>Senior developers should focus on the application core. By working with the business experts, you can learn enough domain knowledge to map the
+business domain to a suitable application core.</p>
 </li>
 <li>
-<p>The intermediate developers then support implementing the application core.</p>
+<p>The intermediate developers then support the implementation of the application core.</p>
 </li>
 <li>
-<p>Since your senior and intermediate developers focus on the application core, your junior developers have to focus on the technology stack. Therefore,
-your framework should be as simple as possible and not an <code>egg-laying wool-milk sow</code>.</p>
+<p>Because your senior and intermediate developers focus on the application core, your younger developers must focus on the technology stack.
+Therefore, your framework should be as simple as possible and not an <code>egg-laying wool-milk sow</code>.</p>
 </li>
 </ul>
 </div>
@@ -592,18 +594,23 @@ architecture and the domain language step by step from the intermediate and seni
 </table>
 </div>
 <div class="paragraph">
-<p>Unfortunately, I have often experienced in the past that companies expect a graduate or junior developer to already know the craftsmanship of software
-engineering and methods of software architecture so that they only need to learn a business domain.</p>
+<p>Unfortunately, I have often experienced in the past companies expect a graduate or junior developer to already know the craftsmanship of software
+engineering, and methods of software architecture so that they only need to learn a business domain. Finally, he or she has applied for the position
+of a full-stack developer&#8230;&#8203;</p>
 </div>
 <div class="paragraph">
-<p>Jexxa was developed to ideally support the above team structure. Even though if you have complex application scenarios that requires a sophisticated
-framework, you should use some lightwight frameworks to support the integration of new developers. The rest of this section described the resulting
-design consequences and why conventions or configurations are used.</p>
+<p>Jexxa was developed to ideally support the above team structure as well as the learning process. Therefore, the development of Jexxa is very much
+driven by which aspects should be made explicit or hidden.</p>
+</div>
+<div class="paragraph">
+<p>To make certain aspects explicit, typically a certain design pattern or a fluent API is used. If certain aspects are to be hidden, conventions are used.
+In the rest of this section the design decisions of the most important aspects are explained.</p>
 </div>
 <div class="sect2">
 <h3 id="_visible_flow_of_control"><a class="anchor" href="#_visible_flow_of_control"></a>3.1. Visible flow of control</h3>
 <div class="paragraph">
-<p>Most today&#8217;s frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and
+<p>Most today&#8217;s frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency and rebuild the
+application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and
 adapters architecture. This is especially true for the entry points of your application.</p>
 </div>
 <div class="paragraph">
@@ -1327,7 +1334,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-11-09 20:03:32 +0100
+Last updated 2020-11-10 06:20:51 +0100
 </div>
 </div>
 </body>
