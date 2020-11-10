@@ -5,13 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[2.x.x] - yyyy-mm-dd  
-### Added
-
 ### Fixed
 -   RESTfulRPCAdapter: 
     -   [Issue #7](https://github.com/repplix/Jexxa/issues/7) Stack trace is now included when serializing an Exception  
 
 ### Changed
+-   Updated [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa_architecture.html):
+    -   Added Section about General Design Decision.  
 
 ## \[2.5.1] - 2020-10-25  
 ### Fixed
