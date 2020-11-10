@@ -76,7 +76,7 @@ Jexxa was developed to ideally support the above team structure as well as the l
 driven by which aspects should be made explicit or hidden.
 
 To make certain aspects explicit, typically a certain design pattern or a fluent API is used. If certain aspects are to be hidden, conventions are used.
-In the rest of this section the design decisions of the most important aspects are explained.
+The rest of this section describes the most important design decisions and how they should support the learning process of your teams.
 
 ===  Visible flow of control
 
