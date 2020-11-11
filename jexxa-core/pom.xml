@@ -5,11 +5,11 @@
   <parent>
     <artifactId>jexxa</artifactId>
     <groupId>io.jexxa</groupId>
-    <version>2.5.2</version>
+    <version>2.5.3-SNAPSHOT</version>
   </parent>
 
   <artifactId>jexxa-core</artifactId>
-  <version>2.5.2</version>
+  <version>2.5.3-SNAPSHOT</version>
 
   <name>Jexxa-Core</name>
 
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>io.jexxa</groupId>
       <artifactId>jexxa-adapter-api</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.2-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
 
