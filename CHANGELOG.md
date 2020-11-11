@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 -   Updated [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa_architecture.html):
-    -   Added Section about General Design Decision.  
+    -   Added Section about General Design Decision. 
+
+-   Updated dependencies on minor level 
 
 ## \[2.5.1] - 2020-10-25  
 ### Fixed
