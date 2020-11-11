@@ -46,7 +46,7 @@ Maven:
 Gradle:
 
 ```groovy
-compile "io.Jexxa:jexxa-core:2.5.1"
+compile "io.Jexxa:jexxa-core:2.5.2"
 ``` 
  
 ### Start programming 
