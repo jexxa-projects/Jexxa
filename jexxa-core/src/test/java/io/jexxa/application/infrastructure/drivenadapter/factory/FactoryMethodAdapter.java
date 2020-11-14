@@ -5,6 +5,9 @@ import java.util.Properties;
 import io.jexxa.application.domainservice.IFactoryMethodService;
 import org.apache.commons.lang3.Validate;
 
+/**
+ * Simulate a valid driven adapter with static factory method expecting a Properties
+ */
 @SuppressWarnings("unused")
 public final class FactoryMethodAdapter implements IFactoryMethodService
 {
