@@ -2,6 +2,7 @@ package io.jexxa.core.factory;
 
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DOMAIN_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,6 +15,7 @@ import java.util.Properties;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
+import io.jexxa.application.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
 import io.jexxa.application.infrastructure.drivingadapter.InvalidPortAdapter;
 import io.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
 import org.junit.jupiter.api.Tag;
@@ -31,8 +33,8 @@ class PortFactoryTest
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
                 acceptPackage(JEXXA_DRIVEN_ADAPTER);
-        var objectUnderTest = new PortFactory(drivenAdapterFactory).
-                acceptPackage(JEXXA_APPLICATION_SERVICE);
+        var objectUnderTest = new PortFactory(drivenAdapterFactory)
+                .acceptPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act
         boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDrivenAdapters.class);
@@ -59,6 +61,22 @@ class PortFactoryTest
         assertThrows(MissingAdapterException.class, () -> objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenAdapters.class, properties));
     }
 
+    @Test
+    void createPortWithInvalidDrivenAdapter()
+    {
+        //Arrange
+        var drivenAdapterFactory = new AdapterFactory().
+                acceptPackage(JEXXA_DRIVEN_ADAPTER).acceptPackage(JEXXA_DOMAIN_SERVICE);
+        var objectUnderTest = new PortFactory(drivenAdapterFactory)
+                .acceptPackage(JEXXA_APPLICATION_SERVICE)
+                .acceptPackage(JEXXA_DOMAIN_SERVICE);
+
+        var properties = new Properties();
+
+        //Act - Assert
+        assertThrows(InvalidAdapterException.class,
+                () -> objectUnderTest.getInstanceOf(ApplicationServiceWithInvalidDrivenAdapters.class, properties));
+    }
 
     @Test
     void newInstanceOfPort()

@@ -159,9 +159,12 @@ class AdapterFactoryTest
 
     @Test
     void createInvalidAdapterProperties() {
+        //Arrange
+        var properties = new Properties();
+
         //Act/Assert
-        assertThrows(AdapterFactory.InvalidAdapterConfigurationException.class, () ->
-                objectUnderTest.newInstanceOf(IInvalidAdapterProperties.class, new Properties())
+        assertThrows(InvalidAdapterException.class, () ->
+                objectUnderTest.newInstanceOf(IInvalidAdapterProperties.class, properties)
         );
     }
 }

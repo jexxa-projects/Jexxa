@@ -4,17 +4,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Properties;
 
 import com.google.gson.Gson;
+import io.jexxa.application.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.domainservice.IJexxaAggregateRepository;
 import io.jexxa.application.domainservice.IJexxaPublisher;
 import io.jexxa.application.domainservice.InitializeJexxaAggregates;
 import io.jexxa.application.domainservice.PublishJexxaValueObject;
 import io.jexxa.core.JexxaMain;
+import io.jexxa.core.factory.InvalidAdapterException;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +36,12 @@ class JexxaTestTest
                 .addToInfrastructure("io.jexxa.application.infrastructure");
 
         jexxaTest = new JexxaTest(jexxaMain);
+    }
+
+    @Test
+    void invalidPort()
+    {
+        assertThrows(InvalidAdapterException.class, () -> jexxaTest.getInstanceOfPort(ApplicationServiceWithInvalidDrivenAdapters.class));
     }
 
     @Test

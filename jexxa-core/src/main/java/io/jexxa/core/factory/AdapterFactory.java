@@ -53,11 +53,11 @@ public class AdapterFactory
             {
                 adapterInstance = ClassFactory.newInstanceOf(adapterInterface, adapterImpl);
             }
-            return adapterInterface.cast(adapterInstance.orElseThrow());
+            return adapterInterface.cast(adapterInstance.orElseThrow(() -> new InvalidAdapterException(adapterImpl)));
         }
         catch (ReflectiveOperationException e)
         {
-            throw new InvalidAdapterConfigurationException(adapterInterface, e);
+            throw new InvalidAdapterException(adapterInterface, e);
         }
 
     }
@@ -85,12 +85,12 @@ public class AdapterFactory
                 return newInstanceOf(adapterInterface);
             }
 
-            return adapterInterface.cast(adapterInstance.orElseThrow());
+            return adapterInterface.cast(adapterInstance.orElseThrow(() -> new InvalidAdapterException(adapterImpl)));
 
         }
         catch (ReflectiveOperationException e)
         {
-            throw new InvalidAdapterConfigurationException(adapterInterface, e);
+            throw new InvalidAdapterException(adapterInterface, e);
         }
     }
 
@@ -152,29 +152,4 @@ public class AdapterFactory
         return Optional.of(implementationList.get(0));
     }
 
-    static class InvalidAdapterConfigurationException extends RuntimeException
-    {
-        private static final long serialVersionUID = 1L;
-
-        private final String errorMessage;
-
-        public <T> InvalidAdapterConfigurationException(Class<T> adapter, Exception exception)
-        {
-            super(exception);
-            if (exception.getCause() == null )
-            {
-                errorMessage = "Cannot create adapter " + adapter.getName() + "\n";
-            }
-            else
-            {
-                errorMessage = "Cannot create adapter " + adapter.getName() + "\n" + "Error message from adapter : " + exception.getCause().getMessage();
-            }
-        }
-
-        @Override
-        public String getMessage()
-        {
-            return errorMessage;
-        }
-    }
 }
