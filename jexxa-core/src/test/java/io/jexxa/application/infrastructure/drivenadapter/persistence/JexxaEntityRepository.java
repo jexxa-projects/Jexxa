@@ -63,7 +63,7 @@ public final class JexxaEntityRepository implements IJexxaEntityRepository
 
     public static IJexxaEntityRepository create(Properties properties)
     {
-        return new JexxaEntityRepository(RepositoryManager.getInstance().getStrategy(
+        return new JexxaEntityRepository(RepositoryManager.getRepository(
                 JexxaEntity.class,
                 JexxaEntity::getKey,
                 properties)

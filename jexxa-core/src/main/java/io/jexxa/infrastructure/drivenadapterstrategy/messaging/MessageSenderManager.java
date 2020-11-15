@@ -46,7 +46,7 @@ public final class MessageSenderManager
     public void setDefaultStrategy(Class<? extends MessageSender>  defaultStrategy)
     {
         Validate.notNull(defaultStrategy);
-        
+
         this.defaultStrategy = defaultStrategy;
     }
 
@@ -54,4 +54,6 @@ public final class MessageSenderManager
     {
         return MESSAGE_SENDER_MANAGER;
     }
+
+    public static MessageSender getMessageSender(Properties properties) { return getInstance().getStrategy(properties); }
 }

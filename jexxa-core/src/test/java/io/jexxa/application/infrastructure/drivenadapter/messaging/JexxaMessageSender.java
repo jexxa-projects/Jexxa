@@ -17,7 +17,7 @@ public class JexxaMessageSender implements IJexxaPublisher
 
     public JexxaMessageSender(Properties properties)
     {
-        this.messageSender = MessageSenderManager.getInstance().getStrategy(properties);
+        this.messageSender = MessageSenderManager.getMessageSender(properties);
     }
 
     @Override

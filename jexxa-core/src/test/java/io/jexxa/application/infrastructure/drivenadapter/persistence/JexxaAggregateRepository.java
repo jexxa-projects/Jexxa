@@ -65,7 +65,7 @@ public class JexxaAggregateRepository implements IJexxaAggregateRepository
 
     public static IJexxaAggregateRepository create(Properties properties)
     {
-        return new JexxaAggregateRepository((RepositoryManager.getInstance().getStrategy(
+        return new JexxaAggregateRepository((RepositoryManager.getRepository(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 properties)

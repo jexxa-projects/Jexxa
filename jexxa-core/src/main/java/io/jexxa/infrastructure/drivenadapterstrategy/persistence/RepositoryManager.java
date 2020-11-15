@@ -25,6 +25,14 @@ public final class RepositoryManager
         return REPOSITORY_MANAGER;
     }
 
+    public static  <T,K> IRepository<T,K> getRepository(
+            Class<T> aggregateClazz,
+            Function<T,K> keyFunction,
+            Properties properties)
+    {
+        return getInstance().getStrategy(aggregateClazz, keyFunction, properties);
+    }
+
     public <U extends IRepository<?,?>, T > void setStrategy(Class<U> strategyType, Class<T> aggregateType)
     {
         strategyMap.put(aggregateType, strategyType);
@@ -46,7 +54,7 @@ public final class RepositoryManager
         try
         {
             var strategy = getStrategy(aggregateClazz, properties);
-            
+
             var result = ClassFactory.newInstanceOf(strategy, new Object[]{aggregateClazz, keyFunction, properties});
 
             return (IRepository<T, K>) result.orElseThrow();
@@ -68,7 +76,7 @@ public final class RepositoryManager
         strategyMap.clear();
     }
 
-    
+
     private RepositoryManager()
     {
         //Package protected constructor
