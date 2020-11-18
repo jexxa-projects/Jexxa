@@ -64,7 +64,7 @@ business domain to a suitable application core.
 Therefore, your framework should be as simple as possible and not an `egg-laying wool-milk sow`.
 
 
-IMPORTANT: Using a simple framework ensures that junior developers get the time to learn the craftsmanship of software development, methods of software
+IMPORTANT: Using a lightweight framework ensures that junior developers get the time to learn the craftsmanship of software development, methods of software
 architecture and the domain language step by step from the intermediate and senior developers.
 
 Unfortunately, I have often experienced in the past companies expect a graduate or junior developer to already know the craftsmanship of software
