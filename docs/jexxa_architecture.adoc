@@ -60,7 +60,7 @@ business domain to a suitable application core.
 
 * The intermediate developers then support the implementation of the application core.
 
-* Because your senior and intermediate developers focus on the application core, your younger developers must focus on the technology stack.
+* Because your senior and intermediate developers focus on the application core, your junior developers must focus on the technology stack.
 Therefore, your framework should be as simple as possible and not an `egg-laying wool-milk sow`.
 
 
