@@ -2,6 +2,7 @@ package io.jexxa.application.infrastructure.drivenadapter.messaging;
 
 import java.util.Properties;
 
+import io.jexxa.application.domain.domainevent.JexxaDomainEvent;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.domainservice.IJexxaPublisher;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
@@ -34,5 +35,13 @@ public class JexxaMessageSender implements IJexxaPublisher
         messageSender.send(jexxaValueObject)
                 .toTopic(JEXXA_TOPIC)
                 .asJson();
+    }
+
+    @Override
+    public void sendDomainEvent(JexxaDomainEvent jexxaDomainEvent)
+    {
+        messageSender.send(jexxaDomainEvent)
+                .toTopic(JEXXA_TOPIC)
+                .asDomainEvent();
     }
 }

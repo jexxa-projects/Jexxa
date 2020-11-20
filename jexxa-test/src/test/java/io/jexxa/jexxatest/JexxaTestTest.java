@@ -15,7 +15,7 @@ import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.domainservice.IJexxaAggregateRepository;
 import io.jexxa.application.domainservice.IJexxaPublisher;
 import io.jexxa.application.domainservice.InitializeJexxaAggregates;
-import io.jexxa.application.domainservice.PublishJexxaValueObject;
+import io.jexxa.application.domainservice.PublishDomainInformation;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.core.factory.InvalidAdapterException;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
@@ -63,7 +63,7 @@ class JexxaTestTest
         var testMessage = new JexxaValueObject(1);
         var messageRecorder= jexxaTest.getMessageRecorder(IJexxaPublisher.class);
 
-        var objectUnderTest = jexxaTest.getInstanceOfPort(PublishJexxaValueObject.class);
+        var objectUnderTest = jexxaTest.getInstanceOfPort(PublishDomainInformation.class);
 
         //Act
         objectUnderTest.sendToTopic(testMessage);
@@ -91,7 +91,7 @@ class JexxaTestTest
         var testMessage = new JexxaValueObject(1);
         var messageRecorder = jexxaTest.getMessageRecorder(IJexxaPublisher.class);
 
-        var objectUnderTest = jexxaTest.getInstanceOfPort(PublishJexxaValueObject.class);
+        var objectUnderTest = jexxaTest.getInstanceOfPort(PublishDomainInformation.class);
 
         //Act
         objectUnderTest.sendToQueue(testMessage);

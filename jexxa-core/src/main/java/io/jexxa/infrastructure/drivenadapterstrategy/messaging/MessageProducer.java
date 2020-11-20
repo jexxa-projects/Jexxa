@@ -1,5 +1,8 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
+import static java.util.UUID.randomUUID;
+
+import java.time.Instant;
 import java.util.Properties;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -13,19 +16,19 @@ public class MessageProducer
 {
     public enum DestinationType { TOPIC, QUEUE }
     private Properties properties;
-    private final Object message;
-    private final MessageSender jmsSender;
+    private Object message;
+    private final MessageSender messageSender;
 
     private DestinationType destinationType;
     private String destination;
 
-    protected <T> MessageProducer(T message, MessageSender jmsSender)
+    protected <T> MessageProducer(T message, MessageSender messageSender)
     {
         Validate.notNull(message);
-        Validate.notNull(jmsSender);
+        Validate.notNull(messageSender);
 
         this.message = message;
-        this.jmsSender = jmsSender;
+        this.messageSender = messageSender;
     }
 
     @CheckReturnValue
@@ -72,17 +75,32 @@ public class MessageProducer
     }
 
 
+    public void asDomainEvent()
+    {
+        Gson gson = new Gson();
+
+        message = new UnpublishedDomainEvent(
+                randomUUID().toString(),
+                message.getClass().getName(),
+                gson.toJson(message),
+                Instant.now());
+
+        as(gson::toJson);
+    }
+
+
+
     public void as( Function<Object, String> serializer )
     {
         Validate.notNull(destination, "No destination in MessageProducer set");
 
         if (destinationType == DestinationType.QUEUE)
         {
-            jmsSender.sendToQueue(serializer.apply(message), destination, properties);
+            messageSender.sendToQueue(serializer.apply(message), destination, properties);
         }
         else
         {
-            jmsSender.sendToTopic(serializer.apply(message), destination, properties);
+            messageSender.sendToTopic(serializer.apply(message), destination, properties);
         }
     }
 
@@ -92,11 +110,28 @@ public class MessageProducer
 
         if (destinationType == DestinationType.QUEUE)
         {
-            jmsSender.sendToQueue(serializer.get(), destination, properties);
+            messageSender.sendToQueue(serializer.get(), destination, properties);
         }
         else
         {
-            jmsSender.sendToTopic(serializer.get(), destination, properties);
+            messageSender.sendToTopic(serializer.get(), destination, properties);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static class UnpublishedDomainEvent
+    {
+        private final String id;
+        private final String type;
+        private final String payload;
+        private final Instant publishedAt;
+
+        public UnpublishedDomainEvent(String id, String type, String payload, Instant publishedAt )
+        {
+            this.id = id;
+            this.payload = payload;
+            this.type = type;
+            this.publishedAt = publishedAt;
         }
     }
 }
