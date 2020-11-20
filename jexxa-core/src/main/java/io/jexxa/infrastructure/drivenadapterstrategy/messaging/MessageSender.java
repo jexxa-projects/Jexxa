@@ -18,9 +18,9 @@ public abstract class MessageSender
      *
      * @param message message as string. Must not be null
      * @param destination name of the queue to send the message
-     * @param messageProperties additional properties of the message. Can be null if no properties are required 
+     * @param messageProperties additional properties of the message. Can be null if no properties are required
      */
-    protected abstract void sendMessageToQueue(String message, String destination, Properties messageProperties);
+    protected abstract void sendToQueue(String message, String destination, Properties messageProperties);
 
     /**
      * Sends an asynchronous text message to a topic
@@ -29,5 +29,5 @@ public abstract class MessageSender
      * @param destination name of the queue to send the message
      * @param messageProperties additional properties of the message. Can be null if no properties are required
      */
-    protected abstract void sendMessageToTopic(String message, String destination, Properties messageProperties);
+    protected abstract void sendToTopic(String message, String destination, Properties messageProperties);
 }

@@ -41,8 +41,8 @@ public class JMSSender extends MessageSender implements AutoCloseable
         this.properties = properties;
         Validate.notNull(getConnection()); //Try create a connection to ensure fail fast
     }
-    
-    protected void sendMessageToTopic(String message, String topicName, Properties messageProperties)
+
+    protected void sendToTopic(String message, String topicName, Properties messageProperties)
     {
         try
         {
@@ -55,11 +55,11 @@ public class JMSSender extends MessageSender implements AutoCloseable
         catch (JMSException e)
         {
             close();
-            throw new IllegalStateException("Could not send message", e);                         
+            throw new IllegalStateException("Could not send message", e);
         }
     }
-    
-    protected void sendMessageToQueue(String message, String queueName, Properties messageProperties)
+
+    protected void sendToQueue(String message, String queueName, Properties messageProperties)
     {
         try
         {
@@ -110,11 +110,11 @@ public class JMSSender extends MessageSender implements AutoCloseable
         {
             connection = createConnection(properties, this);
         }
-        
+
         return connection;
     }
 
-    @SuppressWarnings("java:S2095") 
+    @SuppressWarnings("java:S2095")
     private static Connection createConnection(Properties properties, JMSSender jmsSender)
     {
         try
@@ -125,7 +125,7 @@ public class JMSSender extends MessageSender implements AutoCloseable
 
             //Register an exception listener that closes the connection as soon as the error occurs. This approach ensure that we recreate a connection
             // as soon as next message must be send and we cab handle a temporarily error in between sending two messages. If the error still exist, the
-            // application will get a RuntimeError 
+            // application will get a RuntimeError
             connection.setExceptionListener( exception -> {
                 JexxaLogger.getLogger(JMSSender.class).error(exception.getMessage());
                 jmsSender.close();

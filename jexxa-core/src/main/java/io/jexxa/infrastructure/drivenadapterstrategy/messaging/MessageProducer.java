@@ -78,11 +78,11 @@ public class MessageProducer
 
         if (destinationType == DestinationType.QUEUE)
         {
-            jmsSender.sendMessageToQueue(serializer.apply(message), destination, properties);
+            jmsSender.sendToQueue(serializer.apply(message), destination, properties);
         }
         else
         {
-            jmsSender.sendMessageToTopic(serializer.apply(message), destination, properties);
+            jmsSender.sendToTopic(serializer.apply(message), destination, properties);
         }
     }
 
@@ -92,12 +92,11 @@ public class MessageProducer
 
         if (destinationType == DestinationType.QUEUE)
         {
-            jmsSender.sendMessageToQueue(serializer.get(), destination, properties);
+            jmsSender.sendToQueue(serializer.get(), destination, properties);
         }
         else
         {
-            jmsSender.sendMessageToTopic(serializer.get(), destination, properties);
+            jmsSender.sendToTopic(serializer.get(), destination, properties);
         }
     }
-
 }

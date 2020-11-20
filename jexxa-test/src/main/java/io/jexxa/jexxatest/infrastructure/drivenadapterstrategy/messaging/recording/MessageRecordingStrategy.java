@@ -29,7 +29,7 @@ public class MessageRecordingStrategy extends MessageSender
     }
 
     @Override
-    protected void sendMessageToQueue(String message, String destination, Properties messageProperties)
+    protected void sendToQueue(String message, String destination, Properties messageProperties)
     {
         messageRecorder.put(new RecordedMessage(
                 currentMessage,
@@ -41,7 +41,7 @@ public class MessageRecordingStrategy extends MessageSender
     }
 
     @Override
-    protected void sendMessageToTopic(String message, String destination, Properties messageProperties)
+    protected void sendToTopic(String message, String destination, Properties messageProperties)
     {
         messageRecorder.put(new RecordedMessage(
                 currentMessage,

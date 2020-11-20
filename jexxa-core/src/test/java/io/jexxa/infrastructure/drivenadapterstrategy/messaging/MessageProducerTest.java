@@ -70,14 +70,14 @@ class MessageProducerTest
         private MessageProducer.DestinationType destinationType = null;
 
         @Override
-        protected void sendMessageToQueue(String message, String destination, Properties messageProperties)
+        protected void sendToQueue(String message, String destination, Properties messageProperties)
         {
             this.message = message;
             this.destinationType = MessageProducer.DestinationType.QUEUE;
         }
 
         @Override
-        protected void sendMessageToTopic(String message, String destination, Properties messageProperties)
+        protected void sendToTopic(String message, String destination, Properties messageProperties)
         {
             this.message = message;
             this.destinationType = MessageProducer.DestinationType.TOPIC;
