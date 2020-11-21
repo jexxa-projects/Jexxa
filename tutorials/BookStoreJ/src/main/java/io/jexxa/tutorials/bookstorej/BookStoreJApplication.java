@@ -33,8 +33,8 @@ public final class BookStoreJApplication
         // In case of JDBC we use a simple key value approach which stores the key and the value as json strings.
         // Using json strings might be very inconvenient if you come from typical relational databases but in terms
         // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
-        RepositoryManager.getInstance().setDefaultStrategy(getDrivenAdapterStrategy(args));
-        MessageSenderManager.getInstance().setDefaultStrategy(MessageLogger.class);
+        RepositoryManager.setDefaultStrategy(getDrivenAdapterStrategy(args));
+        MessageSenderManager.setDefaultStrategy(MessageLogger.class);
 
         JexxaMain jexxaMain = new JexxaMain(BookStoreJApplication.class.getSimpleName());
 

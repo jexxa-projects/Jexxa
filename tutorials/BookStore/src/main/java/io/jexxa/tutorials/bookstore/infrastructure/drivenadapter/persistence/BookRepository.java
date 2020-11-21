@@ -24,7 +24,7 @@ public final class BookRepository implements IBookRepository
     public static IBookRepository create(Properties properties)
     {
         return new BookRepository(
-                RepositoryManager.getInstance().getStrategy(Book.class, Book::getISBN13, properties)
+                RepositoryManager.getRepository(Book.class, Book::getISBN13, properties)
         );
     }
 

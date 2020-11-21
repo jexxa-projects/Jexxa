@@ -12,7 +12,7 @@ public final class MessageSenderManager
 {
     private static final MessageSenderManager MESSAGE_SENDER_MANAGER = new MessageSenderManager();
 
-    private Class<? extends MessageSender> defaultStrategy = JMSSender.class;
+    private static Class<? extends MessageSender> defaultStrategy = JMSSender.class;
 
     private MessageSenderManager()
     {
@@ -43,11 +43,11 @@ public final class MessageSenderManager
         }
     }
 
-    public void setDefaultStrategy(Class<? extends MessageSender>  defaultStrategy)
+    public static void setDefaultStrategy(Class<? extends MessageSender>  defaultStrategy)
     {
         Validate.notNull(defaultStrategy);
 
-        this.defaultStrategy = defaultStrategy;
+        MessageSenderManager.defaultStrategy = defaultStrategy;
     }
 
     public static MessageSenderManager getInstance()

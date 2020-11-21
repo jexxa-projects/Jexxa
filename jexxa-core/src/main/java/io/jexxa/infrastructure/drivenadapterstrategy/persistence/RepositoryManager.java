@@ -16,8 +16,8 @@ public final class RepositoryManager
 {
     private static final RepositoryManager REPOSITORY_MANAGER = new RepositoryManager();
 
-    private final Map<Class<?> , Class<?>> strategyMap = new HashMap<>();
-    private Class<?> defaultStrategy = null;
+    private static final Map<Class<?> , Class<?>> strategyMap = new HashMap<>();
+    private static Class<?> defaultStrategy = null;
 
 
     public static RepositoryManager getInstance()
@@ -38,9 +38,9 @@ public final class RepositoryManager
         strategyMap.put(aggregateType, strategyType);
     }
 
-    public <U extends IRepository<?,?> > void setDefaultStrategy(Class<U> defaultStrategy)
+    public static <U extends IRepository<?,?> > void setDefaultStrategy(Class<U> defaultStrategy)
     {
-        this.defaultStrategy = defaultStrategy;
+        RepositoryManager.defaultStrategy = defaultStrategy;
     }
 
     @SuppressWarnings("unchecked")
@@ -70,7 +70,7 @@ public final class RepositoryManager
         }
     }
 
-    public void defaultSettings( )
+    public static void defaultSettings( )
     {
         defaultStrategy = null;
         strategyMap.clear();

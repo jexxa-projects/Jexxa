@@ -24,11 +24,11 @@ public final class BookRepository implements IBookRepository
     }
 
     // Factory method that requests a repository strategy from Jexxa's RepositoryManager
-    // Using a factory method here is just for demonstration purpose. Using public constructor would also be fine here. 
+    // Using a factory method here is just for demonstration purpose. Using public constructor would also be fine here.
     public static IBookRepository create(Properties properties)
     {
         return new BookRepository(
-                RepositoryManager.getInstance().getStrategy(Book.class, Book::getISBN13, properties)
+                RepositoryManager.getRepository(Book.class, Book::getISBN13, properties)
         );
     }
 

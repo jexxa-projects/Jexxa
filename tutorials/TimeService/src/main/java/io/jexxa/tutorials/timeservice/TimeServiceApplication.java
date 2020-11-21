@@ -32,7 +32,7 @@ public final class TimeServiceApplication
         TimeServiceApplication.args = args;
 
         // Define the default strategy for messaging which is either a simple logger called `MessageLogger.class` or `JMSSender.class` for JMS messages
-        MessageSenderManager.getInstance().setDefaultStrategy(getMessageSenderStrategy());
+        MessageSenderManager.setDefaultStrategy(getMessageSenderStrategy());
 
         //Create your jexxaMain for this application
         JexxaMain jexxaMain = new JexxaMain("TimeService");
