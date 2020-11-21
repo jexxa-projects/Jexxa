@@ -63,6 +63,13 @@
       <version>${postgres.version}</version>
     </dependency>
 
+    <!-- dependencies for tests with ActiveMQ -->
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-client</artifactId>
+      <version>${activemq.client.version}</version>
+    </dependency>
+
     <!-- Additional utils for command line parsing and validation -->
     <dependency>
       <groupId>commons-cli</groupId>

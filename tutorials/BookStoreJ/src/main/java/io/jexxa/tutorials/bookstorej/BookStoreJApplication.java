@@ -3,7 +3,9 @@ package io.jexxa.tutorials.bookstorej;
 
 import io.jexxa.addend.applicationcore.ApplicationService;
 import io.jexxa.core.JexxaMain;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
@@ -33,8 +35,8 @@ public final class BookStoreJApplication
         // In case of JDBC we use a simple key value approach which stores the key and the value as json strings.
         // Using json strings might be very inconvenient if you come from typical relational databases but in terms
         // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
-        RepositoryManager.setDefaultStrategy(getDrivenAdapterStrategy(args));
-        MessageSenderManager.setDefaultStrategy(MessageLogger.class);
+        RepositoryManager.setDefaultStrategy(getRepositoryStrategy(args));
+        MessageSenderManager.setDefaultStrategy(getMessagingStrategy(args));
 
         JexxaMain jexxaMain = new JexxaMain(BookStoreJApplication.class.getSimpleName());
 
@@ -64,7 +66,7 @@ public final class BookStoreJApplication
 
 
     @SuppressWarnings("rawtypes")
-    private static Class<? extends IRepository> getDrivenAdapterStrategy(String[] args)
+    private static Class<? extends IRepository> getRepositoryStrategy(String[] args)
     {
         Options options = new Options();
         options.addOption("j", "jdbc", false, "jdbc driven adapter strategy");
@@ -90,6 +92,34 @@ public final class BookStoreJApplication
                     .error( "Parsing failed.  Reason: {}", exp.getMessage() );
         }
         return IMDBRepository.class;
+    }
+
+    private static Class<? extends MessageSender> getMessagingStrategy(String[] args)
+    {
+        Options options = new Options();
+        options.addOption("J", "jms", false, "jdbc driven adapter strategy");
+
+        CommandLineParser parser = new DefaultParser();
+        try
+        {
+            CommandLine line = parser.parse( options, args );
+
+            if (line.hasOption("jms"))
+            {
+                JexxaLogger.getLogger(BookStoreJApplication.class).info("Use messaging strategy: {} ", JMSSender.class.getSimpleName());
+                return JMSSender.class;
+            }
+            else
+            {
+                JexxaLogger.getLogger(BookStoreJApplication.class).info("Use messaging strategy: {} ", MessageLogger.class.getSimpleName());
+                return MessageLogger.class;
+            }
+        }
+        catch( ParseException exp ) {
+            JexxaLogger.getLogger(BookStoreJApplication.class)
+                    .error( "Parsing failed.  Reason: {}", exp.getMessage() );
+        }
+        return MessageLogger.class;
     }
 
 
