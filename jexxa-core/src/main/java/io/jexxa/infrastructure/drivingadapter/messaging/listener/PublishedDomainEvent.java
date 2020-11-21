@@ -2,6 +2,7 @@ package io.jexxa.infrastructure.drivingadapter.messaging.listener;
 
 import java.time.Instant;
 
+@SuppressWarnings("unused")
 public class PublishedDomainEvent
 {
     private final String id;
@@ -9,7 +10,7 @@ public class PublishedDomainEvent
     private final String payload;
     private final Instant publishedAt;
 
-    private PublishedDomainEvent(String id, String type, String payload, Instant publishedAt )
+    public PublishedDomainEvent(String id, String type, String payload, Instant publishedAt )
     {
         this.id = id;
         this.payload = payload;
