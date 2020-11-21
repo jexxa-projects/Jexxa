@@ -21,7 +21,7 @@ public final class TimeServiceApplication
 {
     //Declare the packages that should be used by Jexxa
     private static final String DRIVEN_ADAPTER  = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter";
-    private static final String DRIVING_ADAPTER  = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivingadapter";
+    private static final String DRIVING_ADAPTER = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivingadapter";
     private static final String OUTBOUND_PORTS  = TimeServiceApplication.class.getPackageName() + ".domainservice";
 
     private static String[] args;
