@@ -119,7 +119,7 @@ public final class BookRepository implements IBookRepository
     public static IBookRepository create(Properties properties)
     {
         return new BookRepository(
-                RepositoryManager.getInstance().getStrategy(Book.class, Book::getISBN13, properties)
+                RepositoryManager.getRepository(Book.class, Book::getISBN13, properties)
         );
     }
 
@@ -180,7 +180,7 @@ public final class BookStoreApplication
         // In case of JDBC we use a simple key value approach which stores the key and the value as json strings.
         // Using json strings might be very inconvenient if you come from typical relational databases but in terms
         // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
-        RepositoryManager.getInstance().setDefaultStrategy(getDrivenAdapterStrategy(args));
+        RepositoryManager.setDefaultStrategy(getDrivenAdapterStrategy(args));
     
         JexxaMain jexxaMain = new JexxaMain(BookStoreApplication.class.getSimpleName());
     

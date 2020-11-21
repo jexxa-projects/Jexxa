@@ -44,13 +44,13 @@ public class JexxaTest
     public <T> MessageRecorder getMessageRecorder(Class<T> outboundPort)
     {
         T realImplementation = jexxaMain.getInstanceOfPort(outboundPort);
-        return  MessageRecorderManager.getInstance().getMessageRecorder(realImplementation.getClass());
+        return  MessageRecorderManager.getMessageRecorder(realImplementation.getClass());
     }
 
     private void initForUnitTests( )
     {
-        RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);
-        MessageSenderManager.getInstance().setDefaultStrategy(MessageRecordingStrategy.class);
+        RepositoryManager.setDefaultStrategy(IMDBRepository.class);
+        MessageSenderManager.setDefaultStrategy(MessageRecordingStrategy.class);
 
         IMDBRepository.clear();
         MessageRecorderManager.clear();

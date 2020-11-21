@@ -33,7 +33,7 @@ public final class RepositoryManager
         return getInstance().getStrategy(aggregateClazz, keyFunction, properties);
     }
 
-    public <U extends IRepository<?,?>, T > void setStrategy(Class<U> strategyType, Class<T> aggregateType)
+    public static <U extends IRepository<?,?>, T > void setStrategy(Class<U> strategyType, Class<T> aggregateType)
     {
         strategyMap.put(aggregateType, strategyType);
     }

@@ -154,7 +154,7 @@ class JexxaMainTest
     void bootstrapService()
     {
         //Arrange
-        RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);
+        RepositoryManager.setDefaultStrategy(IMDBRepository.class);
         objectUnderTest = new JexxaMain(CONTEXT_NAME);
         objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .addToApplicationCore(JEXXA_APPLICATION_SERVICE)

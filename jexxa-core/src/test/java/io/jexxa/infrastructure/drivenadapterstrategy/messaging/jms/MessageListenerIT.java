@@ -51,7 +51,7 @@ class MessageListenerIT
         jexxaMain = new JexxaMain(MessageListenerIT.class.getSimpleName());
         domainEventListener = new TopicDomainEventListener();
         typedListener = new TypedListener();
-        objectUnderTest = MessageSenderManager.getInstance().getStrategy(jexxaMain.getProperties());
+        objectUnderTest = MessageSenderManager.getMessageSender(jexxaMain.getProperties());
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)

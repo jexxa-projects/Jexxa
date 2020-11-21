@@ -23,17 +23,17 @@ class RepositoryManagerIT
     @AfterEach
     void cleanup()
     {
-        RepositoryManager.getInstance().defaultSettings();
+        RepositoryManager.defaultSettings();
     }
 
     @Test
     void validateIMDBFallbackStrategy( )
     {
         //Arrange
-        RepositoryManager.getInstance().setDefaultStrategy(null);
+        RepositoryManager.setDefaultStrategy(null);
 
         // Act
-        var result =  RepositoryManager.getInstance().getStrategy(JexxaEntity.class,
+        var result =  RepositoryManager.getRepository(JexxaEntity.class,
                 JexxaEntity::getKey,
                 new Properties());
 
@@ -46,12 +46,12 @@ class RepositoryManagerIT
     void validatePropertiesStrategy( )
     {
         //Arrange
-        RepositoryManager.getInstance().setDefaultStrategy(null);
+        RepositoryManager.setDefaultStrategy(null);
 
         var postgresProperties = getDefaultProperties();
 
         //Act
-        var result =  RepositoryManager.getInstance().getStrategy(JexxaEntity.class,
+        var result =  RepositoryManager.getRepository(JexxaEntity.class,
                 JexxaEntity::getKey,
                 postgresProperties);
 
@@ -68,9 +68,9 @@ class RepositoryManagerIT
         var postgresProperties = getDefaultProperties();
 
         //Act
-        RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);
+        RepositoryManager.setDefaultStrategy(IMDBRepository.class);
 
-        var result =  RepositoryManager.getInstance().getStrategy(JexxaEntity.class,
+        var result =  RepositoryManager.getRepository(JexxaEntity.class,
                 JexxaEntity::getKey,
                 postgresProperties);
 
@@ -85,12 +85,12 @@ class RepositoryManagerIT
         //Arrange: Define a JDBC connection in properties but also set a default strategy
         var postgresProperties = getDefaultProperties();
 
-        RepositoryManager.getInstance().setDefaultStrategy(IMDBRepository.class);  // Set a default strategy which is used in case no specific strategy is defines
+        RepositoryManager.setDefaultStrategy(IMDBRepository.class);  // Set a default strategy which is used in case no specific strategy is defines
 
         //Act
-        RepositoryManager.getInstance().setStrategy(JDBCKeyValueRepository.class, JexxaEntity.class );  // Set a specific strategy
+        RepositoryManager.setStrategy(JDBCKeyValueRepository.class, JexxaEntity.class );  // Set a specific strategy
 
-        var result =  RepositoryManager.getInstance().getStrategy(JexxaEntity.class,
+        var result =  RepositoryManager.getRepository(JexxaEntity.class,
                 JexxaEntity::getKey,
                 postgresProperties);
 

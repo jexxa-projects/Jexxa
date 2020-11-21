@@ -24,7 +24,7 @@ public class MessageRecordingStrategy extends MessageSender
         Class<?> callerClass = walker.getCallerClass();
 
         currentMessage = message;
-        messageRecorder = MessageRecorderManager.getInstance().getMessageRecorder(callerClass);
+        messageRecorder = MessageRecorderManager.getMessageRecorder(callerClass);
         return new RecordableMessageProducer(message, this);
     }
 

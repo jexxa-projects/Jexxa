@@ -50,7 +50,7 @@ class JMSSenderIT
         jexxaMain = new JexxaMain(JMSSenderIT.class.getSimpleName());
         topicListener = new TopicListener();
         queueListener = new QueueListener();
-        objectUnderTest = MessageSenderManager.getInstance().getStrategy(jexxaMain.getProperties());
+        objectUnderTest = MessageSenderManager.getMessageSender(jexxaMain.getProperties());
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)

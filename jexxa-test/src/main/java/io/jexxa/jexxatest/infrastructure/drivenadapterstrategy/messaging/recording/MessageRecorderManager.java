@@ -10,12 +10,10 @@ import io.jexxa.utils.annotations.CheckReturnValue;
  */
 public final class MessageRecorderManager
 {
-    private static final MessageRecorderManager MESSAGE_RECORDER_MANAGER = new MessageRecorderManager();
-
     private static final Map<Class<?>, MessageRecorder> MESSAGE_RECORDER_MAP = new HashMap<>();
 
     @CheckReturnValue
-    public MessageRecorder getMessageRecorder(Class<?> type)
+    public static MessageRecorder getMessageRecorder(Class<?> type)
     {
         //If MessageRecorder is not known for given type, we create it
         if ( !MESSAGE_RECORDER_MAP.containsKey(type) )
@@ -26,11 +24,6 @@ public final class MessageRecorderManager
         return MESSAGE_RECORDER_MAP.get(type);
     }
 
-    @CheckReturnValue
-    public static MessageRecorderManager getInstance()
-    {
-        return MESSAGE_RECORDER_MANAGER;
-    }
 
     public static void clear()
     {
