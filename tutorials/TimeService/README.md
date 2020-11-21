@@ -183,42 +183,30 @@ When receiving asynchronous messages we have to convert it into business data wh
   
 Implementing a port adapter for JMS is quite easy.
 *   Within the constructor we define our class from the application core that will be called. Jexxa automatically injects this object when creating the port adapter. By convention, this is the only object defined in the constructor.  
-*   In case of JMS we have to implement the `MessageListener` interface and the corresponding `onMessage` method. 
-*   Then we have to pass the configuration parameter the specific driving adapter. In this case it is called `JMSConfiguration` and allows to define all JMS related information, such as destination, messaging type, and a messaging selector if required.            
+*   In case of JMS we have to implement the JMS specific `MessageListener` interface. To facilitate this, Jexxa offers convenience classes which perform JSON deserialization.  
+*   Finally, we have to pass the configuration parameter the specific driving adapter. In this case it is called `JMSConfiguration` and allows to define all JMS related information, such as destination, messaging type, and a messaging selector if required.            
   
 ```java
 @SuppressWarnings("unused")
-public class PublishTimeListener implements MessageListener
+public final class PublishTimeListener extends TypedMessageListener<LocalTime>
 {
     private final TimeService timeService;
     private static final String TIME_TOPIC = "TimeService";
 
-    //To implement a so called PortAdapter we need a public constructor which expects a single argument that must be an InboundPort.
+    //To implement a so called PortAdapter we need a public constructor which expects a single argument that must be a InboundPort.
     public PublishTimeListener(TimeService timeService)
     {
+        super(LocalTime.class);
         this.timeService = timeService;
     }
 
     @Override
     // The JMS specific configuration is defined via annotation.
-    @JMSConfiguration(destination = TIME_TOPIC, messagingType = JMSConfiguration.MessagingType.TOPIC)
-    public void onMessage(Message message)
+    @JMSConfiguration(destination = TIME_TOPIC,  messagingType = TOPIC)
+    public void onMessage(LocalTime localTime)
     {
-        try
-        {
-            // The JMSSender sends all messages as TextMessage in Json encoding
-            var textMessage = (TextMessage)message;
-        
-            // Deserialize the message which is of type 'LocalTime'
-            var time = new Gson().fromJson(textMessage.getText(), LocalTime.class);
-        
-            // Forward this information to corresponding application service.
-            timeService.displayPublishedTime(time);
-        }
-        catch (RuntimeException | JMSException exception)
-        {
-            JexxaLogger.getLogger(PublishTimeListener.class).error(exception.getMessage());
-        }
+        // Forward this information to corresponding application service.
+        timeService.displayPublishedTime(localTime);
     }
 }
 ```
