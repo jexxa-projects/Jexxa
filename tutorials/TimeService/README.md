@@ -3,7 +3,7 @@
 ## What You Learn
 
 *   How to write an application service acting as a so called inbound-port 
-*   How to declare an outbound-port sending current time   
+*   How to declare an outbound-port sending current time (which represents some kind of measuring point)    
 *   How to provide an implementation of this outbound-port, a so called driving adapter, with console output
 *   How to provide an implementation of this outbound-port using `DrivenAdapterStrategy` from Jexxa for JMS.
 *   How to use a so called `specific adapter` provided by Jexxa together with an application specific driving adapter    
@@ -138,7 +138,10 @@ Jexxa provides so called `DrivenAdapterStrategy` for various Java-APIs such as J
 is just a facade and maps domain specific methods to the technology stack. In the main application we can adjust the default strategy so that we can 
 define either to use JMS or a simple logger. Moreover, within tests, we can define a MessageRecorder and uint-test our infrastructure as well.  
 
-Note: Since `TimePublisher` requires information from a `Properties` we must provide a constructor or static factory method with a `Properties` attribute. By default, Jexxa hands in all information from jexxa-application.properties file. This file can extended by application specific information such as the topic name if required.        
+Note: Since `TimePublisher` requires information from a `Properties` we must provide a constructor or static factory method with a `Properties` attribute. By default, Jexxa hands in all information from jexxa-application.properties file. This file can extended by application specific information such as the topic name if required.
+
+In this example, sending a time is just a representation for any kind of measuring point. In real world applications this kind of information has no additional semantic meaning. Typically, it is also send in a fixed interval. So, we just have to define a notation to publish this information. The 
+following code shows how to publish a LocalTime in JSON format.                
 
 ```java
 @SuppressWarnings("unused")
@@ -159,7 +162,7 @@ public class TimePublisher implements ITimePublisher
     @Override
     public void publish(LocalTime localTime)
     {
-        // Send the message to the topic.
+        // Send the message to the topic in JSON format.
         messageSender.send(localTime)
                 .toTopic(TIME_TOPIC)
                 .asJson();

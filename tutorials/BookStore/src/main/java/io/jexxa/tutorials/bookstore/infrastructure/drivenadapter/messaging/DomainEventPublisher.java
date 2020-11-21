@@ -25,6 +25,6 @@ public class DomainEventPublisher implements IDomainEventPublisher
         messageSender
                 .send(domainEvent)
                 .toTopic("BookStoreTopic")
-                .asJson();
+                .asDomainEvent();
     }
 }
