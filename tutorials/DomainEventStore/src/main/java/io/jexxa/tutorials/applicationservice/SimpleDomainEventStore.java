@@ -20,7 +20,7 @@ public class SimpleDomainEventStore
 
     public void addDomainEvent(DomainEvent domainEvent)
     {
-        if (! iSimpleDomainEventRepository.isPresent(domainEvent.getId()))
+        if (! iSimpleDomainEventRepository.isPresent(domainEvent.getUUID()))
         {
             iSimpleDomainEventRepository.add(domainEvent);
         }

@@ -79,7 +79,7 @@ public class MessageProducer
     {
         Gson gson = new Gson();
 
-        message = new UnpublishedDomainEvent(
+        message = new UnpublishedDomainEventFrame(
                 randomUUID().toString(),
                 message.getClass().getName(),
                 gson.toJson(message),
@@ -119,18 +119,18 @@ public class MessageProducer
     }
 
     @SuppressWarnings({"unused", "java:S1068", "FieldCanBeLocal"}) // for attributes. We need them for proper json serialization
-    static class UnpublishedDomainEvent
+    static class UnpublishedDomainEventFrame
     {
-        private final String id;
-        private final String type;
+        private final String uuid;
+        private final String payloadType;
         private final String payload;
         private final Instant publishedAt;
 
-        UnpublishedDomainEvent(String id, String type, String payload, Instant publishedAt )
+        UnpublishedDomainEventFrame(String uuid, String payloadType, String payload, Instant publishedAt )
         {
-            this.id = id;
+            this.uuid = uuid;
+            this.payloadType = payloadType;
             this.payload = payload;
-            this.type = type;
             this.publishedAt = publishedAt;
         }
     }

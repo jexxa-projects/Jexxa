@@ -14,7 +14,7 @@ public class SimpleDomainEventRepository implements ISimpleDomainEventRepository
 
     public SimpleDomainEventRepository(Properties properties)
     {
-        repository = RepositoryManager.getRepository(DomainEvent.class, DomainEvent::getId, properties);
+        repository = RepositoryManager.getRepository(DomainEvent.class, DomainEvent::getUUID, properties);
     }
 
     @Override

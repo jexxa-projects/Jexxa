@@ -3,29 +3,30 @@ package io.jexxa.infrastructure.drivingadapter.messaging.listener;
 import java.time.Instant;
 
 @SuppressWarnings("unused")
-public class PublishedDomainEvent
+public
+class DomainEventFrame
 {
-    private final String id;
-    private final String type;
+    private final String uuid;
+    private final String payloadType;
     private final String payload;
     private final Instant publishedAt;
 
-    public PublishedDomainEvent(String id, String type, String payload, Instant publishedAt )
+    DomainEventFrame(String uuid, String payloadType, String payload, Instant publishedAt )
     {
-        this.id = id;
+        this.uuid = uuid;
+        this.payloadType = payloadType;
         this.payload = payload;
-        this.type = type;
         this.publishedAt = publishedAt;
     }
 
     public String getUUID()
     {
-        return id;
+        return uuid;
     }
 
     public String getType()
     {
-        return type;
+        return payloadType;
     }
 
     public String getPayload()

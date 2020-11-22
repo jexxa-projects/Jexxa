@@ -7,22 +7,22 @@ import io.jexxa.addend.applicationcore.ValueObject;
 @ValueObject
 public class DomainEvent
 {
-    private final String id;
-    private final String type;
+    private final String uuid;
+    private final String payloadType;
     private final String payload;
     private final Instant publishedAt;
 
-    public DomainEvent(String id, String type, String payload, Instant publishedAt )
+    public DomainEvent(String uuid, String payloadType, String payload, Instant publishedAt )
     {
-        this.id = id;
+        this.uuid = uuid;
         this.payload = payload;
-        this.type = type;
+        this.payloadType = payloadType;
         this.publishedAt = publishedAt;
     }
 
-    public String getId()
+    public String getUUID()
     {
-        return id;
+        return uuid;
     }
 
     public String getPayload()
@@ -35,8 +35,8 @@ public class DomainEvent
         return publishedAt;
     }
 
-    public String getType()
+    public String getPayloadType()
     {
-        return type;
+        return payloadType;
     }
 }

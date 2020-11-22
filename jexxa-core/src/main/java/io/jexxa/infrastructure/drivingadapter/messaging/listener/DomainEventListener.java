@@ -1,18 +1,18 @@
 package io.jexxa.infrastructure.drivingadapter.messaging.listener;
 
-public abstract class DomainEventListener<T> extends TypedMessageListener<PublishedDomainEvent>
+public abstract class DomainEventListener<T> extends TypedMessageListener<DomainEventFrame>
 {
-    private PublishedDomainEvent currentDomainEvent;
+    private DomainEventFrame currentDomainEvent;
     private final Class<T> clazz;
 
     protected DomainEventListener(Class<T> clazz)
     {
-        super(PublishedDomainEvent.class);
+        super(DomainEventFrame.class);
         this.clazz = clazz;
     }
 
     @Override
-    public final void onMessage(PublishedDomainEvent message)
+    public final void onMessage(DomainEventFrame message)
     {
         this.currentDomainEvent = message;
 
@@ -21,7 +21,7 @@ public abstract class DomainEventListener<T> extends TypedMessageListener<Publis
         this.currentDomainEvent = null;
     }
 
-    protected PublishedDomainEvent getDomainEvent()
+    protected DomainEventFrame getDomainEvent()
     {
         return currentDomainEvent;
     }

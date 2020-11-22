@@ -8,7 +8,8 @@ DomainEventStore check your requirements and evaluate other messaging frameworks
 
 ## What You Learn
 
-*   How Jexxa publishes DomainEvents    
+*   How Jexxa publishes DomainEvents 
+*   We use the onion structure    
 
 ## What you need
 
