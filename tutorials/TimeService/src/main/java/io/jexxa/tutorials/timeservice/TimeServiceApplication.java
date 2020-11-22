@@ -24,15 +24,10 @@ public final class TimeServiceApplication
     private static final String DRIVING_ADAPTER = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivingadapter";
     private static final String OUTBOUND_PORTS  = TimeServiceApplication.class.getPackageName() + ".domainservice";
 
-    private static String[] args;
-
     public static void main(String[] args)
     {
-        //Store the arguments for internal use
-        TimeServiceApplication.args = args;
-
         // Define the default strategy for messaging which is either a simple logger called `MessageLogger.class` or `JMSSender.class` for JMS messages
-        MessageSenderManager.setDefaultStrategy(getMessageSenderStrategy());
+        MessageSenderManager.setDefaultStrategy(getMessagingStrategy(args));
 
         //Create your jexxaMain for this application
         JexxaMain jexxaMain = new JexxaMain("TimeService");
@@ -61,30 +56,42 @@ public final class TimeServiceApplication
                 .stop();
     }
 
-    private static Class<? extends MessageSender> getMessageSenderStrategy()
+    // Methods for command line parsing
+    static Options getOptions()
     {
-        if ( isJMSEnabled() )
+        Options options = new Options();
+        options.addOption("j", "jdbc", false, "jdbc driven adapter strategy");
+        options.addOption("J", "jms", false, "JMS message sender");
+        return options;
+    }
+
+    static boolean isJMSEnabled()
+    {
+        return MessageSenderManager.getDefaultStrategy() == JMSSender.class;
+    }
+
+
+    private static Class<? extends MessageSender> getMessagingStrategy(String[] args)
+    {
+        if (parameterAvailable("jms", args))
         {
+            JexxaLogger.getLogger(TimeServiceApplication.class).info("Use messaging strategy: {} ", JMSSender.class.getSimpleName());
             return JMSSender.class;
         }
 
+        JexxaLogger.getLogger(TimeServiceApplication.class).info("Use messaging strategy: {} ", MessageLogger.class.getSimpleName());
         return MessageLogger.class;
     }
 
-    private static boolean isJMSEnabled()
+    @SuppressWarnings("SameParameterValue")
+    static boolean parameterAvailable(String parameter, String[] args)
     {
-        Options options = new Options();
-        options.addOption("j", "jms", false, "jms driven adapter");
-
         CommandLineParser parser = new DefaultParser();
         try
         {
-            CommandLine line = parser.parse( options, args );
+            CommandLine line = parser.parse( getOptions(), args );
 
-            if (line.hasOption("jms"))
-            {
-                return true;
-            }
+            return line.hasOption(parameter);
         }
         catch( ParseException exp ) {
             JexxaLogger.getLogger(TimeServiceApplication.class)
@@ -92,6 +99,7 @@ public final class TimeServiceApplication
         }
         return false;
     }
+
 
     private TimeServiceApplication()
     {

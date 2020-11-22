@@ -17,13 +17,13 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-public final class DomainEventStore
+public final class DomainEventStoreApplication
 {
-    private static final String DRIVEN_ADAPTER = DomainEventStore.class.getPackageName() + ".infrastructure.drivenadapter";
-    private static final String DRIVING_ADAPTER = DomainEventStore.class.getPackageName() + ".infrastructure.drivingadapter";
-    private static final String OUTBOUND_PORTS = DomainEventStore.class.getPackageName() + ".domainservice";
+    private static final String DRIVEN_ADAPTER = DomainEventStoreApplication.class.getPackageName() + ".infrastructure.drivenadapter";
+    private static final String DRIVING_ADAPTER = DomainEventStoreApplication.class.getPackageName() + ".infrastructure.drivingadapter";
+    private static final String OUTBOUND_PORTS = DomainEventStoreApplication.class.getPackageName() + ".domainservice";
     //Add also package name with inbound ports so that they are scanned by Jexxa
-    private static final String INBOUND_PORTS = DomainEventStore.class.getPackageName() + ".applicationservice";
+    private static final String INBOUND_PORTS = DomainEventStoreApplication.class.getPackageName() + ".applicationservice";
 
     public static void main(String[] args)
     {
@@ -31,9 +31,9 @@ public final class DomainEventStore
         // In case of JDBC we use a simple key value approach which stores the key and the value as json strings.
         // Using json strings might be very inconvenient if you come from typical relational databases but in terms
         // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
-        RepositoryManager.setDefaultStrategy(getDrivenAdapterStrategy(args));
+        RepositoryManager.setDefaultStrategy(getRepositoryStrategy(args));
 
-        JexxaMain jexxaMain = new JexxaMain(DomainEventStore.class.getSimpleName());
+        JexxaMain jexxaMain = new JexxaMain(DomainEventStoreApplication.class.getSimpleName());
 
         jexxaMain
                 // In order to find ports by annotation we must add packages that are searched by Jexxa.
@@ -58,38 +58,47 @@ public final class DomainEventStore
     }
 
 
-    @SuppressWarnings("rawtypes")
-    private static Class<? extends IRepository> getDrivenAdapterStrategy(String[] args)
+    // Methods for command line parsing
+    static Options getOptions()
     {
         Options options = new Options();
         options.addOption("j", "jdbc", false, "jdbc driven adapter strategy");
+        return options;
+    }
 
-        CommandLineParser parser = new DefaultParser();
-        try
-        {
-            CommandLine line = parser.parse(options, args);
 
-            if (line.hasOption("jdbc"))
-            {
-                JexxaLogger.getLogger(DomainEventStore.class).info("Use persistence strategy: {} ",
-                        JDBCKeyValueRepository.class.getSimpleName());
-                return JDBCKeyValueRepository.class;
-            }
-            else
-            {
-                JexxaLogger.getLogger(DomainEventStore.class).info("Use persistence strategy: {} ", IMDBRepository.class.getSimpleName());
-                return IMDBRepository.class;
-            }
-        }
-        catch (ParseException exp)
+    @SuppressWarnings("rawtypes")
+    private static Class<? extends IRepository> getRepositoryStrategy(String[] args)
+    {
+        if (parameterAvailable("jdbc", args))
         {
-            JexxaLogger.getLogger(DomainEventStore.class)
-                    .error("Parsing failed.  Reason: {}", exp.getMessage());
+            JexxaLogger.getLogger(DomainEventStoreApplication.class).info("Use persistence strategy: {} ", JDBCKeyValueRepository.class.getSimpleName());
+            return JDBCKeyValueRepository.class;
         }
+
+        JexxaLogger.getLogger(DomainEventStoreApplication.class).info("Use persistence strategy: {} ", IMDBRepository.class.getSimpleName());
         return IMDBRepository.class;
     }
 
-    private DomainEventStore()
+
+    @SuppressWarnings("SameParameterValue")
+    static boolean parameterAvailable(String parameter, String[] args)
+    {
+        CommandLineParser parser = new DefaultParser();
+        try
+        {
+            CommandLine line = parser.parse( getOptions(), args );
+
+            return line.hasOption(parameter);
+        }
+        catch( ParseException exp ) {
+            JexxaLogger.getLogger(DomainEventStoreApplication.class)
+                    .error( "Parsing failed.  Reason: {}", exp.getMessage() );
+        }
+        return false;
+    }
+
+    private DomainEventStoreApplication()
     {
         // Private constructor
     }

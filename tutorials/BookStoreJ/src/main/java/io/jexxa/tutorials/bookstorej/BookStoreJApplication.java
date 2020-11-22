@@ -31,11 +31,13 @@ public final class BookStoreJApplication
 
     public static void main(String[] args)
     {
-        // Define the default strategy which is either an IMDB database or a JDBC based repository
+        // Define the default strategies.
+        // In this tutorial it the Repository is either an IMDB database or a JDBC based repository.
         // In case of JDBC we use a simple key value approach which stores the key and the value as json strings.
         // Using json strings might be very inconvenient if you come from typical relational databases but in terms
         // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
         RepositoryManager.setDefaultStrategy(getRepositoryStrategy(args));
+        // The message sender is either a simple MessageLogger or a JMS sender.
         MessageSenderManager.setDefaultStrategy(getMessagingStrategy(args));
 
         JexxaMain jexxaMain = new JexxaMain(BookStoreJApplication.class.getSimpleName());
@@ -64,62 +66,55 @@ public final class BookStoreJApplication
                 .stop();
     }
 
+    // Methods for command line parsing
+    static Options getOptions()
+    {
+        Options options = new Options();
+        options.addOption("j", "jdbc", false, "jdbc driven adapter strategy");
+        options.addOption("J", "jms", false, "JMS message sender");
+        return options;
+    }
+
 
     @SuppressWarnings("rawtypes")
     private static Class<? extends IRepository> getRepositoryStrategy(String[] args)
     {
-        Options options = new Options();
-        options.addOption("j", "jdbc", false, "jdbc driven adapter strategy");
-
-        CommandLineParser parser = new DefaultParser();
-        try
+        if (parameterAvailable("jdbc", args))
         {
-            CommandLine line = parser.parse( options, args );
+            JexxaLogger.getLogger(BookStoreJApplication.class).info("Use persistence strategy: {} ", JDBCKeyValueRepository.class.getSimpleName());
+            return JDBCKeyValueRepository.class;
+        }
 
-            if (line.hasOption("jdbc"))
-            {
-                JexxaLogger.getLogger(BookStoreJApplication.class).info("Use persistence strategy: {} ", JDBCKeyValueRepository.class.getSimpleName());
-                return JDBCKeyValueRepository.class;
-            }
-            else
-            {
-                JexxaLogger.getLogger(BookStoreJApplication.class).info("Use persistence strategy: {} ", IMDBRepository.class.getSimpleName());
-                return IMDBRepository.class;
-            }
-        }
-        catch( ParseException exp ) {
-            JexxaLogger.getLogger(BookStoreJApplication.class)
-                    .error( "Parsing failed.  Reason: {}", exp.getMessage() );
-        }
+        JexxaLogger.getLogger(BookStoreJApplication.class).info("Use persistence strategy: {} ", IMDBRepository.class.getSimpleName());
         return IMDBRepository.class;
     }
 
     private static Class<? extends MessageSender> getMessagingStrategy(String[] args)
     {
-        Options options = new Options();
-        options.addOption("J", "jms", false, "jdbc driven adapter strategy");
+        if (parameterAvailable("jms", args))
+        {
+            JexxaLogger.getLogger(BookStoreJApplication.class).info("Use messaging strategy: {} ", JMSSender.class.getSimpleName());
+            return JMSSender.class;
+        }
 
+        JexxaLogger.getLogger(BookStoreJApplication.class).info("Use messaging strategy: {} ", MessageLogger.class.getSimpleName());
+        return MessageLogger.class;
+    }
+
+    static boolean parameterAvailable(String parameter, String[] args)
+    {
         CommandLineParser parser = new DefaultParser();
         try
         {
-            CommandLine line = parser.parse( options, args );
+            CommandLine line = parser.parse( getOptions(), args );
 
-            if (line.hasOption("jms"))
-            {
-                JexxaLogger.getLogger(BookStoreJApplication.class).info("Use messaging strategy: {} ", JMSSender.class.getSimpleName());
-                return JMSSender.class;
-            }
-            else
-            {
-                JexxaLogger.getLogger(BookStoreJApplication.class).info("Use messaging strategy: {} ", MessageLogger.class.getSimpleName());
-                return MessageLogger.class;
-            }
+            return line.hasOption(parameter);
         }
         catch( ParseException exp ) {
             JexxaLogger.getLogger(BookStoreJApplication.class)
                     .error( "Parsing failed.  Reason: {}", exp.getMessage() );
         }
-        return MessageLogger.class;
+        return false;
     }
 
 

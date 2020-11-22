@@ -11,7 +11,7 @@
   <name>DomainEventStore</name>
 
   <properties>
-    <main.class>io.jexxa.tutorials.DomainEventStore</main.class>
+    <main.class>io.jexxa.tutorials.DomainEventStoreApplication</main.class>
     <jmx.port>1099</jmx.port>
   </properties>
 

@@ -228,16 +228,13 @@ public final class TimeServiceApplication
 {
     //Declare the packages that should be used by Jexxa
     private static final String DRIVEN_ADAPTER  = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter";
+    private static final String DRIVING_ADAPTER = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivingadapter";
     private static final String OUTBOUND_PORTS  = TimeServiceApplication.class.getPackageName() + ".domainservice";
-    private static String[] args;
 
     public static void main(String[] args)
     {
-        //Store the arguments for internal use
-        TimeServiceApplication.args = args;
-
         // Define the default strategy for messaging which is either a simple logger called `MessageLogger.class` or `JMSSender.class` for JMS messages
-        MessageSenderManager.setDefaultStrategy(getMessageSenderStrategy());
+        MessageSenderManager.setDefaultStrategy(getMessagingStrategy(args));
 
         //Create your jexxaMain for this application
         JexxaMain jexxaMain = new JexxaMain("TimeService");
@@ -246,10 +243,13 @@ public final class TimeServiceApplication
                 //Define which outbound ports should be managed by Jexxa
                 .addToApplicationCore(OUTBOUND_PORTS)
                 .addToInfrastructure(DRIVEN_ADAPTER)
+                //Note: Since we provide our own special driving adapters, we have to add it to the infrastructure
+                .addToInfrastructure(DRIVING_ADAPTER)
 
                 // Bind RESTfulRPCAdapter and JMXAdapter to TimeService class so that we can invoke its method
                 .bind(RESTfulRPCAdapter.class).to(TimeService.class)
                 .bind(JMXAdapter.class).to(TimeService.class)
+
 
                 // Conditional bind is only executed if given expression evaluates to true
                 .conditionalBind( TimeServiceApplication::isJMSEnabled, JMSAdapter.class).to(PublishTimeListener.class)
@@ -304,7 +304,7 @@ Each time you execute curl you should see following output on the console:
 
 ```console                                                          
 mvn clean install
-java -jar target/timeservice-jar-with-dependencies.jar -j 
+java -jar target/timeservice-jar-with-dependencies.jar -J 
 ```
 You will see following (or similar) output
 ```console
