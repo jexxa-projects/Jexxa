@@ -50,6 +50,12 @@ public final class MessageSenderManager
         MessageSenderManager.defaultStrategy = defaultStrategy;
     }
 
+    public static Class<? extends MessageSender> getDefaultStrategy()
+    {
+        return MessageSenderManager.defaultStrategy;
+    }
+
+
     public static MessageSenderManager getInstance()
     {
         return MESSAGE_SENDER_MANAGER;
