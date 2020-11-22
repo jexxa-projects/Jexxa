@@ -118,15 +118,15 @@ public class MessageProducer
         }
     }
 
-    @SuppressWarnings("unused")
-    public static class UnpublishedDomainEvent
+    @SuppressWarnings({"unused", "java:S1068", "FieldCanBeLocal"}) // for attributes. We need them for proper json serialization
+    static class UnpublishedDomainEvent
     {
         private final String id;
         private final String type;
         private final String payload;
         private final Instant publishedAt;
 
-        public UnpublishedDomainEvent(String id, String type, String payload, Instant publishedAt )
+        UnpublishedDomainEvent(String id, String type, String payload, Instant publishedAt )
         {
             this.id = id;
             this.payload = payload;
