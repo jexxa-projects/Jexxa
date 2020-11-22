@@ -11,11 +11,10 @@ class MessageSenderManagerTest
     @Test
     void setInvalidDefaultStrategy()
     {
-        //Arrange 
-        var objectUnderTest = MessageSenderManager.getInstance();
+        //Arrange - nothing
 
         //Act/Assert
-        assertThrows( NullPointerException.class, () -> objectUnderTest.setDefaultStrategy(null));
+        assertThrows( NullPointerException.class, () -> MessageSenderManager.setDefaultStrategy(null));
     }
 
 }

@@ -11,7 +11,7 @@ import io.jexxa.utils.JexxaLogger;
 public abstract class TypedMessageListener<T>  implements MessageListener
 {
     private final Gson gson = new Gson();
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
     protected TypedMessageListener(Class<T> clazz)
     {

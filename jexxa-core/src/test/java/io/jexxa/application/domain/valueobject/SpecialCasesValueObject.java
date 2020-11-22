@@ -25,6 +25,7 @@ public class SpecialCasesValueObject
         this.valueWithoutGetter = value;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public String getNullValue()
     {
         return nullValue;

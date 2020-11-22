@@ -12,8 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTimeout;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-import javax.jms.JMSException;
-
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.domainevent.JexxaDomainEvent;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
