@@ -2,6 +2,10 @@ package io.jexxa.tutorials;
 
 
 import io.jexxa.core.JexxaMain;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
@@ -32,6 +36,8 @@ public final class DomainEventStoreApplication
         // Using json strings might be very inconvenient if you come from typical relational databases but in terms
         // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
         RepositoryManager.setDefaultStrategy(getRepositoryStrategy(args));
+        // The message sender is either a simple MessageLogger or a JMS sender.
+        MessageSenderManager.setDefaultStrategy(getMessagingStrategy(args));
 
         JexxaMain jexxaMain = new JexxaMain(DomainEventStoreApplication.class.getSimpleName());
 
@@ -63,6 +69,7 @@ public final class DomainEventStoreApplication
     {
         Options options = new Options();
         options.addOption("j", "jdbc", false, "jdbc driven adapter strategy");
+        options.addOption("J", "jms", false, "JMS message sender");
         return options;
     }
 
@@ -80,8 +87,18 @@ public final class DomainEventStoreApplication
         return IMDBRepository.class;
     }
 
+    private static Class<? extends MessageSender> getMessagingStrategy(String[] args)
+    {
+        if (parameterAvailable("jms", args))
+        {
+            JexxaLogger.getLogger(DomainEventStoreApplication.class).info("Use messaging strategy: {} ", JMSSender.class.getSimpleName());
+            return JMSSender.class;
+        }
 
-    @SuppressWarnings("SameParameterValue")
+        JexxaLogger.getLogger(DomainEventStoreApplication.class).info("Use messaging strategy: {} ", MessageLogger.class.getSimpleName());
+        return MessageLogger.class;
+    }
+
     static boolean parameterAvailable(String parameter, String[] args)
     {
         CommandLineParser parser = new DefaultParser();

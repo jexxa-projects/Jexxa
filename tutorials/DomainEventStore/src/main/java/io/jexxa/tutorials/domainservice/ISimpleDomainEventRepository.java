@@ -8,6 +8,8 @@ public interface ISimpleDomainEventRepository
 {
     void add(DomainEvent domainEvent);
 
+    boolean isPresent(String uuid);
+
     DomainEvent get(String uuid);
 
     List<DomainEvent> getAll();

@@ -24,6 +24,12 @@ public class SimpleDomainEventRepository implements ISimpleDomainEventRepository
     }
 
     @Override
+    public boolean isPresent(String uuid)
+    {
+        return repository.get(uuid).isPresent();
+    }
+
+    @Override
     public DomainEvent get(String uuid)
     {
         return repository.get(uuid).orElseThrow();
