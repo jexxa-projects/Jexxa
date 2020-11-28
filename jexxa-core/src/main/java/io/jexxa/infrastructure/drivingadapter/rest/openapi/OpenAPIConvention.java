@@ -219,7 +219,7 @@ public class OpenAPIConvention
 
         if (  clazz.equals(ZonedDateTime.class) )
         {
-            return ZonedDateTime.of(1970,1,1,0,0,0,0, ZoneId.systemDefault()).withZoneSameInstant(ZoneId.systemDefault()).toString();
+            return ZonedDateTime.of(1970,1,1,0,0,0,0, ZoneId.systemDefault()).withFixedOffsetZone().toString();
         }
 
         return null;
