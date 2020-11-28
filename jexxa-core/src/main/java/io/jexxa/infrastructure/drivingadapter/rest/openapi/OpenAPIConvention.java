@@ -192,24 +192,19 @@ public class OpenAPIConvention
 
     private static Object createExampleInstance(Class<?> clazz, Type genericType)
     {
-        if ( isJava8DateTime(clazz) )
+        if ( isJava8Date(clazz) )
         {
-            return java8DateTimeExample(clazz);
+            return java8DateExample(clazz);
         }
 
-        return createGenericExampleInstance(clazz, genericType);
+        return createGenericExample(clazz, genericType);
     }
 
-    private static String java8DateTimeExample(Class<?> clazz)
+    private static Object java8DateExample(Class<?> clazz)
     {
         if ( clazz.equals( LocalDate.class ) )
         {
             return LocalDate.of(1970, 1, 1).toString();
-        }
-
-        if ( clazz.equals( LocalTime.class) )
-        {
-            return LocalTime.of(0,0,0).toString();
         }
 
         if ( clazz.equals( LocalDateTime.class ) )
@@ -225,7 +220,7 @@ public class OpenAPIConvention
         return null;
     }
 
-    private static Object createGenericExampleInstance(Class<?> clazz, Type genericType)
+    private static Object createGenericExample(Class<?> clazz, Type genericType)
     {
         try
         {
@@ -314,7 +309,7 @@ public class OpenAPIConvention
             return new StringSchema();
         }
 
-        if ( isJava8DateTime(clazz) )
+        if ( isJava8Date(clazz) )
         {
             return new StringSchema();
         }
@@ -351,10 +346,9 @@ public class OpenAPIConvention
                 clazz.equals(double.class);
     }
 
-    private static boolean isJava8DateTime(Class<?> clazz)
+    private static boolean isJava8Date(Class<?> clazz)
     {
         return clazz.equals( LocalDate.class ) ||
-                clazz.equals( LocalTime.class ) ||
                 clazz.equals(LocalDateTime.class) ||
                 clazz.equals(ZonedDateTime.class);
     }
