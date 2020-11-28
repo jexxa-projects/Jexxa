@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.Properties;
 
 import com.google.gson.Gson;
@@ -120,4 +122,50 @@ class RESTfulRPCJava8DateTimeTest
         assertNotNull(result);
         assertEquals(localDateTime, result);
     }
+
+    @Test
+    void testLocalTime()
+    {
+        //Arrange -> Nothing to do
+        LocalTime localTime = LocalTime.now();
+
+        //Act
+
+        var response = Unirest.post(REST_PATH + "setLocalTime")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .body(localTime)
+                .asEmpty();
+
+        LocalTime result = Unirest.get(REST_PATH + "getLocalTime")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(LocalTime.class).getBody();
+
+        //Assert
+        assertTrue(response.isSuccess());
+        assertNotNull(result);
+        assertEquals(localTime, result);
+    }
+
+    @Test
+    void testZonedDateTime()
+    {
+        //Arrange -> Nothing to do
+        ZonedDateTime zonedDateTime = ZonedDateTime.now().withFixedOffsetZone();
+
+        //Act
+        var response = Unirest.post(REST_PATH + "setZonedDateTime")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .body(zonedDateTime)
+                .asEmpty();
+
+        var result = Unirest.get(REST_PATH + "getZonedDateTime")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(ZonedDateTime.class).getBody();
+
+        //Assert
+        assertTrue(response.isSuccess());
+        assertNotNull(result);
+        assertEquals(zonedDateTime, result);
+    }
+
 }

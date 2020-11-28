@@ -6,6 +6,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -207,11 +209,10 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
             var targetException = e.getTargetException();
             targetException.getStackTrace(); // Ensures that stack trace is filled in
 
-            Gson gson = new Gson();
             JsonObject exceptionWrapper = new JsonObject();
             exceptionWrapper.addProperty("ExceptionType", targetException.getClass().getName());
-            exceptionWrapper.addProperty("Exception", gson.toJson(targetException));
-            exceptionWrapper.addProperty("ApplicationType", gson.toJson("application/json"));
+            exceptionWrapper.addProperty("Exception", GSON.toJson(targetException));
+            exceptionWrapper.addProperty("ApplicationType", GSON.toJson("application/json"));
 
             ctx.result(exceptionWrapper.toString());
             ctx.status(400);
@@ -303,11 +304,9 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         Class<?>[] parameterTypes = method.getParameterTypes();
         Object[] paramArray = new Object[parameterTypes.length];
 
-        Gson gson = new Gson();
-
         for (int i = 0; i < parameterTypes.length; ++i)
         {
-            paramArray[i] = gson.fromJson(jsonArray.get(i), parameterTypes[i]);
+            paramArray[i] = GSON.fromJson(jsonArray.get(i), parameterTypes[i]);
         }
 
         return paramArray;
@@ -389,6 +388,15 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
         gsonBuilder.registerTypeAdapter(LocalDateTime.class,
                 (JsonSerializer<LocalDateTime>) (src, typeOfSrc, serializationContext) -> new JsonPrimitive(src.toString()));
+
+        gsonBuilder.registerTypeAdapter(ZonedDateTime.class,
+                (JsonDeserializer<ZonedDateTime>) (json, type, jsonDeserializationContext) -> ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()));
+
+        gsonBuilder.registerTypeAdapter(ZonedDateTime.class,
+                (JsonSerializer<ZonedDateTime>) (src, typeOfSrc, serializationContext) ->
+
+             new JsonPrimitive( DateTimeFormatter.ISO_OFFSET_DATE_TIME.
+                    format(src.withZoneSameInstant(src.getZone())) ));
 
     }
 }

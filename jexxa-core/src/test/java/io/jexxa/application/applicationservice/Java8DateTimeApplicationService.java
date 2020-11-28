@@ -3,6 +3,8 @@ package io.jexxa.application.applicationservice;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 
 import io.jexxa.application.annotation.ApplicationService;
 
@@ -10,9 +12,12 @@ import io.jexxa.application.annotation.ApplicationService;
 @ApplicationService
 public class Java8DateTimeApplicationService
 {
+    private LocalTime localTime = LocalTime.now();
     private LocalDate localDate = LocalDate.now();
     private LocalDateTime localDateTime = LocalDateTime.now();
+    private ZonedDateTime zonedDateTime = ZonedDateTime.now();
 
+    // -- LocalDate
     public void setLocalDate(LocalDate localDate)
     {
         this.localDate = localDate;
@@ -23,6 +28,7 @@ public class Java8DateTimeApplicationService
         return localDate;
     }
 
+    // -- LocalDateTime
     public void setLocalDateTime(LocalDateTime localDateTime)
     {
         this.localDateTime = localDateTime;
@@ -32,5 +38,28 @@ public class Java8DateTimeApplicationService
     {
         return localDateTime;
     }
+
+    // -- LocalTime
+    public void setLocalTime(LocalTime localTime)
+    {
+        this.localTime = localTime;
+    }
+
+    public LocalTime getLocalTime()
+    {
+        return localTime;
+    }
+
+    // -- ZoneDateTime
+    public void setZonedDateTime(ZonedDateTime zonedDateTime)
+    {
+        this.zonedDateTime = zonedDateTime;
+    }
+
+    public ZonedDateTime getZonedDateTime()
+    {
+        return zonedDateTime;
+    }
+
 
 }
