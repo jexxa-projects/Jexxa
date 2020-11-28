@@ -4,6 +4,7 @@ import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.c
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -12,9 +13,12 @@ import java.util.Properties;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
 import io.javalin.Javalin;
 import io.javalin.core.JavalinConfig;
 import io.javalin.http.Context;
@@ -37,7 +41,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public static final String KEYSTORE_PASSWORD = "io.jexxa.rest.keystore_password";
     public static final String OPEN_API_PATH = "io.jexxa.rest.open_api_path";
 
-    private static final Gson GSON = new GsonBuilder().create();
+    private static final Gson GSON = getGsonBuilder().create();
 
     private final Properties properties;
     private Javalin javalin;
@@ -269,7 +273,6 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
             return new Object[]{};
         }
 
-        Gson gson = new Gson();
         JsonElement jsonElement = JsonParser.parseString(jsonString);
 
         // In case we have more than one attribute, we assume a JSonArray
@@ -284,7 +287,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         else
         {
             Object[] result = new Object[1];
-            result[0] = gson.fromJson(jsonString, method.getParameterTypes()[0]);
+            result[0] = GSON.fromJson(jsonString, method.getParameterTypes()[0]);
             return result;
         }
     }
@@ -356,5 +359,28 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         sslContextFactory.setKeyStorePath(RESTfulRPCAdapter.class.getResource("/"+ getKeystore() ).toExternalForm());
         sslContextFactory.setKeyStorePassword(getKeystorePassword());
         return sslContextFactory;
+    }
+
+    private static GsonBuilder getGsonBuilder()
+    {
+        var gsonBuilder = new GsonBuilder();
+        registerTypeAdapter(gsonBuilder);
+        return gsonBuilder;
+    }
+
+    private static void registerTypeAdapter(GsonBuilder gsonBuilder)
+    {
+        gsonBuilder.registerTypeAdapter(LocalDate.class,
+            (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> {
+                if (json.isJsonPrimitive())
+                {
+                    return LocalDate.parse(json.getAsJsonPrimitive().getAsString());
+                }
+                return LocalDate.of(json.getAsJsonObject().get("year").getAsInt(), json.getAsJsonObject().get("month").getAsInt(), json.getAsJsonObject().get("day").getAsInt());
+            });
+
+        gsonBuilder.registerTypeAdapter(LocalDate.class,
+                (JsonSerializer<LocalDate>) (src, typeOfSrc, serializationContext) -> new JsonPrimitive(src.toString()));
+
     }
 }
