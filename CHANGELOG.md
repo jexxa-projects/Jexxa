@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.x.x] - yyyy-mm-dd  
+## \[2.5.3] - yyyy-mm-dd  
 
 ### Fixed
 -   RESTfulRPCAdapter: 
-    -   Corrected handling of Java8 Date API so that a date is handled as a string which is conform to ISO 8601     
+    -   Corrected handling of Java8 Date API so that a date is handled as a string which is conform to ISO 8601
+    -   Added tests that show how to use this from a client side. See [here](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java) for more information.       
     
 ### Changed
 -   Updated dependencies 
