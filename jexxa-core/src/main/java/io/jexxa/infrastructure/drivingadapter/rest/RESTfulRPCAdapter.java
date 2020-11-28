@@ -5,6 +5,7 @@ import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.c
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -381,6 +382,13 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
         gsonBuilder.registerTypeAdapter(LocalDate.class,
                 (JsonSerializer<LocalDate>) (src, typeOfSrc, serializationContext) -> new JsonPrimitive(src.toString()));
+
+
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class,
+                (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext) -> LocalDateTime.parse(json.getAsJsonPrimitive().getAsString()));
+
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class,
+                (JsonSerializer<LocalDateTime>) (src, typeOfSrc, serializationContext) -> new JsonPrimitive(src.toString()));
 
     }
 }

@@ -6,8 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Properties;
 
+import com.google.gson.Gson;
 import io.jexxa.application.applicationservice.Java8DateTimeApplicationService;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
@@ -70,5 +72,52 @@ class RESTfulRPCJava8DateTimeTest
         assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(localDate, result);
+    }
+
+    @Test
+    void testLocalDate()
+    {
+        //Arrange -> Nothing to do
+        LocalDate localDate = LocalDate.now();
+        Gson gson = new Gson();
+
+        //Act
+
+        var response = Unirest.post(REST_PATH + "setLocalDate")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .body(gson.toJson( localDate ))
+                .asEmpty();
+
+        LocalDate result = Unirest.get(REST_PATH + "getLocalDate")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(LocalDate.class).getBody();
+
+        //Assert
+        assertTrue(response.isSuccess());
+        assertNotNull(result);
+        assertEquals(localDate, result);
+    }
+
+    @Test
+    void testLocalDateTime()
+    {
+        //Arrange -> Nothing to do
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        //Act
+
+        var response = Unirest.post(REST_PATH + "setLocalDateTime")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .body(localDateTime)
+                .asEmpty();
+
+        LocalDateTime result = Unirest.get(REST_PATH + "getLocalDateTime")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(LocalDateTime.class).getBody();
+
+        //Assert
+        assertTrue(response.isSuccess());
+        assertNotNull(result);
+        assertEquals(localDateTime, result);
     }
 }
