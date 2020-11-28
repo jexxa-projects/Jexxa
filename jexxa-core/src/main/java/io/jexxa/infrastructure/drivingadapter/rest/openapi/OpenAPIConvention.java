@@ -8,6 +8,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -69,6 +74,7 @@ public class OpenAPIConvention
             javalinConfig.enableCorsForAllOrigins();
 
             openApiOptions.defaultDocumentation(doc -> {
+                doc.json("400", BadRequestResponse.class);
                 doc.json("400", BadRequestResponse.class);
             });
         }
@@ -186,6 +192,41 @@ public class OpenAPIConvention
 
     private static Object createExampleInstance(Class<?> clazz, Type genericType)
     {
+        if ( isJava8DateTime(clazz) )
+        {
+            return java8DateTimeExample(clazz);
+        }
+
+        return createGenericExampleInstance(clazz, genericType);
+    }
+
+    private static String java8DateTimeExample(Class<?> clazz)
+    {
+        if ( clazz.equals( LocalDate.class ) )
+        {
+            return LocalDate.of(1970, 1, 1).toString();
+        }
+
+        if ( clazz.equals( LocalTime.class) )
+        {
+            return LocalTime.of(0,0,0).toString();
+        }
+
+        if ( clazz.equals( LocalDateTime.class ) )
+        {
+            return LocalDateTime.of(LocalDate.of(1970, 1, 1), LocalTime.of(0,0,0) ).toString();
+        }
+
+        if (  clazz.equals(ZonedDateTime.class) )
+        {
+            return ZonedDateTime.of(1970,1,1,0,0,0,0, ZoneId.systemDefault()).withZoneSameInstant(ZoneId.systemDefault()).toString();
+        }
+
+        return null;
+    }
+
+    private static Object createGenericExampleInstance(Class<?> clazz, Type genericType)
+    {
         try
         {
             // We create a JsonSchema and try to create an instance from it
@@ -273,6 +314,11 @@ public class OpenAPIConvention
             return new StringSchema();
         }
 
+        if ( isJava8DateTime(clazz) )
+        {
+            return new StringSchema();
+        }
+
         if ( isJsonArray(clazz) )
         {
             var schema = new ArraySchema();
@@ -303,6 +349,14 @@ public class OpenAPIConvention
                 clazz.equals(long.class) ||
                 clazz.equals(float.class) ||
                 clazz.equals(double.class);
+    }
+
+    private static boolean isJava8DateTime(Class<?> clazz)
+    {
+        return clazz.equals( LocalDate.class ) ||
+                clazz.equals( LocalTime.class ) ||
+                clazz.equals(LocalDateTime.class) ||
+                clazz.equals(ZonedDateTime.class);
     }
 
     private static boolean isBoolean(Class<?> clazz)
