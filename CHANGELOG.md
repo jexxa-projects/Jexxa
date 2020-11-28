@@ -5,11 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[2.x.x] - yyyy-mm-dd  
-### Added
 
 ### Fixed
-
+-   RESTfulRPCAdapter: 
+    -   Corrected handling of Java8 Date API so that a date is handled as a string which is conform to ISO 8601     
+    
 ### Changed
+-   Updated dependencies 
 
 ## \[2.5.2] - 2020-11-11  
 ### Fixed

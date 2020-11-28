@@ -5,9 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
 import java.time.ZonedDateTime;
 import java.util.Properties;
 
@@ -168,4 +171,69 @@ class RESTfulRPCJava8DateTimeTest
         assertEquals(zonedDateTime, result);
     }
 
+    @Test
+    void testDuration()
+    {
+        //Arrange -> Nothing to do
+        Duration duration = Duration.ofDays(2);
+
+        //Act
+        var response = Unirest.post(REST_PATH + "setDuration")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .body(duration)
+                .asEmpty();
+
+        var result = Unirest.get(REST_PATH + "getDuration")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(Duration.class).getBody();
+
+        //Assert
+        assertTrue(response.isSuccess());
+        assertNotNull(result);
+        assertEquals(duration, result);
+    }
+
+    @Test
+    void testPeriod()
+    {
+        //Arrange -> Nothing to do
+        Period period = Period.ofDays(1);
+
+        //Act
+        var response = Unirest.post(REST_PATH + "setPeriod")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .body(period)
+                .asEmpty();
+
+        var result = Unirest.get(REST_PATH + "getPeriod")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(Period.class).getBody();
+
+        //Assert
+        assertTrue(response.isSuccess());
+        assertNotNull(result);
+        assertEquals(period, result);
+    }
+
+    @Test
+    void testInstant()
+    {
+        //Arrange -> Nothing to do
+        Instant instant = Instant.now();
+
+        //Act
+        var response = Unirest.post(REST_PATH + "setInstant")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .body(instant)
+                .asEmpty();
+
+        var result = Unirest.get(REST_PATH + "getInstant")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(Instant.class).getBody();
+
+        //Assert
+        assertTrue(response.isSuccess());
+        assertNotNull(result);
+        assertEquals(instant, result);
+    }
 }

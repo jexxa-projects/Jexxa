@@ -1,9 +1,12 @@
 package io.jexxa.application.applicationservice;
 
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
 import java.time.ZonedDateTime;
 
 import io.jexxa.application.annotation.ApplicationService;
@@ -16,6 +19,9 @@ public class Java8DateTimeApplicationService
     private LocalDate localDate = LocalDate.now();
     private LocalDateTime localDateTime = LocalDateTime.now();
     private ZonedDateTime zonedDateTime = ZonedDateTime.now();
+    private Period period = Period.of(1, 0, 0);
+    private Duration duration = Duration.ofDays(1);
+    private Instant instant = Instant.now();
 
     // -- LocalDate
     public void setLocalDate(LocalDate localDate)
@@ -61,5 +67,37 @@ public class Java8DateTimeApplicationService
         return zonedDateTime;
     }
 
+    // -- Period
+    public void setPeriod(Period period)
+    {
+        this.period = period;
+    }
+
+    public Period getPeriod()
+    {
+        return period;
+    }
+
+    // -- Period
+    public void setDuration(Duration duration)
+    {
+        this.duration = duration;
+    }
+
+    public Duration getDuration()
+    {
+        return duration;
+    }
+
+    // -- Period
+    public void setInstant(Instant instant)
+    {
+        this.instant = instant;
+    }
+
+    public Instant getInstant()
+    {
+        return instant;
+    }
 
 }
