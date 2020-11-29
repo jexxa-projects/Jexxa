@@ -4,36 +4,28 @@ import java.util.List;
 
 import io.jexxa.tutorials.domain.valueobject.DomainEvent;
 import io.jexxa.tutorials.domainservice.IDomainEventResend;
-import io.jexxa.tutorials.domainservice.ISimpleDomainEventRepository;
+import io.jexxa.tutorials.domainservice.IDomainEventRepository;
 
 @SuppressWarnings("unused")
 public class SimpleDomainEventStore
 {
-    private final ISimpleDomainEventRepository iSimpleDomainEventRepository;
+    private final IDomainEventRepository iDomainEventRepository;
     private final IDomainEventResend iDomainEventResend;
 
-    public SimpleDomainEventStore(ISimpleDomainEventRepository iSimpleDomainEventRepository, IDomainEventResend iDomainEventResend)
+    public SimpleDomainEventStore(IDomainEventRepository iDomainEventRepository, IDomainEventResend iDomainEventResend)
     {
-        this.iSimpleDomainEventRepository = iSimpleDomainEventRepository;
+        this.iDomainEventRepository = iDomainEventRepository;
         this.iDomainEventResend = iDomainEventResend;
-    }
-
-    public void addDomainEvent(DomainEvent domainEvent)
-    {
-        if (! iSimpleDomainEventRepository.isPresent(domainEvent.getUUID()))
-        {
-            iSimpleDomainEventRepository.add(domainEvent);
-        }
     }
 
     public List<DomainEvent> getDomainEvents()
     {
-        return iSimpleDomainEventRepository.getAll();
+        return iDomainEventRepository.getAll();
     }
 
     public void resendDomainEvent(String uuid)
     {
-        var domainEvent = iSimpleDomainEventRepository.get(uuid);
+        var domainEvent = iDomainEventRepository.get(uuid);
         iDomainEventResend.resend(domainEvent);
     }
 

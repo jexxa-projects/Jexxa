@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.jexxa.tutorials.domain.valueobject.DomainEvent;
 
-public interface ISimpleDomainEventRepository
+public interface IDomainEventRepository
 {
     void add(DomainEvent domainEvent);
 

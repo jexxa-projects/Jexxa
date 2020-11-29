@@ -2,23 +2,23 @@ package io.jexxa.tutorials.infrastructure.drivingadapter.messaging;
 
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.TypedMessageListener;
-import io.jexxa.tutorials.applicationservice.SimpleDomainEventStore;
 import io.jexxa.tutorials.domain.valueobject.DomainEvent;
+import io.jexxa.tutorials.domainservice.StoreDomainEventService;
 
-public class BookStoreListener extends TypedMessageListener<DomainEvent>
+public class BookStoreTopicListener extends TypedMessageListener<DomainEvent>
 {
-    private final SimpleDomainEventStore simpleDomainEventStore;
+    private final StoreDomainEventService storeDomainEventService;
 
-    public BookStoreListener(SimpleDomainEventStore simpleDomainEventStore)
+    public BookStoreTopicListener(StoreDomainEventService storeDomainEventService)
     {
         super(DomainEvent.class);
-        this.simpleDomainEventStore = simpleDomainEventStore;
+        this.storeDomainEventService = storeDomainEventService;
     }
 
     @Override
     @JMSConfiguration(messagingType = JMSConfiguration.MessagingType.TOPIC, destination = "BookStoreTopic")
     public void onMessage(DomainEvent domainEvent)
     {
-        simpleDomainEventStore.addDomainEvent(domainEvent);
+        storeDomainEventService.add(domainEvent);
     }
 }

@@ -6,13 +6,13 @@ import java.util.Properties;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.tutorials.domain.valueobject.DomainEvent;
-import io.jexxa.tutorials.domainservice.ISimpleDomainEventRepository;
+import io.jexxa.tutorials.domainservice.IDomainEventRepository;
 
-public class SimpleDomainEventRepository implements ISimpleDomainEventRepository
+public class DomainEventRepository implements IDomainEventRepository
 {
     private final IRepository<DomainEvent, String> repository;
 
-    public SimpleDomainEventRepository(Properties properties)
+    public DomainEventRepository(Properties properties)
     {
         repository = RepositoryManager.getRepository(DomainEvent.class, DomainEvent::getUUID, properties);
     }

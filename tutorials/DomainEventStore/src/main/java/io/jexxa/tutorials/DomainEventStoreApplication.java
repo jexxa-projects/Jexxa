@@ -13,7 +13,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyVal
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import io.jexxa.tutorials.applicationservice.SimpleDomainEventStore;
-import io.jexxa.tutorials.infrastructure.drivingadapter.messaging.BookStoreListener;
+import io.jexxa.tutorials.infrastructure.drivingadapter.messaging.BookStoreTopicListener;
 import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -54,7 +54,7 @@ public final class DomainEventStoreApplication
                 // You can also bind DrivingAdapter to annotated classes.
                 .bind(RESTfulRPCAdapter.class).to(SimpleDomainEventStore.class)
 
-                .bind(JMSAdapter.class).to(BookStoreListener.class)
+                .bind(JMSAdapter.class).to(BookStoreTopicListener.class)
 
                 .start()
 
