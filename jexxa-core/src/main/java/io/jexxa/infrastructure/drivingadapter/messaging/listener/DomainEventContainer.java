@@ -4,14 +4,14 @@ import java.time.Instant;
 
 @SuppressWarnings("unused")
 public
-class DomainEventFrame
+class DomainEventContainer
 {
     private final String uuid;
     private final String payloadType;
     private final String payload;
     private final Instant publishedAt;
 
-    DomainEventFrame(String uuid, String payloadType, String payload, Instant publishedAt )
+    DomainEventContainer(String uuid, String payloadType, String payload, Instant publishedAt )
     {
         this.uuid = uuid;
         this.payloadType = payloadType;

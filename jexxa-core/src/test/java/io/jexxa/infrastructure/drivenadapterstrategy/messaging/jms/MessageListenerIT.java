@@ -20,7 +20,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
-import io.jexxa.infrastructure.drivingadapter.messaging.listener.DomainEventFrame;
+import io.jexxa.infrastructure.drivingadapter.messaging.listener.DomainEventContainer;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.DomainEventListener;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.TypedMessageListener;
 import org.junit.jupiter.api.BeforeEach;
@@ -94,7 +94,7 @@ class MessageListenerIT
     private static class TopicDomainEventListener extends DomainEventListener<JexxaDomainEvent>
     {
         private JexxaDomainEvent jexxaDomainEvent;
-        private DomainEventFrame publishedDomainEvent;
+        private DomainEventContainer publishedDomainEvent;
 
         public TopicDomainEventListener()
         {
@@ -114,7 +114,7 @@ class MessageListenerIT
             return jexxaDomainEvent;
         }
 
-        public DomainEventFrame getPublishedDomainEvent()
+        public DomainEventContainer getPublishedDomainEvent()
         {
             return publishedDomainEvent;
         }
