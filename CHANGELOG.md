@@ -7,14 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[2.6.0] - yyyy-mm-dd  
 ### Added
 -   MessageSender:
-    -   Added method `asDomainEvent()` to publish information as domain events in terms of DDD. For this purpose Jexxa encapsulates the published message into JSON: 
+    -   Added method `asDomainEvent()` to publish information as domain events in terms of DDD. For this purpose Jexxa encapsulates the published message into a `DomainEventContainer` with following structure: 
         -   A UUID for unique identification in a distributed environment
         -   A timestamp representing published time 
         -   Type information of the domain event
         -   A payload representing the published message itself as JSON string  
 
 -   JMSAdapter:
-    -   Added default implementations for JMS listener which perform JSON deserialization  
+    -   Added default implementations for JMS listener which perform JSON deserialization
+    -   Please refer to the tutorials [TimeService](https://github.com/repplix/Jexxa/tree/master/tutorials/TimeService) how to use them.  
     
 -   DrivenAdapterStrategies: 
     -   Added static methods to get/set strategie instances for convenience purpose
