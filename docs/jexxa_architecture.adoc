@@ -55,7 +55,7 @@ use of technology stacks itself does not add value as long as the business domai
 
 This actually leads to a rather obvious conclusion about team structures within IT, which in my experience is often ignored:
 
-* Senior developers should focus on the application core. By working with the business experts, you can learn enough domain knowledge to map the
+* Senior developers should focus on the application core. By working with the business experts, they can learn sufficient domain knowledge to map the
 business domain to a suitable application core.
 
 * The intermediate developers then support the implementation of the application core.

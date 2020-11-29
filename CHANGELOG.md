@@ -20,9 +20,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     -   Added static methods to get/set strategie instances for convenience purpose
     -   Updated all tutorials to use these convenience methods    
     
-### Fixed
+## \[2.5.3] - 2020-11-28  
 
+### Fixed
+-   RESTfulRPCAdapter: 
+    -   Corrected handling of Java8 Date API so that a date is handled as a string which is conform to ISO 8601
+    -   Added tests that show how to use this from a client side. See [here](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java) for more information.       
+    
 ### Changed
+-   Updated dependencies 
 
 ## \[2.5.2] - 2020-11-11  
 ### Fixed
