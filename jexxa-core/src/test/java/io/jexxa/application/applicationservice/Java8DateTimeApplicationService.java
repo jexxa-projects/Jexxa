@@ -18,7 +18,7 @@ public class Java8DateTimeApplicationService
     private LocalTime localTime = LocalTime.now();
     private LocalDate localDate = LocalDate.now();
     private LocalDateTime localDateTime = LocalDateTime.now();
-    private ZonedDateTime zonedDateTime = ZonedDateTime.now();
+    private ZonedDateTime zonedDateTime = ZonedDateTime.now().withFixedOffsetZone();
     private Period period = Period.of(1, 0, 0);
     private Duration duration = Duration.ofDays(1);
     private Instant instant = Instant.now();
