@@ -119,7 +119,11 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
         catch (JMSException e)
         {
-            throw new IllegalStateException("Driving Adapter could not connect to JMS-System", e);
+            throw new IllegalStateException(
+                    "Registration of of Driving Adapter " + object.getClass().getName() + " failed. Please check the JMSConfiguration.\n"  +
+                            " Error messsage from JMS subsystem: " + e.getMessage()
+                    , e
+            );
         }
 
     }
