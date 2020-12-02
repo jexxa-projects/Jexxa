@@ -259,9 +259,8 @@ public class OpenAPIConvention
 
             //Handle primitive values
             return createPrimitive(clazz);
-        } catch (Exception e) {
-            JexxaLogger.getLogger(OpenAPIConvention.class).warn(e.getMessage(), e);
-            JexxaLogger.getLogger(OpenAPIConvention.class).warn( "Could not create Object {}" , clazz.getName() , e );
+        } catch (Exception | NoSuchMethodError e ) {
+            JexxaLogger.getLogger(OpenAPIConvention.class).warn( "[OpenAPI] Could not create an example Object {}" , clazz.getName() );
         }
         return null;
     }
