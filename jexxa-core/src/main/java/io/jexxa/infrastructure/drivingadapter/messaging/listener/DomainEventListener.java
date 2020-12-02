@@ -1,6 +1,6 @@
 package io.jexxa.infrastructure.drivingadapter.messaging.listener;
 
-public abstract class DomainEventListener<T> extends TypedMessageListener<DomainEventContainer>
+public abstract class DomainEventListener<T> extends JSONMessageListener<DomainEventContainer>
 {
     private DomainEventContainer currentDomainEvent;
     private final Class<T> clazz;
@@ -16,7 +16,7 @@ public abstract class DomainEventListener<T> extends TypedMessageListener<Domain
     {
         this.currentDomainEvent = message;
 
-        onDomainEvent( getGson().fromJson(message.getPayload(), clazz) );
+        onDomainEvent( fromJson(message.getPayload(), clazz) );
 
         this.currentDomainEvent = null;
     }

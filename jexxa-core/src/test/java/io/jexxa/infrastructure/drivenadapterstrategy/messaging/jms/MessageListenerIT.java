@@ -22,7 +22,7 @@ import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.DomainEventContainer;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.DomainEventListener;
-import io.jexxa.infrastructure.drivingadapter.messaging.listener.TypedMessageListener;
+import io.jexxa.infrastructure.drivingadapter.messaging.listener.JSONMessageListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ class MessageListenerIT
 
 
     private TopicDomainEventListener domainEventListener;
-    private TypedListener typedListener;
+    private JSONListener typedListener;
     private JexxaMain jexxaMain;
 
     private MessageSender objectUnderTest;
@@ -48,7 +48,7 @@ class MessageListenerIT
     {
         jexxaMain = new JexxaMain(MessageListenerIT.class.getSimpleName());
         domainEventListener = new TopicDomainEventListener();
-        typedListener = new TypedListener();
+        typedListener = new JSONListener();
         objectUnderTest = MessageSenderManager.getMessageSender(jexxaMain.getProperties());
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
@@ -120,11 +120,11 @@ class MessageListenerIT
         }
     }
 
-    private static class TypedListener extends TypedMessageListener<JexxaValueObject>
+    private static class JSONListener extends JSONMessageListener<JexxaValueObject>
     {
         private JexxaValueObject jexxaValueObject;
 
-        public TypedListener()
+        public JSONListener()
         {
             super(JexxaValueObject.class);
         }
