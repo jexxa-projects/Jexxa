@@ -1,5 +1,7 @@
 package io.jexxa.application.domain.aggregate;
 
+import java.util.Objects;
+
 import io.jexxa.application.annotation.Aggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 
@@ -35,4 +37,24 @@ public class JexxaAggregate
         return new JexxaAggregate(key);
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        JexxaAggregate that = (JexxaAggregate) o;
+        return Objects.equals(getKey(), that.getKey());     // Only compare keys
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(jexxaValueObject);
+    }
 }
