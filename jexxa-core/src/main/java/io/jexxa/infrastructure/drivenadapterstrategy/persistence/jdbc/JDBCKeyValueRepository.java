@@ -1,12 +1,9 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Function;
@@ -24,16 +21,15 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     public static final String JDBC_USERNAME = "io.jexxa.jdbc.username";
     public static final String JDBC_PASSWORD = "io.jexxa.jdbc.password";
     public static final String JDBC_DRIVER = "io.jexxa.jdbc.driver";
-    public static final String JDBC_AUTOCREATE_DATABASE = "io.jexxa.jdbc.autocreate.database";
     public static final String JDBC_AUTOCREATE_TABLE = "io.jexxa.jdbc.autocreate.table";
-
+    public static final String JDBC_AUTOCREATE_DATABASE = "io.jexxa.jdbc.autocreate.database";
 
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCKeyValueRepository.class);
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
-    private final Connection connection;
+    private final JDBCConnection jdbcConnection;
 
 
     public JDBCKeyValueRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
@@ -41,15 +37,10 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         this.keyFunction = keyFunction;
         this.aggregateClazz = aggregateClazz;
 
-        validateProperties(properties);
-
-        initDBDriver(properties);
-
-        autocreateDatabase(properties);
+        this.jdbcConnection = new JDBCConnection(properties);
 
         autocreateTable(properties);
 
-        this.connection = initJDBCConnection(properties);
     }
 
 
@@ -61,7 +52,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         Gson gson = new Gson();
         String jsonKey = gson.toJson(key);
 
-        try (var preparedStatement = connection.prepareStatement("delete from " + aggregateClazz.getSimpleName() + " where key= ?"))
+        try (var preparedStatement = jdbcConnection.prepareStatement("delete from " + aggregateClazz.getSimpleName() + " where key= ?"))
         {
             preparedStatement.setString(1, jsonKey);
 
@@ -81,7 +72,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     public void removeAll()
     {
 
-        try ( var statement = connection.prepareStatement("delete from " + aggregateClazz.getSimpleName()))
+        try ( var statement = jdbcConnection.prepareStatement("delete from " + aggregateClazz.getSimpleName()))
         {
             statement.executeUpdate();
         }
@@ -102,7 +93,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         String key = gson.toJson(keyFunction.apply(aggregate));
         String value = gson.toJson(aggregate);
 
-        try (var preparedStatement = connection.prepareStatement("insert into " + aggregate.getClass().getSimpleName()+ " values(?,?)"))
+        try (var preparedStatement = jdbcConnection.prepareStatement("insert into " + aggregate.getClass().getSimpleName()+ " values(?,?)"))
         {
             preparedStatement.setString(1, key);
             preparedStatement.setString(2, value);
@@ -125,7 +116,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         String key = gson.toJson(keyFunction.apply(aggregate));
         String value = gson.toJson(aggregate);
 
-        try (var preparedStatement = connection.prepareStatement("update " + aggregateClazz.getSimpleName() + " set value = ? where key = ?") )
+        try (var preparedStatement = jdbcConnection.prepareStatement("update " + aggregateClazz.getSimpleName() + " set value = ? where key = ?") )
         {
             preparedStatement.setString(1, value);
             preparedStatement.setString(2, key);
@@ -152,7 +143,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         Gson gson = new Gson();
         String key = gson.toJson(primaryKey);
 
-        try ( var preparedStatement = connection.prepareStatement("select value from " + aggregateClazz.getSimpleName() + " where key = ? ")  )
+        try ( var preparedStatement = jdbcConnection.prepareStatement("select value from " + aggregateClazz.getSimpleName() + " where key = ? ")  )
         {
             preparedStatement.setString(1, key);
             try ( var resultSet = preparedStatement.executeQuery() )
@@ -181,7 +172,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         var result = new ArrayList<T>();
         Gson gson = new Gson();
         try (
-                var statement = connection.createStatement();
+                var statement = jdbcConnection.createStatement();
                 var resultSet = statement.executeQuery("select value from "+ aggregateClazz.getSimpleName())
              )
         {
@@ -199,63 +190,13 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         return result;
     }
 
-    private static Connection initJDBCConnection(final Properties properties)
-    {
-
-        try {
-            var connection = DriverManager.getConnection(
-                          properties.getProperty(JDBC_URL),
-                          properties.getProperty(JDBC_USERNAME),
-                          properties.getProperty(JDBC_PASSWORD)
-            );
-
-            connection.setAutoCommit(true);
-            return connection;
-        }
-        catch (SQLException e)
-        {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
-    private void autocreateDatabase(final Properties properties)
-    {
-        if (properties.containsKey(JDBC_AUTOCREATE_DATABASE))
-        {
-            var splitURL = properties.getProperty(JDBC_URL).split("/");
-            var dbName = splitURL[splitURL.length - 1].toLowerCase(Locale.ENGLISH); //last part of the URL is the name of the database (Note: Some DBs such as postgres require a name in lower case!)
-
-            Properties creationProperties = new Properties();
-            creationProperties.putAll(properties);
-
-            try (var setupConnection = DriverManager.
-                    getConnection(
-                            creationProperties.getProperty(JDBC_AUTOCREATE_DATABASE),
-                            creationProperties.getProperty(JDBC_USERNAME),
-                            creationProperties.getProperty(JDBC_PASSWORD));
-                 Statement statement = setupConnection.createStatement())
-            {
-                setupConnection.setAutoCommit(true);
-                statement.execute(String.format("create DATABASE %s ", dbName));
-                LOGGER.info("Database {} successfully created ", dbName);
-            }
-            catch (SQLException e)
-            {
-                LOGGER.warn("Could not create database {} => Assume that database already exists", dbName);
-            }
-        }
-    }
 
     private void autocreateTable(final Properties properties)
     {
         if (properties.containsKey(JDBC_AUTOCREATE_TABLE))
         {
-            try (var setupConnection = DriverManager.
-                    getConnection(
-                            properties.getProperty(JDBC_URL).toLowerCase(Locale.ENGLISH),
-                            properties.getProperty(JDBC_USERNAME),
-                            properties.getProperty(JDBC_PASSWORD));
-                 Statement statement = setupConnection.createStatement())
+            try (
+                 Statement statement = jdbcConnection.createStatement())
             {
                 var command = String.format("CREATE TABLE IF NOT EXISTS %s ( key VARCHAR %s PRIMARY KEY, value text) "
                         , aggregateClazz.getSimpleName()
@@ -270,29 +211,11 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         }
     }
 
-    private static void initDBDriver(Properties properties)
-    {
-        try
-        {
-            Class.forName(properties.getProperty(JDBC_DRIVER));
-        }
-        catch (ClassNotFoundException e)
-        {
-            throw new IllegalArgumentException("Specified JDBC driver is not available: " + properties.getProperty(JDBC_DRIVER), e);
-        }
-
-    }
-
-    private static void validateProperties(Properties properties)
-    {
-        Validate.isTrue(properties.containsKey(JDBC_URL), "Parameter " + JDBC_URL + " is missing");
-        Validate.isTrue(properties.containsKey(JDBC_DRIVER), "Parameter " + JDBC_DRIVER + " is missing");
-    }
 
     public void close()
     {
-        Optional.ofNullable(connection)
-                .ifPresent(ThrowingConsumer.exceptionLogger(Connection::close));
+        Optional.ofNullable(jdbcConnection)
+                .ifPresent(ThrowingConsumer.exceptionLogger(JDBCConnection::close));
     }
 
     private static String getMaxVarChar(String jdbcDriver)
