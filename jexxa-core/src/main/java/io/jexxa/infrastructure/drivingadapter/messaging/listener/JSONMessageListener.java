@@ -24,14 +24,17 @@ public abstract class JSONMessageListener<T>  implements MessageListener
     @Override
     public final void onMessage(Message message)
     {
+        String textMessage = null;
         try
         {
             this.currentMessage = (TextMessage) message;
-            onMessage( fromJson( currentMessage.getText(), clazz ));
+            textMessage = currentMessage.getText();
+            onMessage( fromJson( textMessage, clazz ));
         }
         catch (RuntimeException | JMSException exception)
         {
             JexxaLogger.getLogger(JSONMessageListener.class).error(exception.getMessage());
+            JexxaLogger.getLogger(JSONMessageListener.class).error("Message : {}", textMessage);
         }
         currentMessage = null;
     }
