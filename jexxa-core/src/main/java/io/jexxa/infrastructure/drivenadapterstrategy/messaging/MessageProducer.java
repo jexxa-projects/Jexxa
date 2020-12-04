@@ -4,6 +4,7 @@ import static java.util.UUID.randomUUID;
 
 import java.time.Instant;
 import java.util.Properties;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -16,11 +17,14 @@ public class MessageProducer
 {
     public enum DestinationType { TOPIC, QUEUE }
     private Properties properties;
-    private Object message;
+    private final Object message;
     private final MessageSender messageSender;
 
     private DestinationType destinationType;
     private String destination;
+
+    private Object messageContainer;
+    private Consumer<String> payloadConsumer;
 
     protected <T> MessageProducer(T message, MessageSender messageSender)
     {
@@ -71,21 +75,32 @@ public class MessageProducer
 
     public void asString()
     {
-        as(message::toString);
+        if ( messageContainer != null && payloadConsumer != null)
+        {
+            payloadConsumer.accept(message.toString());
+            as(messageContainer::toString);
+        } else {
+            as(message::toString);
+        }
     }
 
 
     public void asDomainEvent()
     {
-        Gson gson = new Gson();
-
-        message = new UnpublishedDomainEventFrame(
+        var container = new UnpublishedDomainEventContainer(
                 randomUUID().toString(),
                 message.getClass().getName(),
-                gson.toJson(message),
                 Instant.now());
 
-        as(gson::toJson);
+        inContainer( container, container::setPayload )
+                .asJson();
+    }
+
+    public <U> MessageProducer inContainer(U container, Consumer<String> payloadConsumer)
+    {
+        this.messageContainer = container;
+        this.payloadConsumer = payloadConsumer;
+        return this;
     }
 
 
@@ -96,15 +111,15 @@ public class MessageProducer
 
         if (destinationType == DestinationType.QUEUE)
         {
-            messageSender.sendToQueue(serializer.apply(message), destination, properties);
+            messageSender.sendToQueue(serializeMessage(serializer), destination, properties);
         }
         else
         {
-            messageSender.sendToTopic(serializer.apply(message), destination, properties);
+            messageSender.sendToTopic(serializeMessage(serializer), destination, properties);
         }
     }
 
-    public void as( Supplier<String> serializer )
+    private void as( Supplier<String> serializer )
     {
         Validate.notNull(destination,  "No destination in MessageProducer set");
 
@@ -118,20 +133,37 @@ public class MessageProducer
         }
     }
 
-    @SuppressWarnings({"unused", "java:S1068", "FieldCanBeLocal"}) // for attributes. We need them for proper json serialization
-    static class UnpublishedDomainEventFrame
+    private String serializeMessage( Function<Object, String> serializer )
+    {
+        var serializedMessage = serializer.apply(message);
+        if ( messageContainer != null && payloadConsumer != null )
+        {
+            payloadConsumer.accept(serializedMessage);
+
+            return serializer.apply(messageContainer);
+        }
+
+        return serializedMessage;
+    }
+
+    @SuppressWarnings({"unused", "java:S1068", "java:S1450", "FieldCanBeLocal"}) // for attributes. We need them for proper json serialization
+    static class UnpublishedDomainEventContainer
     {
         private final String uuid;
         private final String payloadType;
-        private final String payload;
+        private String payload;
         private final Instant publishedAt;
 
-        UnpublishedDomainEventFrame(String uuid, String payloadType, String payload, Instant publishedAt )
+        UnpublishedDomainEventContainer(String uuid, String payloadType, Instant publishedAt )
         {
             this.uuid = uuid;
             this.payloadType = payloadType;
-            this.payload = payload;
             this.publishedAt = publishedAt;
+        }
+
+        public void setPayload(String payload)
+        {
+            this.payload = payload;
         }
     }
 }
