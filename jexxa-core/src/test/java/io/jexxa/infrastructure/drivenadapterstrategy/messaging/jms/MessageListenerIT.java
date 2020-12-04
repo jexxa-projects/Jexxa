@@ -38,7 +38,7 @@ class MessageListenerIT
 
 
     private TopicDomainEventListener domainEventListener;
-    private JSONListener typedListener;
+    private JexxaValueObjectListener typedListener;
     private JexxaMain jexxaMain;
 
     private MessageSender objectUnderTest;
@@ -48,7 +48,7 @@ class MessageListenerIT
     {
         jexxaMain = new JexxaMain(MessageListenerIT.class.getSimpleName());
         domainEventListener = new TopicDomainEventListener();
-        typedListener = new JSONListener();
+        typedListener = new JexxaValueObjectListener();
         objectUnderTest = MessageSenderManager.getMessageSender(jexxaMain.getProperties());
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
@@ -120,23 +120,23 @@ class MessageListenerIT
         }
     }
 
-    private static class JSONListener extends JSONMessageListener<JexxaValueObject>
+    private static class JexxaValueObjectListener extends JSONMessageListener<io.jexxa.application.domain.valueobject.JexxaValueObject>
     {
-        private JexxaValueObject jexxaValueObject;
+        private io.jexxa.application.domain.valueobject.JexxaValueObject jexxaValueObject;
 
-        public JSONListener()
+        public JexxaValueObjectListener()
         {
-            super(JexxaValueObject.class);
+            super(io.jexxa.application.domain.valueobject.JexxaValueObject.class);
         }
 
         @Override
         @JMSConfiguration(destination = QUEUE_DESTINATION, messagingType = JMSConfiguration.MessagingType.QUEUE)
-        public void onMessage(JexxaValueObject jexxaValueObject)
+        public void onMessage(io.jexxa.application.domain.valueobject.JexxaValueObject jexxaValueObject)
         {
             this.jexxaValueObject = jexxaValueObject;
         }
 
-        public JexxaValueObject getJexxaValueObject()
+        public io.jexxa.application.domain.valueobject.JexxaValueObject getJexxaValueObject()
         {
             return jexxaValueObject;
         }
