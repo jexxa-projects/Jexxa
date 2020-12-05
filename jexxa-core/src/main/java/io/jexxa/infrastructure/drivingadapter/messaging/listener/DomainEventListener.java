@@ -1,30 +1,20 @@
 package io.jexxa.infrastructure.drivingadapter.messaging.listener;
 
-public abstract class DomainEventListener<T> extends JSONMessageListener<DomainEventContainer>
+public abstract class DomainEventListener<T> extends MessageContainerListener<DomainEventContainer>
 {
-    private DomainEventContainer currentDomainEvent;
-    private final Class<T> clazz;
+    private final Class<T> payloadClazz;
 
-    protected DomainEventListener(Class<T> clazz)
+    protected DomainEventListener(Class<T> payloadClazz)
     {
-        super(DomainEventContainer.class);
-        this.clazz = clazz;
+        super(DomainEventContainer.class, DomainEventContainer::getPayload);
+        this.payloadClazz = payloadClazz;
     }
 
-    @Override
-    public final void onMessage(DomainEventContainer message)
+    protected void onMessageContainer(DomainEventContainer domainEventContainer )
     {
-        this.currentDomainEvent = message;
-
-        onDomainEvent( fromJson(message.getPayload(), clazz) );
-
-        this.currentDomainEvent = null;
+        onDomainEvent( fromJson(domainEventContainer.getPayload(), payloadClazz) );
     }
 
-    protected DomainEventContainer getDomainEvent()
-    {
-        return currentDomainEvent;
-    }
+    protected abstract void onDomainEvent(T domainEvent);
 
-    public abstract void onDomainEvent(T domainEvent );
 }

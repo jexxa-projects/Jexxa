@@ -8,6 +8,7 @@ import javax.jms.TextMessage;
 import com.google.gson.Gson;
 import io.jexxa.utils.JexxaLogger;
 
+@SuppressWarnings("unused")
 public abstract class JSONMessageListener<T>  implements MessageListener
 {
     private static final Gson gson = new Gson();
@@ -19,7 +20,7 @@ public abstract class JSONMessageListener<T>  implements MessageListener
         this.clazz = clazz;
     }
 
-    public abstract void onMessage(T message);
+    protected abstract void onMessage(T message);
 
     @Override
     public final void onMessage(Message message)

@@ -23,6 +23,7 @@ import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.DomainEventContainer;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.DomainEventListener;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.JSONMessageListener;
+import io.jexxa.infrastructure.drivingadapter.messaging.listener.MessageContainerListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,7 @@ class MessageListenerIT
 
     private TopicDomainEventListener domainEventListener;
     private JexxaValueObjectListener typedListener;
+    private GenericDomainEventListener genericDomainEventListener;
     private JexxaMain jexxaMain;
 
     private MessageSender objectUnderTest;
@@ -48,6 +50,7 @@ class MessageListenerIT
     {
         jexxaMain = new JexxaMain(MessageListenerIT.class.getSimpleName());
         domainEventListener = new TopicDomainEventListener();
+        genericDomainEventListener = new GenericDomainEventListener();
         typedListener = new JexxaValueObjectListener();
         objectUnderTest = MessageSenderManager.getMessageSender(jexxaMain.getProperties());
 
@@ -55,6 +58,7 @@ class MessageListenerIT
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .bind(JMSAdapter.class).to(typedListener)
                 .bind(JMSAdapter.class).to(domainEventListener)
+                .bind(JMSAdapter.class).to(genericDomainEventListener)
                 .start();
     }
 
@@ -90,6 +94,22 @@ class MessageListenerIT
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
+    @Test
+    void receiveMessageContainer()
+    {
+        //Arrange --
+        //Act
+        objectUnderTest
+                .send(domainEvent)
+                .toTopic(TOPIC_DESTINATION)
+                .asDomainEvent();
+
+        //Assert
+        await().atMost(1, TimeUnit.SECONDS).until(() -> genericDomainEventListener.getPublishedDomainEvent() != null);
+        assertEquals(message, genericDomainEventListener.getJexxaValueObject());
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
 
     private static class TopicDomainEventListener extends DomainEventListener<JexxaDomainEvent>
     {
@@ -106,7 +126,7 @@ class MessageListenerIT
         public void onDomainEvent(JexxaDomainEvent domainEvent)
         {
             this.jexxaDomainEvent = domainEvent;
-            this.publishedDomainEvent = getDomainEvent();
+            this.publishedDomainEvent = getMessageContainer();
         }
 
         public JexxaDomainEvent getJexxaDomainEvent()
@@ -120,23 +140,58 @@ class MessageListenerIT
         }
     }
 
-    private static class JexxaValueObjectListener extends JSONMessageListener<io.jexxa.application.domain.valueobject.JexxaValueObject>
+    private static class GenericDomainEventListener extends MessageContainerListener<DomainEventContainer>
     {
-        private io.jexxa.application.domain.valueobject.JexxaValueObject jexxaValueObject;
+        private JexxaValueObject jexxaValueObject;
+        private DomainEventContainer publishedDomainEvent;
+
+        public GenericDomainEventListener()
+        {
+            super(DomainEventContainer.class, DomainEventContainer::getPayload);
+        }
+
+
+
+        @Override
+        @JMSConfiguration(destination = TOPIC_DESTINATION, messagingType = JMSConfiguration.MessagingType.TOPIC)
+        public void onMessageContainer(DomainEventContainer domainEventContainer)
+        {
+            if ( payloadContains("jexxaValueObject") )
+            {
+                jexxaValueObject = getFromPayload("jexxaValueObject", JexxaValueObject.class);
+            }
+            this.publishedDomainEvent = domainEventContainer;
+
+        }
+
+        public JexxaValueObject getJexxaValueObject()
+        {
+            return jexxaValueObject;
+        }
+
+        public DomainEventContainer getPublishedDomainEvent()
+        {
+            return publishedDomainEvent;
+        }
+    }
+
+    private static class JexxaValueObjectListener extends JSONMessageListener<JexxaValueObject>
+    {
+        private JexxaValueObject jexxaValueObject;
 
         public JexxaValueObjectListener()
         {
-            super(io.jexxa.application.domain.valueobject.JexxaValueObject.class);
+            super(JexxaValueObject.class);
         }
 
         @Override
         @JMSConfiguration(destination = QUEUE_DESTINATION, messagingType = JMSConfiguration.MessagingType.QUEUE)
-        public void onMessage(io.jexxa.application.domain.valueobject.JexxaValueObject jexxaValueObject)
+        public void onMessage(JexxaValueObject jexxaValueObject)
         {
             this.jexxaValueObject = jexxaValueObject;
         }
 
-        public io.jexxa.application.domain.valueobject.JexxaValueObject getJexxaValueObject()
+        public JexxaValueObject getJexxaValueObject()
         {
             return jexxaValueObject;
         }
