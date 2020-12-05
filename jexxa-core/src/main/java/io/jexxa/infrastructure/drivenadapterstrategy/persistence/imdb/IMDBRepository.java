@@ -74,7 +74,7 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
         return new ArrayList<>(getOwnAggregateMap().values());
     }
 
-    private Map<K, T> getOwnAggregateMap()
+    protected final Map<K, T> getOwnAggregateMap()
     {
         if ( aggregateMap == null ) {
             aggregateMap = getAggregateMap(aggregateClazz);
