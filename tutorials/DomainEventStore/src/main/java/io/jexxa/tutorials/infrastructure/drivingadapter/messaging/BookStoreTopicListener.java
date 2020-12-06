@@ -1,11 +1,11 @@
 package io.jexxa.tutorials.infrastructure.drivingadapter.messaging;
 
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
-import io.jexxa.infrastructure.drivingadapter.messaging.listener.JSONMessageListener;
+import io.jexxa.infrastructure.drivingadapter.messaging.listener.TypedMessageListener;
 import io.jexxa.tutorials.domain.valueobject.DomainEvent;
 import io.jexxa.tutorials.domainservice.StoreDomainEventService;
 
-public class BookStoreTopicListener extends JSONMessageListener<DomainEvent>
+public class BookStoreTopicListener extends TypedMessageListener<DomainEvent>
 {
     private final StoreDomainEventService storeDomainEventService;
 

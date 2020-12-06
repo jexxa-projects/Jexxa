@@ -22,7 +22,7 @@ import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.DomainEventContainer;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.DomainEventListener;
-import io.jexxa.infrastructure.drivingadapter.messaging.listener.JSONMessageListener;
+import io.jexxa.infrastructure.drivingadapter.messaging.listener.TypedMessageListener;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.MessageContainerListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -175,7 +175,7 @@ class MessageListenerIT
         }
     }
 
-    private static class JexxaValueObjectListener extends JSONMessageListener<JexxaValueObject>
+    private static class JexxaValueObjectListener extends TypedMessageListener<JexxaValueObject>
     {
         private JexxaValueObject jexxaValueObject;
 

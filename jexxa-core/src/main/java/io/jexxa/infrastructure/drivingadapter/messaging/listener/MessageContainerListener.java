@@ -5,7 +5,7 @@ import java.util.function.Function;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-public abstract class MessageContainerListener<T> extends JSONMessageListener<T>
+public abstract class MessageContainerListener<T> extends TypedMessageListener<T>
 {
     private final Function<T,String > payloadAccessor;
     private T currentMessageContainer;

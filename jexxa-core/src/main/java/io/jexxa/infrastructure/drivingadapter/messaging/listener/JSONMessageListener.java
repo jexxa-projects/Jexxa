@@ -1,38 +1,48 @@
 package io.jexxa.infrastructure.drivingadapter.messaging.listener;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import io.jexxa.utils.JexxaLogger;
 
 @SuppressWarnings("unused")
-public abstract class JSONMessageListener<T> extends GenericJSONMessageListener
+public abstract class JSONMessageListener implements MessageListener
 {
     private static final Gson gson = new Gson();
-    private final Class<T> clazz;
+    private TextMessage currentMessage;
+    private String currentMessageText;
 
-    protected JSONMessageListener(Class<T> clazz)
-    {
-        this.clazz = clazz;
-    }
-
-    protected abstract void onMessage(T message);
+    protected abstract void onMessage(TextMessage message);
 
     @Override
-    public final void onMessage(TextMessage message)
+    public final void onMessage(Message message)
     {
-        String currentText = null;
         try
         {
-            currentText = message.getText();
-            onMessage( fromJson(currentText, clazz ));
+            this.currentMessage = (TextMessage) message;
+            this.currentMessageText = currentMessage.getText();
+            onMessage( currentMessage );
         }
         catch (RuntimeException | JMSException exception)
         {
             JexxaLogger.getLogger(JSONMessageListener.class).error(exception.getMessage());
-            JexxaLogger.getLogger(JSONMessageListener.class).error("Message : {}", currentText);
         }
+        currentMessage = null;
+        currentMessageText = null;
+    }
+
+    protected final TextMessage getCurrentMessage()
+    {
+        return currentMessage;
     }
 
     protected static <U> U fromJson( String message, Class<U> clazz)
@@ -40,4 +50,48 @@ public abstract class JSONMessageListener<T> extends GenericJSONMessageListener
         return gson.fromJson( message, clazz);
     }
 
+    protected boolean messageContains(String attribute)
+    {
+        JsonElement jsonElement = JsonParser.parseString(currentMessageText);
+        return deepSearchKeys(jsonElement, attribute)
+                .stream()
+                .findFirst()
+                .isPresent();
+    }
+
+    protected <U> U getFromMessage(String key, Class<U> clazz)
+    {
+        JsonElement jsonElement = JsonParser.parseString(currentMessageText);
+
+        var result = deepSearchKeys( jsonElement, key )
+                .stream()
+                .findFirst()
+                .orElseThrow();
+
+        return fromJson(result.toString(), clazz);
+    }
+
+    protected List<JsonElement> deepSearchKeys(JsonElement jsonElement, String key)
+    {
+        List<JsonElement> result = new ArrayList<>();
+        deepSearchKeys(jsonElement, key, result);
+        return result;
+    }
+
+
+    protected void deepSearchKeys(JsonElement jsonElement, String key, List<JsonElement> result)
+    {
+        Objects.requireNonNull(jsonElement);
+
+        if ( jsonElement.isJsonObject() )
+        {
+            jsonElement.getAsJsonObject().entrySet().forEach(element -> {
+                if ( element.getKey().equals(key) ) {
+                    result.add(element.getValue());
+                }
+                deepSearchKeys( element.getValue(), key, result);
+            });
+        }
+    }
 }
+

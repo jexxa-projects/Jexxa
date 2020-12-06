@@ -5,11 +5,11 @@ import static io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration.
 import java.time.LocalTime;
 
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
-import io.jexxa.infrastructure.drivingadapter.messaging.listener.JSONMessageListener;
+import io.jexxa.infrastructure.drivingadapter.messaging.listener.TypedMessageListener;
 import io.jexxa.tutorials.timeservice.applicationservice.TimeService;
 
 @SuppressWarnings("unused")
-public final class PublishTimeListener extends JSONMessageListener<LocalTime>
+public final class PublishTimeListener extends TypedMessageListener<LocalTime>
 {
     private final TimeService timeService;
     private static final String TIME_TOPIC = "TimeService";
