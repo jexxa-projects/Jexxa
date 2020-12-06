@@ -1,8 +1,5 @@
 package io.jexxa.infrastructure.drivingadapter.messaging.listener;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 
 import com.google.gson.JsonElement;
@@ -10,7 +7,7 @@ import com.google.gson.JsonParser;
 
 public abstract class MessageContainerListener<T> extends JSONMessageListener<T>
 {
-    private Function<T,String > payloadAccessor;
+    private final Function<T,String > payloadAccessor;
     private T currentMessageContainer;
 
 
@@ -58,26 +55,5 @@ public abstract class MessageContainerListener<T> extends JSONMessageListener<T>
         return currentMessageContainer;
     }
 
-    private List<JsonElement> deepSearchKeys(JsonElement jsonElement, String key)
-    {
-        List<JsonElement> result = new ArrayList<>();
-        deepSearchKeys(jsonElement, key, result);
-        return result;
-    }
 
-
-    private void deepSearchKeys(JsonElement jsonElement, String key, List<JsonElement> result)
-    {
-        Objects.requireNonNull(jsonElement);
-
-        if ( jsonElement.isJsonObject() )
-        {
-            jsonElement.getAsJsonObject().entrySet().forEach(element -> {
-                if ( element.getKey().equals(key) ) {
-                    result.add(element.getValue());
-                }
-                deepSearchKeys( element.getValue(), key, result);
-            });
-        }
-    }
 }
