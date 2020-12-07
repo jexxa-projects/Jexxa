@@ -42,6 +42,6 @@ public class JexxaMessageSender implements IJexxaPublisher
     {
         messageSender.send(jexxaDomainEvent)
                 .toTopic(JEXXA_TOPIC)
-                .asDomainEvent();
+                .asJson();
     }
 }

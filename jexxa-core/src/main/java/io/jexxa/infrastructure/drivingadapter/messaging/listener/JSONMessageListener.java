@@ -21,7 +21,7 @@ public abstract class JSONMessageListener implements MessageListener
     private TextMessage currentMessage;
     private String currentMessageText;
 
-    protected abstract void onMessage(TextMessage message);
+    protected abstract void onMessage(TextMessage message) throws JMSException;
 
     @Override
     public final void onMessage(Message message)

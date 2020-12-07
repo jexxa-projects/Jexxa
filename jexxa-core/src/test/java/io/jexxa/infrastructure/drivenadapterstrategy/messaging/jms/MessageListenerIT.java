@@ -6,11 +6,13 @@ import static io.jexxa.infrastructure.utils.messaging.QueueListener.QUEUE_DESTIN
 import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTINATION;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
+
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.domainevent.JexxaDomainEvent;
@@ -20,10 +22,8 @@ import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
-import io.jexxa.infrastructure.drivingadapter.messaging.listener.DomainEventContainer;
-import io.jexxa.infrastructure.drivingadapter.messaging.listener.DomainEventListener;
+import io.jexxa.infrastructure.drivingadapter.messaging.listener.JSONMessageListener;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.TypedMessageListener;
-import io.jexxa.infrastructure.drivingadapter.messaging.listener.MessageContainerListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -38,9 +38,8 @@ class MessageListenerIT
     private final JexxaDomainEvent domainEvent = JexxaDomainEvent.create(message);
 
 
-    private TopicDomainEventListener domainEventListener;
     private JexxaValueObjectListener typedListener;
-    private GenericDomainEventListener genericDomainEventListener;
+    private TextMessageListener jsonMessageListener;
     private JexxaMain jexxaMain;
 
     private MessageSender objectUnderTest;
@@ -49,16 +48,14 @@ class MessageListenerIT
     void initTests()
     {
         jexxaMain = new JexxaMain(MessageListenerIT.class.getSimpleName());
-        domainEventListener = new TopicDomainEventListener();
-        genericDomainEventListener = new GenericDomainEventListener();
+        jsonMessageListener = new TextMessageListener();
         typedListener = new JexxaValueObjectListener();
         objectUnderTest = MessageSenderManager.getMessageSender(jexxaMain.getProperties());
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .bind(JMSAdapter.class).to(typedListener)
-                .bind(JMSAdapter.class).to(domainEventListener)
-                .bind(JMSAdapter.class).to(genericDomainEventListener)
+                .bind(JMSAdapter.class).to(jsonMessageListener)
                 .start();
     }
 
@@ -70,11 +67,11 @@ class MessageListenerIT
         objectUnderTest
                 .send(domainEvent)
                 .toTopic(TOPIC_DESTINATION)
-                .asDomainEvent();
+                .asJson();
 
         //Assert
-        await().atMost(1, TimeUnit.SECONDS).until(() -> domainEventListener.getJexxaDomainEvent() != null);
-        assertNotNull(domainEventListener.getPublishedDomainEvent());
+        await().atMost(1, TimeUnit.SECONDS).until(() -> jsonMessageListener.getTextMessage() != null);
+
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
@@ -94,84 +91,22 @@ class MessageListenerIT
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
-    @Test
-    void receiveMessageContainer()
+
+     private static class TextMessageListener extends JSONMessageListener
     {
-        //Arrange --
-        //Act
-        objectUnderTest
-                .send(domainEvent)
-                .toTopic(TOPIC_DESTINATION)
-                .asDomainEvent();
-
-        //Assert
-        await().atMost(1, TimeUnit.SECONDS).until(() -> genericDomainEventListener.getPublishedDomainEvent() != null);
-        assertEquals(message, genericDomainEventListener.getJexxaValueObject());
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
-    }
-
-
-    private static class TopicDomainEventListener extends DomainEventListener<JexxaDomainEvent>
-    {
-        private JexxaDomainEvent jexxaDomainEvent;
-        private DomainEventContainer publishedDomainEvent;
-
-        public TopicDomainEventListener()
-        {
-            super(JexxaDomainEvent.class);
-        }
+        private String textMessage;
 
         @Override
         @JMSConfiguration(destination = TOPIC_DESTINATION, messagingType = JMSConfiguration.MessagingType.TOPIC)
-        public void onDomainEvent(JexxaDomainEvent domainEvent)
+        public void onMessage(TextMessage textMessage) throws JMSException
         {
-            this.jexxaDomainEvent = domainEvent;
-            this.publishedDomainEvent = getMessageContainer();
-        }
-
-        public JexxaDomainEvent getJexxaDomainEvent()
-        {
-            return jexxaDomainEvent;
-        }
-
-        public DomainEventContainer getPublishedDomainEvent()
-        {
-            return publishedDomainEvent;
-        }
-    }
-
-    private static class GenericDomainEventListener extends MessageContainerListener<DomainEventContainer>
-    {
-        private JexxaValueObject jexxaValueObject;
-        private DomainEventContainer publishedDomainEvent;
-
-        public GenericDomainEventListener()
-        {
-            super(DomainEventContainer.class, DomainEventContainer::getPayload);
-        }
-
-
-
-        @Override
-        @JMSConfiguration(destination = TOPIC_DESTINATION, messagingType = JMSConfiguration.MessagingType.TOPIC)
-        public void onMessageContainer(DomainEventContainer domainEventContainer)
-        {
-            if ( payloadContains("jexxaValueObject") )
-            {
-                jexxaValueObject = getFromPayload("jexxaValueObject", JexxaValueObject.class);
-            }
-            this.publishedDomainEvent = domainEventContainer;
+            this.textMessage = textMessage.getText();
 
         }
 
-        public JexxaValueObject getJexxaValueObject()
+        public String getTextMessage()
         {
-            return jexxaValueObject;
-        }
-
-        public DomainEventContainer getPublishedDomainEvent()
-        {
-            return publishedDomainEvent;
+            return textMessage;
         }
     }
 
