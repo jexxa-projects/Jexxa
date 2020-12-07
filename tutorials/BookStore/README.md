@@ -113,9 +113,9 @@ public final class BookRepository implements IBookRepository
     private BookRepository(IRepository<Book, ISBN13> repository)
     {
         this.repository = repository;
-    }              
+    }
 
-    // Factory method that requests a repository strategy from Jexxa's RepositoryManager 
+    // Factory method that requests a repository strategy from Jexxa's RepositoryManager
     public static IBookRepository create(Properties properties)
     {
         return new BookRepository(
@@ -162,40 +162,6 @@ public final class BookRepository implements IBookRepository
 }
 ```
 
-### Implement the DomainEventPublisher
-
-In tutorial `TimeService` we implemented a message sender which simply informs about a new time. You can compare this with announcing a value of a 
-sensor. It represents just a value without any temporal meaning. As soon as a client gets a new value, it can ignore previous values. From a technical point of view, we had just to define the object notation to publish this message. 
-
-In contrast to this, sending a domain event in terms of DDD is different because it represents the end of a business process which happens in the past.
-So it has a significant higher semantic meaning. First, it is unique in a distributed system and must therefore be clearly distinguishable. In most 
-applications, also the point in time at which the domain event happens is important. Finally, we cannot assume that all clients know all domain events. 
-
-In the past, I often saw that developers try to put all this kind of information into the domain event which is generated inside the application core. From my perspective this is not a good choice because other applications require this additional information and not the application core generating the domain event. Therefore, Jexxa's driven adapter strategies for messaging provides a dedicated method to send a message as domain event. This method
-encapsulates the message in a container object which includes additional information such as UUID, a timestamp in UT1 format and type information.     
-
-```java
-@DrivenAdapter
-public class DomainEventPublisher implements IDomainEventPublisher
-{
-    private final MessageSender messageSender;
-
-    public DomainEventPublisher(Properties properties)
-    {
-        messageSender = MessageSenderManager.getMessageSender(properties);
-    }
-
-    @Override
-    public <T> void publish(T domainEvent)
-    {
-        Validate.notNull(domainEvent);
-        messageSender
-                .send(domainEvent)
-                .toTopic("BookStoreTopic")
-                .asDomainEvent();
-    }
-}
-```
 
 ## 3. Implement the Application 
 
