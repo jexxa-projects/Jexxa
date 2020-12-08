@@ -19,7 +19,11 @@ public final class RepositoryManager
     private static final Map<Class<?> , Class<?>> strategyMap = new HashMap<>();
     private static Class<?> defaultStrategy = null;
 
-
+    /**
+     * @deprecated getInstance will be removed in future releases. Instead a public static API is offered to configure the the strategies
+     * @return Returns the managing component for repository strategies
+     */
+    @Deprecated(forRemoval = true)
     public static RepositoryManager getInstance()
     {
         return REPOSITORY_MANAGER;
@@ -30,7 +34,7 @@ public final class RepositoryManager
             Function<T,K> keyFunction,
             Properties properties)
     {
-        return getInstance().getStrategy(aggregateClazz, keyFunction, properties);
+        return REPOSITORY_MANAGER.getStrategy(aggregateClazz, keyFunction, properties);
     }
 
     public static <U extends IRepository<?,?>, T > void setStrategy(Class<U> strategyType, Class<T> aggregateType)

@@ -52,14 +52,19 @@ public final class MessageSenderManager
 
     public static Class<? extends MessageSender> getDefaultStrategy()
     {
-        return MessageSenderManager.defaultStrategy;
+        return defaultStrategy;
     }
 
 
+    /**
+     * @deprecated getInstance will be removed in future releases. Instead a public static API is offered to configure the the strategies
+     * @return Returns the managing component for message sender strategies
+     */
+    @Deprecated(forRemoval = true)
     public static MessageSenderManager getInstance()
     {
         return MESSAGE_SENDER_MANAGER;
     }
 
-    public static MessageSender getMessageSender(Properties properties) { return getInstance().getStrategy(properties); }
+    public static MessageSender getMessageSender(Properties properties) { return MESSAGE_SENDER_MANAGER.getStrategy(properties); }
 }

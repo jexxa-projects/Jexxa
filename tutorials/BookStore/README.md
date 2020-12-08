@@ -110,10 +110,7 @@ public final class BookRepository implements IBookRepository
 {
     private final IRepository<Book, ISBN13> repository;
 
-    private BookRepository(IRepository<Book, ISBN13> repository)
-    {
-        this.repository = repository;
-    }
+    private BookRepository(IRepository<Book, ISBN13> repository) { this.repository = repository; }
 
     // Factory method that requests a repository strategy from Jexxa's RepositoryManager
     public static IBookRepository create(Properties properties)
@@ -123,16 +120,12 @@ public final class BookRepository implements IBookRepository
         );
     }
 
-    @Override
-    public void add(Book book)
-    {
-        repository.add(book);
+    @Override                    
+    public void add(Book book) { repository.add(book);
     }
 
     @Override
-    public Book get(ISBN13 isbn13)
-    {
-        return repository.get(isbn13).orElseThrow();
+    public Book get(ISBN13 isbn13) { return repository.get(isbn13).orElseThrow();
     }
 
     @Override
@@ -143,22 +136,13 @@ public final class BookRepository implements IBookRepository
     }
 
     @Override
-    public Optional<Book> search(ISBN13 isbn13)
-    {
-        return repository.get(isbn13);
-    }
+    public Optional<Book> search(ISBN13 isbn13) { return repository.get(isbn13); }
 
     @Override
-    public void update(Book book)
-    {
-        repository.update(book);
-    }
+    public void update(Book book) { repository.update(book); }
 
     @Override
-    public List<Book> getAll()
-    {
-        return repository.get();
-    }
+    public List<Book> getAll() { return repository.get(); }
 }
 ```
 
