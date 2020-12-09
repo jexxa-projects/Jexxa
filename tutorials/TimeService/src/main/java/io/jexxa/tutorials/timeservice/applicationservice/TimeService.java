@@ -2,10 +2,10 @@ package io.jexxa.tutorials.timeservice.applicationservice;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 import io.jexxa.tutorials.timeservice.domainservice.IMessageDisplay;
 import io.jexxa.tutorials.timeservice.domainservice.ITimePublisher;
-import org.apache.commons.lang3.Validate;
 
 @SuppressWarnings("unused")
 public class TimeService
@@ -22,8 +22,8 @@ public class TimeService
      */
     public TimeService(ITimePublisher timePublisher, IMessageDisplay messageDisplay)
     {
-        Validate.notNull(timePublisher);
-        Validate.notNull(messageDisplay);
+        Objects.requireNonNull(timePublisher);
+        Objects.requireNonNull(messageDisplay);
 
         this.timePublisher = timePublisher;
         this.messageDisplay = messageDisplay;

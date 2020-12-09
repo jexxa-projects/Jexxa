@@ -51,8 +51,8 @@ public class TimeService
      */
     public TimeService(ITimePublisher timePublisher, IMessageDisplay messageDisplay)
     {
-        Validate.notNull(timePublisher);
-        Validate.notNull(messageDisplay);
+        Objects.requireNonNull(timePublisher);
+        Objects.requireNonNull(messageDisplay);
 
         this.timePublisher = timePublisher;
         this.messageDisplay = messageDisplay;

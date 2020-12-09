@@ -1,5 +1,7 @@
 package io.jexxa.tutorials.bookstorej.domain.domainevent;
 
+import java.util.Objects;
+
 import io.jexxa.addend.applicationcore.DomainEvent;
 import io.jexxa.tutorials.bookstorej.domain.valueobject.ISBN13;
 
@@ -20,6 +22,7 @@ public final class BookSoldOut
 
     public static BookSoldOut bookSoldOut(ISBN13 isbn13)
     {
+        Objects.requireNonNull(isbn13);
         return new BookSoldOut(isbn13);
     }
 }

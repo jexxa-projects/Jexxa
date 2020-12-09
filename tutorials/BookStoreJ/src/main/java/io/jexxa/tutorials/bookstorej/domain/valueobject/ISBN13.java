@@ -1,5 +1,7 @@
 package io.jexxa.tutorials.bookstorej.domain.valueobject;
 
+import java.util.Objects;
+
 import io.jexxa.addend.applicationcore.ValueObject;
 import org.apache.commons.lang3.Validate;
 
@@ -13,7 +15,7 @@ public class ISBN13
 
     public ISBN13(String value)
     {
-        Validate.notNull(value);
+        Objects.requireNonNull(value);
         validateChecksum(value);
 
         this.value = value;
@@ -23,13 +25,13 @@ public class ISBN13
     {
         return value;
     }
-    
+
     private void validateChecksum(String isbn13)
     {
         var digits = isbn13
                 .replace("-","")
                 .toCharArray();
-        
+
         int digitSum = 0;
 
         for (int i = 0; i < digits.length - 1 ; ++i) //Exclude checksum value (which is at position digits.length -1)
@@ -57,5 +59,5 @@ public class ISBN13
                         +  expectedDigit
         );
     }
-    
+
 }

@@ -1,12 +1,12 @@
 package io.jexxa.tutorials.bookstorej.infrastructure.drivenadapter.messaging;
 
+import java.util.Objects;
 import java.util.Properties;
 
 import io.jexxa.addend.infrastructure.DrivenAdapter;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.tutorials.bookstorej.domainservice.IDomainEventPublisher;
-import org.apache.commons.lang3.Validate;
 
 @SuppressWarnings("unused")
 @DrivenAdapter
@@ -22,7 +22,7 @@ public class DomainEventPublisher implements IDomainEventPublisher
     @Override
     public <T> void publish(T domainEvent)
     {
-        Validate.notNull(domainEvent);
+        Objects.requireNonNull(domainEvent);
         messageSender
                 .send(domainEvent)
                 .toTopic("BookStoreTopic")

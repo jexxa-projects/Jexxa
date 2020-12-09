@@ -1,11 +1,11 @@
 package io.jexxa.tutorials.bookstorej.domainservice;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import io.jexxa.addend.applicationcore.DomainService;
-import io.jexxa.tutorials.bookstorej.domain.valueobject.ISBN13;
 import io.jexxa.tutorials.bookstorej.domain.aggregate.Book;
-import org.apache.commons.lang3.Validate;
+import io.jexxa.tutorials.bookstorej.domain.valueobject.ISBN13;
 
 @DomainService
 public class ReferenceLibrary
@@ -14,7 +14,7 @@ public class ReferenceLibrary
 
     public ReferenceLibrary(IBookRepository bookRepository)
     {
-        Validate.notNull(bookRepository);
+        Objects.requireNonNull(bookRepository);
         this.bookRepository = bookRepository;
     }
 

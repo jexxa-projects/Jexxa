@@ -3,6 +3,7 @@ package io.jexxa.tutorials.bookstore.applicationservice;
 import static io.jexxa.tutorials.bookstore.domain.aggregate.Book.newBook;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import io.jexxa.tutorials.bookstore.domain.aggregate.Book;
@@ -10,7 +11,6 @@ import io.jexxa.tutorials.bookstore.domain.businessexception.BookNotInStockExcep
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
 import io.jexxa.tutorials.bookstore.domainservice.IBookRepository;
 import io.jexxa.tutorials.bookstore.domainservice.IDomainEventPublisher;
-import org.apache.commons.lang3.Validate;
 
 @SuppressWarnings("unused")
 public class BookStoreService
@@ -21,8 +21,8 @@ public class BookStoreService
 
     public BookStoreService(IBookRepository ibookRepository, IDomainEventPublisher domainEventPublisher)
     {
-        Validate.notNull(ibookRepository);
-        Validate.notNull(domainEventPublisher);
+        Objects.requireNonNull(ibookRepository);
+        Objects.requireNonNull(domainEventPublisher);
 
         this.ibookRepository = ibookRepository;
         this.domainEventPublisher = domainEventPublisher;
@@ -45,8 +45,8 @@ public class BookStoreService
         ibookRepository.update( book );
     }
 
-    
-    public boolean inStock(String isbn13) 
+
+    public boolean inStock(String isbn13)
     {
         return inStock(new ISBN13(isbn13));
     }

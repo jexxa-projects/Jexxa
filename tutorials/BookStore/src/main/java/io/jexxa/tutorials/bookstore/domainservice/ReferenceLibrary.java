@@ -2,10 +2,10 @@ package io.jexxa.tutorials.bookstore.domainservice;
 
 import static io.jexxa.tutorials.bookstore.domain.aggregate.Book.newBook;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
-import org.apache.commons.lang3.Validate;
 
 public class ReferenceLibrary
 {
@@ -13,7 +13,7 @@ public class ReferenceLibrary
 
     public ReferenceLibrary(IBookRepository bookRepository)
     {
-        Validate.notNull(bookRepository);
+        Objects.requireNonNull(bookRepository);
         this.bookRepository = bookRepository;
     }
 

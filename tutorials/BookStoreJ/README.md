@@ -86,7 +86,7 @@ public class ISBN13
 
  public ISBN13(String value)
  {
-     Validate.notNull(value);
+     Objects.requireNonNull(value);
      validateChecksum(value);
 
      this.value = value;
