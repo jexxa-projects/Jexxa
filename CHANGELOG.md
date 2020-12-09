@@ -14,7 +14,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     -   Set methods getInstance() of all Manager singletons to deprecate
     -   Added static methods to get/set strategie instances
     -   Updated all tutorials to use these new methods    
-    
+
+### Changed
+-   Updated dependencies
+
 ## \[2.5.3] - 2020-11-28  
 
 ### Fixed
