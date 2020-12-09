@@ -4,15 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.6.0] - yyyy-mm-dd  
+## \[2.6.0] - 2012-12-09  
 ### Added
 -   JMSAdapter:
     -   Added default implementations for JMS listener which perform JSON deserialization
     -   Please refer to the tutorials [TimeService](https://github.com/repplix/Jexxa/tree/master/tutorials/TimeService) how to use them.  
     
--   DrivenAdapterStrategies: 
-    -   Added static methods to get/set strategie instances for convenience purpose
-    -   Updated all tutorials to use these convenience methods    
+-   DrivenAdapterStrategies:
+    -   Set methods getInstance() of all Manager singletons to deprecate
+    -   Added static methods to get/set strategie instances
+    -   Updated all tutorials to use these new methods    
     
 ## \[2.5.3] - 2020-11-28  
 
