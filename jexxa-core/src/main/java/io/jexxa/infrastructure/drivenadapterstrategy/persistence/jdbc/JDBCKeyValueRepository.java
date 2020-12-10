@@ -293,7 +293,8 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
                     firstException = e;
                 }
 
-                LOGGER.warn("JDBC connection is invalid => Try to reset", e);
+                LOGGER.warn("JDBC connection is invalid. Reason: {}", e.getMessage());
+                LOGGER.warn("Rest connection and retry query... ");
 
                 jdbcConnection.reset();
             }
