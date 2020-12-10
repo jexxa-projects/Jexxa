@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
@@ -26,6 +28,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
 
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCKeyValueRepository.class);
+    private int reconnectCount = 1;
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
@@ -40,12 +43,46 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         this.jdbcConnection = new JDBCConnection(properties);
 
         autocreateTable(properties);
+    }
 
+    @Override
+    public void update(T aggregate)
+    {
+        checkedExcecuteConsumer(this::internalUpdate, aggregate);
     }
 
 
     @Override
     public void remove(K key)
+    {
+        checkedExcecuteConsumer(this::internalRemove, key);
+    }
+
+    @Override
+    public void removeAll()
+    {
+        internalRemoveAll();
+    }
+
+    @Override
+    public void add(T aggregate)
+    {
+        checkedExcecuteConsumer(this::internalAdd, aggregate);
+    }
+
+    @Override
+    public Optional<T> get(K primaryKey)
+    {
+        return checkedExcecuteFunction(this::internalGet, primaryKey);
+    }
+
+    @Override
+    public List<T> get()
+    {
+        return checkedExcecuteSupplier(this::internalGet);
+    }
+
+    public void internalRemove(K key)
     {
         Validate.notNull(key);
 
@@ -68,8 +105,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
 
     }
 
-    @Override
-    public void removeAll()
+    public void internalRemoveAll()
     {
 
         try ( var statement = jdbcConnection.prepareStatement("delete from " + aggregateClazz.getSimpleName()))
@@ -84,8 +120,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     }
 
     @SuppressWarnings("DuplicatedCode")
-    @Override
-    public void add(T aggregate)
+    public void internalAdd(T aggregate)
     {
         Validate.notNull(aggregate);
 
@@ -107,8 +142,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     }
 
     @SuppressWarnings({"DuplicatedCode", "unused"})
-    @Override
-    public void update(T aggregate)
+    public void internalUpdate(T aggregate)
     {
         Validate.notNull(aggregate);
 
@@ -134,9 +168,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     }
 
 
-
-    @Override
-    public Optional<T> get(K primaryKey)
+    public Optional<T> internalGet(K primaryKey)
     {
         Validate.notNull(primaryKey);
 
@@ -165,9 +197,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         }
     }
 
-
-    @Override
-    public List<T> get()
+    public List<T> internalGet()
     {
         var result = new ArrayList<T>();
         Gson gson = new Gson();
@@ -242,4 +272,123 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
 
         return "(255)";
     }
+
+    private <X> void checkedExcecuteConsumer( Consumer<X> function, X parameter)
+    {
+        RuntimeException firstException = null;
+        for (int i = 0; i <= reconnectCount; ++i)
+        {
+            try {
+                function.accept(parameter);
+                return;
+            } catch (RuntimeException e)
+            {
+                if (jdbcConnection.isValid())
+                {
+                    throw e;
+                }
+
+                if (firstException == null)
+                {
+                    firstException = e;
+                }
+
+                LOGGER.warn("JDBC connection is invalid => Try to reset", e);
+
+                jdbcConnection.reset();
+            }
+        }
+
+        if ( firstException == null )
+        {
+            throw new IllegalStateException("JDBC connection is invalid");
+        } else {
+            throw firstException;
+        }
+    }
+
+    private <X> X checkedExcecuteSupplier(Supplier<X> function)
+    {
+        RuntimeException firstException = null;
+        for (int i = 0; i <= reconnectCount; ++i)
+        {
+            try {
+                var result = function.get();
+
+                if ( firstException != null ) {
+                    LOGGER.warn("Connection reset successful! Query successfully executed with {}th retry ... ", i);
+                }
+
+                return result;
+            } catch (RuntimeException e)
+            {
+                if (jdbcConnection.isValid())
+                {
+                    throw e;
+                }
+
+                if (firstException == null)
+                {
+                    firstException = e;
+                }
+
+                LOGGER.warn("JDBC connection is invalid. Reason: {}", e.getMessage());
+                LOGGER.warn("Rest connection and retry query... ");
+                jdbcConnection.reset();
+            }
+        }
+
+        if ( firstException == null )
+        {
+            throw new IllegalStateException("JDBC connection is invalid");
+        } else {
+            throw firstException;
+        }
+    }
+
+    private <X,Y> Y checkedExcecuteFunction(Function<X,Y> function, X parameter)
+    {
+        RuntimeException firstException = null;
+        for (int i = 0; i <= reconnectCount; ++i)
+        {
+            try {
+                var result = function.apply(parameter);
+
+                if ( firstException != null ) {
+                    LOGGER.warn("Connection reset successful! Query successfully executed with {}th retry ... ", i);
+                }
+
+                return result;
+            } catch (RuntimeException e)
+            {
+                if (jdbcConnection.isValid())
+                {
+                    throw e;
+                }
+
+                if (firstException == null)
+                {
+                    firstException = e;
+                }
+
+                LOGGER.warn("JDBC connection is invalid. Reason: {}", e.getMessage());
+                LOGGER.warn("Rest connection and retry query... ");
+                jdbcConnection.reset();
+            }
+        }
+
+        if ( firstException == null )
+        {
+            throw new IllegalStateException("JDBC connection is invalid");
+        } else {
+            throw firstException;
+        }
+    }
+
+    JDBCConnection getJdbcConnection()
+    {
+        return jdbcConnection;
+    }
+
+
 }

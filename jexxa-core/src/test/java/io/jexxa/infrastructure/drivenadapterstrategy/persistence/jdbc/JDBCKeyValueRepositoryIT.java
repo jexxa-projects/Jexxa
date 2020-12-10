@@ -101,4 +101,23 @@ class JDBCKeyValueRepositoryIT
         //Exception if unknown aggregate ist updated
         assertThrows(IllegalArgumentException.class, () ->objectUnderTest.update(aggregate));
     }
+
+    @Test
+    void testReconnect()
+    {
+        objectUnderTest.getJdbcConnection().close();
+
+        getUnknownAggregate();
+
+        objectUnderTest.getJdbcConnection().close();
+
+        removeAggregate();
+        objectUnderTest.getJdbcConnection().close();
+
+        testExceptionInvalidOperations();
+        objectUnderTest.getJdbcConnection().close();
+
+        addAggregate();
+    }
+
 }

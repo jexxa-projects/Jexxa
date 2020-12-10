@@ -22,13 +22,13 @@ public class JDBCConnection implements AutoCloseable
     public static final String JDBC_DRIVER = "io.jexxa.jdbc.driver";
     public static final String JDBC_AUTOCREATE_DATABASE = "io.jexxa.jdbc.autocreate.database";
 
-    private final Connection connection;
+    private Connection connection;
+    private final Properties properties;
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCConnection.class);
 
     public JDBCConnection(Properties properties)
     {
-
         validateProperties(properties);
 
         initDBDriver(properties);
@@ -36,6 +36,16 @@ public class JDBCConnection implements AutoCloseable
         autocreateDatabase(properties);
 
         this.connection = initJDBCConnection(properties);
+        this.properties = properties;
+    }
+
+    protected Connection getConnection()
+    {
+        if ( connection == null )
+        {
+            connection = initJDBCConnection(properties);
+        }
+        return connection;
     }
 
     private static Connection initJDBCConnection(final Properties properties)
@@ -85,14 +95,42 @@ public class JDBCConnection implements AutoCloseable
         }
     }
 
+    public void reset()
+    {
+        close();
+        connection = null;
+    }
+
+    public boolean isValid()
+    {
+        return isValid(0);
+    }
+
+    public boolean isValid(int timeout)
+    {
+        try
+        {
+            if ( connection == null)
+            {
+                return false;
+            }
+
+            return connection.isValid(timeout);
+        }
+        catch (SQLException e)
+        {
+            return false;
+        }
+    }
+
     public Statement createStatement() throws SQLException
     {
-        return connection.createStatement();
+        return getConnection().createStatement();
     }
 
     public PreparedStatement prepareStatement(String sqlStatement) throws SQLException
     {
-        return connection.prepareStatement(sqlStatement);
+        return getConnection().prepareStatement(sqlStatement);
     }
 
     private static void validateProperties(Properties properties)
