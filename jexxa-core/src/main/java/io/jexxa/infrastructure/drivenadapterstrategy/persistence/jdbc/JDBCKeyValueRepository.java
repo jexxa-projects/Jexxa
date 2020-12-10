@@ -25,10 +25,11 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     public static final String JDBC_DRIVER = "io.jexxa.jdbc.driver";
     public static final String JDBC_AUTOCREATE_TABLE = "io.jexxa.jdbc.autocreate.table";
     public static final String JDBC_AUTOCREATE_DATABASE = "io.jexxa.jdbc.autocreate.database";
+    public static final String JDBC_MAX_RECONNECT = "io.jexxa.jdbc.max.reconnect";
 
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCKeyValueRepository.class);
-    private int reconnectCount = 1;
+    private final int reconnectCount;
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
@@ -41,6 +42,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         this.aggregateClazz = aggregateClazz;
 
         this.jdbcConnection = new JDBCConnection(properties);
+        this.reconnectCount = Integer.parseInt( properties.getProperty(JDBC_MAX_RECONNECT, "1") );
 
         autocreateTable(properties);
     }
@@ -48,38 +50,57 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     @Override
     public void update(T aggregate)
     {
-        checkedExcecuteConsumer(this::internalUpdate, aggregate);
+        new Executor<Void>(jdbcConnection)
+                .setMaxRetries(reconnectCount)
+                .execute( this::internalUpdate, aggregate)
+                .evaluateResult();
     }
 
 
     @Override
     public void remove(K key)
     {
-        checkedExcecuteConsumer(this::internalRemove, key);
+        new Executor<Void>(jdbcConnection)
+                .setMaxRetries(reconnectCount)
+                .execute( this::internalRemove, key)
+                .evaluateResult();
     }
 
     @Override
     public void removeAll()
     {
-        internalRemoveAll();
+        new Executor<Void>(jdbcConnection)
+                .setMaxRetries(reconnectCount)
+                .execute( this::internalRemoveAll )
+                .evaluateResult();
     }
 
     @Override
     public void add(T aggregate)
     {
-        checkedExcecuteConsumer(this::internalAdd, aggregate);
+        new Executor<Void>(jdbcConnection)
+                .setMaxRetries(reconnectCount)
+                .execute( this::internalAdd, aggregate)
+                .evaluateResult();
     }
 
     @Override
     public Optional<T> get(K primaryKey)
     {
-        return checkedExcecuteFunction(this::internalGet, primaryKey);
+        return new Executor<Optional<T>>(jdbcConnection)
+                .setMaxRetries(reconnectCount)
+                .execute( this::internalGet, primaryKey)
+                .evaluateResult();
     }
+
 
     @Override
     public List<T> get()
     {
-        return checkedExcecuteSupplier(this::internalGet);
+        return new Executor<List<T>>(jdbcConnection)
+                .setMaxRetries(reconnectCount)
+                .execute(this::internalGetAll)
+                .evaluateResult();
     }
 
     public void internalRemove(K key)
@@ -197,7 +218,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         }
     }
 
-    public List<T> internalGet()
+    public List<T> internalGetAll()
     {
         var result = new ArrayList<T>();
         Gson gson = new Gson();
@@ -273,123 +294,131 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         return "(255)";
     }
 
-    private <X> void checkedExcecuteConsumer( Consumer<X> function, X parameter)
-    {
-        RuntimeException firstException = null;
-        for (int i = 0; i <= reconnectCount; ++i)
-        {
-            try {
-                function.accept(parameter);
-                return;
-            } catch (RuntimeException e)
-            {
-                if (jdbcConnection.isValid())
-                {
-                    throw e;
-                }
 
-                if (firstException == null)
-                {
-                    firstException = e;
-                }
 
-                LOGGER.warn("JDBC connection is invalid. Reason: {}", e.getMessage());
-                LOGGER.warn("Rest connection and retry query... ");
 
-                jdbcConnection.reset();
-            }
-        }
-
-        if ( firstException == null )
-        {
-            throw new IllegalStateException("JDBC connection is invalid");
-        } else {
-            throw firstException;
-        }
-    }
-
-    private <X> X checkedExcecuteSupplier(Supplier<X> function)
-    {
-        RuntimeException firstException = null;
-        for (int i = 0; i <= reconnectCount; ++i)
-        {
-            try {
-                var result = function.get();
-
-                if ( firstException != null ) {
-                    LOGGER.warn("Connection reset successful! Query successfully executed with {}th retry ... ", i);
-                }
-
-                return result;
-            } catch (RuntimeException e)
-            {
-                if (jdbcConnection.isValid())
-                {
-                    throw e;
-                }
-
-                if (firstException == null)
-                {
-                    firstException = e;
-                }
-
-                LOGGER.warn("JDBC connection is invalid. Reason: {}", e.getMessage());
-                LOGGER.warn("Rest connection and retry query... ");
-                jdbcConnection.reset();
-            }
-        }
-
-        if ( firstException == null )
-        {
-            throw new IllegalStateException("JDBC connection is invalid");
-        } else {
-            throw firstException;
-        }
-    }
-
-    private <X,Y> Y checkedExcecuteFunction(Function<X,Y> function, X parameter)
-    {
-        RuntimeException firstException = null;
-        for (int i = 0; i <= reconnectCount; ++i)
-        {
-            try {
-                var result = function.apply(parameter);
-
-                if ( firstException != null ) {
-                    LOGGER.warn("Connection reset successful! Query successfully executed with {}th retry ... ", i);
-                }
-
-                return result;
-            } catch (RuntimeException e)
-            {
-                if (jdbcConnection.isValid())
-                {
-                    throw e;
-                }
-
-                if (firstException == null)
-                {
-                    firstException = e;
-                }
-
-                LOGGER.warn("JDBC connection is invalid. Reason: {}", e.getMessage());
-                LOGGER.warn("Rest connection and retry query... ");
-                jdbcConnection.reset();
-            }
-        }
-
-        if ( firstException == null )
-        {
-            throw new IllegalStateException("JDBC connection is invalid");
-        } else {
-            throw firstException;
-        }
-    }
 
     JDBCConnection getJdbcConnection()
     {
         return jdbcConnection;
     }
 
+
+    public static class Executor<R>
+    {
+        private final JDBCConnection jdbcConnection;
+        private R returnValue;
+        private RuntimeException firstException;
+        private int currentCounter = 0;
+        private int maxRetries = 1;
+        private boolean operationSuccess = false;
+
+        public Executor(JDBCConnection jdbcConnection)
+        {
+            this.jdbcConnection = jdbcConnection;
+        }
+
+        Executor<R> setMaxRetries(int maxRetries)
+        {
+            this.maxRetries = maxRetries;
+            return this;
+        }
+
+        Executor<R> execute( Supplier<R> function )
+        {
+            for (currentCounter = 0; currentCounter <= maxRetries; ++currentCounter)
+            {
+                try {
+                    returnValue = function.get();
+                    operationSuccess = true;
+                    break;
+                } catch (RuntimeException e)
+                {
+                    validateJDBCConnection(e) ;
+                }
+            }
+            return this;
+        }
+
+        <X> Executor<R> execute( Function<X, R> function, X parameter)
+        {
+            for (currentCounter = 0; currentCounter <= maxRetries; ++currentCounter)
+            {
+                try {
+                    returnValue = function.apply(parameter);
+                    operationSuccess = true;
+                    break;
+                } catch (RuntimeException e)
+                {
+                    validateJDBCConnection(e) ;
+                }
+            }
+            return this;
+        }
+
+        <T> Executor<R> execute( Consumer<T> function, T parameter)
+        {
+            for (currentCounter = 0; currentCounter <= maxRetries; ++currentCounter)
+            {
+                try {
+                    function.accept(parameter);
+                    operationSuccess = true;
+                    break;
+                } catch (RuntimeException e)
+                {
+                    validateJDBCConnection(e) ;
+                }
+            }
+            return this;
+        }
+
+        Executor<R> execute( Runnable function)
+        {
+            for (currentCounter = 0; currentCounter <= maxRetries; ++currentCounter)
+            {
+                try {
+                    function.run();
+                    operationSuccess = true;
+                    break;
+                } catch (RuntimeException e)
+                {
+                    validateJDBCConnection(e) ;
+                }
+            }
+            return this;
+        }
+
+        public R evaluateResult()
+        {
+            if ( operationSuccess )
+            {
+                if (firstException != null) {
+                    LOGGER.warn("Connection reset successful! Query successfully executed with {}th retry ... ", currentCounter);
+                }
+
+                return returnValue;
+            }
+
+            throw new IllegalStateException("JDBC connection is invalid. Connection failed with: " + firstException.getMessage()) ;
+        }
+
+        void validateJDBCConnection(RuntimeException e)
+        {
+            if (jdbcConnection.isValid())
+            {
+                throw e;
+            }
+
+            LOGGER.warn("JDBC connection is invalid. Reason: {}", e.getMessage());
+            LOGGER.warn("Rest connection and retry query... ");
+            jdbcConnection.reset();
+
+            if ( this.firstException == null)
+            {
+                this.firstException = e;
+            }
+        }
+
+    }
 
 }
