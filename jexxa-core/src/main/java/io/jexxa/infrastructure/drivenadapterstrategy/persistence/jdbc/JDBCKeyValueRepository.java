@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
@@ -16,6 +14,7 @@ import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
+
 
 public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoCloseable
 {
@@ -25,11 +24,8 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     public static final String JDBC_DRIVER = "io.jexxa.jdbc.driver";
     public static final String JDBC_AUTOCREATE_TABLE = "io.jexxa.jdbc.autocreate.table";
     public static final String JDBC_AUTOCREATE_DATABASE = "io.jexxa.jdbc.autocreate.database";
-    public static final String JDBC_MAX_RECONNECT = "io.jexxa.jdbc.max.reconnect";
-
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCKeyValueRepository.class);
-    private final int reconnectCount;
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
@@ -42,75 +38,20 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         this.aggregateClazz = aggregateClazz;
 
         this.jdbcConnection = new JDBCConnection(properties);
-        this.reconnectCount = Integer.parseInt( properties.getProperty(JDBC_MAX_RECONNECT, "1") );
 
         autocreateTable(properties);
-    }
-
-    @Override
-    public void update(T aggregate)
-    {
-        new RetryExecutor<Void>(this::validateJDBCConnection)
-                .setMaxRetries(reconnectCount)
-                .execute( this::internalUpdate, aggregate)
-                .evaluateResult();
     }
 
 
     @Override
     public void remove(K key)
     {
-        new RetryExecutor<Void>(this::validateJDBCConnection)
-                .setMaxRetries(reconnectCount)
-                .execute( this::internalRemove, key)
-                .evaluateResult();
-    }
-
-    @Override
-    public void removeAll()
-    {
-        new RetryExecutor<Void>(this::validateJDBCConnection)
-                .setMaxRetries(reconnectCount)
-                .execute( this::internalRemoveAll )
-                .evaluateResult();
-    }
-
-    @Override
-    public void add(T aggregate)
-    {
-        new RetryExecutor<Void>(this::validateJDBCConnection)
-                .setMaxRetries(reconnectCount)
-                .execute( this::internalAdd, aggregate)
-                .evaluateResult();
-    }
-
-    @Override
-    public Optional<T> get(K primaryKey)
-    {
-        return new RetryExecutor<Optional<T>>(this::validateJDBCConnection)
-                .setMaxRetries(reconnectCount)
-                .execute( this::internalGet, primaryKey)
-                .evaluateResult();
-    }
-
-
-    @Override
-    public List<T> get()
-    {
-        return new RetryExecutor<List<T>>(this::validateJDBCConnection)
-                .setMaxRetries(reconnectCount)
-                .execute(this::internalGetAll)
-                .evaluateResult();
-    }
-
-    public void internalRemove(K key)
-    {
         Validate.notNull(key);
 
         Gson gson = new Gson();
         String jsonKey = gson.toJson(key);
 
-        try (var preparedStatement = jdbcConnection.prepareStatement("delete from " + aggregateClazz.getSimpleName() + " where key= ?"))
+        try (var preparedStatement = getConnection().prepareStatement("delete from " + aggregateClazz.getSimpleName() + " where key= ?"))
         {
             preparedStatement.setString(1, jsonKey);
 
@@ -126,10 +67,11 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
 
     }
 
-    public void internalRemoveAll()
+    @Override
+    public void removeAll()
     {
 
-        try ( var statement = jdbcConnection.prepareStatement("delete from " + aggregateClazz.getSimpleName()))
+        try ( var statement = getConnection().prepareStatement("delete from " + aggregateClazz.getSimpleName()))
         {
             statement.executeUpdate();
         }
@@ -141,7 +83,8 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     }
 
     @SuppressWarnings("DuplicatedCode")
-    public void internalAdd(T aggregate)
+    @Override
+    public void add(T aggregate)
     {
         Validate.notNull(aggregate);
 
@@ -149,7 +92,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         String key = gson.toJson(keyFunction.apply(aggregate));
         String value = gson.toJson(aggregate);
 
-        try (var preparedStatement = jdbcConnection.prepareStatement("insert into " + aggregate.getClass().getSimpleName()+ " values(?,?)"))
+        try (var preparedStatement = getConnection().prepareStatement("insert into " + aggregate.getClass().getSimpleName()+ " values(?,?)"))
         {
             preparedStatement.setString(1, key);
             preparedStatement.setString(2, value);
@@ -163,7 +106,8 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     }
 
     @SuppressWarnings({"DuplicatedCode", "unused"})
-    public void internalUpdate(T aggregate)
+    @Override
+    public void update(T aggregate)
     {
         Validate.notNull(aggregate);
 
@@ -171,7 +115,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         String key = gson.toJson(keyFunction.apply(aggregate));
         String value = gson.toJson(aggregate);
 
-        try (var preparedStatement = jdbcConnection.prepareStatement("update " + aggregateClazz.getSimpleName() + " set value = ? where key = ?") )
+        try (var preparedStatement = getConnection().prepareStatement("update " + aggregateClazz.getSimpleName() + " set value = ? where key = ?") )
         {
             preparedStatement.setString(1, value);
             preparedStatement.setString(2, key);
@@ -188,15 +132,15 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
 
     }
 
-
-    public Optional<T> internalGet(K primaryKey)
+    @Override
+    public Optional<T> get(K primaryKey)
     {
         Validate.notNull(primaryKey);
 
         Gson gson = new Gson();
         String key = gson.toJson(primaryKey);
 
-        try ( var preparedStatement = jdbcConnection.prepareStatement("select value from " + aggregateClazz.getSimpleName() + " where key = ? ")  )
+        try ( var preparedStatement = getConnection().prepareStatement("select value from " + aggregateClazz.getSimpleName() + " where key = ? ")  )
         {
             preparedStatement.setString(1, key);
             try ( var resultSet = preparedStatement.executeQuery() )
@@ -218,12 +162,13 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         }
     }
 
-    public List<T> internalGetAll()
+    @Override
+    public List<T> get()
     {
         var result = new ArrayList<T>();
         Gson gson = new Gson();
         try (
-                var statement = jdbcConnection.createStatement();
+                var statement = getConnection().createStatement();
                 var resultSet = statement.executeQuery("select value from "+ aggregateClazz.getSimpleName())
              )
         {
@@ -247,7 +192,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         if (properties.containsKey(JDBC_AUTOCREATE_TABLE))
         {
             try (
-                 Statement statement = jdbcConnection.createStatement())
+                 Statement statement = getConnection().createStatement())
             {
                 var command = String.format("CREATE TABLE IF NOT EXISTS %s ( key VARCHAR %s PRIMARY KEY, value text) "
                         , aggregateClazz.getSimpleName()
@@ -268,18 +213,27 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         Optional.ofNullable(jdbcConnection)
                 .ifPresent(ThrowingConsumer.exceptionLogger(JDBCConnection::close));
     }
-
-    void validateJDBCConnection(RuntimeException e)
+    @SuppressWarnings("java:S2139")  // To explicitly show log messages in backend. Otherwise they are forwarded to the client and not visible in backend
+    JDBCConnection getConnection()
     {
-        if (jdbcConnection.isValid())
+        try
         {
+            if (!jdbcConnection.isValid())
+            {
+                LOGGER.warn("JDBC connection for Aggregate {} is invalid. ", aggregateClazz.getSimpleName());
+                LOGGER.warn("Reset connection before handing out JDBC connection ");
+                jdbcConnection.reset();
+            }
+        } catch ( RuntimeException e )
+        {
+            LOGGER.warn("JDBC connection for Aggregate {} is invalid. Reason: {}", aggregateClazz.getSimpleName(), e.getMessage());
+            LOGGER.warn("Reset connection before handing out JDBC connection ");
+            jdbcConnection.reset();
             throw e;
         }
-
-        LOGGER.warn("JDBC connection is invalid. Reason: {}", e.getMessage());
-        LOGGER.warn("Reset connection and retry query... ");
-        jdbcConnection.reset();
+        return jdbcConnection;
     }
+
 
 
     private static String getMaxVarChar(String jdbcDriver)
@@ -305,124 +259,6 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         }
 
         return "(255)";
-    }
-
-    JDBCConnection getJdbcConnection()
-    {
-        return jdbcConnection;
-    }
-
-
-    public static class RetryExecutor<R>
-    {
-        private final Consumer<RuntimeException> throwingConsumer;
-        private R returnValue;
-        private RuntimeException firstException;
-        private int currentCounter = 0;
-        private int maxRetries = 1;
-        private boolean operationSuccess = false;
-
-
-        public RetryExecutor(Consumer<RuntimeException> throwingConsumer)
-        {
-            this.throwingConsumer = throwingConsumer;
-        }
-
-
-        RetryExecutor<R> setMaxRetries(int maxRetries)
-        {
-            this.maxRetries = maxRetries;
-            return this;
-        }
-
-        RetryExecutor<R> execute(Supplier<R> function )
-        {
-            for (currentCounter = 0; currentCounter <= maxRetries; ++currentCounter)
-            {
-                try {
-                    returnValue = function.get();
-                    operationSuccess = true;
-                    break;
-                } catch (RuntimeException e)
-                {
-                    handleException(e);
-                }
-            }
-            return this;
-        }
-
-        <X> RetryExecutor<R> execute(Function<X, R> function, X parameter)
-        {
-            for (currentCounter = 0; currentCounter <= maxRetries; ++currentCounter)
-            {
-                try {
-                    returnValue = function.apply(parameter);
-                    operationSuccess = true;
-                    break;
-                } catch (RuntimeException e)
-                {
-                    handleException(e);
-                }
-            }
-            return this;
-        }
-
-        <T> RetryExecutor<R> execute(Consumer<T> function, T parameter)
-        {
-            for (currentCounter = 0; currentCounter <= maxRetries; ++currentCounter)
-            {
-                try {
-                    function.accept(parameter);
-                    operationSuccess = true;
-                    break;
-                } catch (RuntimeException e)
-                {
-                    handleException(e);
-                }
-            }
-            return this;
-        }
-
-        RetryExecutor<R> execute(Runnable function)
-        {
-            for (currentCounter = 0; currentCounter <= maxRetries; ++currentCounter)
-            {
-                try {
-                    function.run();
-                    operationSuccess = true;
-                    break;
-                } catch (RuntimeException e)
-                {
-                    handleException(e);
-                }
-            }
-            return this;
-        }
-
-        public R evaluateResult()
-        {
-            if ( operationSuccess )
-            {
-                if (firstException != null) {
-                    LOGGER.warn("Connection reset successful! Operation successfully executed with {}th retry ... ",  currentCounter);
-                }
-
-                return returnValue;
-            }
-
-            currentCounter = 0;
-            throw new IllegalStateException("JDBC connection is invalid. Connection failed with: " + firstException.getMessage()) ;
-        }
-
-        private void handleException(RuntimeException e)
-        {
-            if ( this.firstException == null)
-            {
-                this.firstException = e;
-            }
-            throwingConsumer.accept(e);
-        }
-
     }
 
 }

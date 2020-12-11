@@ -110,12 +110,7 @@ public class JDBCConnection implements AutoCloseable
     {
         try
         {
-            if ( connection == null)
-            {
-                return false;
-            }
-
-            return connection.isValid(timeout);
+            return getConnection().isValid(timeout);
         }
         catch (SQLException e)
         {
