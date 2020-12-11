@@ -307,10 +307,6 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         return "(255)";
     }
 
-
-
-
-
     JDBCConnection getJdbcConnection()
     {
         return jdbcConnection;
@@ -349,11 +345,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
                     break;
                 } catch (RuntimeException e)
                 {
-                    if ( this.firstException == null)
-                    {
-                        this.firstException = e;
-                    }
-                    throwingConsumer.accept(e);
+                    handleException(e);
                 }
             }
             return this;
@@ -369,11 +361,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
                     break;
                 } catch (RuntimeException e)
                 {
-                    if ( this.firstException == null)
-                    {
-                        this.firstException = e;
-                    }
-                    throwingConsumer.accept(e);
+                    handleException(e);
                 }
             }
             return this;
@@ -389,11 +377,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
                     break;
                 } catch (RuntimeException e)
                 {
-                    if ( this.firstException == null)
-                    {
-                        this.firstException = e;
-                    }
-                    throwingConsumer.accept(e);
+                    handleException(e);
                 }
             }
             return this;
@@ -409,11 +393,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
                     break;
                 } catch (RuntimeException e)
                 {
-                    if ( this.firstException == null)
-                    {
-                        this.firstException = e;
-                    }
-                    throwingConsumer.accept(e);
+                    handleException(e);
                 }
             }
             return this;
@@ -432,6 +412,15 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
 
             currentCounter = 0;
             throw new IllegalStateException("JDBC connection is invalid. Connection failed with: " + firstException.getMessage()) ;
+        }
+
+        private void handleException(RuntimeException e)
+        {
+            if ( this.firstException == null)
+            {
+                this.firstException = e;
+            }
+            throwingConsumer.accept(e);
         }
 
     }
