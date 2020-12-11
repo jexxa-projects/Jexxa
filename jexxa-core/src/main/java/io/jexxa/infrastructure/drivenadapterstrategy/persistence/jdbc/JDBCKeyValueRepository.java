@@ -50,7 +50,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     @Override
     public void update(T aggregate)
     {
-        new Executor<Void>(jdbcConnection)
+        new RetryExecutor<Void>(this::validateJDBCConnection)
                 .setMaxRetries(reconnectCount)
                 .execute( this::internalUpdate, aggregate)
                 .evaluateResult();
@@ -60,7 +60,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     @Override
     public void remove(K key)
     {
-        new Executor<Void>(jdbcConnection)
+        new RetryExecutor<Void>(this::validateJDBCConnection)
                 .setMaxRetries(reconnectCount)
                 .execute( this::internalRemove, key)
                 .evaluateResult();
@@ -69,7 +69,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     @Override
     public void removeAll()
     {
-        new Executor<Void>(jdbcConnection)
+        new RetryExecutor<Void>(this::validateJDBCConnection)
                 .setMaxRetries(reconnectCount)
                 .execute( this::internalRemoveAll )
                 .evaluateResult();
@@ -78,7 +78,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     @Override
     public void add(T aggregate)
     {
-        new Executor<Void>(jdbcConnection)
+        new RetryExecutor<Void>(this::validateJDBCConnection)
                 .setMaxRetries(reconnectCount)
                 .execute( this::internalAdd, aggregate)
                 .evaluateResult();
@@ -87,7 +87,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     @Override
     public Optional<T> get(K primaryKey)
     {
-        return new Executor<Optional<T>>(jdbcConnection)
+        return new RetryExecutor<Optional<T>>(this::validateJDBCConnection)
                 .setMaxRetries(reconnectCount)
                 .execute( this::internalGet, primaryKey)
                 .evaluateResult();
@@ -97,7 +97,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     @Override
     public List<T> get()
     {
-        return new Executor<List<T>>(jdbcConnection)
+        return new RetryExecutor<List<T>>(this::validateJDBCConnection)
                 .setMaxRetries(reconnectCount)
                 .execute(this::internalGetAll)
                 .evaluateResult();
@@ -269,6 +269,19 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
                 .ifPresent(ThrowingConsumer.exceptionLogger(JDBCConnection::close));
     }
 
+    void validateJDBCConnection(RuntimeException e)
+    {
+        if (jdbcConnection.isValid())
+        {
+            throw e;
+        }
+
+        LOGGER.warn("JDBC connection is invalid. Reason: {}", e.getMessage());
+        LOGGER.warn("Reset connection and retry query... ");
+        jdbcConnection.reset();
+    }
+
+
     private static String getMaxVarChar(String jdbcDriver)
     {
         if ( jdbcDriver.toLowerCase().contains("oracle") )
@@ -304,27 +317,29 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     }
 
 
-    public static class Executor<R>
+    public static class RetryExecutor<R>
     {
-        private final JDBCConnection jdbcConnection;
+        private final Consumer<RuntimeException> throwingConsumer;
         private R returnValue;
         private RuntimeException firstException;
         private int currentCounter = 0;
         private int maxRetries = 1;
         private boolean operationSuccess = false;
 
-        public Executor(JDBCConnection jdbcConnection)
+
+        public RetryExecutor(Consumer<RuntimeException> throwingConsumer)
         {
-            this.jdbcConnection = jdbcConnection;
+            this.throwingConsumer = throwingConsumer;
         }
 
-        Executor<R> setMaxRetries(int maxRetries)
+
+        RetryExecutor<R> setMaxRetries(int maxRetries)
         {
             this.maxRetries = maxRetries;
             return this;
         }
 
-        Executor<R> execute( Supplier<R> function )
+        RetryExecutor<R> execute(Supplier<R> function )
         {
             for (currentCounter = 0; currentCounter <= maxRetries; ++currentCounter)
             {
@@ -334,13 +349,17 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
                     break;
                 } catch (RuntimeException e)
                 {
-                    validateJDBCConnection(e) ;
+                    if ( this.firstException == null)
+                    {
+                        this.firstException = e;
+                    }
+                    throwingConsumer.accept(e);
                 }
             }
             return this;
         }
 
-        <X> Executor<R> execute( Function<X, R> function, X parameter)
+        <X> RetryExecutor<R> execute(Function<X, R> function, X parameter)
         {
             for (currentCounter = 0; currentCounter <= maxRetries; ++currentCounter)
             {
@@ -350,13 +369,17 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
                     break;
                 } catch (RuntimeException e)
                 {
-                    validateJDBCConnection(e) ;
+                    if ( this.firstException == null)
+                    {
+                        this.firstException = e;
+                    }
+                    throwingConsumer.accept(e);
                 }
             }
             return this;
         }
 
-        <T> Executor<R> execute( Consumer<T> function, T parameter)
+        <T> RetryExecutor<R> execute(Consumer<T> function, T parameter)
         {
             for (currentCounter = 0; currentCounter <= maxRetries; ++currentCounter)
             {
@@ -366,13 +389,17 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
                     break;
                 } catch (RuntimeException e)
                 {
-                    validateJDBCConnection(e) ;
+                    if ( this.firstException == null)
+                    {
+                        this.firstException = e;
+                    }
+                    throwingConsumer.accept(e);
                 }
             }
             return this;
         }
 
-        Executor<R> execute( Runnable function)
+        RetryExecutor<R> execute(Runnable function)
         {
             for (currentCounter = 0; currentCounter <= maxRetries; ++currentCounter)
             {
@@ -382,7 +409,11 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
                     break;
                 } catch (RuntimeException e)
                 {
-                    validateJDBCConnection(e) ;
+                    if ( this.firstException == null)
+                    {
+                        this.firstException = e;
+                    }
+                    throwingConsumer.accept(e);
                 }
             }
             return this;
@@ -393,30 +424,14 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
             if ( operationSuccess )
             {
                 if (firstException != null) {
-                    LOGGER.warn("Connection reset successful! Query successfully executed with {}th retry ... ", currentCounter);
+                    LOGGER.warn("Connection reset successful! Operation successfully executed with {}th retry ... ",  currentCounter);
                 }
 
                 return returnValue;
             }
 
+            currentCounter = 0;
             throw new IllegalStateException("JDBC connection is invalid. Connection failed with: " + firstException.getMessage()) ;
-        }
-
-        void validateJDBCConnection(RuntimeException e)
-        {
-            if (jdbcConnection.isValid())
-            {
-                throw e;
-            }
-
-            LOGGER.warn("JDBC connection is invalid. Reason: {}", e.getMessage());
-            LOGGER.warn("Rest connection and retry query... ");
-            jdbcConnection.reset();
-
-            if ( this.firstException == null)
-            {
-                this.firstException = e;
-            }
         }
 
     }
