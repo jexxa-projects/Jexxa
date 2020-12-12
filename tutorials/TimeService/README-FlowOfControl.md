@@ -12,6 +12,7 @@
 *   30 minutes
 
 ## Building blocks of a hexagonal architecture
+
 If you select ports and adapters as the architecture of your application, your have the following building blocks:
 
 *   `Driving Adapter`: A driving adapter belongs to the infrastructure. It receives incoming requests from a client using a specific technology such as REST, RMI or, JMS and forwards it to the entry point of your business application called `inbound port`.
@@ -23,8 +24,8 @@ Since this is a very high level abstraction, this is often called the **macro-ar
 
 Fore more details please read the article [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/).
            
-
 ## Navigate through your application 
+
 The first way to navigate through your source code that each developer learn is to follow the flow of control statement by statement. Most IDE's and debuggers support this very well. This works fine for tiny applications but will fail on large(r) projects. Here, you need another approach that scales independently of the lines of code. 
 
 This is where the software architecture of an application comes into play. A suitable software architecture is the most scalable approach to navigate through your application. The main problem with software architecture is that it looks so simple and obvious on a white board but is quite 
@@ -36,7 +37,7 @@ Let's see the flow of control through a ports and adapters architecture which is
 
 Jexxa's API support to follow the flow of control as good as possible. Let's see how it works...
 
-### 1. The Main-method  
+### The main-method  
 
 Each application starts with the main method. Within Jexxa we have to bind our `driving adapters` to the `inbound ports` of our application. 
  
@@ -62,7 +63,7 @@ Please note that most large frameworks such as Spring or J2EE hide these aspects
 
 From above source code we can navigate into two different directions. Either we dive deep into a concrete `Driving Adapter` such as `RESTfulRPCAdapter`. Or we follow direction `Inbound Port` &rarr; `Outbound Port` by selecting `TimeService` and enter the application core.  
 
-### 2. Enter the Application Core
+### Enter the application core
 
 If we select an inbound port such as `TimeService`, the constructor looks as follows. 
 
@@ -86,7 +87,7 @@ From this point we can navigate into two different directions again. Either we d
 
 Alternatively, you can select one of the `Outbound ports` from your IDE to continue into direction `Outbound Port` &rarr; `Driven Adapter`.
    
-### 3. Leave the application core  
+### Leave the application core  
 
 If we select `IMessageDisplay` we see just an interface, as described in the beginning. 
 
