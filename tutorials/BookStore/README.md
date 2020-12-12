@@ -31,7 +31,7 @@ This application core should provide following super simplified functionality:
     *   Service provides a hardcoded list
     *   Service is triggered when starting the application     
 
-## Implementing Application Core 
+## Implementing application core 
 
 General note: There are several books, courses, tutorials available describing how to implement an application core using the patterns of DDD. 
 The approach used in this tutorial should not be considered as reference. It serves only for demonstration purpose how to realize your decisions 
@@ -87,11 +87,11 @@ In our tutorials we use following package structure:
 
 *   `Repositroy` when defining any interface within the application core ensure that you use the domain language for all methods. Resist the temptation to use the language of the used technology stack that you will use to implement this interface.        
      
-## 2. Implement the Infrastructure
+## 2. Implement the infrastructure
 
 Implementation of `IDomainEventPublisher` just prints the `DomainEvent` to the console. So we can just use the implementation from tutorial `TimeService`.    
 
-### Implement the Repository 
+### Implement the repository 
 When using Jexxa's `RepositoryManager` implementing a repository is just a mapping to the `IRepository` interface which provides typical CRUD operations.   
   
 The requirement are: 
@@ -147,7 +147,7 @@ public final class BookRepository implements IBookRepository
 ```
 
 
-## 3. Implement the Application 
+## 3. Implement the application 
 
 Finally, we have to write our application. As you can see in the code below there are two main differences compared to `HelloJexxa` and `TimeService`:
 
@@ -214,7 +214,7 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'BookStoreApplication' successfully started in 0.484 seconds
 ```          
 
-### Use a Postgres database
+### Use a postgres database
 
 You can run this application using a Postgres database because the corresponding driver is included in the pom file. The 
 configured username and password is `admin`/`admin`. You can change it in the [jexxa-application.properties](src/main/resources/jexxa-application.properties) 
