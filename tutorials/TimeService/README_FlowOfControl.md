@@ -28,23 +28,20 @@ Fore more details please read the article [ports and adapters](https://herbertog
            
 
 ## Navigate through your application 
-            
-The first thing most developers learn in the beginning is to navigate through the code line by line using a debugger or your IDE. 
+The first way to navigate through your source code that each developer learn is to follow the flow of control statement by statement. Most IDE's and debuggers support this very well. This works fine for tiny applications but will fail on large(r) projects. Here, you need another approach that scales independently of the lines of code. 
 
-This might work for tiny applications but will fail on larger projects. Here, you need another approach that scales independently of the lines of code. 
+This is where the software architecture of an application comes into play. A suitable software architecture is the most scalable approach to navigate through your application. The main problem with software architecture is that it looks so simple and obvious on a white board but is quite 
+hard to map to source code. Much worse, a missing understanding or misunderstanding of the software architecture can cause high developing costs in a long term.     
 
-A very scalable approach is to navigate through the applications by using the underlying software architecture. As described in the previous section, 
-the ports and adapters architecture consists of these 4 building blocks, independent of the lines of code.  
-
-Jexxa's API is strongly inspired to support the navigation code based on the flow of control through your architecture which is: 
+Let's see the flow of control through a ports and adapters architecture which is quite simple:
 
 *   `Driving Adapter` &rarr; `Inbound Port` &rarr; `Outbound Port` &rarr; `Driven Adapter`
 
-Let's see how it works...
+Jexxa's API is strongly inspired to support the navigation code based on the flow of control through your architecture. Let's see how it works...
 
 ### 1. The Main-method  
 
-All applications start with the main method. Within Jexxa we have to bind our `driving adapters` to the `inbound ports` of our application which represents `Driving Adapter` &rarr; `Inbound Port`. 
+Each application starts with the main method. Within Jexxa we have to bind our `driving adapters` to the `inbound ports` of our application. 
  
 ```java
 void main(String[] args)
@@ -59,8 +56,7 @@ void main(String[] args)
 }
 ```
 
-
-In our example we know following pieces of our application: 
+So this part represents `Driving Adapter` &rarr; `Inbound Port`. Now, we know following parts of our application: 
 
 * Used `driving adapters`: `RESTfulRPCAdapter` and `JMXAdapter`
 * Used `inbound ports`: `TimeService`
