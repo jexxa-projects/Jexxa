@@ -37,7 +37,7 @@ Let's see the flow of control through a ports and adapters architecture which is
 
 *   `Driving Adapter` &rarr; `Inbound Port` &rarr; `Outbound Port` &rarr; `Driven Adapter`
 
-Jexxa's API is strongly inspired to support the navigation code based on the flow of control through your architecture. Let's see how it works...
+Jexxa's API support to follow the flow of control as good as possible. Let's see how it works...
 
 ### 1. The Main-method  
 
@@ -63,7 +63,7 @@ So this part represents `Driving Adapter` &rarr; `Inbound Port`. Now, we know fo
 
 Please note that most large frameworks such as Spring or J2EE hide these aspects because it is seen as boiler plate code. You will see that this is true to a certain extend if you check Jexxa's tutorials. Anyway, it represents the starting point of our flow of control. Since it greatly simplifies the navigation through the application, we have to explicitly bind `driving adapters` to `inbound ports` within Jexxa. 
 
-From above source code we can navigate into two different directions. Either we dive deep into a concrete `Driving Adapter` such as `RESTfulRPCAdapter`. Or we select `TimeService` for direction `Inbound Port` &rarr; `Outbound Port` and enter the application core.  
+From above source code we can navigate into two different directions. Either we dive deep into a concrete `Driving Adapter` such as `RESTfulRPCAdapter`. Or we follow direction `Inbound Port` &rarr; `Outbound Port` by selecting `TimeService` and enter the application core.  
 
 ### 2. Enter the Application Core
 
@@ -103,9 +103,9 @@ This interface describes required methods from a domain's point of view that can
 
 The most important aspect here is the following: 
 
-Our flow of control states the direction `Outbound Port` &rarr; `Driven Adapter`. But an `Outbound Port` is a much higher abstraction that must not depend on a specific infrastructure. So the direction of the dependency must be `Outbound Port` &larr; `Driven Adapter` which is done by using [dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle). For this purpose any object-oriented language uses the concept of an `interface`.  
- 
-From this point we can use our IDE to go the concrete implementation of the interface which is located in the infrastructure part again. In this application the implementation is quite simple. 
+Our flow of control states the direction `Outbound Port` &rarr; `Driven Adapter`. But an `Outbound Port` is a much higher abstraction that must not depend on a specific infrastructure. So the direction of the dependency must be `Outbound Port` &larr; `Driven Adapter` which is done by using [dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle). For this purpose any object-oriented language uses the concept of an `interface`. Therefore, we must declare a high-level interface that belongs to our application core. This interface is then implemented by a `driven adapter` which again belongs to the infrastructure.  
+
+This approach ensures that we can easily exchange the technology stack that is used by our application core. From this point we can use hot-keys of our IDE to swithc the concrete implementation of the interface which is located in the infrastructure part again. In this application the implementation is quite simple. 
 
 ```java
 public class MessageDisplay implements IMessageDisplay
