@@ -14,7 +14,6 @@ import javax.jms.JMSException;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.utils.messaging.ITMessageSender;
 import io.jexxa.infrastructure.utils.messaging.TopicListener;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class JMSBrokerFailedIT
