@@ -13,15 +13,14 @@
 
 ## Building blocks of a hexagonal architecture
 If you select ports and adapters as the architecture of your application, your have the following building blocks:
-*   `Driving Adapter`: A driving adapter receives incoming requests from a client using a sepcific technology such as REST, RMI or, JMS and forwards it to the entry point of your business application called `inbound port`.   
+*   `Driving Adapter`: A driving adapter belongs to the infrastructure. It receives incoming requests from a client using a sepcific technology such as REST, RMI or, JMS and forwards it to the entry point of your business application called `inbound port`.   
 
 
-*   `Inbound Port`: An `inbound port` represents the use cases of your business application. If your business application grows, you can  apply the [interface segregation principle](https://en.wikipedia.org/wiki/Interface_segregation_principle) to separate your `inbound ports` based on the clients you have.
+*   `Inbound Port`: An `inbound port` belongs to the application core and represents the use cases of your business application. If your business application grows, you can  apply the [interface segregation principle](https://en.wikipedia.org/wiki/Interface_segregation_principle) to separate your `inbound ports` based on the clients you have.
 
-*   `Outbound Port`: The `outbound port` describes required methods from a application core's point of view that can only be implemented by using a technology stack such as a logger or a database.
+*   `Outbound Port`: An `outbound port` is an interface that belongs to the application core. It describes required methods from an application core's point of view that can only be implemented by using a technology stack such as a logger or a database.
 
-
-*   `Driven Adapter`: A ` 
+*   `Driven Adapter`: A `driven adapter` belongs to the infrastructure and implements a specific `outbound port` by using a concrete technology stack. 
 
 Since this is a very high level abstraction, this is often called the **macro-architecture** of an application.
 
@@ -124,4 +123,5 @@ public class MessageDisplay implements IMessageDisplay
 ```
 
 ## Summary
-
+ 
+I hope you get an idea how to easily navigate through your application using the underlying architecture.  
