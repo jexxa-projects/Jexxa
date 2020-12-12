@@ -1,0 +1,127 @@
+# TimeService - Flow of Control  
+
+## What You Learn
+
+*   A general idea of the building blocks of a hexagonal architecture 
+*   Follow the flow of control of your application using your architecture 
+*   An initial understanding of [dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) 
+
+## What you need
+
+*   Understand tutorial `HelloJexxa` and `TimeService` because we explain only new aspects 
+*   30 minutes
+
+## Building blocks of a hexagonal architecture
+If you select ports and adapters as the architecture of your application, your have the following building blocks:
+*   `Driving Adapter`: A driving adapter receives incoming requests from a client using a sepcific technology such as REST, RMI or, JMS and forwards it to the entry point of your business application called `inbound port`.   
+
+
+*   `Inbound Port`: An `inbound port` represents the use cases of your business application. If your business application grows, you can  apply the [interface segregation principle](https://en.wikipedia.org/wiki/Interface_segregation_principle) to separate your `inbound ports` based on the clients you have.
+
+*   `Outbound Port`: The `outbound port` describes required methods from a application core's point of view that can only be implemented by using a technology stack such as a logger or a database.
+
+
+*   `Driven Adapter`: A ` 
+
+Since this is a very high level abstraction, this is often called the **macro-architecture** of an application.
+
+Fore more details please read the article [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/).
+           
+
+## Navigate through your application 
+            
+The first thing most developers learn in the beginning is to navigate through the code line by line using a debugger or your IDE. 
+
+This might work for tiny applications but will fail on larger projects. Here, you need another approach that scales independently of the lines of code. 
+
+A very scalable approach is to navigate through the applications by using the underlying software architecture. As described in the previous section, 
+the ports and adapters architecture consists of these 4 building blocks, independent of the lines of code.  
+
+Jexxa's API is strongly inspired to support the navigation code based on the flow of control through your architecture which is: 
+
+*   `Driving Adapter` &rarr; `Inbound Port` &rarr; `Outbound Port` &rarr; `Driven Adapter`
+
+Let's see how it works...
+
+### 1. The Main-method  
+
+All applications start with the main method. Within Jexxa we have to bind our `driving adapters` to the `inbound ports` of our application which represents `Driving Adapter` &rarr; `Inbound Port`. 
+ 
+```java
+void main(String[] args)
+{   
+    ///...
+    jexxaMain
+        // Bind RESTfulRPCAdapter and JMXAdapter to TimeService class so that we can invoke its method
+        .bind(RESTfulRPCAdapter.class).to(TimeService.class)
+        .bind(JMXAdapter.class).to(TimeService.class);
+
+        ///...
+}
+```
+
+
+In our example we know following pieces of our application: 
+
+* Used `driving adapters`: `RESTfulRPCAdapter` and `JMXAdapter`
+* Used `inbound ports`: `TimeService`
+
+Please note that most large frameworks such as Spring or J2EE hide these aspects because it is seen as boiler plate code. You will see that this is true to a certain extend if you check Jexxa's tutorials. Anyway, it represents the starting point of our flow of control. Since it greatly simplifies the navigation through the application, we have to explicitly bind `driving adapters` to `inbound ports` within Jexxa. 
+
+From above source code we can navigate into two different directions. Either we dive deep into a concrete `Driving Adapter` such as `RESTfulRPCAdapter`. Or we select `TimeService` for direction `Inbound Port` &rarr; `Outbound Port` and enter the application core.  
+
+### 2. Enter the Application Core
+
+If we select an inbound port such as `TimeService`, the constructor looks as follows. 
+
+```java
+public TimeService(ITimePublisher timePublisher, IMessageDisplay messageDisplay)
+{
+  // ...
+}
+```
+
+From an architectural point of view, the constructor represents `Inbound Port` &rarr; `Outbound Port`. Within Jexxa, all parameters of the constructor must be `outbound ports`. These are the only parameters that are essential to create an `inbound port`. If you need any other parameters in the constructor of your `inbound port` it is most likely that you have an issue in your software design. 
+
+Obviously, the constructor of an `inbound port` should only take these `outbound ports` that are required for its use cases. Even in a large application, the constructor should take only a few parameters. Otherwise, you should think about splitting your `inbound port`.
+Especially in a large application, you automatically fade out a lot of source code.
+
+In this example we know following of our application:
+* Current `inbound port`: `TimeService`
+* Required `outbound ports`: `ITimePublisher` and `IMessageDisplay`
+
+From this point we can navigate into two different directions again. Either we dive deep into the application core by checking the implementation of `TimeService`. Please note that within a large application core you use a so-called micro architecture that supports the navigation through your application core. Please check tutorial [BookStore](https://github.com/repplix/Jexxa/tree/master/tutorials/BookStore) to see a potential mapping of an onion architecture for your application core.   
+
+Alternatively, you can select one of the `Outbound ports` from your IDE to continue into direction `Outbound Port` &rarr; `Driven Adapter`.
+   
+### 3. Leave the application core  
+
+If we select `IMessageDisplay` we see just an interface, as described in the beginning. 
+
+```java
+public interface IMessageDisplay
+{
+  void show(String message);
+}
+```
+This interface describes required methods from a domain's point of view that can only be implemented by using a technology stack such as a logger or a database. 
+
+The most important aspect here is the following: 
+
+Our flow of control states the direction `Outbound Port` &rarr; `Driven Adapter`. But an `Outbound Port` is a much higher abstraction that must not depend on a specific infrastructure. So the direction of the dependency must be `Outbound Port` &larr; `Driven Adapter` which is done by using [dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle). For this purpose any object-oriented language uses the concept of an `interface`.  
+ 
+From this point we can use our IDE to go the concrete implementation of the interface which is located in the infrastructure part again. In this application the implementation is quite simple. 
+
+```java
+public class MessageDisplay implements IMessageDisplay
+{
+    @Override
+    public void show(String message)
+    {
+        JexxaLogger.getLogger(MessageDisplay.class).info(message);
+    }
+}
+```
+
+## Summary
+
