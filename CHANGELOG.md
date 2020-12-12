@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[2.6.1] - 2020-mm-dd
 ### Fixed
--   `JDBCKeyValueRepository`: Fixed reconnection on lost JDBC connection for example if database closes connection after some time  
+-   `JDBCKeyValueRepository`: Fixed reconnection on lost JDBC connection for example if database closes connection after some time
+-   `JMSAdapter`: Fixes reconnection if entire Session object becomes invalid. Typically, this should only happen if you restart your messaging system.   
 
 
 ## \[2.6.0] - 2020-12-09  
