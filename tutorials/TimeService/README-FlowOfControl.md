@@ -13,7 +13,7 @@
 
 ## Building blocks of a hexagonal architecture
 
-If you select ports and adapters as the architecture of your application, your have the following building blocks:
+If you select ports and adapters as the architecture of your application, you have the following building blocks:
 
 *   `Driving Adapter`: A driving adapter belongs to the infrastructure. It receives incoming requests from a client using a specific technology such as REST, RMI or, JMS and forwards it to the entry point of your business application called `inbound port`.
 *   `Inbound Port`: An `inbound port` belongs to the application core and represents the use cases of your business application. If your business application grows, you can  apply the [interface segregation principle](https://en.wikipedia.org/wiki/Interface_segregation_principle) to separate your `inbound ports` based on the clients you have.
@@ -26,21 +26,22 @@ Fore more details please read the article [ports and adapters](https://herbertog
            
 ## Navigate through your application 
 
-The first way to navigate through your source code that each developer learn is to follow the flow of control statement by statement. Most IDE's and debuggers support this very well. This works fine for tiny applications but will fail on large(r) projects. Here, you need another approach that scales independently of the lines of code. 
+The first way to navigate through your source code that every developer learn is to follow the flow of control by lines of code. Most IDE's and debuggers support this very well. This works fine for tiny applications but will fail on large(r) projects. Here, you need another approach that scales independently of the lines of code. 
 
 This is where the software architecture of an application comes into play. A suitable software architecture is the most scalable approach to navigate through your application. The main problem with software architecture is that it looks so simple and obvious on a white board but is quite 
 hard to map to source code. Much worse, a missing understanding or misunderstanding of the software architecture can cause high developing costs in a long term.     
 
-Let's see the flow of control through a ports and adapters architecture which is quite simple:
+Let's see the flow of control through an application based on ports and adapters architecture:
 
 *   `Driving Adapter` &rarr; `Inbound Port` &rarr; `Outbound Port` &rarr; `Driven Adapter`
 
-Jexxa's API support to follow the flow of control as good as possible. Let's see how it works...
+This looks very simple but is not as easy to see in your source code. Therefore, Jexxa's API supports following the flow of control as good as possible. Let's see how it works...
 
 ### The main-method  
 
-Each application starts with the main method. Within Jexxa we have to bind our `driving adapters` to the `inbound ports` of our application. 
- 
+Each application starts with the main method. Therefore, it represents the first part which is`Driving Adapter` &rarr; `Inbound Port` which must be 
+explicitly written within Jexxa.
+
 ```java
 void main(String[] args)
 {   
@@ -53,8 +54,7 @@ void main(String[] args)
         ///...
 }
 ```
-
-So this part represents `Driving Adapter` &rarr; `Inbound Port`. Now, we know following parts of our application: 
+Now, we know following parts of our application: 
 
 *   Used `driving adapters`: `RESTfulRPCAdapter` and `JMXAdapter`
 *   Used `inbound ports`: `TimeService`
@@ -93,7 +93,7 @@ If we select `IMessageDisplay` we see just an interface, as described in the beg
 
 ```java
 public interface IMessageDisplay
-{
+{                                       
   void show(String message);
 }
 ```
@@ -103,7 +103,7 @@ The most important aspect here is the following:
 
 Our flow of control states the direction `Outbound Port` &rarr; `Driven Adapter`. But an `Outbound Port` is a much higher abstraction that must not depend on a specific infrastructure. So the direction of the dependency must be `Outbound Port` &larr; `Driven Adapter` which is done by using [dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle). For this purpose any object-oriented language uses the concept of an `interface`. Therefore, we must declare a high-level interface that belongs to our application core. This interface is then implemented by a `driven adapter` which again belongs to the infrastructure.  
 
-This approach ensures that we can easily exchange the technology stack that is used by our application core. From this point we can use hot-keys of our IDE to swithc the concrete implementation of the interface which is located in the infrastructure part again. In this application the implementation is quite simple. 
+This approach ensures that we can easily exchange the technology stack that is used by our application core. From this point we can use hot-keys of our IDE to switch to the concrete implementation of the interface which is located in the infrastructure part again. In this application the implementation is quite simple. 
 
 ```java
 public class MessageDisplay implements IMessageDisplay
