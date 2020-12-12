@@ -221,16 +221,16 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
             if (!jdbcConnection.isValid())
             {
                 LOGGER.warn("JDBC connection for Aggregate {} is invalid. ", aggregateClazz.getSimpleName());
-                LOGGER.warn("Reset connection before handing out JDBC connection ");
+                LOGGER.warn("Try to reset JDBC connection for Aggregate {}", aggregateClazz.getSimpleName());
                 jdbcConnection.reset();
+                LOGGER.warn("JDBC connection for Aggregate {} successfully restarted.", aggregateClazz.getSimpleName());
             }
-        } catch ( RuntimeException e )
+        } catch (RuntimeException e)
         {
-            LOGGER.warn("JDBC connection for Aggregate {} is invalid. Reason: {}", aggregateClazz.getSimpleName(), e.getMessage());
-            LOGGER.warn("Reset connection before handing out JDBC connection ");
-            jdbcConnection.reset();
+            LOGGER.error("Could not reset JDBC connection for Aggregate {}. Reason: {}", aggregateClazz.getSimpleName(), e.getMessage());
             throw e;
         }
+
         return jdbcConnection;
     }
 
