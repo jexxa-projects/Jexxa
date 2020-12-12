@@ -1,6 +1,6 @@
 # TimeService - Flow of Control  
 
-## What You Learn
+## What you learn
 
 *   A general idea of the building blocks of a hexagonal architecture 
 *   Follow the flow of control of your application using your architecture 
@@ -13,8 +13,7 @@
 
 ## Building blocks of a hexagonal architecture
 If you select ports and adapters as the architecture of your application, your have the following building blocks:
-*   `Driving Adapter`: A driving adapter belongs to the infrastructure. It receives incoming requests from a client using a sepcific technology such as REST, RMI or, JMS and forwards it to the entry point of your business application called `inbound port`.   
-
+*   `Driving Adapter`: A driving adapter belongs to the infrastructure. It receives incoming requests from a client using a specific technology such as REST, RMI or, JMS and forwards it to the entry point of your business application called `inbound port`.   
 
 *   `Inbound Port`: An `inbound port` belongs to the application core and represents the use cases of your business application. If your business application grows, you can  apply the [interface segregation principle](https://en.wikipedia.org/wiki/Interface_segregation_principle) to separate your `inbound ports` based on the clients you have.
 
@@ -58,8 +57,8 @@ void main(String[] args)
 
 So this part represents `Driving Adapter` &rarr; `Inbound Port`. Now, we know following parts of our application: 
 
-* Used `driving adapters`: `RESTfulRPCAdapter` and `JMXAdapter`
-* Used `inbound ports`: `TimeService`
+*   Used `driving adapters`: `RESTfulRPCAdapter` and `JMXAdapter`
+*   Used `inbound ports`: `TimeService`
 
 Please note that most large frameworks such as Spring or J2EE hide these aspects because it is seen as boiler plate code. You will see that this is true to a certain extend if you check Jexxa's tutorials. Anyway, it represents the starting point of our flow of control. Since it greatly simplifies the navigation through the application, we have to explicitly bind `driving adapters` to `inbound ports` within Jexxa. 
 
@@ -82,8 +81,8 @@ Obviously, the constructor of an `inbound port` should only take these `outbound
 Especially in a large application, you automatically fade out a lot of source code.
 
 In this example we know following of our application:
-* Current `inbound port`: `TimeService`
-* Required `outbound ports`: `ITimePublisher` and `IMessageDisplay`
+*   Current `inbound port`: `TimeService`
+*   Required `outbound ports`: `ITimePublisher` and `IMessageDisplay`
 
 From this point we can navigate into two different directions again. Either we dive deep into the application core by checking the implementation of `TimeService`. Please note that within a large application core you use a so-called micro architecture that supports the navigation through your application core. Please check tutorial [BookStore](https://github.com/repplix/Jexxa/tree/master/tutorials/BookStore) to see a potential mapping of an onion architecture for your application core.   
 
