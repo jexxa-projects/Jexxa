@@ -116,5 +116,6 @@ public class MessageDisplay implements IMessageDisplay
 }
 ```
 
-## Summary 
+## Summary
+
 I hope you get an idea how to easily navigate through your application using the underlying architecture.  
