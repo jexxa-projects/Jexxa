@@ -105,17 +105,17 @@ class JDBCKeyValueRepositoryIT
     @Test
     void testReconnect()
     {
-        objectUnderTest.getJdbcConnection().close();
+        objectUnderTest.getConnection().close();
 
         getUnknownAggregate();
 
-        objectUnderTest.getJdbcConnection().close();
+        objectUnderTest.getConnection().close();
 
         removeAggregate();
-        objectUnderTest.getJdbcConnection().close();
+        objectUnderTest.getConnection().close();
 
         testExceptionInvalidOperations();
-        objectUnderTest.getJdbcConnection().close();
+        objectUnderTest.getConnection().close();
 
         addAggregate();
     }
