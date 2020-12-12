@@ -15,6 +15,9 @@ See documentation [HelloJexxa](HelloJexxa/)
 ## TimeService
 See documentation [TimeService](TimeService/)
 
+## TimeService - Follow flow of Control
+See documentation [TimeService - Follow flow of Control](TimeService/README-FlowOfControl.md)
+
 ## BookStore
 See documentation [BookStore](BookStore/)
 
