@@ -37,7 +37,8 @@ General note: There are several books, courses, tutorials available describing h
 The approach used in this tutorial should not be considered as reference. It serves only for demonstration purpose how to realize your decisions 
 with Jexxa.       
 
-### 1. Mapping to DDD patterns  
+### 1. Mapping to DDD patterns 
+
 First we map the functionality of the application to DDD patterns   
 
 *   `Aggregate:` Elements that change over time and include our business logic 
@@ -56,9 +57,9 @@ First we map the functionality of the application to DDD patterns
 
 *   `BusinessException:`
     *   `BookNotInStockException:` In case we try to sell a book that is currently not available   
-     
-       
-### Package structure 
+          
+### Package structure
+
 In our tutorials we use following package structure: 
 
 *   applicationservice
@@ -145,7 +146,6 @@ public final class BookRepository implements IBookRepository
     public List<Book> getAll() { return repository.get(); }
 }
 ```
-
 
 ## 3. Implement the application 
 
