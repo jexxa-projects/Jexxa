@@ -98,13 +98,13 @@ Please remember the characteristics of an `Outbound Port`:
 *   It provides **required** methods to the application core.
 *   It must be an interface because it can be implemented by different technology stacks.
 
-Within your source code that is the job of the constructor of an inbound port. Therefore, it represents `Inbound Port` &rarr; `Outbound Port`. Jexxa
-enforces this rule and requires that all parameters of the constructor must be `outbound ports`. These are the only parameters that are essential to
-create an `inbound port`. If you need any other parameters in the constructor of your `inbound port` it is most likely that you have an issue in your
-software design. 
+In most object-oriented languages it is the job of the constructor to define all required attributes. Therefore, the constructor of an `Inbound Port`
+must define its required `Outbound Ports` and this represents `Inbound Port` &rarr; `Outbound Port`. Jexxa enforces this rule and requires that all
+parameters of the constructor must be `Outbound Ports`. These are the only parameters that are essential to create an `Inbound Port`. If you need any
+other parameters in the constructor of your `inbound port` it is most likely that you have an issue in your software design. 
 
-Obviously, the constructor of an `inbound port` should only take these `outbound ports` that are required for its use cases. Even in a large 
-application, the constructor should take only a few parameters. Otherwise, you should think about splitting your `inbound port`.
+Obviously, the constructor of an `inbound port` should only take these `outbound ports` that are required for its own use cases. Even in a large 
+application, the constructor should take only a few parameters. Otherwise, you should think about splitting your `Inbound Port`.
 Especially in a large application, you automatically fade out a lot of source code.
 
 At this point, we have following additional information:
@@ -116,7 +116,7 @@ of `TimeService`. Please note that within a large application core you should us
 your application core. Please check tutorial [BookStore](https://github.com/repplix/Jexxa/tree/master/tutorials/BookStore) to see a potential mapping 
 of an onion architecture for your application core.   
 
-Alternatively, you can select one of the `Outbound ports` from your IDE to continue into direction `Outbound Port` &rarr; `Driven Adapter`.
+Alternatively, you can select one of the `Outbound Ports` from your IDE to continue in the direction of `Outbound Port` &rarr; `Driven Adapter`.
    
 ### Leave the application core  
 
@@ -184,9 +184,10 @@ Here, a JMS message should be handled by our application core. The `port adapter
 Please note that this is a crucial aspect. In the past, I saw a lot of code where this mapping is directly done in the `Inbound Port`. From my 
 understanding this is a massive architectural violation because we couple a technology stack directly to our application core. 
 
-Anyway, from a navigation point of view we have to take just a single additional step to follow direction `Port Adapter` &rarr; `Inbound Port`. 
-To do so, just select `PublishTimeListener` in your IDE. Again, you have to check the constructor of `PublishTimeListener` which takes exactly one
-parameter which must be an `Inbound Port`. In this case it is `TimeService` again as you can see in the following code.          
+Anyway, from a navigation point of view we have to take just a single additional step to continue in the direction of `Port Adapter` &rarr; 
+`Inbound Port`. To do so, just select `PublishTimeListener` in your IDE. Again, you have to check the constructor of `PublishTimeListener`. Within 
+Jexxa this constructor must take exactly one parameter which must be an `Inbound Port`. In this case it is `TimeService` again as you can see in the
+following code.          
 
 ```java
 public PublishTimeListener(TimeService timeService)
@@ -195,8 +196,8 @@ public PublishTimeListener(TimeService timeService)
 }
 ```
 
-By selecting the parameter of the constructor in our IDE, we can continue to `Inbound Port` &rarr; `Outbound Port`. Since it is no difference to follow
-the flow of control in the source code, Jexxa uses the same API to represent the starting point of our flow of control.
+By selecting the parameter of the constructor in our IDE, we can continue in the direction of `Inbound Port` &rarr; `Outbound Port`. Since it is no 
+difference to follow the flow of control in the source code, Jexxa uses the same API to represent the starting point on both cases.
 
 ## Summary
 
