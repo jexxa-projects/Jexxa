@@ -118,7 +118,7 @@ of `TimeService`. Please note that within a large application core you should us
 your application core. Please check tutorial [BookStore](https://github.com/repplix/Jexxa/tree/master/tutorials/BookStore) to see a potential mapping 
 of an onion architecture for your application core.   
 
-Alternatively, you can select one of the `Outbound Ports` from your IDE to continue in the direction of `Outbound Port` &rarr; `Driven Adapter`.
+Alternatively, you can select one of the two `Outbound Ports` from your IDE to continue in the direction of `Outbound Port` &rarr; `Driven Adapter`.
    
 ### Leave the application core  
 
