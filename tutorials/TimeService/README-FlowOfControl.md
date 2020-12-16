@@ -16,16 +16,14 @@
 If you choose ports and adapters as the architecture of your application, you have the following building blocks:
 
 *   `Driving Adapter`: A driving adapter belongs to the infrastructure. It receives incoming requests from a client using a specific technology such 
-    as REST, RMI or, JMS. Then it forwards the request to an `inbound port` for execution.
+    as REST, RMI or, JMS. Then it forwards the request to an `inbound port` for execution and this *drives* the domain logic of your application.
     
-*   `Inbound Port`: An `inbound port` belongs to the application core and represents the use cases of your business application. If your business 
-    application grows, you can  apply the [interface segregation principle](https://en.wikipedia.org/wiki/Interface_segregation_principle) to separate 
-    your `inbound ports` based on the clients you have.
+*   `Inbound Port`: An `inbound port` belongs to the application core and represents the use cases of your business application that can be started 
+    by a `Driving Adapter`. If your business application grows, you can  apply the [interface segregation principle](https://en.wikipedia.org/wiki/Interface_segregation_principle) to separate your `inbound ports` based on the clients you have.
     
-*   `Outbound Port`: An `outbound port` is an interface that belongs to the application core. It describes required methods from an application core's 
-    point of view that can only be implemented by using a technology stack such as a logger or a database.
+*   `Outbound Port`: An `outbound port` is an interface that belongs to the application core. It describes required methods from an application core's point of view that can only be implemented by using a technology stack such as a logger or a database.
     
-*   `Driven Adapter`: A `driven adapter` belongs to the infrastructure and implements a specific `outbound port` by using a concrete technology stack. 
+*   `Driven Adapter`: A `driven adapter` belongs to the infrastructure and implements a specific `outbound port` by using a concrete technology stack such as database. This building block is *driven* by the domain logic of the application.   
 
 Since this is a very high level abstraction, this architecture is often called the **macro-architecture** of an application.
 
