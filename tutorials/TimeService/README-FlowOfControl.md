@@ -19,7 +19,7 @@ If you choose ports and adapters as the architecture of your application, you ha
     as REST, RMI or, JMS. Then it forwards the request to an `inbound port` for execution and this *drives* the domain logic of your application.
     
 *   `Inbound Port`: An `inbound port` belongs to the application core and represents the use cases of your business application that can be started 
-    by a `Driving Adapter`. If your business application grows, you can  apply the [interface segregation principle](https://en.wikipedia.org/wiki/Interface_segregation_principle) to separate your `inbound ports` based on the clients you have.
+    by a `Driving Adapter`. The term `port` is used similar to a network- or USB port, that provide access to a computer. 
     
 *   `Outbound Port`: An `outbound port` is an interface that belongs to the application core. It describes required methods from an application core's point of view that can only be implemented by using a technology stack such as a logger or a database.
     
@@ -31,9 +31,10 @@ Fore more details please read the article [ports and adapters](https://herbertog
            
 ## Navigate through your application 
 
-The first way to navigate through your source code that every developer learn is to follow the flow of control by lines of code. Most IDE's and 
-debuggers support this very well. This works fine for tiny applications but will fail on large(r) projects. Here, you need another approach that 
-scales independently of the lines of code. 
+The first way to navigate through source code that every developer learns is to follow the lines of code. This allows you to see the flow of control,
+which eventually allows you to understand the application logic. Most IDE's and debuggers support this very well. However, this only works well for a
+limited number of lines of code and/or for a few possible paths. For larger applications, you need an approach that scales independently of 
+the lines of code and excludes a large portion of possible paths directly.
 
 This is where the software architecture of an application comes into play. A suitable software architecture is the most scalable approach to navigate 
 through your application. The main problem with software architecture is that it looks so simple and obvious on a white board but is quite 
