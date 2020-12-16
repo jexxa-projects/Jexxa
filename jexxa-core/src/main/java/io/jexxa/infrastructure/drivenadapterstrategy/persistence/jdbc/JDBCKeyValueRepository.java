@@ -11,12 +11,10 @@ import java.util.function.Function;
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.function.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 
-
-public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoCloseable
+public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRepository<T, K>
 {
     public static final String JDBC_URL = "io.jexxa.jdbc.url";
     public static final String JDBC_USERNAME = "io.jexxa.jdbc.username";
@@ -29,15 +27,14 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
-    private final JDBCConnection jdbcConnection;
 
 
     public JDBCKeyValueRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
     {
+        super(properties);
+
         this.keyFunction = keyFunction;
         this.aggregateClazz = aggregateClazz;
-
-        this.jdbcConnection = new JDBCConnection(properties);
 
         autocreateTable(properties);
     }
@@ -51,13 +48,13 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         Gson gson = new Gson();
         String jsonKey = gson.toJson(key);
 
-        try (var preparedStatement = getConnection().prepareStatement("delete from " + aggregateClazz.getSimpleName() + " where key= ?"))
+        try (var preparedStatement = getConnection().prepareStatement("delete from " + getAggregateName() + " where key= ?"))
         {
             preparedStatement.setString(1, jsonKey);
 
             if ( preparedStatement.executeUpdate() == 0 )
             {
-                throw new IllegalArgumentException("Could not delete aggregate " + aggregateClazz.getSimpleName());
+                throw new IllegalArgumentException("Could not delete aggregate " + getAggregateName());
             }
         }
         catch (SQLException e)
@@ -71,7 +68,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
     public void removeAll()
     {
 
-        try ( var statement = getConnection().prepareStatement("delete from " + aggregateClazz.getSimpleName()))
+        try ( var statement = getConnection().prepareStatement("delete from " + getAggregateName()))
         {
             statement.executeUpdate();
         }
@@ -92,7 +89,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         String key = gson.toJson(keyFunction.apply(aggregate));
         String value = gson.toJson(aggregate);
 
-        try (var preparedStatement = getConnection().prepareStatement("insert into " + aggregate.getClass().getSimpleName()+ " values(?,?)"))
+        try (var preparedStatement = getConnection().prepareStatement("insert into " + getAggregateName() + " values(?,?)"))
         {
             preparedStatement.setString(1, key);
             preparedStatement.setString(2, value);
@@ -115,14 +112,14 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         String key = gson.toJson(keyFunction.apply(aggregate));
         String value = gson.toJson(aggregate);
 
-        try (var preparedStatement = getConnection().prepareStatement("update " + aggregateClazz.getSimpleName() + " set value = ? where key = ?") )
+        try (var preparedStatement = getConnection().prepareStatement("update " + getAggregateName() + " set value = ? where key = ?") )
         {
             preparedStatement.setString(1, value);
             preparedStatement.setString(2, key);
             int result = preparedStatement.executeUpdate();
             if (result == 0)
             {
-                throw new IllegalArgumentException("Could not update aggregate " + aggregate.getClass().getSimpleName());
+                throw new IllegalArgumentException("Could not update aggregate " + getAggregateName());
             }
         }
         catch (SQLException e)
@@ -140,7 +137,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         Gson gson = new Gson();
         String key = gson.toJson(primaryKey);
 
-        try ( var preparedStatement = getConnection().prepareStatement("select value from " + aggregateClazz.getSimpleName() + " where key = ? ")  )
+        try ( var preparedStatement = getConnection().prepareStatement("select value from " + getAggregateName() + " where key = ? ")  )
         {
             preparedStatement.setString(1, key);
             try ( var resultSet = preparedStatement.executeQuery() )
@@ -169,7 +166,7 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
         Gson gson = new Gson();
         try (
                 var statement = getConnection().createStatement();
-                var resultSet = statement.executeQuery("select value from "+ aggregateClazz.getSimpleName())
+                var resultSet = statement.executeQuery("select value from "+ getAggregateName())
              )
         {
             while (resultSet.next())
@@ -202,38 +199,16 @@ public class JDBCKeyValueRepository<T, K> implements IRepository<T, K>, AutoClos
             }
             catch (SQLException e)
             {
-                LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
+                LOGGER.warn("Could not create table {} => Assume that table already exists", getAggregateName());
             }
         }
     }
 
-
-    public void close()
+    @Override
+    protected String getAggregateName()
     {
-        Optional.ofNullable(jdbcConnection)
-                .ifPresent(ThrowingConsumer.exceptionLogger(JDBCConnection::close));
+        return aggregateClazz.getSimpleName();
     }
-    @SuppressWarnings("java:S2139")  // To explicitly show log messages in backend. Otherwise they are forwarded to the client and not visible in backend
-    JDBCConnection getConnection()
-    {
-        try
-        {
-            if (!jdbcConnection.isValid())
-            {
-                LOGGER.warn("JDBC connection for Aggregate {} is invalid. ", aggregateClazz.getSimpleName());
-                LOGGER.warn("Try to reset JDBC connection for Aggregate {}", aggregateClazz.getSimpleName());
-                jdbcConnection.reset();
-                LOGGER.warn("JDBC connection for Aggregate {} successfully restarted.", aggregateClazz.getSimpleName());
-            }
-        } catch (RuntimeException e)
-        {
-            LOGGER.error("Could not reset JDBC connection for Aggregate {}. Reason: {}", aggregateClazz.getSimpleName(), e.getMessage());
-            throw e;
-        }
-
-        return jdbcConnection;
-    }
-
 
 
     private static String getMaxVarChar(String jdbcDriver)
