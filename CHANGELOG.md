@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[2.7.0] - YYYY-MM-DD
+
+### Added
+-   New Tutorial (TimeService - Flow Of Control)[https://github.com/repplix/Jexxa/blob/master/tutorials/TimeService/README-FlowOfControl.md]
+
+### Changed
+-   Updated dependencies
+    
+-   JDBCRepository: 
+    -   Added abstract base class `JDBCRepository` for implementing specific repository 
+
 ## \[2.6.1] - 2020-12-12
 ### Fixed
 -   `JDBCKeyValueRepository`: Fixed reconnection on lost JDBC connection for example if database closes connection after some time
