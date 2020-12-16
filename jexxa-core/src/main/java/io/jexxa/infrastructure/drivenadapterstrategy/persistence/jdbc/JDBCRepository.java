@@ -24,6 +24,12 @@ public abstract class JDBCRepository  implements AutoCloseable
         ThrowingConsumer.exceptionLogger(JDBCConnection::close);
     }
 
+    /**
+     * Returns a JDBCConnection that is in a valid state. If the connection can not be changed into a valid state, an IllegalStateException is thrown.
+     *
+     * @throws IllegalStateException if JDBCConnection can not be reset
+     * @return JDBCConnection that is in a valid state.
+     */
     @SuppressWarnings("java:S2139")  // To explicitly show log messages in backend. Otherwise they are forwarded to the client and not visible in backend
     protected final JDBCConnection getConnection()
     {
