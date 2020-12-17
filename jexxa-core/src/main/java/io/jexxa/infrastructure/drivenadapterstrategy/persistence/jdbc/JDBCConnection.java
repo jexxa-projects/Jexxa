@@ -111,11 +111,6 @@ public class JDBCConnection implements AutoCloseable
         }
     }
 
-    public Statement createStatement() throws SQLException
-    {
-        return getConnection().createStatement();
-    }
-
     public PreparedStatement prepareStatement(String sqlStatement) throws SQLException
     {
         return getConnection().prepareStatement(sqlStatement);
@@ -174,5 +169,4 @@ public class JDBCConnection implements AutoCloseable
         Validate.isTrue(properties.containsKey(JDBC_URL), "Parameter " + JDBC_URL + " is missing");
         Validate.isTrue(properties.containsKey(JDBC_DRIVER), "Parameter " + JDBC_DRIVER + " is missing");
     }
-
 }

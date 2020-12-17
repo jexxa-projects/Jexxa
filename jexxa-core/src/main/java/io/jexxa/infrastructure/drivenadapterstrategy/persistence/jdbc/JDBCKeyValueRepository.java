@@ -1,17 +1,15 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.utils.JexxaLogger;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 
 public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRepository<T, K>
@@ -27,6 +25,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
+    private final Gson gson = new Gson();
 
 
     public JDBCKeyValueRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
@@ -43,161 +42,100 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     @Override
     public void remove(K key)
     {
-        Validate.notNull(key);
+        Objects.requireNonNull(key);
 
-        Gson gson = new Gson();
-        String jsonKey = gson.toJson(key);
+        String command = String.format("delete from %s where key= '%s'"
+                , getAggregateName()
+                , gson.toJson(key));
 
-        try (var preparedStatement = getConnection().prepareStatement("delete from " + getAggregateName() + " where key= ?"))
-        {
-            preparedStatement.setString(1, jsonKey);
-
-            if ( preparedStatement.executeUpdate() == 0 )
-            {
-                throw new IllegalArgumentException("Could not delete aggregate " + getAggregateName());
-            }
-        }
-        catch (SQLException e)
-        {
-            throw new IllegalArgumentException(e);
-        }
-
+        createCommand()
+                .execute(command)
+                .asUpdate();
     }
 
     @Override
     public void removeAll()
     {
+        String command = String.format("delete from %s", getAggregateName());
 
-        try ( var statement = getConnection().prepareStatement("delete from " + getAggregateName()))
-        {
-            statement.executeUpdate();
-        }
-        catch (SQLException e)
-        {
-            throw new IllegalArgumentException(e);
-        }
-
+        createCommand()
+                .execute(command)
+                .asIgnore();
     }
 
     @SuppressWarnings("DuplicatedCode")
     @Override
     public void add(T aggregate)
     {
-        Validate.notNull(aggregate);
+        Objects.requireNonNull(aggregate);
 
-        Gson gson = new Gson();
-        String key = gson.toJson(keyFunction.apply(aggregate));
-        String value = gson.toJson(aggregate);
+        String command = String.format("insert into %s values( '%s' , '%s' )"
+                , getAggregateName()
+                , gson.toJson(keyFunction.apply(aggregate))
+                , gson.toJson(aggregate));
 
-        try (var preparedStatement = getConnection().prepareStatement("insert into " + getAggregateName() + " values(?,?)"))
-        {
-            preparedStatement.setString(1, key);
-            preparedStatement.setString(2, value);
-            preparedStatement.executeUpdate();
-        }
-        catch (SQLException e)
-        {
-            throw new IllegalArgumentException(e);
-        }
-
+        createCommand()
+                .execute(command)
+                .asUpdate();
     }
 
     @SuppressWarnings({"DuplicatedCode", "unused"})
     @Override
     public void update(T aggregate)
     {
-        Validate.notNull(aggregate);
+        Objects.requireNonNull(aggregate);
 
-        Gson gson = new Gson();
-        String key = gson.toJson(keyFunction.apply(aggregate));
-        String value = gson.toJson(aggregate);
+        String command = String.format("update %s set value = '%s' where key = '%s'"
+                , getAggregateName()
+                , gson.toJson(aggregate)
+                , gson.toJson(keyFunction.apply(aggregate)));
 
-        try (var preparedStatement = getConnection().prepareStatement("update " + getAggregateName() + " set value = ? where key = ?") )
-        {
-            preparedStatement.setString(1, value);
-            preparedStatement.setString(2, key);
-            int result = preparedStatement.executeUpdate();
-            if (result == 0)
-            {
-                throw new IllegalArgumentException("Could not update aggregate " + getAggregateName());
-            }
-        }
-        catch (SQLException e)
-        {
-            throw new IllegalArgumentException(e);
-        }
-
+        createCommand()
+                .execute(command)
+                .asUpdate();
     }
 
     @Override
     public Optional<T> get(K primaryKey)
     {
-        Validate.notNull(primaryKey);
+        Objects.requireNonNull(primaryKey);
 
-        Gson gson = new Gson();
-        String key = gson.toJson(primaryKey);
+        String query = String.format( "select value from %s where key = '%s'"
+                , getAggregateName()
+                , gson.toJson(primaryKey));
 
-        try ( var preparedStatement = getConnection().prepareStatement("select value from " + getAggregateName() + " where key = ? ")  )
-        {
-            preparedStatement.setString(1, key);
-            try ( var resultSet = preparedStatement.executeQuery() )
-            {
-                if ( resultSet.next() )
-                {
-                    return Optional.ofNullable(gson.fromJson(resultSet.getString(1), aggregateClazz));
-                }
-                else
-                {
-                    return Optional.empty();
-                }
-            }
-
-        }
-        catch (SQLException e)
-        {
-            throw new IllegalArgumentException(e);
-        }
+        return createQuery()
+                .query(query)
+                .asString()
+                .findFirst()
+                .map( element -> gson.fromJson(element, aggregateClazz))
+                .or(Optional::empty);
     }
 
     @Override
     public List<T> get()
     {
-        var result = new ArrayList<T>();
-        Gson gson = new Gson();
-        try (
-                var statement = getConnection().createStatement();
-                var resultSet = statement.executeQuery("select value from "+ getAggregateName())
-             )
-        {
-            while (resultSet.next())
-            {
-                T aggregate = gson.fromJson( resultSet.getString(1), aggregateClazz);
-                result.add(aggregate);
-            }
-        }
-        catch (SQLException e)
-        {
-            throw new IllegalArgumentException(e);
-        }
-
-        return result;
+        return createQuery()
+                .query("select value from "+ getAggregateName())
+                .asString()
+                .map( element -> gson.fromJson(element, aggregateClazz))
+                .collect(Collectors.toList());
     }
-
 
     private void autocreateTable(final Properties properties)
     {
         if (properties.containsKey(JDBC_AUTOCREATE_TABLE))
         {
-            try (
-                 Statement statement = getConnection().createStatement())
-            {
+            try{
                 var command = String.format("CREATE TABLE IF NOT EXISTS %s ( key VARCHAR %s PRIMARY KEY, value text) "
                         , aggregateClazz.getSimpleName()
-                        , getMaxVarChar(properties.getProperty(JDBC_URL))
-                );
-                statement.executeUpdate(command);
+                        , getMaxVarChar(properties.getProperty(JDBC_URL)));
+
+                createCommand()
+                        .execute(command)
+                        .asIgnore();
             }
-            catch (SQLException e)
+            catch (RuntimeException e)
             {
                 LOGGER.warn("Could not create table {} => Assume that table already exists", getAggregateName());
             }
@@ -209,8 +147,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         return aggregateClazz.getSimpleName();
     }
-
-
+    
     private static String getMaxVarChar(String jdbcDriver)
     {
         if ( jdbcDriver.toLowerCase().contains("oracle") )

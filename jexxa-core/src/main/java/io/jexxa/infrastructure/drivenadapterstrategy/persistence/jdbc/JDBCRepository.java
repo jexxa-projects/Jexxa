@@ -12,13 +12,14 @@ public abstract class JDBCRepository  implements AutoCloseable
     private final JDBCConnection jdbcConnection;
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCRepository.class);
 
-    JDBCRepository(Properties properties)
+    protected JDBCRepository(Properties properties)
     {
         Objects.requireNonNull(properties);
 
         this.jdbcConnection = new JDBCConnection(properties);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void close()
     {
         ThrowingConsumer.exceptionLogger(JDBCConnection::close);
@@ -49,6 +50,16 @@ public abstract class JDBCRepository  implements AutoCloseable
         }
 
         return jdbcConnection;
+    }
+
+    protected JDBCCommand createCommand()
+    {
+        return new JDBCCommand(this::getConnection);
+    }
+
+    protected JDBCQuery createQuery()
+    {
+        return new JDBCQuery(this::getConnection);
     }
 
     protected abstract String getAggregateName();
