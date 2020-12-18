@@ -52,12 +52,12 @@ public abstract class JDBCRepository  implements AutoCloseable
         return jdbcConnection;
     }
 
-    protected JDBCCommand createCommand()
+    public JDBCCommand createCommand()
     {
         return new JDBCCommand(this::getConnection);
     }
 
-    protected JDBCQuery createQuery()
+    public JDBCQuery createQuery()
     {
         return new JDBCQuery(this::getConnection);
     }

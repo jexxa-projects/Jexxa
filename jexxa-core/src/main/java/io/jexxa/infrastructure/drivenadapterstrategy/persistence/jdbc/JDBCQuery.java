@@ -24,13 +24,13 @@ public class JDBCQuery
     }
 
 
-    JDBCQuery query(String command)
+    public JDBCQuery query(String command)
     {
         this.command = command;
         return this;
     }
 
-    Stream<String> asString()
+    public Stream<String> asString()
     {
         Objects.requireNonNull(command);
 
@@ -70,7 +70,7 @@ public class JDBCQuery
         }
     }
 
-    Stream<Instant> asTimestamp()
+    public Stream<Instant> asTimestamp()
     {
         Objects.requireNonNull(command);
 

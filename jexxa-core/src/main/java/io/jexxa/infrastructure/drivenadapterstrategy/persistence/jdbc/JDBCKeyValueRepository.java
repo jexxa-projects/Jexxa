@@ -122,6 +122,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
                 .collect(Collectors.toList());
     }
 
+
     private void autocreateTable(final Properties properties)
     {
         if (properties.containsKey(JDBC_AUTOCREATE_TABLE))
@@ -147,7 +148,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         return aggregateClazz.getSimpleName();
     }
-    
+
     private static String getMaxVarChar(String jdbcDriver)
     {
         if ( jdbcDriver.toLowerCase().contains("oracle") )
