@@ -29,10 +29,9 @@ public class JDBCCommand
     {
         Objects.requireNonNull(command);
 
-        try (var preparedStatement = jdbcConnection.get().prepareStatement(command) )
+        try (var statement = jdbcConnection.get().createStatement() )
         {
-            int result = preparedStatement.executeUpdate();
-            if (result == 0)
+            if( statement.executeUpdate(command) == 0)
             {
                 throw new IllegalArgumentException("Command '" + command + "'was executed but returned that nothing changed! ");
             }
@@ -52,10 +51,9 @@ public class JDBCCommand
     {
         Objects.requireNonNull(command);
 
-        try (var preparedStatement = jdbcConnection.get().prepareStatement(command) )
+        try (var statement = jdbcConnection.get().createStatement() )
         {
-            int result = preparedStatement.executeUpdate();
-            if (result == 1)
+            if( statement.executeUpdate(command) == 1)
             {
                 throw new IllegalArgumentException("Command '" + command + "' was executed but returned that something changed! ");
             }
@@ -74,11 +72,10 @@ public class JDBCCommand
     {
         Objects.requireNonNull(command);
 
-        try (var preparedStatement = jdbcConnection.get().prepareStatement(command) )
+        try (var statement = jdbcConnection.get().createStatement() )
         {
-            preparedStatement.executeUpdate();
+            statement.executeUpdate(command);
         }
-
         catch (SQLException e)
         {
             throw new IllegalArgumentException(e);

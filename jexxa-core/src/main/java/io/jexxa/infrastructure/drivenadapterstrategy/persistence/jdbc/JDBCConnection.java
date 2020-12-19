@@ -111,9 +111,23 @@ public class JDBCConnection implements AutoCloseable
         }
     }
 
-    PreparedStatement prepareStatement(String sqlStatement) throws SQLException
+    /**
+     * Creates a PreparedStatement
+     *
+     * @param sqlStatement describes the template of the command
+     * @return PreparedStatement
+     * @throws SQLException in case of an error
+     * @deprecated Inside this package use {@link #createStatement()}. Outside of this package use {@link JDBCCommand} or {@link JDBCQuery}
+     */
+    @Deprecated(forRemoval = true)
+    public PreparedStatement prepareStatement(String sqlStatement) throws SQLException
     {
         return getConnection().prepareStatement(sqlStatement);
+    }
+
+    Statement createStatement() throws SQLException
+    {
+        return getConnection().createStatement();
     }
 
     public void close()

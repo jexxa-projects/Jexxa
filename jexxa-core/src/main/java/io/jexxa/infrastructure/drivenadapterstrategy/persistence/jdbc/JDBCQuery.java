@@ -34,8 +34,8 @@ public class JDBCQuery
     {
         Objects.requireNonNull(command);
 
-        try (   var preparedStatement = jdbcConnection.get().prepareStatement(command);
-                var resultSet = preparedStatement.executeQuery())
+        try (   var statement = jdbcConnection.get().createStatement();
+                var resultSet = statement.executeQuery(command))
         {
             List<String> result = new ArrayList<>();
             while ( resultSet.next() )
@@ -54,8 +54,8 @@ public class JDBCQuery
     {
         Objects.requireNonNull(command);
 
-        try ( var preparedStatement = jdbcConnection.get().prepareStatement(command);
-              var resultSet = preparedStatement.executeQuery())
+        try ( var statement = jdbcConnection.get().createStatement();
+              var resultSet = statement.executeQuery(command))
         {
             List<BigDecimal> result = new ArrayList<>();
             while ( resultSet.next() )
@@ -74,8 +74,8 @@ public class JDBCQuery
     {
         Objects.requireNonNull(command);
 
-        try ( var preparedStatement = jdbcConnection.get().prepareStatement(command);
-              var resultSet = preparedStatement.executeQuery())
+        try ( var statement = jdbcConnection.get().createStatement();
+              var resultSet = statement.executeQuery(command))
         {
             List<Timestamp> result = new ArrayList<>();
             while ( resultSet.next() )
