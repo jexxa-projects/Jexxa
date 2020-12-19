@@ -16,12 +16,7 @@ public final class MessageRecorderManager
     public static MessageRecorder getMessageRecorder(Class<?> type)
     {
         //If MessageRecorder is not known for given type, we create it
-        if ( !MESSAGE_RECORDER_MAP.containsKey(type) )
-        {
-            MESSAGE_RECORDER_MAP.put(type, new MessageRecorder());
-        }
-
-        return MESSAGE_RECORDER_MAP.get(type);
+        return MESSAGE_RECORDER_MAP.computeIfAbsent(type, element -> new MessageRecorder());
     }
 
 
