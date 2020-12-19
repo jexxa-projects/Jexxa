@@ -3,6 +3,7 @@ package io.jexxa.core;
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
@@ -16,7 +17,6 @@ import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.function.ThrowingConsumer;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 
 /**
@@ -68,8 +68,8 @@ public final class JexxaMain
      */
     public JexxaMain(String contextName, Properties properties)
     {
-        Validate.notNull(properties);
-        Validate.notNull(contextName);
+        Objects.requireNonNull(properties);
+        Objects.requireNonNull(contextName);
 
         this.boundedContext = new BoundedContext(contextName, this);
 
@@ -205,7 +205,7 @@ public final class JexxaMain
     {
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
         var inboundPort    = portFactory.getInstanceOf(port, properties);
-        Validate.notNull(inboundPort);
+        Objects.requireNonNull(inboundPort);
         drivingAdapter.register(inboundPort);
 
         compositeDrivingAdapter.add(drivingAdapter);
@@ -309,13 +309,13 @@ public final class JexxaMain
         @Override
         public void register(Object object)
         {
-            Validate.notNull(object);
+            Objects.requireNonNull(object);
             drivingAdapters.forEach(element -> element.register(object));
         }
 
         public void add(IDrivingAdapter drivingAdapter)
         {
-            Validate.notNull(drivingAdapter);
+            Objects.requireNonNull(drivingAdapter);
             drivingAdapters.add(drivingAdapter);
         }
 

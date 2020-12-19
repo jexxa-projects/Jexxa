@@ -1,13 +1,14 @@
 package io.jexxa.application.infrastructure.drivingadapter;
 
+import java.util.Objects;
+
 import io.jexxa.application.applicationservice.SimpleApplicationService;
-import org.apache.commons.lang3.Validate;
 
 public class InvalidPortAdapter
 {
     public InvalidPortAdapter( SimpleApplicationService port)
     {
-        Validate.notNull(port);
+        Objects.requireNonNull(port);
         throw new IllegalArgumentException("Simulate exception in constructor of a PortAdapter.");
     }
 }

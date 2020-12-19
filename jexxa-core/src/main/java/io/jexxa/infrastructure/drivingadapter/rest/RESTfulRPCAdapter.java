@@ -10,6 +10,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -86,7 +87,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     public void register(Object object)
     {
-        Validate.notNull(object);
+        Objects.requireNonNull(object);
         registerGETMethods(object);
         registerPOSTMethods(object);
     }

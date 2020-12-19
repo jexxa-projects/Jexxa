@@ -1,12 +1,12 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
+import java.util.Objects;
 import java.util.Properties;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.google.gson.Gson;
 import io.jexxa.utils.annotations.CheckReturnValue;
-import org.apache.commons.lang3.Validate;
 
 @CheckReturnValue
 public class MessageProducer
@@ -21,8 +21,8 @@ public class MessageProducer
 
     protected <T> MessageProducer(T message, MessageSender messageSender)
     {
-        Validate.notNull(message);
-        Validate.notNull(messageSender);
+        Objects.requireNonNull(message);
+        Objects.requireNonNull(messageSender);
 
         this.message = message;
         this.messageSender = messageSender;
@@ -73,7 +73,7 @@ public class MessageProducer
 
     public void as( Function<Object, String> serializer )
     {
-        Validate.notNull(destination, "No destination in MessageProducer set");
+        Objects.requireNonNull(destination, "No destination in MessageProducer set");
 
         if (destinationType == DestinationType.QUEUE)
         {
@@ -87,7 +87,7 @@ public class MessageProducer
 
     private void as( Supplier<String> serializer )
     {
-        Validate.notNull(destination,  "No destination in MessageProducer set");
+        Objects.requireNonNull(destination,  "No destination in MessageProducer set");
 
         if (destinationType == DestinationType.QUEUE)
         {

@@ -4,16 +4,15 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.apache.commons.lang3.Validate;
 
 public final class ClassFactory
 {
     public static <T> Optional<T> newInstanceOf(Class<? extends T> clazz) throws ReflectiveOperationException
     {
-        Validate.notNull(clazz);
+        Objects.requireNonNull(clazz);
 
         var defaultConstructor = getConstructor(clazz);
         if (defaultConstructor.isPresent()) {
@@ -25,8 +24,8 @@ public final class ClassFactory
 
     public static <T> Optional<T> newInstanceOf(Class<? extends T> clazz, Object[] parameter) throws ReflectiveOperationException
     {
-        Validate.notNull(clazz);
-        Validate.notNull(parameter);
+        Objects.requireNonNull(clazz);
+        Objects.requireNonNull(parameter);
 
         var parameterConstructor = getConstructor(clazz, parameter);
 
@@ -40,7 +39,7 @@ public final class ClassFactory
 
     public static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory) throws ReflectiveOperationException
     {
-        Validate.notNull(factory);
+        Objects.requireNonNull(factory);
 
         var method = getFactoryMethod(factory, interfaceType);
         if (method.isPresent()) {
@@ -55,9 +54,9 @@ public final class ClassFactory
 
     public static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory, Object[] parameters) throws ReflectiveOperationException
     {
-        Validate.notNull(factory);
-        Validate.notNull(interfaceType);
-        Validate.notNull(parameters);
+        Objects.requireNonNull(factory);
+        Objects.requireNonNull(interfaceType);
+        Objects.requireNonNull(parameters);
 
         var parameterTypes = Arrays.stream(parameters).
                 map(Object::getClass).
@@ -88,7 +87,7 @@ public final class ClassFactory
      * of given parameter.
      **
      * @param clazz Class of object whose constructor is requested
-     * @param parameter Object array with parameters the constructor must provide 
+     * @param parameter Object array with parameters the constructor must provide
      * @param <T> Type of the class whose constructor is requested
      * @return A constructor or an empty optional if no constructor is available that provides given parameter
      */
@@ -125,7 +124,7 @@ public final class ClassFactory
                 .filter( element -> element.getReturnType().equals(interfaceType))
                 .findFirst();
     }
-    
+
 
     private static <T> Optional<Method> getFactoryMethod(Class<?> implementation, Class<T> interfaceType, Class<?>[] parameterTypes)
     {

@@ -1,12 +1,12 @@
 package io.jexxa.core;
 
 import java.lang.annotation.Annotation;
+import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
 import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import org.apache.commons.lang3.Validate;
 
 public class  DrivingAdapter<T extends IDrivingAdapter>
 {
@@ -21,9 +21,9 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
 
     DrivingAdapter(BooleanSupplier conditionalBind, Class<T> drivingAdapterClass, JexxaMain jexxaMain)
     {
-        Validate.notNull(conditionalBind);
-        Validate.notNull(drivingAdapterClass);
-        Validate.notNull(jexxaMain);
+        Objects.requireNonNull(conditionalBind);
+        Objects.requireNonNull(drivingAdapterClass);
+        Objects.requireNonNull(jexxaMain);
 
         AdapterConvention.validate(drivingAdapterClass);
 
@@ -34,7 +34,7 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
 
     public <P> JexxaMain to(Class<P> port)
     {
-        Validate.notNull(port);
+        Objects.requireNonNull(port);
 
         if ( !conditionalBind.getAsBoolean())
         {
@@ -56,7 +56,7 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
 
     public JexxaMain to(Object port)
     {
-        Validate.notNull(port);
+        Objects.requireNonNull(port);
 
         if ( !conditionalBind.getAsBoolean())
         {
@@ -68,7 +68,7 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
 
     public <P extends Annotation> JexxaMain toAnnotation(Class<P> annotation)
     {
-        Validate.notNull(annotation);
+        Objects.requireNonNull(annotation);
 
         if ( !conditionalBind.getAsBoolean())
         {

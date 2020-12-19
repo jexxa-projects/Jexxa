@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
@@ -46,7 +47,7 @@ final class DependencyScanner
 
     List<Class<?>> getClassesImplementing(final Class<?> interfaceType)
     {
-        Validate.notNull(interfaceType);
+        Objects.requireNonNull(interfaceType);
         return getScanResult()
                     .getClassesImplementing(interfaceType.getName())
                     .loadClasses();
@@ -55,7 +56,7 @@ final class DependencyScanner
 
 
     private void validateRetentionRuntime(final Class<? extends Annotation> annotation) {
-        Validate.notNull(annotation.getAnnotation(Retention.class), "Annotation must be declared with '@Retention(RUNTIME)'" );
+        Objects.requireNonNull(annotation.getAnnotation(Retention.class), "Annotation must be declared with '@Retention(RUNTIME)'" );
         Validate.isTrue(annotation.getAnnotation(Retention.class).value().equals(RetentionPolicy.RUNTIME), "Annotation must be declared with '@Retention(RUNTIME)");
     }
 

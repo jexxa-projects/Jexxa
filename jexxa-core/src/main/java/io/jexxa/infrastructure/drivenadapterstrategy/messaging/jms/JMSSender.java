@@ -1,6 +1,7 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -16,7 +17,6 @@ import javax.naming.NamingException;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
-import org.apache.commons.lang3.Validate;
 
 @SuppressWarnings({"unused", "java:S1133"})
 public class JMSSender extends MessageSender implements AutoCloseable
@@ -39,7 +39,7 @@ public class JMSSender extends MessageSender implements AutoCloseable
     public JMSSender(Properties properties)
     {
         this.properties = properties;
-        Validate.notNull(getConnection()); //Try create a connection to ensure fail fast
+        Objects.requireNonNull(getConnection()); //Try create a connection to ensure fail fast
     }
 
     protected void sendToTopic(String message, String topicName, Properties messageProperties)

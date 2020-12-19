@@ -1,5 +1,7 @@
 package io.jexxa.jexxatest;
 
+import java.util.Objects;
+
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
@@ -7,7 +9,6 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBReposi
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorderManager;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
-import org.apache.commons.lang3.Validate;
 
 /**
  * This class supports unit testing of your application core, at least if you use driven adapter strategies
@@ -25,7 +26,7 @@ public class JexxaTest
 
     public JexxaTest(JexxaMain jexxaMain)
     {
-        Validate.notNull(jexxaMain);
+        Objects.requireNonNull(jexxaMain);
         this.jexxaMain = jexxaMain;
 
         initForUnitTests();

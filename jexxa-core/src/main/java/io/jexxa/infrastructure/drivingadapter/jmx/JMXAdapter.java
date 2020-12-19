@@ -3,6 +3,7 @@ package io.jexxa.infrastructure.drivingadapter.jmx;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 import javax.management.InstanceAlreadyExistsException;
@@ -12,7 +13,6 @@ import javax.management.NotCompliantMBeanException;
 
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.utils.function.ThrowingConsumer;
-import org.apache.commons.lang3.Validate;
 
 public class JMXAdapter implements IDrivingAdapter
 {
@@ -22,18 +22,18 @@ public class JMXAdapter implements IDrivingAdapter
 
     public JMXAdapter(Properties properties)
     {
-        Validate.notNull(properties);
+        Objects.requireNonNull(properties);
         this.properties = properties;
     }
 
     public void register(Object object)
     {
-        Validate.notNull(object);
+        Objects.requireNonNull(object);
 
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         MBeanConvention mBeanConvention = new MBeanConvention(object, properties);
 
-        //Check if service is already registered 
+        //Check if service is already registered
         if (!mbs.queryMBeans(mBeanConvention.getObjectName(), null).isEmpty())
         {
             throw new IllegalArgumentException(this.getClass().getSimpleName() + "> Object already registered : " + object.getClass().getSimpleName());

@@ -2,11 +2,11 @@ package io.jexxa.core.convention;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Objects;
 import java.util.Properties;
 
 import io.jexxa.application.applicationservice.InvalidApplicationService;
 import io.jexxa.application.domainservice.IJexxaEntityRepository;
-import org.apache.commons.lang3.Validate;
 import org.junit.jupiter.api.Test;
 
 class PortConventionTest
@@ -33,7 +33,7 @@ class PortConventionTest
         @SuppressWarnings("unused")
         public InvalidApplicationServiceMultipleConstructor(IJexxaEntityRepository jexxaAggregateRepository)
         {
-            Validate.notNull(jexxaAggregateRepository);
+            Objects.requireNonNull(jexxaAggregateRepository);
         }
     }
 
@@ -41,7 +41,7 @@ class PortConventionTest
     {
         public InvalidApplicationServiceNoInterface(Properties properties)
         {
-            Validate.notNull(properties);
+            Objects.requireNonNull(properties);
         }
 
     }

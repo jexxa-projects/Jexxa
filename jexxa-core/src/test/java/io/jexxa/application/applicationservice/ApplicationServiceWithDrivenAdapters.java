@@ -1,10 +1,11 @@
 package io.jexxa.application.applicationservice;
 
+import java.util.Objects;
+
 import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.domainservice.IDefaultConstructorService;
 import io.jexxa.application.domainservice.IFactoryMethodService;
 import io.jexxa.application.domainservice.IPropertiesConstructorService;
-import org.apache.commons.lang3.Validate;
 
 @ApplicationService
 public class ApplicationServiceWithDrivenAdapters
@@ -15,8 +16,8 @@ public class ApplicationServiceWithDrivenAdapters
             IPropertiesConstructorService propertiesConstructorService
     )
     {
-        Validate.notNull(defaultConstructorService);
-        Validate.notNull(factoryMethodService);
-        Validate.notNull(propertiesConstructorService);
+        Objects.requireNonNull(defaultConstructorService);
+        Objects.requireNonNull(factoryMethodService);
+        Objects.requireNonNull(propertiesConstructorService);
     }
 }

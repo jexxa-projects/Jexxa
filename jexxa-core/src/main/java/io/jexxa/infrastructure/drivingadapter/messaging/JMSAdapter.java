@@ -4,6 +4,7 @@ package io.jexxa.infrastructure.drivingadapter.messaging;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.Executors;
@@ -208,7 +209,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
         SynchronizedMessageListener(MessageListener jmsListener)
         {
-            Validate.notNull(jmsListener);
+            Objects.requireNonNull(jmsListener);
             this.jmsListener = jmsListener;
         }
 
