@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 
-public class IMDBComparableRepository<T, K, M extends Enum<M> & Strategy>  extends IMDBRepository<T, K> implements IComparableRepository<T, K, M>
+public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & SearchStrategy>  extends IMDBRepository<T, K> implements IMultiIndexRepository<T, K, M>
 {
 
     Set<M> comparatorFunctions;
 
 
-    public IMDBComparableRepository(Class<T> aggregateClazz,
+    public IMDBMultiIndexRepository(Class<T> aggregateClazz,
                                     Function<T, K> keyFunction,
                                     Set<M> comparatorFunctions,
                                     Properties properties)
@@ -25,19 +25,19 @@ public class IMDBComparableRepository<T, K, M extends Enum<M> & Strategy>  exten
     }
 
     @Override
-    public <S> IRangedResult<T, S> getRangeInterface(M strategy)
+    public <S> IRangeQuery<T, S> getRangeQuery(M strategy)
     {
         if ( !comparatorFunctions.contains(strategy) )
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
 
-        return new IMBDRangedResult<>(getOwnAggregateMap(), strategy.getStrategy());
+        return new IMBDRangeQuery<>(getOwnAggregateMap(), strategy.get());
     }
 
-    public static class IMBDRangedResult<T, K, S> implements IRangedResult<T, S>
+    public static class IMBDRangeQuery<T, K, S> implements IRangeQuery<T, S>
     {
-        Comparator <T, S> comparator;
+        RangeComparator<T, S> rangeComparator;
         Map<K, T> internalMap;
 
 
@@ -46,10 +46,10 @@ public class IMDBComparableRepository<T, K, M extends Enum<M> & Strategy>  exten
             return internalMap;
         }
 
-        public IMBDRangedResult(Map<K, T> internalMap, Comparator<T,S> comparator)
+        public IMBDRangeQuery(Map<K, T> internalMap, RangeComparator<T,S> rangeComparator)
         {
             this.internalMap = internalMap;
-            this.comparator = comparator;
+            this.rangeComparator = rangeComparator;
         }
 
         @Override
@@ -58,7 +58,7 @@ public class IMDBComparableRepository<T, K, M extends Enum<M> & Strategy>  exten
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .filter(element -> comparator.getIntValueT(element).compareTo( comparator.getIntValueS(startValue)) >= 0)
+                    .filter(element -> rangeComparator.getIntValueT(element).compareTo( rangeComparator.getIntValueS(startValue)) >= 0)
                     .collect(Collectors.toList());
         }
 
@@ -68,8 +68,8 @@ public class IMDBComparableRepository<T, K, M extends Enum<M> & Strategy>  exten
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .filter(t -> comparator.getIntValueT(t).compareTo( comparator.getIntValueS(startValue)) >= 0)
-                    .filter(t -> comparator.getIntValueT(t).compareTo( comparator.getIntValueS(endValue)) <= 0)
+                    .filter(t -> rangeComparator.getIntValueT(t).compareTo( rangeComparator.getIntValueS(startValue)) >= 0)
+                    .filter(t -> rangeComparator.getIntValueT(t).compareTo( rangeComparator.getIntValueS(endValue)) <= 0)
                     .collect(Collectors.toList());
         }
 
@@ -79,7 +79,7 @@ public class IMDBComparableRepository<T, K, M extends Enum<M> & Strategy>  exten
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .filter(t -> comparator.getIntValueT(t).compareTo( comparator.getIntValueS(endValue)) <= 0)
+                    .filter(t -> rangeComparator.getIntValueT(t).compareTo( rangeComparator.getIntValueS(endValue)) <= 0)
                     .collect(Collectors.toList());
         }
 

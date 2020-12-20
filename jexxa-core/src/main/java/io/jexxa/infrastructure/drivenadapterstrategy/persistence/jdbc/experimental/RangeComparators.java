@@ -5,12 +5,12 @@ import java.time.Instant;
 import java.util.function.Function;
 
 @SuppressWarnings("unused")
-public class Comparators
+public class RangeComparators
 {
-    public static class InstantComparator<T> extends Comparator<T, Instant>
+    public static class InstantRangeComparator<T> extends RangeComparator<T, Instant>
     {
         public static final int NANO = 1000000000;
-        public InstantComparator(Function<T, BigDecimal> converterFunctionT)
+        public InstantRangeComparator(Function<T, BigDecimal> converterFunctionT)
         {
             super(converterFunctionT
                     , instant -> BigDecimal.valueOf(instant.getEpochSecond() * NANO).add( BigDecimal.valueOf(instant.getNano()))
@@ -19,10 +19,10 @@ public class Comparators
 
     }
 
-    public static class NumberComparator<T, V extends Number> extends Comparator<T, V>
+    public static class NumberRangeComparator<T, V extends Number> extends RangeComparator<T, V>
     {
 
-        public NumberComparator(Function<T, Number> converterFunctionT)
+        public NumberRangeComparator(Function<T, Number> converterFunctionT)
         {
             super( aggregate -> new BigDecimal((converterFunctionT.apply(aggregate).toString()))
                     , element -> new BigDecimal( element.toString() ));
@@ -30,7 +30,7 @@ public class Comparators
 
     }
 
-    private Comparators()
+    private RangeComparators()
     {
         //private constrator
     }

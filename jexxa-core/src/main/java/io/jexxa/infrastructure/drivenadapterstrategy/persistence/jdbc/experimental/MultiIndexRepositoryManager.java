@@ -12,16 +12,16 @@ import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.factory.ClassFactory;
 
 
-public final class ComparableRepositoryManager
+public final class MultiIndexRepositoryManager
 {
-    private static final ComparableRepositoryManager REPOSITORY_MANAGER = new ComparableRepositoryManager();
+    private static final MultiIndexRepositoryManager REPOSITORY_MANAGER = new MultiIndexRepositoryManager();
 
     private static final Map<Class<?> , Class<?>> strategyMap = new HashMap<>();
     private static Class<?> defaultStrategy = null;
 
 
 
-    public static  <T,K,M  extends Enum<?> & Strategy> IComparableRepository<T,K, M> getRepository(
+    public static  <T,K,M  extends Enum<?> & SearchStrategy> IMultiIndexRepository<T,K, M> getRepository(
             Class<T> aggregateClazz,
             Function<T,K> keyFunction,
             Set<M> comparatorFunctions,
@@ -30,19 +30,19 @@ public final class ComparableRepositoryManager
         return REPOSITORY_MANAGER.getStrategy(aggregateClazz, keyFunction, comparatorFunctions, properties);
     }
 
-    public static <U extends IComparableRepository<?,?,?>, T > void setStrategy(Class<U> strategyType, Class<T> aggregateType)
+    public static <U extends IMultiIndexRepository<?,?,?>, T > void setStrategy(Class<U> strategyType, Class<T> aggregateType)
     {
         strategyMap.put(aggregateType, strategyType);
     }
 
-    public static <U extends IComparableRepository<?,?,?>> void setDefaultStrategy(Class<U> defaultStrategy)
+    public static <U extends IMultiIndexRepository<?,?,?>> void setDefaultStrategy(Class<U> defaultStrategy)
     {
-        ComparableRepositoryManager.defaultStrategy = defaultStrategy;
+        MultiIndexRepositoryManager.defaultStrategy = defaultStrategy;
     }
 
     @SuppressWarnings("unchecked")
     @CheckReturnValue
-    public <T,K,M  extends Enum<?> & Strategy> IComparableRepository<T,K,M> getStrategy(
+    public <T,K,M  extends Enum<?> & SearchStrategy> IMultiIndexRepository<T,K,M> getStrategy(
             Class<T> aggregateClazz,
             Function<T,K> keyFunction,
             Set<M> comparatorFunctions,
@@ -55,7 +55,7 @@ public final class ComparableRepositoryManager
 
             var result = ClassFactory.newInstanceOf(strategy, new Object[]{aggregateClazz, keyFunction, comparatorFunctions, properties});
 
-            return (IComparableRepository<T, K,M>) result.orElseThrow();
+            return (IMultiIndexRepository<T, K,M>) result.orElseThrow();
         }
         catch (ReflectiveOperationException e)
         {
@@ -75,7 +75,7 @@ public final class ComparableRepositoryManager
     }
 
 
-    private ComparableRepositoryManager()
+    private MultiIndexRepositoryManager()
     {
         //Package protected constructor
     }
@@ -104,11 +104,11 @@ public final class ComparableRepositoryManager
         // 3. If a JDBC driver is stated in Properties => Use JDBCKeyValueRepository
         if (properties.containsKey(JDBCKeyValueRepository.JDBC_DRIVER))
         {
-            return JDBCComparableRepository.class;
+            return JDBCMultiIndexRepository.class;
         }
 
         // 4. If everything fails, return a IMDBRepository
-        return IMDBComparableRepository.class;
+        return IMDBMultiIndexRepository.class;
     }
 
 }

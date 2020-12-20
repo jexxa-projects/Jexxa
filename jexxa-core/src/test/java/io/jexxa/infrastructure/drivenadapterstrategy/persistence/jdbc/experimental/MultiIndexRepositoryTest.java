@@ -15,29 +15,35 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyVal
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class ComparableRepositoryTest
+class MultiIndexRepositoryTest
 {
     private static final String REPOSITORY_CONFIG = "repositoryConfig";
 
-    public enum SearchStrategies implements Strategy
+    /**
+     * Defines the Range comparators that we use:
+     * Conventions for real databases:
+     * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
+     * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
+     */
+    public enum SearchStrategies implements SearchStrategy
     {
-        INTERNAL_VALUE(() -> new Comparators.NumberComparator<JexxaAggregate, Integer>(
+        INTERNAL_VALUE(() -> new RangeComparators.NumberRangeComparator<JexxaAggregate, Integer>(
                 JexxaAggregate::getInternalValue)),
 
-        AGGREGATE_KEY(() -> new Comparator<>(
+        AGGREGATE_KEY(() -> new RangeComparator<>(
                 (aggregate) -> aggregate.getKey().getValue(),
                 JexxaValueObject::getValue));
 
-        private final Supplier< Comparator<JexxaAggregate,?>> supplier;
+        private final Supplier<RangeComparator<JexxaAggregate,?>> supplier;
 
 
-        SearchStrategies(final Supplier< Comparator<JexxaAggregate,?>> supplier) {
+        SearchStrategies(final Supplier<RangeComparator<JexxaAggregate,?>> supplier) {
             this.supplier = supplier;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public Comparator<JexxaAggregate, ? > getStrategy()
+        public RangeComparator<JexxaAggregate, ? > get()
         {
             return supplier.get();
         }
@@ -53,7 +59,7 @@ class ComparableRepositoryTest
                 .collect(Collectors.toList());
 
 
-        var objectUnderTest = ComparableRepositoryManager.getRepository(
+        var objectUnderTest = MultiIndexRepositoryManager.getRepository(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 EnumSet.allOf(SearchStrategies.class),
@@ -64,7 +70,7 @@ class ComparableRepositoryTest
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
         testData.forEach(objectUnderTest::add);
 
-        IRangedResult<JexxaAggregate, Integer> irangedResult = objectUnderTest.getRangeInterface( SearchStrategies.INTERNAL_VALUE);
+        IRangeQuery<JexxaAggregate, Integer> irangedResult = objectUnderTest.getRangeQuery( SearchStrategies.INTERNAL_VALUE);
 
         //Act
         var fromResult = irangedResult.getFrom(50);
@@ -82,23 +88,21 @@ class ComparableRepositoryTest
     void testCompareAggregateKey(Properties properties)
     {
         //Arrange
-        var testData = IntStream.range(1, 100)
-                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element)))
-                .collect(Collectors.toList());
-
-
-        var objectUnderTest = ComparableRepositoryManager.getRepository(
+        var objectUnderTest = MultiIndexRepositoryManager.getRepository(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 EnumSet.allOf(SearchStrategies.class),
                 properties);
-
         objectUnderTest.removeAll();
+
+        var testData = IntStream.range(1, 100)
+                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element)))
+                .collect(Collectors.toList());
 
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
         testData.forEach(objectUnderTest::add);
 
-        IRangedResult<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getRangeInterface( SearchStrategies.AGGREGATE_KEY);
+        IRangeQuery<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getRangeQuery( SearchStrategies.AGGREGATE_KEY);
 
         //Act
         var fromResult = irangedResult.getFrom(new JexxaValueObject(50));

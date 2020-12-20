@@ -17,9 +17,9 @@ import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
 @SuppressWarnings("unused")
-public class JDBCComparableRepository<T,K, M extends Enum<M> & Strategy> extends JDBCRepository implements IComparableRepository<T, K, M>
+public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> extends JDBCRepository implements IMultiIndexRepository<T, K, M>
 {
-    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCComparableRepository.class);
+    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCMultiIndexRepository.class);
     private static final String SQL_NUMERIC = "NUMERIC";
 
     private final Function<T,K> keyFunction;
@@ -30,7 +30,7 @@ public class JDBCComparableRepository<T,K, M extends Enum<M> & Strategy> extends
 
 
 
-    public JDBCComparableRepository(
+    public JDBCMultiIndexRepository(
             Class<T> aggregateClazz,
             Function<T, K> keyFunction,
             Set<M> comparatorFunctions,
@@ -65,7 +65,7 @@ public class JDBCComparableRepository<T,K, M extends Enum<M> & Strategy> extends
         comparatorFunctions.forEach( element -> stringBuilder.append(
                 String.format(" '%s' = '%s' "
                         , element.name()
-                        , element.getStrategy().getIntValueT(aggregate))
+                        , element.get().getIntValueT(aggregate))
                 )
         );
 
@@ -111,7 +111,7 @@ public class JDBCComparableRepository<T,K, M extends Enum<M> & Strategy> extends
         );
 
         comparatorFunctions.forEach( element -> stringBuilder.append(
-                String.format(", '%s'", element.getStrategy().getIntValueT(aggregate))));
+                String.format(", '%s'", element.get().getIntValueT(aggregate))));
 
         String command = String.format("insert into %s values( %s )"
                 , getAggregateName()
@@ -211,12 +211,12 @@ public class JDBCComparableRepository<T,K, M extends Enum<M> & Strategy> extends
     }
 
 
-    public <S> IRangedResult<T, S> getRangeInterface(M strategy)
+    public <S> IRangeQuery<T, S> getRangeQuery(M strategy)
     {
         if ( !comparatorFunctions.contains(strategy) )
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
-        return new JDBCRangedResult<>(this, strategy.getStrategy(), strategy.name(), aggregateClazz);
+        return new JDBCRangeQuery<>(this, strategy.get(), strategy.name(), aggregateClazz);
     }
 }

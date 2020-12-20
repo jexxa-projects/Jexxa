@@ -2,8 +2,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimen
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 
-public interface IComparableRepository<T, V, M  extends Enum<?> & Strategy> extends IRepository<T, V>
+public interface IMultiIndexRepository<T, V, M  extends Enum<?> & SearchStrategy> extends IRepository<T, V>
 {
-    <S > IRangedResult<T, S > getRangeInterface(M strategy);
-
+    <S > IRangeQuery<T, S > getRangeQuery(M strategy);
 }
