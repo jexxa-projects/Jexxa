@@ -27,17 +27,17 @@ class MultiIndexRepositoryTest
      */
     public enum SearchStrategies implements SearchStrategy
     {
-        INTERNAL_VALUE(() -> new RangeComparators.NumberRangeComparator<JexxaAggregate, Integer>(
-                JexxaAggregate::getInternalValue)),
+        INTERNAL_VALUE(RangeComparators.createNumberComparator(JexxaAggregate::getInternalValue)),
 
-        AGGREGATE_KEY(() -> new RangeComparator<>(
-                (aggregate) -> aggregate.getKey().getValue(),
+        AGGREGATE_KEY(RangeComparators.create(
+                aggregate -> aggregate.getKey().getValue(),
                 JexxaValueObject::getValue));
 
-        private final Supplier<RangeComparator<JexxaAggregate,?>> supplier;
+        private final Supplier<RangeComparator<JexxaAggregate,? >> supplier;
 
 
-        SearchStrategies(final Supplier<RangeComparator<JexxaAggregate,?>> supplier) {
+        SearchStrategies(final Supplier<RangeComparator<JexxaAggregate,?>> supplier)
+        {
             this.supplier = supplier;
         }
 
@@ -70,12 +70,12 @@ class MultiIndexRepositoryTest
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
         testData.forEach(objectUnderTest::add);
 
-        IRangeQuery<JexxaAggregate, Integer> irangedResult = objectUnderTest.getRangeQuery( SearchStrategies.INTERNAL_VALUE);
+        IRangeQuery<JexxaAggregate, Integer> rangeQuery = objectUnderTest.getRangeQuery( SearchStrategies.INTERNAL_VALUE);
 
         //Act
-        var fromResult = irangedResult.getFrom(50);
-        var untilResult = irangedResult.getUntil(50);
-        var rangedResult = irangedResult.getRange(30,50);
+        var fromResult = rangeQuery.getFrom(50);
+        var untilResult = rangeQuery.getUntil(50);
+        var rangedResult = rangeQuery.getRange(30,50);
 
         //Assert
         assertEquals(50, fromResult.size());
