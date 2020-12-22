@@ -236,4 +236,33 @@ class RESTfulRPCJava8DateTimeTest
         assertNotNull(result);
         assertEquals(instant, result);
     }
+
+    @Test
+    void testJava8DateTimeWrapper()
+    {
+        //Arrange
+        var java8DateTimeWrapper = new Java8DateTimeApplicationService.Java8DateTimeWrapper( LocalTime.now()
+                , LocalDate.now()
+                , LocalDateTime.now()
+                , ZonedDateTime.now().withFixedOffsetZone()
+                , Period.of(1, 0, 0)
+                , Duration.ofDays(1)
+                , Instant.now()
+        );
+        //Act
+        var response = Unirest.post(REST_PATH + "setJava8DateTimeWrapper")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .body(java8DateTimeWrapper)
+                .asEmpty();
+
+        var result = Unirest.get(REST_PATH + "getJava8DateTimeWrapper")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(Java8DateTimeApplicationService.Java8DateTimeWrapper.class).getBody();
+
+        //Assert
+        assertTrue(response.isSuccess());
+        assertNotNull(result);
+        assertEquals(java8DateTimeWrapper, result);
+    }
+
 }
