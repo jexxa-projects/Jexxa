@@ -327,7 +327,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         javalinConfig.server(this::getServer);
         javalinConfig.showJavalinBanner = false;
 
-        this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig );
+        this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig,getGsonBuilder() );
     }
 
     private Server getServer()

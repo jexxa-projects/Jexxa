@@ -21,7 +21,11 @@ import java.util.Properties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import io.javalin.core.JavalinConfig;
 import io.javalin.plugin.openapi.OpenApiOptions;
@@ -51,11 +55,13 @@ public class OpenAPIConvention
     private final Properties properties;
     private final JavalinConfig javalinConfig;
     private OpenApiOptions openApiOptions;
+    private final GsonBuilder gsonBuilder;
 
-    public OpenAPIConvention(Properties properties, JavalinConfig javalinConfig)
+    public OpenAPIConvention(Properties properties, JavalinConfig javalinConfig, GsonBuilder gsonBuilder)
     {
         this.properties = properties;
         this.javalinConfig = javalinConfig;
+        this.gsonBuilder = gsonBuilder;
         initOpenAPI();
     }
     private void initOpenAPI()
@@ -125,7 +131,7 @@ public class OpenAPIConvention
                     openApiOperation.operationId(method.getName());
                 });
 
-        documentParameters(method, openApiDocumentation);
+        documentParameters(method, openApiDocumentation, gsonBuilder);
 
         documentReturnType(method, openApiDocumentation);
 
@@ -146,12 +152,12 @@ public class OpenAPIConvention
         }
     }
 
-    private static void documentParameters(Method method, OpenApiDocumentation openApiDocumentation)
+    private static void documentParameters(Method method, OpenApiDocumentation openApiDocumentation, GsonBuilder gsonBuilder)
     {
         if (method.getParameters().length == 1 )
         {
             var schema = createSchema(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]);
-            schema.setExample(createExampleInstance(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]));
+            schema.setExample(createExampleInstance(method.getParameterTypes()[0], method.getGenericParameterTypes()[0], gsonBuilder));
 
             //For some reason I have to add requests as DocumentedContent. Otherwise components seems to be not correctly created
             openApiDocumentation.body(List.of(new DocumentedContent(method.getParameterTypes()[0], isJsonArray(method.getParameterTypes()[0]), APPLICATION_TYPE_JSON )));
@@ -164,7 +170,7 @@ public class OpenAPIConvention
 
             for (int i = 0; i < method.getParameterTypes().length; ++i)
             {
-                exampleObjects[i] = createExampleInstance(method.getParameterTypes()[i],method.getGenericParameterTypes()[i]);
+                exampleObjects[i] = createExampleInstance(method.getParameterTypes()[i],method.getGenericParameterTypes()[i], gsonBuilder);
                 var parameterSchema = createSchema(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]);
                 parameterSchema.setExample(exampleObjects[i]);
 
@@ -182,22 +188,27 @@ public class OpenAPIConvention
     private static String createJsonSchema(Class<?> clazz) throws JsonProcessingException
     {
         var mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
         //There are other configuration options you can set.  This is the one I needed.
         mapper.configure(WRITE_ENUMS_USING_TO_STRING, true);
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        // StdDateFormat is ISO8601 since jackson 2.9
+        mapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
 
         var schema = mapper.generateJsonSchema(clazz);
 
         return schema.toString();
     }
 
-    private static Object createExampleInstance(Class<?> clazz, Type genericType)
+    private static Object createExampleInstance(Class<?> clazz, Type genericType, GsonBuilder gsonBuilder)
     {
         if ( isJava8Date(clazz) )
         {
             return java8DateExample(clazz);
         }
 
-        return createGenericExample(clazz, genericType);
+        return createGenericExample(clazz, genericType, gsonBuilder);
     }
 
     private static Object java8DateExample(Class<?> clazz)
@@ -220,7 +231,7 @@ public class OpenAPIConvention
         return null;
     }
 
-    private static Object createGenericExample(Class<?> clazz, Type genericType)
+    private static Object createGenericExample(Class<?> clazz, Type genericType, GsonBuilder gsonBuilder)
     {
         try
         {
@@ -245,7 +256,7 @@ public class OpenAPIConvention
                     return null;
                 }
 
-                Gson gson = new Gson();
+                Gson gson = gsonBuilder.create();
                 return gson.fromJson(jsonObject, clazz);
             }
 
@@ -253,7 +264,7 @@ public class OpenAPIConvention
             if (typeInformation.getAsString().equals(JSON_ARRAY_TYPE))
             {
                 var result = new Object[1];
-                result[0] = createExampleInstance(extractTypeFromArray(genericType), null);
+                result[0] = createExampleInstance(extractTypeFromArray(genericType), null, gsonBuilder);
                 return result;
             }
 
