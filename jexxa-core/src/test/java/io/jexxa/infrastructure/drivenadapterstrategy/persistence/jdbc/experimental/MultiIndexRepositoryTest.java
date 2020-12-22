@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.EnumSet;
 import java.util.Properties;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -33,19 +32,19 @@ class MultiIndexRepositoryTest
                 aggregate -> aggregate.getKey().getValue(),
                 JexxaValueObject::getValue));
 
-        private final Supplier<RangeComparator<JexxaAggregate,? >> supplier;
+        private final RangeComparator<JexxaAggregate,? > supplier;
 
 
-        SearchStrategies(final Supplier<RangeComparator<JexxaAggregate,?>> supplier)
+        SearchStrategies(final RangeComparator<JexxaAggregate,?> supplier)
         {
             this.supplier = supplier;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public RangeComparator<JexxaAggregate, ? > get()
+        public RangeComparator<JexxaAggregate, ?> get()
         {
-            return supplier.get();
+            return supplier;
         }
     }
 
@@ -121,7 +120,7 @@ class MultiIndexRepositoryTest
         postgresProperties.put(JDBCKeyValueRepository.JDBC_DRIVER, "org.postgresql.Driver");
         postgresProperties.put(JDBCKeyValueRepository.JDBC_PASSWORD, "admin");
         postgresProperties.put(JDBCKeyValueRepository.JDBC_USERNAME, "admin");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_URL, "jdbc:postgresql://localhost:5432/comparablerepository");
+        postgresProperties.put(JDBCKeyValueRepository.JDBC_URL, "jdbc:postgresql://localhost:5432/multiindexrepository");
         postgresProperties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_TABLE, "true");
         postgresProperties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
 
