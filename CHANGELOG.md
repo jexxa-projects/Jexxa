@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -   OpenAPI-Support in `RESTfulRPCAdapter`:
     -   Corrected schema creation of data types including Java8 date/time types
 
+### Added 
+-   New Tutorial [TimeService - Flow Of Control](https://github.com/repplix/Jexxa/blob/master/tutorials/TimeService/README-FlowOfControl.md)
+
+### Changed
+-   Updated dependencies on minor level
+
 ## \[2.6.1] - 2020-12-12
 ### Fixed
 -   `JDBCKeyValueRepository`: Fixed reconnection on lost JDBC connection for example if database closes connection after some time
