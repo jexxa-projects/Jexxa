@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[2.6.2] - 2020-12-23
+### Fixed
+-   OpenAPI-Support in `RESTfulRPCAdapter`:
+    -   Corrected schema creation of data types including Java8 date/time types
+
 ## \[2.6.1] - 2020-12-12
 ### Fixed
 -   `JDBCKeyValueRepository`: Fixed reconnection on lost JDBC connection for example if database closes connection after some time
