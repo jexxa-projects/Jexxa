@@ -11,9 +11,9 @@ Jexxa is a lightweight framework to implement durable business applications base
 
 Goal of this framework is to support the development of _durable_ business applications as good as possible. Therefore, Jexxa stresses the following aspects in particular:
 *   Aligned development: Framework is tailored to the needs of development teams for durable business applications.
-*   Visible flow of control: Simplify navigation through your business logic.      
+*   Visible flow of control: Simplifies navigation through your business application.      
 *   Technology agnostic: Even IoC concepts such as dependency injection do not require any framework specific @Annotations.
-*   Well-defined API: Allows for the integration of arbitrary technology stacks. 
+*   Well-defined API: Allows for the integration of arbitrary (old and new) technology stacks. 
 
 In addition, Jexxa offers following production-proven features:          
 *   Integrated most common driving adapters: RMI over REST, JMX, and JMS. 
