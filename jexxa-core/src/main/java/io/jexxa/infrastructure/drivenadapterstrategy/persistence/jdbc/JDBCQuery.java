@@ -38,17 +38,17 @@ public class JDBCQuery
         return as( resultSet -> resultSet.getString(1) );
     }
 
-    Stream<BigDecimal> asNumeric()
+    public Stream<BigDecimal> asNumeric()
     {
         return as( resultSet -> resultSet.getBigDecimal(1) );
     }
 
-    Stream<Long> asLong()
+    public Stream<Long> asLong()
     {
         return as( resultSet -> resultSet.getLong(1) );
     }
 
-    Stream<Integer> asInt()
+    public Stream<Integer> asInt()
     {
         return as( resultSet -> resultSet.getInt(1) );
     }
