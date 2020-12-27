@@ -184,4 +184,34 @@ public class JDBCConnection implements AutoCloseable
         Validate.isTrue(properties.containsKey(JDBC_DRIVER), "Parameter " + JDBC_DRIVER + " is missing");
     }
 
+    public final JDBCConnection validateConnection()
+    {
+        try
+        {
+            if (!isValid())
+            {
+                LOGGER.warn("JDBC connection for connection {} is invalid. ", properties.getProperty(JDBC_URL));
+                LOGGER.warn("Try to reset JDBC connection for connection {}",  properties.getProperty(JDBC_URL));
+                reset();
+                LOGGER.warn("JDBC connection for connection {} successfully restarted.",  properties.getProperty(JDBC_URL));
+            }
+        } catch (RuntimeException e)
+        {
+            LOGGER.error("Could not reset JDBC connection for connection {}. Reason: {}", properties.getProperty(JDBC_URL), e.getMessage());
+            throw e;
+        }
+
+        return this;
+    }
+
+    public JDBCCommand execute(String command)
+    {
+        return new JDBCCommand(this::validateConnection, command);
+    }
+
+    public JDBCQuery query(String sqlQuery)
+    {
+        return new JDBCQuery(this::validateConnection, sqlQuery);
+    }
+
 }

@@ -8,18 +8,17 @@ import java.util.function.Supplier;
 public class JDBCCommand
 {
     private final Supplier<JDBCConnection> jdbcConnection;
-    private String command;
+    private final String sqlCommand;
 
-    public JDBCCommand(Supplier<JDBCConnection> jdbcConnection)
+    public JDBCCommand(Supplier<JDBCConnection> jdbcConnection, String sqlCommand)
     {
+        Objects.requireNonNull(jdbcConnection);
+        Objects.requireNonNull(sqlCommand);
+
         this.jdbcConnection = jdbcConnection;
+        this.sqlCommand = sqlCommand;
     }
 
-    public JDBCCommand execute(String command)
-    {
-        this.command = command;
-        return this;
-    }
 
     /**
      * Number of rows must not change
@@ -27,13 +26,11 @@ public class JDBCCommand
      */
     public void asUpdate()
     {
-        Objects.requireNonNull(command);
-
         try (var statement = jdbcConnection.get().createStatement() )
         {
-            if( statement.executeUpdate(command) == 0)
+            if( statement.executeUpdate(sqlCommand) == 0)
             {
-                throw new IllegalArgumentException("Command '" + command + "'was executed but returned that nothing changed! ");
+                throw new IllegalArgumentException("Command '" + sqlCommand + "'was executed but returned that nothing changed! ");
             }
         }
 
@@ -49,13 +46,13 @@ public class JDBCCommand
      */
     public void asEmpty( )
     {
-        Objects.requireNonNull(command);
+        Objects.requireNonNull(sqlCommand);
 
         try (var statement = jdbcConnection.get().createStatement() )
         {
-            if( statement.executeUpdate(command) == 1)
+            if( statement.executeUpdate(sqlCommand) == 1)
             {
-                throw new IllegalArgumentException("Command '" + command + "' was executed but returned that something changed! ");
+                throw new IllegalArgumentException("Command '" + sqlCommand + "' was executed but returned that something changed! ");
             }
         }
 
@@ -70,11 +67,11 @@ public class JDBCCommand
      */
     public void asIgnore( )
     {
-        Objects.requireNonNull(command);
+        Objects.requireNonNull(sqlCommand);
 
         try (var statement = jdbcConnection.get().createStatement() )
         {
-            statement.executeUpdate(command);
+            statement.executeUpdate(sqlCommand);
         }
         catch (SQLException e)
         {

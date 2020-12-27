@@ -69,7 +69,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
                 )
         );
 
-        createCommand()
+        getConnection()
                 .execute(stringBuilder.toString())
                 .asUpdate();
     }
@@ -83,7 +83,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
                 , getAggregateName()
                 , gson.toJson(key));
 
-        createCommand()
+        getConnection()
                 .execute(command)
                 .asUpdate();
     }
@@ -93,7 +93,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
     {
         String command = String.format("delete from %s", getAggregateName());
 
-        createCommand()
+        getConnection()
                 .execute(command)
                 .asIgnore();
     }
@@ -117,7 +117,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
                 , getAggregateName()
                 , stringBuilder.toString());
 
-        createCommand()
+        getConnection()
                 .execute(command)
                 .asUpdate();
     }
@@ -127,12 +127,12 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
     {
         Objects.requireNonNull(primaryKey);
 
-        String query = String.format( "select value from %s where key = '%s'"
+        String sqlQuery = String.format( "select value from %s where key = '%s'"
                 , getAggregateName()
                 , gson.toJson(primaryKey));
 
-        return createQuery()
-                .query(query)
+        return getConnection()
+                .query(sqlQuery)
                 .asString()
                 .findFirst()
                 .map( element -> gson.fromJson(element, aggregateClazz))
@@ -142,7 +142,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
     @Override
     public List<T> get()
     {
-        return createQuery()
+        return getConnection()
                 .query("select value from "+ getAggregateName())
                 .asString()
                 .map( element -> gson.fromJson(element, aggregateClazz))
@@ -166,7 +166,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
                         , getMaxVarChar(properties.getProperty(JDBC_URL))
                         , stringBuilder.toString());
 
-                createCommand()
+                getConnection()
                         .execute(command)
                         .asIgnore();
             }

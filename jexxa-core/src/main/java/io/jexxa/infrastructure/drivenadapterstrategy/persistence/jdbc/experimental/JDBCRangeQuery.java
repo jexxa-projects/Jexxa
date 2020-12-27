@@ -73,7 +73,7 @@ public class JDBCRangeQuery<T,S> implements IRangeQuery<T, S>
     protected List<T> searchElements(String query)
     {
         return jdbcRepository
-                .createQuery()
+                .getConnection()
                 .query(query)
                 .asString()
                 .map( element -> gson.fromJson(element, aggregateClazz))

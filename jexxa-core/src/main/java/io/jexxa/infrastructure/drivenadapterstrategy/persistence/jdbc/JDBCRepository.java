@@ -3,14 +3,11 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 import java.util.Objects;
 import java.util.Properties;
 
-import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
-import org.slf4j.Logger;
 
 public abstract class JDBCRepository  implements AutoCloseable
 {
     private final JDBCConnection jdbcConnection;
-    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCRepository.class);
 
     protected JDBCRepository(Properties properties)
     {
@@ -32,34 +29,9 @@ public abstract class JDBCRepository  implements AutoCloseable
      * @return JDBCConnection that is in a valid state.
      */
     @SuppressWarnings("java:S2139")  // To explicitly show log messages in backend. Otherwise they are forwarded to the client and not visible in backend
-    protected final JDBCConnection getConnection()
+    public final JDBCConnection getConnection()
     {
-        try
-        {
-            if (!jdbcConnection.isValid())
-            {
-                LOGGER.warn("JDBC connection for Repository {} is invalid. ", getClass().getSimpleName());
-                LOGGER.warn("Try to reset JDBC connection for Repository {}",getClass().getSimpleName());
-                jdbcConnection.reset();
-                LOGGER.warn("JDBC connection for Repository {} successfully restarted.", getClass().getSimpleName());
-            }
-        } catch (RuntimeException e)
-        {
-            LOGGER.error("Could not reset JDBC connection for Repository {}. Reason: {}", getClass().getSimpleName(), e.getMessage());
-            throw e;
-        }
-
-        return jdbcConnection;
-    }
-
-    public JDBCCommand createCommand()
-    {
-        return new JDBCCommand(this::getConnection);
-    }
-
-    public JDBCQuery createQuery()
-    {
-        return new JDBCQuery(this::getConnection);
+        return jdbcConnection.validateConnection();
     }
 
 }

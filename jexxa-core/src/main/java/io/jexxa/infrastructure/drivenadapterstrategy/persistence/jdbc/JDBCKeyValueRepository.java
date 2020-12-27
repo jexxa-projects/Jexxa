@@ -48,7 +48,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
                 , getAggregateName()
                 , gson.toJson(key));
 
-        createCommand()
+        getConnection()
                 .execute(command)
                 .asUpdate();
     }
@@ -58,7 +58,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         String command = String.format("delete from %s", getAggregateName());
 
-        createCommand()
+        getConnection()
                 .execute(command)
                 .asIgnore();
     }
@@ -74,7 +74,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
                 , gson.toJson(keyFunction.apply(aggregate))
                 , gson.toJson(aggregate));
 
-        createCommand()
+        getConnection()
                 .execute(command)
                 .asUpdate();
     }
@@ -90,7 +90,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
                 , gson.toJson(aggregate)
                 , gson.toJson(keyFunction.apply(aggregate)));
 
-        createCommand()
+        getConnection()
                 .execute(command)
                 .asUpdate();
     }
@@ -100,12 +100,12 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(primaryKey);
 
-        String query = String.format( "select value from %s where key = '%s'"
+        String sqlQuery = String.format( "select value from %s where key = '%s'"
                 , getAggregateName()
                 , gson.toJson(primaryKey));
 
-        return createQuery()
-                .query(query)
+        return getConnection()
+                .query(sqlQuery)
                 .asString()
                 .findFirst()
                 .map( element -> gson.fromJson(element, aggregateClazz))
@@ -115,7 +115,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     @Override
     public List<T> get()
     {
-        return createQuery()
+        return getConnection()
                 .query("select value from "+ getAggregateName())
                 .asString()
                 .map( element -> gson.fromJson(element, aggregateClazz))
@@ -132,7 +132,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
                         , aggregateClazz.getSimpleName()
                         , getMaxVarChar(properties.getProperty(JDBC_URL)));
 
-                createCommand()
+                getConnection()
                         .execute(command)
                         .asIgnore();
             }
