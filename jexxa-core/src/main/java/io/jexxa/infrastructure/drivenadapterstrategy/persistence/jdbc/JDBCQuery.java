@@ -48,6 +48,16 @@ public class JDBCQuery
         return as( resultSet -> resultSet.getLong(1) );
     }
 
+    public Stream<Float> asFloat()
+    {
+        return as( resultSet -> resultSet.getFloat(1) );
+    }
+
+    public Stream<Double> asDouble()
+    {
+        return as( resultSet -> resultSet.getDouble(1) );
+    }
+
     public Stream<Integer> asInt()
     {
         return as( resultSet -> resultSet.getInt(1) );
@@ -76,7 +86,4 @@ public class JDBCQuery
             throw new IllegalStateException(INVALID_QUERY + command , e);
         }
     }
-
-
-
 }
