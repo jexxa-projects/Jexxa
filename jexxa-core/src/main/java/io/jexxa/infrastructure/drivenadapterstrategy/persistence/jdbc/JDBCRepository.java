@@ -38,14 +38,14 @@ public abstract class JDBCRepository  implements AutoCloseable
         {
             if (!jdbcConnection.isValid())
             {
-                LOGGER.warn("JDBC connection for Aggregate {} is invalid. ", getAggregateName());
-                LOGGER.warn("Try to reset JDBC connection for Aggregate {}", getAggregateName());
+                LOGGER.warn("JDBC connection for Repository {} is invalid. ", getClass().getSimpleName());
+                LOGGER.warn("Try to reset JDBC connection for Repository {}",getClass().getSimpleName());
                 jdbcConnection.reset();
-                LOGGER.warn("JDBC connection for Aggregate {} successfully restarted.", getAggregateName());
+                LOGGER.warn("JDBC connection for Repository {} successfully restarted.", getClass().getSimpleName());
             }
         } catch (RuntimeException e)
         {
-            LOGGER.error("Could not reset JDBC connection for Aggregate {}. Reason: {}", getAggregateName(), e.getMessage());
+            LOGGER.error("Could not reset JDBC connection for Repository {}. Reason: {}", getClass().getSimpleName(), e.getMessage());
             throw e;
         }
 
@@ -61,7 +61,5 @@ public abstract class JDBCRepository  implements AutoCloseable
     {
         return new JDBCQuery(this::getConnection);
     }
-
-    protected abstract String getAggregateName();
 
 }

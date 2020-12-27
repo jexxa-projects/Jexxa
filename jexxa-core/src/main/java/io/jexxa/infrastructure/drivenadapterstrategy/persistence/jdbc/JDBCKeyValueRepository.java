@@ -143,7 +143,6 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         }
     }
 
-    @Override
     protected String getAggregateName()
     {
         return aggregateClazz.getSimpleName();

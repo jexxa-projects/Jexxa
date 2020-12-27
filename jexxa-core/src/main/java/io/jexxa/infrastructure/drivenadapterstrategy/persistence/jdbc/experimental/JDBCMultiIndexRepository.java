@@ -177,13 +177,10 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
         }
     }
 
-
-    @Override
     protected String getAggregateName()
     {
         return aggregateClazz.getSimpleName();
     }
-
 
     private static String getMaxVarChar(String jdbcDriver)
     {
