@@ -7,18 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[2.7.0] - YYYY-MM-DD
 
 ### Added
--   New `IMultiIndexRepository` to query range of aggregates from a Repository 
-    -   `JDBCMultiIndexRespotiory` which implements the new interface for JDBC
-    -   `IMDBMultiIndexRepository` which implements the new interface for IMDB 
-
 -   JDBCRepository:
     -   Added abstract base class `JDBCRepository` for implementing specific repository
-    -   Added wrapper classes `JDBCQuery` and `JDBCCommand` for reading and executing commands using a stream like API.  
+    -   Added wrapper classes `JDBCQuery` and `JDBCCommand` for reading and executing commands using Java streams.  
 
 -   New Tutorial [TimeService - Flow Of Control](https://github.com/repplix/Jexxa/blob/master/tutorials/TimeService/README-FlowOfControl.md)
 
 ### Changed
 -   Updated dependencies
+
+-   JDBCKeyValueRepository:
+    -   Inherits from JDBCRepository
+    -   Changed implementation to `JDBCQuery` and `JDBCCommand`
 
 ## \[2.6.1] - 2020-12-12
 ### Fixed
