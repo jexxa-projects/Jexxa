@@ -10,7 +10,7 @@ public class JDBCCommand
     private final Supplier<JDBCConnection> jdbcConnection;
     private final String sqlCommand;
 
-    public JDBCCommand(Supplier<JDBCConnection> jdbcConnection, String sqlCommand)
+    JDBCCommand(Supplier<JDBCConnection> jdbcConnection, String sqlCommand)
     {
         Objects.requireNonNull(jdbcConnection);
         Objects.requireNonNull(sqlCommand);

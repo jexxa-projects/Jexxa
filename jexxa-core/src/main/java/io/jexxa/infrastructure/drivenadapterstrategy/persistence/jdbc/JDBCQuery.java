@@ -24,7 +24,7 @@ public class JDBCQuery
     private final Supplier<JDBCConnection> jdbcConnection;
     private final String command;
 
-    public JDBCQuery(Supplier<JDBCConnection> jdbcConnection, String command)
+    JDBCQuery(Supplier<JDBCConnection> jdbcConnection, String command)
     {
         Objects.requireNonNull(jdbcConnection);
         Objects.requireNonNull(command);
