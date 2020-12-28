@@ -14,7 +14,7 @@ import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaEntityRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.parallel.Execution;
@@ -34,19 +34,19 @@ class JexxaEntityRepositoryIT
     @SuppressWarnings("unused")
     static Stream<Properties> repositoryConfig() {
         var postgresProperties = new Properties();
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_PASSWORD, "admin");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_USERNAME, "admin");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
+        postgresProperties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
+        postgresProperties.put(JDBCConnection.JDBC_PASSWORD, "admin");
+        postgresProperties.put(JDBCConnection.JDBC_USERNAME, "admin");
+        postgresProperties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
+        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
+        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
 
         var h2Properties = new Properties();
-        h2Properties.put(JDBCKeyValueRepository.JDBC_DRIVER, "org.h2.Driver");
-        h2Properties.put(JDBCKeyValueRepository.JDBC_PASSWORD, "admin");
-        h2Properties.put(JDBCKeyValueRepository.JDBC_USERNAME, "admin");
-        h2Properties.put(JDBCKeyValueRepository.JDBC_URL, "jdbc:h2:mem:jexxa;DB_CLOSE_DELAY=-1");
-        h2Properties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_TABLE, "true");
+        h2Properties.put(JDBCConnection.JDBC_DRIVER, "org.h2.Driver");
+        h2Properties.put(JDBCConnection.JDBC_PASSWORD, "admin");
+        h2Properties.put(JDBCConnection.JDBC_USERNAME, "admin");
+        h2Properties.put(JDBCConnection.JDBC_URL, "jdbc:h2:mem:jexxa;DB_CLOSE_DELAY=-1");
+        h2Properties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
 
         return Stream.of(new Properties(), postgresProperties, h2Properties);
     }

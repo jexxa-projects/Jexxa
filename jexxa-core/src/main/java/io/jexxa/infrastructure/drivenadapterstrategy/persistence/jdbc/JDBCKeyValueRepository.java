@@ -14,12 +14,19 @@ import org.slf4j.Logger;
 
 public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRepository<T, K>
 {
+    @Deprecated(forRemoval = true)
     public static final String JDBC_URL = "io.jexxa.jdbc.url";
+    @Deprecated(forRemoval = true)
     public static final String JDBC_USERNAME = "io.jexxa.jdbc.username";
+    @Deprecated(forRemoval = true)
     public static final String JDBC_PASSWORD = "io.jexxa.jdbc.password";
+    @Deprecated(forRemoval = true)
     public static final String JDBC_DRIVER = "io.jexxa.jdbc.driver";
+    @Deprecated(forRemoval = true)
     public static final String JDBC_AUTOCREATE_TABLE = "io.jexxa.jdbc.autocreate.table";
+    @Deprecated(forRemoval = true)
     public static final String JDBC_AUTOCREATE_DATABASE = "io.jexxa.jdbc.autocreate.database";
+
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCKeyValueRepository.class);
 
@@ -125,12 +132,12 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
     private void autocreateTable(final Properties properties)
     {
-        if (properties.containsKey(JDBC_AUTOCREATE_TABLE))
+        if (properties.containsKey(JDBCConnection.JDBC_AUTOCREATE_TABLE))
         {
             try{
                 var command = String.format("CREATE TABLE IF NOT EXISTS %s ( key VARCHAR %s PRIMARY KEY, value text) "
                         , aggregateClazz.getSimpleName()
-                        , getMaxVarChar(properties.getProperty(JDBC_URL)));
+                        , getMaxVarChar(properties.getProperty(JDBCConnection.JDBC_URL)));
 
                 getConnection()
                         .execute(command)

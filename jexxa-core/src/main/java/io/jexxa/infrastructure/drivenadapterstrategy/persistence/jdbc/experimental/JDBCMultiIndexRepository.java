@@ -1,7 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection.JDBC_URL;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.JDBC_AUTOCREATE_TABLE;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCRepository;
 import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
@@ -153,7 +153,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
 
     private void autocreateTable(final Properties properties)
     {
-        if (properties.containsKey(JDBC_AUTOCREATE_TABLE))
+        if (properties.containsKey(JDBCConnection.JDBC_AUTOCREATE_TABLE))
         {
             try{
                 //Create inner part in ( )

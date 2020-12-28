@@ -25,8 +25,8 @@ class JDBCPropertiesTest
 
         //2.Arrange invalid properties: Invalid Driver
         Properties propertiesInvalidDriver = new Properties();
-        propertiesInvalidDriver.put(JDBCKeyValueRepository.JDBC_DRIVER, "org.unknown.Driver");
-        propertiesInvalidDriver.put(JDBCKeyValueRepository.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
+        propertiesInvalidDriver.put(JDBCConnection.JDBC_DRIVER, "org.unknown.Driver");
+        propertiesInvalidDriver.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
 
         //2.Assert invalid properties: Invalid Driver
         assertThrows(IllegalArgumentException.class, () -> new JDBCKeyValueRepository<>(
@@ -37,8 +37,8 @@ class JDBCPropertiesTest
 
         //3. Arrange invalid properties: Invalid URL
         Properties propertiesInvalidURL = new Properties();
-        propertiesInvalidURL.put(JDBCKeyValueRepository.JDBC_DRIVER, "org.postgresql.Driver");
-        propertiesInvalidURL.put(JDBCKeyValueRepository.JDBC_URL, "jdbc:unknown://localhost:5432/jexxa");
+        propertiesInvalidURL.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
+        propertiesInvalidURL.put(JDBCConnection.JDBC_URL, "jdbc:unknown://localhost:5432/jexxa");
 
         //3.Assert invalid properties: Invalid URL
         assertThrows(IllegalArgumentException.class, () -> new JDBCKeyValueRepository<>(

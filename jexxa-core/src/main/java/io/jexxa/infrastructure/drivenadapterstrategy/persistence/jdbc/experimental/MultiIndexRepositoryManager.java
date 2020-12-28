@@ -7,7 +7,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.function.Function;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.factory.ClassFactory;
 
@@ -102,7 +102,7 @@ public final class MultiIndexRepositoryManager
         }
 
         // 3. If a JDBC driver is stated in Properties => Use JDBCKeyValueRepository
-        if (properties.containsKey(JDBCKeyValueRepository.JDBC_DRIVER))
+        if (properties.containsKey(JDBCConnection.JDBC_DRIVER))
         {
             return JDBCMultiIndexRepository.class;
         }

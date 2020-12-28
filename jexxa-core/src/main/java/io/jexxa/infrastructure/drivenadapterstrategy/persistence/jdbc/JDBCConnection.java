@@ -21,6 +21,8 @@ public class JDBCConnection implements AutoCloseable
     public static final String JDBC_PASSWORD = "io.jexxa.jdbc.password";
     public static final String JDBC_DRIVER = "io.jexxa.jdbc.driver";
     public static final String JDBC_AUTOCREATE_DATABASE = "io.jexxa.jdbc.autocreate.database";
+    public static final String JDBC_AUTOCREATE_TABLE = "io.jexxa.jdbc.autocreate.table";
+
     public static final int NO_TIMEOUT = 0;
 
     private Connection connection;

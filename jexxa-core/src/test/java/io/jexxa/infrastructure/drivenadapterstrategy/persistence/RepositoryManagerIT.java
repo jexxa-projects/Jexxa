@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
@@ -102,12 +103,12 @@ class RepositoryManagerIT
     private Properties getDefaultProperties()
     {
         var postgresProperties = new Properties();
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_PASSWORD, "admin");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_USERNAME, "admin");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JDBCKeyValueRepository.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
+        postgresProperties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
+        postgresProperties.put(JDBCConnection.JDBC_PASSWORD, "admin");
+        postgresProperties.put(JDBCConnection.JDBC_USERNAME, "admin");
+        postgresProperties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
+        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
+        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
 
         return postgresProperties;
     }
