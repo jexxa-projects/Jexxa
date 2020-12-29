@@ -1,11 +1,11 @@
 package io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording;
 
+import java.util.Objects;
 import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.utils.annotations.CheckReturnValue;
-import org.apache.commons.lang3.Validate;
 
 public class MessageRecordingStrategy extends MessageSender
 {
@@ -16,7 +16,7 @@ public class MessageRecordingStrategy extends MessageSender
     @Override
     public <T> MessageProducer send(T message)
     {
-        Validate.notNull(message);
+        Objects.requireNonNull(message);
 
         //Get caller object of this class. Here we assume that it is the implementation of a driven adapter
         StackWalker walker = StackWalker

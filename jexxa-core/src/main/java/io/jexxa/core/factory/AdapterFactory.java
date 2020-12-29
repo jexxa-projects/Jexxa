@@ -5,11 +5,11 @@ import static java.util.stream.Collectors.toList;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
 import io.jexxa.utils.factory.ClassFactory;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Creates all kind of adapters (driving and driving) which fulfill one of the following conventions:
@@ -38,7 +38,7 @@ public class AdapterFactory
     }
 
     public <T> T newInstanceOf(Class<T> adapterInterface) {
-        Validate.notNull(adapterInterface);
+        Objects.requireNonNull(adapterInterface);
 
         Class<?> adapterImpl = getImplementationOf(adapterInterface).
                 orElseThrow(() -> new IllegalArgumentException("No implementation found for interface " + adapterInterface.getName()));
@@ -63,7 +63,7 @@ public class AdapterFactory
     }
 
     public <T> T newInstanceOf(Class<T> adapterInterface, Properties properties) {
-        Validate.notNull(adapterInterface);
+        Objects.requireNonNull(adapterInterface);
 
         Class<?> adapterImpl = getImplementationOf(adapterInterface).
                 orElseThrow(() -> new IllegalArgumentException("No implementation found for interface " + adapterInterface.getName()));

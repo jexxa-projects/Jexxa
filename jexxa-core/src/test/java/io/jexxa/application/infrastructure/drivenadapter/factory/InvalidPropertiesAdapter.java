@@ -1,9 +1,9 @@
 package io.jexxa.application.infrastructure.drivenadapter.factory;
 
+import java.util.Objects;
 import java.util.Properties;
 
 import io.jexxa.application.domainservice.IInvalidAdapterProperties;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Throws an IllegalArgumentException in constructor to simulate invalid properties
@@ -13,7 +13,7 @@ public class InvalidPropertiesAdapter implements IInvalidAdapterProperties
 {
     public InvalidPropertiesAdapter(Properties properties)
     {
-        Validate.notNull(properties);
+        Objects.requireNonNull(properties);
         throw new IllegalArgumentException("InvalidAdapterProperties test");
     }
 }

@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -25,7 +26,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.utils.JexxaLogger;
-import org.apache.commons.lang3.Validate;
 
 public class MBeanConvention implements DynamicMBean
 {
@@ -37,8 +37,8 @@ public class MBeanConvention implements DynamicMBean
 
     MBeanConvention(Object object, Properties properties)
     {
-        Validate.notNull(object);
-        Validate.notNull(properties);
+        Objects.requireNonNull(object);
+        Objects.requireNonNull(properties);
 
         this.object = object;
         contextName = properties.getProperty(JEXXA_CONTEXT_NAME, "UnknownContext");

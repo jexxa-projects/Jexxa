@@ -1,12 +1,12 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import io.jexxa.utils.factory.ClassFactory;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
 import io.jexxa.utils.annotations.CheckReturnValue;
-import org.apache.commons.lang3.Validate;
+import io.jexxa.utils.factory.ClassFactory;
 
 public final class MessageSenderManager
 {
@@ -45,7 +45,7 @@ public final class MessageSenderManager
 
     public static void setDefaultStrategy(Class<? extends MessageSender>  defaultStrategy)
     {
-        Validate.notNull(defaultStrategy);
+        Objects.requireNonNull(defaultStrategy);
 
         MessageSenderManager.defaultStrategy = defaultStrategy;
     }

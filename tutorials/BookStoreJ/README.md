@@ -34,14 +34,15 @@ For the pattern langauge of DDD we recommend project [Addend](https://addend.jex
 
 The following shows the annotation of an `Aggregate`. Apart from the obvious annotation, it also uses two other annotations: 
 *   `AggregateID` to explicitly document the unique key
-*   `AggregateFactory` to explicitly document the factory method for the `Aggregate`     
+*   `AggregateFactory` to explicitly document the factory method for the `Aggregate`
 
 ```java
+
 @Aggregate
 public final class Book
 {
     private final ISBN13 isbn13;
-    private int amountInStock = 0;
+    private final int amountInStock = 0;
 
     private Book(ISBN13 isbn13)
     {
@@ -53,7 +54,7 @@ public final class Book
     {
         return isbn13;
     }
-  
+
     // ... 
 
     @AggregateFactory(Book.class)

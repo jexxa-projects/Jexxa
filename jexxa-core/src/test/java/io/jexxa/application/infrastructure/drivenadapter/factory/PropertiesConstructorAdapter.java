@@ -1,9 +1,9 @@
 package io.jexxa.application.infrastructure.drivenadapter.factory;
 
+import java.util.Objects;
 import java.util.Properties;
 
 import io.jexxa.application.domainservice.IPropertiesConstructorService;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Simulate a valid driven adapter with constructor expecting a Properties
@@ -12,6 +12,6 @@ public class PropertiesConstructorAdapter implements IPropertiesConstructorServi
 {
     public PropertiesConstructorAdapter(Properties properties)
     {
-        Validate.notNull(properties);
+        Objects.requireNonNull(properties);
     }
 }

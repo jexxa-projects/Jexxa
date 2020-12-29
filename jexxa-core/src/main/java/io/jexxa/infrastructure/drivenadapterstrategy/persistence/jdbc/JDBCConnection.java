@@ -21,6 +21,9 @@ public class JDBCConnection implements AutoCloseable
     public static final String JDBC_PASSWORD = "io.jexxa.jdbc.password";
     public static final String JDBC_DRIVER = "io.jexxa.jdbc.driver";
     public static final String JDBC_AUTOCREATE_DATABASE = "io.jexxa.jdbc.autocreate.database";
+    public static final String JDBC_AUTOCREATE_TABLE = "io.jexxa.jdbc.autocreate.table";
+
+    public static final int NO_TIMEOUT = 0;
 
     private Connection connection;
     private final Properties properties;
@@ -67,6 +70,38 @@ public class JDBCConnection implements AutoCloseable
         }
     }
 
+    @SuppressWarnings("java:S2139") // Here we log and and rethrow an exception in order to document that we tried to handle a connection failure without success and must give up
+    public final JDBCConnection validateConnection()
+    {
+        try
+        {
+            if (!isValid())
+            {
+                LOGGER.warn("JDBC connection for connection {} is invalid. ", properties.getProperty(JDBC_URL));
+                LOGGER.warn("Try to reset JDBC connection for connection {}",  properties.getProperty(JDBC_URL));
+                reset();
+                LOGGER.warn("JDBC connection for connection {} successfully restarted.",  properties.getProperty(JDBC_URL));
+            }
+        } catch (RuntimeException e)
+        {
+            LOGGER.error("Could not reset JDBC connection for connection {}. Reason: {}", properties.getProperty(JDBC_URL), e.getMessage());
+            throw e;
+        }
+
+        return this;
+    }
+
+    public JDBCCommand execute(String command)
+    {
+        return new JDBCCommand(this::validateConnection, command);
+    }
+
+    public JDBCQuery query(String sqlQuery)
+    {
+        return new JDBCQuery(this::validateConnection, sqlQuery);
+    }
+
+
     /**
      * This method resets the internal JDBC connection in the following way:
      * <ol>
@@ -81,9 +116,9 @@ public class JDBCConnection implements AutoCloseable
         close();
         try
         {
-            if (!getConnection().isValid(0))
+            if (!getConnection().isValid(NO_TIMEOUT))
             {
-                throw new IllegalStateException("");
+                throw new IllegalStateException("JDBC Connection is invalid for connection " + properties.getProperty(JDBC_URL));
             }
         } catch (SQLException e)
         {
@@ -93,7 +128,7 @@ public class JDBCConnection implements AutoCloseable
 
     public boolean isValid()
     {
-        return isValid(0);
+        return isValid(NO_TIMEOUT);
     }
 
     public boolean isValid(int timeout)
@@ -111,14 +146,23 @@ public class JDBCConnection implements AutoCloseable
         }
     }
 
-    public Statement createStatement() throws SQLException
-    {
-        return getConnection().createStatement();
-    }
-
+    /**
+     * Creates a PreparedStatement
+     *
+     * @param sqlStatement describes the template of the command
+     * @return PreparedStatement
+     * @throws SQLException in case of an error
+     * @deprecated Inside this package use {@link #createStatement()}. Outside of this package use {@link JDBCCommand} or {@link JDBCQuery}
+     */
+    @Deprecated(forRemoval = true)
     public PreparedStatement prepareStatement(String sqlStatement) throws SQLException
     {
         return getConnection().prepareStatement(sqlStatement);
+    }
+
+    Statement createStatement() throws SQLException
+    {
+        return getConnection().createStatement();
     }
 
     public void close()
@@ -174,5 +218,4 @@ public class JDBCConnection implements AutoCloseable
         Validate.isTrue(properties.containsKey(JDBC_URL), "Parameter " + JDBC_URL + " is missing");
         Validate.isTrue(properties.containsKey(JDBC_DRIVER), "Parameter " + JDBC_DRIVER + " is missing");
     }
-
 }

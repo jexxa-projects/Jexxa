@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[2.7.0] - YYYY-MM-DD
+
+### Added
+-   JDBCRepository:
+    -   Added abstract base class `JDBCRepository` for implementing specific repository
+    -   Added wrapper classes `JDBCQuery` and `JDBCCommand` for reading and executing commands using Java streams.
+
+-   New Tutorial [TimeService - Flow Of Control](https://github.com/repplix/Jexxa/blob/master/tutorials/TimeService/README-FlowOfControl.md)
+
+### Changed
+-   Updated dependencies
+
+-   JDBCKeyValueRepository:
+    -   Inherits from JDBCRepository
+    -   Changed implementation to `JDBCQuery` and `JDBCCommand`
+    
 ## \[2.6.2] - 2020-12-23
 ### Fixed
 -   OpenAPI-Support in `RESTfulRPCAdapter`:

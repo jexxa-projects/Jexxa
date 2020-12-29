@@ -99,14 +99,7 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     @SuppressWarnings("unchecked")
     private static synchronized <T, K> Map<T, K> getAggregateMap(Class<?> aggregateClazz)
     {
-        if ( REPOSITORY_MAP.containsKey(aggregateClazz) )
-        {
-            return (Map<T, K>) REPOSITORY_MAP.get(aggregateClazz);
-        }
-
-        var newRepository = new ConcurrentHashMap<T,K>();
-        REPOSITORY_MAP.put(aggregateClazz, newRepository);
-        return newRepository;
+        return (Map<T, K>)REPOSITORY_MAP.computeIfAbsent(aggregateClazz, element -> new ConcurrentHashMap<T,K>());
     }
 
     protected void resetIMDBInstance()

@@ -5,13 +5,13 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import io.jexxa.utils.factory.ClassFactory;
 import io.jexxa.utils.JexxaLogger;
+import io.jexxa.utils.factory.ClassFactory;
 import io.jexxa.utils.function.ThrowingConsumer;
-import org.apache.commons.lang3.Validate;
 
 /**
  * This class is responsible for creating instances of ports or a wrapper for a port including all required parameter.
@@ -83,8 +83,8 @@ public class PortFactory
      */
     public <T> T getInstanceOf(Class<T> inboundPort, Properties adapterProperties)
     {
-        Validate.notNull(inboundPort);
-        Validate.notNull(adapterProperties);
+        Objects.requireNonNull(inboundPort);
+        Objects.requireNonNull(adapterProperties);
 
 
         var existingInstance = objectPool.getInstance(inboundPort);
@@ -156,8 +156,8 @@ public class PortFactory
      */
     <T> T newInstanceOf(Class<T> inboundPort, Properties adapterProperties)
     {
-        Validate.notNull(inboundPort);
-        Validate.notNull(adapterProperties);
+        Objects.requireNonNull(inboundPort);
+        Objects.requireNonNull(adapterProperties);
 
         var portConstructor = findConstructor(inboundPort)
                 .orElseThrow(() -> new MissingAdapterException(inboundPort, adapterFactory));
