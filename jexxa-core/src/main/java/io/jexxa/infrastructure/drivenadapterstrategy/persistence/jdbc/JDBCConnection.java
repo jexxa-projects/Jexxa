@@ -118,7 +118,7 @@ public class JDBCConnection implements AutoCloseable
         {
             if (!getConnection().isValid(NO_TIMEOUT))
             {
-                throw new IllegalStateException("");
+                throw new IllegalStateException("JDBC Connection is invalid for connection " + properties.getProperty(JDBC_URL));
             }
         } catch (SQLException e)
         {
