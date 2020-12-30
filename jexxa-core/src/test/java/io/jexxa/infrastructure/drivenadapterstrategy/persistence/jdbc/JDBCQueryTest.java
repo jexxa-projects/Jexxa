@@ -1,25 +1,22 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Properties;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.validation.constraints.AssertTrue;
 
 import io.jexxa.TestConstants;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 @Tag(TestConstants.INTEGRATION_TEST)
 class JDBCQueryTest
 {
+    private static final int PRIMARY_KEY_WITH_NULL_VALUES = 1;
+    private static final int PRIMARY_KEY_WITH_NONNULL_VALUES = 2;
+    private static final int PRIMARY_KEY_NOT_PRESENT = 3;
+
     private JDBCConnection jdbcConnection;
 
     @BeforeEach
@@ -35,59 +32,37 @@ class JDBCQueryTest
 
         jdbcConnection = new JDBCConnection(postgresProperties);
         dropTable();
-        autocreateTable(postgresProperties);
+        autocreateTable();
+        insertTestData();
     }
 
     @Test
     void testNonNullValues()
     {
         //Arrange
-        var command = String.format("insert into %s values( '%s' , '%s', '%s', '%s', '%s', '%s' )",
-                JDBCQueryTest.class.getSimpleName(), 1, 2 , 3, 4, 5, "HELLO WORLD");
-
-        jdbcConnection.execute(command).asUpdate();
 
         //act
-        var getIntegerType =  String.format("select integer_type from %s where key = '1'", JDBCQueryTest.class.getSimpleName());
+        var getIntegerType =  String.format("select integer_type from %s where key = '%s'"
+                , JDBCQueryTest.class.getSimpleName()
+                , PRIMARY_KEY_WITH_NONNULL_VALUES);
         jdbcConnection.query(getIntegerType).asInt().findFirst().orElseThrow();
     }
 
-    @Test
-    @Disabled
-    void testNullStreams()
-    {
-        //Arrange
-        var testStrings = new ArrayList<String>();
-        testStrings.add(null);
-        testStrings.add("Hello");
-        testStrings.add(null);
-
-        var goodStream = testStrings.stream().flatMap(Stream::ofNullable);
-
-        System.out.println("COUNT " + goodStream.count());
-        var result = goodStream
-                .findFirst()
-                .orElseThrow();
-
-
-        assertNull(result);
-    }
 
     @Test
-    @Disabled
     void testNullValues()
     {
         //Arrange
-        var command = String.format("insert into %s values( '%s' , null, null, null, null, null )",
-                JDBCQueryTest.class.getSimpleName(), 1);
-
-        jdbcConnection.execute(command).asUpdate();
 
         //act
-        var getIntegerType =  String.format("select integer_type from %s where key = '1'", JDBCQueryTest.class.getSimpleName());
+        var getIntegerType =  String.format("select integer_type from %s where key = '%s'"
+                , JDBCQueryTest.class.getSimpleName()
+                , PRIMARY_KEY_WITH_NULL_VALUES);
         jdbcConnection.query(getIntegerType).asInt().findFirst().orElseThrow();
 
-        var getStringType =  String.format("select string_type from %s where key = '1'", JDBCQueryTest.class.getSimpleName());
+        var getStringType =  String.format("select string_type from %s where key = '%s'"
+                , JDBCQueryTest.class.getSimpleName()
+                , PRIMARY_KEY_WITH_NULL_VALUES);
         jdbcConnection.query(getStringType).asString().findFirst().orElseThrow();
     }
 
@@ -95,22 +70,15 @@ class JDBCQueryTest
     void testIsPresent()
     {
         //Arrange
-        var insertNullValues = String.format("insert into %s values( '%s' , null, null, null, null, null )",
-                JDBCQueryTest.class.getSimpleName(), 1);
-        var insertNonNullValues = String.format("insert into %s values( '%s' , '%s', '%s', '%s', '%s', '%s' )",
-                JDBCQueryTest.class.getSimpleName(), 2, 2 , 3, 4, 5, "HELLO WORLD");
 
-        jdbcConnection.execute(insertNullValues).asUpdate();
-        jdbcConnection.execute(insertNonNullValues).asUpdate();
+        var queryNullInteger =  String.format("select integer_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NULL_VALUES);
+        var queryNullString =  String.format("select string_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NULL_VALUES);
 
-        var queryNullInteger =  String.format("select integer_type from %s where key = '1'", JDBCQueryTest.class.getSimpleName());
-        var queryNullString =  String.format("select string_type from %s where key = '1'", JDBCQueryTest.class.getSimpleName());
+        var queryNonNullInteger =  String.format("select integer_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NONNULL_VALUES);
+        var queryNonNullString =  String.format("select string_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NONNULL_VALUES);
 
-        var queryNonNullInteger =  String.format("select integer_type from %s where key = '2'", JDBCQueryTest.class.getSimpleName());
-        var queryNonNullString =  String.format("select string_type from %s where key = '2'", JDBCQueryTest.class.getSimpleName());
-
-        var queryNotAvailableInteger =  String.format("select integer_type from %s where key = '3'", JDBCQueryTest.class.getSimpleName());
-        var queryNotAvailableString =  String.format("select string_type from %s where key = '3'", JDBCQueryTest.class.getSimpleName());
+        var queryNotAvailableInteger =  String.format("select integer_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_NOT_PRESENT);
+        var queryNotAvailableString =  String.format("select string_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_NOT_PRESENT);
 
         //act / assert - NullValues
         assertTrue( jdbcConnection.query(queryNullInteger).isPresent());
@@ -134,7 +102,7 @@ class JDBCQueryTest
         assertTrue( jdbcConnection.query(queryNotAvailableString).isEmpty());
     }
 
-    private void autocreateTable(final Properties properties)
+    private void autocreateTable()
     {
 
         var command = String.format("CREATE TABLE IF NOT EXISTS %s ( key INTEGER PRIMARY KEY" +
@@ -159,6 +127,17 @@ class JDBCQueryTest
         jdbcConnection
                 .execute(command)
                 .asIgnore();
+    }
+
+    private void insertTestData()
+    {
+        var insertNullValues = String.format("insert into %s values( '%s' , null, null, null, null, null )",
+                JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NULL_VALUES);
+        var insertNonNullValues = String.format("insert into %s values( '%s' , '%s', '%s', '%s', '%s', '%s' )",
+                JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NONNULL_VALUES, 2 , 3, 4, 5, "HELLO WORLD");
+
+        jdbcConnection.execute(insertNullValues).asUpdate();
+        jdbcConnection.execute(insertNonNullValues).asUpdate();
     }
 
 

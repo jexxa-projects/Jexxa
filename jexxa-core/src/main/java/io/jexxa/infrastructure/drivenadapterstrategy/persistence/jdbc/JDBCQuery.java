@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -33,9 +34,9 @@ public class JDBCQuery
         this.command = command;
     }
 
-    public Stream<String> asString()
+    public Stream<Optional<String>> asString()
     {
-        return as( resultSet -> resultSet.getString(1) );
+        return as( resultSet -> resultSet.getString(1) ).map(Optional::ofNullable);
     }
 
     public Stream<BigDecimal> asNumeric()

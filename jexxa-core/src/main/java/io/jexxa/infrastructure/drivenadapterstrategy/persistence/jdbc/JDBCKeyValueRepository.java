@@ -14,16 +14,39 @@ import org.slf4j.Logger;
 
 public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRepository<T, K>
 {
+    /**
+     * @deprecated use constant {@link JDBCConnection#JDBC_URL} instead
+     */
     @Deprecated(forRemoval = true)
     public static final String JDBC_URL = "io.jexxa.jdbc.url";
+
+    /**
+     * @deprecated use constant {@link JDBCConnection#JDBC_USERNAME} instead
+     */
     @Deprecated(forRemoval = true)
     public static final String JDBC_USERNAME = "io.jexxa.jdbc.username";
+
+    /**
+     * @deprecated use constant {@link JDBCConnection#JDBC_PASSWORD} instead
+     */
     @Deprecated(forRemoval = true)
     public static final String JDBC_PASSWORD = "io.jexxa.jdbc.password";
+
+    /**
+     * @deprecated use constant {@link JDBCConnection#JDBC_DRIVER} instead
+     */
     @Deprecated(forRemoval = true)
     public static final String JDBC_DRIVER = "io.jexxa.jdbc.driver";
+
+    /**
+     * @deprecated use constant {@link JDBCConnection#JDBC_AUTOCREATE_TABLE} instead
+     */
     @Deprecated(forRemoval = true)
     public static final String JDBC_AUTOCREATE_TABLE = "io.jexxa.jdbc.autocreate.table";
+
+    /**
+     * @deprecated use constant {@link JDBCConnection#JDBC_AUTOCREATE_DATABASE} instead
+     */
     @Deprecated(forRemoval = true)
     public static final String JDBC_AUTOCREATE_DATABASE = "io.jexxa.jdbc.autocreate.database";
 
@@ -114,6 +137,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         return getConnection()
                 .query(sqlQuery)
                 .asString()
+                .flatMap(Optional::stream)
                 .findFirst()
                 .map( element -> gson.fromJson(element, aggregateClazz))
                 .or(Optional::empty);
@@ -125,6 +149,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         return getConnection()
                 .query("select value from "+ getAggregateName())
                 .asString()
+                .flatMap(Optional::stream)
                 .map( element -> gson.fromJson(element, aggregateClazz))
                 .collect(Collectors.toList());
     }
