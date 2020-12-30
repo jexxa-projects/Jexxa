@@ -20,7 +20,7 @@ public class JDBCQuery
         R apply(T t) throws SQLException;
     }
 
-    private static final String INVALID_QUERY = "Invalid Query: ";
+    private static final String INVALID_QUERY = "Invalid query or type conversion: ";
 
     private final Supplier<JDBCConnection> jdbcConnection;
     private final String command;
@@ -39,9 +39,9 @@ public class JDBCQuery
         return as( resultSet -> resultSet.getString(1) ).map(Optional::ofNullable);
     }
 
-    public Stream<BigDecimal> asNumeric()
+    public Stream<Optional<BigDecimal>> asNumeric()
     {
-        return as( resultSet -> resultSet.getBigDecimal(1) );
+        return as( resultSet -> resultSet.getBigDecimal(1) ).map(Optional::ofNullable);
     }
 
     public Stream<Long> asLong()
@@ -64,10 +64,12 @@ public class JDBCQuery
         return as( resultSet -> resultSet.getInt(1) );
     }
 
-    public Stream<Instant> asTimestamp()
+    public Stream<Optional<Instant>> asTimestamp()
     {
         return as(resultSet -> resultSet.getTimestamp(1))
-                .map(Timestamp::toInstant);
+                .map(Optional::ofNullable)
+                .map( element -> element.map(Timestamp::toInstant))
+                ;
     }
 
     public boolean isEmpty()
