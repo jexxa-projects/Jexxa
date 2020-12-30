@@ -69,6 +69,24 @@ public class JDBCQuery
                 .map(Timestamp::toInstant);
     }
 
+    public boolean isEmpty()
+    {
+        return !isPresent();
+    }
+
+    public boolean isPresent()
+    {
+        try ( var statement = jdbcConnection.get().createStatement();
+              var resultSet = statement.executeQuery(command))
+        {
+            return resultSet.next();
+        }
+        catch (SQLException e)
+        {
+            throw new IllegalStateException(INVALID_QUERY + command , e);
+        }
+    }
+
     public <R> Stream<R> as(CheckedFunction<ResultSet, R> function)
     {
         try ( var statement = jdbcConnection.get().createStatement();
