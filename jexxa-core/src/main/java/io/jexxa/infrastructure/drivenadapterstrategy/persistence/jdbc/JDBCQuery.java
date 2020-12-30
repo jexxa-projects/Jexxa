@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -19,7 +20,7 @@ public class JDBCQuery
         R apply(T t) throws SQLException;
     }
 
-    private static final String INVALID_QUERY = "Invalid Query: ";
+    private static final String INVALID_QUERY = "Invalid query or type conversion: ";
 
     private final Supplier<JDBCConnection> jdbcConnection;
     private final String command;
@@ -33,14 +34,14 @@ public class JDBCQuery
         this.command = command;
     }
 
-    public Stream<String> asString()
+    public Stream<Optional<String>> asString()
     {
-        return as( resultSet -> resultSet.getString(1) );
+        return as( resultSet -> resultSet.getString(1) ).map(Optional::ofNullable);
     }
 
-    public Stream<BigDecimal> asNumeric()
+    public Stream<Optional<BigDecimal>> asNumeric()
     {
-        return as( resultSet -> resultSet.getBigDecimal(1) );
+        return as( resultSet -> resultSet.getBigDecimal(1) ).map(Optional::ofNullable);
     }
 
     public Stream<Long> asLong()
@@ -63,10 +64,30 @@ public class JDBCQuery
         return as( resultSet -> resultSet.getInt(1) );
     }
 
-    public Stream<Instant> asTimestamp()
+    public Stream<Optional<Instant>> asTimestamp()
     {
         return as(resultSet -> resultSet.getTimestamp(1))
-                .map(Timestamp::toInstant);
+                .map(Optional::ofNullable)
+                .map( element -> element.map(Timestamp::toInstant))
+                ;
+    }
+
+    public boolean isEmpty()
+    {
+        return !isPresent();
+    }
+
+    public boolean isPresent()
+    {
+        try ( var statement = jdbcConnection.get().createStatement();
+              var resultSet = statement.executeQuery(command))
+        {
+            return resultSet.next();
+        }
+        catch (SQLException e)
+        {
+            throw new IllegalStateException(INVALID_QUERY + command , e);
+        }
     }
 
     public <R> Stream<R> as(CheckedFunction<ResultSet, R> function)
