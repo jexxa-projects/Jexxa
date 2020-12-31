@@ -4,21 +4,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.7.0] - YYYY-MM-DD
+## \[2.7.1] - 2020-12-30
+### Fixed
+-   JDBCQuery: 
+    -   Fixed API so that returned streams obviously can include `null` values by returning a `Stream<Optional<T>>`.
+    -   Completed API with new methods `isPresent` and `isEmpty` to check if queries return a result.
+
+## \[2.7.0] - 2020-12-29
 
 ### Added
--   New `IMultiIndexRepository` to query range of aggregates from a Repository 
-    -   `JDBCMultiIndexRespotiory` which implements the new interface for JDBC
-    -   `IMDBMultiIndexRepository` which implements the new interface for IMDB 
-
 -   JDBCRepository:
     -   Added abstract base class `JDBCRepository` for implementing specific repository
-    -   Added wrapper classes `JDBCQuery` and `JDBCCommand` for reading and executing commands using a stream like API.  
+    -   Added wrapper classes `JDBCQuery` and `JDBCCommand` for reading and executing commands using Java streams.
 
 -   New Tutorial [TimeService - Flow Of Control](https://github.com/repplix/Jexxa/blob/master/tutorials/TimeService/README-FlowOfControl.md)
 
 ### Changed
 -   Updated dependencies
+
+-   JDBCKeyValueRepository:
+    -   Inherits from JDBCRepository
+    -   Changed implementation to `JDBCQuery` and `JDBCCommand`
+    
+## \[2.6.2] - 2020-12-23
+### Fixed
+-   OpenAPI-Support in `RESTfulRPCAdapter`:
+    -   Corrected schema creation of data types including Java8 date/time types
+
+### Added 
+-   New Tutorial [TimeService - Flow Of Control](https://github.com/repplix/Jexxa/blob/master/tutorials/TimeService/README-FlowOfControl.md)
+
+### Changed
+-   Updated dependencies on minor level
 
 ## \[2.6.1] - 2020-12-12
 ### Fixed
