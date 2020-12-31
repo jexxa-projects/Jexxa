@@ -17,7 +17,7 @@ public abstract class TypedMessageListener<T> extends JSONMessageListener
         this.clazz = clazz;
     }
 
-    protected abstract void onMessage(T message);
+    public abstract void onMessage(T message);
 
     @Override
     public final void onMessage(TextMessage message)
