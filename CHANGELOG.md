@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[2.7.1] - 2020-12-30
 ### Fixed
 -   JDBCQuery: 
-    -   Fixed API so that returned streams that can include `null` values return a `Stream<Optional<T>>`.
+    -   Fixed API so that returned streams obviously can include `null` values by returning a `Stream<Optional<T>>`.
     -   Completed API with new methods `isPresent` and `isEmpty` to check if queries return a result.
 
 ## \[2.7.0] - 2020-12-29
