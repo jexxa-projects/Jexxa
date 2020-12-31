@@ -179,7 +179,10 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         return Arrays.stream(object.getClass().getMethods())
                 .filter(method -> method.isAnnotationPresent(JMSConfiguration.class))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Given object does not provide a " + JMSConfiguration.class.getSimpleName()))
+                .orElseThrow(() -> new IllegalArgumentException(
+                        String.format("Given object %s does not provide a %s for any public method!"
+                                , object.getClass().getSimpleName()
+                                , JMSConfiguration.class.getSimpleName())))
                 .getDeclaredAnnotation(JMSConfiguration.class);
     }
 
