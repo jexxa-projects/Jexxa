@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[2.7.2] - 2021-01-07
+### Fixed
+-  JMS Listener: 
+    - Make abstract method public so that IDE makes an implementation of these abstract methods is automatically made public by an IDE 
+
 ## \[2.7.1] - 2020-12-30
 ### Fixed
 -   JDBCQuery: 
