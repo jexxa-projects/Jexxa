@@ -1,6 +1,6 @@
 # TimeService - Flow of Control  
 
-## What you learn
+## What you learn ##
 
 *   A general idea of the building blocks of ports and adapters 
 *   How to follow the flow of control of your application using your architecture 
