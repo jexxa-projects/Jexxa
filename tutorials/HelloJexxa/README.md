@@ -56,7 +56,7 @@ public final class HelloJexxa
 }
 ```
 
-## Compile & Start the Application  ##
+## Compile & Start the Application ##
 ```console                                                          
 mvn clean install
 java -jar target/hellojexxa-jar-with-dependencies.jar
