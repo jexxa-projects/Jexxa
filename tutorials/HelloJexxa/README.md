@@ -1,6 +1,6 @@
 # HelloJexxa
 
-## What You Learn
+## What You Learn ##
 
 *   How to write a simple application using Jexxa
 *   How to bind different driving adapter to the `BoundedContext` object which allow to control your application from outside
@@ -8,14 +8,14 @@
 *   How to use the `jexxa-application.properties` to configure the driving adapters
 *   How to build a docker image with this tutorial    
 
-## What you need
+## What you need ##
 
 *   15 minutes
 *   JDK 11 (or higher) installed 
 *   Maven 3.6 (or higher) installed
 *   Docker installed (optional)
 
-## Write the application
+## Write the application ##
 The source code of the main method is quite obvious. Each line include comments to explain the meaning.  
 
 ```java     
@@ -54,7 +54,7 @@ public final class HelloJexxa
     }
 }
 ```
-## Compile & Start the Application
+## Compile & Start the Application  ##
 
 ```console                                                          
 mvn clean install
@@ -70,7 +70,7 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'HelloJexxa' successfully started in 0.549 seconds
 ```
 
-### Access the application via web browser
+### Access the application via web browser ###
 *   Get name of the bounded context:
     *   URL: http://localhost:7000/HelloJexxa/greetings
     *   Result: 
@@ -78,7 +78,7 @@ You will see following (or similar) output
         Hello Jexxa 
     ```
     
-### Access the application JConsole
+### Access the application JConsole ###
 
 *   Start jconsole and select the MBean `BoundedContext` as shown in screenshot below
 *   Now you can execute all methods of this object 
@@ -86,7 +86,7 @@ You will see following (or similar) output
 
 ![JConsole](images/JConsole.png) 
 
-### Adjust properties
+### Adjust properties ###
 In this simple tutorial `jexxa-application.properties` includes only the two parameters for RESTFulRPCAdapter. 
 The most interesting one here is `io.jexxa.rest.port` that allows to define the used network port. 
 
@@ -97,7 +97,7 @@ io.jexxa.rest.host=0.0.0.0
 io.jexxa.rest.port=7000
 ```
 
-## Build a docker image 
+## Build a docker image ##              
 In order to build a docker image with this tutorial we use the maven-jib-plugin. For the sake of simplicity we assume
 that docker is installed on your local machine so that we do not need to configure any external docker registry.
 
