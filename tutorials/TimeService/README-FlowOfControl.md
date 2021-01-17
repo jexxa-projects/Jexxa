@@ -1,4 +1,4 @@
-# TimeService - Flow of Control #  
+# TimeService - Flow of Control #
 
 ## What you learn ##
 
@@ -29,7 +29,7 @@ Since this is a very high level abstraction, this architecture is often called t
 
 Fore more details please read the article [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/).
            
-## Navigate through your application ## 
+## Navigate through your application ##
 
 The first way to navigate through source code that every developer learns is to follow the lines of code. This allows you to see the flow of control,
 which eventually allows you to understand the application logic. Most IDE's and debuggers support this very well. However, this only works well for a
@@ -54,7 +54,7 @@ control as good as possible.
 
 Let's see how it works...
 
-### The main-method ###  
+### The main-method ###
 
 Each application starts with the `main` method. Since it is our starting point, it should represent the beginning of the flow of control which is
 `Driving Adapter` &rarr; `Inbound Port`. For this purpose Jexxa's API offers methods to represent this binding explicitly in the main method.
@@ -120,7 +120,7 @@ of an onion architecture for your application core.
 
 Alternatively, you can select one of the two `Outbound Ports` from your IDE to continue in the direction of `Outbound Port` &rarr; `Driven Adapter`.
    
-### Leave the application core ###  
+### Leave the application core ###
 
 If we select `IMessageDisplay` we just see the following interface: 
 
@@ -157,7 +157,7 @@ public class MessageDisplay implements IMessageDisplay
 }
 ```
                    
-### One small exception ### 
+### One small exception ###
 
 In reality there is always an exception that confirms the rule. Within Jexxa this exception is directly in the beginning `Driving Adapter` &rarr;
 `Inbound Port`. The described rule works fine as long as the `Driving Adapter` can apply a convention how to automatically expose the methods 
