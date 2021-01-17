@@ -15,15 +15,15 @@ import java.util.stream.Stream;
 @SuppressWarnings("unused")
 public class JDBCQuery
 {
-    @FunctionalInterface
-    public interface CheckedFunction<T, R> {
-        R apply(T t) throws SQLException;
-    }
-
     private static final String INVALID_QUERY = "Invalid query or type conversion: ";
 
     private final Supplier<JDBCConnection> jdbcConnection;
     private final String command;
+
+    @FunctionalInterface
+    public interface CheckedFunction<T, R> {
+        R apply(T t) throws SQLException;
+    }
 
     JDBCQuery(Supplier<JDBCConnection> jdbcConnection, String command)
     {
