@@ -49,6 +49,11 @@
     <maven.reports.plugin>3.1.0</maven.reports.plugin>
     <maven.enforcer.plugin>3.0.0-M3</maven.enforcer.plugin>
     <maven.javadoc.plugin>3.2.0</maven.javadoc.plugin>
+    <maven.teplating.plugin>1.0.0</maven.teplating.plugin>
+
+    <!--information for filtered sources  -->
+    <build.timestamp>${maven.build.timestamp}</build.timestamp>
+    <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 
     <!-- target/compiler configuration  -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -128,6 +133,11 @@
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>${maven.resources.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>templating-maven-plugin</artifactId>
+          <version>${maven.teplating.plugin}</version>
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
