@@ -1,4 +1,4 @@
-# TimeService # 
+# TimeService #
 
 ## What You Learn ##
 
@@ -17,7 +17,7 @@
 *   A running ActiveMQ instance (at least if you start the application with option `-jms`)
 *   curl or jconsole to trigger the application  
 
-## Implement the Application Core ## 
+## Implement the Application Core ##
 
 The application core consists of following two classes:
 
@@ -25,7 +25,7 @@ The application core consists of following two classes:
 *   `ITimePublisher:` Allows for publishing current time and is a `DomainService` in terms of the pattern language of DDD
 *   `IMessageDisplay:` Shows a message and is a `DomainService` in terms of the pattern language of DDD        
   
-### Implement class `TimeService` ### 
+### Implement class `TimeService` ###
 
 This class provides the supports the main two very simple use cases of this application: 
 *   Provide current time
@@ -104,7 +104,7 @@ public interface IMessageDisplay
  
 ## Implement the Infrastructure ##
 
-### Driven Adapter with console output ### 
+### Driven Adapter with console output ###
 The implementation is quite simple and just prints given arguments to a logger.  
 
 Note: Jexxa uses implicit constructor injection together with a strict convention over configuration approach.
@@ -214,7 +214,7 @@ public final class PublishTimeListener extends TypedMessageListener<LocalTime>
 }
 ```
 
-## Implement the Application ## 
+## Implement the Application ##
 
 Finally, we have to write our application. As you can see in the code below there are two main differences compared to `HelloJexxa`:
 
@@ -267,7 +267,7 @@ public final class TimeServiceApplication
 
 That's it. 
 
-## Run the Application with console output ## 
+## Run the Application with console output ##
 
 ```console                                                          
 mvn clean install
@@ -283,7 +283,7 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'TimeService' successfully started in 0.649 seconds
 ```          
 
-### Publish the time  with console output ### 
+### Publish the time  with console output ###
 
 You can use curl to publish the time.  
 ```Console
@@ -300,7 +300,7 @@ Each time you execute curl you should see following output on the console:
 [qtp380242442-31] INFO io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger - End> Send message
 ```
 
-## Run the Application with JMS ## 
+## Run the Application with JMS ##
 
 ```console                                                          
 mvn clean install
@@ -316,7 +316,7 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'TimeService' successfully started in 0.649 seconds
 ```          
 
-### Publish the time with JMS ### 
+### Publish the time with JMS ###
  
 You can use curl to publish the time.  
 ```Console
