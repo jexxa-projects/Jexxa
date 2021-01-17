@@ -16,6 +16,7 @@
 *   Docker installed (optional)
 
 ## Write the application ##
+
 The source code of the main method is quite obvious. Each line include comments to explain the meaning.  
 
 ```java     
@@ -54,8 +55,8 @@ public final class HelloJexxa
     }
 }
 ```
-## Compile & Start the Application  ##
 
+## Compile & Start the Application  ##
 ```console                                                          
 mvn clean install
 java -jar target/hellojexxa-jar-with-dependencies.jar
@@ -97,7 +98,7 @@ io.jexxa.rest.host=0.0.0.0
 io.jexxa.rest.port=7000
 ```
 
-## Build a docker image ##              
+## Build a docker image ##
 In order to build a docker image with this tutorial we use the maven-jib-plugin. For the sake of simplicity we assume
 that docker is installed on your local machine so that we do not need to configure any external docker registry.
 
