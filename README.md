@@ -38,14 +38,14 @@ Maven:
 <dependency>
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa-core</artifactId>
-  <version>2.7.2</version>
+  <version>2.7.3</version>
 </dependency> 
 ```
 
 Gradle:
 
 ```groovy
-compile "io.Jexxa:jexxa-core:2.7.2"
+compile "io.Jexxa:jexxa-core:2.7.3"
 ``` 
  
 ### Start programming 
