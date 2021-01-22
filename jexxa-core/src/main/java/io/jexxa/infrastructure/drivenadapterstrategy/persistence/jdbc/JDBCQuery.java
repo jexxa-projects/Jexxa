@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -64,12 +63,10 @@ public class JDBCQuery
         return as( resultSet -> resultSet.getInt(1) );
     }
 
-    public Stream<Optional<Instant>> asTimestamp()
+    public Stream<Optional<Timestamp>> asTimestamp()
     {
         return as(resultSet -> resultSet.getTimestamp(1))
-                .map(Optional::ofNullable)
-                .map( element -> element.map(Timestamp::toInstant))
-                ;
+                .map(Optional::ofNullable);
     }
 
     public boolean isEmpty()
