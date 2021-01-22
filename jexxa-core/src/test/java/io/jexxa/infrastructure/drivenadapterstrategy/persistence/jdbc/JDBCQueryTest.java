@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -41,7 +42,7 @@ class JDBCQueryTest
     private final String queryNotAvailableInteger =  String.format("select integer_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_NOT_PRESENT);
     private final String queryNotAvailableString =  String.format("select string_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_NOT_PRESENT);
 
-    private final Instant testTimestamp = Instant.now();
+    private final Timestamp testTimestamp = Timestamp.from(Instant.now().truncatedTo(ChronoUnit.MICROS));
     private final String testString = "Hello World";
     private final int testIntValue = 2;
     private final int testFloatValue = 3;
@@ -196,7 +197,7 @@ class JDBCQueryTest
         var insertNullValues = String.format("insert into %s values( '%s' , null, null, null, null, null, null )",
                 JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NULL_VALUES);
         var insertNonNullValues = String.format("insert into %s values( '%s' , '%s', '%s', '%s', '%s', '%s' , '%s')",
-                JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NONNULL_VALUES, testIntValue , testNumericValue, testFloatValue, testDoubleValue, testString, Timestamp.from(testTimestamp));
+                JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NONNULL_VALUES, testIntValue , testNumericValue, testFloatValue, testDoubleValue, testString, testTimestamp);
 
         jdbcConnection.execute(insertNullValues).asUpdate();
         jdbcConnection.execute(insertNonNullValues).asUpdate();

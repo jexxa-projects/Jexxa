@@ -64,12 +64,10 @@ public class JDBCQuery
         return as( resultSet -> resultSet.getInt(1) );
     }
 
-    public Stream<Optional<Instant>> asTimestamp()
+    public Stream<Optional<Timestamp>> asTimestamp()
     {
         return as(resultSet -> resultSet.getTimestamp(1))
-                .map(Optional::ofNullable)
-                .map( element -> element.map(Timestamp::toInstant))
-                ;
+                .map(Optional::ofNullable);
     }
 
     public boolean isEmpty()
