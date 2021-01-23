@@ -1,7 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.STATIC_FILES;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.STATIC_FILES_ROOT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -55,7 +55,7 @@ class RESTfulRPCAdapterIT
 
         properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
         properties.put(HTTP_PORT_PROPERTY, Integer.toString(defaultPort));
-        properties.put(STATIC_FILES, "/public");
+        properties.put(STATIC_FILES_ROOT, "/public");
 
         objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
         objectUnderTest.register(simpleApplicationService);
