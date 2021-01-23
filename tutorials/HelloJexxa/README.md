@@ -71,9 +71,9 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'HelloJexxa' successfully started in 0.549 seconds
 ```
 
-## Access the application 
+## Access the application ## 
 
-### Access application via web browser
+### Using a web browser ###
 *   Get name of the bounded context:
     *   URL: http://localhost:7000/HelloJexxa/greetings
     *   Result: 
@@ -92,7 +92,7 @@ io.jexxa.rest.host=0.0.0.0
 io.jexxa.rest.port=7000
 ```
 
-### Access provided web pages
+### Access provided web pages ###
 You can also define a path to static web pages in properties as follows. 
 ```properties                                                          
 #Settings for RESTfulRPCAdapter
@@ -108,7 +108,7 @@ The web page can be accessed via following link [http://localhost:7000/index.htm
 
 ![Webpage](images/Webpage.jpg)
     
-# Access the application JConsole ###
+### Use JConsole ###
 
 *   Start jconsole and select the MBean `BoundedContext` as shown in screenshot below
 *   Now you can execute all methods of this object 
