@@ -73,13 +73,13 @@
     <commons.lang3.version>3.11</commons.lang3.version>
     <commons.cli.version>1.4</commons.cli.version>
     <gson.version>2.8.6</gson.version>
-    <javalin.version>3.12.0</javalin.version>
+    <javalin.version>3.13.0</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
     <jackson.databind.version>2.12.1</jackson.databind.version>
     <jackson.core.version>2.12.1</jackson.core.version>
 
     <!-- version of test dependencies -->
-    <activemq.client.version>5.16.0</activemq.client.version>
+    <activemq.client.version>5.16.1</activemq.client.version>
     <postgres.version>42.2.18</postgres.version>
     <unirest.java.version>3.11.10</unirest.java.version>
     <junit.platform.launcher.version>1.7.0</junit.platform.launcher.version>
