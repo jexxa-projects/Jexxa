@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[2.8.0] - yyyy-mm-dd
+### Added
+-   `RESTfulRPCAdapter`:
+    -   Added support for providing static web pages. See tutorial [HelloJexxa](https://github.com/repplix/Jexxa/blob/master/tutorials/HelloJexxa/README.md)
+
+
 ## \[2.7.3] - 2021-01-22
 ### Fixed
 -   JDBCQuery:
