@@ -71,25 +71,19 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'HelloJexxa' successfully started in 0.549 seconds
 ```
 
-### Access the application via web browser ###
+## Access the application 
+
+### Access application via web browser
 *   Get name of the bounded context:
     *   URL: http://localhost:7000/HelloJexxa/greetings
     *   Result: 
     ```Json 
         Hello Jexxa 
     ```
-    
-### Access the application JConsole ###
-
-*   Start jconsole and select the MBean `BoundedContext` as shown in screenshot below
-*   Now you can execute all methods of this object 
-*   Execute `shutdown` to end the application 
-
-![JConsole](images/JConsole.png) 
 
 ### Adjust properties ###
-In this simple tutorial `jexxa-application.properties` includes only the two parameters for RESTFulRPCAdapter. 
-The most interesting one here is `io.jexxa.rest.port` that allows to define the used network port. 
+In this simple tutorial `jexxa-application.properties` includes only the two parameters for RESTFulRPCAdapter.
+The most interesting one here is `io.jexxa.rest.port` that allows to define the used network port.
 
 ```properties                                                          
 #Settings for RESTfulRPCAdapter
@@ -97,6 +91,30 @@ The most interesting one here is `io.jexxa.rest.port` that allows to define the 
 io.jexxa.rest.host=0.0.0.0
 io.jexxa.rest.port=7000
 ```
+
+### Access provided web pages
+You can also define a path to static web pages in properties as follows. 
+```properties                                                          
+#Settings for RESTfulRPCAdapter
+...
+io.jexxa.rest.static_files_root=/public
+```
+
+Note: This directory is relative to the class path of the application. From a web client it is accessed without any other prefix. 
+
+This tutorial provides a simple web page which performs the previous `GET`. The html page itself can be found [here](src/main/resources/public/index.html).
+
+The web page can be accessed via following link [http://localhost:7000/index.html](http://localhost:7000/index.html) and looks as follows: 
+
+![Webpage](images/Webpage.jpg)
+    
+# Access the application JConsole ###
+
+*   Start jconsole and select the MBean `BoundedContext` as shown in screenshot below
+*   Now you can execute all methods of this object 
+*   Execute `shutdown` to end the application 
+
+![JConsole](images/JConsole.png) 
 
 ## Build a docker image ##
 In order to build a docker image with this tutorial we use the maven-jib-plugin. For the sake of simplicity we assume
