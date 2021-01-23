@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<title> Test page for Jexxa </title>
+
+<body>
+<h1 id = "greetings">Greetings: </h1>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+    const BASE_URL = 'http://' + location.host +'/HelloJexxa';
+
+    const appendToDOM = (message) => {
+        document
+            .querySelector("#greetings")
+            .append(message);
+    };
+
+    const fetchGreetings = () => {
+        axios.get(`${BASE_URL}/greetings`)
+            .then(response => {
+                const greetings = response.data;
+                console.log(`GET greetings`, greetings);
+                // append to DOM
+                appendToDOM(greetings);
+            })
+            .catch(error => console.error(error));
+    };
+
+    fetchGreetings();
+</script>
+</body>
+</html>
