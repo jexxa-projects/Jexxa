@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title> Test page for Jexxa </title>
 </head>
 
@@ -10,7 +11,7 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script>
-    const BASE_URL = 'http://' + location.host +'/HelloJexxa';
+    const BASE_URL = window.location.protocol + '//' + location.host +'/HelloJexxa';
 
     const appendToDOM = (message) => {
         document
