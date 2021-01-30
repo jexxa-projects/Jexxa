@@ -107,6 +107,12 @@ public class JDBCConnection implements AutoCloseable
         return new JDBCQueryBuilder<>(() -> this);
     }
 
+    @SuppressWarnings("java:S1172")
+    public <T extends Enum<T>>  JDBCCommandBuilder<T> createCommand(Class<T> schema)
+    {
+        return new JDBCCommandBuilder<>(() -> this);
+    }
+
 
     /**
      * This method resets the internal JDBC connection in the following way:

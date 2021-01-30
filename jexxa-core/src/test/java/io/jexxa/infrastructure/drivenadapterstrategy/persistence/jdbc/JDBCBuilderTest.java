@@ -1,8 +1,8 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryBuilderTest.JDBCQueryBuilderTestSchema.INTEGER_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryBuilderTest.JDBCQueryBuilderTestSchema.JDBCQueryBuilderTestTable;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryBuilderTest.JDBCQueryBuilderTestSchema.KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCBuilderTest.JDBCBuilderTestSchema.INTEGER_TYPE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCBuilderTest.JDBCBuilderTestSchema.JDBCQueryBuilderTestTable;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCBuilderTest.JDBCBuilderTestSchema.KEY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -15,7 +15,7 @@ import java.util.Properties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class JDBCQueryBuilderTest
+class JDBCBuilderTest
 {
     private static final int PRIMARY_KEY_WITH_NULL_VALUES = 1;
     private static final int PRIMARY_KEY_WITH_NONNULL_VALUES = 2;
@@ -30,7 +30,8 @@ class JDBCQueryBuilderTest
 
     private JDBCConnection jdbcConnection;
 
-    enum JDBCQueryBuilderTestSchema {
+    enum JDBCBuilderTestSchema
+    {
         JDBCQueryBuilderTestTable,
         KEY,
         INTEGER_TYPE,
@@ -65,7 +66,7 @@ class JDBCQueryBuilderTest
     void buildQuery()
     {
         //"SELECT SEQID FROM bestellung WHERE bestid=5"
-        var objectUnderTest = jdbcConnection.createQuery(JDBCQueryBuilderTestSchema.class);
+        var objectUnderTest = jdbcConnection.createQuery(JDBCBuilderTestSchema.class);
 
         //Act
         var query = objectUnderTest
@@ -111,13 +112,18 @@ class JDBCQueryBuilderTest
 
     private void insertTestData()
     {
-        var insertNullValues = String.format("insert into %s values( '%s' , null, null, null, null, null, null )",
-                JDBCQueryBuilderTestTable, PRIMARY_KEY_WITH_NULL_VALUES);
-        var insertNonNullValues = String.format("insert into %s values( '%s' , '%s', '%s', '%s', '%s', '%s' , '%s')",
-                JDBCQueryBuilderTestTable, PRIMARY_KEY_WITH_NONNULL_VALUES, testIntValue , testNumericValue, testFloatValue, testDoubleValue, testString, testTimestamp);
+        var insertNullValues2 = jdbcConnection.createCommand(JDBCBuilderTestSchema.class)
+                .insertInto(JDBCQueryBuilderTestTable)
+                .values(PRIMARY_KEY_WITH_NULL_VALUES, null, null, null, null, null, null )
+                .create();
 
-        jdbcConnection.execute(insertNullValues).asUpdate();
-        jdbcConnection.execute(insertNonNullValues).asUpdate();
+        var insertNonNullValues2 = jdbcConnection.createCommand(JDBCBuilderTestSchema.class)
+                .insertInto(JDBCQueryBuilderTestTable)
+                .values(PRIMARY_KEY_WITH_NONNULL_VALUES, testIntValue , testNumericValue, testFloatValue, testDoubleValue, testString, testTimestamp)
+                .create();
+
+        insertNullValues2.asUpdate();
+        insertNonNullValues2.asUpdate();
     }
 
 

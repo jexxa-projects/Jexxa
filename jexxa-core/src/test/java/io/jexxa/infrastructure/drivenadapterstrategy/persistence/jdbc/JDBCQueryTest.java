@@ -1,5 +1,12 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.DOUBLE_TYPE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.FLOAT_TYPE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.INTEGER_TYPE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.NUMERIC_TYPE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.STRING_TYPE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.TIMESTAMP_TYPE;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -24,23 +31,24 @@ class JDBCQueryTest
     private static final int PRIMARY_KEY_WITH_NONNULL_VALUES = 2;
     private static final int PRIMARY_KEY_NOT_PRESENT = 3;
 
-    private final String queryNullInteger =  String.format("select integer_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NULL_VALUES);
-    private final String queryNullNumeric =  String.format("select numeric_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NULL_VALUES);
-    private final String queryNullFloat =  String.format("select float_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NULL_VALUES);
-    private final String queryNullDouble =  String.format("select double_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NULL_VALUES);
-    private final String queryNullString =  String.format("select string_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NULL_VALUES);
-    private final String queryNullTimestamp =  String.format("select timestamp_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NULL_VALUES);
+    private JDBCPreparedQuery queryNullInteger;
+    private JDBCPreparedQuery queryNullNumeric;
+    private JDBCPreparedQuery queryNullFloat;
+    private JDBCPreparedQuery queryNullDouble;
+    private JDBCPreparedQuery queryNullString;
+    private JDBCPreparedQuery queryNullTimestamp;
 
-    private final String queryNonNullInteger =  String.format("select integer_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NONNULL_VALUES);
-    private final String queryNonNullNumeric =  String.format("select numeric_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NONNULL_VALUES);
-    private final String queryNonNullFloat =  String.format("select float_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NONNULL_VALUES);
-    private final String queryNonNullDouble =  String.format("select double_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NONNULL_VALUES);
-    private final String queryNonNullString =  String.format("select string_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NONNULL_VALUES);
-    private final String queryNonNullTimestamp =  String.format("select timestamp_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NONNULL_VALUES);
+    private JDBCPreparedQuery queryNonNullInteger;
+    private JDBCPreparedQuery queryNonNullNumeric;
+    private JDBCPreparedQuery queryNonNullFloat;
+    private JDBCPreparedQuery queryNonNullDouble;
+    private JDBCPreparedQuery queryNonNullString;
+    private JDBCPreparedQuery queryNonNullTimestamp;
 
 
-    private final String queryNotAvailableInteger =  String.format("select integer_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_NOT_PRESENT);
-    private final String queryNotAvailableString =  String.format("select string_type from %s where key = '%s'", JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_NOT_PRESENT);
+    private JDBCPreparedQuery queryNotAvailableInteger;
+    private JDBCPreparedQuery queryNotAvailableString;
+
 
     private final Timestamp testTimestamp = Timestamp.from(Instant.now().truncatedTo(ChronoUnit.MICROS));
     private final String testString = "Hello World";
@@ -66,6 +74,7 @@ class JDBCQueryTest
         dropTable();
         autocreateTable();
         insertTestData();
+        createQueries();
     }
 
     @Test
@@ -74,19 +83,19 @@ class JDBCQueryTest
         //Arrange
 
         //act
-        assertDoesNotThrow(() -> jdbcConnection.query(queryNonNullInteger).asInt().findFirst().orElseThrow() );
-        assertDoesNotThrow(() -> jdbcConnection.query(queryNonNullNumeric).asNumeric().flatMap(Optional::stream).findFirst().orElseThrow() );
-        assertDoesNotThrow(() -> jdbcConnection.query(queryNonNullFloat).asFloat().findFirst().orElseThrow() );
-        assertDoesNotThrow(() -> jdbcConnection.query(queryNonNullDouble).asDouble().findFirst().orElseThrow() );
-        assertDoesNotThrow(() -> jdbcConnection.query(queryNonNullString).asString().flatMap(Optional::stream).findFirst().orElseThrow());
-        assertDoesNotThrow(() -> jdbcConnection.query(queryNonNullTimestamp).asTimestamp().flatMap(Optional::stream).findFirst().orElseThrow());
+        assertDoesNotThrow(() -> queryNonNullInteger.asInt().findFirst().orElseThrow() );
+        assertDoesNotThrow(() -> queryNonNullNumeric.asNumeric().flatMap(Optional::stream).findFirst().orElseThrow() );
+        assertDoesNotThrow(() -> queryNonNullFloat.asFloat().findFirst().orElseThrow() );
+        assertDoesNotThrow(() -> queryNonNullDouble.asDouble().findFirst().orElseThrow() );
+        assertDoesNotThrow(() -> queryNonNullString.asString().flatMap(Optional::stream).findFirst().orElseThrow());
+        assertDoesNotThrow(() -> queryNonNullTimestamp.asTimestamp().flatMap(Optional::stream).findFirst().orElseThrow());
 
-        assertEquals(testIntValue, jdbcConnection.query(queryNonNullInteger).asInt().findFirst().orElseThrow() );
-        assertEquals(testNumericValue, jdbcConnection.query(queryNonNullNumeric).asNumeric().flatMap(Optional::stream).findFirst().orElseThrow() );
-        assertEquals(testFloatValue, jdbcConnection.query(queryNonNullFloat).asFloat().findFirst().orElseThrow() );
-        assertEquals(testDoubleValue, jdbcConnection.query(queryNonNullDouble).asDouble().findFirst().orElseThrow() );
-        assertEquals(testString, jdbcConnection.query(queryNonNullString).asString().flatMap(Optional::stream).findFirst().orElseThrow());
-        assertEquals(testTimestamp, jdbcConnection.query(queryNonNullTimestamp).asTimestamp().flatMap(Optional::stream).findFirst().orElseThrow());
+        assertEquals(testIntValue, queryNonNullInteger.asInt().findFirst().orElseThrow() );
+        assertEquals(testNumericValue, queryNonNullNumeric.asNumeric().flatMap(Optional::stream).findFirst().orElseThrow() );
+        assertEquals(testFloatValue, queryNonNullFloat.asFloat().findFirst().orElseThrow() );
+        assertEquals(testDoubleValue, queryNonNullDouble.asDouble().findFirst().orElseThrow() );
+        assertEquals(testString, queryNonNullString.asString().flatMap(Optional::stream).findFirst().orElseThrow());
+        assertEquals(testTimestamp, queryNonNullTimestamp.asTimestamp().flatMap(Optional::stream).findFirst().orElseThrow());
 
     }
 
@@ -97,19 +106,19 @@ class JDBCQueryTest
         //Arrange - nothing
 
         //act / assert
-        assertDoesNotThrow(() -> jdbcConnection.query(queryNullInteger).asInt().findFirst().orElseThrow() );
-        assertDoesNotThrow(() -> jdbcConnection.query(queryNullNumeric).asNumeric().findFirst().orElseThrow() );
-        assertDoesNotThrow(() -> jdbcConnection.query(queryNullFloat).asFloat().findFirst().orElseThrow() );
-        assertDoesNotThrow(() -> jdbcConnection.query(queryNullDouble).asDouble().findFirst().orElseThrow() );
-        assertDoesNotThrow(() -> jdbcConnection.query(queryNullString).asString().findFirst().orElseThrow());
-        assertDoesNotThrow(() -> jdbcConnection.query(queryNullTimestamp).asTimestamp().findFirst().orElseThrow());
+        assertDoesNotThrow(() -> queryNullInteger.asInt().findFirst().orElseThrow() );
+        assertDoesNotThrow(() -> queryNullNumeric.asNumeric().findFirst().orElseThrow() );
+        assertDoesNotThrow(() -> queryNullFloat.asFloat().findFirst().orElseThrow() );
+        assertDoesNotThrow(() -> queryNullDouble.asDouble().findFirst().orElseThrow() );
+        assertDoesNotThrow(() -> queryNullString.asString().findFirst().orElseThrow());
+        assertDoesNotThrow(() -> queryNullTimestamp.asTimestamp().findFirst().orElseThrow());
 
-        assertEquals(0, jdbcConnection.query(queryNullInteger).asInt().findFirst().orElseThrow() );
-        assertEquals(Optional.empty(), jdbcConnection.query(queryNullNumeric).asNumeric().findFirst().orElseThrow() );
-        assertEquals(0, jdbcConnection.query(queryNullFloat).asFloat().findFirst().orElseThrow() );
-        assertEquals(0, jdbcConnection.query(queryNullDouble).asDouble().findFirst().orElseThrow() );
-        assertEquals(Optional.empty(), jdbcConnection.query(queryNullString).asString().findFirst().orElseThrow());
-        assertEquals(Optional.empty(), jdbcConnection.query(queryNullTimestamp).asTimestamp().findFirst().orElseThrow());
+        assertEquals(0, queryNullInteger.asInt().findFirst().orElseThrow() );
+        assertEquals(Optional.empty(), queryNullNumeric.asNumeric().findFirst().orElseThrow() );
+        assertEquals(0, queryNullFloat.asFloat().findFirst().orElseThrow() );
+        assertEquals(0, queryNullDouble.asDouble().findFirst().orElseThrow() );
+        assertEquals(Optional.empty(), queryNullString.asString().findFirst().orElseThrow());
+        assertEquals(Optional.empty(), queryNullTimestamp.asTimestamp().findFirst().orElseThrow());
     }
 
     @Test
@@ -118,24 +127,24 @@ class JDBCQueryTest
         //Arrange - nothing
 
         //act / assert - NullValues
-        assertTrue( jdbcConnection.query(queryNullInteger).isPresent());
-        assertTrue( jdbcConnection.query(queryNullNumeric).isPresent());
-        assertTrue( jdbcConnection.query(queryNullFloat).isPresent());
-        assertTrue( jdbcConnection.query(queryNullDouble).isPresent());
-        assertTrue( jdbcConnection.query(queryNullString).isPresent());
-        assertTrue( jdbcConnection.query(queryNullTimestamp).isPresent());
+        assertTrue( queryNullInteger.isPresent());
+        assertTrue( queryNullNumeric.isPresent());
+        assertTrue( queryNullFloat.isPresent());
+        assertTrue( queryNullDouble.isPresent());
+        assertTrue( queryNullString.isPresent());
+        assertTrue( queryNullTimestamp.isPresent());
 
         //act / assert - NonNullValues
-        assertTrue( jdbcConnection.query(queryNonNullInteger).isPresent());
-        assertTrue( jdbcConnection.query(queryNonNullNumeric).isPresent());
-        assertTrue( jdbcConnection.query(queryNonNullFloat).isPresent());
-        assertTrue( jdbcConnection.query(queryNonNullDouble).isPresent());
-        assertTrue( jdbcConnection.query(queryNonNullString).isPresent());
-        assertTrue( jdbcConnection.query(queryNullTimestamp).isPresent());
+        assertTrue( queryNonNullInteger.isPresent());
+        assertTrue( queryNonNullNumeric.isPresent());
+        assertTrue( queryNonNullFloat.isPresent());
+        assertTrue( queryNonNullDouble.isPresent());
+        assertTrue( queryNonNullString.isPresent());
+        assertTrue( queryNullTimestamp.isPresent());
 
         //act / assert - Not available values
-        assertFalse( jdbcConnection.query(queryNotAvailableInteger).isPresent());
-        assertFalse( jdbcConnection.query(queryNotAvailableString).isPresent());
+        assertFalse( queryNotAvailableInteger.isPresent());
+        assertFalse( queryNotAvailableString.isPresent());
     }
 
     @Test
@@ -144,24 +153,24 @@ class JDBCQueryTest
         //Arrange - nothing
 
         //act / assert - NullValues
-        assertFalse( jdbcConnection.query(queryNullInteger).isEmpty());
-        assertFalse( jdbcConnection.query(queryNullNumeric).isEmpty());
-        assertFalse( jdbcConnection.query(queryNullFloat).isEmpty());
-        assertFalse( jdbcConnection.query(queryNullDouble).isEmpty());
-        assertFalse( jdbcConnection.query(queryNullString).isEmpty());
-        assertFalse( jdbcConnection.query(queryNullTimestamp).isEmpty());
+        assertFalse( queryNullInteger.isEmpty());
+        assertFalse( queryNullNumeric.isEmpty());
+        assertFalse( queryNullFloat.isEmpty());
+        assertFalse( queryNullDouble.isEmpty());
+        assertFalse( queryNullString.isEmpty());
+        assertFalse( queryNullTimestamp.isEmpty());
 
         //act / assert - NonNullValues
-        assertFalse( jdbcConnection.query(queryNonNullInteger).isEmpty());
-        assertFalse( jdbcConnection.query(queryNonNullNumeric).isEmpty());
-        assertFalse( jdbcConnection.query(queryNonNullFloat).isEmpty());
-        assertFalse( jdbcConnection.query(queryNonNullDouble).isEmpty());
-        assertFalse( jdbcConnection.query(queryNonNullString).isEmpty());
-        assertFalse( jdbcConnection.query(queryNullTimestamp).isEmpty());
+        assertFalse( queryNonNullInteger.isEmpty());
+        assertFalse( queryNonNullNumeric.isEmpty());
+        assertFalse( queryNonNullFloat.isEmpty());
+        assertFalse( queryNonNullDouble.isEmpty());
+        assertFalse( queryNonNullString.isEmpty());
+        assertFalse( queryNullTimestamp.isEmpty());
 
         //act / assert - Not available values
-        assertTrue( jdbcConnection.query(queryNotAvailableInteger).isEmpty());
-        assertTrue( jdbcConnection.query(queryNotAvailableString).isEmpty());
+        assertTrue( queryNotAvailableInteger.isEmpty());
+        assertTrue( queryNotAvailableString.isEmpty());
     }
 
     private void autocreateTable()
@@ -176,6 +185,14 @@ class JDBCQueryTest
                         ", timestamp_type TIMESTAMP)"
                 , JDBCQueryTest.class.getSimpleName());
 
+       /* var createTableCommand = jdbcConnection.createCommand(JDBCQueryTestSchema.class)
+                .createTableIfNotExists(JDBCQueryTest.class)
+                .addColumn(KEY, INTEGER, PRIMARY_KEY)
+                .addColumn(KEY, INTEGER)
+                .addColumn(KEY, INTEGER)
+                .create();
+         */
+
         jdbcConnection
                 .execute(command)
                 .asIgnore();
@@ -185,23 +202,55 @@ class JDBCQueryTest
 
     private void dropTable()
     {
-        var command = String.format("DROP TABLE IF EXISTS %s ", JDBCQueryTest.class.getSimpleName());
+        var dropTableCommand = jdbcConnection.createCommand(JDBCQueryTestSchema.class).dropTableIfExists(JDBCQueryTest.class);
 
-        jdbcConnection
-                .execute(command)
-                .asIgnore();
+        dropTableCommand.asIgnore();
     }
 
     private void insertTestData()
     {
-        var insertNullValues = String.format("insert into %s values( '%s' , null, null, null, null, null, null )",
-                JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NULL_VALUES);
-        var insertNonNullValues = String.format("insert into %s values( '%s' , '%s', '%s', '%s', '%s', '%s' , '%s')",
-                JDBCQueryTest.class.getSimpleName(), PRIMARY_KEY_WITH_NONNULL_VALUES, testIntValue , testNumericValue, testFloatValue, testDoubleValue, testString, testTimestamp);
+        var insertNullValues = jdbcConnection.createCommand(JDBCQueryTestSchema.class)
+                .insertInto(JDBCQueryTest.class)
+                .values(PRIMARY_KEY_WITH_NULL_VALUES, null, null, null, null, null, null )
+                .create();
 
-        jdbcConnection.execute(insertNullValues).asUpdate();
-        jdbcConnection.execute(insertNonNullValues).asUpdate();
+        var insertNonNullValues = jdbcConnection.createCommand(JDBCBuilderTest.JDBCBuilderTestSchema.class)
+                .insertInto(JDBCQueryTest.class)
+                .values(PRIMARY_KEY_WITH_NONNULL_VALUES, testIntValue , testNumericValue, testFloatValue, testDoubleValue, testString, testTimestamp)
+                .create();
+
+        insertNullValues.asUpdate();
+        insertNonNullValues.asUpdate();
     }
 
+    private void createQueries()
+    {
+        queryNullInteger = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(INTEGER_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NULL_VALUES).create();
+        queryNullNumeric = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(NUMERIC_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NULL_VALUES).create();
+        queryNullFloat = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(FLOAT_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NULL_VALUES).create();
+        queryNullDouble = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(DOUBLE_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NULL_VALUES).create();
+        queryNullString = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(STRING_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NULL_VALUES).create();
+        queryNullTimestamp = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(TIMESTAMP_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NULL_VALUES).create();
+
+        queryNonNullInteger = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(INTEGER_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES).create();
+        queryNonNullNumeric = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(NUMERIC_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES).create();
+        queryNonNullFloat = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(FLOAT_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES).create();
+        queryNonNullDouble = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(DOUBLE_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES).create();
+        queryNonNullString = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(STRING_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES).create();
+        queryNonNullTimestamp = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(TIMESTAMP_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES).create();
+
+        queryNotAvailableInteger = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(INTEGER_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_NOT_PRESENT).create();
+        queryNotAvailableString = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(STRING_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_NOT_PRESENT).create();
+    }
+    enum JDBCQueryTestSchema
+    {
+        KEY,
+        INTEGER_TYPE,
+        NUMERIC_TYPE,
+        FLOAT_TYPE,
+        DOUBLE_TYPE,
+        STRING_TYPE,
+        TIMESTAMP_TYPE
+    }
 
 }
