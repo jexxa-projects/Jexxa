@@ -1,5 +1,8 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.VALUE;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -130,12 +133,14 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(primaryKey);
 
-        String sqlQuery = String.format( "select value from %s where key = '%s'"
-                , getAggregateName()
-                , gson.toJson(primaryKey));
+        var query = getConnection().createQuery(KeyValueSchema.class)
+                .select(VALUE)
+                .from(aggregateClazz)
+                .where(KEY)
+                .isEqual(gson.toJson(primaryKey))
+                .create();
 
-        return getConnection()
-                .query(sqlQuery)
+        return  query
                 .asString()
                 .flatMap(Optional::stream)
                 .findFirst()
@@ -146,8 +151,12 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     @Override
     public List<T> get()
     {
-        return getConnection()
-                .query("select value from "+ getAggregateName())
+        var query = getConnection().createQuery(KeyValueSchema.class)
+                .select(VALUE)
+                .from(aggregateClazz)
+                .create();
+
+        return query
                 .asString()
                 .flatMap(Optional::stream)
                 .map( element -> gson.fromJson(element, aggregateClazz))
@@ -205,4 +214,10 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         return "(255)";
     }
 
+
+    enum KeyValueSchema
+    {
+        KEY,
+        VALUE
+    }
 }

@@ -101,6 +101,12 @@ public class JDBCConnection implements AutoCloseable
         return new JDBCQuery(this::validateConnection, sqlQuery);
     }
 
+    @SuppressWarnings("java:S1172")
+    public <T extends Enum<T>>  JDBCQueryBuilder<T> createQuery(Class<T> schema)
+    {
+        return new JDBCQueryBuilder<>(() -> this);
+    }
+
 
     /**
      * This method resets the internal JDBC connection in the following way:
@@ -152,9 +158,7 @@ public class JDBCConnection implements AutoCloseable
      * @param sqlStatement describes the template of the command
      * @return PreparedStatement
      * @throws SQLException in case of an error
-     * @deprecated Inside this package use {@link #createStatement()}. Outside of this package use {@link JDBCCommand} or {@link JDBCQuery}
      */
-    @Deprecated(forRemoval = true)
     public PreparedStatement prepareStatement(String sqlStatement) throws SQLException
     {
         return getConnection().prepareStatement(sqlStatement);
