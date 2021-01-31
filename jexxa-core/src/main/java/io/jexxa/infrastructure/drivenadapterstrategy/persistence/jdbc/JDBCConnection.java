@@ -104,13 +104,13 @@ public class JDBCConnection implements AutoCloseable
     @SuppressWarnings("java:S1172")
     public <T extends Enum<T>>  JDBCQueryBuilder<T> createQuery(Class<T> schema)
     {
-        return new JDBCQueryBuilder<>(() -> this);
+        return new JDBCQueryBuilder<>(this::validateConnection);
     }
 
     @SuppressWarnings("java:S1172")
     public <T extends Enum<T>>  JDBCCommandBuilder<T> createCommand(Class<T> schema)
     {
-        return new JDBCCommandBuilder<>(() -> this);
+        return new JDBCCommandBuilder<>(this::validateConnection);
     }
 
 
