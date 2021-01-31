@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 -   `RESTfulRPCAdapter`:
     -   Added support for providing static web pages. See tutorial [HelloJexxa](https://github.com/repplix/Jexxa/blob/master/tutorials/HelloJexxa/README.md)
+    -   Write occurred exceptions to Logger  
     
 -   JDBC Driven Adapter Strategy:
     -   Added typesafe SQL Builder for `JDBCQuery` and `JDBCCommand`
