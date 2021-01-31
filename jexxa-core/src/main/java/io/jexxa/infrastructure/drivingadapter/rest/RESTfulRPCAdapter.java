@@ -209,14 +209,22 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         //Exception Handler for thrown Exception from methods
         javalin.exception(InvocationTargetException.class, (e, ctx) -> {
             var targetException = e.getTargetException();
-            targetException.getStackTrace(); // Ensures that stack trace is filled in
+            if ( targetException != null )
+            {
+                targetException.getStackTrace(); // Ensures that stack trace is filled in
 
-            JsonObject exceptionWrapper = new JsonObject();
-            exceptionWrapper.addProperty("ExceptionType", targetException.getClass().getName());
-            exceptionWrapper.addProperty("Exception", GSON.toJson(targetException));
-            exceptionWrapper.addProperty("ApplicationType", GSON.toJson("application/json"));
+                JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("{} occurred when processing {} request {}",
+                        targetException.getClass().getSimpleName(), ctx.method(), ctx.path());
+                JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Content of Body: {}", ctx.body());
+                JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Exception message: {}", targetException.getMessage());
 
-            ctx.result(exceptionWrapper.toString());
+                JsonObject exceptionWrapper = new JsonObject();
+                exceptionWrapper.addProperty("ExceptionType", targetException.getClass().getName());
+                exceptionWrapper.addProperty("Exception", GSON.toJson(targetException));
+                exceptionWrapper.addProperty("ApplicationType", GSON.toJson("application/json"));
+
+                ctx.result(exceptionWrapper.toString());
+            }
             ctx.status(400);
         });
     }

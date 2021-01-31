@@ -73,11 +73,11 @@ public class MBeanConvention implements DynamicMBean
     @SuppressWarnings({"java:S112", "java:S2139"})
     public Object invoke(String actionName, Object[] params, String[] signature)
     {
-        var method = getMethod(actionName).
-                orElseThrow(UnsupportedOperationException::new);
-
         try
         {
+            var method = getMethod(actionName).
+                orElseThrow(UnsupportedOperationException::new);
+
             Object[] parameter = deserializeObjects(method.getParameterTypes(), params);
             Object result = IDrivingAdapter
                     .acquireLock()
@@ -85,9 +85,18 @@ public class MBeanConvention implements DynamicMBean
 
             return serializeComplexReturnValue(result);
         }
-        catch (ReflectiveOperationException | RuntimeException e)
+        catch (Exception e)
         {
-            JexxaLogger.getLogger(getClass()).error(e.getMessage());
+            String errorMessage;
+            if ( e.getCause() != null)
+            {
+                errorMessage = e.getCause().getMessage();
+            } else {
+                errorMessage = e.getMessage();
+            }
+
+            JexxaLogger.getLogger(JMXAdapter.class).error("{} occurred when processing method `{}`", e.getClass().getSimpleName(), actionName);
+            JexxaLogger.getLogger(JMXAdapter.class).error("Exception message: {}", errorMessage);
             throw new IllegalArgumentException(e);
         }
     }
