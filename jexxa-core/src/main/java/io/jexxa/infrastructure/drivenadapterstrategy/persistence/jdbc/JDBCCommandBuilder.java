@@ -1,7 +1,5 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -206,22 +204,7 @@ public class JDBCCommandBuilder<T extends Enum<T>>
 
     public JDBCPreparedCommand create()
     {
-        PreparedStatement preparedStatement;
-        try
-        {
-            preparedStatement = jdbcConnection.get().prepareStatement(sqlCommandBuilder.toString());
-
-            for (int i = 0; i < arguments.size(); ++i)
-            {
-                preparedStatement.setObject(i+1, arguments.get(i));
-            }
-
-        } catch (SQLException e)
-        {
-            throw new IllegalArgumentException("Invalid Query " + getCommand() + " " + e.getMessage(), e);
-        }
-
-        return new JDBCPreparedCommand(preparedStatement);
+        return new JDBCPreparedCommand(jdbcConnection, sqlCommandBuilder.toString(), arguments );
     }
 
 }
