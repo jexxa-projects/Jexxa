@@ -1,5 +1,18 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.ARGUMENT_PLACEHOLDER;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.BLANK;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.DROP_TABLE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.FROM;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.IF_EXISTS;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.INSERT_INTO;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.REMOVE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.EQUAL;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.GREATER_THAN;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.LESS_THAN;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.UPDATE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.WHERE;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -7,17 +20,6 @@ import java.util.function.Supplier;
 @SuppressWarnings("unused")
 public class JDBCCommandBuilder<T extends Enum<T>>
 {
-    private static final String UPDATE = "UPDATE ";
-    private static final String INSERT_INTO = "INSERT INTO ";
-    private static final String REMOVE = "REMOVE ";
-    private static final String FROM = "FROM ";
-    private static final String WHERE = "WHERE ";
-    private static final String DROP_TABLE = "DROP TABLE ";
-    private static final String IF_EXISTS = "IF EXISTS ";
-
-    private static final String ARGUMENT_PLACEHOLDER = " ? ";
-    private static final String BLANK = " ";
-
     private final StringBuilder sqlCommandBuilder = new StringBuilder();
     private final Supplier<JDBCConnection> jdbcConnection;
     private final List<Object> arguments = new ArrayList<>();
@@ -26,24 +28,6 @@ public class JDBCCommandBuilder<T extends Enum<T>>
     JDBCCommandBuilder(Supplier<JDBCConnection> jdbcConnection )
     {
         this.jdbcConnection = jdbcConnection;
-    }
-
-    enum SQLOperation
-    {
-        GREATER_THAN(">"),
-        LESS_THAN("<"),
-        EQUAL("=");
-
-        private final String string;
-
-        // constructor to set the string
-        SQLOperation(String name){string = name;}
-
-        // the toString just returns the given name
-        @Override
-        public String toString() {
-            return string;
-        }
     }
 
     public JDBCCommandBuilder<T> update(T element)
@@ -135,17 +119,17 @@ public class JDBCCommandBuilder<T extends Enum<T>>
 
     public JDBCCommandBuilder<T> isEqual(Object value)
     {
-        return is(SQLOperation.EQUAL, value);
+        return is(EQUAL, value);
     }
 
     public JDBCCommandBuilder<T> isLessThan(Object value)
     {
-        return is(SQLOperation.LESS_THAN, value);
+        return is(LESS_THAN, value);
     }
 
     public JDBCCommandBuilder<T> isGreaterThan(Object value)
     {
-        return is(SQLOperation.GREATER_THAN, value);
+        return is(GREATER_THAN, value);
     }
 
 
@@ -154,7 +138,7 @@ public class JDBCCommandBuilder<T extends Enum<T>>
         return sqlCommandBuilder.toString();
     }
 
-    public JDBCCommandBuilder<T> is(SQLOperation operation, Object attribute)
+    public JDBCCommandBuilder<T> is(SQLSyntax.SQLOperation operation, Object attribute)
     {
         sqlCommandBuilder
                 .append(operation.toString())
