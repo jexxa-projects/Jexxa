@@ -7,6 +7,13 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDB
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.NUMERIC_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.STRING_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.TIMESTAMP_TYPE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLConstraint.PRIMARY_KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.DOUBLE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.FLOAT;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.INTEGER;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.NUMERIC;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.TEXT;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.TIMESTAMP;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -175,29 +182,18 @@ class JDBCQueryTest
 
     private void autocreateTable()
     {
-
-        var command = String.format("CREATE TABLE IF NOT EXISTS %s ( key INTEGER PRIMARY KEY" +
-                        ", integer_type integer" +
-                        ", numeric_type numeric" +
-                        ", float_type float" +
-                        ", double_type double precision" +
-                        ", string_type VARCHAR  " +
-                        ", timestamp_type TIMESTAMP)"
-                , JDBCQueryTest.class.getSimpleName());
-
-       /* var createTableCommand = jdbcConnection.createCommand(JDBCQueryTestSchema.class)
+        var createTableCommand = jdbcConnection.createCommand(JDBCQueryTestSchema.class)
                 .createTableIfNotExists(JDBCQueryTest.class)
                 .addColumn(KEY, INTEGER, PRIMARY_KEY)
-                .addColumn(KEY, INTEGER)
-                .addColumn(KEY, INTEGER)
+                .addColumn(INTEGER_TYPE, INTEGER)
+                .addColumn(NUMERIC_TYPE, NUMERIC)
+                .addColumn(FLOAT_TYPE, FLOAT)
+                .addColumn(DOUBLE_TYPE, DOUBLE)
+                .addColumn(STRING_TYPE, TEXT)
+                .addColumn(TIMESTAMP_TYPE, TIMESTAMP)
                 .create();
-         */
 
-        jdbcConnection
-                .execute(command)
-                .asIgnore();
-
-
+        createTableCommand.asIgnore();
     }
 
     private void dropTable()
@@ -214,7 +210,7 @@ class JDBCQueryTest
                 .values(PRIMARY_KEY_WITH_NULL_VALUES, null, null, null, null, null, null )
                 .create();
 
-        var insertNonNullValues = jdbcConnection.createCommand(JDBCBuilderTest.JDBCBuilderTestSchema.class)
+        var insertNonNullValues = jdbcConnection.createCommand(JDBCQueryTestSchema.class)
                 .insertInto(JDBCQueryTest.class)
                 .values(PRIMARY_KEY_WITH_NONNULL_VALUES, testIntValue , testNumericValue, testFloatValue, testDoubleValue, testString, testTimestamp)
                 .create();
