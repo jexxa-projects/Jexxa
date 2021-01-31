@@ -225,22 +225,9 @@ class JDBCQueryTest
 
     private void createQueries()
     {
-        queryNullInteger = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(INTEGER_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NULL_VALUES).create();
-        queryNullNumeric = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(NUMERIC_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NULL_VALUES).create();
-        queryNullFloat = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(FLOAT_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NULL_VALUES).create();
-        queryNullDouble = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(DOUBLE_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NULL_VALUES).create();
-        queryNullString = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(STRING_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NULL_VALUES).create();
-        queryNullTimestamp = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(TIMESTAMP_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NULL_VALUES).create();
-
-        queryNonNullInteger = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(INTEGER_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES).create();
-        queryNonNullNumeric = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(NUMERIC_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES).create();
-        queryNonNullFloat = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(FLOAT_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES).create();
-        queryNonNullDouble = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(DOUBLE_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES).create();
-        queryNonNullString = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(STRING_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES).create();
-        queryNonNullTimestamp = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(TIMESTAMP_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES).create();
-
-        queryNotAvailableInteger = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(INTEGER_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_NOT_PRESENT).create();
-        queryNotAvailableString = jdbcConnection.createQuery(JDBCQueryTestSchema.class).select(STRING_TYPE).from(JDBCQueryTest.class).where(KEY).isEqual(PRIMARY_KEY_NOT_PRESENT).create();
+        createQueriesForNullValues();
+        createQueriesForNonNullValues();
+        createQueriesForEmptyValues();
     }
     enum JDBCQueryTestSchema
     {
@@ -253,4 +240,109 @@ class JDBCQueryTest
         TIMESTAMP_TYPE
     }
 
+    private void createQueriesForNullValues()
+    {
+        queryNullInteger = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(INTEGER_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NULL_VALUES)
+                .create();
+
+        queryNullNumeric = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(NUMERIC_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NULL_VALUES)
+                .create();
+
+        queryNullFloat = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(FLOAT_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NULL_VALUES)
+                .create();
+
+        queryNullDouble = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(DOUBLE_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NULL_VALUES)
+                .create();
+
+        queryNullString = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(STRING_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NULL_VALUES)
+                .create();
+
+        queryNullTimestamp = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(TIMESTAMP_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NULL_VALUES)
+                .create();
+    }
+
+    void createQueriesForNonNullValues()
+    {
+        queryNonNullInteger = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(INTEGER_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .create();
+
+        queryNonNullNumeric = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(NUMERIC_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .create();
+
+        queryNonNullFloat = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(FLOAT_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .create();
+
+        queryNonNullDouble = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(DOUBLE_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .create();
+
+        queryNonNullString = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(STRING_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .create();
+
+        queryNonNullTimestamp = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(TIMESTAMP_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .create();
+    }
+    private void createQueriesForEmptyValues()
+    {
+        queryNotAvailableInteger = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(INTEGER_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_NOT_PRESENT)
+                .create();
+
+        queryNotAvailableString = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(STRING_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_NOT_PRESENT)
+                .create();
+    }
 }
