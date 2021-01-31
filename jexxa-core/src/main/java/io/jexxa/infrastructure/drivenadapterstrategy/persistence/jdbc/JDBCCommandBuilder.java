@@ -30,7 +30,7 @@ public class JDBCCommandBuilder<T extends Enum<T>>
         this.jdbcConnection = jdbcConnection;
     }
 
-    public enum SQLOperation
+    enum SQLOperation
     {
         GREATER_THAN(">"),
         LESS_THAN("<"),
