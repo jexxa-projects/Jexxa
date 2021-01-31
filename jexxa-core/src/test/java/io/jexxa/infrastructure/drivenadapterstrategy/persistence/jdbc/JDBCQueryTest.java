@@ -184,7 +184,8 @@ class JDBCQueryTest
     {
         var createTableCommand = jdbcConnection.createCommand(JDBCQueryTestSchema.class)
                 .createTableIfNotExists(JDBCQueryTest.class)
-                .addColumn(KEY, INTEGER, PRIMARY_KEY)
+                .addColumn(KEY, INTEGER)
+                .addConstraint(PRIMARY_KEY)
                 .addColumn(INTEGER_TYPE, INTEGER)
                 .addColumn(NUMERIC_TYPE, NUMERIC)
                 .addColumn(FLOAT_TYPE, FLOAT)

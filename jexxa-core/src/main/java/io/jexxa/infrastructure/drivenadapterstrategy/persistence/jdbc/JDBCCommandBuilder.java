@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SET;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLConstraint;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.ARGUMENT_PLACEHOLDER;
@@ -11,7 +12,7 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQL
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.IF_EXISTS;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.IF_NOT_EXISTS;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.INSERT_INTO;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.REMOVE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.DELETE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.EQUAL;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.GREATER_THAN;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.GREATER_THAN_OR_EQUAL;
@@ -43,6 +44,16 @@ public class JDBCCommandBuilder<T extends Enum<T>>
         sqlCommandBuilder
                 .append(UPDATE)
                 .append(element.name())
+                .append(BLANK);
+
+        return this;
+    }
+
+    public JDBCCommandBuilder<T> update(Class<?> clazz)
+    {
+        sqlCommandBuilder
+                .append(UPDATE)
+                .append(clazz.getSimpleName())
                 .append(BLANK);
 
         return this;
@@ -85,11 +96,23 @@ public class JDBCCommandBuilder<T extends Enum<T>>
         return this;
     }
 
-    public JDBCCommandBuilder<T> remove(T element)
+    public JDBCCommandBuilder<T> deleteFrom(T element)
     {
         sqlCommandBuilder
-                .append(REMOVE)
+                .append(DELETE)
+                .append(FROM)
                 .append(element.name())
+                .append(BLANK);
+
+        return this;
+    }
+
+    public JDBCCommandBuilder<T> deleteFrom(Class<?> clazz)
+    {
+        sqlCommandBuilder
+                .append(DELETE)
+                .append(FROM)
+                .append(clazz.getSimpleName())
                 .append(BLANK);
 
         return this;
@@ -170,6 +193,19 @@ public class JDBCCommandBuilder<T extends Enum<T>>
         arguments.add(attribute);
         return this;
     }
+
+    public JDBCCommandBuilder<T> set(T element, Object value)
+    {
+        sqlCommandBuilder
+                .append(SET)
+                .append(element.name())
+                .append(EQUAL.toString())
+                .append(ARGUMENT_PLACEHOLDER);
+
+        arguments.add(value);
+        return this;
+    }
+
 
     public JDBCCommand dropTableIfExists(T element)
     {
@@ -277,18 +313,13 @@ public class JDBCCommandBuilder<T extends Enum<T>>
             return this;
         }
 
-        public JDBCColumnBuilder<T> addColumn(T element, SQLDataType dataType, SQLConstraint sqlConstraint)
+        public JDBCColumnBuilder<T> addConstraint( SQLConstraint sqlConstraint)
         {
-            addCommaSeparatorIfRequired();
-
             commandBuilder
                     .getSqlCommandBuilder()
-                    .append(element.name())
-                    .append(BLANK)
-                    .append(dataType.toString())
-                    .append(BLANK)
                     .append(sqlConstraint.toString())
                     .append(BLANK);
+
             return this;
         }
 

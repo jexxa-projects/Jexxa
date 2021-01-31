@@ -4,7 +4,7 @@ public class SQLSyntax
 {
     static final String SELECT = "SELECT ";
     static final String UPDATE = "UPDATE ";
-    static final String REMOVE = "REMOVE ";
+    static final String DELETE = "DELETE ";
     static final String INSERT_INTO = "INSERT INTO ";
 
     static final String DROP_TABLE = "DROP TABLE ";
@@ -13,6 +13,7 @@ public class SQLSyntax
     static final String CREATE_TABLE = "CREATE TABLE ";
     static final String IF_NOT_EXISTS = "IF NOT EXISTS ";
 
+    static final String SET = "SET ";
     static final String FROM = "FROM ";
     static final String WHERE = "WHERE ";
 
@@ -41,27 +42,30 @@ public class SQLSyntax
         }
     }
 
-    public enum SQLDataType
+    public static class SQLDataType
     {
-        INTEGER("INTEGER "),
-        NUMERIC("NUMERIC "),
-        FLOAT("FLOAT "),
-        DOUBLE("DOUBLE PRECISION "),
-        VARCHAR("VARCHAR "),
-        TEXT("TEXT "),
-        TIMESTAMP("TIMESTAMP ");
+        public static final SQLDataType INTEGER = new SQLDataType("INTEGER ");
+        public static final SQLDataType NUMERIC = new SQLDataType("NUMERIC ");
+        public static final SQLDataType FLOAT = new SQLDataType("FLOAT ");
+        public static final SQLDataType DOUBLE = new SQLDataType("DOUBLE PRECISION ");
+        public static final SQLDataType TIMESTAMP = new SQLDataType("TIMESTAMP ");
+        public static final SQLDataType TEXT = new SQLDataType("TEXT ");
+        public static final SQLDataType VARCHAR = new SQLDataType("VARCHAR ");
+
+        @SuppressWarnings({"java:S100", "java:S1845"}) // Explicit naming for fluent API style
+        public static SQLDataType VARCHAR(int maxSize) { return new SQLDataType("VARCHAR("+maxSize +") ");}
 
         private final String string;
 
-        // constructor to set the string
-        SQLDataType(String name){string = name;}
+        protected SQLDataType(String name){string = name;}
 
-        // the toString just returns the given name
         @Override
-        public final String toString() {
+        public String toString()
+        {
             return string;
         }
     }
+
 
     public enum SQLConstraint
     {
