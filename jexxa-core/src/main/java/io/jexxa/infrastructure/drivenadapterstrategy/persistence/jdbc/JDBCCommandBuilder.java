@@ -9,11 +9,18 @@ import java.util.function.Supplier;
 @SuppressWarnings("unused")
 public class JDBCCommandBuilder<T extends Enum<T>>
 {
-    private static final String UPDATE = "update ";
-    private static final String INSERT_INTO = "insert into ";
-    private static final String REMOVE = "remove ";
+    private static final String UPDATE = "UPDATE ";
+    private static final String INSERT_INTO = "INSERT INTO ";
+    private static final String REMOVE = "REMOVE ";
+    private static final String FROM = "FROM ";
+    private static final String WHERE = "WHERE ";
+    private static final String DROP_TABLE = "DROP TABLE ";
+    private static final String IF_EXISTS = "IF EXISTS ";
 
-    private String command = "";
+    private static final String ARGUMENT_PLACEHOLDER = " ? ";
+    private static final String BLANK = " ";
+
+    private final StringBuilder sqlCommandBuilder = new StringBuilder();
     private final Supplier<JDBCConnection> jdbcConnection;
     private final List<Object> arguments = new ArrayList<>();
 
@@ -43,63 +50,88 @@ public class JDBCCommandBuilder<T extends Enum<T>>
 
     public JDBCCommandBuilder<T> update(T element)
     {
-        command += UPDATE + element.name() + " ";
+        sqlCommandBuilder
+                .append(UPDATE)
+                .append(element.name())
+                .append(BLANK);
+
         return this;
     }
 
     public JDBCCommandBuilder<T> insertInto(T element)
     {
-        command += INSERT_INTO + element.name() + " ";
+        sqlCommandBuilder
+                .append(INSERT_INTO)
+                .append(element.name())
+                .append(BLANK);
+
         return this;
     }
 
     public JDBCCommandBuilder<T> insertInto(Class<?> clazz)
     {
-        command += INSERT_INTO + clazz.getSimpleName() + " ";
+        sqlCommandBuilder
+                .append(INSERT_INTO)
+                .append(clazz.getSimpleName())
+                .append(BLANK);
+
         return this;
     }
 
     public JDBCCommandBuilder<T> values(Object... args)
     {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("values ( ");
+        sqlCommandBuilder.append("values ( ");
         for(int i = 0;  i < args.length; ++i )
         {
-            stringBuilder.append( " ? " );
+            sqlCommandBuilder.append( " ? " );
             if ( i < args.length -1)
             {
-                stringBuilder.append( " , " );
+                sqlCommandBuilder.append( " , " );
             }
             arguments.add(args[i]);
         }
-        stringBuilder.append(")");
-
-        command += stringBuilder.toString();
+        sqlCommandBuilder.append(")");
 
         return this;
     }
 
     public JDBCCommandBuilder<T> remove(T element)
     {
-        command += REMOVE + element.name() + " ";
+        sqlCommandBuilder
+                .append(REMOVE)
+                .append(element.name())
+                .append(BLANK);
+
         return this;
     }
 
     public JDBCCommandBuilder<T> from(T element)
     {
-        command += "from " + element.name() + " ";
+        sqlCommandBuilder
+                .append(FROM)
+                .append( element.name() )
+                .append(BLANK);
+
         return this;
     }
 
     public JDBCCommandBuilder<T> from(Class<?> clazz)
     {
-        command += "from " + clazz.getSimpleName() + " ";
+        sqlCommandBuilder
+                .append(FROM)
+                .append(clazz.getSimpleName())
+                .append(BLANK);
+
         return this;
     }
 
     public JDBCCommandBuilder<T> where(T element)
     {
-        command += "where " + element.name() + " ";
+        sqlCommandBuilder
+                .append(WHERE)
+                .append(element.name())
+                .append(BLANK);
+
         return this;
     }
 
@@ -121,37 +153,54 @@ public class JDBCCommandBuilder<T extends Enum<T>>
 
     public String getCommand()
     {
-        return command;
+        return sqlCommandBuilder.toString();
     }
 
     public JDBCCommandBuilder<T> is(SQLOperation operation, Object attribute)
     {
-        command += operation.toString() + " ? ";
+        sqlCommandBuilder
+                .append(operation.toString())
+                .append(ARGUMENT_PLACEHOLDER);
+
         arguments.add(attribute);
         return this;
     }
 
     public JDBCPreparedCommand dropTableIfExists(T element)
     {
-        command = "drop table if exists " + element.name();
+        sqlCommandBuilder
+                .append(DROP_TABLE)
+                .append(IF_EXISTS)
+                .append(element.name());
+
         return create();
     }
 
     public JDBCPreparedCommand dropTableIfExists(Class<?> clazz)
     {
-        command = "drop table if exists " + clazz.getSimpleName();
+        sqlCommandBuilder
+                .append(DROP_TABLE)
+                .append(IF_EXISTS)
+                .append(clazz.getSimpleName());
+
         return create();
     }
 
     public JDBCPreparedCommand dropTable(T element)
     {
-        command = "drop table " + element.name();
+        sqlCommandBuilder
+                .append(DROP_TABLE)
+                .append(element.name());
+
         return create();
     }
 
     public JDBCPreparedCommand dropTable(Class<?> clazz)
     {
-        command = "drop table " + clazz.getSimpleName();
+        sqlCommandBuilder
+                .append(DROP_TABLE)
+                .append(clazz.getSimpleName());
+
         return create();
     }
 
@@ -160,7 +209,7 @@ public class JDBCCommandBuilder<T extends Enum<T>>
         PreparedStatement preparedStatement;
         try
         {
-            preparedStatement = jdbcConnection.get().prepareStatement(command);
+            preparedStatement = jdbcConnection.get().prepareStatement(sqlCommandBuilder.toString());
 
             for (int i = 0; i < arguments.size(); ++i)
             {
