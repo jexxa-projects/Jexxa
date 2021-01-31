@@ -31,23 +31,23 @@ class JDBCQueryTest
     private static final int PRIMARY_KEY_WITH_NONNULL_VALUES = 2;
     private static final int PRIMARY_KEY_NOT_PRESENT = 3;
 
-    private JDBCPreparedQuery queryNullInteger;
-    private JDBCPreparedQuery queryNullNumeric;
-    private JDBCPreparedQuery queryNullFloat;
-    private JDBCPreparedQuery queryNullDouble;
-    private JDBCPreparedQuery queryNullString;
-    private JDBCPreparedQuery queryNullTimestamp;
+    private JDBCQuery queryNullInteger;
+    private JDBCQuery queryNullNumeric;
+    private JDBCQuery queryNullFloat;
+    private JDBCQuery queryNullDouble;
+    private JDBCQuery queryNullString;
+    private JDBCQuery queryNullTimestamp;
 
-    private JDBCPreparedQuery queryNonNullInteger;
-    private JDBCPreparedQuery queryNonNullNumeric;
-    private JDBCPreparedQuery queryNonNullFloat;
-    private JDBCPreparedQuery queryNonNullDouble;
-    private JDBCPreparedQuery queryNonNullString;
-    private JDBCPreparedQuery queryNonNullTimestamp;
+    private JDBCQuery queryNonNullInteger;
+    private JDBCQuery queryNonNullNumeric;
+    private JDBCQuery queryNonNullFloat;
+    private JDBCQuery queryNonNullDouble;
+    private JDBCQuery queryNonNullString;
+    private JDBCQuery queryNonNullTimestamp;
 
 
-    private JDBCPreparedQuery queryNotAvailableInteger;
-    private JDBCPreparedQuery queryNotAvailableString;
+    private JDBCQuery queryNotAvailableInteger;
+    private JDBCQuery queryNotAvailableString;
 
 
     private final Timestamp testTimestamp = Timestamp.from(Instant.now().truncatedTo(ChronoUnit.MICROS));

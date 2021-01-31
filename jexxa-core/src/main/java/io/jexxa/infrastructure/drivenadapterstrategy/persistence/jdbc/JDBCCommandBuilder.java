@@ -148,7 +148,7 @@ public class JDBCCommandBuilder<T extends Enum<T>>
         return this;
     }
 
-    public JDBCPreparedCommand dropTableIfExists(T element)
+    public JDBCCommand dropTableIfExists(T element)
     {
         sqlCommandBuilder
                 .append(DROP_TABLE)
@@ -158,7 +158,7 @@ public class JDBCCommandBuilder<T extends Enum<T>>
         return create();
     }
 
-    public JDBCPreparedCommand dropTableIfExists(Class<?> clazz)
+    public JDBCCommand dropTableIfExists(Class<?> clazz)
     {
         sqlCommandBuilder
                 .append(DROP_TABLE)
@@ -168,7 +168,7 @@ public class JDBCCommandBuilder<T extends Enum<T>>
         return create();
     }
 
-    public JDBCPreparedCommand dropTable(T element)
+    public JDBCCommand dropTable(T element)
     {
         sqlCommandBuilder
                 .append(DROP_TABLE)
@@ -177,7 +177,7 @@ public class JDBCCommandBuilder<T extends Enum<T>>
         return create();
     }
 
-    public JDBCPreparedCommand dropTable(Class<?> clazz)
+    public JDBCCommand dropTable(Class<?> clazz)
     {
         sqlCommandBuilder
                 .append(DROP_TABLE)
@@ -186,9 +186,9 @@ public class JDBCCommandBuilder<T extends Enum<T>>
         return create();
     }
 
-    public JDBCPreparedCommand create()
+    public JDBCCommand create()
     {
-        return new JDBCPreparedCommand(jdbcConnection, sqlCommandBuilder.toString(), arguments );
+        return new JDBCCommand(jdbcConnection, sqlCommandBuilder.toString(), arguments );
     }
 
 }

@@ -1,24 +1,30 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
 import java.sql.SQLException;
-import java.util.Objects;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
-public class JDBCCommand
+public class JDBCCommand extends JDBCPreparedStatement
 {
-    private final Supplier<JDBCConnection> jdbcConnection;
-    private final String sqlCommand;
-
-    JDBCCommand(Supplier<JDBCConnection> jdbcConnection, String sqlCommand)
+    JDBCCommand(Supplier<JDBCConnection> jdbcConnection, String sqlQuery, List<Object> arguments)
     {
-        Objects.requireNonNull(jdbcConnection);
-        Objects.requireNonNull(sqlCommand);
-
-        this.jdbcConnection = jdbcConnection;
-        this.sqlCommand = sqlCommand;
+        super(jdbcConnection, sqlQuery, arguments);
     }
 
+    /**
+     * Creates a JDBCCommand
+     *
+     * @param jdbcConnection used connection to execute command
+     * @param sqlCommand must include the complete command with all attributes included
+     * @deprecated Is only added to support deprecated methods in JDBCConnection
+     */
+    @Deprecated(forRemoval = true)
+    JDBCCommand(Supplier<JDBCConnection> jdbcConnection, String sqlCommand)
+    {
+        super(jdbcConnection, sqlCommand, Collections.emptyList());
+    }
 
     /**
      * Number of rows must not change
@@ -26,11 +32,11 @@ public class JDBCCommand
      */
     public void asUpdate()
     {
-        try (var statement = jdbcConnection.get().createStatement() )
+        try
         {
-            if( statement.executeUpdate(sqlCommand) == 0)
+            if( getStatement().executeUpdate() == 0)
             {
-                throw new IllegalArgumentException("Command '" + sqlCommand + "'was executed but returned that nothing changed! ");
+                throw new IllegalArgumentException("Command was executed but returned that nothing changed! ");
             }
         }
 
@@ -46,13 +52,11 @@ public class JDBCCommand
      */
     public void asEmpty( )
     {
-        Objects.requireNonNull(sqlCommand);
-
-        try (var statement = jdbcConnection.get().createStatement() )
+        try
         {
-            if( statement.executeUpdate(sqlCommand) == 1)
+            if( getStatement().executeUpdate() == 1)
             {
-                throw new IllegalArgumentException("Command '" + sqlCommand + "' was executed but returned that something changed! ");
+                throw new IllegalArgumentException("Command was executed but returned that something changed! ");
             }
         }
 
@@ -67,11 +71,9 @@ public class JDBCCommand
      */
     public void asIgnore( )
     {
-        Objects.requireNonNull(sqlCommand);
-
-        try (var statement = jdbcConnection.get().createStatement() )
+        try
         {
-            statement.executeUpdate(sqlCommand);
+            getStatement().executeUpdate();
         }
         catch (SQLException e)
         {

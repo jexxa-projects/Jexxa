@@ -150,8 +150,8 @@ public class JDBCQueryBuilder <T extends Enum<T>>
         return this;
     }
 
-    public JDBCPreparedQuery create()
+    public JDBCQuery create()
     {
-        return new JDBCPreparedQuery(jdbcConnection, sqlQueryBuilder.toString(), arguments);
+        return new JDBCQuery(jdbcConnection, sqlQueryBuilder.toString(), arguments);
     }
 }

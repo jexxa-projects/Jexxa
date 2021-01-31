@@ -5,32 +5,38 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
-public class JDBCQuery
+public class JDBCQuery extends JDBCPreparedStatement
 {
     private static final String INVALID_QUERY = "Invalid query or type conversion: ";
-
-    private final Supplier<JDBCConnection> jdbcConnection;
-    private final String command;
 
     @FunctionalInterface
     public interface CheckedFunction<T, R> {
         R apply(T t) throws SQLException;
     }
 
-    JDBCQuery(Supplier<JDBCConnection> jdbcConnection, String command)
+    JDBCQuery(Supplier<JDBCConnection> jdbcConnection, String sqlQuery, List<Object> arguments)
     {
-        Objects.requireNonNull(jdbcConnection);
-        Objects.requireNonNull(command);
+        super(jdbcConnection, sqlQuery, arguments);
+    }
 
-        this.jdbcConnection = jdbcConnection;
-        this.command = command;
+    /**
+     * Creates a JDBC query
+     *
+     * @param jdbcConnection used connection
+     * @param sqlQuery must include the complete command with all attributes included
+     * @deprecated Is only added to support deprecated methods in JDBCConnection
+     */
+    @Deprecated(forRemoval = true)
+    JDBCQuery(Supplier<JDBCConnection> jdbcConnection, String sqlQuery)
+    {
+        super(jdbcConnection, sqlQuery, Collections.emptyList());
     }
 
     public Stream<Optional<String>> asString()
@@ -76,21 +82,19 @@ public class JDBCQuery
 
     public boolean isPresent()
     {
-        try ( var statement = jdbcConnection.get().createStatement();
-              var resultSet = statement.executeQuery(command))
+        try ( var resultSet = getStatement().executeQuery())
         {
             return resultSet.next();
         }
         catch (SQLException e)
         {
-            throw new IllegalStateException(INVALID_QUERY + command , e);
+            throw new IllegalStateException(INVALID_QUERY, e);
         }
     }
 
     public <R> Stream<R> as(CheckedFunction<ResultSet, R> function)
     {
-        try ( var statement = jdbcConnection.get().createStatement();
-              var resultSet = statement.executeQuery(command))
+        try ( var resultSet = getStatement().executeQuery())
         {
             List<R> result = new ArrayList<>();
             while ( resultSet.next() )
@@ -101,7 +105,7 @@ public class JDBCQuery
         }
         catch (SQLException e)
         {
-            throw new IllegalStateException(INVALID_QUERY + command , e);
+            throw new IllegalStateException(INVALID_QUERY, e);
         }
     }
 }
