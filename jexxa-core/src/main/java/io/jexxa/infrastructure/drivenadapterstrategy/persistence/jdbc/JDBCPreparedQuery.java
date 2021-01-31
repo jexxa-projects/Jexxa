@@ -9,12 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public class JDBCPreparedQuery
 {
     private static final String INVALID_QUERY = "Invalid query or type conversion: ";
+
+    private final Supplier<JDBCConnection> jdbcConnection;
+    private final String sqlQuery;
+    private final List<Object> arguments;
 
     private final PreparedStatement statement;
 
@@ -23,12 +28,19 @@ public class JDBCPreparedQuery
         R apply(T t) throws SQLException;
     }
 
-    JDBCPreparedQuery(PreparedStatement statement)
+    JDBCPreparedQuery(Supplier<JDBCConnection> jdbcConnection, String sqlQuery, List<Object> arguments)
     {
-        Objects.requireNonNull(statement);
+        Objects.requireNonNull(jdbcConnection);
+        Objects.requireNonNull(sqlQuery);
+        Objects.requireNonNull(arguments);
 
-        this.statement = statement;
+        this.jdbcConnection = jdbcConnection;
+        this.sqlQuery = sqlQuery;
+        this.arguments = arguments;
+
+        this.statement = createPreparedStatement();
     }
+
 
     public Stream<Optional<String>> asString()
     {
@@ -97,6 +109,24 @@ public class JDBCPreparedQuery
         catch (SQLException e)
         {
             throw new IllegalStateException(INVALID_QUERY, e);
+        }
+    }
+
+    private PreparedStatement createPreparedStatement()
+    {
+        try
+        {
+            var preparedStatement = jdbcConnection.get().prepareStatement(sqlQuery);
+
+            for (int i = 0; i < arguments.size(); ++i)
+            {
+                preparedStatement.setObject(i+1, arguments.get(i));
+            }
+
+            return preparedStatement;
+        } catch (SQLException e)
+        {
+            throw new IllegalArgumentException("Invalid Query " + sqlQuery + " " + e.getMessage(), e);
         }
     }
 }

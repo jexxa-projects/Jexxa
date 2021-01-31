@@ -2,15 +2,19 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
 class SQLSyntax
 {
+    static final String SELECT = "SELECT ";
     static final String UPDATE = "UPDATE ";
-    static final String INSERT_INTO = "INSERT INTO ";
     static final String REMOVE = "REMOVE ";
-    static final String FROM = "FROM ";
-    static final String WHERE = "WHERE ";
+    static final String INSERT_INTO = "INSERT INTO ";
+
     static final String DROP_TABLE = "DROP TABLE ";
     static final String IF_EXISTS = "IF EXISTS ";
 
+    static final String FROM = "FROM ";
+    static final String WHERE = "WHERE ";
+
     static final String ARGUMENT_PLACEHOLDER = " ? ";
+    static final String COMMA = " , ";
     static final String BLANK = " ";
 
     enum SQLOperation

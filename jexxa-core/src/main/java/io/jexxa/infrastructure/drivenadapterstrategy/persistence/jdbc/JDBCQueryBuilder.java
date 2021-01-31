@@ -1,16 +1,23 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.ARGUMENT_PLACEHOLDER;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.BLANK;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.COMMA;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.FROM;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SELECT;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.EQUAL;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.GREATER_THAN;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.LESS_THAN;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.WHERE;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+@SuppressWarnings("unused")
 public class JDBCQueryBuilder <T extends Enum<T>>
 {
-    private static final String SELECT = "select ";
-
-    private String query = "";
+    private final StringBuilder sqlQueryBuilder = new StringBuilder();
     private final Supplier<JDBCConnection> jdbcConnection;
     private final List<Object> arguments = new ArrayList<>();
 
@@ -20,118 +27,131 @@ public class JDBCQueryBuilder <T extends Enum<T>>
         this.jdbcConnection = jdbcConnection;
     }
 
-    public enum SQLOperation
-    {
-        GREATER_THAN(">"),
-        LESS_THAN("<"),
-        EQUAL("=");
-
-        private final String string;
-
-        // constructor to set the string
-        SQLOperation(String name){string = name;}
-
-        // the toString just returns the given name
-        @Override
-        public String toString() {
-            return string;
-        }
-    }
-
     public JDBCQueryBuilder<T> select(T element)
     {
-        query += SELECT + element.name() + " ";
+        sqlQueryBuilder
+                .append(SELECT)
+                .append(element.name())
+                .append(BLANK);
+
         return this;
     }
 
     public JDBCQueryBuilder<T> select(T element1, T element2 )
     {
-        query += SELECT + element1.name() + ", " + element2.name() + " ";
+        sqlQueryBuilder
+                .append(SELECT)
+                .append(element1.name())
+                .append(COMMA)
+                .append(element2.name())
+                .append(BLANK);
+
         return this;
     }
 
     public JDBCQueryBuilder<T> select(T element1, T element2, T element3 )
     {
-        query += SELECT + element1.name() + ", " + element2.name() + ", " + element3.name() + " ";
+        sqlQueryBuilder
+                .append(SELECT)
+                .append(element1.name())
+                .append(COMMA)
+                .append(element2.name())
+                .append(COMMA)
+                .append(element3.name())
+                .append(BLANK);
+
         return this;
     }
 
     public JDBCQueryBuilder<T> select(T element1, T element2, T element3, T element4 )
     {
-        query += SELECT + element1.name() + ", " + element2.name() + ", " + element3.name() + ", " + element4.name() + " ";
+        sqlQueryBuilder
+                .append(SELECT)
+                .append(element1.name())
+                .append(COMMA)
+                .append(element2.name())
+                .append(COMMA)
+                .append(element3.name())
+                .append(COMMA)
+                .append(element4.name())
+                .append(BLANK);
+
         return this;
     }
 
     public JDBCQueryBuilder<T> selectAll()
     {
-        query += "select * ";
+        sqlQueryBuilder
+                .append(SELECT)
+                .append(" * ");
         return this;
     }
 
 
     public JDBCQueryBuilder<T> from(T element)
     {
-        query += "from " + element.name() + " ";
+        sqlQueryBuilder
+                .append(FROM)
+                .append(element.name())
+                .append(BLANK);
+
         return this;
     }
 
     public JDBCQueryBuilder<T> from(Class<?> clazz)
     {
-        query += "from " + clazz.getSimpleName() + " ";
+        sqlQueryBuilder
+                .append(FROM)
+                .append(clazz.getSimpleName())
+                .append(BLANK);
+
         return this;
     }
 
     public JDBCQueryBuilder<T> where(T element)
     {
-        query += "where " + element.name() + " ";
+        sqlQueryBuilder
+                .append(WHERE)
+                .append(element.name())
+                .append(BLANK);
+
         return this;
     }
 
     public JDBCQueryBuilder<T> isEqual(Object value)
     {
-        return is(SQLOperation.EQUAL, value);
+        return is(EQUAL, value);
     }
 
     public JDBCQueryBuilder<T> isLessThan(Object value)
     {
-        return is(SQLOperation.LESS_THAN, value);
+        return is(LESS_THAN, value);
     }
 
     public JDBCQueryBuilder<T> isGreaterThan(Object value)
     {
-        return is(SQLOperation.GREATER_THAN, value);
+        return is(GREATER_THAN, value);
     }
 
 
     public String getQuery()
     {
-        return query;
+        return sqlQueryBuilder.toString();
     }
 
-    public JDBCQueryBuilder<T> is(SQLOperation operation, Object attribute)
+    public JDBCQueryBuilder<T> is(SQLSyntax.SQLOperation operation, Object attribute)
     {
-        query += operation.toString() + " ? ";
+        sqlQueryBuilder
+                .append(operation.toString())
+                .append(ARGUMENT_PLACEHOLDER);
+
         arguments.add(attribute);
+
         return this;
     }
 
     public JDBCPreparedQuery create()
     {
-        PreparedStatement preparedStatement;
-        try
-        {
-            preparedStatement = jdbcConnection.get().prepareStatement(query);
-
-            for (int i = 0; i < arguments.size(); ++i)
-            {
-                preparedStatement.setObject(i+1, arguments.get(i));
-            }
-
-        } catch (SQLException e)
-        {
-            throw new IllegalArgumentException("Invalid Query " + getQuery() + " " + e.getMessage(), e);
-        }
-
-        return new JDBCPreparedQuery(preparedStatement);
+        return new JDBCPreparedQuery(jdbcConnection, sqlQueryBuilder.toString(), arguments);
     }
 }
