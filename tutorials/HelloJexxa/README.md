@@ -71,7 +71,7 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'HelloJexxa' successfully started in 0.549 seconds
 ```
 
-## Access the application ## 
+## Access the application ##
 
 ### Using a web browser ###
 *   Get name of the bounded context:
