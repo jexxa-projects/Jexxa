@@ -87,7 +87,7 @@ public class JDBCCommandBuilder<T extends Enum<T>>
             sqlCommandBuilder.append( " ? " );
             if ( i < args.length -1)
             {
-                sqlCommandBuilder.append( " , " );
+                sqlCommandBuilder.append( COMMA );
             }
             arguments.add(args[i]);
         }

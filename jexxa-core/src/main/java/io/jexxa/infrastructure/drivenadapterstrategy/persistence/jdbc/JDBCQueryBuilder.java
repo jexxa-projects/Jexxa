@@ -1,18 +1,24 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.AND;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.ARGUMENT_PLACEHOLDER;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.BLANK;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.COMMA;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.FROM;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.OR;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SELECT;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.EQUAL;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.GREATER_THAN;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.GREATER_THAN_OR_EQUAL;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.LESS_THAN;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.LESS_THAN_OR_EQUAL;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.LIKE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.WHERE;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public class JDBCQueryBuilder <T extends Enum<T>>
@@ -37,44 +43,17 @@ public class JDBCQueryBuilder <T extends Enum<T>>
         return this;
     }
 
-    public JDBCQueryBuilder<T> select(T element1, T element2 )
+    @SafeVarargs
+    public final JDBCQueryBuilder<T> select(T element, T... elements)
     {
-        sqlQueryBuilder
-                .append(SELECT)
-                .append(element1.name())
-                .append(COMMA)
-                .append(element2.name())
-                .append(BLANK);
+        select(element);
 
-        return this;
-    }
-
-    public JDBCQueryBuilder<T> select(T element1, T element2, T element3 )
-    {
-        sqlQueryBuilder
-                .append(SELECT)
-                .append(element1.name())
-                .append(COMMA)
-                .append(element2.name())
-                .append(COMMA)
-                .append(element3.name())
-                .append(BLANK);
-
-        return this;
-    }
-
-    public JDBCQueryBuilder<T> select(T element1, T element2, T element3, T element4 )
-    {
-        sqlQueryBuilder
-                .append(SELECT)
-                .append(element1.name())
-                .append(COMMA)
-                .append(element2.name())
-                .append(COMMA)
-                .append(element3.name())
-                .append(COMMA)
-                .append(element4.name())
-                .append(BLANK);
+        Stream.of( elements )
+                .forEach( entry -> sqlQueryBuilder
+                        .append(COMMA)
+                        .append(entry.name())
+                        .append(BLANK)
+                );
 
         return this;
     }
@@ -83,7 +62,7 @@ public class JDBCQueryBuilder <T extends Enum<T>>
     {
         sqlQueryBuilder
                 .append(SELECT)
-                .append(" * ");
+                .append("* ");
         return this;
     }
 
@@ -108,50 +87,106 @@ public class JDBCQueryBuilder <T extends Enum<T>>
         return this;
     }
 
-    public JDBCQueryBuilder<T> where(T element)
+    public JDBCCondition<T> where(T element)
     {
         sqlQueryBuilder
                 .append(WHERE)
                 .append(element.name())
                 .append(BLANK);
 
-        return this;
+        return new JDBCCondition<>(this);
     }
 
-    public JDBCQueryBuilder<T> isEqual(Object value)
+    public JDBCCondition<T> and(T element)
     {
-        return is(EQUAL, value);
+        sqlQueryBuilder
+                .append(AND)
+                .append(element.name())
+                .append(BLANK);
+
+        return new JDBCCondition<>(this);
     }
 
-    public JDBCQueryBuilder<T> isLessThan(Object value)
+    public JDBCCondition<T> or(T element)
     {
-        return is(LESS_THAN, value);
-    }
+        sqlQueryBuilder
+                .append(OR)
+                .append(element.name())
+                .append(BLANK);
 
-    public JDBCQueryBuilder<T> isGreaterThan(Object value)
-    {
-        return is(GREATER_THAN, value);
+        return new JDBCCondition<>(this);
     }
-
 
     public String getQuery()
     {
         return sqlQueryBuilder.toString();
     }
 
-    public JDBCQueryBuilder<T> is(SQLSyntax.SQLOperation operation, Object attribute)
-    {
-        sqlQueryBuilder
-                .append(operation.toString())
-                .append(ARGUMENT_PLACEHOLDER);
-
-        arguments.add(attribute);
-
-        return this;
-    }
-
     public JDBCQuery create()
     {
         return new JDBCQuery(jdbcConnection, sqlQueryBuilder.toString(), arguments);
     }
+
+    StringBuilder getSqlQueryBuilder()
+    {
+        return sqlQueryBuilder;
+    }
+
+    void addArgument(Object argument)
+    {
+        arguments.add(argument);
+    }
+
+    public static class JDBCCondition<T extends Enum<T>>
+    {
+        private final JDBCQueryBuilder<T> queryBuilder;
+
+        JDBCCondition( JDBCQueryBuilder<T> queryBuilder)
+        {
+            this.queryBuilder = queryBuilder;
+        }
+
+        public JDBCQueryBuilder<T> isEqual(Object value)
+        {
+            return is(EQUAL, value);
+        }
+
+        public JDBCQueryBuilder<T> isLessThan(Object value)
+        {
+            return is(LESS_THAN, value);
+        }
+
+        public JDBCQueryBuilder<T> isLessOrEqual(Object value)
+        {
+            return is(LESS_THAN_OR_EQUAL, value);
+        }
+
+        public JDBCQueryBuilder<T> isGreaterThan(Object value)
+        {
+            return is(GREATER_THAN, value);
+        }
+
+        public JDBCQueryBuilder<T> isGreaterOrEqual(Object value)
+        {
+            return is(GREATER_THAN_OR_EQUAL, value);
+        }
+
+        public JDBCQueryBuilder<T> like(String pattern)
+        {
+            return is(LIKE, pattern);
+        }
+
+        public JDBCQueryBuilder<T> is(SQLSyntax.SQLOperation operation, Object attribute)
+        {
+            queryBuilder.getSqlQueryBuilder()
+                    .append(operation.toString())
+                    .append(ARGUMENT_PLACEHOLDER);
+
+            queryBuilder.addArgument(attribute);
+
+            return queryBuilder;
+        }
+
+    }
+
 }

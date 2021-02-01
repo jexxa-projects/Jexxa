@@ -16,6 +16,8 @@ public class SQLSyntax
     static final String SET = "SET ";
     static final String FROM = "FROM ";
     static final String WHERE = "WHERE ";
+    static final String AND = "AND ";
+    static final String OR = "OR ";
 
     static final String ARGUMENT_PLACEHOLDER = " ? ";
     static final String COMMA = " , ";
@@ -23,12 +25,13 @@ public class SQLSyntax
 
     enum SQLOperation
     {
-        GREATER_THAN(">"),
-        GREATER_THAN_OR_EQUAL(">="),
-        LESS_THAN("<"),
-        LESS_THAN_OR_EQUAL("<="),
-        EQUAL("="),
-        NOT_EQUAL("!=");
+        GREATER_THAN("> "),
+        GREATER_THAN_OR_EQUAL(">= "),
+        LESS_THAN("< "),
+        LESS_THAN_OR_EQUAL("<= "),
+        EQUAL("= "),
+        NOT_EQUAL("<> "),
+        LIKE("LIKE ");
 
         private final String string;
 
@@ -44,6 +47,8 @@ public class SQLSyntax
 
     public static class SQLDataType
     {
+        private final String string;
+
         public static final SQLDataType INTEGER = new SQLDataType("INTEGER ");
         public static final SQLDataType NUMERIC = new SQLDataType("NUMERIC ");
         public static final SQLDataType FLOAT = new SQLDataType("FLOAT ");
@@ -54,8 +59,6 @@ public class SQLSyntax
 
         @SuppressWarnings({"java:S100", "java:S1845"}) // Explicit naming for fluent API style
         public static SQLDataType VARCHAR(int maxSize) { return new SQLDataType("VARCHAR("+maxSize +") ");}
-
-        private final String string;
 
         protected SQLDataType(String name){string = name;}
 
