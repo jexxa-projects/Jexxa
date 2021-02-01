@@ -82,13 +82,13 @@ public class JDBCCommandBuilder<T extends Enum<T>>
     public JDBCCommandBuilder<T> values(Object... args)
     {
         sqlCommandBuilder.append("values ( ");
-        for(int i = 0;  i < args.length; ++i )
+        sqlCommandBuilder.append( ARGUMENT_PLACEHOLDER ); // Handle first entry (without COMMA)
+        arguments.add(args[0]);
+
+        for(int i = 1;  i < args.length; ++i ) // Handle remaining entries(with leading COMMA)
         {
-            sqlCommandBuilder.append( " ? " );
-            if ( i < args.length -1)
-            {
-                sqlCommandBuilder.append( COMMA );
-            }
+            sqlCommandBuilder.append( COMMA );
+            sqlCommandBuilder.append( ARGUMENT_PLACEHOLDER );
             arguments.add(args[i]);
         }
         sqlCommandBuilder.append(")");
