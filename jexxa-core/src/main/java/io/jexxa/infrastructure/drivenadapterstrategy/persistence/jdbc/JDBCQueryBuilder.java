@@ -1,35 +1,21 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.AND;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.ARGUMENT_PLACEHOLDER;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.BLANK;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.COMMA;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.FROM;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.OR;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.ORDER_BY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SELECT;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.EQUAL;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.GREATER_THAN;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.GREATER_THAN_OR_EQUAL;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.IS_NOT_NULL;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.IS_NULL;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.LESS_THAN;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.LESS_THAN_OR_EQUAL;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.LIKE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.NOT_LIKE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.WHERE;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
-public class JDBCQueryBuilder <T extends Enum<T>>
+public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
 {
-    private final StringBuilder sqlQueryBuilder = new StringBuilder();
     private final Supplier<JDBCConnection> jdbcConnection;
-    private final List<Object> arguments = new ArrayList<>();
 
     private boolean orderByAdded = false;
 
@@ -41,7 +27,7 @@ public class JDBCQueryBuilder <T extends Enum<T>>
 
     public JDBCQueryBuilder<T> select(T element)
     {
-        sqlQueryBuilder
+        getSqlQueryBuilder()
                 .append(SELECT)
                 .append(element.name())
                 .append(BLANK);
@@ -55,7 +41,7 @@ public class JDBCQueryBuilder <T extends Enum<T>>
         select(element);
 
         Stream.of( elements )
-                .forEach( entry -> sqlQueryBuilder
+                .forEach( entry -> getSqlQueryBuilder()
                         .append(COMMA)
                         .append(entry.name())
                         .append(BLANK)
@@ -66,7 +52,7 @@ public class JDBCQueryBuilder <T extends Enum<T>>
 
     public JDBCQueryBuilder<T> selectAll()
     {
-        sqlQueryBuilder
+        getSqlQueryBuilder()
                 .append(SELECT)
                 .append("* ");
         return this;
@@ -75,7 +61,7 @@ public class JDBCQueryBuilder <T extends Enum<T>>
 
     public JDBCQueryBuilder<T> from(T element)
     {
-        sqlQueryBuilder
+        getSqlQueryBuilder()
                 .append(FROM)
                 .append(element.name())
                 .append(BLANK);
@@ -85,7 +71,7 @@ public class JDBCQueryBuilder <T extends Enum<T>>
 
     public JDBCQueryBuilder<T> from(Class<?> clazz)
     {
-        sqlQueryBuilder
+        getSqlQueryBuilder()
                 .append(FROM)
                 .append(clazz.getSimpleName())
                 .append(BLANK);
@@ -93,9 +79,9 @@ public class JDBCQueryBuilder <T extends Enum<T>>
         return this;
     }
 
-    public JDBCCondition<T> where(T element)
+    public JDBCCondition<T, JDBCQueryBuilder<T>> where(T element)
     {
-        sqlQueryBuilder
+        getSqlQueryBuilder()
                 .append(WHERE)
                 .append(element.name())
                 .append(BLANK);
@@ -103,9 +89,9 @@ public class JDBCQueryBuilder <T extends Enum<T>>
         return new JDBCCondition<>(this);
     }
 
-    public JDBCCondition<T> and(T element)
+    public JDBCCondition<T, JDBCQueryBuilder<T>> and(T element)
     {
-        sqlQueryBuilder
+        getSqlQueryBuilder()
                 .append(AND)
                 .append(element.name())
                 .append(BLANK);
@@ -113,9 +99,9 @@ public class JDBCQueryBuilder <T extends Enum<T>>
         return new JDBCCondition<>(this);
     }
 
-    public JDBCCondition<T> or(T element)
+    public JDBCCondition<T, JDBCQueryBuilder<T>> or(T element)
     {
-        sqlQueryBuilder
+        getSqlQueryBuilder()
                 .append(OR)
                 .append(element.name())
                 .append(BLANK);
@@ -125,33 +111,23 @@ public class JDBCQueryBuilder <T extends Enum<T>>
 
     public String getQuery()
     {
-        return sqlQueryBuilder.toString();
+        return getSqlQueryBuilder().toString();
     }
 
     public JDBCQuery create()
     {
-        return new JDBCQuery(jdbcConnection, sqlQueryBuilder.toString(), arguments);
-    }
-
-    StringBuilder getSqlQueryBuilder()
-    {
-        return sqlQueryBuilder;
-    }
-
-    void addArgument(Object argument)
-    {
-        arguments.add(argument);
+        return new JDBCQuery(jdbcConnection, getSqlQueryBuilder().toString(), getArguments());
     }
 
     public JDBCQueryBuilder<T> orderBy(T element, SQLSyntax.SQLOrder order)
     {
         if (!orderByAdded)
         {
-            sqlQueryBuilder.append(ORDER_BY);
+            getSqlQueryBuilder().append(ORDER_BY);
             orderByAdded = true;
         }
 
-        sqlQueryBuilder.append(element.name())
+        getSqlQueryBuilder().append(element.name())
                 .append(BLANK)
                 .append(order.name())
                 .append(BLANK);
@@ -163,86 +139,15 @@ public class JDBCQueryBuilder <T extends Enum<T>>
     {
         if (!orderByAdded)
         {
-            sqlQueryBuilder.append(ORDER_BY);
+            getSqlQueryBuilder().append(ORDER_BY);
             orderByAdded = true;
         }
 
-        sqlQueryBuilder.append(element.name())
+        getSqlQueryBuilder().append(element.name())
                 .append(BLANK);
 
         return this;
     }
 
-    public static class JDBCCondition<T extends Enum<T>>
-    {
-        private final JDBCQueryBuilder<T> queryBuilder;
-
-        JDBCCondition( JDBCQueryBuilder<T> queryBuilder)
-        {
-            this.queryBuilder = queryBuilder;
-        }
-
-        public JDBCQueryBuilder<T> isEqual(Object value)
-        {
-            return is(EQUAL, value);
-        }
-
-        public JDBCQueryBuilder<T> isNull()
-        {
-            queryBuilder.getSqlQueryBuilder()
-                    .append(IS_NULL.toString());
-
-            return queryBuilder;
-        }
-
-        public JDBCQueryBuilder<T> isNotNull()
-        {
-            queryBuilder.getSqlQueryBuilder()
-                    .append(IS_NOT_NULL.toString());
-
-            return queryBuilder;
-        }
-
-        public JDBCQueryBuilder<T> isLessThan(Object value)
-        {
-            return is(LESS_THAN, value);
-        }
-
-        public JDBCQueryBuilder<T> isLessOrEqual(Object value)
-        {
-            return is(LESS_THAN_OR_EQUAL, value);
-        }
-
-        public JDBCQueryBuilder<T> isGreaterThan(Object value)
-        {
-            return is(GREATER_THAN, value);
-        }
-
-        public JDBCQueryBuilder<T> isGreaterOrEqual(Object value)
-        {
-            return is(GREATER_THAN_OR_EQUAL, value);
-        }
-
-        public JDBCQueryBuilder<T> like(String pattern)
-        {
-            return is(LIKE, pattern);
-        }
-
-        public JDBCQueryBuilder<T> notLike(String pattern)
-        {
-            return is(NOT_LIKE, pattern);
-        }
-
-        public JDBCQueryBuilder<T> is(SQLSyntax.SQLOperation operation, Object attribute)
-        {
-            queryBuilder.getSqlQueryBuilder()
-                    .append(operation.toString())
-                    .append(ARGUMENT_PLACEHOLDER);
-
-            queryBuilder.addArgument(attribute);
-
-            return queryBuilder;
-        }
-    }
 
 }
