@@ -7,13 +7,13 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDB
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.NUMERIC_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.STRING_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.TIMESTAMP_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLConstraint.PRIMARY_KEY;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.DOUBLE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.FLOAT;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.INTEGER;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.NUMERIC;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.TEXT;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.TIMESTAMP;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.DOUBLE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.FLOAT;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.INTEGER;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.NUMERIC;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.TEXT;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.TIMESTAMP;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -46,7 +46,7 @@ public class JDBCTestDatabase
 
     static void autocreateTable(JDBCConnection jdbcConnection)
     {
-        var createTableCommand = jdbcConnection.createCommand(JDBCTestSchema.class)
+        var createTableCommand = jdbcConnection.createTableCommand(JDBCTestSchema.class)
                 .createTableIfNotExists(JDBCTestDatabase.class)
                 .addColumn(KEY, INTEGER)
                 .addConstraint(PRIMARY_KEY)
@@ -63,7 +63,7 @@ public class JDBCTestDatabase
 
     static void dropTable(JDBCConnection jdbcConnection)
     {
-        var dropTableCommand = jdbcConnection.createCommand(JDBCTestSchema.class).dropTableIfExists(JDBCTestDatabase.class);
+        var dropTableCommand = jdbcConnection.createTableCommand(JDBCTestSchema.class).dropTableIfExists(JDBCTestDatabase.class);
 
         dropTableCommand.asIgnore();
     }

@@ -21,7 +21,7 @@ public class JDBCQuery extends JDBCPreparedStatement
         R apply(T t) throws SQLException;
     }
 
-    JDBCQuery(Supplier<JDBCConnection> jdbcConnection, String sqlQuery, List<Object> arguments)
+    public JDBCQuery(Supplier<JDBCConnection> jdbcConnection, String sqlQuery, List<Object> arguments)
     {
         super(jdbcConnection, sqlQuery, arguments);
     }

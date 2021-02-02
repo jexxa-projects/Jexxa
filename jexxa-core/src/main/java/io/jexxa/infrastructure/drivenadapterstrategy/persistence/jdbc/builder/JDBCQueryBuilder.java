@@ -1,16 +1,19 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.AND;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.BLANK;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.COMMA;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.FROM;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.OR;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.ORDER_BY;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SELECT;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.WHERE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.AND;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.BLANK;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.COMMA;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.FROM;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.OR;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.ORDER_BY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SELECT;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.WHERE;
 
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 
 @SuppressWarnings("unused")
 public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
@@ -20,14 +23,14 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
     private boolean orderByAdded = false;
 
 
-    JDBCQueryBuilder(Supplier<JDBCConnection> jdbcConnection )
+    public JDBCQueryBuilder(Supplier<JDBCConnection> jdbcConnection)
     {
         this.jdbcConnection = jdbcConnection;
     }
 
     public JDBCQueryBuilder<T> select(T element)
     {
-        getSqlQueryBuilder()
+        getStatementBuilder()
                 .append(SELECT)
                 .append(element.name())
                 .append(BLANK);
@@ -41,7 +44,7 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         select(element);
 
         Stream.of( elements )
-                .forEach( entry -> getSqlQueryBuilder()
+                .forEach( entry -> getStatementBuilder()
                         .append(COMMA)
                         .append(entry.name())
                         .append(BLANK)
@@ -52,7 +55,7 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
 
     public JDBCQueryBuilder<T> selectAll()
     {
-        getSqlQueryBuilder()
+        getStatementBuilder()
                 .append(SELECT)
                 .append("* ");
         return this;
@@ -61,7 +64,7 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
 
     public JDBCQueryBuilder<T> from(T element)
     {
-        getSqlQueryBuilder()
+        getStatementBuilder()
                 .append(FROM)
                 .append(element.name())
                 .append(BLANK);
@@ -71,7 +74,7 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
 
     public JDBCQueryBuilder<T> from(Class<?> clazz)
     {
-        getSqlQueryBuilder()
+        getStatementBuilder()
                 .append(FROM)
                 .append(clazz.getSimpleName())
                 .append(BLANK);
@@ -81,7 +84,7 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
 
     public JDBCCondition<T, JDBCQueryBuilder<T>> where(T element)
     {
-        getSqlQueryBuilder()
+        getStatementBuilder()
                 .append(WHERE)
                 .append(element.name())
                 .append(BLANK);
@@ -91,7 +94,7 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
 
     public JDBCCondition<T, JDBCQueryBuilder<T>> and(T element)
     {
-        getSqlQueryBuilder()
+        getStatementBuilder()
                 .append(AND)
                 .append(element.name())
                 .append(BLANK);
@@ -101,7 +104,7 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
 
     public JDBCCondition<T, JDBCQueryBuilder<T>> or(T element)
     {
-        getSqlQueryBuilder()
+        getStatementBuilder()
                 .append(OR)
                 .append(element.name())
                 .append(BLANK);
@@ -109,25 +112,20 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         return new JDBCCondition<>(this);
     }
 
-    public String getQuery()
-    {
-        return getSqlQueryBuilder().toString();
-    }
-
     public JDBCQuery create()
     {
-        return new JDBCQuery(jdbcConnection, getSqlQueryBuilder().toString(), getArguments());
+        return new JDBCQuery(jdbcConnection, getStatementBuilder().toString(), getArguments());
     }
 
     public JDBCQueryBuilder<T> orderBy(T element, SQLSyntax.SQLOrder order)
     {
         if (!orderByAdded)
         {
-            getSqlQueryBuilder().append(ORDER_BY);
+            getStatementBuilder().append(ORDER_BY);
             orderByAdded = true;
         }
 
-        getSqlQueryBuilder().append(element.name())
+        getStatementBuilder().append(element.name())
                 .append(BLANK)
                 .append(order.name())
                 .append(BLANK);
@@ -139,11 +137,11 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
     {
         if (!orderByAdded)
         {
-            getSqlQueryBuilder().append(ORDER_BY);
+            getStatementBuilder().append(ORDER_BY);
             orderByAdded = true;
         }
 
-        getSqlQueryBuilder().append(element.name())
+        getStatementBuilder().append(element.name())
                 .append(BLANK);
 
         return this;

@@ -2,7 +2,8 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.KEY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.VALUE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.TEXT;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.TEXT;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
@@ -169,10 +171,10 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         {
             try{
 
-                var command = getConnection().createCommand(KeyValueSchema.class)
+                var command = getConnection().createTableCommand(KeyValueSchema.class)
                         .createTableIfNotExists(aggregateClazz)
                         .addColumn(KEY, getMaxVarChar(properties.getProperty(JDBCConnection.JDBC_URL)))
-                        .addConstraint(SQLSyntax.SQLConstraint.PRIMARY_KEY)
+                        .addConstraint(PRIMARY_KEY)
                         .addColumn(VALUE, TEXT)
                         .create();
 
@@ -190,29 +192,29 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         return aggregateClazz.getSimpleName();
     }
 
-    private static SQLSyntax.SQLDataType getMaxVarChar(String jdbcDriver)
+    private static SQLDataType getMaxVarChar(String jdbcDriver)
     {
         if ( jdbcDriver.toLowerCase().contains("oracle") )
         {
-            return SQLSyntax.SQLDataType.VARCHAR(4000);
+            return SQLDataType.VARCHAR(4000);
         }
 
         if ( jdbcDriver.toLowerCase().contains("postgres") )
         {
-            return SQLSyntax.SQLDataType.VARCHAR; // Note in general Postgres does not have a real upper limit.
+            return SQLDataType.VARCHAR; // Note in general Postgres does not have a real upper limit.
         }
 
         if ( jdbcDriver.toLowerCase().contains("h2") )
         {
-            return SQLSyntax.SQLDataType.VARCHAR(Integer.MAX_VALUE);
+            return SQLDataType.VARCHAR(Integer.MAX_VALUE);
         }
 
         if ( jdbcDriver.toLowerCase().contains("mysql") )
         {
-            return SQLSyntax.SQLDataType.VARCHAR(65535);
+            return SQLDataType.VARCHAR(65535);
         }
 
-        return SQLSyntax.SQLDataType.VARCHAR(255);
+        return SQLDataType.VARCHAR(255);
     }
 
 

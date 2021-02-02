@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 @SuppressWarnings("unused")
 public class JDBCCommand extends JDBCPreparedStatement
 {
-    JDBCCommand(Supplier<JDBCConnection> jdbcConnection, String sqlQuery, List<Object> arguments)
+    public JDBCCommand(Supplier<JDBCConnection> jdbcConnection, String sqlQuery, List<Object> arguments)
     {
         super(jdbcConnection, sqlQuery, arguments);
     }

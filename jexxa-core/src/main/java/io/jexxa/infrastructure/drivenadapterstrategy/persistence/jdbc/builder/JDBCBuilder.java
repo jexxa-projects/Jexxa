@@ -1,27 +1,31 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.ARGUMENT_PLACEHOLDER;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.EQUAL;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.GREATER_THAN;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.GREATER_THAN_OR_EQUAL;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.IS_NOT_NULL;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.IS_NULL;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.LESS_THAN;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.LESS_THAN_OR_EQUAL;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.LIKE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.NOT_EQUAL;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.NOT_LIKE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.ARGUMENT_PLACEHOLDER;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SQLOperation.EQUAL;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SQLOperation.GREATER_THAN;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SQLOperation.GREATER_THAN_OR_EQUAL;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SQLOperation.IS_NOT_NULL;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SQLOperation.IS_NULL;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SQLOperation.LESS_THAN;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SQLOperation.LESS_THAN_OR_EQUAL;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SQLOperation.LIKE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SQLOperation.NOT_EQUAL;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SQLOperation.NOT_LIKE;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class  JDBCBuilder <T extends Enum<T>>
+public class  JDBCBuilder <T extends Enum<T>>
 {
     private final StringBuilder sqlQueryBuilder = new StringBuilder();
     private final List<Object> arguments = new ArrayList<>();
 
+    public String getStatement()
+    {
+        return getStatementBuilder().toString();
+    }
 
-    protected final StringBuilder getSqlQueryBuilder()
+    public final StringBuilder getStatementBuilder()
     {
         return sqlQueryBuilder;
     }
@@ -36,11 +40,12 @@ class  JDBCBuilder <T extends Enum<T>>
         return arguments;
     }
 
+
     public static class JDBCCondition<V extends Enum<V>, T extends JDBCBuilder<V> >
     {
         private final T queryBuilder;
 
-        JDBCCondition( T queryBuilder)
+        public JDBCCondition( T queryBuilder)
         {
             this.queryBuilder = queryBuilder;
         }
@@ -52,7 +57,7 @@ class  JDBCBuilder <T extends Enum<T>>
 
         public T isNull()
         {
-            queryBuilder.getSqlQueryBuilder()
+            queryBuilder.getStatementBuilder()
                     .append(IS_NULL.toString());
 
             return queryBuilder;
@@ -60,7 +65,7 @@ class  JDBCBuilder <T extends Enum<T>>
 
         public T isNotNull()
         {
-            queryBuilder.getSqlQueryBuilder()
+            queryBuilder.getStatementBuilder()
                     .append(IS_NOT_NULL.toString());
 
             return queryBuilder;
@@ -104,7 +109,7 @@ class  JDBCBuilder <T extends Enum<T>>
 
         public T is(SQLSyntax.SQLOperation operation, Object attribute)
         {
-            queryBuilder.getSqlQueryBuilder()
+            queryBuilder.getStatementBuilder()
                     .append(operation.toString())
                     .append(ARGUMENT_PLACEHOLDER);
 

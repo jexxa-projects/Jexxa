@@ -9,6 +9,9 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.Properties;
 
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCCommandBuilder;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCQueryBuilder;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
@@ -116,7 +119,7 @@ public class JDBCConnection implements AutoCloseable
     }
 
     @SuppressWarnings("java:S1172")
-    public <T extends Enum<T>>  JDBCQueryBuilder<T> createQuery(Class<T> schema)
+    public <T extends Enum<T>> JDBCQueryBuilder<T> createQuery(Class<T> schema)
     {
         return new JDBCQueryBuilder<>(this::validateConnection);
     }
@@ -127,10 +130,17 @@ public class JDBCConnection implements AutoCloseable
     }
 
     @SuppressWarnings("java:S1172")
-    public <T extends Enum<T>>  JDBCCommandBuilder<T> createCommand(Class<T> schema)
+    public <T extends Enum<T>> JDBCCommandBuilder<T> createCommand(Class<T> schema)
     {
         return new JDBCCommandBuilder<>(this::validateConnection);
     }
+
+    @SuppressWarnings("java:S1172")
+    public <T extends Enum<T>> JDBCTableBuilder<T> createTableCommand(Class<T> schema)
+    {
+        return new JDBCTableBuilder<>(this::validateConnection);
+    }
+
 
     public JDBCCommand createCommand(String command)
     {
