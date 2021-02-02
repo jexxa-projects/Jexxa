@@ -212,7 +212,7 @@ class JDBCQueryTest
         //Arrange
         var queryMultiSelect = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(STRING_TYPE, INTEGER_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
@@ -228,7 +228,7 @@ class JDBCQueryTest
         //Arrange
         var querySelectAll = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .selectAll()
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
