@@ -20,11 +20,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import io.jexxa.TestConstants;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +58,10 @@ class JDBCQueryTest
 
     private JDBCQuery queryNotAvailableInteger;
     private JDBCQuery queryNotAvailableString;
+
+    private JDBCQuery queryMultiSelect;
+    private JDBCQuery querySelectAll;
+
 
 
     private final Timestamp testTimestamp = Timestamp.from(Instant.now().truncatedTo(ChronoUnit.MICROS));
@@ -180,6 +187,45 @@ class JDBCQueryTest
         assertTrue( queryNotAvailableString.isEmpty());
     }
 
+    @Test
+    void testMultiSelect()
+    {
+        //Arrange
+        var result = queryMultiSelect.as(this::readMultiSelect);
+
+        assertEquals(2, result.findFirst().orElseThrow().count());
+    }
+
+    @Test
+    void testSelectAll()
+    {
+        //Arrange
+        var result = querySelectAll.as(this::readSelectAll);
+
+        assertEquals(7, result.findFirst().orElseThrow().count());
+    }
+
+    Stream<String> readMultiSelect(ResultSet resultSet ) throws SQLException
+    {
+        return Stream.of(
+                resultSet.getString(STRING_TYPE.name()),
+                String.valueOf( resultSet.getInt(INTEGER_TYPE.name()))
+        );
+    }
+
+    Stream<String> readSelectAll(ResultSet resultSet ) throws SQLException
+    {
+        return Stream.of(
+                String.valueOf( resultSet.getInt(KEY.name())),
+                resultSet.getString(STRING_TYPE.name()),
+                String.valueOf( resultSet.getInt(INTEGER_TYPE.name())),
+                String.valueOf( resultSet.getFloat(FLOAT_TYPE.name())),
+                String.valueOf( resultSet.getDouble(DOUBLE_TYPE.name())),
+                String.valueOf( resultSet.getBigDecimal(NUMERIC_TYPE.name())),
+                String.valueOf( resultSet.getTimestamp(TIMESTAMP_TYPE.name()))
+        );
+    }
+
     private void autocreateTable()
     {
         var createTableCommand = jdbcConnection.createCommand(JDBCQueryTestSchema.class)
@@ -225,6 +271,7 @@ class JDBCQueryTest
         createQueriesForNullValues();
         createQueriesForNonNullValues();
         createQueriesForEmptyValues();
+        createQueriesMuliSelect();
     }
     enum JDBCQueryTestSchema
     {
@@ -341,5 +388,23 @@ class JDBCQueryTest
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_NOT_PRESENT)
                 .create();
+    }
+
+    private void createQueriesMuliSelect()
+    {
+        querySelectAll = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .selectAll()
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .create();
+
+        queryMultiSelect = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(STRING_TYPE, INTEGER_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .create();
+
     }
 }

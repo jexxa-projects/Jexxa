@@ -21,8 +21,8 @@ public class SQLSyntax
 
     static final String ORDER_BY = "ORDER BY ";
 
-    static final String ARGUMENT_PLACEHOLDER = " ? ";
-    static final String COMMA = " , ";
+    static final String ARGUMENT_PLACEHOLDER = "? ";
+    static final String COMMA = ", ";
     static final String BLANK = " ";
 
     enum SQLOperation

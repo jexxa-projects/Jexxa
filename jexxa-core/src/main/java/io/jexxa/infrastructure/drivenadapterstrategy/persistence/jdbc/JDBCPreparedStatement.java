@@ -9,19 +9,19 @@ import java.util.function.Supplier;
 class JDBCPreparedStatement
 {
     private final Supplier<JDBCConnection> jdbcConnection;
-    private final String sqlQuery;
+    private final String sqlStatement;
     private final List<Object> arguments;
 
     private final PreparedStatement statement;
 
-    JDBCPreparedStatement(Supplier<JDBCConnection> jdbcConnection, String sqlQuery, List<Object> arguments)
+    JDBCPreparedStatement(Supplier<JDBCConnection> jdbcConnection, String sqlStatement, List<Object> arguments)
     {
         Objects.requireNonNull(jdbcConnection);
-        Objects.requireNonNull(sqlQuery);
+        Objects.requireNonNull(sqlStatement);
         Objects.requireNonNull(arguments);
 
         this.jdbcConnection = jdbcConnection;
-        this.sqlQuery = sqlQuery;
+        this.sqlStatement = sqlStatement;
         this.arguments = arguments;
 
         this.statement = createPreparedStatement();
@@ -31,7 +31,7 @@ class JDBCPreparedStatement
     {
         try
         {
-            var preparedStatement = jdbcConnection.get().prepareStatement(sqlQuery);
+            var preparedStatement = jdbcConnection.get().prepareStatement(sqlStatement);
 
             for (int i = 0; i < arguments.size(); ++i)
             {
@@ -41,12 +41,17 @@ class JDBCPreparedStatement
             return preparedStatement;
         } catch (SQLException e)
         {
-            throw new IllegalArgumentException("Invalid Query " + sqlQuery + " " + e.getMessage(), e);
+            throw new IllegalArgumentException("Invalid Query " + sqlStatement + " " + e.getMessage(), e);
         }
     }
 
     public PreparedStatement getStatement()
     {
         return statement;
+    }
+
+    protected String getSQLStatement()
+    {
+        return sqlStatement;
     }
 }

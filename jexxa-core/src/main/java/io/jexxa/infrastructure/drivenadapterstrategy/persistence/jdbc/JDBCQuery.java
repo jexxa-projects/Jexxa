@@ -103,7 +103,7 @@ public class JDBCQuery extends JDBCPreparedStatement
         }
         catch (SQLException e)
         {
-            throw new IllegalStateException(INVALID_QUERY, e);
+            throw new IllegalStateException(INVALID_QUERY + getSQLStatement(), e);
         }
     }
 }
