@@ -2,6 +2,7 @@ package io.jexxa.infrastructure.drivingadapter.rest;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.STATIC_FILES_ROOT;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -283,9 +284,9 @@ class RESTfulRPCAdapterIT
         assertEquals(SimpleApplicationService.SimpleApplicationException.class.getName(), error.get("ExceptionType").getAsString());
 
         var jsonString = error.get("Exception").getAsString();
-        var gson = new Gson();
+
         assertThrows(SimpleApplicationService.SimpleApplicationException.class, () -> {
-            throw gson.fromJson(jsonString, SimpleApplicationService.SimpleApplicationException.class);
+            throw getJSONConverter().fromJson(jsonString, SimpleApplicationService.SimpleApplicationException.class);
         });
     }
 

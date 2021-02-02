@@ -1,6 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
 
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 import static java.util.stream.Collectors.toList;
 import static javax.management.MBeanOperationInfo.UNKNOWN;
 
@@ -22,7 +23,6 @@ import javax.management.MBeanParameterInfo;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.utils.JexxaLogger;
@@ -30,7 +30,6 @@ import io.jexxa.utils.JexxaLogger;
 public class MBeanConvention implements DynamicMBean
 {
     public static final String JEXXA_CONTEXT_NAME = "io.jexxa.context.name";
-    private final Gson gson = new Gson();
 
     private final Object object;
     private final String contextName;
@@ -117,7 +116,7 @@ public class MBeanConvention implements DynamicMBean
 
         for (int i = 0; i < parameters.length; ++i)
         {
-            result[i] = gson.fromJson((String) parameters[i], parameterTypes[i]);
+            result[i] = getJSONConverter().fromJson((String) parameters[i], parameterTypes[i]);
         }
 
         return result;
@@ -247,7 +246,7 @@ public class MBeanConvention implements DynamicMBean
             return object;
         }
 
-        return gson.toJson(object);
+        return getJSONConverter().toJson(object);
     }
 
     private Field[] filterFieldsForJson(Class<?> clazz)

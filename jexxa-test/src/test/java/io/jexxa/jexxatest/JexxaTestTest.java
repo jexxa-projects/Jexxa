@@ -1,5 +1,6 @@
 package io.jexxa.jexxatest;
 
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -9,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Properties;
 
-import com.google.gson.Gson;
 import io.jexxa.application.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.domainservice.IJexxaAggregateRepository;
@@ -82,7 +82,7 @@ class JexxaTestTest
         assertEquals("JexxaTopic", recordedMessage.getDestinationName());
         assertEquals(MessageProducer.DestinationType.TOPIC, recordedMessage.getDestinationType());
         assertNull(recordedMessage.getMessageProperties());
-        assertEquals(new Gson().toJson(testMessage), recordedMessage.getSerializedMessage());
+        assertEquals(getJSONConverter().toJson(testMessage), recordedMessage.getSerializedMessage());
     }
 
     @Test void validateMessageToQueue()

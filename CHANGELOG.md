@@ -14,6 +14,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     -   Added typesafe SQL Builder for `JDBCQuery` and `JDBCCommand`
     -   Using SQL Builder also prevents any SQL injection issues
 
+### Fixed
+-   `JDBCKeyValueRepository`:
+    -   Corrected handling of Java8 Date API so that a date is handled as a string which is conform to ISO 8601
+
+-   `JMSSender`:
+    -   Corrected handling of Java8 Date API so that a date is handled as a string which is conform to ISO 8601
+
+-   `JSONMessageListener`:
+    -   Corrected handling of Java8 Date API so that a date is handled as a string which is conform to ISO 8601
+
+
 ## \[2.7.3] - 2021-01-22
 ### Fixed
 -   JDBCQuery:

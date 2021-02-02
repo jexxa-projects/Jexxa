@@ -4,6 +4,7 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDB
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.VALUE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.TEXT;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,7 +13,6 @@ import java.util.Properties;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 import io.jexxa.utils.JexxaLogger;
@@ -61,8 +61,6 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
-    private final Gson gson = new Gson();
-
 
     public JDBCKeyValueRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
     {
@@ -83,7 +81,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .deleteFrom(aggregateClazz)
                 .where(KEY)
-                .isEqual(gson.toJson(key))
+                .isEqual(getJSONConverter().toJson(key))
                 .create();
 
         command.asUpdate();
@@ -107,7 +105,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .insertInto(aggregateClazz)
-                .values(gson.toJson(keyFunction.apply(aggregate)), gson.toJson(aggregate))
+                .values(getJSONConverter().toJson(keyFunction.apply(aggregate)), getJSONConverter().toJson(aggregate))
                 .create();
 
         command.asUpdate();
@@ -121,9 +119,9 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .update(aggregateClazz)
-                .set(VALUE,gson.toJson(aggregate) )
+                .set(VALUE, getJSONConverter().toJson(aggregate) )
                 .where(KEY)
-                .isEqual(gson.toJson(keyFunction.apply(aggregate)))
+                .isEqual(getJSONConverter().toJson(keyFunction.apply(aggregate)))
                 .create();
 
         command.asUpdate();
@@ -138,14 +136,14 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
                 .select(VALUE)
                 .from(aggregateClazz)
                 .where(KEY)
-                .isEqual(gson.toJson(primaryKey))
+                .isEqual(getJSONConverter().toJson(primaryKey))
                 .create();
 
         return  query
                 .asString()
                 .flatMap(Optional::stream)
                 .findFirst()
-                .map( element -> gson.fromJson(element, aggregateClazz))
+                .map( element -> getJSONConverter().fromJson(element, aggregateClazz))
                 .or(Optional::empty);
     }
 
@@ -160,7 +158,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         return query
                 .asString()
                 .flatMap(Optional::stream)
-                .map( element -> gson.fromJson(element, aggregateClazz))
+                .map( element -> getJSONConverter().fromJson(element, aggregateClazz))
                 .collect(Collectors.toList());
     }
 

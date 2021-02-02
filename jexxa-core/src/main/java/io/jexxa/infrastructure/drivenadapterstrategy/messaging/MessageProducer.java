@@ -1,11 +1,12 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+
 import java.util.Objects;
 import java.util.Properties;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import com.google.gson.Gson;
 import io.jexxa.utils.annotations.CheckReturnValue;
 
 @CheckReturnValue
@@ -61,9 +62,7 @@ public class MessageProducer
 
     public void asJson()
     {
-        Gson gson = new Gson();
-
-        as(gson::toJson);
+        as(getJSONConverter()::toJson);
     }
 
     public void asString()

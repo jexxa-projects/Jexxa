@@ -84,7 +84,7 @@ class RESTfulRPCJava8DateTimeTest
     {
         //Arrange -> Nothing to do
         LocalDate localDate = LocalDate.now();
-        Gson gson = new Gson();
+        Gson gson = new Gson(); // Use explicit GSON instance to check if non ISO dates are correctly handled
 
         //Act
 

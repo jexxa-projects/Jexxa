@@ -1,12 +1,12 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Properties;
 
-import com.google.gson.Gson;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +48,7 @@ class MessageProducerTest
         assertNotNull(localMessageSender.getMessage());
         assertEquals(MessageProducer.DestinationType.QUEUE, localMessageSender.getDestinationType());
 
-        assertEquals(new Gson().toJson(testData), localMessageSender.getMessage());
+        assertEquals(getJSONConverter().toJson(testData), localMessageSender.getMessage());
     }
 
     @Test
