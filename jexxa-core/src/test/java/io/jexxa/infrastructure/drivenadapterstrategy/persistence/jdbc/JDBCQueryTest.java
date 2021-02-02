@@ -59,9 +59,6 @@ class JDBCQueryTest
     private JDBCQuery queryNotAvailableInteger;
     private JDBCQuery queryNotAvailableString;
 
-    private JDBCQuery queryMultiSelect;
-    private JDBCQuery querySelectAll;
-
 
 
     private final Timestamp testTimestamp = Timestamp.from(Instant.now().truncatedTo(ChronoUnit.MICROS));
@@ -188,9 +185,48 @@ class JDBCQueryTest
     }
 
     @Test
+    void testSelectOR()
+    {
+        //Arrange
+        var querySelectOr = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(STRING_TYPE)
+                .from(JDBCQueryTestSchema.JDBCQueryTest)
+                .where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .or(STRING_TYPE).isNull()
+                .create();
+
+        var result = querySelectOr.asString();
+
+        assertEquals(2, result.count());
+    }
+
+    @Test
+    void testSelectAND()
+    {
+        //Arrange
+        var querySelectOr = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(STRING_TYPE)
+                .from(JDBCQueryTestSchema.JDBCQueryTest)
+                .where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .and(STRING_TYPE).isNull()
+                .create();
+
+        var result = querySelectOr.asString();
+
+        assertEquals(0, result.count());
+    }
+
+    @Test
     void testMultiSelect()
     {
         //Arrange
+        var queryMultiSelect = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .select(STRING_TYPE, INTEGER_TYPE)
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .create();
+
         var result = queryMultiSelect.as(this::readMultiSelect);
 
         assertEquals(2, result.findFirst().orElseThrow().count());
@@ -200,8 +236,17 @@ class JDBCQueryTest
     void testSelectAll()
     {
         //Arrange
+        var querySelectAll = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+                .selectAll()
+                .from(JDBCQueryTest.class)
+                .where(KEY)
+                .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .create();
+
+        //Act
         var result = querySelectAll.as(this::readSelectAll);
 
+        //Assert
         assertEquals(7, result.findFirst().orElseThrow().count());
     }
 
@@ -271,7 +316,6 @@ class JDBCQueryTest
         createQueriesForNullValues();
         createQueriesForNonNullValues();
         createQueriesForEmptyValues();
-        createQueriesMuliSelect();
     }
     enum JDBCQueryTestSchema
     {
@@ -281,7 +325,9 @@ class JDBCQueryTest
         FLOAT_TYPE,
         DOUBLE_TYPE,
         STRING_TYPE,
-        TIMESTAMP_TYPE
+        TIMESTAMP_TYPE,
+
+        JDBCQueryTest
     }
 
     private void createQueriesForNullValues()
@@ -390,21 +436,4 @@ class JDBCQueryTest
                 .create();
     }
 
-    private void createQueriesMuliSelect()
-    {
-        querySelectAll = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
-                .selectAll()
-                .from(JDBCQueryTest.class)
-                .where(KEY)
-                .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
-                .create();
-
-        queryMultiSelect = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
-                .select(STRING_TYPE, INTEGER_TYPE)
-                .from(JDBCQueryTest.class)
-                .where(KEY)
-                .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
-                .create();
-
-    }
 }

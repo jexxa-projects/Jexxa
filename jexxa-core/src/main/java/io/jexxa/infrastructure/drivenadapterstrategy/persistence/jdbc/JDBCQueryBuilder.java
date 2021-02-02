@@ -11,6 +11,8 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQL
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.EQUAL;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.GREATER_THAN;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.GREATER_THAN_OR_EQUAL;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.IS_NOT_NULL;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.IS_NULL;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.LESS_THAN;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.LESS_THAN_OR_EQUAL;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLOperation.LIKE;
@@ -183,6 +185,22 @@ public class JDBCQueryBuilder <T extends Enum<T>>
         public JDBCQueryBuilder<T> isEqual(Object value)
         {
             return is(EQUAL, value);
+        }
+
+        public JDBCQueryBuilder<T> isNull()
+        {
+            queryBuilder.getSqlQueryBuilder()
+                    .append(IS_NULL.toString());
+
+            return queryBuilder;
+        }
+
+        public JDBCQueryBuilder<T> isNotNull()
+        {
+            queryBuilder.getSqlQueryBuilder()
+                    .append(IS_NOT_NULL.toString());
+
+            return queryBuilder;
         }
 
         public JDBCQueryBuilder<T> isLessThan(Object value)
