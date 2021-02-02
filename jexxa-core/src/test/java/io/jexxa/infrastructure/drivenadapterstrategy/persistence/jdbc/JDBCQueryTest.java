@@ -1,30 +1,31 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.DOUBLE_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.FLOAT_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.INTEGER_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.KEY;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.NUMERIC_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.STRING_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQueryTest.JDBCQueryTestSchema.TIMESTAMP_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLConstraint.PRIMARY_KEY;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.DOUBLE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.FLOAT;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.INTEGER;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.NUMERIC;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.TEXT;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.SQLSyntax.SQLDataType.TIMESTAMP;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.DOUBLE_TYPE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.FLOAT_TYPE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.INTEGER_TYPE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.NUMERIC_TYPE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.STRING_TYPE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.TIMESTAMP_TYPE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_VALUES_NOT_PRESENT;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_WITH_NONNULL_VALUES;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_WITH_NULL_VALUES;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.autocreateTable;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.dropTable;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.insertTestData;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testDoubleValue;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testFloatValue;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testIntValue;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testNumericValue;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testString;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testTimestamp;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Stream;
@@ -37,10 +38,6 @@ import org.junit.jupiter.api.Test;
 @Tag(TestConstants.INTEGRATION_TEST)
 class JDBCQueryTest
 {
-    private static final int PRIMARY_KEY_WITH_NULL_VALUES = 1;
-    private static final int PRIMARY_KEY_WITH_NONNULL_VALUES = 2;
-    private static final int PRIMARY_KEY_NOT_PRESENT = 3;
-
     private JDBCQuery queryNullInteger;
     private JDBCQuery queryNullNumeric;
     private JDBCQuery queryNullFloat;
@@ -61,13 +58,6 @@ class JDBCQueryTest
 
 
 
-    private final Timestamp testTimestamp = Timestamp.from(Instant.now().truncatedTo(ChronoUnit.MICROS));
-    private final String testString = "Hello World";
-    private final int testIntValue = 2;
-    private final int testFloatValue = 3;
-    private final int testDoubleValue = 4;
-    private final BigDecimal testNumericValue = BigDecimal.valueOf(5);
-
     private JDBCConnection jdbcConnection;
 
     @BeforeEach
@@ -82,9 +72,9 @@ class JDBCQueryTest
         postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
 
         jdbcConnection = new JDBCConnection(postgresProperties);
-        dropTable();
-        autocreateTable();
-        insertTestData();
+        dropTable(jdbcConnection);
+        autocreateTable(jdbcConnection);
+        insertTestData(jdbcConnection);
         createQueries();
     }
 
@@ -188,9 +178,9 @@ class JDBCQueryTest
     void testSelectOR()
     {
         //Arrange
-        var querySelectOr = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        var querySelectOr = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(STRING_TYPE)
-                .from(JDBCQueryTestSchema.JDBCQueryTest)
+                .from(JDBCTestDatabase.class)
                 .where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .or(STRING_TYPE).isNull()
                 .create();
@@ -204,14 +194,14 @@ class JDBCQueryTest
     void testSelectAND()
     {
         //Arrange
-        var querySelectOr = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        var querySelectAnd = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(STRING_TYPE)
-                .from(JDBCQueryTestSchema.JDBCQueryTest)
+                .from(JDBCTestDatabase.class)
                 .where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .and(STRING_TYPE).isNull()
                 .create();
 
-        var result = querySelectOr.asString();
+        var result = querySelectAnd.asString();
 
         assertEquals(0, result.count());
     }
@@ -220,7 +210,7 @@ class JDBCQueryTest
     void testMultiSelect()
     {
         //Arrange
-        var queryMultiSelect = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        var queryMultiSelect = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(STRING_TYPE, INTEGER_TYPE)
                 .from(JDBCQueryTest.class)
                 .where(KEY)
@@ -236,7 +226,7 @@ class JDBCQueryTest
     void testSelectAll()
     {
         //Arrange
-        var querySelectAll = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        var querySelectAll = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .selectAll()
                 .from(JDBCQueryTest.class)
                 .where(KEY)
@@ -271,45 +261,7 @@ class JDBCQueryTest
         );
     }
 
-    private void autocreateTable()
-    {
-        var createTableCommand = jdbcConnection.createCommand(JDBCQueryTestSchema.class)
-                .createTableIfNotExists(JDBCQueryTest.class)
-                .addColumn(KEY, INTEGER)
-                .addConstraint(PRIMARY_KEY)
-                .addColumn(INTEGER_TYPE, INTEGER)
-                .addColumn(NUMERIC_TYPE, NUMERIC)
-                .addColumn(FLOAT_TYPE, FLOAT)
-                .addColumn(DOUBLE_TYPE, DOUBLE)
-                .addColumn(STRING_TYPE, TEXT)
-                .addColumn(TIMESTAMP_TYPE, TIMESTAMP)
-                .create();
 
-        createTableCommand.asIgnore();
-    }
-
-    private void dropTable()
-    {
-        var dropTableCommand = jdbcConnection.createCommand(JDBCQueryTestSchema.class).dropTableIfExists(JDBCQueryTest.class);
-
-        dropTableCommand.asIgnore();
-    }
-
-    private void insertTestData()
-    {
-        var insertNullValues = jdbcConnection.createCommand(JDBCQueryTestSchema.class)
-                .insertInto(JDBCQueryTest.class)
-                .values(PRIMARY_KEY_WITH_NULL_VALUES, null, null, null, null, null, null )
-                .create();
-
-        var insertNonNullValues = jdbcConnection.createCommand(JDBCQueryTestSchema.class)
-                .insertInto(JDBCQueryTest.class)
-                .values(PRIMARY_KEY_WITH_NONNULL_VALUES, testIntValue , testNumericValue, testFloatValue, testDoubleValue, testString, testTimestamp)
-                .create();
-
-        insertNullValues.asUpdate();
-        insertNonNullValues.asUpdate();
-    }
 
     private void createQueries()
     {
@@ -317,59 +269,48 @@ class JDBCQueryTest
         createQueriesForNonNullValues();
         createQueriesForEmptyValues();
     }
-    enum JDBCQueryTestSchema
-    {
-        KEY,
-        INTEGER_TYPE,
-        NUMERIC_TYPE,
-        FLOAT_TYPE,
-        DOUBLE_TYPE,
-        STRING_TYPE,
-        TIMESTAMP_TYPE,
 
-        JDBCQueryTest
-    }
 
     private void createQueriesForNullValues()
     {
-        queryNullInteger = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        queryNullInteger = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(INTEGER_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_WITH_NULL_VALUES)
                 .create();
 
-        queryNullNumeric = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        queryNullNumeric = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(NUMERIC_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_WITH_NULL_VALUES)
                 .create();
 
-        queryNullFloat = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        queryNullFloat = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(FLOAT_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_WITH_NULL_VALUES)
                 .create();
 
-        queryNullDouble = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        queryNullDouble = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(DOUBLE_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_WITH_NULL_VALUES)
                 .create();
 
-        queryNullString = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        queryNullString = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(STRING_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_WITH_NULL_VALUES)
                 .create();
 
-        queryNullTimestamp = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        queryNullTimestamp = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(TIMESTAMP_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_WITH_NULL_VALUES)
                 .create();
@@ -377,62 +318,62 @@ class JDBCQueryTest
 
     void createQueriesForNonNullValues()
     {
-        queryNonNullInteger = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        queryNonNullInteger = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(INTEGER_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
 
-        queryNonNullNumeric = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        queryNonNullNumeric = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(NUMERIC_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
 
-        queryNonNullFloat = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        queryNonNullFloat = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(FLOAT_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
 
-        queryNonNullDouble = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        queryNonNullDouble = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(DOUBLE_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
 
-        queryNonNullString = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        queryNonNullString = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(STRING_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
 
-        queryNonNullTimestamp = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        queryNonNullTimestamp = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(TIMESTAMP_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
                 .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
     }
     private void createQueriesForEmptyValues()
     {
-        queryNotAvailableInteger = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        queryNotAvailableInteger = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(INTEGER_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
-                .isEqual(PRIMARY_KEY_NOT_PRESENT)
+                .isEqual(PRIMARY_KEY_VALUES_NOT_PRESENT)
                 .create();
 
-        queryNotAvailableString = jdbcConnection.createQuery(JDBCQueryTestSchema.class)
+        queryNotAvailableString = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(STRING_TYPE)
-                .from(JDBCQueryTest.class)
+                .from(JDBCTestDatabase.class)
                 .where(KEY)
-                .isEqual(PRIMARY_KEY_NOT_PRESENT)
+                .isEqual(PRIMARY_KEY_VALUES_NOT_PRESENT)
                 .create();
     }
 
