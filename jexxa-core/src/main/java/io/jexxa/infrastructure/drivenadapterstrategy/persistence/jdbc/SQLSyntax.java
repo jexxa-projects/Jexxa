@@ -19,6 +19,8 @@ public class SQLSyntax
     static final String AND = "AND ";
     static final String OR = "OR ";
 
+    static final String ORDER_BY = "ORDER BY ";
+
     static final String ARGUMENT_PLACEHOLDER = " ? ";
     static final String COMMA = " , ";
     static final String BLANK = " ";
@@ -31,7 +33,8 @@ public class SQLSyntax
         LESS_THAN_OR_EQUAL("<= "),
         EQUAL("= "),
         NOT_EQUAL("<> "),
-        LIKE("LIKE ");
+        LIKE("LIKE "),
+        NOT_LIKE("NOT LIKE ");
 
         private final String string;
 
@@ -69,6 +72,11 @@ public class SQLSyntax
         }
     }
 
+    public enum SQLOrder
+    {
+        ASC,
+        DESC
+    }
 
     public enum SQLConstraint
     {

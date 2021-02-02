@@ -45,7 +45,7 @@ class JDBCPreparedStatement
         }
     }
 
-    PreparedStatement getStatement()
+    public PreparedStatement getStatement()
     {
         return statement;
     }

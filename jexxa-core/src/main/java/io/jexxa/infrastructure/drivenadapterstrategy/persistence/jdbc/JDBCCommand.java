@@ -18,9 +18,7 @@ public class JDBCCommand extends JDBCPreparedStatement
      *
      * @param jdbcConnection used connection to execute command
      * @param sqlCommand must include the complete command with all attributes included
-     * @deprecated Is only added to support deprecated methods in JDBCConnection
      */
-    @Deprecated(forRemoval = true)
     JDBCCommand(Supplier<JDBCConnection> jdbcConnection, String sqlCommand)
     {
         super(jdbcConnection, sqlCommand, Collections.emptyList());

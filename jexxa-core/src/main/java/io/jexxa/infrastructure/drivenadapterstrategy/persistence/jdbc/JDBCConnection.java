@@ -121,10 +121,20 @@ public class JDBCConnection implements AutoCloseable
         return new JDBCQueryBuilder<>(this::validateConnection);
     }
 
+    public JDBCQuery createQuery(String query)
+    {
+        return new JDBCQuery(this::validateConnection, query);
+    }
+
     @SuppressWarnings("java:S1172")
     public <T extends Enum<T>>  JDBCCommandBuilder<T> createCommand(Class<T> schema)
     {
         return new JDBCCommandBuilder<>(this::validateConnection);
+    }
+
+    public JDBCCommand createCommand(String command)
+    {
+        return new JDBCCommand(this::validateConnection, command);
     }
 
 
@@ -180,7 +190,8 @@ public class JDBCConnection implements AutoCloseable
      * @throws SQLException in case of an error
      * @deprecated Will be made package private
      */
-    @Deprecated(forRemoval = true)
+    @SuppressWarnings("java:S1123")
+    @Deprecated
     public PreparedStatement prepareStatement(String sqlStatement) throws SQLException
     {
         return getConnection().prepareStatement(sqlStatement);

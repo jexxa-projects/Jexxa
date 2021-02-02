@@ -31,9 +31,7 @@ public class JDBCQuery extends JDBCPreparedStatement
      *
      * @param jdbcConnection used connection
      * @param sqlQuery must include the complete command with all attributes included
-     * @deprecated Is only added to support deprecated methods in JDBCConnection
      */
-    @Deprecated(forRemoval = true)
     JDBCQuery(Supplier<JDBCConnection> jdbcConnection, String sqlQuery)
     {
         super(jdbcConnection, sqlQuery, Collections.emptyList());
