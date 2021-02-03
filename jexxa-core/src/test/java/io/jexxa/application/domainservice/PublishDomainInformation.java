@@ -1,6 +1,5 @@
 package io.jexxa.application.domainservice;
 
-import io.jexxa.application.domain.domainevent.JexxaDomainEvent;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 
 public class PublishDomainInformation

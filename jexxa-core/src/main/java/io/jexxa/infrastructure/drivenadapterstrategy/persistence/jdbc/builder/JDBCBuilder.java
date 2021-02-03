@@ -15,6 +15,7 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.bui
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class  JDBCBuilder <T extends Enum<T>>
 {
     private final StringBuilder sqlQueryBuilder = new StringBuilder();
@@ -118,6 +119,4 @@ public class  JDBCBuilder <T extends Enum<T>>
             return queryBuilder;
         }
     }
-
-
 }
