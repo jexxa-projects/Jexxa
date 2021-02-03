@@ -32,7 +32,7 @@ public class JexxaDomainEvent
             return false;
         }
         JexxaDomainEvent that = (JexxaDomainEvent) o;
-        return Objects.equals(jexxaValueObject, that.jexxaValueObject);
+        return Objects.equals(getValue(), that.getValue());
     }
 
     @Override
