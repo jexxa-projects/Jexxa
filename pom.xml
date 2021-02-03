@@ -5,7 +5,7 @@
 
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa</artifactId>
-  <version>2.7.4-SNAPSHOT</version>
+  <version>2.8.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <!-- Project Information -->
@@ -49,6 +49,11 @@
     <maven.reports.plugin>3.1.0</maven.reports.plugin>
     <maven.enforcer.plugin>3.0.0-M3</maven.enforcer.plugin>
     <maven.javadoc.plugin>3.2.0</maven.javadoc.plugin>
+    <maven.teplating.plugin>1.0.0</maven.teplating.plugin>
+
+    <!--information for filtered sources  -->
+    <build.timestamp>${maven.build.timestamp}</build.timestamp>
+    <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 
     <!-- target/compiler configuration  -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -64,19 +69,19 @@
     <argLine>-Xmx2048m -Xms1024m</argLine>
 
     <!-- version of compile dependencies -->
-    <classgraph.version>4.8.98</classgraph.version>
+    <classgraph.version>4.8.102</classgraph.version>
     <commons.lang3.version>3.11</commons.lang3.version>
     <commons.cli.version>1.4</commons.cli.version>
     <gson.version>2.8.6</gson.version>
-    <javalin.version>3.12.0</javalin.version>
+    <javalin.version>3.13.3</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
-    <jackson.databind.version>2.12.0</jackson.databind.version>
-    <jackson.core.version>2.12.0</jackson.core.version>
+    <jackson.databind.version>2.12.1</jackson.databind.version>
+    <jackson.core.version>2.12.1</jackson.core.version>
 
     <!-- version of test dependencies -->
-    <activemq.client.version>5.16.0</activemq.client.version>
+    <activemq.client.version>5.16.1</activemq.client.version>
     <postgres.version>42.2.18</postgres.version>
-    <unirest.java.version>3.11.09</unirest.java.version>
+    <unirest.java.version>3.11.10</unirest.java.version>
     <junit.platform.launcher.version>1.7.0</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.7.0</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.7.0</junit.jupiter.params.version>
@@ -128,6 +133,11 @@
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>${maven.resources.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>templating-maven-plugin</artifactId>
+          <version>${maven.teplating.plugin}</version>
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>

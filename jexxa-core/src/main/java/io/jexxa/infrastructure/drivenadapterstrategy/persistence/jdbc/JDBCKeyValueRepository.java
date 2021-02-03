@@ -1,5 +1,11 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.VALUE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.TEXT;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -7,8 +13,8 @@ import java.util.Properties;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
@@ -55,8 +61,6 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
-    private final Gson gson = new Gson();
-
 
     public JDBCKeyValueRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
     {
@@ -74,23 +78,23 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(key);
 
-        String command = String.format("delete from %s where key= '%s'"
-                , getAggregateName()
-                , gson.toJson(key));
+        var command = getConnection().createCommand(KeyValueSchema.class)
+                .deleteFrom(aggregateClazz)
+                .where(KEY)
+                .isEqual(getJSONConverter().toJson(key))
+                .create();
 
-        getConnection()
-                .execute(command)
-                .asUpdate();
+        command.asUpdate();
     }
 
     @Override
     public void removeAll()
     {
-        String command = String.format("delete from %s", getAggregateName());
+        var command = getConnection().createCommand(KeyValueSchema.class)
+                .deleteFrom(aggregateClazz)
+                .create();
 
-        getConnection()
-                .execute(command)
-                .asIgnore();
+        command.asIgnore();
     }
 
     @SuppressWarnings("DuplicatedCode")
@@ -99,14 +103,12 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(aggregate);
 
-        String command = String.format("insert into %s values( '%s' , '%s' )"
-                , getAggregateName()
-                , gson.toJson(keyFunction.apply(aggregate))
-                , gson.toJson(aggregate));
+        var command = getConnection().createCommand(KeyValueSchema.class)
+                .insertInto(aggregateClazz)
+                .values(getJSONConverter().toJson(keyFunction.apply(aggregate)), getJSONConverter().toJson(aggregate))
+                .create();
 
-        getConnection()
-                .execute(command)
-                .asUpdate();
+        command.asUpdate();
     }
 
     @SuppressWarnings({"DuplicatedCode", "unused"})
@@ -115,14 +117,14 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(aggregate);
 
-        String command = String.format("update %s set value = '%s' where key = '%s'"
-                , getAggregateName()
-                , gson.toJson(aggregate)
-                , gson.toJson(keyFunction.apply(aggregate)));
+        var command = getConnection().createCommand(KeyValueSchema.class)
+                .update(aggregateClazz)
+                .set(VALUE, getJSONConverter().toJson(aggregate) )
+                .where(KEY)
+                .isEqual(getJSONConverter().toJson(keyFunction.apply(aggregate)))
+                .create();
 
-        getConnection()
-                .execute(command)
-                .asUpdate();
+        command.asUpdate();
     }
 
     @Override
@@ -130,27 +132,33 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(primaryKey);
 
-        String sqlQuery = String.format( "select value from %s where key = '%s'"
-                , getAggregateName()
-                , gson.toJson(primaryKey));
+        var query = getConnection().createQuery(KeyValueSchema.class)
+                .select(VALUE)
+                .from(aggregateClazz)
+                .where(KEY)
+                .isEqual(getJSONConverter().toJson(primaryKey))
+                .create();
 
-        return getConnection()
-                .query(sqlQuery)
+        return  query
                 .asString()
                 .flatMap(Optional::stream)
                 .findFirst()
-                .map( element -> gson.fromJson(element, aggregateClazz))
+                .map( element -> getJSONConverter().fromJson(element, aggregateClazz))
                 .or(Optional::empty);
     }
 
     @Override
     public List<T> get()
     {
-        return getConnection()
-                .query("select value from "+ getAggregateName())
+        var query = getConnection().createQuery(KeyValueSchema.class)
+                .select(VALUE)
+                .from(aggregateClazz)
+                .create();
+
+        return query
                 .asString()
                 .flatMap(Optional::stream)
-                .map( element -> gson.fromJson(element, aggregateClazz))
+                .map( element -> getJSONConverter().fromJson(element, aggregateClazz))
                 .collect(Collectors.toList());
     }
 
@@ -160,13 +168,15 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         if (properties.containsKey(JDBCConnection.JDBC_AUTOCREATE_TABLE))
         {
             try{
-                var command = String.format("CREATE TABLE IF NOT EXISTS %s ( key VARCHAR %s PRIMARY KEY, value text) "
-                        , aggregateClazz.getSimpleName()
-                        , getMaxVarChar(properties.getProperty(JDBCConnection.JDBC_URL)));
 
-                getConnection()
-                        .execute(command)
-                        .asIgnore();
+                var command = getConnection().createTableCommand(KeyValueSchema.class)
+                        .createTableIfNotExists(aggregateClazz)
+                        .addColumn(KEY, getMaxVarChar(properties.getProperty(JDBCConnection.JDBC_URL)))
+                        .addConstraint(PRIMARY_KEY)
+                        .addColumn(VALUE, TEXT)
+                        .create();
+
+                command.asIgnore();
             }
             catch (RuntimeException e)
             {
@@ -180,29 +190,35 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         return aggregateClazz.getSimpleName();
     }
 
-    private static String getMaxVarChar(String jdbcDriver)
+    private static SQLDataType getMaxVarChar(String jdbcDriver)
     {
         if ( jdbcDriver.toLowerCase().contains("oracle") )
         {
-            return "(4000)";
+            return SQLDataType.VARCHAR(4000);
         }
 
         if ( jdbcDriver.toLowerCase().contains("postgres") )
         {
-            return ""; // Note in general Postgres does not have a real upper limit.
+            return SQLDataType.VARCHAR; // Note in general Postgres does not have a real upper limit.
         }
 
         if ( jdbcDriver.toLowerCase().contains("h2") )
         {
-            return "(" + Integer.MAX_VALUE + ")";
+            return SQLDataType.VARCHAR(Integer.MAX_VALUE);
         }
 
         if ( jdbcDriver.toLowerCase().contains("mysql") )
         {
-            return "(65535)";
+            return SQLDataType.VARCHAR(65535);
         }
 
-        return "(255)";
+        return SQLDataType.VARCHAR(255);
     }
 
+
+    enum KeyValueSchema
+    {
+        KEY,
+        VALUE
+    }
 }

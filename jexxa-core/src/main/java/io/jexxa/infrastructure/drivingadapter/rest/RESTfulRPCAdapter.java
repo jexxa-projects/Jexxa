@@ -1,13 +1,10 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
+import static io.jexxa.utils.json.gson.GsonConverter.getGsonBuilder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -15,14 +12,10 @@ import java.util.Optional;
 import java.util.Properties;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializer;
 import io.javalin.Javalin;
 import io.javalin.core.JavalinConfig;
 import io.javalin.http.Context;
@@ -44,6 +37,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public static final String KEYSTORE = "io.jexxa.rest.keystore";
     public static final String KEYSTORE_PASSWORD = "io.jexxa.rest.keystore_password";
     public static final String OPEN_API_PATH = "io.jexxa.rest.open_api_path";
+    public static final String STATIC_FILES_ROOT = "io.jexxa.rest.static_files_root";
 
     private static final Gson GSON = getGsonBuilder().create();
 
@@ -208,14 +202,22 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         //Exception Handler for thrown Exception from methods
         javalin.exception(InvocationTargetException.class, (e, ctx) -> {
             var targetException = e.getTargetException();
-            targetException.getStackTrace(); // Ensures that stack trace is filled in
+            if ( targetException != null )
+            {
+                targetException.getStackTrace(); // Ensures that stack trace is filled in
 
-            JsonObject exceptionWrapper = new JsonObject();
-            exceptionWrapper.addProperty("ExceptionType", targetException.getClass().getName());
-            exceptionWrapper.addProperty("Exception", GSON.toJson(targetException));
-            exceptionWrapper.addProperty("ApplicationType", GSON.toJson("application/json"));
+                JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("{} occurred when processing {} request {}",
+                        targetException.getClass().getSimpleName(), ctx.method(), ctx.path());
+                JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Content of Body: {}", ctx.body());
+                JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Exception message: {}", targetException.getMessage());
 
-            ctx.result(exceptionWrapper.toString());
+                JsonObject exceptionWrapper = new JsonObject();
+                exceptionWrapper.addProperty("ExceptionType", targetException.getClass().getName());
+                exceptionWrapper.addProperty("Exception", GSON.toJson(targetException));
+                exceptionWrapper.addProperty("ApplicationType", GSON.toJson("application/json"));
+
+                ctx.result(exceptionWrapper.toString());
+            }
             ctx.status(400);
         });
     }
@@ -326,8 +328,12 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     {
         javalinConfig.server(this::getServer);
         javalinConfig.showJavalinBanner = false;
+        if ( properties.containsKey(STATIC_FILES_ROOT) )
+        {
+            javalinConfig.addStaticFiles(properties.getProperty(STATIC_FILES_ROOT));
+        }
 
-        this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig,getGsonBuilder() );
+        this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig, getGsonBuilder() );
     }
 
     private Server getServer()
@@ -362,42 +368,5 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         return sslContextFactory;
     }
 
-    private static GsonBuilder getGsonBuilder()
-    {
-        var gsonBuilder = new GsonBuilder();
-        registerTypeAdapter(gsonBuilder);
-        return gsonBuilder;
-    }
 
-    private static void registerTypeAdapter(GsonBuilder gsonBuilder)
-    {
-        gsonBuilder.registerTypeAdapter(LocalDate.class,
-            (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> {
-                if (json.isJsonPrimitive())
-                {
-                    return LocalDate.parse(json.getAsJsonPrimitive().getAsString());
-                }
-                return LocalDate.of(json.getAsJsonObject().get("year").getAsInt(), json.getAsJsonObject().get("month").getAsInt(), json.getAsJsonObject().get("day").getAsInt());
-            });
-
-        gsonBuilder.registerTypeAdapter(LocalDate.class,
-                (JsonSerializer<LocalDate>) (src, typeOfSrc, serializationContext) -> new JsonPrimitive(src.toString()));
-
-
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class,
-                (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext) -> LocalDateTime.parse(json.getAsJsonPrimitive().getAsString()));
-
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class,
-                (JsonSerializer<LocalDateTime>) (src, typeOfSrc, serializationContext) -> new JsonPrimitive(src.toString()));
-
-        gsonBuilder.registerTypeAdapter(ZonedDateTime.class,
-                (JsonDeserializer<ZonedDateTime>) (json, type, jsonDeserializationContext) -> ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()));
-
-        gsonBuilder.registerTypeAdapter(ZonedDateTime.class,
-                (JsonSerializer<ZonedDateTime>) (src, typeOfSrc, serializationContext) ->
-
-             new JsonPrimitive( DateTimeFormatter.ISO_OFFSET_DATE_TIME.
-                    format(src.withZoneSameInstant(src.getZone())) ));
-
-    }
 }

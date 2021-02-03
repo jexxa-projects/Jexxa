@@ -1,6 +1,6 @@
-# HelloJexxa
+# HelloJexxa #
 
-## What You Learn
+## What You Learn ##
 
 *   How to write a simple application using Jexxa
 *   How to bind different driving adapter to the `BoundedContext` object which allow to control your application from outside
@@ -8,14 +8,15 @@
 *   How to use the `jexxa-application.properties` to configure the driving adapters
 *   How to build a docker image with this tutorial    
 
-## What you need
+## What you need ##
 
 *   15 minutes
 *   JDK 11 (or higher) installed 
 *   Maven 3.6 (or higher) installed
 *   Docker installed (optional)
 
-## Write the application
+## Write the application ##
+
 The source code of the main method is quite obvious. Each line include comments to explain the meaning.  
 
 ```java     
@@ -54,8 +55,8 @@ public final class HelloJexxa
     }
 }
 ```
-## Compile & Start the Application
 
+## Compile & Start the Application ##
 ```console                                                          
 mvn clean install
 java -jar target/hellojexxa-jar-with-dependencies.jar
@@ -70,25 +71,19 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'HelloJexxa' successfully started in 0.549 seconds
 ```
 
-### Access the application via web browser
+## Access the application ##
+
+### Using a web browser ###
 *   Get name of the bounded context:
     *   URL: http://localhost:7000/HelloJexxa/greetings
     *   Result: 
     ```Json 
         Hello Jexxa 
     ```
-    
-### Access the application JConsole
 
-*   Start jconsole and select the MBean `BoundedContext` as shown in screenshot below
-*   Now you can execute all methods of this object 
-*   Execute `shutdown` to end the application 
-
-![JConsole](images/JConsole.png) 
-
-### Adjust properties
-In this simple tutorial `jexxa-application.properties` includes only the two parameters for RESTFulRPCAdapter. 
-The most interesting one here is `io.jexxa.rest.port` that allows to define the used network port. 
+### Adjust properties ###
+In this simple tutorial `jexxa-application.properties` includes only the two parameters for RESTFulRPCAdapter.
+The most interesting one here is `io.jexxa.rest.port` that allows to define the used network port.
 
 ```properties                                                          
 #Settings for RESTfulRPCAdapter
@@ -97,7 +92,31 @@ io.jexxa.rest.host=0.0.0.0
 io.jexxa.rest.port=7000
 ```
 
-## Build a docker image 
+### Access provided web pages ###
+You can also define a path to static web pages in properties as follows. 
+```properties                                                          
+#Settings for RESTfulRPCAdapter
+...
+io.jexxa.rest.static_files_root=/public
+```
+
+Note: This directory is relative to the class path of the application. From a web client it is accessed without any other prefix. 
+
+This tutorial provides a simple web page which performs the previous `GET`. The html page itself can be found [here](src/main/resources/public/index.html).
+
+The web page can be accessed via following link [http://localhost:7000/index.html](http://localhost:7000/index.html) and looks as follows: 
+
+![Webpage](images/Webpage.jpg)
+    
+### Use JConsole ###
+
+*   Start jconsole and select the MBean `BoundedContext` as shown in screenshot below
+*   Now you can execute all methods of this object 
+*   Execute `shutdown` to end the application 
+
+![JConsole](images/JConsole.png) 
+
+## Build a docker image ##
 In order to build a docker image with this tutorial we use the maven-jib-plugin. For the sake of simplicity we assume
 that docker is installed on your local machine so that we do not need to configure any external docker registry.
 

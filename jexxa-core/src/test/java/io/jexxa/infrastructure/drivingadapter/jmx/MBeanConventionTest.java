@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -14,7 +15,6 @@ import java.util.stream.Collectors;
 import javax.management.Attribute;
 import javax.management.AttributeList;
 
-import com.google.gson.Gson;
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
@@ -138,13 +138,11 @@ class MBeanConventionTest
         properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
         var action = "setSimpleValue";
         var newValue = 5;
-        var gson = new Gson();
-
 
         var objectUnderTest = new MBeanConvention(applicationService, properties);
 
         //Act
-        objectUnderTest.invoke(action, new String[]{gson.toJson(newValue)}, new String[0]);
+        objectUnderTest.invoke(action, new String[]{getJSONConverter().toJson(newValue)}, new String[0]);
 
         //Assert
         assertEquals(newValue, applicationService.getSimpleValue());
@@ -160,12 +158,11 @@ class MBeanConventionTest
         properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
         var action = "setSimpleValueObject";
         var newValue = new JexxaValueObject(5);
-        var gson = new Gson();
 
         var objectUnderTest = new MBeanConvention(applicationService, properties);
 
         //Act
-        objectUnderTest.invoke(action, new String[]{gson.toJson(newValue)}, new String[0]);
+        objectUnderTest.invoke(action, new String[]{getJSONConverter().toJson(newValue)}, new String[0]);
 
         //Assert
         assertEquals(newValue.getValue(), applicationService.getSimpleValueObject().getValue());

@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,7 +17,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
+@Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
 class JDBCKeyValueRepositoryIT
 {
@@ -59,7 +63,7 @@ class JDBCKeyValueRepositoryIT
     }
 
     @Test
-    void getUnknownAggregate()
+    void getUnavailableAggregate()
     {
         //arrange
         var unknownAggregate = JexxaEntity.create(new JexxaValueObject(42));
@@ -106,18 +110,16 @@ class JDBCKeyValueRepositoryIT
     void testReconnect()
     {
         objectUnderTest.getConnection().close();
-
-        getUnknownAggregate();
+        assertDoesNotThrow(this::getUnavailableAggregate);
 
         objectUnderTest.getConnection().close();
+        assertDoesNotThrow(this::removeAggregate);
 
-        removeAggregate();
         objectUnderTest.getConnection().close();
+        assertDoesNotThrow(this::testExceptionInvalidOperations);
 
-        testExceptionInvalidOperations();
         objectUnderTest.getConnection().close();
-
-        addAggregate();
+        assertDoesNotThrow(this::addAggregate);
     }
 
 }

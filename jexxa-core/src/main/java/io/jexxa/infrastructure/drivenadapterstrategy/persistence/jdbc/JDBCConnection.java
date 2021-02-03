@@ -9,6 +9,9 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.Properties;
 
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCCommandBuilder;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCQueryBuilder;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
 import org.apache.commons.lang3.Validate;
@@ -91,14 +94,57 @@ public class JDBCConnection implements AutoCloseable
         return this;
     }
 
+    /**
+     * Creates a JDBC Command to execute commands
+     * @param command to be executed
+     * @return JDBCCommand that can be used to query results
+     * @deprecated Use method {@link #createCommand(Class)} instead
+     */
+    @Deprecated(forRemoval = true)
     public JDBCCommand execute(String command)
     {
         return new JDBCCommand(this::validateConnection, command);
     }
 
+    /**
+     * Creates a JDBC Query to execute a query
+     * @param sqlQuery to be executed
+     * @return JDBCQuery that can be used to query results
+     * @deprecated Use method {@link #createQuery(Class)} instead
+     */
+    @Deprecated(forRemoval = true)
     public JDBCQuery query(String sqlQuery)
     {
         return new JDBCQuery(this::validateConnection, sqlQuery);
+    }
+
+    @SuppressWarnings("java:S1172")
+    public <T extends Enum<T>> JDBCQueryBuilder<T> createQuery(Class<T> schema)
+    {
+        return new JDBCQueryBuilder<>(this::validateConnection);
+    }
+
+    public JDBCQuery createQuery(String query)
+    {
+        return new JDBCQuery(this::validateConnection, query);
+    }
+
+    @SuppressWarnings("java:S1172")
+    public <T extends Enum<T>> JDBCCommandBuilder<T> createCommand(Class<T> schema)
+    {
+        return new JDBCCommandBuilder<>(this::validateConnection);
+    }
+
+    @SuppressWarnings("java:S1172")
+    public <T extends Enum<T>> JDBCTableBuilder<T> createTableCommand(Class<T> schema)
+    {
+        return new JDBCTableBuilder<>(this::validateConnection);
+    }
+
+
+    public JDBCCommand createCommand(String command)
+    {
+        return new JDBCCommand(this::validateConnection, command);
     }
 
 
@@ -152,17 +198,13 @@ public class JDBCConnection implements AutoCloseable
      * @param sqlStatement describes the template of the command
      * @return PreparedStatement
      * @throws SQLException in case of an error
-     * @deprecated Inside this package use {@link #createStatement()}. Outside of this package use {@link JDBCCommand} or {@link JDBCQuery}
+     * @deprecated Will be made package private
      */
-    @Deprecated(forRemoval = true)
+    @SuppressWarnings("java:S1123")
+    @Deprecated
     public PreparedStatement prepareStatement(String sqlStatement) throws SQLException
     {
         return getConnection().prepareStatement(sqlStatement);
-    }
-
-    Statement createStatement() throws SQLException
-    {
-        return getConnection().createStatement();
     }
 
     public void close()

@@ -163,13 +163,34 @@ public final class JexxaMain
             return boundedContext;
         }
 
-        LOGGER.info("Start BoundedContext '{}' with {} Driving Adapter ", getBoundedContext().contextName(), compositeDrivingAdapter.size());
+        printStartupInfo();
+
         compositeDrivingAdapter.start();
         boundedContext.start();
-        var startTime = getBoundedContext().uptime();
-        LOGGER.info("BoundedContext '{}' successfully started in {}.{} seconds", getBoundedContext().contextName(), startTime.toSeconds(), startTime.toMillisPart());
+
+        printStartupDuration();
 
         return boundedContext;
+    }
+
+    @SuppressWarnings("java:S2629")
+    void printStartupInfo()
+    {
+        LOGGER.info("{} {}; built: {}; git: {};"
+                , JexxaVersion.PROJECT_NAME
+                ,JexxaVersion.VERSION
+                ,JexxaVersion.BUILD_TIMESTAMP
+                ,JexxaVersion.REPOSITORY);
+
+
+        LOGGER.info("Start BoundedContext '{}' with {} Driving Adapter ", getBoundedContext().contextName(), compositeDrivingAdapter.size());
+    }
+
+    @SuppressWarnings("java:S2629")
+    void printStartupDuration()
+    {
+        var startTime = getBoundedContext().uptime();
+        LOGGER.info("BoundedContext '{}' successfully started in {}.{} seconds", getBoundedContext().contextName(), startTime.toSeconds(), startTime.toMillisPart());
     }
 
     @SuppressWarnings("java:S2629")
@@ -199,6 +220,7 @@ public final class JexxaMain
     {
         return drivenAdapterFactory.getAcceptPackages();
     }
+    @SuppressWarnings("unused")
     List<String> getApplicationCore() { return portFactory.getAcceptPackages(); }
 
     void bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port)

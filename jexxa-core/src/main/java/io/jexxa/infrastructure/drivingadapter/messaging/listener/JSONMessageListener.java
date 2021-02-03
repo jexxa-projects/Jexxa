@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.messaging.listener;
 
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,7 +11,6 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.jexxa.utils.JexxaLogger;
@@ -17,7 +18,6 @@ import io.jexxa.utils.JexxaLogger;
 @SuppressWarnings("unused")
 public abstract class JSONMessageListener implements MessageListener
 {
-    private static final Gson gson = new Gson();
     private TextMessage currentMessage;
     private String currentMessageText;
 
@@ -47,7 +47,7 @@ public abstract class JSONMessageListener implements MessageListener
 
     protected static <U> U fromJson( String message, Class<U> clazz)
     {
-        return gson.fromJson( message, clazz);
+        return getJSONConverter().fromJson( message, clazz);
     }
 
     protected boolean messageContains(String attribute)

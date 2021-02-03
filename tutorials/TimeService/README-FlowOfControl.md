@@ -1,17 +1,17 @@
-# TimeService - Flow of Control  
+# TimeService - Flow of Control #
 
-## What you learn
+## What you learn ##
 
 *   A general idea of the building blocks of ports and adapters 
 *   How to follow the flow of control of your application using your architecture 
 *   An initial understanding of [dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) 
 
-## What you need
+## What you need ##
 
 *   Understand tutorial `HelloJexxa` and `TimeService` because we explain only new aspects 
 *   45 minutes (take the time)
 
-## Building blocks of a hexagonal architecture
+## Building blocks of a hexagonal architecture ##
 
 If you choose ports and adapters as the architecture of your application, you have the following building blocks:
 
@@ -29,7 +29,7 @@ Since this is a very high level abstraction, this architecture is often called t
 
 Fore more details please read the article [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/).
            
-## Navigate through your application 
+## Navigate through your application ##
 
 The first way to navigate through source code that every developer learns is to follow the lines of code. This allows you to see the flow of control,
 which eventually allows you to understand the application logic. Most IDE's and debuggers support this very well. However, this only works well for a
@@ -54,7 +54,7 @@ control as good as possible.
 
 Let's see how it works...
 
-### The main-method  
+### The main-method ###
 
 Each application starts with the `main` method. Since it is our starting point, it should represent the beginning of the flow of control which is
 `Driving Adapter` &rarr; `Inbound Port`. For this purpose Jexxa's API offers methods to represent this binding explicitly in the main method.
@@ -84,7 +84,7 @@ Based on this source code we can navigate into two different directions using so
 `Driving Adapter` such as `RESTfulRPCAdapter`. Or we follow direction `Inbound Port` &rarr; `Outbound Port` by selecting `TimeService` and enter 
 the application core.  
 
-### Enter the application core
+### Enter the application core ###
 
 If we select an inbound port such as `TimeService`, the constructor looks as follows. 
 
@@ -120,7 +120,7 @@ of an onion architecture for your application core.
 
 Alternatively, you can select one of the two `Outbound Ports` from your IDE to continue in the direction of `Outbound Port` &rarr; `Driven Adapter`.
    
-### Leave the application core  
+### Leave the application core ###
 
 If we select `IMessageDisplay` we just see the following interface: 
 
@@ -157,7 +157,7 @@ public class MessageDisplay implements IMessageDisplay
 }
 ```
                    
-### One small exception 
+### One small exception ###
 
 In reality there is always an exception that confirms the rule. Within Jexxa this exception is directly in the beginning `Driving Adapter` &rarr;
 `Inbound Port`. The described rule works fine as long as the `Driving Adapter` can apply a convention how to automatically expose the methods 
@@ -201,6 +201,6 @@ public PublishTimeListener(TimeService timeService)
 By selecting the parameter of the constructor in our IDE, we can continue in the direction of `Inbound Port` &rarr; `Outbound Port`. Since it is no 
 difference to follow the flow of control in the source code, Jexxa uses the same API to represent the starting point on both cases.
 
-## Summary
+## Summary ##
 
 I hope you get an idea how to easily navigate through your application using the underlying architecture.  

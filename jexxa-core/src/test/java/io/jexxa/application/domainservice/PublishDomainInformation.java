@@ -1,6 +1,5 @@
 package io.jexxa.application.domainservice;
 
-import io.jexxa.application.domain.domainevent.JexxaDomainEvent;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 
 public class PublishDomainInformation
@@ -22,8 +21,4 @@ public class PublishDomainInformation
         jexxaPublisher.sendToTopic(jexxaValueObject);
     }
 
-    public void sendDomainEvent(JexxaDomainEvent jexxaDomainEvent)
-    {
-        jexxaPublisher.sendDomainEvent(jexxaDomainEvent);
-    }
 }
