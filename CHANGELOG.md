@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.8.0] - yyyy-mm-dd
+## \[2.8.0] - 2021-02-03
 ### Added
 -   `RESTfulRPCAdapter`:
     -   Added support for providing static web pages. See tutorial [HelloJexxa](https://github.com/repplix/Jexxa/blob/master/tutorials/HelloJexxa/README.md)
@@ -15,16 +15,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     -   Using SQL Builder also prevents any SQL injection issues
 
 ### Fixed
--   `JDBCKeyValueRepository`:
-    -   Corrected handling of Java8 Date API so that a date is handled as a string which is conform to ISO 8601
-
--   `JMSSender`:
-    -   Corrected handling of Java8 Date API so that a date is handled as a string which is conform to ISO 8601
-
--   `JSONMessageListener`:
-    -   Corrected handling of Java8 Date API so that a date is handled as a string which is conform to ISO 8601
-
-
+-   Corrected handling of Java8 Date API so that a date is handled as a string conform to ISO 8601. See [here](https://repplix.github.io/Jexxa/jexxa_reference.html#_json_representation_of_date) for more information. Affected adapter are: 
+    -   `JDBCKeyValueRepository`   
+    -   `JMSSender`
+    -   `JSONMessageListener`:
+    
 ## \[2.7.3] - 2021-01-22
 ### Fixed
 -   JDBCQuery:
