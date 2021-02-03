@@ -12,13 +12,18 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDB
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.dropTable;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.insertTestData;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.collect.Ordering;
 import io.jexxa.TestConstants;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -109,6 +114,46 @@ class JDBCQueryTest
 
         //Assert
         assertEquals(7, result.findFirst().orElseThrow().count());
+    }
+
+    @Test
+    void testSelectAsc()
+    {
+        //Arrange
+        var querySelectAsc = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
+                .select(KEY)
+                .from(JDBCTestDatabase.class)
+                .orderBy(KEY, SQLOrder.ASC)
+                .create();
+
+        //Act
+        var result = querySelectAsc.asInt().collect(Collectors.toList());
+
+        //Assert
+        assertEquals(3, result.size());
+
+        assertFalse(Ordering.natural().reverse().isOrdered(result));
+        assertTrue(Ordering.natural().isOrdered(result));
+    }
+
+    @Test
+    void testSelectDesc()
+    {
+        //Arrange
+        var querySelectDesc = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
+                .select(KEY)
+                .from(JDBCTestDatabase.class)
+                .orderBy(KEY, SQLOrder.DESC)
+                .create();
+
+        //Act
+        var result = querySelectDesc.asInt().collect(Collectors.toList());
+
+        //Assert
+        assertEquals(3, result.size());
+
+        assertTrue(Ordering.natural().reverse().isOrdered(result));
+        assertFalse(Ordering.natural().isOrdered(result));
     }
 
     // Begin> Utility methods used in this test

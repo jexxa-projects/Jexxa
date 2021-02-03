@@ -50,10 +50,4 @@ class SQLSyntax
         }
     }
 
-    enum SQLOrder
-    {
-        ASC,
-        DESC
-    }
-
 }

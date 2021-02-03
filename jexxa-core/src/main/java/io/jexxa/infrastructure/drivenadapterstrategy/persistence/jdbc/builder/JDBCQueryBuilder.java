@@ -117,7 +117,7 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         return new JDBCQuery(jdbcConnection, getStatementBuilder().toString(), getArguments());
     }
 
-    public JDBCQueryBuilder<T> orderBy(T element, SQLSyntax.SQLOrder order)
+    public JDBCQueryBuilder<T> orderBy(T element, SQLOrder order)
     {
         if (!orderByAdded)
         {

@@ -24,7 +24,8 @@ public class JDBCTestDatabase
 {
     static final int PRIMARY_KEY_WITH_NULL_VALUES = 1;
     static final int PRIMARY_KEY_WITH_NONNULL_VALUES = 2;
-    static final int PRIMARY_KEY_VALUES_NOT_PRESENT = 3;
+    static final int PRIMARY_KEY_WITH_NONNULL_VALUES_DUPLICATE = 3;
+    static final int PRIMARY_KEY_VALUES_NOT_PRESENT = 4;
     static final Timestamp testTimestamp = Timestamp.from(Instant.now().truncatedTo(ChronoUnit.MICROS));
     static final String testString = "Hello World";
     static final int testIntValue = 2;
@@ -80,7 +81,13 @@ public class JDBCTestDatabase
                 .values(PRIMARY_KEY_WITH_NONNULL_VALUES, testIntValue , testNumericValue, testFloatValue, testDoubleValue, testString, testTimestamp)
                 .create();
 
+        var insertNonNullValuesDuplicate = jdbcConnection.createCommand(JDBCTestSchema.class)
+                .insertInto(JDBCTestDatabase.class)
+                .values(PRIMARY_KEY_WITH_NONNULL_VALUES_DUPLICATE, testIntValue , testNumericValue, testFloatValue, testDoubleValue, testString, testTimestamp)
+                .create();
+
         insertNullValues.asUpdate();
         insertNonNullValues.asUpdate();
+        insertNonNullValuesDuplicate.asUpdate();
     }
 }
