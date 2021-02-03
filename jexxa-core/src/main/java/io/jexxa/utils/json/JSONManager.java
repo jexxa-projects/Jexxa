@@ -4,7 +4,7 @@ import io.jexxa.utils.json.gson.GsonConverter;
 
 public class JSONManager
 {
-    public static JSONConverter jsonConverter = new GsonConverter();
+    private static JSONConverter jsonConverter = new GsonConverter();
 
     public static JSONConverter getJSONConverter()
     {
