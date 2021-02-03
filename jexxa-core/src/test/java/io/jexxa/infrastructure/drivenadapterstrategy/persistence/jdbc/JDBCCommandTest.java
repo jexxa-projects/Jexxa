@@ -3,42 +3,31 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.KEY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.STRING_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_WITH_NONNULL_VALUES;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.autocreateTable;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.dropTable;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.insertTestData;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.REPOSITORY_CONFIG;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.setupDatabase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Properties;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import io.jexxa.TestConstants;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
+@Execution(ExecutionMode.SAME_THREAD)
+@Tag(TestConstants.INTEGRATION_TEST)
 class JDBCCommandTest
 {
-    private JDBCConnection jdbcConnection;
-
-    @BeforeEach
-    void initTest()
-    {
-        var postgresProperties = new Properties();
-        postgresProperties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JDBCConnection.JDBC_PASSWORD, "admin");
-        postgresProperties.put(JDBCConnection.JDBC_USERNAME, "admin");
-        postgresProperties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
-        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
-
-        jdbcConnection = new JDBCConnection(postgresProperties);
-        dropTable(jdbcConnection);
-        autocreateTable(jdbcConnection);
-        insertTestData(jdbcConnection);
-    }
-
-    @Test
-    void testDeleteValues()
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testDeleteValues(Properties properties)
     {
         //arrange
+        var jdbcConnection = setupDatabase(properties);
+
         var deleteAllRowsQuery = jdbcConnection.createCommand(JDBCTestDatabase.JDBCTestSchema.class)
                 .deleteFrom(JDBCTestDatabase.class)
                 .where(KEY).isNotEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
@@ -56,11 +45,14 @@ class JDBCCommandTest
         assertTrue(validateNoEntriesQuery.isEmpty());
     }
 
-    @Test
-    void testUpdateValues()
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testUpdateValues(Properties properties)
     {
         //arrange
         String updatedString = "UpdatesString";
+        var jdbcConnection = setupDatabase(properties);
+
 
         var updateQuery = jdbcConnection.createCommand(JDBCTestDatabase.JDBCTestSchema.class) //Simulate an equal statement
                 .update(JDBCTestDatabase.class)
@@ -80,6 +72,4 @@ class JDBCCommandTest
         //Assert
         assertEquals(1, validateUpdate.asString().count());
     }
-
-
 }

@@ -8,9 +8,8 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDB
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.STRING_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.TIMESTAMP_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_WITH_NONNULL_VALUES;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.autocreateTable;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.dropTable;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.insertTestData;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.REPOSITORY_CONFIG;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.setupDatabase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,36 +23,25 @@ import java.util.stream.Stream;
 import com.google.common.collect.Ordering;
 import io.jexxa.TestConstants;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 @Tag(TestConstants.INTEGRATION_TEST)
+@Execution(ExecutionMode.SAME_THREAD)
 class JDBCQueryTest
 {
     private JDBCConnection jdbcConnection;
 
-    @BeforeEach
-    void initTest()
-    {
-        var postgresProperties = new Properties();
-        postgresProperties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JDBCConnection.JDBC_PASSWORD, "admin");
-        postgresProperties.put(JDBCConnection.JDBC_USERNAME, "admin");
-        postgresProperties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
-        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
-
-        jdbcConnection = new JDBCConnection(postgresProperties);
-        dropTable(jdbcConnection);
-        autocreateTable(jdbcConnection);
-        insertTestData(jdbcConnection);
-    }
-
-    @Test
-    void testSelectOR()
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testSelectOR(Properties properties)
     {
         //Arrange
+        jdbcConnection = setupDatabase(properties);
+
         var querySelectOr = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(STRING_TYPE)
                 .from(JDBCTestDatabase.class)
@@ -66,10 +54,13 @@ class JDBCQueryTest
         assertEquals(2, result.count());
     }
 
-    @Test
-    void testSelectAND()
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testSelectAND(Properties properties)
     {
         //Arrange
+        jdbcConnection = setupDatabase(properties);
+
         var querySelectAnd = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(STRING_TYPE)
                 .from(JDBCTestDatabase.class)
@@ -82,10 +73,13 @@ class JDBCQueryTest
         assertEquals(0, result.count());
     }
 
-    @Test
-    void testMultiSelect()
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testMultiSelect(Properties properties)
     {
         //Arrange
+        jdbcConnection = setupDatabase(properties);
+
         var queryMultiSelect = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(STRING_TYPE, INTEGER_TYPE)
                 .from(JDBCTestDatabase.class)
@@ -98,10 +92,13 @@ class JDBCQueryTest
         assertEquals(2, result.findFirst().orElseThrow().count());
     }
 
-    @Test
-    void testSelectAll()
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testSelectAll(Properties properties)
     {
         //Arrange
+        jdbcConnection = setupDatabase(properties);
+
         var querySelectAll = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .selectAll()
                 .from(JDBCTestDatabase.class)
@@ -116,10 +113,13 @@ class JDBCQueryTest
         assertEquals(7, result.findFirst().orElseThrow().count());
     }
 
-    @Test
-    void testSelectAsc()
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testSelectAsc(Properties properties)
     {
         //Arrange
+        jdbcConnection = setupDatabase(properties);
+
         var querySelectAsc = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(KEY)
                 .from(JDBCTestDatabase.class)
@@ -136,10 +136,13 @@ class JDBCQueryTest
         assertTrue(Ordering.natural().isOrdered(result));
     }
 
-    @Test
-    void testSelectDesc()
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testSelectDesc(Properties properties)
     {
         //Arrange
+        jdbcConnection = setupDatabase(properties);
+
         var querySelectDesc = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(KEY)
                 .from(JDBCTestDatabase.class)

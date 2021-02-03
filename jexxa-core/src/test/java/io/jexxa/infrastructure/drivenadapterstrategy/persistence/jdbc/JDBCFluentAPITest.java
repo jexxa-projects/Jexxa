@@ -10,9 +10,8 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDB
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_VALUES_NOT_PRESENT;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_WITH_NONNULL_VALUES;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_WITH_NULL_VALUES;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.autocreateTable;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.dropTable;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.insertTestData;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.REPOSITORY_CONFIG;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.setupDatabase;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testDoubleValue;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testFloatValue;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testIntValue;
@@ -24,17 +23,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.stream.Stream;
 
 import io.jexxa.TestConstants;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
+@Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
 class JDBCFluentAPITest
 {
@@ -56,32 +55,15 @@ class JDBCFluentAPITest
     private JDBCQuery queryNotAvailableInteger;
     private JDBCQuery queryNotAvailableString;
 
-
-
     private JDBCConnection jdbcConnection;
 
-    @BeforeEach
-    void initTest()
-    {
-        var postgresProperties = new Properties();
-        postgresProperties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JDBCConnection.JDBC_PASSWORD, "admin");
-        postgresProperties.put(JDBCConnection.JDBC_USERNAME, "admin");
-        postgresProperties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
-        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
-
-        jdbcConnection = new JDBCConnection(postgresProperties);
-        dropTable(jdbcConnection);
-        autocreateTable(jdbcConnection);
-        insertTestData(jdbcConnection);
-        createQueries();
-    }
-
-    @Test
-    void testNonNullValues()
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testNonNullValues(Properties properties)
     {
         //Arrange
+        jdbcConnection = setupDatabase(properties);
+        createQueries();
 
         //act
         assertDoesNotThrow(() -> queryNonNullInteger.asInt().findFirst().orElseThrow() );
@@ -101,10 +83,13 @@ class JDBCFluentAPITest
     }
 
 
-    @Test
-    void testNullValues()
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testNullValues(Properties properties)
     {
-        //Arrange - nothing
+        //Arrange
+        jdbcConnection = setupDatabase(properties);
+        createQueries();
 
         //act / assert
         assertDoesNotThrow(() -> queryNullInteger.asInt().findFirst().orElseThrow() );
@@ -122,10 +107,13 @@ class JDBCFluentAPITest
         assertEquals(Optional.empty(), queryNullTimestamp.asTimestamp().findFirst().orElseThrow());
     }
 
-    @Test
-    void testIsPresent()
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testIsPresent(Properties properties)
     {
-        //Arrange - nothing
+        //Arrange
+        jdbcConnection = setupDatabase(properties);
+        createQueries();
 
         //act / assert - NullValues
         assertTrue( queryNullInteger.isPresent());
@@ -148,10 +136,13 @@ class JDBCFluentAPITest
         assertFalse( queryNotAvailableString.isPresent());
     }
 
-    @Test
-    void testIsEmpty()
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testIsEmpty(Properties properties)
     {
-        //Arrange - nothing
+        //Arrange
+        jdbcConnection = setupDatabase(properties);
+        createQueries();
 
         //act / assert - NullValues
         assertFalse( queryNullInteger.isEmpty());

@@ -8,8 +8,11 @@ import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaEntity;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Tag(TestConstants.UNIT_TEST)
+@Execution(ExecutionMode.CONCURRENT)
 class JDBCPropertiesTest
 {
     @Test
