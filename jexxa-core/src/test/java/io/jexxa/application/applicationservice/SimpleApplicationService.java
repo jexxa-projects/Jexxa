@@ -108,14 +108,15 @@ public class SimpleApplicationService
         return  SpecialCasesValueObject.SPECIAL_CASES_VALUE_OBJECT;
     }
 
+    /** The following static methods should NOT be offered by any DrivingAdapter according to our conventions  */
     public static SpecialCasesValueObject testStaticGetMethod()
     {
-        return SpecialCasesValueObject.SPECIAL_CASES_VALUE_OBJECT;
+        throw new IllegalArgumentException("Method testStaticGetMethod should not be available or called" );
     }
 
     public static void testStaticSetMethod(JexxaValueObject jexxaValueObject)
     {
-        //This method is just for testing static behavior => So no code is required
+        throw new IllegalArgumentException("Method testStaticSetMethod should not be available or called" );
     }
 
 

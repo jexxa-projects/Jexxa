@@ -22,8 +22,4 @@ public class PublishDomainInformation
         jexxaPublisher.sendToTopic(jexxaValueObject);
     }
 
-    public void sendDomainEvent(JexxaDomainEvent jexxaDomainEvent)
-    {
-        jexxaPublisher.sendDomainEvent(jexxaDomainEvent);
-    }
 }
