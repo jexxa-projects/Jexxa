@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -97,32 +98,21 @@ public class JDBCConnection implements AutoCloseable
     @SuppressWarnings("java:S1172")
     public <T extends Enum<T>> JDBCQueryBuilder<T> createQuery(Class<T> schema)
     {
+        Objects.requireNonNull(schema);
         return new JDBCQueryBuilder<>(this::validateConnection);
     }
 
-    public JDBCQuery createQuery(String query)
-    {
-        return new JDBCQuery(this::validateConnection, query);
-    }
-
-    @SuppressWarnings("java:S1172")
     public <T extends Enum<T>> JDBCCommandBuilder<T> createCommand(Class<T> schema)
     {
+        Objects.requireNonNull(schema);
         return new JDBCCommandBuilder<>(this::validateConnection);
     }
 
-    @SuppressWarnings("java:S1172")
     public <T extends Enum<T>> JDBCTableBuilder<T> createTableCommand(Class<T> schema)
     {
+        Objects.requireNonNull(schema);
         return new JDBCTableBuilder<>(this::validateConnection);
     }
-
-
-    public JDBCCommand createCommand(String command)
-    {
-        return new JDBCCommand(this::validateConnection, command);
-    }
-
 
     /**
      * This method resets the internal JDBC connection in the following way:
