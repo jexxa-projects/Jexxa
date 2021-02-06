@@ -20,7 +20,7 @@ public final class MessageSenderManager
     }
 
     @CheckReturnValue
-    public MessageSender getStrategy(Properties properties)
+    MessageSender getStrategy(Properties properties)
     {
         try {
             Optional<MessageSender> strategy = ClassFactory.newInstanceOf(defaultStrategy, new Object[]{properties});
@@ -55,16 +55,6 @@ public final class MessageSenderManager
         return defaultStrategy;
     }
 
-
-    /**
-     * @deprecated getInstance will be removed in future releases. Instead a public static API is offered to configure the the strategies
-     * @return Returns the managing component for message sender strategies
-     */
-    @Deprecated(forRemoval = true)
-    public static MessageSenderManager getInstance()
-    {
-        return MESSAGE_SENDER_MANAGER;
-    }
 
     public static MessageSender getMessageSender(Properties properties) { return MESSAGE_SENDER_MANAGER.getStrategy(properties); }
 }

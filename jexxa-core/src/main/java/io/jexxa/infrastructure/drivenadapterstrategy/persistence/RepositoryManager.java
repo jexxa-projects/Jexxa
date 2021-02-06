@@ -20,16 +20,6 @@ public final class RepositoryManager
     private static final Map<Class<?> , Class<?>> strategyMap = new HashMap<>();
     private static Class<?> defaultStrategy = null;
 
-    /**
-     * @deprecated getInstance will be removed in future releases. Instead a public static API is offered to configure the the strategies
-     * @return Returns the managing component for repository strategies
-     */
-    @Deprecated(forRemoval = true)
-    public static RepositoryManager getInstance()
-    {
-        return REPOSITORY_MANAGER;
-    }
-
     public static  <T,K> IRepository<T,K> getRepository(
             Class<T> aggregateClazz,
             Function<T,K> keyFunction,
@@ -50,7 +40,7 @@ public final class RepositoryManager
 
     @SuppressWarnings("unchecked")
     @CheckReturnValue
-    public <T,K> IRepository<T,K> getStrategy(
+    <T,K> IRepository<T,K> getStrategy(
             Class<T> aggregateClazz,
             Function<T,K> keyFunction,
             Properties properties
