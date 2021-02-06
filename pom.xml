@@ -77,6 +77,7 @@
     <javax.jms.version>2.0.1</javax.jms.version>
     <jackson.databind.version>2.12.1</jackson.databind.version>
     <jackson.core.version>2.12.1</jackson.core.version>
+    <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
 
     <!-- version of test dependencies -->
     <activemq.client.version>5.16.1</activemq.client.version>

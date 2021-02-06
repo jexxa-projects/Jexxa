@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import com.kjetland.jackson.jsonSchema.JsonSchemaGenerator;
 import io.javalin.core.JavalinConfig;
 import io.javalin.plugin.openapi.OpenApiOptions;
 import io.javalin.plugin.openapi.OpenApiPlugin;
@@ -196,9 +198,10 @@ public class OpenAPIConvention
         // StdDateFormat is ISO8601 since jackson 2.9
         mapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
 
-        var schema = mapper.generateJsonSchema(clazz);
+        JsonSchemaGenerator jsonSchemaGenerator = new JsonSchemaGenerator(mapper);
+        JsonNode jsonSchema = jsonSchemaGenerator.generateJsonSchema(clazz);
 
-        return schema.toString();
+        return mapper.writeValueAsString(jsonSchema);
     }
 
     private static Object createExampleInstance(Class<?> clazz, Type genericType, GsonBuilder gsonBuilder)
@@ -386,7 +389,7 @@ public class OpenAPIConvention
         return (Class<?>)parameterType.getActualTypeArguments()[0];
     }
 
-    @SuppressWarnings({"java:S1104", "java:S116"})
+    @SuppressWarnings({"java:S1104", "java:S116", "unused"})
     public static class BadRequestResponse
     {
         public String Exception;
