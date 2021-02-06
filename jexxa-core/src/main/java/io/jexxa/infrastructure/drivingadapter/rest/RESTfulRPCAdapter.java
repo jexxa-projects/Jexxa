@@ -23,7 +23,6 @@ import io.javalin.plugin.json.JavalinJson;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
 import io.jexxa.utils.JexxaLogger;
-import org.apache.commons.lang3.Validate;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -54,12 +53,12 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     {
         this.properties = properties;
 
-        Validate.isTrue(isHTTPEnabled() || isHTTPSEnabled(), "Neither HTTP (" + HTTP_PORT_PROPERTY + ") nor HTTPS (" + HTTPS_PORT_PROPERTY + ") is enabled!");
+        validateIsTrue(isHTTPEnabled() || isHTTPSEnabled(), "Neither HTTP (" + HTTP_PORT_PROPERTY + ") nor HTTPS (" + HTTPS_PORT_PROPERTY + ") is enabled!");
 
         if ( isHTTPSEnabled() )
         {
-            Validate.isTrue( properties.containsKey( KEYSTORE ), "You need to define a location for keystore ("+ KEYSTORE+ ")");
-            Validate.isTrue( properties.containsKey( KEYSTORE_PASSWORD ) , "You need to define a location for keystore-password ("+ KEYSTORE_PASSWORD+ ")");
+            validateIsTrue( properties.containsKey( KEYSTORE ), "You need to define a location for keystore ("+ KEYSTORE+ ")");
+            validateIsTrue( properties.containsKey( KEYSTORE_PASSWORD ) , "You need to define a location for keystore-password ("+ KEYSTORE_PASSWORD+ ")");
         }
 
         setupJavalin();
@@ -368,5 +367,12 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         return sslContextFactory;
     }
 
+    void validateIsTrue( boolean expression, String message)
+    {
+        if (!expression)
+        {
+            throw new IllegalArgumentException(message);
+        }
+    }
 
 }
