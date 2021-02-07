@@ -190,7 +190,7 @@ public final class JexxaMain
     void printStartupDuration()
     {
         var startTime = getBoundedContext().uptime();
-        LOGGER.info("BoundedContext '{}' successfully started in {}.{} seconds", getBoundedContext().contextName(), startTime.toSeconds(), startTime.toMillisPart());
+        LOGGER.info("BoundedContext '{}' successfully started in {}.{} seconds", getBoundedContext().contextName(), startTime.toSeconds(), String.format("%03d", startTime.toMillisPart()));
     }
 
     @SuppressWarnings("java:S2629")
