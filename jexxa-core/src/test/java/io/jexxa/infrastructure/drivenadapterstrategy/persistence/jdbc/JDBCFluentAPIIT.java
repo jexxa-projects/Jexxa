@@ -35,7 +35,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
-class JDBCFluentAPITest
+class JDBCFluentAPIIT
 {
     private JDBCQuery queryNullInteger;
     private JDBCQuery queryNullNumeric;

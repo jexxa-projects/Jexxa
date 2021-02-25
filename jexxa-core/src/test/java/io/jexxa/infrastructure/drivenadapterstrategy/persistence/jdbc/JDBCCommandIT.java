@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
-class JDBCCommandTest
+class JDBCCommandIT
 {
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
