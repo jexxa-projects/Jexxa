@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[2.8.1] - 2021-02-26
+### Fixed
+-   Updated JaCoCo plugin so that tests run under Java 15
+-   Corrected suffixes of integration tests so that maven option -DskipITs works correct 
+
 ## \[2.8.0] - 2021-02-03
 ### Added
 -   `RESTfulRPCAdapter`:
