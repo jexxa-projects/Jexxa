@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 @Tag(TestConstants.INTEGRATION_TEST)
 @Execution(ExecutionMode.SAME_THREAD)
-class JDBCQueryTest
+class JDBCQueryIT
 {
     private JDBCConnection jdbcConnection;
 

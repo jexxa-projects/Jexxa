@@ -12,8 +12,10 @@ import java.util.Properties;
 
 import io.jexxa.application.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.domainservice.IInvalidConstructor;
 import io.jexxa.application.domainservice.IJexxaAggregateRepository;
 import io.jexxa.application.domainservice.IJexxaPublisher;
+import io.jexxa.application.domainservice.INotImplementedService;
 import io.jexxa.application.domainservice.InitializeJexxaAggregates;
 import io.jexxa.application.domainservice.PublishDomainInformation;
 import io.jexxa.core.JexxaMain;
@@ -57,7 +59,8 @@ class JexxaTestTest
         assertFalse(jexxaRepository.get().isEmpty());
     }
 
-    @Test void validateMessageToTopic()
+    @Test
+    void validateMessageToTopic()
     {
         //Arrange
         var testMessage = new JexxaValueObject(1);
@@ -85,7 +88,8 @@ class JexxaTestTest
         assertEquals(getJSONConverter().toJson(testMessage), recordedMessage.getSerializedMessage());
     }
 
-    @Test void validateMessageToQueue()
+    @Test
+    void validateMessageToQueue()
     {
         //Arrange
         var testMessage = new JexxaValueObject(1);
@@ -96,7 +100,6 @@ class JexxaTestTest
         //Act
         objectUnderTest.sendToQueue(testMessage);
 
-
         //Assert MessageRecorder
         assertFalse(messageRecorder.isEmpty());
         assertEquals(1, messageRecorder.size());
@@ -104,6 +107,16 @@ class JexxaTestTest
         //Assert RecordedMessage
         var recordedMessage = messageRecorder.getMessage(JexxaValueObject.class);
         assertNotNull(recordedMessage);
+    }
+
+    @Test
+    void repositoryNotAvailable()
+    {
+        //Act/Assert
+        assertThrows( IllegalArgumentException.class, () -> jexxaTest.getRepository(INotImplementedService.class) );
+
+        //Act/Assert
+        assertThrows( InvalidAdapterException.class, () -> jexxaTest.getRepository(IInvalidConstructor.class) );
     }
 
 }

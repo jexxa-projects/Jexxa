@@ -45,7 +45,7 @@
     <maven.site.plugin>3.9.1</maven.site.plugin>
     <maven.surefire.plugin>3.0.0-M5</maven.surefire.plugin>
     <maven.release.plugin>3.0.0-M1</maven.release.plugin>
-    <maven.jacoco.plugin>0.8.5</maven.jacoco.plugin>
+    <maven.jacoco.plugin>0.8.6</maven.jacoco.plugin>
     <maven.reports.plugin>3.1.0</maven.reports.plugin>
     <maven.enforcer.plugin>3.0.0-M3</maven.enforcer.plugin>
     <maven.javadoc.plugin>3.2.0</maven.javadoc.plugin>
@@ -81,7 +81,7 @@
 
     <!-- version of test dependencies -->
     <activemq.client.version>5.16.1</activemq.client.version>
-    <postgres.version>42.2.18</postgres.version>
+    <postgres.version>42.2.19</postgres.version>
     <unirest.java.version>3.11.10</unirest.java.version>
     <junit.platform.launcher.version>1.7.1</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.7.1</junit.jupiter.engine.version>

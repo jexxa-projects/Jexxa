@@ -1,0 +1,32 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+
+name: Java CI Unit-Tests only
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # test against LTS Java version:
+        java: [ 1.11 ]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK ${{ matrix.java }}
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.java }}
+
+    - name: Maven build
+      env:
+        GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}
+        GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}
+        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml -DskipITs -B clean install --file pom.xml
+
