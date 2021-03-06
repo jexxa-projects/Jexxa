@@ -332,7 +332,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
             javalinConfig.addStaticFiles(properties.getProperty(STATIC_FILES_ROOT));
         }
 
-        this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig, getGsonBuilder() );
+        this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig );
     }
 
     private Server getServer()

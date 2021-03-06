@@ -37,6 +37,7 @@ import io.javalin.plugin.openapi.dsl.DocumentedContent;
 import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
 import io.javalin.plugin.openapi.dsl.OpenApiDocumentation;
 import io.jexxa.utils.JexxaLogger;
+import io.jexxa.utils.json.gson.GsonConverter;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.BooleanSchema;
@@ -59,11 +60,11 @@ public class OpenAPIConvention
     private OpenApiOptions openApiOptions;
     private final GsonBuilder gsonBuilder;
 
-    public OpenAPIConvention(Properties properties, JavalinConfig javalinConfig, GsonBuilder gsonBuilder)
+    public OpenAPIConvention(Properties properties, JavalinConfig javalinConfig)
     {
         this.properties = properties;
         this.javalinConfig = javalinConfig;
-        this.gsonBuilder = gsonBuilder;
+        this.gsonBuilder = GsonConverter.getGsonBuilder();
         initOpenAPI();
     }
     private void initOpenAPI()
