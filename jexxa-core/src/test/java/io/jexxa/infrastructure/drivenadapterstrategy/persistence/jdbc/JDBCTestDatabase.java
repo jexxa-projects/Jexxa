@@ -69,6 +69,11 @@ public class JDBCTestDatabase
         return Stream.of(postgresProperties, h2Properties);
     }
 
+    public static Properties getPostgresProperties()
+    {
+        return repositoryConfig().findFirst().orElseThrow();
+    }
+
 
     static JDBCConnection setupDatabase(Properties properties)
     {
