@@ -12,12 +12,12 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDB
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_WITH_NULL_VALUES;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.REPOSITORY_CONFIG;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.setupDatabase;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testDoubleValue;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testFloatValue;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testIntValue;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testNumericValue;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testString;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.testTimestamp;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.TEST_DOUBLE_VALUE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.TEST_FLOAT_VALUE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.TEST_INT_VALUE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.TEST_NUMERIC_VALUE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.TEST_STRING;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.TEST_TIMESTAMP;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -73,12 +73,12 @@ class JDBCFluentAPIIT
         assertDoesNotThrow(() -> queryNonNullString.asString().flatMap(Optional::stream).findFirst().orElseThrow());
         assertDoesNotThrow(() -> queryNonNullTimestamp.asTimestamp().flatMap(Optional::stream).findFirst().orElseThrow());
 
-        assertEquals(testIntValue, queryNonNullInteger.asInt().findFirst().orElseThrow() );
-        assertEquals(testNumericValue, queryNonNullNumeric.asNumeric().flatMap(Optional::stream).findFirst().orElseThrow() );
-        assertEquals(testFloatValue, queryNonNullFloat.asFloat().findFirst().orElseThrow() );
-        assertEquals(testDoubleValue, queryNonNullDouble.asDouble().findFirst().orElseThrow() );
-        assertEquals(testString, queryNonNullString.asString().flatMap(Optional::stream).findFirst().orElseThrow());
-        assertEquals(testTimestamp, queryNonNullTimestamp.asTimestamp().flatMap(Optional::stream).findFirst().orElseThrow());
+        assertEquals(TEST_INT_VALUE, queryNonNullInteger.asInt().findFirst().orElseThrow() );
+        assertEquals(TEST_NUMERIC_VALUE, queryNonNullNumeric.asNumeric().flatMap(Optional::stream).findFirst().orElseThrow() );
+        assertEquals(TEST_FLOAT_VALUE, queryNonNullFloat.asFloat().findFirst().orElseThrow() );
+        assertEquals(TEST_DOUBLE_VALUE, queryNonNullDouble.asDouble().findFirst().orElseThrow() );
+        assertEquals(TEST_STRING, queryNonNullString.asString().flatMap(Optional::stream).findFirst().orElseThrow());
+        assertEquals(TEST_TIMESTAMP, queryNonNullTimestamp.asTimestamp().flatMap(Optional::stream).findFirst().orElseThrow());
 
     }
 

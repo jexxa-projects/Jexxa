@@ -28,12 +28,12 @@ public class JDBCTestDatabase
     static final int PRIMARY_KEY_WITH_NONNULL_VALUES = 2;
     static final int PRIMARY_KEY_WITH_NONNULL_VALUES_DUPLICATE = 3;
     static final int PRIMARY_KEY_VALUES_NOT_PRESENT = 4;
-    static final Timestamp testTimestamp = Timestamp.from(Instant.now().truncatedTo(ChronoUnit.MICROS));
-    static final String testString = "Hello World";
-    static final int testIntValue = 2;
-    static final int testFloatValue = 3;
-    static final int testDoubleValue = 4;
-    static final BigDecimal testNumericValue = BigDecimal.valueOf(5);
+    static final Timestamp TEST_TIMESTAMP = Timestamp.from(Instant.now().truncatedTo(ChronoUnit.MICROS));
+    static final String TEST_STRING = "Hello World";
+    static final int TEST_INT_VALUE = 2;
+    static final int TEST_FLOAT_VALUE = 3;
+    static final int TEST_DOUBLE_VALUE = 4;
+    static final BigDecimal TEST_NUMERIC_VALUE = BigDecimal.valueOf(5);
 
 
     enum JDBCTestSchema
@@ -114,12 +114,13 @@ public class JDBCTestDatabase
 
         var insertNonNullValues = jdbcConnection.createCommand(JDBCTestSchema.class)
                 .insertInto(JDBCTestDatabase.class)
-                .values(PRIMARY_KEY_WITH_NONNULL_VALUES, testIntValue , testNumericValue, testFloatValue, testDoubleValue, testString, testTimestamp)
+                .values(PRIMARY_KEY_WITH_NONNULL_VALUES, TEST_INT_VALUE, TEST_NUMERIC_VALUE, TEST_FLOAT_VALUE, TEST_DOUBLE_VALUE, TEST_STRING, TEST_TIMESTAMP)
                 .create();
 
         var insertNonNullValuesDuplicate = jdbcConnection.createCommand(JDBCTestSchema.class)
                 .insertInto(JDBCTestDatabase.class)
-                .values(PRIMARY_KEY_WITH_NONNULL_VALUES_DUPLICATE, testIntValue , testNumericValue, testFloatValue, testDoubleValue, testString, testTimestamp)
+                .values(PRIMARY_KEY_WITH_NONNULL_VALUES_DUPLICATE, TEST_INT_VALUE, TEST_NUMERIC_VALUE, TEST_FLOAT_VALUE, TEST_DOUBLE_VALUE, TEST_STRING,
+                        TEST_TIMESTAMP)
                 .create();
 
         insertNullValues.asUpdate();
