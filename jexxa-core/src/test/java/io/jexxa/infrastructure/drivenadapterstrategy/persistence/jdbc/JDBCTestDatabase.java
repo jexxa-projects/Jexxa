@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 
 public class JDBCTestDatabase
 {
+    static final String ADMIN = "admin";
     static final int PRIMARY_KEY_WITH_NULL_VALUES = 1;
     static final int PRIMARY_KEY_WITH_NONNULL_VALUES = 2;
     static final int PRIMARY_KEY_WITH_NONNULL_VALUES_DUPLICATE = 3;
@@ -53,16 +54,16 @@ public class JDBCTestDatabase
     static Stream<Properties> repositoryConfig() {
         var postgresProperties = new Properties();
         postgresProperties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JDBCConnection.JDBC_PASSWORD, "admin");
-        postgresProperties.put(JDBCConnection.JDBC_USERNAME, "admin");
+        postgresProperties.put(JDBCConnection.JDBC_PASSWORD, ADMIN);
+        postgresProperties.put(JDBCConnection.JDBC_USERNAME, ADMIN);
         postgresProperties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
         postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
         postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
 
         var h2Properties = new Properties();
         h2Properties.put(JDBCConnection.JDBC_DRIVER, "org.h2.Driver");
-        h2Properties.put(JDBCConnection.JDBC_PASSWORD, "admin");
-        h2Properties.put(JDBCConnection.JDBC_USERNAME, "admin");
+        h2Properties.put(JDBCConnection.JDBC_PASSWORD, ADMIN);
+        h2Properties.put(JDBCConnection.JDBC_USERNAME, ADMIN);
         h2Properties.put(JDBCConnection.JDBC_URL, "jdbc:h2:mem:jexxa;DB_CLOSE_DELAY=-1");
         h2Properties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
 
