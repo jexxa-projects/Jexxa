@@ -91,7 +91,7 @@ class JDBCFluentAPIIT
         jdbcConnection = setupDatabase(properties);
         createQueries();
 
-        //act / assert
+        //act and assert
         assertDoesNotThrow(() -> queryNullInteger.asInt().findFirst().orElseThrow() );
         assertDoesNotThrow(() -> queryNullNumeric.asNumeric().findFirst().orElseThrow() );
         assertDoesNotThrow(() -> queryNullFloat.asFloat().findFirst().orElseThrow() );
