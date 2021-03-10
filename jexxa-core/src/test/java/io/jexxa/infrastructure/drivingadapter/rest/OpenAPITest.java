@@ -75,8 +75,6 @@ class OpenAPITest
         //Assert - Fields of basic openAPI structure
         assertNotNull(result);
 
-        System.out.println(result);
-
         assertNotNull(result.get("openapi"));
         assertNotNull(result.get("info"));
         assertNotNull(result.get("paths"));
