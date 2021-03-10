@@ -47,7 +47,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private ServerConnector httpConnector;
     private OpenAPIConvention openAPIConvention;
 
-    private static final Map<Properties, RESTfulRPCAdapter> rpcAdapterMap = new HashMap<>();
+    private static final Map<Properties, RESTfulRPCAdapter> RPC_ADAPTER_MAP = new HashMap<>();
 
     private RESTfulRPCAdapter(Properties properties)
     {
@@ -68,14 +68,14 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     public static RESTfulRPCAdapter createAdapter(Properties properties)
     {
-        if ( rpcAdapterMap.containsKey(properties) )
+        if ( RPC_ADAPTER_MAP.containsKey(properties) )
         {
             JexxaLogger.getLogger(RESTfulRPCAdapter.class).warn("Tried to create an RESTfulRPCAdapter with same properties twice! Return already instantiated adapter.");
         } else {
-            rpcAdapterMap.put(properties, new RESTfulRPCAdapter(properties));
+            RPC_ADAPTER_MAP.put(properties, new RESTfulRPCAdapter(properties));
         }
 
-        return rpcAdapterMap.get(properties);
+        return RPC_ADAPTER_MAP.get(properties);
     }
 
     public void register(Object object)
@@ -119,7 +119,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     @Override
     public void stop()
     {
-        rpcAdapterMap.remove(properties);
+        RPC_ADAPTER_MAP.remove(properties);
 
         javalin.stop();
         Optional.ofNullable(httpConnector).ifPresent(ServerConnector::close);
