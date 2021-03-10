@@ -109,7 +109,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                         RESTfulRPCAdapter.class.getSimpleName()
                         + ": "
                         + e.getCause().getMessage()
-                        + ". Please check that IP address is correct and port is not in use."
+                        + ". Please check that IP address is correct and port is not in use.", e
                 );
             }
             throw e;
