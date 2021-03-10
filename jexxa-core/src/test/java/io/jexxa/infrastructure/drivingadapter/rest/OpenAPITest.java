@@ -15,6 +15,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
+import io.jexxa.application.domain.valueobject.SpecialCasesValueObject;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,10 +75,34 @@ class OpenAPITest
         //Assert - Fields of basic openAPI structure
         assertNotNull(result);
 
+        System.out.println(result);
+
         assertNotNull(result.get("openapi"));
         assertNotNull(result.get("info"));
         assertNotNull(result.get("paths"));
     }
+
+    @Test
+    void testSpecialCasesValueObject()
+    {
+        //Arrange -> Nothing to do
+
+        //Act
+        JsonObject response = Unirest.get(OPENAPI_PATH)
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(JsonObject.class).getBody();
+
+        var result = response
+                .get("components").getAsJsonObject()
+                .get("schemas").getAsJsonObject()
+                .get(SpecialCasesValueObject.class.getSimpleName()).getAsJsonObject();
+
+        //Assert - Fields of basic openAPI structure
+        assertNotNull(result);
+        assertFalse(deepSearchKeys(result,"nullValue").isEmpty());
+        assertFalse(deepSearchKeys(result,"valueWithoutGetter").isEmpty());
+    }
+
 
     @Test
     void testContentTypeIsJson()
@@ -108,6 +133,8 @@ class OpenAPITest
         //Act
         var postResults = deepSearchKeys(openAPI, "post");
         var getResults = deepSearchKeys(openAPI, "get");
+
+        System.out.println(openAPI);
 
         //Assert -- POST mapping
         assertFalse(postResults.isEmpty());

@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -78,6 +80,9 @@ public class OpenAPIConvention
 
             openApiOptions = new OpenApiOptions(applicationInfo)
                     .path("/" + properties.getProperty(OPEN_API_PATH));
+
+            //Show all fields of an ValueObject
+            openApiOptions.getJacksonMapper().setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
             javalinConfig.registerPlugin(new OpenApiPlugin(openApiOptions));
             javalinConfig.enableCorsForAllOrigins();
@@ -198,6 +203,7 @@ public class OpenAPIConvention
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         // StdDateFormat is ISO8601 since jackson 2.9
         mapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
         JsonSchemaGenerator jsonSchemaGenerator = new JsonSchemaGenerator(mapper);
         JsonNode jsonSchema = jsonSchemaGenerator.generateJsonSchema(clazz);
