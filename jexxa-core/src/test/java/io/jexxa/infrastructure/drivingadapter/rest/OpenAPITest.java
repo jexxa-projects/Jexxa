@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.OPEN_API_PATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,9 +30,6 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestConstants.INTEGRATION_TEST)
 class OpenAPITest
 {
-    private static final String CONTENT_TYPE = "Content-Type";
-    private static final String APPLICATION_TYPE = "application/json";
-
     private static final String OPENAPI_PATH = "http://localhost:7000/swagger-docs/";
     private final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
 

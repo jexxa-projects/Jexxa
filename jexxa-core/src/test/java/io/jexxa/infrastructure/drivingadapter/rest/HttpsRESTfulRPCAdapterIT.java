@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -28,8 +30,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class HttpsRESTfulRPCAdapterIT
 {
-    private static final String CONTENT_TYPE = "Content-Type";
-    private static final String APPLICATION_TYPE = "application/json";
     private static final String METHOD_GET_SIMPLE_VALUE = "getSimpleValue";
 
     private static final int DEFAULT_VALUE = 42;

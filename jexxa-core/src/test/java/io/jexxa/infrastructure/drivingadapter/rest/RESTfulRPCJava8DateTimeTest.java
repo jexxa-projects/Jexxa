@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -23,9 +25,6 @@ import org.junit.jupiter.api.Test;
 
 class RESTfulRPCJava8DateTimeTest
 {
-    private static final String CONTENT_TYPE = "Content-Type";
-    private static final String APPLICATION_TYPE = "application/json";
-
     private static final String REST_PATH = "http://localhost:7000/Java8DateTimeApplicationService/";
 
     private final Java8DateTimeApplicationService java8DateTimeApplicationService = new Java8DateTimeApplicationService();

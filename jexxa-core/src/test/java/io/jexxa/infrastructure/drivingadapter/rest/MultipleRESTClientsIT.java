@@ -2,6 +2,8 @@ package io.jexxa.infrastructure.drivingadapter.rest;
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,8 +26,6 @@ import org.junit.jupiter.api.Test;
 @Tag(TestConstants.INTEGRATION_TEST)
 class MultipleRESTClientsIT
 {
-    private static final String CONTENT_TYPE = "Content-Type";
-    private static final String APPLICATION_TYPE = "application/json";
     private static final String METHOD_GET_SIMPLE_VALUE = "increment";
     private static final int MAX_COUNTER = 1000;
     private static final int MAX_THREADS = 5;
@@ -60,7 +60,7 @@ class MultipleRESTClientsIT
                 .collect(toList());
 
         var exceptionList = new ArrayList<Throwable>();
-        
+
         //Act
         clientPool.forEach(Thread::start);
 

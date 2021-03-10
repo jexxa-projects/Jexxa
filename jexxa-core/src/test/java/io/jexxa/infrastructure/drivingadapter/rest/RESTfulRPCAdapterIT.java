@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.STATIC_FILES_ROOT;
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
@@ -31,8 +33,6 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestConstants.INTEGRATION_TEST)
 class RESTfulRPCAdapterIT
 {
-    private static final String CONTENT_TYPE = "Content-Type";
-    private static final String APPLICATION_TYPE = "application/json";
     private static final String METHOD_GET_SIMPLE_VALUE = "getSimpleValue";
 
     private static final String REST_PATH = "http://localhost:7000/SimpleApplicationService/";
