@@ -131,8 +131,6 @@ class OpenAPITest
         var postResults = deepSearchKeys(openAPI, "post");
         var getResults = deepSearchKeys(openAPI, "get");
 
-        System.out.println(openAPI);
-
         //Assert -- POST mapping
         assertFalse(postResults.isEmpty());
         assertEquals(resTfulRPCConvention.getPOSTCommands().size(), postResults.size());
