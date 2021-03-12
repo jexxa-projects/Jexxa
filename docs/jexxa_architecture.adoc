@@ -149,6 +149,8 @@ Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology f
 ....
 @startuml
 skinparam PackagePadding 20
+skinparam linetype ortho
+
 
 package JexxaCore <<Jexxa>> {
 [Convention] <<Inversion of Control>>
