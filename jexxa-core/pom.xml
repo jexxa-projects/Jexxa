@@ -14,6 +14,7 @@
   <name>Jexxa-Core</name>
 
   <properties>
+    <jexxa.adapter.api.version>1.0.1</jexxa.adapter.api.version>
     <sonar.projectKey>repplix_Jexxa</sonar.projectKey>
   </properties>
 
@@ -23,7 +24,7 @@
     <dependency>
       <groupId>io.jexxa</groupId>
       <artifactId>jexxa-adapter-api</artifactId>
-      <version>1.0.2-SNAPSHOT</version>
+      <version>${jexxa.adapter.api.version}</version>
       <scope>compile</scope>
     </dependency>
 
@@ -41,11 +42,6 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.api.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>${commons.lang3.version}</version>
@@ -56,39 +52,19 @@
       <version>${google.guava.version}</version>
     </dependency>
 
+    <!-- API dependency for Logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.api.version}</version>
+    </dependency>
 
-
-
-    <!-- dependencies for JMSAdapter -->
+    <!-- API dependency for JMSAdapter -->
     <dependency>
       <groupId>javax.jms</groupId>
       <artifactId>javax.jms-api</artifactId>
       <version>${javax.jms.version}</version>
       <scope>compile</scope>
-    </dependency>
-
-    <!-- dependencies for tests with ActiveMQ -->
-    <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-client</artifactId>
-      <version>${activemq.client.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- dependencies for tests with JDBCAdapter -->
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>${postgres.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>1.4.200</version>
-      <scope>test</scope>
     </dependency>
 
     <!-- dependencies for tests -->
@@ -122,6 +98,29 @@
       <version>${awaitility.version}</version>
       <scope>test</scope>
     </dependency>
+    <!-- dependencies for tests with JDBCAdapter -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${postgres.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.200</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- dependencies for tests with ActiveMQ -->
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-client</artifactId>
+      <version>${activemq.client.version}</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <build>

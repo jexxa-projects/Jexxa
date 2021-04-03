@@ -27,14 +27,17 @@ a| Jexxa-Adapter-API
 a| Defines the API for driving adapters. In case you need to implement a new driving adapter, you should use this dependency.
 
 a| Jexxa-Core
-a| Provides the core functionality of Jexxa as described in <<Jexxa Features>>. In case you write a new business application,
-you will need this package. It also provides driving and driven adapter based on java standard APIs such as:
+a| Provides the core functionality of Jexxa as described in <<Jexxa Features>>. In case you write a new business application, you will need this package.
+
+In addition, it provides following driving- and driven-adapter strategies written against Java standard APIs:
 
 * Driving-Adapter: `JMXAdapter`, `JMSAdapter`
 * Driven-Adapter Strategies: `JDBCKeyValueRepository`, `JMSSender`
 
+NOTE: In order to use these adapters, you need to bind a concrete implementation of the used API, such as an ActiveMQ client, or a concrete database driver.
+
 a| Jexxa-Web
-a| Provides driving adapters to access your application via HTTP. The used web-server is jetty.
+a| Provides driving adapters to access your application via HTTP. The used web-framework is http://javalin.io[javalin] which internally uses jetty.
 
 * Driving-Adapter: `RESTfulRPCAdapter`
 
