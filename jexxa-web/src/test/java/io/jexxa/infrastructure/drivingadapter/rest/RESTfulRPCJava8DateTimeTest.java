@@ -59,11 +59,10 @@ class RESTfulRPCJava8DateTimeTest
     void testLocalDateAsString()
     {
 
-        //Arrange -> Nothing to do
+        //Arrange
         LocalDate localDate = LocalDate.now();
 
         //Act
-
         var response = Unirest.post(REST_PATH + "setLocalDate")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(localDate)
@@ -82,12 +81,11 @@ class RESTfulRPCJava8DateTimeTest
     @Test
     void testLocalDate()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         LocalDate localDate = LocalDate.now();
         Gson gson = new Gson(); // Use explicit GSON instance to check if non ISO dates are correctly handled
 
         //Act
-
         var response = Unirest.post(REST_PATH + "setLocalDate")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(gson.toJson( localDate ))
@@ -106,11 +104,10 @@ class RESTfulRPCJava8DateTimeTest
     @Test
     void testLocalDateTime()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         LocalDateTime localDateTime = LocalDateTime.now();
 
         //Act
-
         var response = Unirest.post(REST_PATH + "setLocalDateTime")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(localDateTime)
@@ -129,11 +126,10 @@ class RESTfulRPCJava8DateTimeTest
     @Test
     void testLocalTime()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         LocalTime localTime = LocalTime.now();
 
         //Act
-
         var response = Unirest.post(REST_PATH + "setLocalTime")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(localTime)
@@ -152,7 +148,7 @@ class RESTfulRPCJava8DateTimeTest
     @Test
     void testZonedDateTime()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         ZonedDateTime zonedDateTime = ZonedDateTime.now().withFixedOffsetZone();
 
         //Act
@@ -174,7 +170,7 @@ class RESTfulRPCJava8DateTimeTest
     @Test
     void testDuration()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         Duration duration = Duration.ofDays(2);
 
         //Act
@@ -196,7 +192,7 @@ class RESTfulRPCJava8DateTimeTest
     @Test
     void testPeriod()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         Period period = Period.ofDays(1);
 
         //Act
@@ -218,7 +214,7 @@ class RESTfulRPCJava8DateTimeTest
     @Test
     void testInstant()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         Instant instant = Instant.now();
 
         //Act
