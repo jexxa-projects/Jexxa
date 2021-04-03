@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.OPEN_API_PATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,7 +16,8 @@ import java.util.Properties;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.jexxa.TestConstants;
-import io.jexxa.application.applicationservice.Java8DateTimeApplicationService;
+import io.jexxa.application.applicationservice.SimpleApplicationService;
+import io.jexxa.application.domain.valueobject.SpecialCasesValueObject;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,13 +28,10 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
-class OpenAPIJava8DateTimeTest
+class OpenAPITest
 {
-    private static final String CONTENT_TYPE = "Content-Type";
-    private static final String APPLICATION_TYPE = "application/json";
-
     private static final String OPENAPI_PATH = "http://localhost:7000/swagger-docs/";
-    private final Java8DateTimeApplicationService java8DateTimeApplicationService = new Java8DateTimeApplicationService();
+    private final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
 
 
     private RESTfulRPCAdapter objectUnderTest;
@@ -48,7 +48,7 @@ class OpenAPIJava8DateTimeTest
         properties.put(OPEN_API_PATH, "swagger-docs");
 
         objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
-        objectUnderTest.register(java8DateTimeApplicationService);
+        objectUnderTest.register(simpleApplicationService);
         objectUnderTest.start();
     }
 
@@ -67,7 +67,7 @@ class OpenAPIJava8DateTimeTest
         //Arrange -> Nothing to do
 
         //Act
-       JsonObject result = Unirest.get(OPENAPI_PATH)
+        JsonObject result = Unirest.get(OPENAPI_PATH)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
 
@@ -78,6 +78,28 @@ class OpenAPIJava8DateTimeTest
         assertNotNull(result.get("info"));
         assertNotNull(result.get("paths"));
     }
+
+    @Test
+    void testSpecialCasesValueObject()
+    {
+        //Arrange -> Nothing to do
+
+        //Act
+        JsonObject response = Unirest.get(OPENAPI_PATH)
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(JsonObject.class).getBody();
+
+        var result = response
+                .get("components").getAsJsonObject()
+                .get("schemas").getAsJsonObject()
+                .get(SpecialCasesValueObject.class.getSimpleName()).getAsJsonObject();
+
+        //Assert - Fields of basic openAPI structure
+        assertNotNull(result);
+        assertFalse(deepSearchKeys(result,"nullValue").isEmpty());
+        assertFalse(deepSearchKeys(result,"valueWithoutGetter").isEmpty());
+    }
+
 
     @Test
     void testContentTypeIsJson()
@@ -95,11 +117,11 @@ class OpenAPIJava8DateTimeTest
         result.forEach( element -> assertNotNull( element.getAsJsonObject().get(APPLICATION_TYPE) ) );
     }
 
-   @Test
+    @Test
     void testHTTPRequestMapping()
     {
         //Arrange
-        var resTfulRPCConvention = new RESTfulRPCConvention(java8DateTimeApplicationService);
+        var resTfulRPCConvention = new RESTfulRPCConvention(simpleApplicationService);
 
         JsonObject openAPI = Unirest.get(OPENAPI_PATH)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)

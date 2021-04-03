@@ -17,18 +17,8 @@ public final class RepositoryManager
 {
     private static final RepositoryManager REPOSITORY_MANAGER = new RepositoryManager();
 
-    private static final Map<Class<?> , Class<?>> strategyMap = new HashMap<>();
+    private static final Map<Class<?> , Class<?>> STRATEGY_MAP = new HashMap<>();
     private static Class<?> defaultStrategy = null;
-
-    /**
-     * @deprecated getInstance will be removed in future releases. Instead a public static API is offered to configure the the strategies
-     * @return Returns the managing component for repository strategies
-     */
-    @Deprecated(forRemoval = true)
-    public static RepositoryManager getInstance()
-    {
-        return REPOSITORY_MANAGER;
-    }
 
     public static  <T,K> IRepository<T,K> getRepository(
             Class<T> aggregateClazz,
@@ -40,7 +30,7 @@ public final class RepositoryManager
 
     public static <U extends IRepository<?,?>, T > void setStrategy(Class<U> strategyType, Class<T> aggregateType)
     {
-        strategyMap.put(aggregateType, strategyType);
+        STRATEGY_MAP.put(aggregateType, strategyType);
     }
 
     public static <U extends IRepository<?,?> > void setDefaultStrategy(Class<U> defaultStrategy)
@@ -50,7 +40,7 @@ public final class RepositoryManager
 
     @SuppressWarnings("unchecked")
     @CheckReturnValue
-    public <T,K> IRepository<T,K> getStrategy(
+    <T,K> IRepository<T,K> getStrategy(
             Class<T> aggregateClazz,
             Function<T,K> keyFunction,
             Properties properties
@@ -78,7 +68,7 @@ public final class RepositoryManager
     public static void defaultSettings( )
     {
         defaultStrategy = null;
-        strategyMap.clear();
+        STRATEGY_MAP.clear();
     }
 
 
@@ -90,7 +80,7 @@ public final class RepositoryManager
     private <T> Class<?> getStrategy(Class<T> aggregateClazz, Properties properties)
     {
         // 1. Check if a dedicated strategy is registered for aggregateClazz
-        var result = strategyMap
+        var result = STRATEGY_MAP
                 .entrySet()
                 .stream()
                 .filter( element -> element.getKey().equals(aggregateClazz))

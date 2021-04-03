@@ -302,7 +302,7 @@ First, add the following dependency to your tests.
     <dependency>
       <groupId>io.jexxa.jexxatest</groupId>
       <artifactId>jexxa-test</artifactId>
-      <version>2.8.1</version>
+      <version>3.0.0</version>
       <scope>test</scope>
     </dependency>
 ```

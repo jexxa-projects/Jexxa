@@ -30,8 +30,8 @@ public abstract class TypedMessageListener<T> extends JSONMessageListener
         }
         catch (RuntimeException | JMSException exception)
         {
-            JexxaLogger.getLogger(TypedMessageListener.class).error(exception.getMessage());
-            JexxaLogger.getLogger(TypedMessageListener.class).error("Message : {}", currentText);
+            JexxaLogger.getLogger(getClass()).error(exception.getMessage());
+            JexxaLogger.getLogger(getClass()).error("Message : {}", currentText);
         }
     }
 

@@ -7,6 +7,6 @@ public class InvalidConstructor implements IInvalidConstructor
 {
     public InvalidConstructor(Integer integer)
     {
-
+        //Empty constructor to check invalid parameter handling
     }
 }

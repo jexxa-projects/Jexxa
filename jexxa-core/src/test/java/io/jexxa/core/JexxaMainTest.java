@@ -1,7 +1,6 @@
 package io.jexxa.core;
 
 
-
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -21,7 +20,6 @@ import io.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplic
 import io.jexxa.core.convention.PortConventionViolation;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
-import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -52,7 +50,7 @@ class JexxaMainTest
         {
             objectUnderTest.stop();
         }
-        Unirest.shutDown();
+        //Unirest.shutDown();
     }
 
 

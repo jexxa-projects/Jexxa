@@ -59,7 +59,7 @@ public class ITMessageSender implements AutoCloseable
         }
         catch (JMSException e)
         {
-            JexxaLogger.getLogger(ITMessageSender.class).error(e.getMessage());
+            JexxaLogger.getLogger(getClass()).error(e.getMessage());
         }
     }
 

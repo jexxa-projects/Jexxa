@@ -32,6 +32,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestConstants.INTEGRATION_TEST)
 class JMSSenderIT
 {
+    private static final String TYPE = "type";
     private final JexxaValueObject message = new JexxaValueObject(42);
 
     private TopicListener topicListener;
@@ -65,7 +66,7 @@ class JMSSenderIT
         objectUnderTest
                 .send(message)
                 .toTopic(TOPIC_DESTINATION)
-                .addHeader("type", message.getClass().getSimpleName())
+                .addHeader(TYPE, message.getClass().getSimpleName())
                 .asJson();
 
         //Assert
@@ -84,7 +85,7 @@ class JMSSenderIT
         objectUnderTest
                 .send(message)
                 .toQueue(QUEUE_DESTINATION)
-                .addHeader("type", message.getClass().getSimpleName())
+                .addHeader(TYPE, message.getClass().getSimpleName())
                 .asJson();
 
         //Assert
@@ -102,7 +103,7 @@ class JMSSenderIT
         objectUnderTest
                 .send(message)
                 .toQueue(QUEUE_DESTINATION)
-                .addHeader("type", message.getClass().getSimpleName())
+                .addHeader(TYPE, message.getClass().getSimpleName())
                 .asString();
 
         //Assert

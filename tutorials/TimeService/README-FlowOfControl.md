@@ -19,7 +19,7 @@ If you choose ports and adapters as the architecture of your application, you ha
     as REST, RMI or, JMS. Then it forwards the request to an `inbound port` for execution and this *drives* the domain logic of your application.
     
 *   `Inbound Port`: An `inbound port` belongs to the application core and represents the use cases of your business application that can be started 
-    by a `Driving Adapter`. The term `port` is used similar to a network- or USB port, that provide access to a computer. 
+    by a specific client or a group of clients via an `Driving Adapter`. 
     
 *   `Outbound Port`: An `outbound port` is an interface that belongs to the application core. It describes required methods from an application core's point of view that can only be implemented by using a technology stack such as a logger or a database.
     

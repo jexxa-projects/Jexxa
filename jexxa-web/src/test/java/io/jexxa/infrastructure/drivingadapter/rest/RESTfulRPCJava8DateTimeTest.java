@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -18,14 +20,12 @@ import com.google.gson.Gson;
 import io.jexxa.application.applicationservice.Java8DateTimeApplicationService;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RESTfulRPCJava8DateTimeTest
 {
-    private static final String CONTENT_TYPE = "Content-Type";
-    private static final String APPLICATION_TYPE = "application/json";
-
     private static final String REST_PATH = "http://localhost:7000/Java8DateTimeApplicationService/";
 
     private final Java8DateTimeApplicationService java8DateTimeApplicationService = new Java8DateTimeApplicationService();
@@ -59,11 +59,10 @@ class RESTfulRPCJava8DateTimeTest
     void testLocalDateAsString()
     {
 
-        //Arrange -> Nothing to do
+        //Arrange
         LocalDate localDate = LocalDate.now();
 
         //Act
-
         var response = Unirest.post(REST_PATH + "setLocalDate")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(localDate)
@@ -74,7 +73,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(LocalDate.class).getBody();
 
         //Assert
-        assertTrue(response.isSuccess());
+        Assertions.assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(localDate, result);
     }
@@ -82,12 +81,11 @@ class RESTfulRPCJava8DateTimeTest
     @Test
     void testLocalDate()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         LocalDate localDate = LocalDate.now();
         Gson gson = new Gson(); // Use explicit GSON instance to check if non ISO dates are correctly handled
 
         //Act
-
         var response = Unirest.post(REST_PATH + "setLocalDate")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(gson.toJson( localDate ))
@@ -98,7 +96,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(LocalDate.class).getBody();
 
         //Assert
-        assertTrue(response.isSuccess());
+        Assertions.assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(localDate, result);
     }
@@ -106,11 +104,10 @@ class RESTfulRPCJava8DateTimeTest
     @Test
     void testLocalDateTime()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         LocalDateTime localDateTime = LocalDateTime.now();
 
         //Act
-
         var response = Unirest.post(REST_PATH + "setLocalDateTime")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(localDateTime)
@@ -121,7 +118,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(LocalDateTime.class).getBody();
 
         //Assert
-        assertTrue(response.isSuccess());
+        Assertions.assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(localDateTime, result);
     }
@@ -129,11 +126,10 @@ class RESTfulRPCJava8DateTimeTest
     @Test
     void testLocalTime()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         LocalTime localTime = LocalTime.now();
 
         //Act
-
         var response = Unirest.post(REST_PATH + "setLocalTime")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .body(localTime)
@@ -144,7 +140,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(LocalTime.class).getBody();
 
         //Assert
-        assertTrue(response.isSuccess());
+        Assertions.assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(localTime, result);
     }
@@ -152,7 +148,7 @@ class RESTfulRPCJava8DateTimeTest
     @Test
     void testZonedDateTime()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         ZonedDateTime zonedDateTime = ZonedDateTime.now().withFixedOffsetZone();
 
         //Act
@@ -166,7 +162,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(ZonedDateTime.class).getBody();
 
         //Assert
-        assertTrue(response.isSuccess());
+        Assertions.assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(zonedDateTime, result);
     }
@@ -174,7 +170,7 @@ class RESTfulRPCJava8DateTimeTest
     @Test
     void testDuration()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         Duration duration = Duration.ofDays(2);
 
         //Act
@@ -188,7 +184,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(Duration.class).getBody();
 
         //Assert
-        assertTrue(response.isSuccess());
+        Assertions.assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(duration, result);
     }
@@ -196,7 +192,7 @@ class RESTfulRPCJava8DateTimeTest
     @Test
     void testPeriod()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         Period period = Period.ofDays(1);
 
         //Act
@@ -210,7 +206,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(Period.class).getBody();
 
         //Assert
-        assertTrue(response.isSuccess());
+        Assertions.assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(period, result);
     }
@@ -218,7 +214,7 @@ class RESTfulRPCJava8DateTimeTest
     @Test
     void testInstant()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         Instant instant = Instant.now();
 
         //Act
@@ -232,7 +228,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(Instant.class).getBody();
 
         //Assert
-        assertTrue(response.isSuccess());
+        Assertions.assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(instant, result);
     }
@@ -260,9 +256,9 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(Java8DateTimeApplicationService.Java8DateTimeWrapper.class).getBody();
 
         //Assert
-        assertTrue(response.isSuccess());
+        Assertions.assertTrue(response.isSuccess());
         assertNotNull(result);
-        assertEquals(java8DateTimeWrapper, result);
+        Assertions.assertEquals(java8DateTimeWrapper, result);
     }
 
 }

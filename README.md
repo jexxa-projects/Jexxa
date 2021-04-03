@@ -39,15 +39,15 @@ Maven:
 ```xml
 <dependency>
   <groupId>io.jexxa</groupId>
-  <artifactId>jexxa-core</artifactId>
-  <version>2.8.1</version>
+  <artifactId>jexxa-web</artifactId>
+  <version>3.0.0</version>
 </dependency> 
 ```
 
 Gradle:
 
 ```groovy
-compile "io.Jexxa:jexxa-core:2.8.1"
+compile "io.Jexxa:jexxa-web:3.0.0"
 ``` 
  
 ### Start programming 
@@ -98,8 +98,9 @@ public final class HelloJexxa
 ```    
 
 ### Adding a logger
+Whenever possible, Jexxa is developed against standard APIs. This allows a business application to use the preferred technology stacks. For further information please refer to [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html#_jexxa_modules).
 
-Jexxa does not include a logger, which means that you have to add your own logger to your application. If you do not add a logger, you will get a warning message to your console. In case your application has not any special requirements you can add the following dependency to your project:
+Therefore, Jexxa does not include a logger, which means that you have to add your own logger to your application. If you do not add a logger, you will get a warning message to your console. In case your application has not any special requirements you can add the following dependency to your project:
 
 Maven: 
 ```xml

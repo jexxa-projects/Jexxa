@@ -5,7 +5,7 @@
   <parent>
     <artifactId>jexxa</artifactId>
     <groupId>io.jexxa</groupId>
-    <version>2.8.2-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>tutorials</artifactId>
@@ -14,10 +14,10 @@
   <name>Tutorials</name>
 
   <dependencies>
-
     <dependency>
       <groupId>io.jexxa</groupId>
-      <artifactId>jexxa-core</artifactId>
+      <artifactId>jexxa-web</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>

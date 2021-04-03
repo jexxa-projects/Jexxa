@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -94,59 +95,24 @@ public class JDBCConnection implements AutoCloseable
         return this;
     }
 
-    /**
-     * Creates a JDBC Command to execute commands
-     * @param command to be executed
-     * @return JDBCCommand that can be used to query results
-     * @deprecated Use method {@link #createCommand(Class)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public JDBCCommand execute(String command)
-    {
-        return new JDBCCommand(this::validateConnection, command);
-    }
-
-    /**
-     * Creates a JDBC Query to execute a query
-     * @param sqlQuery to be executed
-     * @return JDBCQuery that can be used to query results
-     * @deprecated Use method {@link #createQuery(Class)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public JDBCQuery query(String sqlQuery)
-    {
-        return new JDBCQuery(this::validateConnection, sqlQuery);
-    }
-
     @SuppressWarnings("java:S1172")
     public <T extends Enum<T>> JDBCQueryBuilder<T> createQuery(Class<T> schema)
     {
+        Objects.requireNonNull(schema);
         return new JDBCQueryBuilder<>(this::validateConnection);
     }
 
-    public JDBCQuery createQuery(String query)
-    {
-        return new JDBCQuery(this::validateConnection, query);
-    }
-
-    @SuppressWarnings("java:S1172")
     public <T extends Enum<T>> JDBCCommandBuilder<T> createCommand(Class<T> schema)
     {
+        Objects.requireNonNull(schema);
         return new JDBCCommandBuilder<>(this::validateConnection);
     }
 
-    @SuppressWarnings("java:S1172")
     public <T extends Enum<T>> JDBCTableBuilder<T> createTableCommand(Class<T> schema)
     {
+        Objects.requireNonNull(schema);
         return new JDBCTableBuilder<>(this::validateConnection);
     }
-
-
-    public JDBCCommand createCommand(String command)
-    {
-        return new JDBCCommand(this::validateConnection, command);
-    }
-
 
     /**
      * This method resets the internal JDBC connection in the following way:
@@ -198,11 +164,8 @@ public class JDBCConnection implements AutoCloseable
      * @param sqlStatement describes the template of the command
      * @return PreparedStatement
      * @throws SQLException in case of an error
-     * @deprecated Will be made package private
      */
-    @SuppressWarnings("java:S1123")
-    @Deprecated
-    public PreparedStatement prepareStatement(String sqlStatement) throws SQLException
+    PreparedStatement prepareStatement(String sqlStatement) throws SQLException
     {
         return getConnection().prepareStatement(sqlStatement);
     }

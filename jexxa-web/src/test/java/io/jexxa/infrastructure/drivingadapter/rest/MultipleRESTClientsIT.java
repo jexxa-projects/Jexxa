@@ -2,6 +2,8 @@ package io.jexxa.infrastructure.drivingadapter.rest;
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,6 +19,7 @@ import io.jexxa.core.JexxaMain;
 import io.jexxa.utils.function.ThrowingConsumer;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -24,8 +27,6 @@ import org.junit.jupiter.api.Test;
 @Tag(TestConstants.INTEGRATION_TEST)
 class MultipleRESTClientsIT
 {
-    private static final String CONTENT_TYPE = "Content-Type";
-    private static final String APPLICATION_TYPE = "application/json";
     private static final String METHOD_GET_SIMPLE_VALUE = "increment";
     private static final int MAX_COUNTER = 1000;
     private static final int MAX_THREADS = 5;
@@ -38,8 +39,8 @@ class MultipleRESTClientsIT
     void setUp()
     {
         jexxaMain = new JexxaMain(MultipleRESTClientsIT.class.getSimpleName());
-        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+        jexxaMain.addToApplicationCore(TestConstants.JEXXA_APPLICATION_SERVICE)
+                .addToInfrastructure(TestConstants.JEXXA_DRIVEN_ADAPTER)
                 .bind(RESTfulRPCAdapter.class).to(IncrementApplicationService.class)
                 .start();
 
@@ -60,7 +61,7 @@ class MultipleRESTClientsIT
                 .collect(toList());
 
         var exceptionList = new ArrayList<Throwable>();
-        
+
         //Act
         clientPool.forEach(Thread::start);
 
@@ -68,7 +69,7 @@ class MultipleRESTClientsIT
 
 
         //Assert
-        assertEquals(expectedResult, applicationService.getUsedCounter());
+        Assertions.assertEquals(expectedResult, applicationService.getUsedCounter());
         assertTrue(exceptionList.isEmpty());
     }
 

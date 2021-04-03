@@ -15,7 +15,7 @@ import io.jexxa.application.annotation.ValueObject;
 public class SpecialCasesValueObject
 {
 
-    public final static SpecialCasesValueObject SPECIAL_CASES_VALUE_OBJECT = new SpecialCasesValueObject(1);
+    public static final SpecialCasesValueObject SPECIAL_CASES_VALUE_OBJECT = new SpecialCasesValueObject(1);
 
     private final int valueWithoutGetter;
     private final String nullValue = null;

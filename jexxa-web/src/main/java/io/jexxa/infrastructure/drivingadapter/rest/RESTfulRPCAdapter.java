@@ -1,7 +1,6 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
-import static io.jexxa.utils.json.gson.GsonConverter.getGsonBuilder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -23,7 +22,7 @@ import io.javalin.plugin.json.JavalinJson;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
 import io.jexxa.utils.JexxaLogger;
-import org.apache.commons.lang3.Validate;
+import io.jexxa.utils.json.gson.GsonConverter;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -39,7 +38,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public static final String OPEN_API_PATH = "io.jexxa.rest.open_api_path";
     public static final String STATIC_FILES_ROOT = "io.jexxa.rest.static_files_root";
 
-    private static final Gson GSON = getGsonBuilder().create();
+    private static final Gson GSON = GsonConverter.getGson();
 
     private final Properties properties;
     private Javalin javalin;
@@ -48,18 +47,18 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private ServerConnector httpConnector;
     private OpenAPIConvention openAPIConvention;
 
-    private static final Map<Properties, RESTfulRPCAdapter> rpcAdapterMap = new HashMap<>();
+    private static final Map<Properties, RESTfulRPCAdapter> RPC_ADAPTER_MAP = new HashMap<>();
 
     private RESTfulRPCAdapter(Properties properties)
     {
         this.properties = properties;
 
-        Validate.isTrue(isHTTPEnabled() || isHTTPSEnabled(), "Neither HTTP (" + HTTP_PORT_PROPERTY + ") nor HTTPS (" + HTTPS_PORT_PROPERTY + ") is enabled!");
+        validateIsTrue(isHTTPEnabled() || isHTTPSEnabled(), "Neither HTTP (" + HTTP_PORT_PROPERTY + ") nor HTTPS (" + HTTPS_PORT_PROPERTY + ") is enabled!");
 
         if ( isHTTPSEnabled() )
         {
-            Validate.isTrue( properties.containsKey( KEYSTORE ), "You need to define a location for keystore ("+ KEYSTORE+ ")");
-            Validate.isTrue( properties.containsKey( KEYSTORE_PASSWORD ) , "You need to define a location for keystore-password ("+ KEYSTORE_PASSWORD+ ")");
+            validateIsTrue( properties.containsKey( KEYSTORE ), "You need to define a location for keystore ("+ KEYSTORE+ ")");
+            validateIsTrue( properties.containsKey( KEYSTORE_PASSWORD ) , "You need to define a location for keystore-password ("+ KEYSTORE_PASSWORD+ ")");
         }
 
         setupJavalin();
@@ -69,14 +68,14 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     public static RESTfulRPCAdapter createAdapter(Properties properties)
     {
-        if ( rpcAdapterMap.containsKey(properties) )
+        if ( RPC_ADAPTER_MAP.containsKey(properties) )
         {
             JexxaLogger.getLogger(RESTfulRPCAdapter.class).warn("Tried to create an RESTfulRPCAdapter with same properties twice! Return already instantiated adapter.");
         } else {
-            rpcAdapterMap.put(properties, new RESTfulRPCAdapter(properties));
+            RPC_ADAPTER_MAP.put(properties, new RESTfulRPCAdapter(properties));
         }
 
-        return rpcAdapterMap.get(properties);
+        return RPC_ADAPTER_MAP.get(properties);
     }
 
     public void register(Object object)
@@ -110,7 +109,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                         RESTfulRPCAdapter.class.getSimpleName()
                         + ": "
                         + e.getCause().getMessage()
-                        + ". Please check that IP address is correct and port is not in use."
+                        + ". Please check that IP address is correct and port is not in use.", e
                 );
             }
             throw e;
@@ -120,7 +119,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     @Override
     public void stop()
     {
-        rpcAdapterMap.remove(properties);
+        RPC_ADAPTER_MAP.remove(properties);
 
         javalin.stop();
         Optional.ofNullable(httpConnector).ifPresent(ServerConnector::close);
@@ -333,7 +332,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
             javalinConfig.addStaticFiles(properties.getProperty(STATIC_FILES_ROOT));
         }
 
-        this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig, getGsonBuilder() );
+        this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig );
     }
 
     private Server getServer()
@@ -368,5 +367,12 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         return sslContextFactory;
     }
 
+    void validateIsTrue( boolean expression, String message)
+    {
+        if (!expression)
+        {
+            throw new IllegalArgumentException(message);
+        }
+    }
 
 }
