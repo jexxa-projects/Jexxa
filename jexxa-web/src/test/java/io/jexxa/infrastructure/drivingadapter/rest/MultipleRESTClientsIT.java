@@ -19,6 +19,7 @@ import io.jexxa.core.JexxaMain;
 import io.jexxa.utils.function.ThrowingConsumer;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -38,8 +39,8 @@ class MultipleRESTClientsIT
     void setUp()
     {
         jexxaMain = new JexxaMain(MultipleRESTClientsIT.class.getSimpleName());
-        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+        jexxaMain.addToApplicationCore(TestConstants.JEXXA_APPLICATION_SERVICE)
+                .addToInfrastructure(TestConstants.JEXXA_DRIVEN_ADAPTER)
                 .bind(RESTfulRPCAdapter.class).to(IncrementApplicationService.class)
                 .start();
 
@@ -68,7 +69,7 @@ class MultipleRESTClientsIT
 
 
         //Assert
-        assertEquals(expectedResult, applicationService.getUsedCounter());
+        Assertions.assertEquals(expectedResult, applicationService.getUsedCounter());
         assertTrue(exceptionList.isEmpty());
     }
 

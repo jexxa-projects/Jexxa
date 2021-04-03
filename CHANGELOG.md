@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[3.0.0] - yyyy-mm-dd
 ### Changed
+-   Introduced new package Jexxa-Web which includes all web specific plugins such as `RESTfulRPCAdapter` 
 -   Removed all methods and constants that were declared deprecated in 2.x
 
 ### Fixed

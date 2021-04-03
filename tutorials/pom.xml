@@ -14,10 +14,10 @@
   <name>Tutorials</name>
 
   <dependencies>
-
     <dependency>
       <groupId>io.jexxa</groupId>
-      <artifactId>jexxa-core</artifactId>
+      <artifactId>jexxa-web</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>

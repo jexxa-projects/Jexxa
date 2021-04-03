@@ -24,6 +24,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -88,8 +89,8 @@ class HttpsRESTfulRPCAdapterIT
 
         //Assert
         assertNotNull(result);
-        assertEquals(DEFAULT_VALUE, simpleApplicationService.getSimpleValue());
-        assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
+        Assertions.assertEquals(DEFAULT_VALUE, simpleApplicationService.getSimpleValue());
+        Assertions.assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
     }
 
     @AfterEach

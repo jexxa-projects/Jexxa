@@ -39,7 +39,7 @@ Maven:
 ```xml
 <dependency>
   <groupId>io.jexxa</groupId>
-  <artifactId>jexxa-core</artifactId>
+  <artifactId>jexxa-web</artifactId>
   <version>2.8.1</version>
 </dependency> 
 ```
@@ -47,7 +47,7 @@ Maven:
 Gradle:
 
 ```groovy
-compile "io.Jexxa:jexxa-core:2.8.1"
+compile "io.Jexxa:jexxa-web:2.8.1"
 ``` 
  
 ### Start programming 

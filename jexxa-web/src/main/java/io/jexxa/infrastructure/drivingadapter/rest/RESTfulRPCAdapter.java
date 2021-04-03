@@ -1,7 +1,6 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
-import static io.jexxa.utils.json.gson.GsonConverter.getGson;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -23,6 +22,7 @@ import io.javalin.plugin.json.JavalinJson;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
 import io.jexxa.utils.JexxaLogger;
+import io.jexxa.utils.json.gson.GsonConverter;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -38,7 +38,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public static final String OPEN_API_PATH = "io.jexxa.rest.open_api_path";
     public static final String STATIC_FILES_ROOT = "io.jexxa.rest.static_files_root";
 
-    private static final Gson GSON = getGson();
+    private static final Gson GSON = GsonConverter.getGson();
 
     private final Properties properties;
     private Javalin javalin;
