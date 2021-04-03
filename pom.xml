@@ -103,25 +103,6 @@
     <maven.shade.plugin>3.2.4</maven.shade.plugin>
   </properties>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>io.jexxa.jexxatest</groupId>
-        <artifactId>jexxa-test</artifactId>
-        <!-- <version>${jexxa-test.release.version}</version> -->
-        <!-- In case you want to run your tutorials with SNAPSHOT version of Jexxa uncomment line below and remove line above -->
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.jexxa</groupId>
-        <artifactId>jexxa-core</artifactId>
-        <!-- <version>${jexxa-core.release.version}</version> -->
-        <!-- In case you want to run your tutorials with SNAPSHOT version of Jexxa uncomment line below and remove line above -->
-        <version>${project.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
