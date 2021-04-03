@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[3.0.0] - yyyy-mm-dd
 ### Changed
--   Introduced new package Jexxa-Web which includes all web specific plugins such as `RESTfulRPCAdapter`. See [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html#_jexxa_modules) for more information.
+-   Introduced new package Jexxa-Web which includes all web specific plugins such as `RESTfulRPCAdapter`. See [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html#_jexxa_modules) for more information. If your application uses this adapter, you have now to add dependency `jexxa-web`. See tutorial [HelloJexxa](https://github.com/repplix/Jexxa/blob/master/tutorials/HelloJexxa/README.md) for an example.  
 -   Removed all methods and constants that were declared deprecated in 2.x
 
 ### Fixed
