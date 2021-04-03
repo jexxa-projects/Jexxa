@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 -   Removed all methods and constants that were declared deprecated in 2.x
 
+### Fixed
+-   `RESTfulRPCAdapter`: 
+    -   OpenAPI plugin uses global JSONManager for creating prototypes so that specific type converter can be registered    
+    
 ## \[2.8.1] - 2021-02-27
 ### Fixed
 -   Updated JaCoCo plugin so that tests run under Java 15
