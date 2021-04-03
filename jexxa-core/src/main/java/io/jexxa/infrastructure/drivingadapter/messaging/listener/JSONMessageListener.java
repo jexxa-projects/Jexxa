@@ -34,7 +34,7 @@ public abstract class JSONMessageListener implements MessageListener
         }
         catch (RuntimeException | JMSException exception)
         {
-            JexxaLogger.getLogger(JSONMessageListener.class).error(exception.getMessage());
+            JexxaLogger.getLogger(getClass()).error(exception.getMessage());
         }
         currentMessage = null;
         currentMessageText = null;
