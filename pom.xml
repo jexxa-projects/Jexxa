@@ -73,6 +73,7 @@
     <commons.lang3.version>3.12.0</commons.lang3.version>
     <commons.cli.version>1.4</commons.cli.version>
     <gson.version>2.8.6</gson.version>
+    <google.guava.version>30.1.1-jre</google.guava.version>
     <javalin.version>3.13.3</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
     <jackson.databind.version>2.12.2</jackson.databind.version>
@@ -87,6 +88,7 @@
     <junit.jupiter.engine.version>5.8.0-M1</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.8.0-M1</junit.jupiter.params.version>
     <slf4j.simple.version>1.7.30</slf4j.simple.version>
+    <slf4j.api.version>1.7.30</slf4j.api.version>
     <awaitility.version>4.0.3</awaitility.version>
 
     <!-- version of tutorials dependencies -->
