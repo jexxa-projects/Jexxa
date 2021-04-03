@@ -15,7 +15,7 @@ import io.jexxa.utils.json.JSONConverter;
 
 public class GsonConverter implements JSONConverter
 {
-    private static Gson gsonConverter;
+    private static Gson gson;
     private static final GsonBuilder GSON_BUILDER = getGsonBuilder();
 
     @Override
@@ -33,15 +33,15 @@ public class GsonConverter implements JSONConverter
     @SuppressWarnings("unused")
     public static void registerTypeAdapter(Type type, Object typeAdapter) {
         GSON_BUILDER.registerTypeAdapter(type, typeAdapter);
-        gsonConverter = null; // reset internal gsonConverter so that it is recreated with new registered typeAdapter
+        gson = null; // reset internal gsonConverter so that it is recreated with new registered typeAdapter
     }
 
     public static Gson getGson()
     {
-        if ( gsonConverter == null) {
-            gsonConverter = GSON_BUILDER.create();
+        if ( gson == null) {
+            gson = GSON_BUILDER.create();
         }
-        return gsonConverter;
+        return gson;
     }
 
     private static GsonBuilder getGsonBuilder()
