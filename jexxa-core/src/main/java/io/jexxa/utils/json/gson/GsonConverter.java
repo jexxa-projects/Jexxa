@@ -33,7 +33,7 @@ public class GsonConverter implements JSONConverter
     @SuppressWarnings("unused")
     public static void registerTypeAdapter(Type type, Object typeAdapter) {
         GSON_BUILDER.registerTypeAdapter(type, typeAdapter);
-        gsonConverter = null; // reset internal gsonConverter so that it is recreated with new registered type
+        gsonConverter = null; // reset internal gsonConverter so that it is recreated with new registered typeAdapter
     }
 
     public static Gson getGson()
