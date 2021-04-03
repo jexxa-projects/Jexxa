@@ -1,5 +1,6 @@
 package io.jexxa.utils.json.gson;
 
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -14,33 +15,43 @@ import io.jexxa.utils.json.JSONConverter;
 
 public class GsonConverter implements JSONConverter
 {
-    private static final Gson GSON = getGsonBuilder().create();
+    private static Gson gsonConverter;
+    private static final GsonBuilder GSON_BUILDER = getGsonBuilder();
 
     @Override
     public <T> T fromJson(String jsonString, Class<T> clazz)
     {
-        return GSON.fromJson(jsonString, clazz);
+        return getGson().fromJson(jsonString, clazz);
     }
 
     @Override
     public <T> String toJson(T object)
     {
-        return GSON.toJson(object);
+        return getGson().toJson(object);
+    }
+
+    @SuppressWarnings("unused")
+    public static void registerTypeAdapter(Type type, Object typeAdapter) {
+        GSON_BUILDER.registerTypeAdapter(type, typeAdapter);
+        gsonConverter = null; // reset internal gsonConverter so that it is recreated with new registered type
     }
 
     public static Gson getGson()
     {
-        return GSON;
+        if ( gsonConverter == null) {
+            gsonConverter = GSON_BUILDER.create();
+        }
+        return gsonConverter;
     }
 
-    public static GsonBuilder getGsonBuilder()
+    private static GsonBuilder getGsonBuilder()
     {
         var gsonBuilder = new GsonBuilder();
-        registerTypeAdapter(gsonBuilder);
+        registerDateTimeAdapter(gsonBuilder);
         return gsonBuilder;
     }
 
-    private static void registerTypeAdapter(GsonBuilder gsonBuilder)
+    private static void registerDateTimeAdapter(GsonBuilder gsonBuilder)
     {
         gsonBuilder.registerTypeAdapter(LocalDate.class,
                 (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> {
