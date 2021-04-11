@@ -24,7 +24,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -36,6 +35,7 @@ class HttpsRESTfulRPCAdapterIT
     private static final int DEFAULT_VALUE = 42;
     private final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
 
+    @SuppressWarnings("unused")
     // Run the tests with Port 0 (random port and port 8080)
     static Stream<Integer> httpsPorts() {
         return Stream.of(0,8081);
@@ -89,8 +89,8 @@ class HttpsRESTfulRPCAdapterIT
 
         //Assert
         assertNotNull(result);
-        Assertions.assertEquals(DEFAULT_VALUE, simpleApplicationService.getSimpleValue());
-        Assertions.assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
+        assertEquals(DEFAULT_VALUE, simpleApplicationService.getSimpleValue());
+        assertEquals(simpleApplicationService.getSimpleValue(), result.intValue() );
     }
 
     @AfterEach

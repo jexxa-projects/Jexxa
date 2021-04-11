@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -99,7 +98,7 @@ class RESTfulRPCConventionTest
 
         //Assert - that we get mbean methods without static methods
         assertNotNull(methods);
-        Assertions.assertTrue ( staticMethods.stream().allMatch(
+        assertTrue ( staticMethods.stream().allMatch(
                 staticMethod -> methods.stream()
                         .noneMatch( method -> method.getMethod().getName().equals(staticMethod.getName()))
                 )

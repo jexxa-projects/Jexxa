@@ -1,7 +1,5 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static java.util.stream.Collectors.toList;
@@ -19,7 +17,6 @@ import io.jexxa.core.JexxaMain;
 import io.jexxa.utils.function.ThrowingConsumer;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -69,7 +66,7 @@ class MultipleRESTClientsIT
 
 
         //Assert
-        Assertions.assertEquals(expectedResult, applicationService.getUsedCounter());
+        assertEquals(expectedResult, applicationService.getUsedCounter());
         assertTrue(exceptionList.isEmpty());
     }
 

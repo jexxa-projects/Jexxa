@@ -22,7 +22,6 @@ import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.domain.valueobject.SpecialCasesValueObject;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -88,8 +87,8 @@ class RESTfulRPCAdapterIT
 
         //Assert
         assertNotNull(result);
-        Assertions.assertEquals(DEFAULT_VALUE, simpleApplicationService.getSimpleValue());
-        Assertions.assertEquals(simpleApplicationService.getSimpleValue(), result.intValue());
+        assertEquals(DEFAULT_VALUE, simpleApplicationService.getSimpleValue());
+        assertEquals(simpleApplicationService.getSimpleValue(), result.intValue());
     }
 
     @Test
@@ -115,8 +114,8 @@ class RESTfulRPCAdapterIT
 
         //Assert
         assertNotNull(result);
-        Assertions.assertEquals(DEFAULT_VALUE, simpleApplicationService.getSimpleValue());
-        Assertions.assertEquals(simpleApplicationService.getSimpleValue(), result.intValue());
+        assertEquals(DEFAULT_VALUE, simpleApplicationService.getSimpleValue());
+        assertEquals(simpleApplicationService.getSimpleValue(), result.intValue());
 
     }
 
@@ -149,8 +148,8 @@ class RESTfulRPCAdapterIT
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
-        Assertions.assertTrue(response.isSuccess());
-        Assertions.assertEquals(newValue, simpleApplicationService.getSimpleValue());
+        assertTrue(response.isSuccess());
+        assertEquals(newValue, simpleApplicationService.getSimpleValue());
         assertEquals(newValue, newResult.intValue());
     }
 
@@ -172,9 +171,9 @@ class RESTfulRPCAdapterIT
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
-        Assertions.assertTrue(response.isSuccess());
-        Assertions.assertEquals(newValue.getValue(), simpleApplicationService.getSimpleValueObject().getValue());
-        Assertions.assertEquals(newValue.getValue(), newResult.intValue());
+        assertTrue(response.isSuccess());
+        assertEquals(newValue.getValue(), simpleApplicationService.getSimpleValueObject().getValue());
+        assertEquals(newValue.getValue(), newResult.intValue());
     }
 
     @Test
@@ -191,8 +190,8 @@ class RESTfulRPCAdapterIT
                 .asEmpty();
 
         //Assert
-        Assertions.assertTrue(response.isSuccess());
-        Assertions.assertEquals(messageList, simpleApplicationService.getMessages());
+        assertTrue(response.isSuccess());
+        assertEquals(messageList, simpleApplicationService.getMessages());
     }
 
     @Test
@@ -215,8 +214,8 @@ class RESTfulRPCAdapterIT
                 .asEmpty();
 
         //Assert
-        Assertions.assertTrue(response.isSuccess());
-        Assertions.assertEquals(messageList, simpleApplicationService.getMessages());
+        assertTrue(response.isSuccess());
+        assertEquals(messageList, simpleApplicationService.getMessages());
     }
 
     @Test
@@ -237,9 +236,9 @@ class RESTfulRPCAdapterIT
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
-        Assertions.assertTrue(response.isSuccess());
-        Assertions.assertEquals(paramList[1].getValue(), simpleApplicationService.getSimpleValueObject().getValue());
-        Assertions.assertEquals(paramList[1].getValue(), newResult.intValue());
+        assertTrue(response.isSuccess());
+        assertEquals(paramList[1].getValue(), simpleApplicationService.getSimpleValueObject().getValue());
+        assertEquals(paramList[1].getValue(), newResult.intValue());
     }
 
     @Test
@@ -264,8 +263,8 @@ class RESTfulRPCAdapterIT
 
         //Assert
         assertNotNull(oldValue);
-        Assertions.assertEquals(DEFAULT_VALUE, oldValue.intValue());
-        Assertions.assertEquals(newValue, simpleApplicationService.getSimpleValueObject().getValue());
+        assertEquals(DEFAULT_VALUE, oldValue.intValue());
+        assertEquals(newValue, simpleApplicationService.getSimpleValueObject().getValue());
         assertEquals(newValue, newResult.intValue());
     }
 
@@ -305,7 +304,7 @@ class RESTfulRPCAdapterIT
 
         //Assert
         assertNotNull(result);
-        Assertions.assertEquals(SpecialCasesValueObject.SPECIAL_CASES_VALUE_OBJECT, result);
+        assertEquals(SpecialCasesValueObject.SPECIAL_CASES_VALUE_OBJECT, result);
     }
 
     @Test
@@ -343,6 +342,6 @@ class RESTfulRPCAdapterIT
                 .asEmpty();
 
         //Assert
-        Assertions.assertTrue(response.isSuccess());
+        assertTrue(response.isSuccess());
     }
 }
