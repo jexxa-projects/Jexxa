@@ -16,13 +16,9 @@ class JDBCPreparedStatement
 
     JDBCPreparedStatement(Supplier<JDBCConnection> jdbcConnection, String sqlStatement, List<Object> arguments)
     {
-        Objects.requireNonNull(jdbcConnection);
-        Objects.requireNonNull(sqlStatement);
-        Objects.requireNonNull(arguments);
-
-        this.jdbcConnection = jdbcConnection;
-        this.sqlStatement = sqlStatement;
-        this.arguments = arguments;
+        this.jdbcConnection = Objects.requireNonNull(jdbcConnection);
+        this.sqlStatement = Objects.requireNonNull(sqlStatement);
+        this.arguments = Objects.requireNonNull(arguments);
 
         this.statement = createPreparedStatement();
     }

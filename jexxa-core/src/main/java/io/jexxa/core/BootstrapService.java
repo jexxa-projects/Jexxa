@@ -1,5 +1,6 @@
 package io.jexxa.core;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class BootstrapService<T>
@@ -9,8 +10,8 @@ public class BootstrapService<T>
 
     BootstrapService(Class<T> bootstrapService, JexxaMain jexxaMain)
     {
-        this.bootstrapServiceClass = bootstrapService;
-        this.jexxaMain = jexxaMain;
+        this.bootstrapServiceClass = Objects.requireNonNull(bootstrapService);
+        this.jexxaMain = Objects.requireNonNull(jexxaMain);
     }
 
     public JexxaMain with(Consumer<T> initFunction)

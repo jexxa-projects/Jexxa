@@ -3,6 +3,7 @@ package io.jexxa.core;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Objects;
 
 import io.jexxa.utils.JexxaLogger;
 
@@ -19,8 +20,8 @@ public class BoundedContext
     BoundedContext(final String contextName, JexxaMain jexxaMain)
     {
         this.startTime = clock.instant();
-        this.contextName = contextName;
-        this.jexxaMain = jexxaMain;
+        this.contextName = Objects.requireNonNull(contextName);
+        this.jexxaMain = Objects.requireNonNull(jexxaMain);
     }
 
     @SuppressWarnings("unused")
@@ -45,7 +46,7 @@ public class BoundedContext
         }
     }
 
-    
+
     public boolean isRunning()
     {
         return isRunning;

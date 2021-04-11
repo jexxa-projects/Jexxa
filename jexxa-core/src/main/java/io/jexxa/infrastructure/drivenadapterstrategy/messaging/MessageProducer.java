@@ -22,17 +22,14 @@ public class MessageProducer
 
     protected <T> MessageProducer(T message, MessageSender messageSender)
     {
-        Objects.requireNonNull(message);
-        Objects.requireNonNull(messageSender);
-
-        this.message = message;
-        this.messageSender = messageSender;
+        this.message = Objects.requireNonNull(message);
+        this.messageSender = Objects.requireNonNull(messageSender);
     }
 
     @CheckReturnValue
     public MessageProducer toQueue(String destination)
     {
-        this.destination = destination;
+        this.destination = Objects.requireNonNull(destination);
         this.destinationType = DestinationType.QUEUE;
 
         return this;
@@ -41,7 +38,7 @@ public class MessageProducer
     @CheckReturnValue
     public MessageProducer toTopic(String destination)
     {
-        this.destination = destination;
+        this.destination = Objects.requireNonNull(destination);
         this.destinationType = DestinationType.TOPIC;
 
         return this;

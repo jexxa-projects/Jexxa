@@ -40,7 +40,7 @@ public class PortFactory
 
     public PortFactory(AdapterFactory adapterFactory)
     {
-        this.adapterFactory = adapterFactory;
+        this.adapterFactory = Objects.requireNonNull(adapterFactory);
     }
 
     public PortFactory acceptPackage(String packageName)
