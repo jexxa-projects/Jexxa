@@ -49,6 +49,11 @@
       <artifactId>mbknor-jackson-jsonschema_2.13</artifactId>
       <version>${jackson.jsonschema.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jdk8</artifactId>
+      <version>${jackson.core.version}</version>
+    </dependency>
     <!-- dependencies for tests -->
     <dependency>
       <groupId>org.junit.platform</groupId>

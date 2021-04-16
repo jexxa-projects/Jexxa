@@ -15,8 +15,9 @@ import java.time.Period;
 import java.time.ZonedDateTime;
 import java.util.Properties;
 
-import com.google.gson.Gson;
 import io.jexxa.application.applicationservice.Java8DateTimeApplicationService;
+import io.jexxa.utils.json.JSONManager;
+import kong.unirest.ObjectMapper;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -44,7 +45,35 @@ class RESTfulRPCJava8DateTimeTest
         objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
         objectUnderTest.register(java8DateTimeApplicationService);
         objectUnderTest.start();
+
+        Unirest.config().setObjectMapper(new ObjectMapper()
+        {
+
+            @Override
+            public <T> T readValue(String value, Class<T> valueType)
+            {
+                return JSONManager.getJSONConverter().fromJson(value, valueType);
+            }
+
+            @Override
+            public String writeValue(Object value)
+            {
+                return JSONManager.getJSONConverter().toJson(value);
+            }
+        });
     }
+
+    @Test
+    void testGson()
+    {
+        LocalDate now = LocalDate.now();
+        String json = JSONManager.getJSONConverter().toJson(now);
+
+        LocalDate recreated = JSONManager.getJSONConverter().fromJson(json, LocalDate.class);
+        assertEquals(now, recreated);
+        System.out.println("SUCCESS");
+    }
+
 
     @AfterEach
     void tearDownTests(){
@@ -55,7 +84,7 @@ class RESTfulRPCJava8DateTimeTest
     }
 
     @Test
-    void testLocalDateAsString()
+    void testLocalDateAsString() //OK
     {
 
         //Arrange
@@ -78,16 +107,15 @@ class RESTfulRPCJava8DateTimeTest
     }
 
     @Test
-    void testLocalDate()
+    void testLocalDate()   //NOT OK
     {
         //Arrange
         LocalDate localDate = LocalDate.now();
-        Gson gson = new Gson(); // Use explicit GSON instance to check if non ISO dates are correctly handled
 
         //Act
         var response = Unirest.post(REST_PATH + "setLocalDate")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
-                .body(gson.toJson( localDate ))
+                .body(localDate.toString() )
                 .asEmpty();
 
         LocalDate result = Unirest.get(REST_PATH + "getLocalDate")
@@ -123,10 +151,12 @@ class RESTfulRPCJava8DateTimeTest
     }
 
     @Test
-    void testLocalTime()
+    void testLocalTime()  //NOT OK
     {
         //Arrange
         LocalTime localTime = LocalTime.now();
+
+        System.out.println( JSONManager.getJSONConverter().toJson(localTime) );
 
         //Act
         var response = Unirest.post(REST_PATH + "setLocalTime")
@@ -167,10 +197,11 @@ class RESTfulRPCJava8DateTimeTest
     }
 
     @Test
-    void testDuration()
+    void testDuration()  //NOT OK
     {
         //Arrange
         Duration duration = Duration.ofDays(2);
+        System.out.println( JSONManager.getJSONConverter().toJson(duration));
 
         //Act
         var response = Unirest.post(REST_PATH + "setDuration")
@@ -189,7 +220,7 @@ class RESTfulRPCJava8DateTimeTest
     }
 
     @Test
-    void testPeriod()
+    void testPeriod()     //NOT OK
     {
         //Arrange
         Period period = Period.ofDays(1);
@@ -211,7 +242,7 @@ class RESTfulRPCJava8DateTimeTest
     }
 
     @Test
-    void testInstant()
+    void testInstant()   //NOT OK
     {
         //Arrange
         Instant instant = Instant.now();
@@ -233,7 +264,7 @@ class RESTfulRPCJava8DateTimeTest
     }
 
     @Test
-    void testJava8DateTimeWrapper()
+    void testJava8DateTimeWrapper()   //NOT OK
     {
         //Arrange
         var java8DateTimeWrapper = new Java8DateTimeApplicationService.Java8DateTimeWrapper( LocalTime.now()
