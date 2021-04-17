@@ -75,6 +75,19 @@ public class GsonConverter implements JSONConverter
 
     private static void registerDateTimeAdapter(GsonBuilder gsonBuilder)
     {
+        registerLocalDateAdapter(gsonBuilder);
+        registerLocalDateAdapter(gsonBuilder);
+        registerLocalDateTimeAdapter(gsonBuilder);
+        registerZonedDateTimeAdapter(gsonBuilder);
+
+        registerLocalTimeAdapter(gsonBuilder);
+        registerDurationAdapter(gsonBuilder);
+        registerInstantAdapter(gsonBuilder);
+        registerPeriodAdapter(gsonBuilder);
+    }
+
+    public static void registerLocalDateAdapter(GsonBuilder gsonBuilder)
+    {
         gsonBuilder.registerTypeAdapter(LocalDate.class,
                 (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> {
                     if (json.isJsonPrimitive())
@@ -90,23 +103,32 @@ public class GsonConverter implements JSONConverter
         gsonBuilder.registerTypeAdapter(LocalDate.class,
                 (JsonSerializer<LocalDate>) (src, typeOfSrc, serializationContext) -> new JsonPrimitive(src.toString()));
 
+    }
 
+    public static void registerLocalDateTimeAdapter(GsonBuilder gsonBuilder)
+    {
         gsonBuilder.registerTypeAdapter(LocalDateTime.class,
-                (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext) -> LocalDateTime.parse(json.getAsJsonPrimitive().getAsString()));
+                (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext) -> LocalDateTime.parse(
+                        json.getAsJsonPrimitive().getAsString()));
 
         gsonBuilder.registerTypeAdapter(LocalDateTime.class,
                 (JsonSerializer<LocalDateTime>) (src, typeOfSrc, serializationContext) -> new JsonPrimitive(src.toString()));
 
+    }
+    public static void registerZonedDateTimeAdapter(GsonBuilder gsonBuilder)
+    {
         gsonBuilder.registerTypeAdapter(ZonedDateTime.class,
-                (JsonDeserializer<ZonedDateTime>) (json, type, jsonDeserializationContext) -> ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()));
+                (JsonDeserializer<ZonedDateTime>) (json, type, jsonDeserializationContext) -> ZonedDateTime.parse(
+                        json.getAsJsonPrimitive().getAsString()));
 
         gsonBuilder.registerTypeAdapter(ZonedDateTime.class,
                 (JsonSerializer<ZonedDateTime>) (src, typeOfSrc, serializationContext) ->
+                        new JsonPrimitive(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(src.withZoneSameInstant(src.getZone()))));
 
-                        new JsonPrimitive( DateTimeFormatter.ISO_OFFSET_DATE_TIME.
-                                format(src.withZoneSameInstant(src.getZone())) ));
+    }
 
-        // LocalTime.class
+    public static void registerLocalTimeAdapter(GsonBuilder gsonBuilder)
+    {
         gsonBuilder.registerTypeAdapter(LocalTime.class,
                 (JsonSerializer<LocalTime>) (src, typeOfSrc, serializationContext) -> {
                     JsonObject jsonObject = new JsonObject();
@@ -124,63 +146,66 @@ public class GsonConverter implements JSONConverter
                         json.getAsJsonObject().get(MINUTE).getAsInt(),
                         json.getAsJsonObject().get(SECOND).getAsInt(),
                         json.getAsJsonObject().get(NANO).getAsInt()
-                        ));
+                ));
 
+    }
+
+    public static void registerDurationAdapter(GsonBuilder gsonBuilder)
+    {
         // Duration.class
         gsonBuilder.registerTypeAdapter(Duration.class,
-                (JsonSerializer<Duration>) (src, typeOfSrc, serializationContext) -> {
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.add(SECONDS, new JsonPrimitive( src.getSeconds() ));
-                    jsonObject.add(NANOS, new JsonPrimitive( src.getNano() ));
-                    return jsonObject;
-                }
-        );
+        (JsonSerializer<Duration>) (src, typeOfSrc, serializationContext) -> {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.add(SECONDS, new JsonPrimitive( src.getSeconds() ));
+            jsonObject.add(NANOS, new JsonPrimitive( src.getNano() ));
+            return jsonObject;
+        });
 
         gsonBuilder.registerTypeAdapter(Duration.class,
                 (JsonDeserializer<Duration>) (json, type, jsonDeserializationContext) ->
                         Duration.ofSeconds(
                                 json.getAsJsonObject().get(SECONDS).getAsInt(),
-                                json.getAsJsonObject().get(NANOS).getAsInt()
-                        )
+                                json.getAsJsonObject().get(NANOS).getAsInt())
         );
+    }
 
+    public static void registerInstantAdapter(GsonBuilder gsonBuilder)
+    {
         // Instant.class
         gsonBuilder.registerTypeAdapter(Instant.class,
-                (JsonSerializer<Instant>) (src, typeOfSrc, serializationContext) -> {
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.add(SECONDS, new JsonPrimitive( src.getEpochSecond() ));
-                    jsonObject.add(NANOS, new JsonPrimitive( src.getNano() ));
-                    return jsonObject;
-                }
-        );
+        (JsonSerializer<Instant>) (src, typeOfSrc, serializationContext) -> {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.add(SECONDS, new JsonPrimitive( src.getEpochSecond() ));
+            jsonObject.add(NANOS, new JsonPrimitive( src.getNano() ));
+            return jsonObject;
+        });
 
         gsonBuilder.registerTypeAdapter(Instant.class,
                 (JsonDeserializer<Instant>) (json, type, jsonDeserializationContext) ->
                         Instant.ofEpochSecond(
                                 json.getAsJsonObject().get(SECONDS).getAsInt(),
-                                json.getAsJsonObject().get(NANOS).getAsInt()
-                        )
+                                json.getAsJsonObject().get(NANOS).getAsInt())
         );
+    }
 
+    public static void registerPeriodAdapter(GsonBuilder gsonBuilder)
+    {
         // Period.class
         gsonBuilder.registerTypeAdapter(Period.class,
                 (JsonSerializer<Period>) (src, typeOfSrc, serializationContext) -> {
                     JsonObject jsonObject = new JsonObject();
-                    jsonObject.add(YEARS, new JsonPrimitive( src.getYears() ));
-                    jsonObject.add(MONTHS, new JsonPrimitive( src.getMonths() ));
-                    jsonObject.add(DAYS, new JsonPrimitive( src.getDays() ));
+                    jsonObject.add(YEARS, new JsonPrimitive(src.getYears()));
+                    jsonObject.add(MONTHS, new JsonPrimitive(src.getMonths()));
+                    jsonObject.add(DAYS, new JsonPrimitive(src.getDays()));
                     return jsonObject;
-                }
-        );
+                });
 
         gsonBuilder.registerTypeAdapter(Period.class,
                 (JsonDeserializer<Period>) (json, type, jsonDeserializationContext) ->
                         Period.of(
                                 json.getAsJsonObject().get(YEARS).getAsInt(),
                                 json.getAsJsonObject().get(MONTHS).getAsInt(),
-                                json.getAsJsonObject().get(DAYS).getAsInt()
-                )
+                                json.getAsJsonObject().get(DAYS).getAsInt())
         );
     }
-
 }
