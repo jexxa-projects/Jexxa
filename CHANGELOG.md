@@ -6,8 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[3.0.1] - yyyy-mm-dd
 ### Fixed
--   `JSONManager`:
-    -   Added default serializer/deserializer for Java8-time classes, because they are strong encapsulated since Java 16. The added serializer/deserializer avoid an `IllegalAccessException` when they are serialized to/from Json.     
+-   `JSONManager`: 
+    -   Bugfix for Java 16+: Added default serializer/deserializer for Java8-time classes, because they are strong encapsulated since Java 16. The added serializer/deserializer avoid an `IllegalAccessException` when they are serialized to/from Json.     
 
 ## \[3.0.0] - 2021-04-03
 ### Changed
