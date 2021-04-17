@@ -261,6 +261,13 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.2.0</version>
+        <configuration>
+          <additionalOptions>-Xdoclint:all -Xdoclint:-missing</additionalOptions>
+          <additionalJOptions>
+            <additionalJOption>-Xdoclint:all</additionalJOption>
+            <additionalJOption>-Xdoclint:-missing</additionalJOption>
+          </additionalJOptions>
+        </configuration>
         <executions>
           <execution>
             <id>attach-javadocs</id>
