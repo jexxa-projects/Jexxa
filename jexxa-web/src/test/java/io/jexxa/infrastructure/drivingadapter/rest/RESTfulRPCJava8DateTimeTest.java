@@ -5,6 +5,7 @@ import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -20,7 +21,6 @@ import io.jexxa.utils.json.JSONManager;
 import kong.unirest.ObjectMapper;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -101,7 +101,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(LocalDate.class).getBody();
 
         //Assert
-        Assertions.assertTrue(response.isSuccess());
+        assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(localDate, result);
     }
@@ -123,7 +123,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(LocalDate.class).getBody();
 
         //Assert
-        Assertions.assertTrue(response.isSuccess());
+        assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(localDate, result);
     }
@@ -145,7 +145,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(LocalDateTime.class).getBody();
 
         //Assert
-        Assertions.assertTrue(response.isSuccess());
+        assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(localDateTime, result);
     }
@@ -169,7 +169,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(LocalTime.class).getBody();
 
         //Assert
-        Assertions.assertTrue(response.isSuccess());
+        assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(localTime, result);
     }
@@ -191,7 +191,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(ZonedDateTime.class).getBody();
 
         //Assert
-        Assertions.assertTrue(response.isSuccess());
+        assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(zonedDateTime, result);
     }
@@ -214,7 +214,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(Duration.class).getBody();
 
         //Assert
-        Assertions.assertTrue(response.isSuccess());
+        assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(duration, result);
     }
@@ -236,7 +236,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(Period.class).getBody();
 
         //Assert
-        Assertions.assertTrue(response.isSuccess());
+        assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(period, result);
     }
@@ -258,7 +258,7 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(Instant.class).getBody();
 
         //Assert
-        Assertions.assertTrue(response.isSuccess());
+        assertTrue(response.isSuccess());
         assertNotNull(result);
         assertEquals(instant, result);
     }
@@ -286,9 +286,9 @@ class RESTfulRPCJava8DateTimeTest
                 .asObject(Java8DateTimeApplicationService.Java8DateTimeWrapper.class).getBody();
 
         //Assert
-        Assertions.assertTrue(response.isSuccess());
+        assertTrue(response.isSuccess());
         assertNotNull(result);
-        Assertions.assertEquals(java8DateTimeWrapper, result);
+        assertEquals(java8DateTimeWrapper, result);
     }
 
 }
