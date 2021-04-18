@@ -76,14 +76,14 @@
     <google.guava.version>30.1.1-jre</google.guava.version>
     <javalin.version>3.13.3</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
-    <jackson.databind.version>2.12.2</jackson.databind.version>
-    <jackson.core.version>2.12.2</jackson.core.version>
+    <jackson.databind.version>2.12.3</jackson.databind.version>
+    <jackson.core.version>2.12.3</jackson.core.version>
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
 
     <!-- version of test dependencies -->
     <activemq.client.version>5.16.1</activemq.client.version>
     <postgres.version>42.2.19</postgres.version>
-    <unirest.java.version>3.11.10</unirest.java.version>
+    <unirest.java.version>3.11.11</unirest.java.version>
     <junit.platform.launcher.version>1.8.0-M1</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.8.0-M1</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.8.0-M1</junit.jupiter.params.version>
