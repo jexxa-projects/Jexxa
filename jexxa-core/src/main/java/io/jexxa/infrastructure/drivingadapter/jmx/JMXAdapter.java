@@ -22,8 +22,7 @@ public class JMXAdapter implements IDrivingAdapter
 
     public JMXAdapter(Properties properties)
     {
-        Objects.requireNonNull(properties);
-        this.properties = properties;
+        this.properties = Objects.requireNonNull(properties);
     }
 
     public void register(Object object)

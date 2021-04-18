@@ -49,6 +49,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
     public JMSAdapter(final Properties properties)
     {
+        Objects.requireNonNull(properties);
         validateProperties(properties);
 
         this.jmsConnectionExceptionHandler = new JMSConnectionExceptionHandler(this, registeredListener);

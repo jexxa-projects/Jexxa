@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.gson.JsonParser;
 import com.kjetland.jackson.jsonSchema.JsonSchemaGenerator;
@@ -193,6 +194,8 @@ public class OpenAPIConvention
     {
         var mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
+        mapper.registerModule(new Jdk8Module());
+
 
         //There are other configuration options you can set.  This is the one I needed.
         mapper.configure(WRITE_ENUMS_USING_TO_STRING, true);

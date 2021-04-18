@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[3.0.1] - 2021-04-18
+### Fixed
+-   `JSONManager`: 
+    -   Bugfix for Java 16+: Added default serializer/deserializer for Java8-time classes, because they are strong encapsulated since Java 16. The added serializer/deserializer avoid an `IllegalAccessException` when they are serialized to/from Json.
+-   Fixed issues from static code analysis tool codacy 
+-   Updated dependencies on patch level 
+
 ## \[3.0.0] - 2021-04-03
 ### Changed
 -   Introduced new package Jexxa-Web which includes all web specific plugins such as `RESTfulRPCAdapter`. See [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html#_jexxa_modules) for more information. If your application uses this adapter, you have now to add dependency `jexxa-web`. See tutorial [HelloJexxa](https://github.com/repplix/Jexxa/blob/master/tutorials/HelloJexxa/README.md) for an example.  

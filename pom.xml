@@ -45,7 +45,7 @@
     <maven.site.plugin>3.9.1</maven.site.plugin>
     <maven.surefire.plugin>3.0.0-M5</maven.surefire.plugin>
     <maven.release.plugin>3.0.0-M1</maven.release.plugin>
-    <maven.jacoco.plugin>0.8.6</maven.jacoco.plugin>
+    <maven.jacoco.plugin>0.8.7-SNAPSHOT</maven.jacoco.plugin>
     <maven.reports.plugin>3.1.0</maven.reports.plugin>
     <maven.enforcer.plugin>3.0.0-M3</maven.enforcer.plugin>
     <maven.javadoc.plugin>3.2.0</maven.javadoc.plugin>
@@ -76,14 +76,14 @@
     <google.guava.version>30.1.1-jre</google.guava.version>
     <javalin.version>3.13.3</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
-    <jackson.databind.version>2.12.2</jackson.databind.version>
-    <jackson.core.version>2.12.2</jackson.core.version>
+    <jackson.databind.version>2.12.3</jackson.databind.version>
+    <jackson.core.version>2.12.3</jackson.core.version>
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
 
     <!-- version of test dependencies -->
     <activemq.client.version>5.16.1</activemq.client.version>
     <postgres.version>42.2.19</postgres.version>
-    <unirest.java.version>3.11.10</unirest.java.version>
+    <unirest.java.version>3.11.11</unirest.java.version>
     <junit.platform.launcher.version>1.8.0-M1</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.8.0-M1</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.8.0-M1</junit.jupiter.params.version>
@@ -99,7 +99,7 @@
 
     <!-- version of maven dependencies for tutorials -->
     <aspectj.maven.plugin.version>1.12.6</aspectj.maven.plugin.version>
-    <maven.jib.plugin>2.5.2</maven.jib.plugin>
+    <maven.jib.plugin>3.0.0</maven.jib.plugin>
     <maven.shade.plugin>3.2.4</maven.shade.plugin>
   </properties>
 
@@ -261,6 +261,13 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.2.0</version>
+        <configuration>
+          <additionalOptions>-Xdoclint:all -Xdoclint:-missing</additionalOptions>
+          <additionalJOptions>
+            <additionalJOption>-Xdoclint:all</additionalJOption>
+            <additionalJOption>-Xdoclint:-missing</additionalJOption>
+          </additionalJOptions>
+        </configuration>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -491,6 +498,14 @@
     </profile>
   </profiles>
 
+  <pluginRepositories>
+    <pluginRepository>
+      <id>jacoco-snapshot</id>
+      <name>jacoco-snapshot</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <snapshots><enabled>true</enabled></snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 
   <distributionManagement>
     <snapshotRepository>

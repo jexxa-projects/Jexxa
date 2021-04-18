@@ -2,6 +2,8 @@ package io.jexxa.infrastructure.drivingadapter.messaging.listener;
 
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
+import java.util.Objects;
+
 import javax.jms.JMSException;
 import javax.jms.TextMessage;
 
@@ -14,7 +16,7 @@ public abstract class TypedMessageListener<T> extends JSONMessageListener
 
     protected TypedMessageListener(Class<T> clazz)
     {
-        this.clazz = clazz;
+        this.clazz = Objects.requireNonNull( clazz );
     }
 
     public abstract void onMessage(T message);

@@ -360,9 +360,10 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         return server;
     }
 
-    private SslContextFactory getSslContextFactory() {
+    private SslContextFactory getSslContextFactory()
+    {
         var sslContextFactory = new SslContextFactory.Server();
-        sslContextFactory.setKeyStorePath(RESTfulRPCAdapter.class.getResource("/"+ getKeystore() ).toExternalForm());
+        sslContextFactory.setKeyStorePath(Objects.requireNonNull(RESTfulRPCAdapter.class.getResource("/" + getKeystore())).toExternalForm());
         sslContextFactory.setKeyStorePassword(getKeystorePassword());
         return sslContextFactory;
     }

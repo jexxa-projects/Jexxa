@@ -36,11 +36,8 @@ public class MBeanConvention implements DynamicMBean
 
     MBeanConvention(Object object, Properties properties)
     {
-        Objects.requireNonNull(object);
-        Objects.requireNonNull(properties);
-
-        this.object = object;
-        contextName = properties.getProperty(JEXXA_CONTEXT_NAME, "UnknownContext");
+        this.object = Objects.requireNonNull(object);
+        contextName = Objects.requireNonNull(properties).getProperty(JEXXA_CONTEXT_NAME, "UnknownContext");
     }
 
 

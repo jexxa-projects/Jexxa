@@ -21,15 +21,11 @@ public class  DrivingAdapter<T extends IDrivingAdapter>
 
     DrivingAdapter(BooleanSupplier conditionalBind, Class<T> drivingAdapterClass, JexxaMain jexxaMain)
     {
-        Objects.requireNonNull(conditionalBind);
-        Objects.requireNonNull(drivingAdapterClass);
-        Objects.requireNonNull(jexxaMain);
-
         AdapterConvention.validate(drivingAdapterClass);
 
-        this.drivingAdapterClass = drivingAdapterClass;
-        this.jexxaMain = jexxaMain;
-        this.conditionalBind = conditionalBind;
+        this.drivingAdapterClass = Objects.requireNonNull(drivingAdapterClass);
+        this.jexxaMain = Objects.requireNonNull(jexxaMain);
+        this.conditionalBind = Objects.requireNonNull(conditionalBind);
     }
 
     public <P> JexxaMain to(Class<P> port)
