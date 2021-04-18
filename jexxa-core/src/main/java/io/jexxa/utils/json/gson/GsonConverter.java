@@ -66,14 +66,7 @@ public class GsonConverter implements JSONConverter
         return gson;
     }
 
-    private static GsonBuilder getGsonBuilder()
-    {
-        var gsonBuilder = new GsonBuilder();
-        registerDateTimeAdapter(gsonBuilder);
-        return gsonBuilder;
-    }
-
-    private static void registerDateTimeAdapter(GsonBuilder gsonBuilder)
+    public static void registerDateTimeAdapter(GsonBuilder gsonBuilder)
     {
         registerLocalDateAdapter(gsonBuilder);
         registerLocalDateAdapter(gsonBuilder);
@@ -86,7 +79,14 @@ public class GsonConverter implements JSONConverter
         registerPeriodAdapter(gsonBuilder);
     }
 
-    public static void registerLocalDateAdapter(GsonBuilder gsonBuilder)
+    private static GsonBuilder getGsonBuilder()
+    {
+        var gsonBuilder = new GsonBuilder();
+        registerDateTimeAdapter(gsonBuilder);
+        return gsonBuilder;
+    }
+
+    private static void registerLocalDateAdapter(GsonBuilder gsonBuilder)
     {
         gsonBuilder.registerTypeAdapter(LocalDate.class,
                 (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> {
@@ -105,7 +105,7 @@ public class GsonConverter implements JSONConverter
 
     }
 
-    public static void registerLocalDateTimeAdapter(GsonBuilder gsonBuilder)
+    private static void registerLocalDateTimeAdapter(GsonBuilder gsonBuilder)
     {
         gsonBuilder.registerTypeAdapter(LocalDateTime.class,
                 (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext) -> LocalDateTime.parse(
@@ -115,7 +115,7 @@ public class GsonConverter implements JSONConverter
                 (JsonSerializer<LocalDateTime>) (src, typeOfSrc, serializationContext) -> new JsonPrimitive(src.toString()));
 
     }
-    public static void registerZonedDateTimeAdapter(GsonBuilder gsonBuilder)
+    private static void registerZonedDateTimeAdapter(GsonBuilder gsonBuilder)
     {
         gsonBuilder.registerTypeAdapter(ZonedDateTime.class,
                 (JsonDeserializer<ZonedDateTime>) (json, type, jsonDeserializationContext) -> ZonedDateTime.parse(
@@ -127,7 +127,7 @@ public class GsonConverter implements JSONConverter
 
     }
 
-    public static void registerLocalTimeAdapter(GsonBuilder gsonBuilder)
+    private static void registerLocalTimeAdapter(GsonBuilder gsonBuilder)
     {
         gsonBuilder.registerTypeAdapter(LocalTime.class,
                 (JsonSerializer<LocalTime>) (src, typeOfSrc, serializationContext) -> {
@@ -150,7 +150,7 @@ public class GsonConverter implements JSONConverter
 
     }
 
-    public static void registerDurationAdapter(GsonBuilder gsonBuilder)
+    private static void registerDurationAdapter(GsonBuilder gsonBuilder)
     {
         // Duration.class
         gsonBuilder.registerTypeAdapter(Duration.class,
@@ -169,7 +169,7 @@ public class GsonConverter implements JSONConverter
         );
     }
 
-    public static void registerInstantAdapter(GsonBuilder gsonBuilder)
+    private static void registerInstantAdapter(GsonBuilder gsonBuilder)
     {
         // Instant.class
         gsonBuilder.registerTypeAdapter(Instant.class,
@@ -188,7 +188,7 @@ public class GsonConverter implements JSONConverter
         );
     }
 
-    public static void registerPeriodAdapter(GsonBuilder gsonBuilder)
+    private static void registerPeriodAdapter(GsonBuilder gsonBuilder)
     {
         // Period.class
         gsonBuilder.registerTypeAdapter(Period.class,
