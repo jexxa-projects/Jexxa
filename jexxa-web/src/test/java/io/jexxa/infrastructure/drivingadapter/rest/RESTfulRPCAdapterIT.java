@@ -20,6 +20,7 @@ import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.domain.valueobject.SpecialCasesValueObject;
+import kong.unirest.GenericType;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -116,7 +117,6 @@ class RESTfulRPCAdapterIT
         assertNotNull(result);
         assertEquals(DEFAULT_VALUE, simpleApplicationService.getSimpleValue());
         assertEquals(simpleApplicationService.getSimpleValue(), result.intValue());
-
     }
 
     @Test
@@ -213,9 +213,15 @@ class RESTfulRPCAdapterIT
                 .body(jsonArray)
                 .asEmpty();
 
+        var result = Unirest.get(REST_PATH + "getMessages")
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(new GenericType<List<String>>() {} ).getBody();
+
         //Assert
         assertTrue(response.isSuccess());
+        assertNotNull(result);
         assertEquals(messageList, simpleApplicationService.getMessages());
+        assertEquals(result, simpleApplicationService.getMessages());
     }
 
     @Test
