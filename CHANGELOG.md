@@ -4,10 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[3.0.1] - yyyy-mm-dd
+## \[3.0.1] - 2021-04-18
 ### Fixed
 -   `JSONManager`: 
-    -   Bugfix for Java 16+: Added default serializer/deserializer for Java8-time classes, because they are strong encapsulated since Java 16. The added serializer/deserializer avoid an `IllegalAccessException` when they are serialized to/from Json.     
+    -   Bugfix for Java 16+: Added default serializer/deserializer for Java8-time classes, because they are strong encapsulated since Java 16. The added serializer/deserializer avoid an `IllegalAccessException` when they are serialized to/from Json.
+-   Fixed issues from static code analysis tool codacy 
+-   Updated dependencies on patch level 
 
 ## \[3.0.0] - 2021-04-03
 ### Changed
