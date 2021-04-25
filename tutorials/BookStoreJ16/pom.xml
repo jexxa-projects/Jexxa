@@ -7,11 +7,11 @@
     <version>3.0.2-SNAPSHOT</version>
   </parent>
 
-  <artifactId>bookstore</artifactId>
-  <name>BookStore</name>
+  <artifactId>bookstorej16</artifactId>
+  <name>BookStoreJ16</name>
 
   <properties>
-    <main.class>io.jexxa.tutorials.bookstore.BookStoreJ16Application</main.class>
+    <main.class>io.jexxa.tutorials.io.jexxa.tutorials.bookstorej16.BookStoreJ16Application</main.class>
     <jmx.port>1091</jmx.port>
   </properties>
 
@@ -112,7 +112,7 @@
             <jvmFlags>
               <!--- Uncomment following lines to configure jdbc parameters -->
               <!--- <jvmFlag>
-                -Dio.jexxa.jdbc.url=jdbc:postgresql://172.17.0.4:5432/bookstore
+                -Dio.jexxa.jdbc.url=jdbc:postgresql://172.17.0.4:5432/io.jexxa.tutorials.bookstore
               </jvmFlag>
               <jvmFlag>
                 -Dio.jexxa.jdbc.autocreate.database=jdbc:postgresql://172.17.0.4:5432/postgres
@@ -147,7 +147,7 @@
                 -Djava.rmi.server.hostname=localhost
               </jvmFlag>
               <jvmFlag>
-                -Dio.jexxa.jdbc.url=jdbc:postgresql://172.17.0.4:5432/bookstore
+                -Dio.jexxa.jdbc.url=jdbc:postgresql://172.17.0.4:5432/io.jexxa.tutorials.bookstore
               </jvmFlag>
             </jvmFlags>
 

@@ -102,5 +102,6 @@
     <module>TimeService</module>
     <module>BookStore</module>
     <module>BookStoreJ</module>
+    <module>BookStoreJ16</module>
   </modules>
 </project>
