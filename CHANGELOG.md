@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[3.x.x] - yyyy-mm-dd
+### Added
+-   New Tutorial [BookstoreJ16](https://github.com/repplix/Jexxa/blob/master/tutorials/BookStoreJ16/README.md) which shows how to use Java records with Jexxa
+
 ## \[3.0.1] - 2021-04-18
 ### Fixed
 -   `JSONManager`: 
