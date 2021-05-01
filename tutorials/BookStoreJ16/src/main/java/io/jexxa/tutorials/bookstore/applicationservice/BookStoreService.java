@@ -13,36 +13,30 @@ import io.jexxa.tutorials.bookstore.domainservice.IBookRepository;
 import io.jexxa.tutorials.bookstore.domainservice.IDomainEventPublisher;
 
 @SuppressWarnings("unused")
-public class BookStoreService
+public record BookStoreService(IBookRepository ibookRepository,
+                               IDomainEventPublisher domainEventPublisher)
 {
-
-    private final IBookRepository ibookRepository;
-    private final IDomainEventPublisher domainEventPublisher;
-
-    public BookStoreService(IBookRepository ibookRepository, IDomainEventPublisher domainEventPublisher)
+    public BookStoreService
     {
         Objects.requireNonNull(ibookRepository);
         Objects.requireNonNull(domainEventPublisher);
-
-        this.ibookRepository = ibookRepository;
-        this.domainEventPublisher = domainEventPublisher;
     }
 
     public void addToStock(String isbn13, int amount)
     {
         var validatedISBN = new ISBN13(isbn13);
 
-        var result = ibookRepository.search( validatedISBN );
-        if ( result.isEmpty() )
+        var result = ibookRepository.search(validatedISBN);
+        if (result.isEmpty())
         {
-            ibookRepository.add(newBook( validatedISBN ));
+            ibookRepository.add(newBook(validatedISBN));
         }
 
         var book = ibookRepository.get(validatedISBN);
 
         book.addToStock(amount);
 
-        ibookRepository.update( book );
+        ibookRepository.update(book);
     }
 
 
@@ -54,9 +48,9 @@ public class BookStoreService
     boolean inStock(ISBN13 isbn13)
     {
         return ibookRepository
-                .search( isbn13 )
-                .map( Book::inStock )
-                .orElse( false );
+                .search(isbn13)
+                .map(Book::inStock)
+                .orElse(false);
     }
 
     public int amountInStock(String isbn13)
@@ -66,7 +60,7 @@ public class BookStoreService
 
     int amountInStock(ISBN13 isbn13)
     {
-       return ibookRepository
+        return ibookRepository
                 .search(isbn13)
                 .map(Book::amountInStock)
                 .orElse(0);

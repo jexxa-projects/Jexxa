@@ -9,14 +9,9 @@ import io.jexxa.tutorials.bookstore.domain.domainevent.BookSoldOut;
 import io.jexxa.tutorials.bookstore.domainservice.IDomainEventPublisher;
 
 @SuppressWarnings("unused")
-public class DomainEventPublisher implements IDomainEventPublisher
+public record DomainEventPublisher(
+        MessageSender messageSender) implements IDomainEventPublisher
 {
-    private final MessageSender messageSender;
-
-    public DomainEventPublisher(Properties properties)
-    {
-        messageSender = MessageSenderManager.getMessageSender(properties);
-    }
 
     @Override
     public void publish(BookSoldOut domainEvent)
@@ -26,5 +21,13 @@ public class DomainEventPublisher implements IDomainEventPublisher
                 .send(domainEvent)
                 .toTopic("BookStoreTopic")
                 .asJson();
+    }
+
+    // Factory method that requests a repository strategy from Jexxa's RepositoryManager
+    public static IDomainEventPublisher create(Properties properties)
+    {
+        return new DomainEventPublisher(
+                MessageSenderManager.getMessageSender(properties)
+        );
     }
 }

@@ -11,6 +11,7 @@
   <name>BookStoreJ16</name>
 
   <properties>
+    <maven.javadoc.skip>true</maven.javadoc.skip>
     <maven.compiler.release>16</maven.compiler.release>
     <main.class>io.jexxa.tutorials.io.jexxa.tutorials.bookstorej16.BookStoreJ16Application</main.class>
     <jmx.port>1091</jmx.port>

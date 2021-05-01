@@ -41,7 +41,7 @@ public final class BookStoreJ16Application
         // Define the default strategy for messaging which is either a simple logger called `MessageLogger.class` or `JMSSender.class` for JMS messages
         MessageSenderManager.setDefaultStrategy(MessageLogger.class);
 
-        JexxaMain jexxaMain = new JexxaMain(BookStoreJ16Application.class.getSimpleName());
+        var jexxaMain = new JexxaMain(BookStoreJ16Application.class.getSimpleName());
 
         jexxaMain
                 //Define which outbound ports should be managed by Jexxa
@@ -66,7 +66,7 @@ public final class BookStoreJ16Application
     // Methods for command line parsing
     static Options getOptions()
     {
-        Options options = new Options();
+        var options = new Options();
         options.addOption("j", "jdbc", false, "jdbc driven adapter strategy");
         options.addOption("J", "jms", false, "JMS message sender");
         return options;

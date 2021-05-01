@@ -11,14 +11,9 @@ import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
 import io.jexxa.tutorials.bookstore.domainservice.IBookRepository;
 
 @SuppressWarnings("unused")
-public final class BookRepository implements IBookRepository
+public record BookRepository(
+        IRepository<Book, ISBN13> repository) implements IBookRepository
 {
-    private final IRepository<Book, ISBN13> repository;
-
-    private BookRepository(IRepository<Book, ISBN13> repository)
-    {
-        this.repository = repository;
-    }
 
     // Factory method that requests a repository strategy from Jexxa's RepositoryManager
     public static IBookRepository create(Properties properties)

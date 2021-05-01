@@ -7,43 +7,12 @@ import org.apache.commons.lang3.Validate;
 /**
  * IMPORTANT NOTE: This is a simplified ISBN13 number which only validates the checksum because this is sufficient for this tutorial
  */
-public class ISBN13
+public record ISBN13(String value)
 {
-    private final String value;
-
-    public ISBN13(String value)
+    public ISBN13
     {
         Objects.requireNonNull(value);
         validateChecksum(value);
-
-        this.value = value;
-    }
-
-    public String getValue()
-    {
-        return value;
-    }
-
-
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass())
-        {
-            return false;
-        }
-
-        return value.equals(((ISBN13) o).value);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return Objects.hash(value);
     }
 
     private void validateChecksum(String isbn13)
