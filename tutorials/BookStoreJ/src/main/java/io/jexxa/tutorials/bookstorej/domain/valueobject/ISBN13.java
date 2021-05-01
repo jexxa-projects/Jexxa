@@ -32,9 +32,9 @@ public class ISBN13
                 .replace("-","")
                 .toCharArray();
 
-        int digitSum = 0;
+        var digitSum = 0;
 
-        for (int i = 0; i < digits.length - 1 ; ++i) //Exclude checksum value (which is at position digits.length -1)
+        for (var i = 0; i < digits.length - 1 ; ++i) //Exclude checksum value (which is at position digits.length -1)
         {
 
             var digitAsInt = Integer.parseInt(String.valueOf(digits[i]));
