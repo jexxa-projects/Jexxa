@@ -3,7 +3,8 @@
 ## What You Learn
 
 *   How and why to use annotations in an application core 
-*   How to handle cross-cutting concerns within the application core using Java records        
+*   How to improve semantic meaning of DDD pattern elements using Java records
+*   Use of annotations to improve reusability     
 
 ## What you need
 
@@ -39,6 +40,57 @@ public record BookSoldOut(ISBN13 isbn13)
     {
         return new BookSoldOut(isbn13);
     }
+}
+```
+
+### Implementing `IDomainEventPublisher` 
+
+In large applications it is quite common that you have multiple domain events that have to published to other applications. 
+To solve this issue at least following solutions exist: 
+
+*   Method overloading: Provide a specific method for each type of DomainEvent in `IDomainEventPublisher`. On the one side, this ensures static type safety but could flood your interface if the number of domain events is quite large. Unfortunately, I've learned that this could also lead to implementations in a `DrivenAdapter` in which each domain event is treated in a slightly different way. 
+
+*   Abstract `DomainEvent` class: This allows to ensure type safety in `IDomainEventPublisher` and also providing only a single method that is implemented in a generic way. This seems to solve all issues from method overloading. The problem with this approach is that you introduce an interface that must be implemented by all kind of domain events for technical reason. At first glance, this seems to be a slightly esoteric problem. In the long run, I've learned that such classes can be a gate opener, allowing technology aspects to enter the application core.
+
+*   Publishing an `Object`: An alternative solution is to provide a method accepting a domain event of type `Object`. This prevents entering technology aspects into the application core. The obvious drawback is that you loose type safety. In case you annotated all your classes you can double-check if the domain event is annotated
+    with `DomainEvent`. This prevents publishing arbitrary objects, but this check is performed only during runtime.
+    
+Of course, you could also combine the approaches. Anyway, the most important aspect is that you should not underestimate such aspects if your application runs 
+for several decades and is maintained by different developer teams. So you should discuss such aspects with your colleagues and/or software architects and propose
+a clean guideline how to handle it. 
+
+The following code shows how to use the annotation to add at least a runtime 
+
+```java
+@DrivenAdapter
+public class DomainEventPublisher implements IDomainEventPublisher
+{
+private final MessageSender messageSender;
+
+    public DomainEventPublisher(Properties properties)
+    {
+        messageSender = MessageSenderManager.getMessageSender(properties);
+    }
+
+    @Override
+    public void publish(Object domainEvent)
+    {
+        validateDomainEvent(domainEvent);
+        messageSender
+                .send(domainEvent)
+                .toTopic("BookStoreTopic")
+                .asJson();
+    }
+
+    private void validateDomainEvent(Object domainEvent)
+    {
+        Objects.requireNonNull(domainEvent);
+        if ( domainEvent.getClass().getAnnotation(DomainEvent.class) == null )
+        {
+            throw new IllegalArgumentException("Given object is not annotated with @DomainEvent");
+        }
+    }
+
 }
 ```
 
