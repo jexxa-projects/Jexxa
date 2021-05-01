@@ -9,11 +9,13 @@ import io.jexxa.addend.applicationcore.DomainService;
 import io.jexxa.tutorials.bookstorej16.domain.valueobject.ISBN13;
 
 @DomainService
-public record ReferenceLibrary(IBookRepository bookRepository)
+public class ReferenceLibrary
 {
-    public ReferenceLibrary
+    private final IBookRepository bookRepository;
+
+    public ReferenceLibrary(IBookRepository bookRepository)
     {
-        Objects.requireNonNull(bookRepository);
+        this.bookRepository = Objects.requireNonNull(bookRepository);
     }
 
     public void addLatestBooks()

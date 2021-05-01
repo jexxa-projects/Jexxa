@@ -13,16 +13,13 @@ import io.jexxa.tutorials.bookstorej16.domainservice.IBookRepository;
 
 @SuppressWarnings("unused")
 @DrivenAdapter
-public record BookRepository(
-        IRepository<Book, ISBN13> repository) implements IBookRepository
+public class BookRepository implements IBookRepository
 {
+    private final IRepository<Book, ISBN13> repository;
 
-    // Factory method that requests a repository strategy from Jexxa's RepositoryManager
-    public static IBookRepository create(Properties properties)
+    public BookRepository (Properties properties)
     {
-        return new BookRepository(
-                RepositoryManager.getRepository(Book.class, Book::getISBN13, properties)
-        );
+        this.repository = RepositoryManager.getRepository(Book.class, Book::getISBN13, properties);
     }
 
     @Override
