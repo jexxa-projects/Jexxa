@@ -11,6 +11,8 @@
   <name>BookStoreJ</name>
 
   <properties>
+    <maven.compiler.release>16</maven.compiler.release>
+
     <main.class>io.jexxa.tutorials.bookstorej.BookStoreJApplication</main.class>
     <jmx.port>1090</jmx.port>
   </properties>

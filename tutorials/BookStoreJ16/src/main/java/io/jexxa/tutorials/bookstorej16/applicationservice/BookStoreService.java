@@ -13,13 +13,18 @@ import io.jexxa.tutorials.bookstorej16.domainservice.IBookRepository;
 import io.jexxa.tutorials.bookstorej16.domainservice.IDomainEventPublisher;
 
 @SuppressWarnings("unused")
-public record BookStoreService(IBookRepository ibookRepository,
-                               IDomainEventPublisher domainEventPublisher)
+public class BookStoreService
 {
-    public BookStoreService
+    private final IBookRepository ibookRepository;
+    private final IDomainEventPublisher domainEventPublisher;
+
+    public BookStoreService (IBookRepository ibookRepository,
+                             IDomainEventPublisher domainEventPublisher)
     {
         Objects.requireNonNull(ibookRepository);
         Objects.requireNonNull(domainEventPublisher);
+        this.ibookRepository = ibookRepository;
+        this.domainEventPublisher = domainEventPublisher;
     }
 
     public void addToStock(String isbn13, int amount)
