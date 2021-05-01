@@ -3,10 +3,10 @@ package io.jexxa.tutorials.bookstorej16.infrastructure.drivenadapter.messaging;
 import java.util.Objects;
 import java.util.Properties;
 
+import io.jexxa.addend.applicationcore.DomainEvent;
 import io.jexxa.addend.infrastructure.DrivenAdapter;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
-import io.jexxa.tutorials.bookstorej16.domain.domainevent.BookSoldOut;
 import io.jexxa.tutorials.bookstorej16.domainservice.IDomainEventPublisher;
 
 @SuppressWarnings("unused")
@@ -21,13 +21,22 @@ public class DomainEventPublisher implements IDomainEventPublisher
     }
 
     @Override
-    public void publish(BookSoldOut domainEvent)
+    public void publish(Object domainEvent)
     {
-        Objects.requireNonNull(domainEvent);
+        validateDomainEvent(domainEvent);
         messageSender
                 .send(domainEvent)
                 .toTopic("BookStoreTopic")
                 .asJson();
+    }
+
+    private void validateDomainEvent(Object domainEvent)
+    {
+        Objects.requireNonNull(domainEvent);
+        if ( domainEvent.getClass().getAnnotation(DomainEvent.class) == null )
+        {
+            throw new IllegalArgumentException("Given object is not annotated with @DomainEvent");
+        }
     }
 
 }
