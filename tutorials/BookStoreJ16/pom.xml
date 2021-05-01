@@ -11,6 +11,7 @@
   <name>BookStoreJ16</name>
 
   <properties>
+    <maven.compiler.release>16</maven.compiler.release>
     <main.class>io.jexxa.tutorials.io.jexxa.tutorials.bookstorej16.BookStoreJ16Application</main.class>
     <jmx.port>1091</jmx.port>
   </properties>
@@ -147,7 +148,7 @@
                 -Djava.rmi.server.hostname=localhost
               </jvmFlag>
               <jvmFlag>
-                -Dio.jexxa.jdbc.url=jdbc:postgresql://172.17.0.4:5432/io.jexxa.tutorials.bookstore
+                -Dio.jexxa.jdbc.url=jdbc:postgresql://172.17.0.4:5432/bookstorej16
               </jvmFlag>
             </jvmFlags>
 
