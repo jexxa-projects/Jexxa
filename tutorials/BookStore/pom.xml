@@ -11,7 +11,7 @@
   <name>BookStore</name>
 
   <properties>
-    <main.class>io.jexxa.tutorials.bookstore.BookStoreJ16Application</main.class>
+    <main.class>io.jexxa.tutorials.bookstorej16.BookStoreJ16Application</main.class>
     <jmx.port>1091</jmx.port>
   </properties>
 

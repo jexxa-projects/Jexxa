@@ -205,7 +205,7 @@ java -jar target/bookstore-jar-with-dependencies.jar
 ```
 You will see following (or similar) output
 ```console
-[main] INFO io.jexxa.tutorials.bookstore.BookStoreJ16Application - Use persistence strategy: IMDBRepository 
+[main] INFO io.jexxa.tutorials.bookstorej16.BookStoreJ16Application - Use persistence strategy: IMDBRepository 
 [main] INFO io.jexxa.core.JexxaMain - Start BoundedContext 'BookStoreApplication' with 2 Driving Adapter 
 [main] INFO org.eclipse.jetty.util.log - Logging initialized @474ms to org.eclipse.jetty.util.log.Slf4jLog
 [main] INFO io.javalin.Javalin - Starting Javalin ...
@@ -226,7 +226,7 @@ java -jar target/bookstore-jar-with-dependencies.jar -jdbc
 ```
 In contrast to the above output Jexxa will state that you use JDBC persistence strategy now:
 ```console
-[main] INFO io.jexxa.tutorials.bookstore.BookStoreJ16Application - Use persistence strategy: JDBCKeyValueRepository 
+[main] INFO io.jexxa.tutorials.bookstorej16.BookStoreJ16Application - Use persistence strategy: JDBCKeyValueRepository 
 ```
 
 Note: In case you want to use a difference database, you have to: 
