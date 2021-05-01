@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import io.jexxa.addend.applicationcore.ApplicationService;
 import io.jexxa.tutorials.bookstorej16.domain.aggregate.Book;
 import io.jexxa.tutorials.bookstorej16.domain.businessexception.BookNotInStockException;
 import io.jexxa.tutorials.bookstorej16.domain.valueobject.ISBN13;
@@ -13,6 +14,7 @@ import io.jexxa.tutorials.bookstorej16.domainservice.IBookRepository;
 import io.jexxa.tutorials.bookstorej16.domainservice.IDomainEventPublisher;
 
 @SuppressWarnings("unused")
+@ApplicationService
 public class BookStoreService
 {
     private final IBookRepository ibookRepository;
@@ -21,10 +23,8 @@ public class BookStoreService
     public BookStoreService (IBookRepository ibookRepository,
                              IDomainEventPublisher domainEventPublisher)
     {
-        Objects.requireNonNull(ibookRepository);
-        Objects.requireNonNull(domainEventPublisher);
-        this.ibookRepository = ibookRepository;
-        this.domainEventPublisher = domainEventPublisher;
+        this.ibookRepository = Objects.requireNonNull(ibookRepository);;
+        this.domainEventPublisher = Objects.requireNonNull(domainEventPublisher);
     }
 
     public void addToStock(String isbn13, int amount)

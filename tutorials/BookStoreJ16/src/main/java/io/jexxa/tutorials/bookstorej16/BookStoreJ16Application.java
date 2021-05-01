@@ -31,10 +31,11 @@ public final class BookStoreJ16Application
 
     public static void main(String[] args)
     {
+        //Set a JsonConverter that support java records
         JSONManager.setJSONConverter(new J16JsonConverter());
 
         // Define the default strategies.
-        // In this tutorial it the Repository is either an IMDB database or a JDBC based repository.
+        // In this tutorial the Repository is either an IMDB database or a JDBC based repository.
         // In case of JDBC we use a simple key value approach which stores the key and the value as json strings.
         // Using json strings might be very inconvenient if you come from typical relational databases but in terms
         // of DDD our aggregate is responsible to ensure consistency of our data and not the database.

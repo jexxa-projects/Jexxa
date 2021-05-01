@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
+import io.jexxa.addend.infrastructure.DrivenAdapter;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.tutorials.bookstorej16.domain.aggregate.Book;
@@ -11,6 +12,7 @@ import io.jexxa.tutorials.bookstorej16.domain.valueobject.ISBN13;
 import io.jexxa.tutorials.bookstorej16.domainservice.IBookRepository;
 
 @SuppressWarnings("unused")
+@DrivenAdapter
 public record BookRepository(
         IRepository<Book, ISBN13> repository) implements IBookRepository
 {
