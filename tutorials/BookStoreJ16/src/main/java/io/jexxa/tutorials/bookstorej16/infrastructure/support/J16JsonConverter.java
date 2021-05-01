@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONConverter;
 import io.jexxa.utils.json.gson.GsonConverter;
 
@@ -96,7 +97,13 @@ public class J16JsonConverter implements JSONConverter
                 reader.beginObject();
                 while (reader.hasNext()) {
                     String name = reader.nextName();
-                    argsMap.put(name, gson.getAdapter(typeMap.get(name)).read(reader));
+                    if ( typeMap.get(name) == null) {
+                        JexxaLogger.getLogger(getClass()).warn("WARNING: Unknown Type {} => Skip element", name );
+                        reader.skipValue();
+                    }   else
+                    {
+                        argsMap.put(name, gson.getAdapter(typeMap.get(name)).read(reader));
+                    }
                 }
                 reader.endObject();
 
@@ -117,7 +124,6 @@ public class J16JsonConverter implements JSONConverter
                 }
             }
         }
-
     }
 
 }
