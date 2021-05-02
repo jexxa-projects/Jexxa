@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import com.google.gson.JsonObject;
@@ -57,7 +58,7 @@ class JSonConverterTest
     {
         // arrange
         var zonedDateTime = ZonedDateTime.now().withFixedOffsetZone();
-        var expectedResult = "\"" + zonedDateTime + "\"";
+        var expectedResult = "\"" + DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(zonedDateTime) + "\"";
 
         // act
         var resultToJson = objectUnderTest.toJson(zonedDateTime);
