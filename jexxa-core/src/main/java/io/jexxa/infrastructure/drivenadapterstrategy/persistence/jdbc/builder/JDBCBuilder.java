@@ -59,7 +59,7 @@ public class  JDBCBuilder <T extends Enum<T>>
         public T isNull()
         {
             queryBuilder.getStatementBuilder()
-                    .append(IS_NULL.toString());
+                    .append(IS_NULL);
 
             return queryBuilder;
         }
@@ -67,7 +67,7 @@ public class  JDBCBuilder <T extends Enum<T>>
         public T isNotNull()
         {
             queryBuilder.getStatementBuilder()
-                    .append(IS_NOT_NULL.toString());
+                    .append(IS_NOT_NULL);
 
             return queryBuilder;
         }

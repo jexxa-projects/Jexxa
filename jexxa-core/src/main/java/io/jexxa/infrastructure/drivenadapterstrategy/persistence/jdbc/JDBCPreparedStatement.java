@@ -29,7 +29,7 @@ class JDBCPreparedStatement
         {
             var preparedStatement = jdbcConnection.get().prepareStatement(sqlStatement);
 
-            for (int i = 0; i < arguments.size(); ++i)
+            for (var i = 0; i < arguments.size(); ++i)
             {
                 preparedStatement.setObject(i+1, arguments.get(i));
             }

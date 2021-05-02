@@ -12,7 +12,6 @@ import java.util.Properties;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.javalin.Javalin;
@@ -210,7 +209,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                 JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Content of Body: {}", ctx.body());
                 JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Exception message: {}", targetException.getMessage());
 
-                JsonObject exceptionWrapper = new JsonObject();
+                var exceptionWrapper = new JsonObject();
                 exceptionWrapper.addProperty("ExceptionType", targetException.getClass().getName());
                 exceptionWrapper.addProperty("Exception", GSON.toJson(targetException));
                 exceptionWrapper.addProperty("ApplicationType", GSON.toJson("application/json"));
@@ -277,7 +276,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
             return new Object[]{};
         }
 
-        JsonElement jsonElement = JsonParser.parseString(jsonString);
+        var jsonElement = JsonParser.parseString(jsonString);
 
         // In case we have more than one attribute, we assume a JSonArray
         if ( method.getParameterCount() > 1)
@@ -290,7 +289,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         }
         else
         {
-            Object[] result = new Object[1];
+            var result = new Object[1];
             result[0] = GSON.fromJson(jsonString, method.getParameterTypes()[0]);
             return result;
         }
@@ -304,9 +303,9 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         }
 
         Class<?>[] parameterTypes = method.getParameterTypes();
-        Object[] paramArray = new Object[parameterTypes.length];
+        var paramArray = new Object[parameterTypes.length];
 
-        for (int i = 0; i < parameterTypes.length; ++i)
+        for (var i = 0; i < parameterTypes.length; ++i)
         {
             paramArray[i] = GSON.fromJson(jsonArray.get(i), parameterTypes[i]);
         }

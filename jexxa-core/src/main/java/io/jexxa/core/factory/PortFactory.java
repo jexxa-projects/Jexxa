@@ -195,7 +195,7 @@ public class PortFactory
     {
         var objectList = new ArrayList<>();
 
-        for ( int i = 0; i < portConstructor.getParameterTypes().length; ++i )
+        for ( var i = 0; i < portConstructor.getParameterTypes().length; ++i )
         {
             //Depending on creation policy we create a new instance or try to reuse existing instance
             if ( drivenAdapterPolicy == CreationPolicy.NEW_INSTANCE) {

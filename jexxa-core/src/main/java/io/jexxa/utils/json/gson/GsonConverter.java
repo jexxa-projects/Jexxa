@@ -131,7 +131,7 @@ public class GsonConverter implements JSONConverter
     {
         gsonBuilder.registerTypeAdapter(LocalTime.class,
                 (JsonSerializer<LocalTime>) (src, typeOfSrc, serializationContext) -> {
-                    JsonObject jsonObject = new JsonObject();
+                    var jsonObject = new JsonObject();
                     jsonObject.add(HOUR, new JsonPrimitive( src.getHour() ));
                     jsonObject.add(MINUTE, new JsonPrimitive( src.getMinute() ));
                     jsonObject.add(SECOND, new JsonPrimitive( src.getSecond() ));
@@ -155,7 +155,7 @@ public class GsonConverter implements JSONConverter
         // Duration.class
         gsonBuilder.registerTypeAdapter(Duration.class,
         (JsonSerializer<Duration>) (src, typeOfSrc, serializationContext) -> {
-            JsonObject jsonObject = new JsonObject();
+            var jsonObject = new JsonObject();
             jsonObject.add(SECONDS, new JsonPrimitive( src.getSeconds() ));
             jsonObject.add(NANOS, new JsonPrimitive( src.getNano() ));
             return jsonObject;
@@ -174,7 +174,7 @@ public class GsonConverter implements JSONConverter
         // Instant.class
         gsonBuilder.registerTypeAdapter(Instant.class,
         (JsonSerializer<Instant>) (src, typeOfSrc, serializationContext) -> {
-            JsonObject jsonObject = new JsonObject();
+            var jsonObject = new JsonObject();
             jsonObject.add(SECONDS, new JsonPrimitive( src.getEpochSecond() ));
             jsonObject.add(NANOS, new JsonPrimitive( src.getNano() ));
             return jsonObject;
@@ -193,7 +193,7 @@ public class GsonConverter implements JSONConverter
         // Period.class
         gsonBuilder.registerTypeAdapter(Period.class,
                 (JsonSerializer<Period>) (src, typeOfSrc, serializationContext) -> {
-                    JsonObject jsonObject = new JsonObject();
+                    var jsonObject = new JsonObject();
                     jsonObject.add(YEARS, new JsonPrimitive(src.getYears()));
                     jsonObject.add(MONTHS, new JsonPrimitive(src.getMonths()));
                     jsonObject.add(DAYS, new JsonPrimitive(src.getDays()));

@@ -265,7 +265,7 @@ public final class JexxaMain
 
     <T> void addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
     {
-        T instance = portFactory.getInstanceOf(bootstrapService, properties);
+        var instance = portFactory.getInstanceOf(bootstrapService, properties);
         initFunction.accept(instance);
     }
 

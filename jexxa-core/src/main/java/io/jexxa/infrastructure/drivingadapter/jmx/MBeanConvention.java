@@ -109,9 +109,9 @@ public class MBeanConvention implements DynamicMBean
             throw new IllegalArgumentException("Invalid number of parameter");
         }
 
-        Object[] result = new Object[parameters.length];
+        var result = new Object[parameters.length];
 
-        for (int i = 0; i < parameters.length; ++i)
+        for (var i = 0; i < parameters.length; ++i)
         {
             result[i] = getJSONConverter().fromJson((String) parameters[i], parameterTypes[i]);
         }
@@ -202,7 +202,7 @@ public class MBeanConvention implements DynamicMBean
 
     private String complexTypeToJsonTemplate(Class<?> clazz)
     {
-        JsonObject jsonObject = new JsonObject();
+        var jsonObject = new JsonObject();
 
         if ( clazz.isPrimitive() || clazz.isAssignableFrom(String.class))
         {
@@ -269,7 +269,7 @@ public class MBeanConvention implements DynamicMBean
 
         if (filterFieldsForJson(field.getType()).length > 0 )
         {
-            JsonObject child = new JsonObject();
+            var child = new JsonObject();
             parent.add(field.getName(), child);
             Arrays.stream(filterFieldsForJson(field.getType())).
                     forEach(attribute -> toJsonTemplate(attribute, child));

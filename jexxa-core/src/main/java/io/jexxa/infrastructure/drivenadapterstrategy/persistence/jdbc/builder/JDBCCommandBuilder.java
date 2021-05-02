@@ -74,7 +74,7 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         getStatementBuilder().append( ARGUMENT_PLACEHOLDER ); // Handle first entry (without COMMA)
         addArgument(args[0]);
 
-        for(int i = 1;  i < args.length; ++i ) // Handle remaining entries(with leading COMMA)
+        for(var i = 1;  i < args.length; ++i ) // Handle remaining entries(with leading COMMA)
         {
             getStatementBuilder().append( COMMA );
             getStatementBuilder().append( ARGUMENT_PLACEHOLDER );

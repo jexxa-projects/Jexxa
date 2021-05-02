@@ -97,7 +97,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         {
             var messageListener = (MessageListener) (object);
 
-            JMSConfiguration jmsConfiguration = getConfiguration(object);
+            var jmsConfiguration = getConfiguration(object);
 
             Destination destination;
             if (jmsConfiguration.messagingType() == JMSConfiguration.MessagingType.TOPIC)
@@ -151,8 +151,8 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     {
         try
         {
-            final InitialContext initialContext = new InitialContext(properties);
-            final ConnectionFactory connectionFactory = (ConnectionFactory) initialContext.lookup("ConnectionFactory");
+            var initialContext = new InitialContext(properties);
+            var connectionFactory = (ConnectionFactory) initialContext.lookup("ConnectionFactory");
             return connectionFactory.createConnection(properties.getProperty(JNDI_USER_KEY), properties.getProperty(JNDI_PASSWORD_KEY));
         }
         catch (NamingException e)

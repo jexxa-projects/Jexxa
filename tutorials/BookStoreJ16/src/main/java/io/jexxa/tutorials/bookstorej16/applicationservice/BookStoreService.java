@@ -23,7 +23,7 @@ public class BookStoreService
     public BookStoreService (IBookRepository ibookRepository,
                              IDomainEventPublisher domainEventPublisher)
     {
-        this.ibookRepository = Objects.requireNonNull(ibookRepository);;
+        this.ibookRepository = Objects.requireNonNull(ibookRepository);
         this.domainEventPublisher = Objects.requireNonNull(domainEventPublisher);
     }
 
