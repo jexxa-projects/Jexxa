@@ -9,10 +9,12 @@ import java.time.LocalTime;
 import java.time.Period;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
@@ -36,6 +38,13 @@ public class GsonConverter implements JSONConverter
 
     private static final String SECONDS = "seconds";
     private static final String NANOS = "nanos";
+    private static final String INVALID_LOCAL_TIME_OBJECT = "GsonConverter: Invalid json representation of 'LocalTime'.";
+    private static final String INVALID_LOCAL_DATE_OBJECT = "GsonConverter: Invalid json representation of 'LocalDate'.";
+    private static final String INVALID_DURATION_OBJECT = "GsonConverter: Invalid json representation of 'Duration'.";
+    private static final String INVALID_INSTANT_OBJECT = "GsonConverter: Invalid json representation of 'Instant'.";
+    private static final String INVALID_PERIOD_OBJECT = "GsonConverter: Invalid json representation of 'Period'.";
+    private static final String JSON_MESSAGE = "\nJSON message : ";
+
 
     private static Gson gson;
     private static final GsonBuilder GSON_BUILDER = getGsonBuilder();
@@ -94,6 +103,11 @@ public class GsonConverter implements JSONConverter
                     {
                         return LocalDate.parse(json.getAsJsonPrimitive().getAsString());
                     }
+
+                    Objects.requireNonNull(json.getAsJsonObject(), INVALID_LOCAL_DATE_OBJECT);
+                    Objects.requireNonNull(json.getAsJsonObject().get(YEAR), INVALID_LOCAL_DATE_OBJECT);
+                    Objects.requireNonNull(json.getAsJsonObject().get(MONTH), INVALID_LOCAL_DATE_OBJECT);
+                    Objects.requireNonNull(json.getAsJsonObject().get(DAY), INVALID_LOCAL_DATE_OBJECT);
                     return LocalDate.of(
                             json.getAsJsonObject().get(YEAR).getAsInt(),
                             json.getAsJsonObject().get(MONTH).getAsInt(),
@@ -132,22 +146,29 @@ public class GsonConverter implements JSONConverter
         gsonBuilder.registerTypeAdapter(LocalTime.class,
                 (JsonSerializer<LocalTime>) (src, typeOfSrc, serializationContext) -> {
                     var jsonObject = new JsonObject();
-                    jsonObject.add(HOUR, new JsonPrimitive( src.getHour() ));
-                    jsonObject.add(MINUTE, new JsonPrimitive( src.getMinute() ));
-                    jsonObject.add(SECOND, new JsonPrimitive( src.getSecond() ));
-                    jsonObject.add(NANO, new JsonPrimitive( src.getNano() ));
+                    jsonObject.add(HOUR, new JsonPrimitive(src.getHour()));
+                    jsonObject.add(MINUTE, new JsonPrimitive(src.getMinute()));
+                    jsonObject.add(SECOND, new JsonPrimitive(src.getSecond()));
+                    jsonObject.add(NANO, new JsonPrimitive(src.getNano()));
                     return jsonObject;
                 }
         );
 
         gsonBuilder.registerTypeAdapter(LocalTime.class,
-                (JsonDeserializer<LocalTime>) (json, type, jsonDeserializationContext) -> LocalTime.of(
-                        json.getAsJsonObject().get(HOUR).getAsInt(),
-                        json.getAsJsonObject().get(MINUTE).getAsInt(),
-                        json.getAsJsonObject().get(SECOND).getAsInt(),
-                        json.getAsJsonObject().get(NANO).getAsInt()
-                ));
-
+                (JsonDeserializer<LocalTime>) (json, type, jsonDeserializationContext) ->
+                {
+                    Objects.requireNonNull(json.getAsJsonObject(), INVALID_LOCAL_TIME_OBJECT + getErrorMessage( json ));
+                    Objects.requireNonNull(json.getAsJsonObject().get(HOUR), INVALID_LOCAL_TIME_OBJECT + getErrorMessage( json ));
+                    Objects.requireNonNull(json.getAsJsonObject().get(MINUTE), INVALID_LOCAL_TIME_OBJECT + getErrorMessage( json ));
+                    Objects.requireNonNull(json.getAsJsonObject().get(SECOND), INVALID_LOCAL_TIME_OBJECT + getErrorMessage( json ));
+                    Objects.requireNonNull(json.getAsJsonObject().get(NANO), INVALID_LOCAL_TIME_OBJECT + getErrorMessage( json ));
+                    return LocalTime.of(
+                            json.getAsJsonObject().get(HOUR).getAsInt(),
+                            json.getAsJsonObject().get(MINUTE).getAsInt(),
+                            json.getAsJsonObject().get(SECOND).getAsInt(),
+                            json.getAsJsonObject().get(NANO).getAsInt()
+                    );
+                });
     }
 
     private static void registerDurationAdapter(GsonBuilder gsonBuilder)
@@ -163,9 +184,15 @@ public class GsonConverter implements JSONConverter
 
         gsonBuilder.registerTypeAdapter(Duration.class,
                 (JsonDeserializer<Duration>) (json, type, jsonDeserializationContext) ->
-                        Duration.ofSeconds(
-                                json.getAsJsonObject().get(SECONDS).getAsInt(),
-                                json.getAsJsonObject().get(NANOS).getAsInt())
+                {
+                    Objects.requireNonNull(json.getAsJsonObject(), INVALID_DURATION_OBJECT +  getErrorMessage( json ));
+                    Objects.requireNonNull(json.getAsJsonObject().get(SECONDS), INVALID_DURATION_OBJECT + getErrorMessage( json ));
+                    Objects.requireNonNull(json.getAsJsonObject().get(NANOS), INVALID_DURATION_OBJECT +  getErrorMessage( json ));
+
+                    return Duration.ofSeconds(
+                            json.getAsJsonObject().get(SECONDS).getAsInt(),
+                            json.getAsJsonObject().get(NANOS).getAsInt());
+                }
         );
     }
 
@@ -182,9 +209,15 @@ public class GsonConverter implements JSONConverter
 
         gsonBuilder.registerTypeAdapter(Instant.class,
                 (JsonDeserializer<Instant>) (json, type, jsonDeserializationContext) ->
-                        Instant.ofEpochSecond(
-                                json.getAsJsonObject().get(SECONDS).getAsInt(),
-                                json.getAsJsonObject().get(NANOS).getAsInt())
+                {
+                    Objects.requireNonNull(json.getAsJsonObject(), INVALID_INSTANT_OBJECT + getErrorMessage( json ));
+                    Objects.requireNonNull(json.getAsJsonObject().get(SECONDS), INVALID_INSTANT_OBJECT + getErrorMessage( json ));
+                    Objects.requireNonNull(json.getAsJsonObject().get(NANOS), INVALID_INSTANT_OBJECT +  getErrorMessage( json ));
+
+                    return Instant.ofEpochSecond(
+                            json.getAsJsonObject().get(SECONDS).getAsInt(),
+                            json.getAsJsonObject().get(NANOS).getAsInt());
+                }
         );
     }
 
@@ -202,10 +235,23 @@ public class GsonConverter implements JSONConverter
 
         gsonBuilder.registerTypeAdapter(Period.class,
                 (JsonDeserializer<Period>) (json, type, jsonDeserializationContext) ->
-                        Period.of(
-                                json.getAsJsonObject().get(YEARS).getAsInt(),
-                                json.getAsJsonObject().get(MONTHS).getAsInt(),
-                                json.getAsJsonObject().get(DAYS).getAsInt())
+                {
+                    Objects.requireNonNull(json.getAsJsonObject(), INVALID_PERIOD_OBJECT + getErrorMessage( json ));
+                    Objects.requireNonNull(json.getAsJsonObject().get(YEARS), INVALID_PERIOD_OBJECT +  getErrorMessage( json ));
+                    Objects.requireNonNull(json.getAsJsonObject().get(MONTHS), INVALID_PERIOD_OBJECT +  getErrorMessage( json ));
+                    Objects.requireNonNull(json.getAsJsonObject().get(DAYS), INVALID_PERIOD_OBJECT +  getErrorMessage( json ));
+
+                    return Period.of(
+                            json.getAsJsonObject().get(YEARS).getAsInt(),
+                            json.getAsJsonObject().get(MONTHS).getAsInt(),
+                            json.getAsJsonObject().get(DAYS).getAsInt());
+                }
         );
     }
+
+    private static String getErrorMessage(JsonElement json)
+    {
+        return  JSON_MESSAGE + json;
+    }
 }
+
