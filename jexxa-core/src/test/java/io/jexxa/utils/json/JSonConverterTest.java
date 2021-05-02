@@ -38,6 +38,24 @@ class JSonConverterTest
     }
 
     @Test
+    void testLocalDateAsJsonObject()
+    {
+        // arrange
+        var localDate = LocalDate.now();
+        var expectedResult = new JsonObject();
+        expectedResult.add("year", new JsonPrimitive( localDate.getYear()));
+        expectedResult.add("month", new JsonPrimitive(localDate.getMonthValue() ));
+        expectedResult.add("day", new JsonPrimitive(localDate.getDayOfMonth() ));
+
+        // act
+        var resultToJson = objectUnderTest.toJson(localDate);
+        var resultFromJson = objectUnderTest.fromJson(resultToJson, LocalDate.class);
+
+        // assert
+        assertEquals(localDate, resultFromJson);
+    }
+
+    @Test
     void testLocalDateTime()
     {
         // arrange
