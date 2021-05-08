@@ -89,7 +89,7 @@
     <junit.jupiter.params.version>5.8.0-M1</junit.jupiter.params.version>
     <slf4j.simple.version>1.7.30</slf4j.simple.version>
     <slf4j.api.version>1.7.30</slf4j.api.version>
-    <awaitility.version>4.0.3</awaitility.version>
+    <awaitility.version>4.1.0</awaitility.version>
 
     <!-- version of tutorials dependencies -->
     <addendj.version>1.0.1</addendj.version>
