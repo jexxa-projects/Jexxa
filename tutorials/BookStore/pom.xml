@@ -99,6 +99,9 @@
           </from>
           <to>
             <image>${project.groupId}/${project.artifactId}:${project.version}</image>
+            <tags>
+              <tag>latest</tag>
+            </tags>
           </to>
           <container>
             <creationTime>
