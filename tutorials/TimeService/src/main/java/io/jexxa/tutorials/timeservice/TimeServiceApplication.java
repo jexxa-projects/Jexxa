@@ -30,7 +30,7 @@ public final class TimeServiceApplication
         MessageSenderManager.setDefaultStrategy(getMessagingStrategy(args));
 
         //Create your jexxaMain for this application
-        JexxaMain jexxaMain = new JexxaMain("TimeService");
+        var jexxaMain = new JexxaMain("TimeService");
 
         jexxaMain
                 //Define which outbound ports should be managed by Jexxa
@@ -59,7 +59,7 @@ public final class TimeServiceApplication
     // Methods for command line parsing
     static Options getOptions()
     {
-        Options options = new Options();
+        var options = new Options();
         options.addOption("j", "jdbc", false, "jdbc driven adapter strategy");
         options.addOption("J", "jms", false, "JMS message sender");
         return options;

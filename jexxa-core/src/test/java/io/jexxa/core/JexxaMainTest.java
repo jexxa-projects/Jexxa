@@ -9,8 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.annotation.ApplicationService;
+import io.jexxa.application.annotation.InvalidApplicationService;
 import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
-import io.jexxa.application.applicationservice.InvalidApplicationService;
+import io.jexxa.application.applicationservice.InvalidConstructorApplicationService;
 import io.jexxa.application.applicationservice.JexxaApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domainservice.IJexxaEntityRepository;
@@ -138,11 +139,20 @@ class JexxaMainTest
     }
 
     @Test
+    void bindToAnnotatedInvalidPorts()
+    {
+        //Arrange --
+        var drivingAdapter = objectUnderTest.bind(ProxyAdapter.class);
+
+        //Act / Assert
+        assertThrows(RuntimeException.class, () -> drivingAdapter.toAnnotation(InvalidApplicationService.class));
+    }
+
+    @Test
     void invalidBindToPortAdapter()
     {
         //Arrange - All done in initTests
-        var drivingAdapter = objectUnderTest
-                .bind(ProxyAdapter.class);
+        var drivingAdapter = objectUnderTest.bind(ProxyAdapter.class);
 
         //Act /Assert
         assertThrows(PortConventionViolation.class, () -> drivingAdapter.to(SimpleApplicationServiceAdapter.class));
@@ -174,7 +184,7 @@ class JexxaMainTest
         //Arrange --
 
         //Act/Assert
-        assertThrows(PortConventionViolation.class, () -> objectUnderTest.getInstanceOfPort(InvalidApplicationService.class));
+        assertThrows(PortConventionViolation.class, () -> objectUnderTest.getInstanceOfPort(InvalidConstructorApplicationService.class));
     }
 
     @Test

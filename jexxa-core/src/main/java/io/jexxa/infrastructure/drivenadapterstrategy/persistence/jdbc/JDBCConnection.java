@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
@@ -53,7 +52,7 @@ public class JDBCConnection implements AutoCloseable
             var splitURL = properties.getProperty(JDBC_URL).split("/");
             var dbName = splitURL[splitURL.length - 1].toLowerCase(Locale.ENGLISH); //last part of the URL is the name of the database (Note: Some DBs such as postgres require a name in lower case!)
 
-            Properties creationProperties = new Properties();
+            var creationProperties = new Properties();
             creationProperties.putAll(properties);
 
             try (var setupConnection = DriverManager.
@@ -61,7 +60,7 @@ public class JDBCConnection implements AutoCloseable
                             creationProperties.getProperty(JDBC_AUTOCREATE_DATABASE),
                             creationProperties.getProperty(JDBC_USERNAME),
                             creationProperties.getProperty(JDBC_PASSWORD));
-                 Statement statement = setupConnection.createStatement())
+                 var statement = setupConnection.createStatement())
             {
                 setupConnection.setAutoCommit(true);
                 statement.execute(String.format("create DATABASE %s ", dbName));

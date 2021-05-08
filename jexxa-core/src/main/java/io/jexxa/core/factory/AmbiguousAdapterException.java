@@ -10,7 +10,7 @@ public class AmbiguousAdapterException extends RuntimeException
 
     <T> AmbiguousAdapterException(Class<T> clazz, List<Class<?>> implementationList)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.append("AmbiguousAdapterException: Outbound port ")
                 .append(clazz.getName())
                 .append(" is implemented by multiple adapters : \n");

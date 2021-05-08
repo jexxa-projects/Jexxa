@@ -97,10 +97,24 @@
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <id>active-on-jdk-16</id>
+      <activation>
+        <jdk>[16,)</jdk>
+      </activation>
+      <modules>
+        <module>BookStoreJ16</module>
+      </modules>
+    </profile>
+  </profiles>
+
+
   <modules>
     <module>HelloJexxa</module>
     <module>TimeService</module>
     <module>BookStore</module>
     <module>BookStoreJ</module>
   </modules>
+
 </project>

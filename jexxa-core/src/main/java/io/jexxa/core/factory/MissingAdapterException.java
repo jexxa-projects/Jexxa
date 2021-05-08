@@ -23,7 +23,7 @@ public class MissingAdapterException extends RuntimeException
 
     private String getInternalMessage(Class<?> port, AdapterFactory drivenAdapterFactory)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.append("Could not create port: ")
                 .append(port.getName()).append("\n")
                 .append("Missing DrivenAdapter:\n");

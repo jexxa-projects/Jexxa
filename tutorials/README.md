@@ -26,3 +26,6 @@ See documentation [BookStoreJ](BookStoreJ/)
 
 ## BookStoreJ - With OpenAPI support 
 See documentation [BookStoreJ - With OpenAPI support](BookStoreJ/README-OPENAPI.md)
+
+## BookStoreJ16
+See documentation [BookStoreJ16](BookStoreJ16/)

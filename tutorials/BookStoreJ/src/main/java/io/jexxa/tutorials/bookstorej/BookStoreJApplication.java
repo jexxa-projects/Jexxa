@@ -40,7 +40,7 @@ public final class BookStoreJApplication
         // The message sender is either a simple MessageLogger or a JMS sender.
         MessageSenderManager.setDefaultStrategy(getMessagingStrategy(args));
 
-        JexxaMain jexxaMain = new JexxaMain(BookStoreJApplication.class.getSimpleName());
+        var jexxaMain = new JexxaMain(BookStoreJApplication.class.getSimpleName());
 
         jexxaMain
                 // In order to find ports by annotation we must add packages that are searched by Jexxa.
@@ -69,7 +69,7 @@ public final class BookStoreJApplication
     // Methods for command line parsing
     static Options getOptions()
     {
-        Options options = new Options();
+        var options = new Options();
         options.addOption("j", "jdbc", false, "jdbc driven adapter strategy");
         options.addOption("J", "jms", false, "JMS message sender");
         return options;

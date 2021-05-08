@@ -9,9 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.factory.ClassFactory;
-import io.jexxa.utils.function.ThrowingConsumer;
 
 /**
  * This class is responsible for creating instances of ports or a wrapper for a port including all required parameter.
@@ -31,9 +29,10 @@ import io.jexxa.utils.function.ThrowingConsumer;
  */
 public class PortFactory
 {
-    private final List<String> acceptedPackages = new ArrayList<>();
     private final ObjectPool objectPool = new ObjectPool();
+    private final DependencyScanner dependencyScanner= new DependencyScanner();
     private final AdapterFactory adapterFactory;
+
     private CreationPolicy drivenAdapterPolicy = CreationPolicy.REUSE;
 
     public enum CreationPolicy{REUSE,NEW_INSTANCE}
@@ -45,12 +44,12 @@ public class PortFactory
 
     public PortFactory acceptPackage(String packageName)
     {
-        acceptedPackages.add(packageName);
+        dependencyScanner.acceptPackage(packageName);
         return this;
     }
     public List<String> getAcceptPackages()
     {
-        return acceptedPackages;
+        return dependencyScanner.getAcceptPackages();
     }
 
     @SuppressWarnings("unused")
@@ -86,7 +85,6 @@ public class PortFactory
         Objects.requireNonNull(inboundPort);
         Objects.requireNonNull(adapterProperties);
 
-
         var existingInstance = objectPool.getInstance(inboundPort);
 
         if (existingInstance.isPresent()) {
@@ -98,24 +96,9 @@ public class PortFactory
         return newInstance;
     }
 
-    public List<Object> getInstanceOfPorts(Class <? extends Annotation> portAnnotation, Properties adapterProperties) {
-        var annotationScanner = new DependencyScanner().
-                acceptPackages(acceptedPackages);
-
-        var scannedInboundPorts = annotationScanner.getClassesWithAnnotation(portAnnotation);
-
-        var result = new ArrayList<>();
-        var exceptionList = new ArrayList<Throwable>();
-
-        scannedInboundPorts.
-                forEach(ThrowingConsumer.exceptionCollector(
-                        element -> result.add(getInstanceOf(element, adapterProperties)),
-                        exceptionList)
-                );
-
-        exceptionList.forEach(element -> JexxaLogger.getLogger(getClass()).warn(element.getMessage()));
-
-        return result;
+    public List<Class<?>> getAnnotatedPorts(Class <? extends Annotation> portAnnotations)
+    {
+        return dependencyScanner.getClassesWithAnnotation(portAnnotations);
     }
 
     /**
@@ -195,7 +178,7 @@ public class PortFactory
     {
         var objectList = new ArrayList<>();
 
-        for ( int i = 0; i < portConstructor.getParameterTypes().length; ++i )
+        for ( var i = 0; i < portConstructor.getParameterTypes().length; ++i )
         {
             //Depending on creation policy we create a new instance or try to reuse existing instance
             if ( drivenAdapterPolicy == CreationPolicy.NEW_INSTANCE) {

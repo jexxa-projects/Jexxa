@@ -3,7 +3,7 @@ package io.jexxa.core;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.applicationservice.InvalidApplicationService;
+import io.jexxa.application.applicationservice.InvalidConstructorApplicationService;
 import io.jexxa.application.infrastructure.drivingadapter.InvalidAdapter;
 import io.jexxa.core.convention.AdapterConventionViolation;
 import io.jexxa.core.convention.PortConventionViolation;
@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 class DrivingAdapterTest
 {
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void throwOnInvalidPortConvention()
     {
@@ -24,7 +23,7 @@ class DrivingAdapterTest
         var drivingAdapter = jexxaMain.bind(JMXAdapter.class);
 
         //Act / Assert
-        assertThrows(PortConventionViolation.class, () -> drivingAdapter.to(InvalidApplicationService.class));
+        assertThrows(PortConventionViolation.class, () -> drivingAdapter.to(InvalidConstructorApplicationService.class));
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

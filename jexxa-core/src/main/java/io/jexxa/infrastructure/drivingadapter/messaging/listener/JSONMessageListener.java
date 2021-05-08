@@ -52,7 +52,7 @@ public abstract class JSONMessageListener implements MessageListener
 
     protected boolean messageContains(String attribute)
     {
-        JsonElement jsonElement = JsonParser.parseString(currentMessageText);
+        var jsonElement = JsonParser.parseString(currentMessageText);
         return deepSearchKeys(jsonElement, attribute)
                 .stream()
                 .findFirst()
@@ -61,7 +61,7 @@ public abstract class JSONMessageListener implements MessageListener
 
     protected <U> U getFromMessage(String key, Class<U> clazz)
     {
-        JsonElement jsonElement = JsonParser.parseString(currentMessageText);
+        var jsonElement = JsonParser.parseString(currentMessageText);
 
         var result = deepSearchKeys( jsonElement, key )
                 .stream()

@@ -5,7 +5,7 @@ import java.util.Objects;
 import io.jexxa.addend.applicationcore.DomainEvent;
 import io.jexxa.tutorials.bookstorej.domain.valueobject.ISBN13;
 
-@DomainEvent("BookSoldOut")
+@DomainEvent
 public final class BookSoldOut
 {
     private final ISBN13 isbn13;

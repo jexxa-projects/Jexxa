@@ -22,7 +22,6 @@ import java.util.Properties;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
@@ -70,7 +69,7 @@ public class OpenAPIConvention
     {
         if (properties.containsKey(OPEN_API_PATH))
         {
-            Info applicationInfo = new Info()
+            var applicationInfo = new Info()
                     .version("1.0")
                     .description(properties.getProperty("io.jexxa.context.name", "Unknown Context"))
                     .title(properties.getProperty("io.jexxa.context.name", "Unknown Context"));
@@ -173,7 +172,7 @@ public class OpenAPIConvention
             var exampleObjects = new Object[method.getParameterTypes().length];
             var documentedContend = new ArrayList<DocumentedContent>();
 
-            for (int i = 0; i < method.getParameterTypes().length; ++i)
+            for (var i = 0; i < method.getParameterTypes().length; ++i)
             {
                 exampleObjects[i] = createExampleInstance(method.getParameterTypes()[i],method.getGenericParameterTypes()[i]);
                 var parameterSchema = createSchema(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]);
@@ -204,8 +203,8 @@ public class OpenAPIConvention
         mapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
-        JsonSchemaGenerator jsonSchemaGenerator = new JsonSchemaGenerator(mapper);
-        JsonNode jsonSchema = jsonSchemaGenerator.generateJsonSchema(clazz);
+        var jsonSchemaGenerator = new JsonSchemaGenerator(mapper);
+        var jsonSchema = jsonSchemaGenerator.generateJsonSchema(clazz);
 
         return mapper.writeValueAsString(jsonSchema);
     }

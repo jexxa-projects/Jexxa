@@ -103,7 +103,7 @@ public class AdapterFactory
             return existingInstance.get();
         }
 
-        T newInstance = newInstanceOf(adapterInterface, properties);
+        var newInstance = newInstanceOf(adapterInterface, properties);
         objectPool.add(newInstance);
         return newInstance;
     }

@@ -119,9 +119,9 @@ public class JMSSender extends MessageSender implements AutoCloseable
     {
         try
         {
-            final InitialContext initialContext = new InitialContext(properties);
-            final ConnectionFactory connectionFactory = (ConnectionFactory) initialContext.lookup("ConnectionFactory");
-            Connection connection = connectionFactory.createConnection(properties.getProperty(JNDI_USER_KEY), properties.getProperty(JNDI_PASSWORD_KEY));
+            var initialContext = new InitialContext(properties);
+            var connectionFactory = (ConnectionFactory) initialContext.lookup("ConnectionFactory");
+            var connection = connectionFactory.createConnection(properties.getProperty(JNDI_USER_KEY), properties.getProperty(JNDI_PASSWORD_KEY));
 
             //Register an exception listener that closes the connection as soon as the error occurs. This approach ensure that we recreate a connection
             // as soon as next message must be send and we cab handle a temporarily error in between sending two messages. If the error still exist, the

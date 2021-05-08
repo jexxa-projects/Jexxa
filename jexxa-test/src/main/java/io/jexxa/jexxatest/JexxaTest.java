@@ -44,7 +44,7 @@ public class JexxaTest
 
     public <T> MessageRecorder getMessageRecorder(Class<T> outboundPort)
     {
-        T realImplementation = jexxaMain.getInstanceOfPort(outboundPort);
+        var realImplementation = jexxaMain.getInstanceOfPort(outboundPort);
         return  MessageRecorderManager.getMessageRecorder(realImplementation.getClass());
     }
 

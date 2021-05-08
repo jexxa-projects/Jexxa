@@ -8,7 +8,6 @@ import java.util.Properties;
 
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.MBeanRegistrationException;
-import javax.management.MBeanServer;
 import javax.management.NotCompliantMBeanException;
 
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
@@ -29,8 +28,8 @@ public class JMXAdapter implements IDrivingAdapter
     {
         Objects.requireNonNull(object);
 
-        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-        MBeanConvention mBeanConvention = new MBeanConvention(object, properties);
+        var mbs = ManagementFactory.getPlatformMBeanServer();
+        var mBeanConvention = new MBeanConvention(object, properties);
 
         //Check if service is already registered
         if (!mbs.queryMBeans(mBeanConvention.getObjectName(), null).isEmpty())
@@ -62,7 +61,7 @@ public class JMXAdapter implements IDrivingAdapter
     @Override
     public void stop()
     {
-        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+        var mbs = ManagementFactory.getPlatformMBeanServer();
 
         registeredMBeans.stream()
                 .filter(element -> mbs.isRegistered(element.getObjectName()))
