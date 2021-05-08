@@ -254,11 +254,16 @@ public final class JexxaMain
         compositeDrivingAdapter.add(drivingAdapter);
     }
 
-    void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation) {
+    void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation)
+    {
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
 
-        var portList = portFactory.getInstanceOfPorts(portAnnotation, properties);
-        portList.forEach(drivingAdapter::register);
+        var inboundPorts = portFactory.getAnnotatedPorts(portAnnotation);
+        inboundPorts.forEach(PortConvention::validate);
+
+        inboundPorts.stream()
+                .map(element -> portFactory.getInstanceOf(element, properties))
+                .forEach(drivingAdapter::register);
 
         compositeDrivingAdapter.add(drivingAdapter);
     }

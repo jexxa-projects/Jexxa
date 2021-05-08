@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[3.x.x] - yyyy-mm-dd
+### Fixed
+-   Fixed fast fail approach in JexxaMain::bindToAnnotation. Now, this method directly fails if any inbound port cannot be created.
+
 ### Added
 -   New Tutorial [BookstoreJ16](https://github.com/repplix/Jexxa/blob/master/tutorials/BookStoreJ16/README.md) which shows how to use Java records with Jexxa
 

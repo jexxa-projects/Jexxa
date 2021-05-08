@@ -1,11 +1,14 @@
 package io.jexxa.application.applicationservice;
 
-public class InvalidApplicationService
+import io.jexxa.application.annotation.InvalidApplicationService;
+
+@InvalidApplicationService
+public class InvalidConstructorApplicationService
 {
     /**
      * Does not provide a public constructor for testing violation of conventions
      */
-    InvalidApplicationService ()
+    InvalidConstructorApplicationService()
     {
         //Empty constructor since class is for testing purpose only
     }
