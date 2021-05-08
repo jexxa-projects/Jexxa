@@ -21,8 +21,9 @@
 ### Use of Java records
 
 When implementing a business application using DDD one of the most important aspects is to provide a semantically elegant and consistent 
-solution for implementing the DDD pattern elements. Apart from using annotations, you should try to use the best possible syntax provided by 
-the programming language to focus on the semantic meaning of the source code. 
+solution for implementing the DDD pattern elements. In previous tutorial `BookStoreJ` we saw that annotations can help to indicate a specific pattern 
+element. In addition, you should try to use the best possible syntax provided by the programming language to focus on the semantic meaning of the 
+source code.  
 
 One of the major changes in Java 16 is the official support for Java [records](https://openjdk.java.net/jeps/359). They are especially designed for classes holding immutable data. Apart from a compact syntax they also provide valid implementations of `equals()`, `hashCode()`, and `toString()`. 
 Therefore, they are suitable for the following DDD elements. 
@@ -43,23 +44,39 @@ public record BookSoldOut(ISBN13 isbn13)
 }
 ```
 
+As you can see, all important information of a DomainEvent can be seen in thw following two lines.
+
+*   `@DomainEvent`: Indicates the concrete type of the pattern element.  
+*   `public record BookSoldOut(ISBN13 isbn13)`: Indicates the type name `BookSoldOut` including the provided data which is `ISBN13` 
+
 ### Implementing `IDomainEventPublisher` 
 
 In large applications it is quite common that you have multiple domain events that have to published to other applications. 
 To solve this issue at least following solutions exist: 
 
-*   Method overloading: Provide a specific method for each type of DomainEvent in `IDomainEventPublisher`. On the one side, this ensures static type safety but could flood your interface if the number of domain events is quite large. Unfortunately, I've learned that this could also lead to implementations in a `DrivenAdapter` in which each domain event is treated in a slightly different way. 
+*   Method overloading: Provide a specific method for each type of DomainEvent in `IDomainEventPublisher`. On the one side, this ensures static type
+    safety but could flood your interface if the number of domain events is quite large. Unfortunately, I've learned that this could also lead to
+    implementations in a `DrivenAdapter` in which each domain event is treated in a slightly different way. 
 
-*   Abstract `DomainEvent` class: This allows to ensure type safety in `IDomainEventPublisher` and also providing only a single method that is implemented in a generic way. This seems to solve all issues from method overloading. The problem with this approach is that you introduce an interface that must be implemented by all kind of domain events for technical reason. At first glance, this seems to be a slightly esoteric problem. In the long run, I've learned that such classes can be a gate opener, allowing technology aspects to enter the application core.
+*   Abstract `DomainEvent` class: This allows to ensure type safety in `IDomainEventPublisher` and also providing only a single method that is
+    implemented in a generic way. This seems to solve all issues from method overloading. The problem with this approach is that you introduce an
+    interface that must be implemented by all kind of domain events for technical reason. At first glance, this seems to be a slightly esoteric 
+    problem. In the long run, I've learned that such classes can be a gate opener, allowing technology aspects to enter the application core.
 
-*   Publishing an `Object`: An alternative solution is to provide a method accepting a domain event of type `Object`. This prevents entering technology aspects into the application core. The obvious drawback is that you loose type safety. In case you annotated all your classes you can double-check if the domain event is annotated
-    with `DomainEvent`. This prevents publishing arbitrary objects, but this check is performed only during runtime.
+*   Publishing an `Object`: An alternative solution is to provide a method accepting a domain event of type `Object`. This prevents entering 
+    technology aspects into the application core. The obvious drawback is that you loose type safety. In case you annotated all your classes you can
+    double-check if the domain event is annotated with `DomainEvent`. This prevents publishing arbitrary objects, but this check is performed only 
+    during runtime.
     
-Of course, you could also combine the approaches. Anyway, the most important aspect is that you should not underestimate such aspects if your application runs 
-for several decades and is maintained by different developer teams. So you should discuss such aspects with your colleagues and/or software architects and propose
-a clean guideline how to handle it. 
+Of course, you can also combine the approaches. For example, you can use method overloading, and the implementation uses an internal method accepting
+an `Object`. Anyway, the most important aspects are: 
+*   The outbound port is an interface to ensure the separation of your application core from a technology stack.
+*   To avoid entering technology aspects into the application core, or vice versa, you should provide a clean guideline how to handle this.   
+    
+Please do not underestimate such aspects if your application runs for several decades and is maintained by different developer teams. So you should
+discuss and docment such aspects with your colleagues and/or software architects. 
 
-The following code shows how to use the annotation to add at least a runtime 
+Finally, the following code shows how to use the annotation to add a runtime test. 
 
 ```java
 @DrivenAdapter
@@ -100,8 +117,10 @@ Implementing the application using java records is almost the same as using stan
 is to ensure proper Json serialization and deserialization. Especially deserialization could be an issue due to the immutability of records and their
 final fields. 
 
-Jexxa uses Gson library for Json serialization by default which does not provide native support of java records. Therefore, we have to provide a generic
-type factory for records. A generic implementation can be found [here](src/main/java/io/jexxa/tutorials/bookstorej16/infrastructure/support/J16JsonConverter.java).  
+Jexxa uses Gson library for Json serialization by default which does not provide native support of java records so far. Therefore, we have to 
+provide a generic type factory for records. A generic implementation can be found [here](src/main/java/io/jexxa/tutorials/bookstorej16/infrastructure/support/J16JsonConverter.java).
+
+Within the main method, we have to set this special JSonConverter as you can see in the following snippet.  
 
 ```java 
 public final class BookStoreJApplication
