@@ -4,7 +4,7 @@
 
 *   How and why to use annotations in an application core 
 *   How to improve semantic meaning of DDD pattern elements using Java records
-*   Use of annotations to improve reusability     
+*   Considerations on interface definition for outbound ports      
 
 ## What you need
 
@@ -18,7 +18,7 @@
 
 ## Implementing Application Core 
 
-### Use of Java records
+### Use of Java records to improve semantic meaning
 
 When implementing a business application using DDD one of the most important aspects is to provide a semantically elegant and consistent 
 solution for implementing the DDD pattern elements. In previous tutorial `BookStoreJ` we saw that annotations can help to indicate a specific pattern 
@@ -49,7 +49,7 @@ As you can see, all important information of a DomainEvent can be seen in thw fo
 *   `@DomainEvent`: Indicates the concrete type of the pattern element.  
 *   `public record BookSoldOut(ISBN13 isbn13)`: Indicates the type name `BookSoldOut` including the provided data which is `ISBN13` 
 
-### Implementing `IDomainEventPublisher` 
+### `IDomainEventPublisher`: Considerations on interface definition  
 
 In large applications it is quite common that you have multiple domain events that have to published to other applications. 
 To solve this issue at least following solutions exist: 
