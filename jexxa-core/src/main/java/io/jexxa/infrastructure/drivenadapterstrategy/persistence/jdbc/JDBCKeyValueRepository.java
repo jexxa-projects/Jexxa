@@ -29,8 +29,8 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         super(properties);
 
-        this.keyFunction = keyFunction;
-        this.aggregateClazz = aggregateClazz;
+        this.keyFunction = Objects.requireNonNull( keyFunction );
+        this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
 
         autocreateTable(properties);
     }
@@ -126,8 +126,9 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     }
 
 
-    private void autocreateTable(final Properties properties)
+    private void autocreateTable(Properties properties)
     {
+        Objects.requireNonNull(properties);
         if (properties.containsKey(JDBCConnection.JDBC_AUTOCREATE_TABLE))
         {
             try{

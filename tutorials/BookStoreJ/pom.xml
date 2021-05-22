@@ -153,11 +153,12 @@
         <artifactId>jib-maven-plugin</artifactId>
         <version>${maven.jib.plugin}</version>
         <configuration>
+          <allowInsecureRegistries>true</allowInsecureRegistries>
           <from>
             <image>adoptopenjdk/openjdk11:jre-11.0.8_10-alpine</image>
           </from>
           <to>
-            <image>${project.groupId}/${project.artifactId}:${project.version}</image>
+            <image>localhost:10001/repository/tiho/${project.groupId}/${project.artifactId}:${project.version}</image>
             <tags>
               <tag>latest</tag>
             </tags>

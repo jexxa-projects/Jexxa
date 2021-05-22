@@ -262,6 +262,23 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.2.0</version>
         <configuration>
+          <tags>
+            <tag>
+              <name>pre</name>
+              <placement>mc</placement>
+              <head>Preconditions:</head>
+            </tag>
+            <tag>
+              <name>post</name>
+              <placement>mc</placement>
+              <head>Postconditions:</head>
+            </tag>
+            <tag>
+              <name>inv</name>
+              <placement>t</placement>
+              <head>Invariants:</head>
+            </tag>
+          </tags>
           <additionalOptions>-Xdoclint:all -Xdoclint:-missing</additionalOptions>
           <additionalJOptions>
             <additionalJOption>-Xdoclint:all</additionalJOption>

@@ -3,6 +3,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,8 +27,8 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     @SuppressWarnings("java:S1172")
     public IMDBRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
     {
-        this.aggregateClazz = aggregateClazz;
-        this.keyFunction = keyFunction;
+        this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
+        this.keyFunction = Objects.requireNonNull(keyFunction);
         IMDB_REPOSITORY_MAP.put(aggregateClazz, this);
 
         aggregateMap = getOwnAggregateMap();
@@ -36,13 +37,20 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     @Override
     public void update(T aggregate)
     {
-        // Nothing to do here because operations are performed on the aggregate
+        Objects.requireNonNull(aggregate);
+        if (! getOwnAggregateMap().containsKey( keyFunction.apply(aggregate)))
+        {
+            throw new IllegalArgumentException("An object with given key does not exists");
+        }
     }
 
     @Override
     public void remove(K key)
     {
-        getOwnAggregateMap().remove( key );
+        if ( getOwnAggregateMap().remove( key ) == null)
+        {
+            throw new IllegalArgumentException("An object with given key does not exists");
+        }
     }
 
     @Override
