@@ -29,26 +29,28 @@ public class MessageRecordingStrategy extends MessageSender
     }
 
     @Override
-    protected void sendToQueue(String message, String destination, Properties messageProperties)
+    protected void sendToQueue(String message, String destination, Properties messageProperties, MessageType messageType)
     {
         messageRecorder.put(new RecordedMessage(
                 currentMessage,
                 message,
                 MessageProducer.DestinationType.QUEUE,
                 destination,
-                messageProperties)
+                messageProperties,
+                messageType)
         );
     }
 
     @Override
-    protected void sendToTopic(String message, String destination, Properties messageProperties)
+    protected void sendToTopic(String message, String destination, Properties messageProperties, MessageType messageType)
     {
         messageRecorder.put(new RecordedMessage(
                 currentMessage,
                 message,
                 MessageProducer.DestinationType.TOPIC,
                 destination,
-                messageProperties)
+                messageProperties,
+                messageType)
         );
     }
 
@@ -56,7 +58,7 @@ public class MessageRecordingStrategy extends MessageSender
     {
         protected <T> RecordableMessageProducer(T message, MessageRecordingStrategy jmsSender)
         {
-            super(message, jmsSender);
+            super(message, jmsSender, MessageType.TEXT_MESSAGE);
         }
     }
 }

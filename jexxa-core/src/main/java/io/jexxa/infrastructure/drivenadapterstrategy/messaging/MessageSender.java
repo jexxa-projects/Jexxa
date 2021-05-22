@@ -6,12 +6,19 @@ import io.jexxa.utils.annotations.CheckReturnValue;
 
 public abstract class MessageSender
 {
+    public enum MessageType{TEXT_MESSAGE, BYTE_MESSAGE }
+
     @CheckReturnValue
     public <T> MessageProducer send(T message)
     {
-        return new MessageProducer(message, this);
+        return new MessageProducer(message, this, MessageType.TEXT_MESSAGE);
     }
 
+    @CheckReturnValue
+    public <T> MessageProducer sendByteMessage(T message)
+    {
+        return new MessageProducer(message, this, MessageType.BYTE_MESSAGE);
+    }
 
     /**
      * Sends an asynchronous text message to a queue
@@ -20,7 +27,7 @@ public abstract class MessageSender
      * @param destination name of the queue to send the message
      * @param messageProperties additional properties of the message. Can be null if no properties are required
      */
-    protected abstract void sendToQueue(String message, String destination, Properties messageProperties);
+    protected abstract void sendToQueue(String message, String destination, Properties messageProperties, MessageType messageType);
 
     /**
      * Sends an asynchronous text message to a topic
@@ -29,5 +36,5 @@ public abstract class MessageSender
      * @param destination name of the queue to send the message
      * @param messageProperties additional properties of the message. Can be null if no properties are required
      */
-    protected abstract void sendToTopic(String message, String destination, Properties messageProperties);
+    protected abstract void sendToTopic(String message, String destination, Properties messageProperties, MessageType messageType);
 }

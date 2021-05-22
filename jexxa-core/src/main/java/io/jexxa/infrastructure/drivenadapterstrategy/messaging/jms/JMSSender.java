@@ -9,6 +9,7 @@ import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
+import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.naming.InitialContext;
@@ -42,14 +43,14 @@ public class JMSSender extends MessageSender implements AutoCloseable
         Objects.requireNonNull(getConnection()); //Try create a connection to ensure fail fast
     }
 
-    protected void sendToTopic(String message, String topicName, Properties messageProperties)
+    protected void sendToTopic(String message, String topicName, Properties messageProperties, MessageType messageType)
     {
         try
         {
             var destination = getSession().createTopic(topicName);
             try (var producer = getSession().createProducer(destination) )
             {
-                sendTextMessage(message, producer, messageProperties);
+                sendJMSMessage(message, producer, messageProperties, messageType);
             }
         }
         catch (JMSException e)
@@ -59,14 +60,14 @@ public class JMSSender extends MessageSender implements AutoCloseable
         }
     }
 
-    protected void sendToQueue(String message, String queueName, Properties messageProperties)
+    protected void sendToQueue(String message, String queueName, Properties messageProperties, MessageType messageType)
     {
         try
         {
             var destination = getSession().createQueue(queueName);
             try (var producer = getSession().createProducer(destination) )
             {
-                sendTextMessage(message, producer, messageProperties);
+                sendJMSMessage(message, producer, messageProperties, messageType);
             }
         }
         catch (JMSException e)
@@ -76,22 +77,34 @@ public class JMSSender extends MessageSender implements AutoCloseable
         }
     }
 
-    private void sendTextMessage(String message, MessageProducer messageProducer, Properties messageProperties) throws JMSException
+    private void sendJMSMessage(String message, MessageProducer messageProducer, Properties messageProperties, MessageType messageType) throws JMSException
     {
         messageProducer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
-        var textMessage = getSession().createTextMessage(message);
+        var jmsMessage = createMessage(messageType, message);
 
         if (messageProperties != null)
         {
             for (Map.Entry<Object, Object> entry : messageProperties.entrySet())
             {
-                textMessage.setStringProperty(entry.getKey().toString(), entry.getValue().toString());
+                jmsMessage.setStringProperty(entry.getKey().toString(), entry.getValue().toString());
             }
         }
 
-        messageProducer.send(textMessage);
+        messageProducer.send(jmsMessage);
     }
+
+    private Message createMessage(MessageType messageType, String message) throws JMSException
+    {
+        if (messageType == MessageType.BYTE_MESSAGE)
+        {
+            var bytesMessage = getSession().createBytesMessage();
+            bytesMessage.writeUTF(message);
+            return bytesMessage;
+        }
+        return getSession().createTextMessage(message);
+    }
+
 
     Session getSession() throws JMSException
     {

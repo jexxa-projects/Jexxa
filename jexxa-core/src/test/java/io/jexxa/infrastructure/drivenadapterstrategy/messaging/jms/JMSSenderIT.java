@@ -6,13 +6,16 @@ import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static io.jexxa.infrastructure.utils.messaging.QueueListener.QUEUE_DESTINATION;
 import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTINATION;
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
+import javax.jms.BytesMessage;
 import javax.jms.Connection;
 import javax.jms.JMSException;
+import javax.jms.TextMessage;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
@@ -72,6 +75,8 @@ class JMSSenderIT
         //Assert
         await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
 
+        assertDoesNotThrow(() -> (TextMessage)topicListener.getMessages().get(0));
+
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
@@ -90,6 +95,7 @@ class JMSSenderIT
 
         //Assert
         await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
+        assertDoesNotThrow(() -> (TextMessage)queueListener.getMessages().get(0));
 
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
@@ -108,6 +114,7 @@ class JMSSenderIT
 
         //Assert
         await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
+        assertDoesNotThrow(() -> (TextMessage)queueListener.getMessages().get(0));
 
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
@@ -133,7 +140,46 @@ class JMSSenderIT
 
         //Assert
         await().atMost(1, TimeUnit.SECONDS).until(() -> queueListener.getMessages().size() >= 2);
+        assertDoesNotThrow(() -> (TextMessage)queueListener.getMessages().get(0));
 
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
+    @Test
+    void sendByteMessageToTopic()
+    {
+        //Arrange --
+
+        //Act
+        objectUnderTest
+                .sendByteMessage(message)
+                .toTopic(TOPIC_DESTINATION)
+                .addHeader(TYPE, message.getClass().getSimpleName())
+                .asJson();
+
+        //Assert
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
+
+        assertDoesNotThrow(() -> (BytesMessage)topicListener.getMessages().get(0));
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
+    @Test
+    void sendByteMessageToQueue()
+    {
+        //Arrange --
+
+        //Act
+        objectUnderTest
+                .sendByteMessage(message)
+                .toQueue(QUEUE_DESTINATION)
+                .addHeader(TYPE, message.getClass().getSimpleName())
+                .asJson();
+
+        //Assert
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
+
+        assertDoesNotThrow(() -> (BytesMessage)queueListener.getMessages().get(0));
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 

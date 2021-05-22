@@ -16,14 +16,16 @@ public class MessageProducer
     private Properties properties;
     private final Object message;
     private final MessageSender messageSender;
+    private final MessageSender.MessageType messageType;
 
     private DestinationType destinationType;
     private String destination;
 
-    protected <T> MessageProducer(T message, MessageSender messageSender)
+    protected <T> MessageProducer(T message, MessageSender messageSender, MessageSender.MessageType messageType)
     {
         this.message = Objects.requireNonNull(message);
         this.messageSender = Objects.requireNonNull(messageSender);
+        this.messageType = Objects.requireNonNull(messageType);
     }
 
     @CheckReturnValue
@@ -73,11 +75,11 @@ public class MessageProducer
 
         if (destinationType == DestinationType.QUEUE)
         {
-            messageSender.sendToQueue( serializer.apply(message), destination, properties);
+            messageSender.sendToQueue( serializer.apply(message), destination, properties, messageType);
         }
         else
         {
-            messageSender.sendToTopic( serializer.apply(message), destination, properties);
+            messageSender.sendToTopic( serializer.apply(message), destination, properties, messageType);
         }
     }
 
@@ -87,11 +89,11 @@ public class MessageProducer
 
         if (destinationType == DestinationType.QUEUE)
         {
-            messageSender.sendToQueue(serializer.get(), destination, properties);
+            messageSender.sendToQueue(serializer.get(), destination, properties, messageType);
         }
         else
         {
-            messageSender.sendToTopic(serializer.get(), destination, properties);
+            messageSender.sendToTopic(serializer.get(), destination, properties, messageType);
         }
     }
 

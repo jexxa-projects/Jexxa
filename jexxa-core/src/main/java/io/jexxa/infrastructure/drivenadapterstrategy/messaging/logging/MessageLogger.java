@@ -11,7 +11,7 @@ public class MessageLogger extends MessageSender
     private static final Logger MESSAGE_LOGGER = JexxaLogger.getLogger(MessageLogger.class);
 
     @Override
-    protected void sendToQueue(String message, String destination, Properties messageProperties)
+    protected void sendToQueue(String message, String destination, Properties messageProperties, MessageSender.MessageType messageType)
     {
         MESSAGE_LOGGER.info("Begin> Send message");
         MESSAGE_LOGGER.info("Message           : {}", message);
@@ -21,7 +21,7 @@ public class MessageLogger extends MessageSender
     }
 
     @Override
-    protected void sendToTopic(String message, String destination, Properties messageProperties)
+    protected void sendToTopic(String message, String destination, Properties messageProperties, MessageSender.MessageType messageType)
     {
         MESSAGE_LOGGER.info("Begin> Send message");
         MESSAGE_LOGGER.info("Message           : {}", message);
