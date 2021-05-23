@@ -13,6 +13,7 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.bui
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.UPDATE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.WHERE;
 
+import java.util.Set;
 import java.util.function.Supplier;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCCommand;
@@ -142,10 +143,31 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         getStatementBuilder()
                 .append(SET)
                 .append(element.name())
-                .append(EQUAL.toString())
+                .append(EQUAL)
                 .append(ARGUMENT_PLACEHOLDER);
 
         addArgument(value);
+        return this;
+    }
+
+    public JDBCCommandBuilder<T> set(Object[] element, Object[] value)
+    {
+        getStatementBuilder()
+                .append(SET);
+
+        for (var i = 0; i < element.length; ++i)
+        {
+            T currentElement = (T) element[i];
+            addArgument(value[i]);
+            getStatementBuilder()
+                    .append( currentElement.name())
+                    .append(EQUAL)
+                    .append(ARGUMENT_PLACEHOLDER);
+            if ( i < element.length - 1)
+            {
+                getStatementBuilder().append(COMMA);
+            }
+        }
         return this;
     }
 
