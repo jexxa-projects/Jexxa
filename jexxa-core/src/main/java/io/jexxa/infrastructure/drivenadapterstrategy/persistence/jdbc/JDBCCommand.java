@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 @SuppressWarnings("unused")
 public class JDBCCommand extends JDBCPreparedStatement
 {
+    private static final String SQL_STATEMENT_FAILED = "Could not execute SQL Statement : ";
     public JDBCCommand(Supplier<JDBCConnection> jdbcConnection, String sqlQuery, List<Object> arguments)
     {
         super(jdbcConnection, sqlQuery, arguments);
@@ -40,7 +41,7 @@ public class JDBCCommand extends JDBCPreparedStatement
 
         catch (SQLException e)
         {
-            throw new IllegalArgumentException(e);
+            throw new IllegalArgumentException(SQL_STATEMENT_FAILED + getSQLStatement(), e);
         }
     }
 
@@ -60,7 +61,7 @@ public class JDBCCommand extends JDBCPreparedStatement
 
         catch (SQLException e)
         {
-            throw new IllegalArgumentException(e);
+            throw new IllegalArgumentException(SQL_STATEMENT_FAILED + getSQLStatement(), e);
         }
     }
 
@@ -75,7 +76,7 @@ public class JDBCCommand extends JDBCPreparedStatement
         }
         catch (SQLException e)
         {
-            throw new IllegalArgumentException(e);
+            throw new IllegalArgumentException(SQL_STATEMENT_FAILED + getSQLStatement(), e);
         }
     }
 }
