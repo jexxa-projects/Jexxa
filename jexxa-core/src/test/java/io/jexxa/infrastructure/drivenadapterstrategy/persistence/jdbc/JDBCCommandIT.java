@@ -3,7 +3,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.KEY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.STRING_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_WITH_NONNULL_VALUES;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.REPOSITORY_CONFIG;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBC_REPOSITORY_CONFIG;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.setupDatabase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,7 +22,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 class JDBCCommandIT
 {
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void testDeleteValues(Properties properties)
     {
         //arrange
@@ -46,7 +46,7 @@ class JDBCCommandIT
     }
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void testUpdateValues(Properties properties)
     {
         //arrange

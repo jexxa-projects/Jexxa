@@ -10,7 +10,7 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDB
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_VALUES_NOT_PRESENT;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_WITH_NONNULL_VALUES;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_WITH_NULL_VALUES;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.REPOSITORY_CONFIG;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBC_REPOSITORY_CONFIG;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.setupDatabase;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.TEST_DOUBLE_VALUE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.TEST_FLOAT_VALUE;
@@ -58,7 +58,7 @@ class JDBCFluentAPIIT
     private JDBCConnection jdbcConnection;
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void testNonNullValues(Properties properties)
     {
         //Arrange
@@ -84,7 +84,7 @@ class JDBCFluentAPIIT
 
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void testNullValues(Properties properties)
     {
         //Arrange
@@ -108,7 +108,7 @@ class JDBCFluentAPIIT
     }
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void testIsPresent(Properties properties)
     {
         //Arrange
@@ -137,7 +137,7 @@ class JDBCFluentAPIIT
     }
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void testIsEmpty(Properties properties)
     {
         //Arrange

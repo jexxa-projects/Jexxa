@@ -7,6 +7,7 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.bui
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.OR;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.ORDER_BY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SELECT;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SELECT_COUNT;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.WHERE;
 
 import java.util.function.Supplier;
@@ -61,6 +62,23 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         return this;
     }
 
+    public JDBCQueryBuilder<T> selectCount(T element)
+    {
+        getStatementBuilder()
+                .append(SELECT_COUNT)
+                .append("( ")
+                .append(element)
+                .append(" )");
+        return this;
+    }
+
+    public JDBCQueryBuilder<T> selectCount()
+    {
+        getStatementBuilder()
+                .append(SELECT_COUNT)
+                .append("( * )");
+        return this;
+    }
 
     public JDBCQueryBuilder<T> from(T element)
     {

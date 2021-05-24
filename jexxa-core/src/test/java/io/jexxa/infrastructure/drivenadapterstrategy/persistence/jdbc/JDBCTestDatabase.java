@@ -47,7 +47,7 @@ public class JDBCTestDatabase
         TIMESTAMP_TYPE,
     }
 
-    public static final String REPOSITORY_CONFIG = "io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase#repositoryConfigJDBC";
+    public static final String JDBC_REPOSITORY_CONFIG = "io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase#repositoryConfigJDBC";
 
     @SuppressWarnings("unused")
     public static Stream<Properties> repositoryConfigJDBC() {

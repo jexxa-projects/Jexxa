@@ -8,7 +8,7 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDB
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.STRING_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.TIMESTAMP_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_WITH_NONNULL_VALUES;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.REPOSITORY_CONFIG;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBC_REPOSITORY_CONFIG;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.setupDatabase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -36,7 +36,7 @@ class JDBCQueryIT
     private JDBCConnection jdbcConnection;
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void testSelectOR(Properties properties)
     {
         //Arrange
@@ -55,7 +55,7 @@ class JDBCQueryIT
     }
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void testSelectAND(Properties properties)
     {
         //Arrange
@@ -74,7 +74,7 @@ class JDBCQueryIT
     }
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void testMultiSelect(Properties properties)
     {
         //Arrange
@@ -93,7 +93,7 @@ class JDBCQueryIT
     }
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void testSelectAll(Properties properties)
     {
         //Arrange
@@ -114,7 +114,69 @@ class JDBCQueryIT
     }
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
+    void testSelectCount(Properties properties)
+    {
+        //Arrange
+        jdbcConnection = setupDatabase(properties);
+
+        var querySelectAll = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
+                .selectCount()
+                .from(JDBCTestDatabase.class)
+                .create();
+
+        //Act
+        var result = querySelectAll.asInt();
+
+        //Assert
+        assertEquals(3, result.findFirst().orElseThrow());
+    }
+
+    @ParameterizedTest
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
+    void testSelectCountParameter(Properties properties)
+    {
+        //Arrange
+        jdbcConnection = setupDatabase(properties);
+
+        var querySelectAll = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
+                .selectCount(KEY)
+                .from(JDBCTestDatabase.class)
+                .create();
+
+        //Act
+        var result = querySelectAll.asInt();
+
+        //Assert
+        assertEquals(3, result.findFirst().orElseThrow());
+    }
+
+    @ParameterizedTest
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
+    void testSelectCountEmptyTable(Properties properties)
+    {
+        //Arrange
+        jdbcConnection = setupDatabase(properties);
+        var command = jdbcConnection.createCommand(JDBCTestDatabase.JDBCTestSchema.class)
+                .deleteFrom(JDBCTestDatabase.class)
+                .create();
+
+        command.asIgnore();
+
+        var querySelectAll = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
+                .selectCount()
+                .from(JDBCTestDatabase.class)
+                .create();
+
+        //Act
+        var result = querySelectAll.asInt();
+
+        //Assert
+        assertEquals(0, result.findFirst().orElseThrow());
+    }
+
+    @ParameterizedTest
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void testSelectAsc(Properties properties)
     {
         //Arrange
@@ -137,7 +199,7 @@ class JDBCQueryIT
     }
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void testSelectDesc(Properties properties)
     {
         //Arrange

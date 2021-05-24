@@ -6,6 +6,7 @@ class SQLSyntax
     static final String UPDATE = "UPDATE ";
     static final String DELETE = "DELETE ";
     static final String INSERT_INTO = "INSERT INTO ";
+    static final String SELECT_COUNT = "SELECT COUNT";
 
     static final String DROP_TABLE = "DROP TABLE ";
     static final String IF_EXISTS = "IF EXISTS ";

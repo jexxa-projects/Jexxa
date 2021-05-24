@@ -1,6 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.REPOSITORY_CONFIG;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBC_REPOSITORY_CONFIG;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,7 +37,7 @@ class JexxaAggregateRepositoryIT
     }
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void addAggregate(Properties repositoryProperties)
     {
         //Arrange
@@ -53,7 +53,7 @@ class JexxaAggregateRepositoryIT
 
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void getAggregateByID(Properties repositoryProperties)
     {
         //Arrange
@@ -71,7 +71,7 @@ class JexxaAggregateRepositoryIT
     }
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void removeAggregate(Properties repositoryProperties)
     {
         //Arrange
@@ -91,7 +91,7 @@ class JexxaAggregateRepositoryIT
 
 
     @ParameterizedTest
-    @MethodSource(REPOSITORY_CONFIG)
+    @MethodSource(JDBC_REPOSITORY_CONFIG)
     void updateAggregate(Properties repositoryProperties)
     {
         //Arrange
