@@ -20,7 +20,6 @@ import com.google.common.collect.Streams;
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONManager;
 import org.slf4j.Logger;
@@ -201,42 +200,10 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
             }
             catch (RuntimeException e)
             {
-                LOGGER.warn("Could not create table {} => Assume that table already exists", getAggregateName());
+                LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
             }
         }
     }
-
-
-    protected String getAggregateName()
-    {
-        return aggregateClazz.getSimpleName();
-    }
-
-    private static SQLDataType getMaxVarChar(String jdbcDriver)
-    {
-        if ( jdbcDriver.toLowerCase().contains("oracle") )
-        {
-            return SQLDataType.VARCHAR(4000);
-        }
-
-        if ( jdbcDriver.toLowerCase().contains("postgres") )
-        {
-            return SQLDataType.VARCHAR; // Note in general Postgres does not have a real upper limit.
-        }
-
-        if ( jdbcDriver.toLowerCase().contains("h2") )
-        {
-            return SQLDataType.VARCHAR(Integer.MAX_VALUE);
-        }
-
-        if ( jdbcDriver.toLowerCase().contains("mysql") )
-        {
-            return SQLDataType.VARCHAR(65535);
-        }
-
-        return SQLDataType.VARCHAR(255);
-    }
-
 
 
     public <S> IRangeQuery<T, S> getRangeQuery(M strategy)

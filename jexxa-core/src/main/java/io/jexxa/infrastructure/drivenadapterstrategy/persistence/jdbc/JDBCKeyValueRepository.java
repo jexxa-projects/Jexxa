@@ -14,7 +14,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
@@ -144,41 +143,10 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
             }
             catch (RuntimeException e)
             {
-                LOGGER.warn("Could not create table {} => Assume that table already exists", getAggregateName());
+                LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
             }
         }
     }
-
-    protected String getAggregateName()
-    {
-        return aggregateClazz.getSimpleName();
-    }
-
-    private static SQLDataType getMaxVarChar(String jdbcDriver)
-    {
-        if ( jdbcDriver.toLowerCase().contains("oracle") )
-        {
-            return SQLDataType.VARCHAR(4000);
-        }
-
-        if ( jdbcDriver.toLowerCase().contains("postgres") )
-        {
-            return SQLDataType.VARCHAR; // Note in general Postgres does not have a real upper limit.
-        }
-
-        if ( jdbcDriver.toLowerCase().contains("h2") )
-        {
-            return SQLDataType.VARCHAR(Integer.MAX_VALUE);
-        }
-
-        if ( jdbcDriver.toLowerCase().contains("mysql") )
-        {
-            return SQLDataType.VARCHAR(65535);
-        }
-
-        return SQLDataType.VARCHAR(255);
-    }
-
 
     enum KeyValueSchema
     {
