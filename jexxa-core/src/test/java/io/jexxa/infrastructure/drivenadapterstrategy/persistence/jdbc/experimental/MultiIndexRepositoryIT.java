@@ -8,14 +8,20 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class MultiIndexRepositoryTest
+@Execution(ExecutionMode.SAME_THREAD)
+@Tag(TestConstants.INTEGRATION_TEST)
+class MultiIndexRepositoryIT
 {
     private static final String REPOSITORY_CONFIG = "repositoryConfig";
     private static final int TEST_DATA_SIZE = 100;
@@ -85,6 +91,47 @@ class MultiIndexRepositoryTest
         assertEquals(TEST_DATA_SIZE, objectUnderTest.get().size());
     }
 
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testDeleteOperation(Properties properties)
+    {
+        //Arrange
+        var objectUnderTest = MultiIndexRepositoryManager.getRepository(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                SearchStrategies.class,
+                properties);
+        objectUnderTest.removeAll();
+
+        testData.forEach(objectUnderTest::add);
+
+        //Act
+        objectUnderTest.removeAll();
+
+        //Assert
+        assertEquals(0, objectUnderTest.get().size());
+    }
+
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testReadOperation(Properties properties)
+    {
+        //Arrange
+        var objectUnderTest = MultiIndexRepositoryManager.getRepository(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                SearchStrategies.class,
+                properties);
+        objectUnderTest.removeAll();
+
+        testData.forEach(objectUnderTest::add);
+
+        //Act
+        var result = objectUnderTest.get();
+
+        //Assert
+        assertEquals(testData, result);
+    }
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
