@@ -19,7 +19,6 @@ public interface IRepository<T, K>
      * Updates the given aggregate inside the repository.
      * @param aggregate that should be updated
      * @pre Given aggregate must be added by using {@link #add(Object)}}
-     * @pre Given aggregate must not be <code>null</code>
      */
     void update(T aggregate);
 

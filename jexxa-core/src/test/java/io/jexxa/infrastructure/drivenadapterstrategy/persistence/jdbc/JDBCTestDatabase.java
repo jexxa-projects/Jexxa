@@ -36,7 +36,6 @@ public class JDBCTestDatabase
     static final int TEST_DOUBLE_VALUE = 4;
     static final BigDecimal TEST_NUMERIC_VALUE = BigDecimal.valueOf(5);
 
-
     enum JDBCTestSchema
     {
         KEY,
@@ -48,10 +47,10 @@ public class JDBCTestDatabase
         TIMESTAMP_TYPE,
     }
 
-    public static final String REPOSITORY_CONFIG = "io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase#repositoryConfig";
+    public static final String REPOSITORY_CONFIG = "io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase#repositoryConfigJDBC";
 
     @SuppressWarnings("unused")
-    static Stream<Properties> repositoryConfig() {
+    public static Stream<Properties> repositoryConfigJDBC() {
         var postgresProperties = new Properties();
         postgresProperties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
         postgresProperties.put(JDBCConnection.JDBC_PASSWORD, ADMIN);
@@ -72,7 +71,7 @@ public class JDBCTestDatabase
 
     public static Properties getPostgresProperties()
     {
-        return repositoryConfig().findFirst().orElseThrow();
+        return repositoryConfigJDBC().findFirst().orElseThrow();
     }
 
 
