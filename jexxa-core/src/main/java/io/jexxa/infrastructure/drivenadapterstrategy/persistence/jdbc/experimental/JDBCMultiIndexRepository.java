@@ -85,14 +85,13 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
         valueSet.addAll(comparatorValueSet);
 
         // Skip the key
-        //"update %s set value = '%s' where key = '%s' "  ComparatorValues... " '%s' = '%s' "
+        //"update %s where key = '%s' "  ComparatorValues... " '%s' = '%s' "
 
         var command = getConnection()
                 .createCommand(comparatorSchema)
-                .update(schemaValue)
-                .set(schemaValue, JSONManager.getJSONConverter().toJson(aggregate))
-                .where(schemaKey).isEqual(JSONManager.getJSONConverter().toJson( keyFunction.apply(aggregate) ))
+                .update(aggregateClazz)
                 .set(keySet, valueSet.toArray() )
+                .where(schemaKey).isEqual(JSONManager.getJSONConverter().toJson( keyFunction.apply(aggregate) ))
                 .create();
 
         command.asUpdate();

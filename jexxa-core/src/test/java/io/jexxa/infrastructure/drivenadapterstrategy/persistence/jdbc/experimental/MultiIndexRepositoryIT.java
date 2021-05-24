@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
@@ -105,6 +106,9 @@ class MultiIndexRepositoryIT
 
         testData.forEach(objectUnderTest::add);
 
+
+        testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
+
         //Act
         objectUnderTest.removeAll();
 
@@ -131,6 +135,28 @@ class MultiIndexRepositoryIT
 
         //Assert
         assertEquals(testData, result);
+    }
+
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testUpdateOperation(Properties properties)
+    {
+        //Arrange
+        var objectUnderTest = MultiIndexRepositoryManager.getRepository(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                SearchStrategies.class,
+                properties);
+        objectUnderTest.removeAll();
+        testData.forEach(objectUnderTest::add);
+
+        //Act
+        testData.forEach(element -> element.setInternalValue(TEST_DATA_SIZE));
+        testData.forEach(objectUnderTest::update);
+        var result = objectUnderTest.get();
+
+        //Assert
+        assertTrue(result.stream().allMatch( element -> element.getInternalValue() == TEST_DATA_SIZE));
     }
 
     @ParameterizedTest
