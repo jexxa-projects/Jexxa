@@ -134,7 +134,6 @@ class MultiIndexRepositoryTest
         h2Properties.put(JDBCConnection.JDBC_URL, "jdbc:h2:mem:ComparableRepositoryTest;DB_CLOSE_DELAY=-1");
         h2Properties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
 
-        //return Stream.of(new Properties(), postgresProperties, h2Properties);
-        return Stream.of(postgresProperties, h2Properties);
+        return Stream.of(new Properties(), postgresProperties, h2Properties);
     }
 }

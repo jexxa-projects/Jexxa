@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -15,13 +16,15 @@ public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & SearchStrategy> 
     Set<M> comparatorFunctions;
 
 
-    public IMDBMultiIndexRepository(Class<T> aggregateClazz,
-                                    Function<T, K> keyFunction,
-                                    Set<M> comparatorFunctions,
-                                    Properties properties)
+    public IMDBMultiIndexRepository(
+            Class<T> aggregateClazz,
+            Function<T, K> keyFunction,
+            Class<M> comparatorSchema,
+            Properties properties
+            )
     {
         super(aggregateClazz, keyFunction, properties);
-        this.comparatorFunctions = comparatorFunctions;
+        this.comparatorFunctions = EnumSet.allOf(comparatorSchema);
     }
 
     @Override
