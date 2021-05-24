@@ -136,7 +136,7 @@ class MultiIndexRepositoryIT
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
-    void testReadOperation(Properties properties)
+    void testReadAllOperation(Properties properties)
     {
         //Arrange
         var objectUnderTest = MultiIndexRepositoryManager.getRepository(
@@ -154,6 +154,27 @@ class MultiIndexRepositoryIT
 
         //Assert
         assertEquals(testData, result);
+    }
+
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testReadOperation(Properties properties)
+    {
+        //Arrange
+        var objectUnderTest = MultiIndexRepositoryManager.getRepository(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                SearchStrategies.class,
+                properties);
+        objectUnderTest.removeAll();
+
+        testData.forEach(objectUnderTest::add);
+
+        //Act
+        var result = objectUnderTest.get(testData.get(0).getKey());
+
+        //Assert
+        assertTrue(result.isPresent());
     }
 
     @ParameterizedTest
