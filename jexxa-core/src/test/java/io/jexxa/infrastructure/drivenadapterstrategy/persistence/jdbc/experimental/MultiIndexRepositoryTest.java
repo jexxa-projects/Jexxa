@@ -2,6 +2,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimen
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -10,12 +11,26 @@ import java.util.stream.Stream;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 class MultiIndexRepositoryTest
 {
     private static final String REPOSITORY_CONFIG = "repositoryConfig";
+    private static final int TEST_DATA_SIZE = 100;
+
+    private List<JexxaAggregate> testData;
+
+    @BeforeEach
+    void initTest()
+    {
+        testData = IntStream.range(0, TEST_DATA_SIZE)
+                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element)))
+                .collect(Collectors.toList());
+
+        testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
+    }
 
     /**
      * Defines the Range comparators that we use:
@@ -52,14 +67,30 @@ class MultiIndexRepositoryTest
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
+    void testAddOperation(Properties properties)
+    {
+        //Arrange
+        var objectUnderTest = MultiIndexRepositoryManager.getRepository(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                SearchStrategies.class,
+                properties);
+        objectUnderTest.removeAll();
+
+
+        //Act
+        testData.forEach(objectUnderTest::add);
+
+        //Assert
+        assertEquals(TEST_DATA_SIZE, objectUnderTest.get().size());
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
     void testCompareInternalValue(Properties properties)
     {
         //Arrange
-        var testData = IntStream.range(1, 100)
-                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element)))
-                .collect(Collectors.toList());
-
-
         var objectUnderTest = MultiIndexRepositoryManager.getRepository(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
@@ -80,7 +111,7 @@ class MultiIndexRepositoryTest
 
         //Assert
         assertEquals(50, fromResult.size());
-        assertEquals(50, untilResult.size());
+        assertEquals(51, untilResult.size());
         assertEquals(21, rangedResult.size());
     }
 
@@ -96,11 +127,6 @@ class MultiIndexRepositoryTest
                 properties);
         objectUnderTest.removeAll();
 
-        var testData = IntStream.range(1, 100)
-                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element)))
-                .collect(Collectors.toList());
-
-        testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
         testData.forEach(objectUnderTest::add);
         //testData.forEach(objectUnderTest::update);
 
@@ -113,7 +139,7 @@ class MultiIndexRepositoryTest
 
         //Assert
         assertEquals(50, fromResult.size());
-        assertEquals(50, untilResult.size());
+        assertEquals(51, untilResult.size());
         assertEquals(21, rangedResult.size());
     }
 
