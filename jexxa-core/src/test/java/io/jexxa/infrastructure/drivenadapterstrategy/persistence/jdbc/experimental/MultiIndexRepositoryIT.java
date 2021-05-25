@@ -215,12 +215,12 @@ class MultiIndexRepositoryIT
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
         testData.forEach(objectUnderTest::add);
 
-        IRangeQuery<JexxaAggregate, Integer> rangeQuery = objectUnderTest.getRangeQuery( SearchStrategies.INTERNAL_VALUE);
+        var subset = objectUnderTest.getSubset( SearchStrategies.INTERNAL_VALUE);
 
         //Act
-        var fromResult = rangeQuery.getFrom(50);
-        var untilResult = rangeQuery.getUntil(50);
-        var rangedResult = rangeQuery.getRange(30,50);
+        var fromResult = subset.getFrom(50);
+        var untilResult = subset.getUntil(50);
+        var rangedResult = subset.getRange(30,50);
 
         //Assert
         assertEquals(50, fromResult.size());
@@ -243,7 +243,7 @@ class MultiIndexRepositoryIT
         testData.forEach(objectUnderTest::add);
         //testData.forEach(objectUnderTest::update);
 
-        IRangeQuery<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getRangeQuery( SearchStrategies.AGGREGATE_KEY);
+        ISubset<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getSubset( SearchStrategies.AGGREGATE_KEY);
 
         //Act
         var fromResult = irangedResult.getFrom(new JexxaValueObject(50));

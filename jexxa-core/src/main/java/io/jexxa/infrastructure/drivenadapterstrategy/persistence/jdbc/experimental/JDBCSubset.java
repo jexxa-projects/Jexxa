@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCRepository;
 
-public class JDBCRangeQuery<T,S, M extends Enum<M> & SearchStrategy> implements IRangeQuery<T, S>
+public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISubset<T, S>
 {
     private final JDBCRepository jdbcRepository;
     private final RangeComparator<T, S> rangeComparator;
@@ -20,7 +20,7 @@ public class JDBCRangeQuery<T,S, M extends Enum<M> & SearchStrategy> implements 
     private final Class<M> comparatorSchema;
 
 
-    JDBCRangeQuery(JDBCRepository jdbcRepository, RangeComparator<T, S> rangeComparator, M nameOfRow, Class<T> aggregateClazz, Class<M> comparatorSchema)
+    JDBCSubset(JDBCRepository jdbcRepository, RangeComparator<T, S> rangeComparator, M nameOfRow, Class<T> aggregateClazz, Class<M> comparatorSchema)
     {
         this.jdbcRepository = jdbcRepository;
         this.rangeComparator = rangeComparator;

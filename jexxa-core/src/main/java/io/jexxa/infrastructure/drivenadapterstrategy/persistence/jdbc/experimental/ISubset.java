@@ -2,7 +2,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimen
 
 import java.util.List;
 
-public interface IRangeQuery<T, S >
+public interface ISubset<T, S >
 {
     /**  get all values which fulfill: {@code startValue <= value}
      */

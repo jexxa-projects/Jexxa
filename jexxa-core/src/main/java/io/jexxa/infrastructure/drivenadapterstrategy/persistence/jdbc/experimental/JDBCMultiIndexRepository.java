@@ -206,13 +206,13 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
     }
 
 
-    public <S> IRangeQuery<T, S> getRangeQuery(M strategy)
+    public <S> ISubset<T, S> getSubset(M strategy)
     {
         if (!comparatorFunctions.contains(strategy))
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
-        return new JDBCRangeQuery<>(this, strategy.get(), strategy, aggregateClazz,comparatorSchema );
+        return new JDBCSubset<>(this, strategy.get(), strategy, aggregateClazz,comparatorSchema );
     }
 
 }
