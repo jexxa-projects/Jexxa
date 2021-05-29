@@ -8,8 +8,18 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * This class provides convenience methods for creating objects for given class information
+ */
 public final class ClassFactory
 {
+    /**
+     * Tries to create an instance of given Class using the default constructor
+     * @param clazz Class information of the object to create
+     * @param <T> Type of the object to be created
+     * @return Optional including the instance or null if no public default constructor available
+     * @throws ReflectiveOperationException in case of an error when creating the object
+     */
     public static <T> Optional<T> newInstanceOf(Class<? extends T> clazz) throws ReflectiveOperationException
     {
         Objects.requireNonNull(clazz);
@@ -22,6 +32,15 @@ public final class ClassFactory
         return Optional.empty();
     }
 
+    /**
+     * Tries to create an instance of given Class using a parameterized constructor
+     *
+     * @param clazz Class information of the object to create
+     * @param parameter array including parameters of the constructor
+     * @param <T> Type of the object to be created
+     * @return Optional including the instance or null if no public default constructor available
+     * @throws ReflectiveOperationException in case of an error when creating the object
+     */
     public static <T> Optional<T> newInstanceOf(Class<? extends T> clazz, Object[] parameter) throws ReflectiveOperationException
     {
         Objects.requireNonNull(clazz);
@@ -36,7 +55,16 @@ public final class ClassFactory
         return Optional.empty();
     }
 
-
+    /**
+     * This method tries tor create an instance of Class<T> using a static factory method of given factory class information.
+     * This method expects that the factory method does not need any parameters to create the new instance.
+     *
+     * @param interfaceType Class information of return type of the factory method
+     * @param factory class information providing the static factory method
+     * @param <T> Type of the object to be created
+     * @return <T> Optional including the instance of T or null if no factory method is found.
+     * @throws ReflectiveOperationException in case of an error when creating the object.
+     */
     public static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory) throws ReflectiveOperationException
     {
         Objects.requireNonNull(factory);
@@ -51,7 +79,17 @@ public final class ClassFactory
         return Optional.empty();
     }
 
-
+    /**
+     * This method tries tor create an instance of Class<T> using a static factory method of given factory class information.
+     * This method expects that the factory method does not need any parameters to create the new instance.
+     *
+     * @param interfaceType Class information of return type of the factory method
+     * @param factory factory class information providing the static factory method
+     * @param parameters array with parameters required by the factory method
+     * @param <T> Type of the object to be created
+     * @return <T> Optional including the instance of T or null if no factory method is found.
+     * @throws ReflectiveOperationException in case of an error when creating the object.
+     */
     public static <T> Optional<T> newInstanceOf(Class<T> interfaceType, Class<?> factory, Object[] parameters) throws ReflectiveOperationException
     {
         Objects.requireNonNull(factory);
