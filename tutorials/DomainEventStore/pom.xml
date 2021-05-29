@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>tutorials</artifactId>
+    <groupId>io.jexxa.tutorials</groupId>
+    <version>3.1.0-SNAPSHOT</version>
+  </parent>
+
+
+  <artifactId>domaineventstore</artifactId>
+  <name>DomainEventStore</name>
+
+  <properties>
+    <main.class>io.jexxa.tutorials.domaineventstore.DomainEventStoreApplication</main.class>
+    <jmx.port>1090</jmx.port>
+  </properties>
+
+  <dependencies>
+    <!-- dependencies for tests -->
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-launcher</artifactId>
+      <version>${junit.platform.launcher.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit.jupiter.engine.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>${junit.jupiter.params.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- dependencies for application core -->
+    <dependency>
+      <groupId>io.jexxa.addendj</groupId>
+      <artifactId>AddendJ</artifactId>
+      <version>${addendj.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjtools</artifactId>
+      <version>${aspectjtools.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+      <version>${aspectjrt.version}</version>
+    </dependency>
+
+    <!-- dependencies for JDBCAdapter -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${postgres.version}</version>
+    </dependency>
+
+    <!-- dependencies for tests with ActiveMQ -->
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-client</artifactId>
+      <version>${activemq.client.version}</version>
+    </dependency>
+
+    <!-- Additional utils for command line parsing and validation -->
+    <dependency>
+      <groupId>commons-cli</groupId>
+      <artifactId>commons-cli</artifactId>
+      <version>${commons.cli.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${commons.lang3.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.nickwongdev</groupId>
+        <artifactId>aspectj-maven-plugin</artifactId>
+        <version>${aspectj.maven.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>compile</id>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <weaveDependencies>
+                <weaveDependency>
+                  <groupId>io.jexxa.addendj</groupId>
+                  <artifactId>AddendJ</artifactId>
+                </weaveDependency>
+              </weaveDependencies>
+              <complianceLevel>11</complianceLevel>
+              <XaddSerialVersionUID>true</XaddSerialVersionUID>
+              <encoding>UTF-8</encoding>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
+            <version>${aspectjtools.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <mainClass>${main.class}</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId> <!-- Extend configuration from parent-pom by main class-->
+        <executions>
+          <execution>
+            <configuration>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>${main.class}</mainClass>
+                </transformer>
+              </transformers>
+
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin> <!-- build a docker image -->
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>${maven.jib.plugin}</version>
+        <configuration>
+          <allowInsecureRegistries>true</allowInsecureRegistries>
+          <from>
+            <image>adoptopenjdk/openjdk11:jre-11.0.8_10-alpine</image>
+          </from>
+          <to>
+            <image>localhost:10001/repository/tiho/${project.groupId}/${project.artifactId}:${project.version}</image>
+            <tags>
+              <tag>latest</tag>
+            </tags>
+          </to>
+          <container>
+            <creationTime>
+              USE_CURRENT_TIMESTAMP
+            </creationTime>
+
+            <!--- The jexxa-application.properties used in this tutorial is fine for local execution. Within a container,
+                            we have to define URLs to external infrastructure such as ActiveMQ or the database. To overwrite jexxa-application.properties
+                            you can use java system properties which can be set as JVM flags.
+                        -->
+            <jvmFlags>
+              <!--- Uncomment following lines to configure jdbc parameters -->
+              <!--- <jvmFlag>
+                -Dio.jexxa.jdbc.url=jdbc:postgresql://172.17.0.4:5432/bookstorej
+              </jvmFlag>
+              <jvmFlag>
+                -Dio.jexxa.jdbc.autocreate.database=jdbc:postgresql://172.17.0.4:5432/postgres
+              </jvmFlag> -->
+
+              <!--- Enable for JMX support.
+              Notes:  - jmxremote.rmi.port and jmxremote.port must be identical in order to access application in docker container
+                      - exposed port in section <ports> must be identical to jmxremote.port. Otherwise port forwarding will not work with jmx
+               -->
+              <jvmFlag>
+                -Dcom.sun.management.jmxremote.local.only=false
+              </jvmFlag>
+              <jvmFlag>
+                -Dcom.sun.management.jmxremote
+              </jvmFlag>
+              <jvmFlag>
+                -Dcom.sun.management.jmxremote.port=${jmx.port}
+              </jvmFlag>
+              <jvmFlag>
+                -Dcom.sun.management.jmxremote.rmi.port=${jmx.port}
+              </jvmFlag>
+              <jvmFlag>
+                -Dcom.sun.management.jmxremote.local.only=false
+              </jvmFlag>
+              <jvmFlag>
+                -Dcom.sun.management.jmxremote.authenticate=false
+              </jvmFlag>
+              <jvmFlag>
+                -Dcom.sun.management.jmxremote.ssl=false
+              </jvmFlag>
+              <jvmFlag>
+                -Djava.rmi.server.hostname=localhost
+              </jvmFlag>
+            </jvmFlags>
+
+            <!--- Enable for JDBC support -->
+            <args>
+              <arg>
+                -jdbc
+              </arg>
+            </args>
+
+            <ports>
+              <port>7000</port>
+              <port>${jmx.port}</port>
+            </ports>
+          </container>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+</project>
