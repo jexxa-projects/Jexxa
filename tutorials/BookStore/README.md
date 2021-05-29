@@ -145,6 +145,7 @@ public final class BookRepository implements IBookRepository
     @Override
     public List<Book> getAll() { return repository.get(); }
 }
+
 ```
 
 ## 3. Implement the application 
@@ -167,7 +168,7 @@ public final class BookStoreApplication
         // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
         RepositoryManager.setDefaultStrategy(getDrivenAdapterStrategy(args));
     
-        JexxaMain jexxaMain = new JexxaMain(BookStoreApplication.class.getSimpleName());
+        var jexxaMain = new JexxaMain(BookStoreApplication.class.getSimpleName());
     
         jexxaMain
                 //Define which outbound ports should be managed by Jexxa
