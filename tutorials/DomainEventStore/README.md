@@ -3,7 +3,44 @@
 https://www.innoq.com/en/blog/domain-events-versus-event-sourcing/
 
 
-## Use cases of a Repository
+
+# Production systems 
+
+reference https://www.britannica.com/technology/production-system
+
+There are three common types of basic production systems: 
+*   The batch system:
+    In a batch system, general-purpose equipment and methods are used to produce small quantities of output (goods or services) with specifications that could vary greatly from one batch to the next. Examples include systems for producing specialized machine tools or heavy-duty construction equipment, specialty chemicals, and processed food products
+    
+*   The continuous system:
+    In the continuous system, items to be processed flow through a series of steps, that are common to most other products being processed. Since large volumes of throughput are expected, specially designed equipment and methods are often used so that lower production costs can be achieved. Examples include systems for assembling automobile engines and automobiles themselves, as well as other consumer products such as televisions, washing machines, and personal computers. Therefore, continuous production systems are often referred to as assembly systems or assembly line systems and, as noted below, are common in mass production operations.
+    
+*   The project system:
+    The third type of production system is the project, or “one-shot” system. For a single, one-of-a-kind product, for example, a building, a ship, or the prototype of a product such as an airplane. Because of the singular nature of project systems, special methods of management have been developed to contain the costs of production within reasonable levels.
+    
+
+Note, that batch and continues systems are often found in combination. 
+
+## Batch Process / Production 
+
+reference: https://de.wikipedia.org/wiki/Chargenprozess 
+In the manufacturing batch production process, the machines are in chronological order directly related to the manufacturing process. The batch production method is also used so any temporary changes or modifications can be made to the product if necessary during the manufacturing process.[3] For example, if a product needed a sudden change in material or details changed, it can be done in between batches. A
+
+Batch production process: A production process that results in the production of defined quantities of material by subjecting quantities of materials to be used are subjected to an orderly sequence of process activities using one or more pieces of manufacturing equipment within a delineated time period. 
+
+In terms of DDD the most important aspects are:
+
+* Defined quantities of materials to be used 
+* Using one or more pieces of manufacturing equipment
+* Within a defined period of time
+* An ordered sequence of process activities.
+
+
+
+
+
+
+
 
 ### Archive 
 
