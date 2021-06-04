@@ -1,3 +1,4 @@
+WIP!!!
 
 # Domain Event vs. Event Sourcing 
 https://www.innoq.com/en/blog/domain-events-versus-event-sourcing/
@@ -29,14 +30,27 @@ In the manufacturing batch production process, the machines are in chronological
 Batch production process: A production process that results in the production of defined quantities of material by subjecting quantities of materials to be used are subjected to an orderly sequence of process activities using one or more pieces of manufacturing equipment within a delineated time period. 
 
 In terms of DDD the most important aspects are:
-
 * Defined quantities of materials to be used 
 * Using one or more pieces of manufacturing equipment
 * Within a defined period of time
 * An ordered sequence of process activities.
 
 
+When modeling a software using DDD, you will end up in a setup that is most likely in the following way. 
 
+*   Manufacturing equipment is modelled as an DDD-Aggregate and typically grouped into aggregates that can be grouped into one or multiple DDD-contexts
+
+*   Within a defined period of time: In general this means that the used equipment which is represented by DDD-aggregates is used for producing the production batch. So the relation between the production batch and the equipment is limited for a defined period of time. In addition, there is in general no relation between a production batch and the predecessor or succeeding batch. 
+
+*   The end of a specific process activity is in general an important event within the domain.  
+    *   This it is modeled as Domainevent
+    *   It potentially starts the next processing step
+
+*   So a modelling approach using events-sourcing might only be recommended if there is strong auditing, especially if all incoming state transitions must be captured. If it is 'only' required to record the used material together with some using Domain Events is sufficient. 
+In case you are not sure which approach to be used in your context you should start with DomainEvents because event sourcing introduces additional complexity. You should really be sure that and why you need it. 
+
+
+*   Important: The process is linear. It is most unlikely that you can undo a specific production step. So in contrast to financial or insurance sector you typically do not have any transaction within the business domain. A failure in one production step typically leads to a some other production step(s) or to discard a specific production batch. 
 
 
 
