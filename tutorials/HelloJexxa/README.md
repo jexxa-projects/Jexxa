@@ -30,7 +30,7 @@ public final class HelloJexxa
     public static void main(String[] args)
     {
         //Create your jexxaMain for this application
-        JexxaMain jexxaMain = new JexxaMain("HelloJexxa");
+        var jexxaMain = new JexxaMain("HelloJexxa");
 
         jexxaMain
                 // Bind a JMX adapter to our BoundedContext object.

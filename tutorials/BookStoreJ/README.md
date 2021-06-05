@@ -129,7 +129,7 @@ public final class BookStoreJApplication
         // of DDD our aggregate is responsible to ensure consistency of our data and not the database.
         RepositoryManager.setDefaultStrategy(getDrivenAdapterStrategy(args));
 
-        JexxaMain jexxaMain = new JexxaMain(BookStoreJApplication.class.getSimpleName());
+        var jexxaMain = new JexxaMain(BookStoreJApplication.class.getSimpleName());
 
         jexxaMain
                 // In order to find ports by annotation we must add packages that are searched by Jexxa.
