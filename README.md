@@ -12,7 +12,7 @@ Jexxa is a lightweight framework to implement durable business applications base
 Goal of this framework is to support the development of _durable_ business applications as good as possible. Therefore, Jexxa stresses the following aspects in particular:
 
 *   Aligned development: Framework is tailored to the needs of development teams for durable business applications.
-*   Visible flow of control: Simplifies navigation through your business application.      
+*   Visible flow of control: Simplifies navigation through your business application. See [here](tutorials/TimeService/README-FlowOfControl.md) for more information.      
 *   Technology agnostic: Even IoC concepts such as dependency injection do not require any framework specific @Annotations.
 *   Well-defined API: Allows for the integration of arbitrary (old and new) technology stacks. 
 
@@ -40,14 +40,14 @@ Maven:
 <dependency>
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa-web</artifactId>
-  <version>3.0.2</version>
+  <version>3.0.3</version>
 </dependency> 
 ```
 
 Gradle:
 
 ```groovy
-compile "io.Jexxa:jexxa-web:3.0.2"
+compile "io.Jexxa:jexxa-web:3.0.3"
 ``` 
  
 ### Start programming 

@@ -203,4 +203,4 @@ difference to follow the flow of control in the source code, Jexxa uses the same
 
 ## Summary ##
 
-I hope you get an idea how to easily navigate through your application using the underlying architecture.  
+I hope you got an idea how to easily navigate through your application using the underlying architecture.  
