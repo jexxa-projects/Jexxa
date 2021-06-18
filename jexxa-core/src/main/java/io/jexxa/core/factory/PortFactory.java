@@ -102,7 +102,7 @@ public class PortFactory
     }
 
     /**
-     * This method creates a so called port-adapter including the managed port. A port-adapter typically
+     * This method creates a new instance of a so called port-adapter including the managed port. A port-adapter typically
      * performs a specific mapping from a generic driving adapter, such as JMS, to a specific type of port.
      * <p>
      *
