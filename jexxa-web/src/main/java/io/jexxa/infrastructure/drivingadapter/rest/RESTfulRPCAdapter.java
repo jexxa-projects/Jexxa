@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -21,7 +20,8 @@ import io.javalin.plugin.json.JavalinJson;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.json.gson.GsonConverter;
+import io.jexxa.utils.json.JSONConverter;
+import io.jexxa.utils.json.JSONManager;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -37,8 +37,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public static final String OPEN_API_PATH = "io.jexxa.rest.open_api_path";
     public static final String STATIC_FILES_ROOT = "io.jexxa.rest.static_files_root";
 
-    private static final Gson GSON = GsonConverter.getGson();
-
+    private final JSONConverter jsonConverter = JSONManager.getJSONConverter();
     private final Properties properties;
     private Javalin javalin;
     private Server server;
@@ -211,8 +210,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
                 var exceptionWrapper = new JsonObject();
                 exceptionWrapper.addProperty("ExceptionType", targetException.getClass().getName());
-                exceptionWrapper.addProperty("Exception", GSON.toJson(targetException));
-                exceptionWrapper.addProperty("ApplicationType", GSON.toJson("application/json"));
+                exceptionWrapper.addProperty("Exception", jsonConverter.toJson(targetException));
+                exceptionWrapper.addProperty("ApplicationType", jsonConverter.toJson("application/json"));
 
                 ctx.result(exceptionWrapper.toString());
             }
@@ -290,7 +289,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         else
         {
             var result = new Object[1];
-            result[0] = GSON.fromJson(jsonString, method.getParameterTypes()[0]);
+            result[0] = jsonConverter.fromJson(jsonString, method.getParameterTypes()[0]);
             return result;
         }
     }
@@ -307,7 +306,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
         for (var i = 0; i < parameterTypes.length; ++i)
         {
-            paramArray[i] = GSON.fromJson(jsonArray.get(i), parameterTypes[i]);
+            paramArray[i] = jsonConverter.fromJson(jsonArray.get(i).toString(), parameterTypes[i]);
         }
 
         return paramArray;
@@ -316,8 +315,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     @SuppressWarnings("NullableProblems") // setToJsonMapper(GSON::toJson) causes this warning because toJson is not annotated
     private void setupJavalin()
     {
-        JavalinJson.setFromJsonMapper(GSON::fromJson);
-        JavalinJson.setToJsonMapper(GSON::toJson);
+        JavalinJson.setFromJsonMapper(jsonConverter::fromJson);
+        JavalinJson.setToJsonMapper(jsonConverter::toJson);
 
         this.javalin = Javalin.create(this::getJavalinConfig);
     }
