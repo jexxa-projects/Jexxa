@@ -3,6 +3,8 @@ package io.jexxa.core;
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static io.jexxa.TestConstants.JEXXA_DRIVING_ADAPTER;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,6 +19,7 @@ import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domainservice.IJexxaEntityRepository;
 import io.jexxa.application.domainservice.InitializeJexxaEntities;
 import io.jexxa.application.infrastructure.drivingadapter.ProxyAdapter;
+import io.jexxa.application.infrastructure.drivingadapter.ProxyPortAdapter;
 import io.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
 import io.jexxa.core.convention.PortConventionViolation;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
@@ -40,7 +43,9 @@ class JexxaMainTest
     {
         RepositoryManager.setDefaultStrategy(IMDBRepository.class);
         objectUnderTest = new JexxaMain(CONTEXT_NAME);
-        objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+        objectUnderTest
+                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+                .addToInfrastructure(JEXXA_DRIVING_ADAPTER)
                 .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
     }
 
@@ -152,10 +157,34 @@ class JexxaMainTest
     void invalidBindToPortAdapter()
     {
         //Arrange - All done in initTests
+        objectUnderTest = new JexxaMain(CONTEXT_NAME);
+        objectUnderTest
+                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
+
         var drivingAdapter = objectUnderTest.bind(ProxyAdapter.class);
 
         //Act /Assert
         assertThrows(PortConventionViolation.class, () -> drivingAdapter.to(SimpleApplicationServiceAdapter.class));
+    }
+
+    @Test
+    void bindToMultiplePortAdapter()
+    {
+        //Arrange - All done in initTests
+        var expectedDrivingAdapterInstanceCount = 1;
+        var expectedProxyAdapterInstanceCount = 2;
+        ProxyAdapter.resetInstanceCount();
+        ProxyPortAdapter.resetInstanceCount();
+
+        //Act
+        objectUnderTest
+                .bind(ProxyAdapter.class).to(ProxyPortAdapter.class)
+                .bind(ProxyAdapter.class).to(ProxyPortAdapter.class);
+
+        //Assert
+        assertEquals(expectedDrivingAdapterInstanceCount, ProxyAdapter.getInstanceCount());
+        assertEquals(expectedProxyAdapterInstanceCount, ProxyPortAdapter.getInstanceCount());
     }
 
 

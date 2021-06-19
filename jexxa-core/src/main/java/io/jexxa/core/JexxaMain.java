@@ -223,35 +223,35 @@ public final class JexxaMain
     @SuppressWarnings("unused")
     List<String> getApplicationCore() { return portFactory.getAcceptPackages(); }
 
-    void bindToPort(Class<? extends IDrivingAdapter> adapter, Class<?> port)
+    void bindToPort(Class<? extends IDrivingAdapter> drivingAdapter, Class<?> inboundPort)
     {
-        var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
-        var inboundPort    = portFactory.getInstanceOf(port, properties);
-        Objects.requireNonNull(inboundPort);
-        drivingAdapter.register(inboundPort);
+        var drivingAdapterInstance = drivingAdapterFactory.getInstanceOf(drivingAdapter, properties);
+        var inboundPortInstance    = portFactory.getInstanceOf(inboundPort, properties);
+        Objects.requireNonNull(inboundPortInstance);
+        drivingAdapterInstance.register(inboundPortInstance);
 
-        compositeDrivingAdapter.add(drivingAdapter);
+        compositeDrivingAdapter.add(drivingAdapterInstance);
     }
 
-    JexxaMain bindToPort(Class<? extends IDrivingAdapter> adapter, Object port)
+    JexxaMain bindToPort(Class<? extends IDrivingAdapter> drivingAdapter, Object inboundPort)
     {
-        var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
-        drivingAdapter.register(port);
+        var drivingAdapterInstance = drivingAdapterFactory.getInstanceOf(drivingAdapter, properties);
+        drivingAdapterInstance.register(inboundPort);
 
-        compositeDrivingAdapter.add(drivingAdapter);
+        compositeDrivingAdapter.add(drivingAdapterInstance);
 
         return this;
     }
 
-    void bindToPortAdapter(Class<? extends IDrivingAdapter> adapter, Class<?> portWrapper)
+    void bindToPortAdapter(Class<? extends IDrivingAdapter> drivingAdapter, Class<?> portAdapter)
     {
-        var drivingAdapter = drivingAdapterFactory.newInstanceOf(adapter, properties);
+        var drivingAdapterInstance = drivingAdapterFactory.getInstanceOf(drivingAdapter, properties);
 
-        var portWrapperInstance = portFactory.getPortAdapterOf(portWrapper, properties);
+        var portAdapterInstance = portFactory.getPortAdapterOf(portAdapter, properties);
 
-        drivingAdapter.register(portWrapperInstance);
+        drivingAdapterInstance.register(portAdapterInstance);
 
-        compositeDrivingAdapter.add(drivingAdapter);
+        compositeDrivingAdapter.add(drivingAdapterInstance);
     }
 
     void bindToAnnotatedPorts(Class<? extends IDrivingAdapter> adapter, Class<? extends Annotation> portAnnotation)
