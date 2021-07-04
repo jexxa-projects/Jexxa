@@ -21,6 +21,7 @@ class SQLSyntax
     static final String OR = "OR ";
 
     static final String ORDER_BY = "ORDER BY ";
+    static final String LIMIT = "LIMIT ";
 
     static final String ARGUMENT_PLACEHOLDER = "? ";
     static final String COMMA = ", ";

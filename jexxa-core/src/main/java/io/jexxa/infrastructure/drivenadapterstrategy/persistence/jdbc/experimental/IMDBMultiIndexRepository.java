@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental;
 
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +84,38 @@ public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & SearchStrategy> 
                     .values()
                     .stream()
                     .filter(t -> rangeComparator.getIntValueT(t).compareTo( rangeComparator.getIntValueS(endValue)) <= 0)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<T> getAscending(int amount)
+        {
+            return getOwnAggregateMap()
+                    .values()
+                    .stream()
+                    .sorted(Comparator.comparing(element -> rangeComparator.getIntValueT(element)))
+                    .limit(amount)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<T> getDescending(int amount)
+        {
+            return getOwnAggregateMap()
+                    .values()
+                    .stream()
+                    .sorted((element1, element2) -> rangeComparator.getIntValueT(element2).compareTo( rangeComparator.getIntValueT(element1)))
+                    .limit(amount)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<T> get(S value)
+        {
+            return getOwnAggregateMap()
+                    .values()
+                    .stream()
+                    .filter(t -> rangeComparator.getIntValueT(t).compareTo( rangeComparator.getIntValueS(value)) == 0)
                     .collect(Collectors.toList());
         }
 

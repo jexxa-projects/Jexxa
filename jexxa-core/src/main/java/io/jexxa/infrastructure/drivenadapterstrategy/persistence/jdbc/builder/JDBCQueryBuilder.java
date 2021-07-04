@@ -1,9 +1,11 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.AND;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.ARGUMENT_PLACEHOLDER;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.BLANK;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.COMMA;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.FROM;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.LIMIT;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.OR;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.ORDER_BY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SELECT;
@@ -128,6 +130,18 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
                 .append(BLANK);
 
         return new JDBCCondition<>(this);
+    }
+
+    public JDBCQueryBuilder<T> limit(int number)
+    {
+        getStatementBuilder()
+                .append( LIMIT )
+                .append( ARGUMENT_PLACEHOLDER )
+                .append(BLANK);
+
+        addArgument(number);
+
+        return this;
     }
 
     public JDBCQuery create()

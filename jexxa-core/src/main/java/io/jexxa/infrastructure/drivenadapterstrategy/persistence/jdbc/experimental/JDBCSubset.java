@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
 
 public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISubset<T, S>
 {
@@ -81,6 +82,49 @@ public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISub
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isLessOrEqual(sqlEndValue)
+                .create();
+
+        return searchElements(jdbcQuery);
+    }
+
+    @Override
+    public List<T> getAscending(int amount)
+    {
+        var jdbcQuery = jdbcRepository.getConnection()
+                .createQuery(comparatorSchema)
+                .select( schemaValue )
+                .from(aggregateClazz)
+                .orderBy(nameOfRow, SQLOrder.ASC)
+                .limit(amount)
+                .create();
+
+        return searchElements(jdbcQuery);
+    }
+
+    @Override
+    public List<T> getDescending(int amount)
+    {
+        var jdbcQuery = jdbcRepository.getConnection()
+                .createQuery(comparatorSchema)
+                .select( schemaValue )
+                .from(aggregateClazz)
+                .orderBy(nameOfRow, SQLOrder.DESC)
+                .limit(amount)
+                .create();
+
+        return searchElements(jdbcQuery);
+    }
+
+    @Override
+    public List<T> get(S value)
+    {
+        var sqlValue = rangeComparator.getIntValueS(value);
+        var jdbcQuery = jdbcRepository.getConnection()
+                .createQuery(comparatorSchema)
+                .select( schemaValue )
+                .from(aggregateClazz)
+                .where(nameOfRow)
+                .isEqual(sqlValue)
                 .create();
 
         return searchElements(jdbcQuery);

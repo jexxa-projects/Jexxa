@@ -256,6 +256,67 @@ class MultiIndexRepositoryIT
         assertEquals(21, rangedResult.size());
     }
 
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testGetAscending(Properties properties)
+    {
+        //Arrange
+        var objectUnderTest = MultiIndexRepositoryManager.getRepository(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                SearchStrategies.class,
+                properties);
+
+        objectUnderTest.removeAll();
+
+        testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
+        testData.forEach(objectUnderTest::add);
+
+        var subset = objectUnderTest.getSubset( SearchStrategies.INTERNAL_VALUE);
+        var limitAmount = 10 ;
+        var expectedResult = testData.stream()
+                .sorted(Comparator.comparing( JexxaAggregate::getInternalValue))
+                .limit(limitAmount).collect(Collectors.toList());
+
+        //Act
+        var result = subset.getAscending(limitAmount);
+
+        //Assert
+        assertEquals(limitAmount, result.size());
+        assertEquals(expectedResult, result);
+    }
+
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testGetDescending(Properties properties)
+    {
+        //Arrange
+        var objectUnderTest = MultiIndexRepositoryManager.getRepository(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                SearchStrategies.class,
+                properties);
+
+        objectUnderTest.removeAll();
+
+        testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
+        testData.forEach(objectUnderTest::add);
+
+        var subset = objectUnderTest.getSubset( SearchStrategies.INTERNAL_VALUE);
+        var limitAmount = 10 ;
+        var expectedResult = testData.stream()
+                .sorted(Comparator.comparing( JexxaAggregate::getInternalValue).reversed())
+                .limit(limitAmount).collect(Collectors.toList());
+
+        //Act
+        var result = subset.getDescending(limitAmount);
+
+        //Assert
+        assertEquals(limitAmount, result.size());
+        assertEquals(expectedResult, result);
+    }
+
+
     @SuppressWarnings("unused")
     static Stream<Properties> repositoryConfig() {
         var postgresProperties = new Properties();
