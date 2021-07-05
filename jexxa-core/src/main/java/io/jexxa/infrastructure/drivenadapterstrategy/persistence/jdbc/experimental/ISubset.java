@@ -21,7 +21,7 @@ public interface ISubset<T, S >
      * @param amount specifies the number of recent added aggregates that should be returned.
      * @return list of elements limited by the given amount.
      *         If less then requested aggregates are managed, all aggregates are returned.
-     *         If amnount is <0 then an empty list ist returned
+     *         If amount is &lt 0 then an empty list ist returned
      */
     List<T> getAscending(int amount);
 
@@ -30,7 +30,7 @@ public interface ISubset<T, S >
      * @param amount specifies the number of recent added aggregates that should be returned.
      * @return list of elements limited by the given amount.
      *         If less then requested aggregates are managed, all aggregates are returned.
-     *         If amnount is <0 then an empty list ist returned
+     *         If amount is &lt 0 then an empty list ist returned
      */
     List<T> getDescending(int amount);
 
