@@ -2,37 +2,43 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimen
 
 import java.math.BigDecimal;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class RangeComparator<T, S>
 {
-    private final Function<T, BigDecimal> toNumberFunctionT;
-    private final Function<S, BigDecimal> toNumberFunctionS;
+    private final Function<T, S> aggregateAccessor;
+    private final Function<S, ? extends Number> converterFunction;
 
-    public RangeComparator(Function<T, ? extends Number> toNumberFunctionT,
-                           Function<S, ? extends Number> toNumberFunctionS)
+    public RangeComparator(Function<T, S> aggregateAccessor,
+                           Function<S, ? extends Number> converterFunction)
     {
-        this.toNumberFunctionT = aggregate -> new BigDecimal( toNumberFunctionT.apply(aggregate).toString() );
-        this.toNumberFunctionS = parameter -> new BigDecimal( toNumberFunctionS.apply(parameter).toString());
+        this.aggregateAccessor = aggregateAccessor;
+        this.converterFunction = converterFunction;
     }
 
-    public <U extends Number, V extends Number> RangeComparator(Supplier<U> supplierT,
-                                                                Supplier<V> supplierS)
+    public Number convertAggregate(T aggregate)
     {
-        this.toNumberFunctionT = aggregate -> new BigDecimal ( supplierT.get().toString());
-        this.toNumberFunctionS = element -> new BigDecimal( supplierS.get().toString());
+        return converterFunction.apply(aggregateAccessor.apply(aggregate));
     }
 
-
-    public BigDecimal getIntValueT(T aggregate)
+    public Number convert(S value)
     {
-        return toNumberFunctionT.apply(aggregate);
+        return converterFunction.apply(value);
     }
 
-    public BigDecimal getIntValueS(S aggregate)
+    public int compareTo(T aggregate, S value)
     {
-        return toNumberFunctionS.apply(aggregate);
+        var aggregateValue = new BigDecimal( converterFunction.apply(aggregateAccessor.apply(aggregate)).toString() );
+        var givenValue = new BigDecimal( converterFunction.apply( value).toString());
+        return aggregateValue.compareTo(givenValue);
     }
+
+    public int compareTo2(T aggregate1, T aggregate2)
+    {
+        var aggregateValue1 = new BigDecimal( converterFunction.apply(aggregateAccessor.apply(aggregate1)).toString() );
+        var aggregateValue2 = new BigDecimal( converterFunction.apply(aggregateAccessor.apply(aggregate2)).toString() );
+        return aggregateValue1.compareTo(aggregateValue2);
+    }
+
 
 }
 

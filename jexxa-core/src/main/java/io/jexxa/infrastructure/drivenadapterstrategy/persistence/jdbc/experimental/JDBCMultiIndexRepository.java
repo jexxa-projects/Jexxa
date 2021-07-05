@@ -212,7 +212,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
-        return new JDBCSubset2<>(this, strategy.get(), strategy, aggregateClazz,comparatorSchema );
+        return new JDBCSubset<>(this, strategy.get(), strategy, aggregateClazz,comparatorSchema );
     }
 
 }

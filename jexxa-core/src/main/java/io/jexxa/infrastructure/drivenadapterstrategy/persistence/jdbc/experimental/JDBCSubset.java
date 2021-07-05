@@ -5,28 +5,31 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
+import io.jexxa.utils.json.JSONConverter;
+import io.jexxa.utils.json.JSONManager;
 
 public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISubset<T, S>
 {
     private final JDBCRepository jdbcRepository;
     private final RangeComparator<T, S> rangeComparator;
+
     private final Class<T> aggregateClazz;
-    private final Gson gson = new Gson();
+    private final JSONConverter jsonConverter = JSONManager.getJSONConverter();
     private final M nameOfRow;
     private final M schemaValue;
     private final Class<M> comparatorSchema;
 
 
-    JDBCSubset(JDBCRepository jdbcRepository, RangeComparator<T, S> rangeComparator, M nameOfRow, Class<T> aggregateClazz, Class<M> comparatorSchema)
+    public JDBCSubset(JDBCRepository jdbcRepository, RangeComparator<T, S> rangeComparator, M nameOfRow, Class<T> aggregateClazz, Class<M> comparatorSchema)
     {
         this.jdbcRepository = jdbcRepository;
-        this.rangeComparator = rangeComparator;
         this.aggregateClazz = aggregateClazz;
         this.nameOfRow = nameOfRow;
+        this.rangeComparator = rangeComparator;
+
         this.comparatorSchema = comparatorSchema;
         var comparatorFunctions = EnumSet.allOf(comparatorSchema);
         var iterator = comparatorFunctions.iterator();
@@ -37,7 +40,7 @@ public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISub
     @Override
     public List<T> getFrom(S startValue)
     {
-        var sqlStartValue = rangeComparator.getIntValueS(startValue);
+        var sqlStartValue = rangeComparator.convert(startValue);
 
         var jdbcQuery = jdbcRepository.getConnection()
                 .createQuery(comparatorSchema)
@@ -53,8 +56,8 @@ public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISub
     @Override
     public List<T> getRange(S startValue, S endValue)
     {
-        var sqlStartValue = rangeComparator.getIntValueS(startValue);
-        var sqlEndValue = rangeComparator.getIntValueS(endValue);
+        var sqlStartValue = rangeComparator.convert(startValue);
+        var sqlEndValue = rangeComparator.convert(endValue);
 
         var jdbcQuery = jdbcRepository.getConnection()
                 .createQuery(comparatorSchema)
@@ -73,7 +76,7 @@ public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISub
     @Override
     public List<T> getUntil(S endValue)
     {
-        var sqlEndValue = rangeComparator.getIntValueS(endValue);
+        var sqlEndValue = rangeComparator.convert(endValue);
 
         //"select value from %s where %s <= %s",
         var jdbcQuery = jdbcRepository.getConnection()
@@ -118,7 +121,7 @@ public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISub
     @Override
     public List<T> get(S value)
     {
-        var sqlValue = rangeComparator.getIntValueS(value);
+        var sqlValue = rangeComparator.convert(value);
         var jdbcQuery = jdbcRepository.getConnection()
                 .createQuery(comparatorSchema)
                 .select( schemaValue )
@@ -134,7 +137,7 @@ public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISub
     {
         return query.asString()
             .flatMap(Optional::stream)
-            .map( element -> gson.fromJson(element, aggregateClazz))
+            .map( element -> jsonConverter.fromJson(element, aggregateClazz))
             .collect(Collectors.toList());
     }
 }
