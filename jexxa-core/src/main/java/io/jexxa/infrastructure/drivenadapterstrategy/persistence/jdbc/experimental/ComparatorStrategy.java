@@ -3,7 +3,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimen
 
 @FunctionalInterface
 public
-interface SearchStrategy
+interface ComparatorStrategy
 {
-    <T,V> RangeComparator<T,V> get();
+    <T,V> Comparator<T,V> getComparator();
 }

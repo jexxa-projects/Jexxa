@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 
 
 @SuppressWarnings("unused")
-public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> extends JDBCRepository implements IMultiIndexRepository<T, K, M>
+public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & ComparatorStrategy> extends JDBCRepository implements IMultiIndexRepository<T, K, M>
 {
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCMultiIndexRepository.class);
     private static final String SQL_NUMERIC = "NUMERIC";
@@ -76,7 +76,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
         var comparatorValueSet = comparatorFunctions
                 .stream()
                 .skip(2) // Skip the key and value
-                .map( element -> element.get().convertAggregate(aggregate) )
+                .map( element -> element.getComparator().convertFrom(aggregate) )
                 .collect(Collectors.toList());
 
         var valueSet = new ArrayList<>();
@@ -132,7 +132,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
                 jsonConverter.toJson(keyFunction.apply(aggregate)),
                 jsonConverter.toJson(aggregate));
 
-        var remainingData =  comparatorFunctions.stream().skip(2).map(element -> element.get().convertAggregate(aggregate));
+        var remainingData =  comparatorFunctions.stream().skip(2).map(element -> element.getComparator().convertFrom(aggregate));
 
         var command = getConnection()
                 .createCommand(comparatorSchema)
@@ -212,7 +212,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & SearchStrategy> e
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
-        return new JDBCSubset<>(this, strategy.get(), strategy, aggregateClazz,comparatorSchema );
+        return new JDBCSubset<>(this, strategy.getComparator(), strategy, aggregateClazz,comparatorSchema );
     }
 
 }

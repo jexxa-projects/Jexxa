@@ -11,10 +11,10 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQ
 import io.jexxa.utils.json.JSONConverter;
 import io.jexxa.utils.json.JSONManager;
 
-public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISubset<T, S>
+public class JDBCSubset<T,S, M extends Enum<M> & ComparatorStrategy> implements ISubset<T, S>
 {
     private final JDBCRepository jdbcRepository;
-    private final RangeComparator<T, S> rangeComparator;
+    private final Comparator<T, S> comparator;
 
     private final Class<T> aggregateClazz;
     private final JSONConverter jsonConverter = JSONManager.getJSONConverter();
@@ -23,12 +23,12 @@ public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISub
     private final Class<M> comparatorSchema;
 
 
-    public JDBCSubset(JDBCRepository jdbcRepository, RangeComparator<T, S> rangeComparator, M nameOfRow, Class<T> aggregateClazz, Class<M> comparatorSchema)
+    public JDBCSubset(JDBCRepository jdbcRepository, Comparator<T, S> comparator, M nameOfRow, Class<T> aggregateClazz, Class<M> comparatorSchema)
     {
         this.jdbcRepository = jdbcRepository;
         this.aggregateClazz = aggregateClazz;
         this.nameOfRow = nameOfRow;
-        this.rangeComparator = rangeComparator;
+        this.comparator = comparator;
 
         this.comparatorSchema = comparatorSchema;
         var comparatorFunctions = EnumSet.allOf(comparatorSchema);
@@ -40,7 +40,7 @@ public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISub
     @Override
     public List<T> getFrom(S startValue)
     {
-        var sqlStartValue = rangeComparator.convert(startValue);
+        var sqlStartValue = comparator.convert(startValue);
 
         var jdbcQuery = jdbcRepository.getConnection()
                 .createQuery(comparatorSchema)
@@ -56,8 +56,8 @@ public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISub
     @Override
     public List<T> getRange(S startValue, S endValue)
     {
-        var sqlStartValue = rangeComparator.convert(startValue);
-        var sqlEndValue = rangeComparator.convert(endValue);
+        var sqlStartValue = comparator.convert(startValue);
+        var sqlEndValue = comparator.convert(endValue);
 
         var jdbcQuery = jdbcRepository.getConnection()
                 .createQuery(comparatorSchema)
@@ -76,7 +76,7 @@ public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISub
     @Override
     public List<T> getUntil(S endValue)
     {
-        var sqlEndValue = rangeComparator.convert(endValue);
+        var sqlEndValue = comparator.convert(endValue);
 
         //"select value from %s where %s <= %s",
         var jdbcQuery = jdbcRepository.getConnection()
@@ -121,7 +121,7 @@ public class JDBCSubset<T,S, M extends Enum<M> & SearchStrategy> implements ISub
     @Override
     public List<T> get(S value)
     {
-        var sqlValue = rangeComparator.convert(value);
+        var sqlValue = comparator.convert(value);
         var jdbcQuery = jdbcRepository.getConnection()
                 .createQuery(comparatorSchema)
                 .select( schemaValue )
