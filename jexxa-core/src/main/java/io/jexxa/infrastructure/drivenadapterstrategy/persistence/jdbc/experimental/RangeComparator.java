@@ -6,32 +6,32 @@ import java.util.function.Supplier;
 
 public class RangeComparator<T, S>
 {
-    private final Function<T, BigDecimal> converterFunctionT;
-    private final Function<S, BigDecimal> converterFunctionS;
+    private final Function<T, BigDecimal> toNumberFunctionT;
+    private final Function<S, BigDecimal> toNumberFunctionS;
 
-    public RangeComparator(Function<T, ? extends Number> converterFunctionT,
-                           Function<S, ? extends Number> converterFunctionS)
+    public RangeComparator(Function<T, ? extends Number> toNumberFunctionT,
+                           Function<S, ? extends Number> toNumberFunctionS)
     {
-        this.converterFunctionT = aggregate -> new BigDecimal( converterFunctionT.apply(aggregate).toString() );
-        this.converterFunctionS = parameter -> new BigDecimal( converterFunctionS.apply(parameter).toString());
+        this.toNumberFunctionT = aggregate -> new BigDecimal( toNumberFunctionT.apply(aggregate).toString() );
+        this.toNumberFunctionS = parameter -> new BigDecimal( toNumberFunctionS.apply(parameter).toString());
     }
 
     public <U extends Number, V extends Number> RangeComparator(Supplier<U> supplierT,
                                                                 Supplier<V> supplierS)
     {
-        this.converterFunctionT = aggregate -> new BigDecimal ( supplierT.get().toString());
-        this.converterFunctionS = element -> new BigDecimal( supplierS.get().toString());
+        this.toNumberFunctionT = aggregate -> new BigDecimal ( supplierT.get().toString());
+        this.toNumberFunctionS = element -> new BigDecimal( supplierS.get().toString());
     }
 
 
     public BigDecimal getIntValueT(T aggregate)
     {
-        return converterFunctionT.apply(aggregate);
+        return toNumberFunctionT.apply(aggregate);
     }
 
     public BigDecimal getIntValueS(S aggregate)
     {
-        return converterFunctionS.apply(aggregate);
+        return toNumberFunctionS.apply(aggregate);
     }
 
 }

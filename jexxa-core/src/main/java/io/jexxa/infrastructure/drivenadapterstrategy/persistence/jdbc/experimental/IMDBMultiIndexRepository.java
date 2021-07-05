@@ -36,7 +36,7 @@ public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & SearchStrategy> 
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
 
-        return new IMBDSubset<>(getOwnAggregateMap(), strategy.get());
+        return new IMBDSubset2<>(getOwnAggregateMap(), strategy.get());
     }
 
     public static class IMBDSubset<T, K, S> implements ISubset<T, S>
@@ -120,5 +120,90 @@ public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & SearchStrategy> 
         }
 
     }
+
+    public static class IMBDSubset2<T, K, S> implements ISubset<T, S>
+    {
+        RangeComparator2<T, S> rangeComparator;
+        Map<K, T> internalMap;
+
+        private Map<K, T> getOwnAggregateMap()
+        {
+            return internalMap;
+        }
+
+        public IMBDSubset2(Map<K, T> internalMap, RangeComparator2<T, S> rangeComparator)
+        {
+            this.internalMap = internalMap;
+            this.rangeComparator = rangeComparator;
+        }
+
+        @Override
+        public List<T> getFrom(S startValue)
+        {
+            return getOwnAggregateMap()
+                    .values()
+                    .stream()
+                    .filter(element -> rangeComparator.compareTo(element, startValue) >= 0)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<T> getRange(S startValue, S endValue)
+        {
+            return getOwnAggregateMap()
+                    .values()
+                    .stream()
+                    .filter(element -> rangeComparator.compareTo(element, startValue) >= 0)
+                    .filter(element -> rangeComparator.compareTo(element, endValue) <= 0)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<T> getUntil(S endValue)
+        {
+            return getOwnAggregateMap()
+                    .values()
+                    .stream()
+                    .filter(element -> rangeComparator.compareTo(element, endValue) <= 0)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<T> getAscending(int amount)
+        {
+            return getOwnAggregateMap()
+                    .values()
+                    .stream()
+                    .sorted((element1, element2) -> rangeComparator.compareTo2(element1, element2))
+                    .limit(amount)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<T> getDescending(int amount)
+        {
+            return getOwnAggregateMap()
+                    .values()
+                    .stream()
+                    .sorted((element1, element2) -> rangeComparator.compareTo2(element2, element1))
+                    .limit(amount)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<T> get(S value)
+        {
+            return getOwnAggregateMap()
+                    .values()
+                    .stream()
+                    .filter(element-> rangeComparator.compareTo(element, value) == 0)
+                    .collect(Collectors.toList());
+        }
+
+    }
+
+
+
+
 }
 

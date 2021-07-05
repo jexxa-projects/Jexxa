@@ -5,5 +5,5 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimen
 public
 interface SearchStrategy
 {
-    <T,V> RangeComparator<T,V> get();
+    <T,V> RangeComparator2<T,V> get();
 }

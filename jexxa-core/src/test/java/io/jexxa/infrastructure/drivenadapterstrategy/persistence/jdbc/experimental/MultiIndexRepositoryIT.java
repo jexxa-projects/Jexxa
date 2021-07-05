@@ -51,25 +51,23 @@ class MultiIndexRepositoryIT
         KEY(null),
         VALUE(null),
 
-        INTERNAL_VALUE(RangeComparators.createNumberComparator(JexxaAggregate::getInternalValue)),
+        INTERNAL_VALUE(new RangeComparator2<>(JexxaAggregate::getInternalValue, element -> element)),
 
-        AGGREGATE_KEY(RangeComparators.create(
-                aggregate -> aggregate.getKey().getValue(),
-                JexxaValueObject::getValue));
+        AGGREGATE_KEY(new RangeComparator2<>(JexxaAggregate::getKey, JexxaValueObject::getValue));
 
-        private final RangeComparator<JexxaAggregate,? > supplier;
+        private final RangeComparator2<JexxaAggregate, ? > comparator;
 
 
-        SearchStrategies(final RangeComparator<JexxaAggregate,?> supplier)
+        SearchStrategies(final RangeComparator2<JexxaAggregate,?> comparator)
         {
-            this.supplier = supplier;
+            this.comparator = comparator;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public RangeComparator<JexxaAggregate, ?> get()
+        public RangeComparator2<JexxaAggregate, ?> get()
         {
-            return supplier;
+            return comparator;
         }
     }
 
