@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
+import io.jexxa.utils.json.JSONConverter;
+import io.jexxa.utils.json.JSONManager;
 
 public class JDBCSubset2<T,S, M extends Enum<M> & SearchStrategy> implements ISubset<T, S>
 {
@@ -16,7 +17,7 @@ public class JDBCSubset2<T,S, M extends Enum<M> & SearchStrategy> implements ISu
     private final RangeComparator2<T, S> rangeComparator;
 
     private final Class<T> aggregateClazz;
-    private final Gson gson = new Gson();
+    private final JSONConverter jsonConverter = JSONManager.getJSONConverter();
     private final M nameOfRow;
     private final M schemaValue;
     private final Class<M> comparatorSchema;
@@ -56,7 +57,7 @@ public class JDBCSubset2<T,S, M extends Enum<M> & SearchStrategy> implements ISu
     public List<T> getRange(S startValue, S endValue)
     {
         var sqlStartValue = rangeComparator.convert(startValue);
-        var sqlEndValue = rangeComparator.convert(endValue);;
+        var sqlEndValue = rangeComparator.convert(endValue);
 
         var jdbcQuery = jdbcRepository.getConnection()
                 .createQuery(comparatorSchema)
@@ -136,7 +137,7 @@ public class JDBCSubset2<T,S, M extends Enum<M> & SearchStrategy> implements ISu
     {
         return query.asString()
             .flatMap(Optional::stream)
-            .map( element -> gson.fromJson(element, aggregateClazz))
+            .map( element -> jsonConverter.fromJson(element, aggregateClazz))
             .collect(Collectors.toList());
     }
 }
