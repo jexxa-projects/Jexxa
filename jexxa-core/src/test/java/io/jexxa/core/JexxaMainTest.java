@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.UNIT_TEST)
 class JexxaMainTest
 {
@@ -171,7 +171,7 @@ class JexxaMainTest
     @Test
     void bindToMultiplePortAdapter()
     {
-        //Arrange - All done in initTests
+        //Arrange
         var expectedDrivingAdapterInstanceCount = 1;
         var expectedProxyAdapterInstanceCount = 2;
         ProxyAdapter.resetInstanceCount();
