@@ -19,7 +19,7 @@ public final class MultiIndexRepositoryManager
     private static Class<?> defaultStrategy = null;
 
 
-    public static  <T,K,M  extends Enum<?> & ComparatorStrategy> IMultiIndexRepository<T,K, M> getRepository(
+    public static  <T,K,M  extends Enum<?> & ComparatorSchema> IMultiIndexRepository<T,K, M> getRepository(
             Class<T> aggregateClazz,
             Function<T,K> keyFunction,
             Class<M> comparatorFunctions,
@@ -40,7 +40,7 @@ public final class MultiIndexRepositoryManager
 
     @SuppressWarnings("unchecked")
     @CheckReturnValue
-    public <T,K,M  extends Enum<?> & ComparatorStrategy> IMultiIndexRepository<T,K,M> getStrategy(
+    public <T,K,M  extends Enum<?> & ComparatorSchema> IMultiIndexRepository<T,K,M> getStrategy(
             Class<T> aggregateClazz,
             Function<T,K> keyFunction,
             Class<M> comparatorFunctions,

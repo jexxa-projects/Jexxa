@@ -22,12 +22,13 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnec
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCRepository;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONManager;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 
 
 
 @SuppressWarnings("unused")
-public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & ComparatorStrategy> extends JDBCRepository implements IMultiIndexRepository<T, K, M>
+public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & ComparatorSchema> extends JDBCRepository implements IMultiIndexRepository<T, K, M>
 {
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCMultiIndexRepository.class);
     private static final String SQL_NUMERIC = "NUMERIC";
@@ -58,6 +59,9 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & ComparatorStrateg
         var iterator =comparatorFunctions.iterator();
         schemaKey =  iterator.next();
         schemaValue = iterator.next();
+
+        Validate.isTrue( "KEY".equals(schemaKey.name()), "First entry of ComparatorSchema must be 'KEY' ");
+        Validate.isTrue( "VALUE".equals(schemaValue.name()), "Second entry of ComparatorSchema must be 'VALUE' ");
 
         autocreateTable(properties);
     }

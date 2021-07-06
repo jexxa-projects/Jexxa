@@ -11,7 +11,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQ
 import io.jexxa.utils.json.JSONConverter;
 import io.jexxa.utils.json.JSONManager;
 
-public class JDBCSubset<T,S, M extends Enum<M> & ComparatorStrategy> implements ISubset<T, S>
+public class JDBCSubset<T,S, M extends Enum<M> & ComparatorSchema> implements ISubset<T, S>
 {
     private final JDBCRepository jdbcRepository;
     private final Comparator<T, S> comparator;

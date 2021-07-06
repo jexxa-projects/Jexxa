@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 
 @SuppressWarnings({"unused","java:S1452"})
-public class SubsetComparators
+public class Comparators
 {
     public static  <T, V> Comparator<T, V> keyComparator()
     {
@@ -18,7 +18,7 @@ public class SubsetComparators
         return null;
     }
 
-    public static <T, V> Comparator<T, V> subsetComparator(Function<T, V> accessorFunction, Function<V, ? extends Number> converterFunction)
+    public static <T, V> Comparator<T, V> aggregateComparator(Function<T, V> accessorFunction, Function<V, ? extends Number> converterFunction)
     {
         return new Comparator<>(accessorFunction, converterFunction);
     }
@@ -55,7 +55,7 @@ public class SubsetComparators
 
 
 
-    private SubsetComparators()
+    private Comparators()
     {
         //private constructor
     }

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 
-public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & ComparatorStrategy>  extends IMDBRepository<T, K> implements IMultiIndexRepository<T, K, M>
+public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & ComparatorSchema>  extends IMDBRepository<T, K> implements IMultiIndexRepository<T, K, M>
 {
 
     Set<M> comparatorFunctions;
