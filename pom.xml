@@ -87,7 +87,7 @@
     <junit.platform.launcher.version>1.8.0-M1</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.8.0-M1</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.8.0-M1</junit.jupiter.params.version>
-    <slf4j.simple.version>1.7.30</slf4j.simple.version>
+    <slf4j.simple.version>1.7.31</slf4j.simple.version>
     <slf4j.api.version>1.7.30</slf4j.api.version>
     <awaitility.version>4.1.0</awaitility.version>
 
