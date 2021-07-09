@@ -210,13 +210,13 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & ComparatorSchema>
     }
 
 
-    public <S> ISubset<T, S> getSubset(M strategy)
+    public <S> IQuery<T, S> getSubset(M strategy)
     {
         if (!comparatorFunctions.contains(strategy))
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
-        return new JDBCSubset<>(this, strategy.getComparator(), strategy, aggregateClazz,comparatorSchema );
+        return new JDBCQuery<>(this, strategy.getComparator(), strategy, aggregateClazz,comparatorSchema );
     }
 
 }

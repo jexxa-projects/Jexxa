@@ -28,17 +28,17 @@ public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & ComparatorSchema
     }
 
     @Override
-    public <S> ISubset<T, S> getSubset(M strategy)
+    public <S> IQuery<T, S> getSubset(M strategy)
     {
         if ( !comparatorFunctions.contains(strategy) )
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
 
-        return new IMBDSubset<>(getOwnAggregateMap(), strategy.getComparator());
+        return new IMBDQuery<>(getOwnAggregateMap(), strategy.getComparator());
     }
 
-    public static class IMBDSubset<T, K, S> implements ISubset<T, S>
+    public static class IMBDQuery<T, K, S> implements IQuery<T, S>
     {
         Comparator<T, S> comparator;
         Map<K, T> internalMap;
@@ -48,7 +48,7 @@ public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & ComparatorSchema
             return internalMap;
         }
 
-        public IMBDSubset(Map<K, T> internalMap, Comparator<T, S> comparator)
+        public IMBDQuery(Map<K, T> internalMap, Comparator<T, S> comparator)
         {
             this.internalMap = internalMap;
             this.comparator = comparator;

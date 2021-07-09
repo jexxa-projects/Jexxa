@@ -5,13 +5,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
 import io.jexxa.utils.json.JSONConverter;
 import io.jexxa.utils.json.JSONManager;
 
-public class JDBCSubset<T,S, M extends Enum<M> & ComparatorSchema> implements ISubset<T, S>
+public class JDBCQuery<T,S, M extends Enum<M> & ComparatorSchema> implements IQuery<T, S>
 {
     private final JDBCRepository jdbcRepository;
     private final Comparator<T, S> comparator;
@@ -23,7 +22,7 @@ public class JDBCSubset<T,S, M extends Enum<M> & ComparatorSchema> implements IS
     private final Class<M> comparatorSchema;
 
 
-    public JDBCSubset(JDBCRepository jdbcRepository, Comparator<T, S> comparator, M nameOfRow, Class<T> aggregateClazz, Class<M> comparatorSchema)
+    public JDBCQuery(JDBCRepository jdbcRepository, Comparator<T, S> comparator, M nameOfRow, Class<T> aggregateClazz, Class<M> comparatorSchema)
     {
         this.jdbcRepository = jdbcRepository;
         this.aggregateClazz = aggregateClazz;
@@ -133,7 +132,7 @@ public class JDBCSubset<T,S, M extends Enum<M> & ComparatorSchema> implements IS
         return searchElements(jdbcQuery);
     }
 
-    protected List<T> searchElements(JDBCQuery query)
+    protected List<T> searchElements(io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery query)
     {
         return query.asString()
             .flatMap(Optional::stream)

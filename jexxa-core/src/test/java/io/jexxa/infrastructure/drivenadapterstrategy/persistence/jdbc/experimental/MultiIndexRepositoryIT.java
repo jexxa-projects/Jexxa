@@ -244,7 +244,7 @@ class MultiIndexRepositoryIT
         testData.forEach(objectUnderTest::add);
         //testData.forEach(objectUnderTest::update);
 
-        ISubset<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getSubset( JexxaAggregateSchema.AGGREGATE_KEY);
+        IQuery<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getSubset( JexxaAggregateSchema.AGGREGATE_KEY);
 
         //Act
         var fromResult = irangedResult.getFrom(new JexxaValueObject(50));

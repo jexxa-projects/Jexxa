@@ -4,5 +4,5 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 
 public interface IMultiIndexRepository<T, V, M  extends Enum<?> & ComparatorSchema> extends IRepository<T, V>
 {
-    <S > ISubset<T, S > getSubset(M strategy);
+    <S > IQuery<T, S > getSubset(M strategy);
 }
