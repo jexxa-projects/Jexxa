@@ -31,14 +31,13 @@ public class JDBCCommand extends JDBCPreparedStatement
      */
     public void asUpdate()
     {
-        try
+        try (var preparedStatement = createPreparedStatement())
         {
-            if( getStatement().executeUpdate() == 0)
+            if( preparedStatement.executeUpdate() == 0)
             {
                 throw new IllegalArgumentException("Command was executed but returned that nothing changed! ");
             }
         }
-
         catch (SQLException e)
         {
             throw new IllegalArgumentException(SQL_STATEMENT_FAILED + getSQLStatement(), e);
@@ -51,9 +50,9 @@ public class JDBCCommand extends JDBCPreparedStatement
      */
     public void asEmpty( )
     {
-        try
+        try (var preparedStatement = createPreparedStatement())
         {
-            if( getStatement().executeUpdate() == 1)
+            if( preparedStatement.executeUpdate() == 1)
             {
                 throw new IllegalArgumentException("Command was executed but returned that something changed! ");
             }
@@ -70,9 +69,9 @@ public class JDBCCommand extends JDBCPreparedStatement
      */
     public void asIgnore( )
     {
-        try
+        try (var preparedStatement = createPreparedStatement())
         {
-            getStatement().executeUpdate();
+            preparedStatement.executeUpdate();
         }
         catch (SQLException e)
         {
