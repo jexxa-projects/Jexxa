@@ -78,7 +78,7 @@ public final class HelloJexxa
                 // It allows to access the public methods of the object via `jconsole`
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
 
-                // Bind a REST adapter to a HelloJexxa object
+                // Bind a REST adapter to class HelloJexxa and expose its methods
                 .bind(RESTfulRPCAdapter.class).to(HelloJexxa.class)
 
                 //Start Jexxa and all bindings
