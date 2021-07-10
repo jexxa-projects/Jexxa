@@ -28,9 +28,9 @@ import org.slf4j.Logger;
 
 
 @SuppressWarnings("unused")
-public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & ComparatorSchema> extends JDBCRepository implements IMultiIndexRepository<T, K, M>
+public class JDBCMultiValueRepository<T,K, M extends Enum<M> & SchemaComparator> extends JDBCRepository implements IMultiValueRepository<T, K, M>
 {
-    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCMultiIndexRepository.class);
+    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCMultiValueRepository.class);
     private static final String SQL_NUMERIC = "NUMERIC";
 
     private final Function<T, K> keyFunction;
@@ -43,7 +43,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & ComparatorSchema>
     private final M schemaValue;
 
 
-    public JDBCMultiIndexRepository(
+    public JDBCMultiValueRepository(
             Class<T> aggregateClazz,
             Function<T, K> keyFunction,
             Class<M> comparatorSchema,
@@ -80,7 +80,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & ComparatorSchema>
         var comparatorValueSet = comparatorFunctions
                 .stream()
                 .skip(2) // Skip the key and value
-                .map( element -> element.getComparator().convertFrom(aggregate) )
+                .map( element -> element.getComparator().convertAggregate(aggregate) )
                 .collect(Collectors.toList());
 
         var valueSet = new ArrayList<>();
@@ -136,7 +136,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & ComparatorSchema>
                 jsonConverter.toJson(keyFunction.apply(aggregate)),
                 jsonConverter.toJson(aggregate));
 
-        var remainingData =  comparatorFunctions.stream().skip(2).map(element -> element.getComparator().convertFrom(aggregate));
+        var remainingData =  comparatorFunctions.stream().skip(2).map(element -> element.getComparator().convertAggregate(aggregate));
 
         var command = getConnection()
                 .createCommand(comparatorSchema)
@@ -210,7 +210,7 @@ public class JDBCMultiIndexRepository<T,K, M extends Enum<M> & ComparatorSchema>
     }
 
 
-    public <S> IQuery<T, S> getSubset(M strategy)
+    public <S> IQuery<T, S> getIQuery(M strategy)
     {
         if (!comparatorFunctions.contains(strategy))
         {

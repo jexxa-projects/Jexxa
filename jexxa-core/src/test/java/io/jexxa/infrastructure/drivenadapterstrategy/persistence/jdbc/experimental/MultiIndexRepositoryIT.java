@@ -2,7 +2,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimen
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.Comparators.keyComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.Comparators.numberComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.Comparators.aggregateComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.Comparators.converterComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.Comparators.valueComparator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -49,7 +49,7 @@ class MultiIndexRepositoryIT
      * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
      * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
      */
-    public enum JexxaAggregateSchema implements ComparatorSchema
+    public enum JexxaAggregateSchema implements SchemaComparator
     {
         KEY(keyComparator()),
 
@@ -57,7 +57,7 @@ class MultiIndexRepositoryIT
 
         INTERNAL_VALUE(numberComparator(JexxaAggregate::getInternalValue)),
 
-        AGGREGATE_KEY(aggregateComparator(JexxaAggregate::getKey, JexxaValueObject::getValue));
+        AGGREGATE_KEY(converterComparator(JexxaAggregate::getKey, JexxaValueObject::getValue));
 
         private final Comparator<JexxaAggregate, ? > comparator;
 
@@ -216,7 +216,7 @@ class MultiIndexRepositoryIT
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
         testData.forEach(objectUnderTest::add);
 
-        var subset = objectUnderTest.getSubset( JexxaAggregateSchema.INTERNAL_VALUE);
+        var subset = objectUnderTest.getIQuery( JexxaAggregateSchema.INTERNAL_VALUE);
 
         //Act
         var fromResult = subset.getFrom(50);
@@ -244,7 +244,7 @@ class MultiIndexRepositoryIT
         testData.forEach(objectUnderTest::add);
         //testData.forEach(objectUnderTest::update);
 
-        IQuery<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getSubset( JexxaAggregateSchema.AGGREGATE_KEY);
+        IQuery<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getIQuery( JexxaAggregateSchema.AGGREGATE_KEY);
 
         //Act
         var fromResult = irangedResult.getFrom(new JexxaValueObject(50));
@@ -273,7 +273,7 @@ class MultiIndexRepositoryIT
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
         testData.forEach(objectUnderTest::add);
 
-        var subset = objectUnderTest.getSubset( JexxaAggregateSchema.INTERNAL_VALUE);
+        var subset = objectUnderTest.getIQuery( JexxaAggregateSchema.INTERNAL_VALUE);
         var limitAmount = 10 ;
         var expectedResult = testData.stream()
                 .sorted(java.util.Comparator.comparing( JexxaAggregate::getInternalValue))
@@ -303,7 +303,7 @@ class MultiIndexRepositoryIT
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
         testData.forEach(objectUnderTest::add);
 
-        var subset = objectUnderTest.getSubset( JexxaAggregateSchema.INTERNAL_VALUE);
+        var subset = objectUnderTest.getIQuery( JexxaAggregateSchema.INTERNAL_VALUE);
         var limitAmount = 10 ;
         var expectedResult = testData.stream()
                 .sorted(java.util.Comparator.comparing( JexxaAggregate::getInternalValue).reversed())

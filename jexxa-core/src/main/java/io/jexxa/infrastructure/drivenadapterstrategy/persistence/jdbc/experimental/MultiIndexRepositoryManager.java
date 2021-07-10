@@ -19,7 +19,7 @@ public final class MultiIndexRepositoryManager
     private static Class<?> defaultStrategy = null;
 
 
-    public static  <T,K,M  extends Enum<?> & ComparatorSchema> IMultiIndexRepository<T,K, M> getRepository(
+    public static  <T,K,M  extends Enum<?> & SchemaComparator> IMultiValueRepository<T,K, M> getRepository(
             Class<T> aggregateClazz,
             Function<T,K> keyFunction,
             Class<M> comparatorFunctions,
@@ -28,19 +28,19 @@ public final class MultiIndexRepositoryManager
         return REPOSITORY_MANAGER.getStrategy(aggregateClazz, keyFunction, comparatorFunctions, properties);
     }
 
-    public static <U extends IMultiIndexRepository<?,?,?>, T > void setStrategy(Class<U> strategyType, Class<T> aggregateType)
+    public static <U extends IMultiValueRepository<?,?,?>, T > void setStrategy(Class<U> strategyType, Class<T> aggregateType)
     {
         strategyMap.put(aggregateType, strategyType);
     }
 
-    public static <U extends IMultiIndexRepository<?,?,?>> void setDefaultStrategy(Class<U> defaultStrategy)
+    public static <U extends IMultiValueRepository<?,?,?>> void setDefaultStrategy(Class<U> defaultStrategy)
     {
         MultiIndexRepositoryManager.defaultStrategy = defaultStrategy;
     }
 
     @SuppressWarnings("unchecked")
     @CheckReturnValue
-    public <T,K,M  extends Enum<?> & ComparatorSchema> IMultiIndexRepository<T,K,M> getStrategy(
+    public <T,K,M  extends Enum<?> & SchemaComparator> IMultiValueRepository<T,K,M> getStrategy(
             Class<T> aggregateClazz,
             Function<T,K> keyFunction,
             Class<M> comparatorFunctions,
@@ -54,7 +54,7 @@ public final class MultiIndexRepositoryManager
 
             var result = ClassFactory.newInstanceOf(strategy, new Object[]{aggregateClazz, keyFunction, comparatorFunctions, properties});
 
-            return (IMultiIndexRepository<T, K,M>) result.orElseThrow();
+            return (IMultiValueRepository<T, K,M>) result.orElseThrow();
         }
         catch (ReflectiveOperationException e)
         {
@@ -103,11 +103,11 @@ public final class MultiIndexRepositoryManager
         // 3. If a JDBC driver is stated in Properties => Use JDBCKeyValueRepository
         if (properties.containsKey(JDBCConnection.JDBC_DRIVER))
         {
-            return JDBCMultiIndexRepository.class;
+            return JDBCMultiValueRepository.class;
         }
 
         // 4. If everything fails, return a IMDBRepository
-        return IMDBMultiIndexRepository.class;
+        return IMDBMultiValueRepository.class;
     }
 
 }

@@ -10,7 +10,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQ
 import io.jexxa.utils.json.JSONConverter;
 import io.jexxa.utils.json.JSONManager;
 
-public class JDBCQuery<T,S, M extends Enum<M> & ComparatorSchema> implements IQuery<T, S>
+public class JDBCQuery<T,S, M extends Enum<M> & SchemaComparator> implements IQuery<T, S>
 {
     private final JDBCRepository jdbcRepository;
     private final Comparator<T, S> comparator;
@@ -39,7 +39,7 @@ public class JDBCQuery<T,S, M extends Enum<M> & ComparatorSchema> implements IQu
     @Override
     public List<T> getFrom(S startValue)
     {
-        var sqlStartValue = comparator.convert(startValue);
+        var sqlStartValue = comparator.convertValue(startValue);
 
         var jdbcQuery = jdbcRepository.getConnection()
                 .createQuery(comparatorSchema)
@@ -55,8 +55,8 @@ public class JDBCQuery<T,S, M extends Enum<M> & ComparatorSchema> implements IQu
     @Override
     public List<T> getRange(S startValue, S endValue)
     {
-        var sqlStartValue = comparator.convert(startValue);
-        var sqlEndValue = comparator.convert(endValue);
+        var sqlStartValue = comparator.convertValue(startValue);
+        var sqlEndValue = comparator.convertValue(endValue);
 
         var jdbcQuery = jdbcRepository.getConnection()
                 .createQuery(comparatorSchema)
@@ -75,7 +75,7 @@ public class JDBCQuery<T,S, M extends Enum<M> & ComparatorSchema> implements IQu
     @Override
     public List<T> getUntil(S endValue)
     {
-        var sqlEndValue = comparator.convert(endValue);
+        var sqlEndValue = comparator.convertValue(endValue);
 
         //"select value from %s where %s <= %s",
         var jdbcQuery = jdbcRepository.getConnection()
@@ -120,7 +120,7 @@ public class JDBCQuery<T,S, M extends Enum<M> & ComparatorSchema> implements IQu
     @Override
     public List<T> get(S value)
     {
-        var sqlValue = comparator.convert(value);
+        var sqlValue = comparator.convertValue(value);
         var jdbcQuery = jdbcRepository.getConnection()
                 .createQuery(comparatorSchema)
                 .select( schemaValue )

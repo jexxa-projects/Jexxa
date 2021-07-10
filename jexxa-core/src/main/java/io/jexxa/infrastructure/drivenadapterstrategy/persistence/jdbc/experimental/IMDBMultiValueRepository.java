@@ -10,13 +10,11 @@ import java.util.stream.Collectors;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 
-public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & ComparatorSchema>  extends IMDBRepository<T, K> implements IMultiIndexRepository<T, K, M>
+public class IMDBMultiValueRepository<T, K, M extends Enum<M> & SchemaComparator>  extends IMDBRepository<T, K> implements IMultiValueRepository<T, K, M>
 {
+    private final Set<M> comparatorFunctions;
 
-    Set<M> comparatorFunctions;
-
-
-    public IMDBMultiIndexRepository(
+    public IMDBMultiValueRepository(
             Class<T> aggregateClazz,
             Function<T, K> keyFunction,
             Class<M> comparatorSchema,
@@ -28,7 +26,7 @@ public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & ComparatorSchema
     }
 
     @Override
-    public <S> IQuery<T, S> getSubset(M strategy)
+    public <S> IQuery<T, S> getIQuery(M strategy)
     {
         if ( !comparatorFunctions.contains(strategy) )
         {
@@ -60,7 +58,7 @@ public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & ComparatorSchema
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .filter(element -> comparator.compareTo(element, startValue) >= 0)
+                    .filter(element -> comparator.compareToValue(element, startValue) >= 0)
                     .collect(Collectors.toList());
         }
 
@@ -70,8 +68,8 @@ public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & ComparatorSchema
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .filter(element -> comparator.compareTo(element, startValue) >= 0)
-                    .filter(element -> comparator.compareTo(element, endValue) <= 0)
+                    .filter(element -> comparator.compareToValue(element, startValue) >= 0)
+                    .filter(element -> comparator.compareToValue(element, endValue) <= 0)
                     .collect(Collectors.toList());
         }
 
@@ -81,7 +79,7 @@ public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & ComparatorSchema
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .filter(element -> comparator.compareTo(element, endValue) <= 0)
+                    .filter(element -> comparator.compareToValue(element, endValue) <= 0)
                     .collect(Collectors.toList());
         }
 
@@ -91,7 +89,7 @@ public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & ComparatorSchema
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .sorted((element1, element2) -> comparator.compareTo2(element1, element2))
+                    .sorted((element1, element2) -> comparator.compareToAggregate(element1, element2))
                     .limit(amount)
                     .collect(Collectors.toList());
         }
@@ -102,7 +100,7 @@ public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & ComparatorSchema
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .sorted((element1, element2) -> comparator.compareTo2(element2, element1))
+                    .sorted((element1, element2) -> comparator.compareToAggregate(element2, element1))
                     .limit(amount)
                     .collect(Collectors.toList());
         }
@@ -113,7 +111,7 @@ public class IMDBMultiIndexRepository<T, K, M extends Enum<M> & ComparatorSchema
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .filter(element-> comparator.compareTo(element, value) == 0)
+                    .filter(element-> comparator.compareToValue(element, value) == 0)
                     .collect(Collectors.toList());
         }
 
