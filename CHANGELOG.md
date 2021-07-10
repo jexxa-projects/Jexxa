@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[3.0.5] - 2021-07-xx
+## \[3.0.5] - 2021-07-10
 ### Fixed
 -   JDBCCommand / JDBCQuery: Internal used PreparedStatement is now correctly closed to avoid issues with dangling resources. 
-
+    Note: Even though this issue depends on your database driver, it occurs at least on Oracle databases.
+    
 ### Changed 
 -   Updated dependencies on minor and patch level
 
