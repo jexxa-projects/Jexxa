@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[3.0.5] - 2021-07-xx
+### Fixed
+-   JDBCCommand / JDBCQuery: Internal used PreparedStatement is now correctly closed to avoid issues with dangling resources. 
+
+### Changed 
+-   Updated dependencies on minor and patch level
+
 ## \[3.0.4] - 2021-06-18
 ### Fixed
 -   JexxaMain: If a specific driving adapter is bound to a port adapter Jexxa ensured that the specific driving adapter is instantiated only once. Without this fix it could happen that a specific driving adapter is instantiated multiple times. In case the specific driving adapter uses resources such as a port this led to an exception.

@@ -12,18 +12,22 @@ class JDBCPreparedStatement
     private final String sqlStatement;
     private final List<Object> arguments;
 
-    private final PreparedStatement statement;
-
     JDBCPreparedStatement(Supplier<JDBCConnection> jdbcConnection, String sqlStatement, List<Object> arguments)
     {
         this.jdbcConnection = Objects.requireNonNull(jdbcConnection);
         this.sqlStatement = Objects.requireNonNull(sqlStatement);
         this.arguments = Objects.requireNonNull(arguments);
-
-        this.statement = createPreparedStatement();
     }
 
-    private PreparedStatement createPreparedStatement()
+    /**
+     * This method creates a new PreparedStatement including sql statement and all arguments.
+     *
+     * Important note: The caller of this method is responsible to close the PreparedStatement, e.g. by calling it
+     * in a try-with-resources statement.
+     *
+     * @return PreparedStatement that can be directly executed
+     */
+    protected PreparedStatement createPreparedStatement()
     {
         try
         {
@@ -41,13 +45,25 @@ class JDBCPreparedStatement
         }
     }
 
+    /**
+     * This method creates a new PreparedStatement including sql statement and all arguments.
+     *
+     * Important note: The caller of this method is responsible to close the PreparedStatement, e.g. by calling it
+     * in a try-with-resources statement.
+     *
+     * @deprecated This method is deprecated because it easy to misuse. Please use createPreparedStatement instead.
+     *
+     * @return PreparedStatement that can be directly executed
+     */
+    @Deprecated(forRemoval = true)
     public PreparedStatement getStatement()
     {
-        return statement;
+        return createPreparedStatement();
     }
 
     protected String getSQLStatement()
     {
         return sqlStatement;
     }
+
 }

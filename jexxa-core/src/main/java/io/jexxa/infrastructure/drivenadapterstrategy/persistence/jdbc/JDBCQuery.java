@@ -80,7 +80,7 @@ public class JDBCQuery extends JDBCPreparedStatement
 
     public boolean isPresent()
     {
-        try ( var resultSet = getStatement().executeQuery())
+        try ( var resultSet = createPreparedStatement().executeQuery() )
         {
             return resultSet.next();
         }
@@ -92,7 +92,7 @@ public class JDBCQuery extends JDBCPreparedStatement
 
     public <R> Stream<R> as(CheckedFunction<ResultSet, R> function)
     {
-        try ( var resultSet = getStatement().executeQuery())
+        try ( var resultSet = createPreparedStatement().executeQuery() )
         {
             List<R> result = new ArrayList<>();
             while ( resultSet.next() )
