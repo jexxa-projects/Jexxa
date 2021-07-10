@@ -40,14 +40,14 @@ Maven:
 <dependency>
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa-web</artifactId>
-  <version>3.0.4</version>
+  <version>3.0.5</version>
 </dependency> 
 ```
 
 Gradle:
 
 ```groovy
-compile "io.Jexxa:jexxa-web:3.0.4"
+compile "io.Jexxa:jexxa-web:3.0.5"
 ``` 
  
 ### Start programming 
@@ -107,13 +107,13 @@ Maven:
 <dependency>
   <groupId>org.slf4j</groupId>
   <artifactId>slf4j-simple</artifactId>
-  <version>1.7.30</version>
+  <version>1.7.31</version>
 </dependency>
 ```                                   
 
 Gradle:
 ```groovy
-compile "org.slf4j:slf4j-simple:1.7.30"
+compile "org.slf4j:slf4j-simple:1.7.31"
 ``` 
 
 ### Configure your Jexxa application  
