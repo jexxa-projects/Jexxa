@@ -3,16 +3,18 @@ package io.jexxa.tutorials.domaineventstore.domainservice;
 import java.time.Instant;
 import java.util.List;
 
-import io.jexxa.tutorials.domaineventstore.domain.domainevent.MyDomainEvent;
-import io.jexxa.tutorials.domaineventstore.domain.valueobject.BatchNumber;
+import io.jexxa.addend.applicationcore.InfrastructureService;
+import io.jexxa.tutorials.domaineventstore.domain.domainevent.ContractSigned;
+import io.jexxa.tutorials.domaineventstore.domain.valueobject.ContractNumber;
 
+@InfrastructureService
 public interface IDomainEventStore
 {
-    void add(MyDomainEvent domainEvent);
+    void add(ContractSigned domainEvent);
 
-    List<MyDomainEvent> get(Instant startTime, Instant endTime);
+    List<ContractSigned> get(Instant startTime, Instant endTime);
 
-    List<MyDomainEvent> getBatchNumbersLessThan(BatchNumber batchNumber);
+    List<ContractSigned> getBatchNumbersLessThan(ContractNumber contractNumber);
 
-    List<MyDomainEvent> getLatestEvents(int number);
+    List<ContractSigned> getLatestBatches(int number);
 }

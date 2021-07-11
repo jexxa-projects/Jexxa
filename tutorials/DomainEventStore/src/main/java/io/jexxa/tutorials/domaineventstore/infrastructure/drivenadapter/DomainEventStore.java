@@ -13,8 +13,8 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comp
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.ObjectStoreManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
-import io.jexxa.tutorials.domaineventstore.domain.domainevent.MyDomainEvent;
-import io.jexxa.tutorials.domaineventstore.domain.valueobject.BatchNumber;
+import io.jexxa.tutorials.domaineventstore.domain.domainevent.ContractSigned;
+import io.jexxa.tutorials.domaineventstore.domain.valueobject.ContractNumber;
 import io.jexxa.tutorials.domaineventstore.domainservice.IDomainEventStore;
 
 @SuppressWarnings("unused")
@@ -34,60 +34,60 @@ public class DomainEventStore implements IDomainEventStore
 
         VALUE(valueComparator()),
 
-        WEIGHT_VALUE(numberComparator(( domainEvent -> domainEvent.getBatchNumber().getValue())) ),
+        CONTRACT_NUMBER(numberComparator((domainEvent -> domainEvent.getBatchNumber().getValue())) ),
 
-        TIMESTAMP_VALUE(instantComparator(MyDomainEvent::getTimestamp));
+        SIGNATURE_DATE(instantComparator(ContractSigned::getSignatureDate));
 
-        private final Comparator<MyDomainEvent, ? > comparator;
+        private final Comparator<ContractSigned, ? > comparator;
 
-        DomainEventMetadata(Comparator<MyDomainEvent,?> comparator)
+        DomainEventMetadata(Comparator<ContractSigned,?> comparator)
         {
             this.comparator = comparator;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public Comparator<MyDomainEvent, ?> getComparator()
+        public Comparator<ContractSigned, ?> getComparator()
         {
             return comparator;
         }
     }
 
-    private final IObjectStore<MyDomainEvent, String, DomainEventMetadata> objectStore;
+    private final IObjectStore<ContractSigned, ContractNumber, DomainEventMetadata> objectStore;
 
 
     public DomainEventStore(Properties properties)
     {
-        this.objectStore = ObjectStoreManager.getObjectStore(MyDomainEvent.class, MyDomainEvent::getUuid, DomainEventMetadata.class, properties);
+        this.objectStore = ObjectStoreManager.getObjectStore(ContractSigned.class, ContractSigned::getBatchNumber, DomainEventMetadata.class, properties);
     }
 
     @Override
-    public void add(MyDomainEvent domainEvent)
+    public void add(ContractSigned domainEvent)
     {
         objectStore.add(domainEvent);
     }
 
     @Override
-    public List<MyDomainEvent> get(Instant startTime, Instant endTime)
+    public List<ContractSigned> get(Instant startTime, Instant endTime)
     {
         return objectStore
-                .getIQuery(DomainEventMetadata.TIMESTAMP_VALUE)
+                .getObjectQuery(DomainEventMetadata.SIGNATURE_DATE)
                 .getRangeClosed(startTime, endTime);
     }
 
     @Override
-    public List<MyDomainEvent> getBatchNumbersLessThan(BatchNumber batchNumber)
+    public List<ContractSigned> getBatchNumbersLessThan(ContractNumber contractNumber)
     {
         return objectStore
-                .getIQuery(DomainEventMetadata.WEIGHT_VALUE)
-                .getLessThan(batchNumber);
+                .getObjectQuery(DomainEventMetadata.CONTRACT_NUMBER)
+                .getLessThan(contractNumber);
     }
 
     @Override
-    public List<MyDomainEvent> getLatestEvents(int number)
+    public List<ContractSigned> getLatestBatches(int number)
     {
         return objectStore
-                .getIQuery(DomainEventMetadata.TIMESTAMP_VALUE)
+                .getObjectQuery(DomainEventMetadata.CONTRACT_NUMBER)
                 .getDescending(number);
     }
 }

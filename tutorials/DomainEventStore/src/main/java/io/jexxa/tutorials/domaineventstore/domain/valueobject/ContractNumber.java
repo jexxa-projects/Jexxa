@@ -3,10 +3,10 @@ package io.jexxa.tutorials.domaineventstore.domain.valueobject;
 import io.jexxa.addend.applicationcore.ValueObject;
 
 @ValueObject
-public class BatchNumber
+public class ContractNumber
 {
     private final int value;
-    public BatchNumber(int value)
+    public ContractNumber(int value)
     {
         this.value = value;
     }

@@ -59,6 +59,18 @@ public class Comparators
     }
 
     /**
+     * Factory method to create comparator wich compares value of type {@link Instant} of an aggregate
+     *
+     * @param accessorFunction returns the Instant
+     * @param <T> type of the aggregate
+     * @return Comparator wich compares an {@link Instant} of an aggregate
+     */
+    public static <T> Comparator<T, Boolean> booleanComparator(Function<T, Boolean> accessorFunction )
+    {
+        return new Comparator<>(accessorFunction, value -> value ? 1 : 0 );
+    }
+
+    /**
      * Factory method to create comparator wich compares value of type {@link Number} of an aggregate
      *
      * @param accessorFunction returns the Instant

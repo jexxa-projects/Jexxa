@@ -214,7 +214,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
     }
 
 
-    public <S> IObjectQuery<T, S> getIQuery(M metadata)
+    public <S> IObjectQuery<T, S> getObjectQuery(M metadata)
     {
         if (!comparatorFunctions.contains(metadata))
         {

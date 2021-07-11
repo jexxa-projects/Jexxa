@@ -29,7 +29,7 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
     }
 
     @Override
-    public <S> IObjectQuery<T, S> getIQuery(M metadata)
+    public <S> IObjectQuery<T, S> getObjectQuery(M metadata)
     {
         if ( !comparatorFunctions.contains(metadata) )
         {
