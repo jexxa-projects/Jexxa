@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 
-public class IMDBMultiValueRepository<T, K, M extends Enum<M> & SchemaComparator>  extends IMDBRepository<T, K> implements IMultiValueRepository<T, K, M>
+public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>
 {
     private final Set<M> comparatorFunctions;
 
-    public IMDBMultiValueRepository(
+    public IMDBObjectStore(
             Class<T> aggregateClazz,
             Function<T, K> keyFunction,
             Class<M> comparatorSchema,
@@ -53,12 +53,33 @@ public class IMDBMultiValueRepository<T, K, M extends Enum<M> & SchemaComparator
         }
 
         @Override
-        public List<T> getFrom(S startValue)
+        public List<T> getGreaterOrEqualThan(S startValue)
         {
             return getOwnAggregateMap()
                     .values()
                     .stream()
                     .filter(element -> comparator.compareToValue(element, startValue) >= 0)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<T> getGreaterThan(S value)
+        {
+            return getOwnAggregateMap()
+                    .values()
+                    .stream()
+                    .filter(element -> comparator.compareToValue(element, value) > 0)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<T> getRangeClosed(S startValue, S endValue)
+        {
+            return getOwnAggregateMap()
+                    .values()
+                    .stream()
+                    .filter(element -> comparator.compareToValue(element, startValue) >= 0)
+                    .filter(element -> comparator.compareToValue(element, endValue) <= 0)
                     .collect(Collectors.toList());
         }
 
@@ -69,17 +90,27 @@ public class IMDBMultiValueRepository<T, K, M extends Enum<M> & SchemaComparator
                     .values()
                     .stream()
                     .filter(element -> comparator.compareToValue(element, startValue) >= 0)
-                    .filter(element -> comparator.compareToValue(element, endValue) <= 0)
+                    .filter(element -> comparator.compareToValue(element, endValue) < 0)
                     .collect(Collectors.toList());
         }
 
         @Override
-        public List<T> getUntil(S endValue)
+        public List<T> getLessOrEqualThan(S endValue)
         {
             return getOwnAggregateMap()
                     .values()
                     .stream()
                     .filter(element -> comparator.compareToValue(element, endValue) <= 0)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<T> getLessThan(S endValue)
+        {
+            return getOwnAggregateMap()
+                    .values()
+                    .stream()
+                    .filter(element -> comparator.compareToValue(element, endValue) < 0)
                     .collect(Collectors.toList());
         }
 
@@ -106,7 +137,7 @@ public class IMDBMultiValueRepository<T, K, M extends Enum<M> & SchemaComparator
         }
 
         @Override
-        public List<T> get(S value)
+        public List<T> getEqualTo(S value)
         {
             return getOwnAggregateMap()
                     .values()

@@ -2,19 +2,48 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimen
 
 import java.util.List;
 
+/**
+ *
+ * @param <T> Type of the managed object
+ * @param <S> Type of the metadata that is used to find the objects
+ */
 public interface IQuery<T, S >
 {
-    /**  get all values which fulfill: {@code startValue <= value}
+    /**
+     * Get all values which fulfill: {@code value <= metadata of the object}
+     *
+     * @param value concrete value that is used for comparison
+     * @return list of all objects that fulfill the condition {@code value <= metadata of the object}
      */
-    List<T> getFrom(S startValue);
+    List<T> getGreaterOrEqualThan(S value);
 
-    /** get all values which fulfill: {@code startValue <= value <= endValue}
+    /**  get all values which fulfill: {@code value < returnedValue}
      */
-    List<T> getRange(S startValue, S endValue);
+    List<T> getGreaterThan(S value);
 
     /** get all values which fulfill:  {@code value <= endValue}
      */
-    List<T> getUntil(S endValue);
+    List<T> getLessOrEqualThan(S endValue);
+
+    /** get all values which fulfill:  {@code value < endValue}
+     */
+    List<T> getLessThan(S endValue);
+
+    /**
+     * Returns all elements equal to S
+     * @param value specifies comparison value
+     * @return list of elements that are equal to value
+     */
+    List<T> getEqualTo(S value);
+
+
+    /** get all values which fulfill: {@code startValue <= value <= endValue}
+     */
+    List<T> getRangeClosed(S startValue, S endValue);
+
+    /** get all values which fulfill: {@code startValue <= value < endValue}
+     */
+    List<T> getRange(S startValue, S endValue);
 
     /**
      * Sorts the entries by S in ascending order and returns the defined amount of elements
@@ -33,11 +62,4 @@ public interface IQuery<T, S >
      *         If amount is &lt; 0 then an empty list ist returned
      */
     List<T> getDescending(int amount);
-
-    /**
-     * Returns all elements equal to S
-     * @param value specifies comparison value
-     * @return list of elements that are equal to value
-     */
-    List<T> get(S value);
 }

@@ -3,20 +3,18 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimen
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 
 /**
- * This kind of repository allows to query the managed objects by an arbitrary number of values.
- * In contrast to this an {@link IRepository} allows only to query objects, or in more
- * detail aggregates, by its keys. Especially for aggregates in terms of DDD this is sufficient.
+ * An {@link IObjectStore} extends an {@link IRepository} by adding additional metadata to managed objects.
+ * This meta data can be used to query for available objects.
  *
- * But in some cases you need advanced query mechanisms which also allow using sophisticated
- * optimization techniques from the underlying technology stack. In these cases, this type of repository
- * should be used.
+ * In contrast to an {@link IRepository} this interface allows for using sophisticated
+ * optimization techniques from the underlying technology stack to perform the query
  *
  * @param <V> Defines the type of the object managed by the repository
  * @param <K> Defines the type of the key identifying the managed object
  * @param <R> Defines the type of the Schema of the aggregate which defines
  *           an enum for each searchable value of the aggregate
  */
-public interface IMultiValueRepository<V, K, R extends Enum<?> & SchemaComparator> extends IRepository<V, K>
+public interface IObjectStore<V, K, R extends Enum<?> & MetadataComparator> extends IRepository<V, K>
 {
     /**
      * This method returns an IQuery object hat can be used to search for elements of type S

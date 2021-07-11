@@ -9,7 +9,7 @@ import java.util.function.Function;
 public class Comparators
 {
     /**
-     *  Reserved Comparator to identify the Key of an aggregate in the {@link SchemaComparator}
+     *  Reserved Comparator to identify the Key of an aggregate in the {@link MetadataComparator}
      *
      * @param <T> type of the aggregate
      * @param <V> type of the key
@@ -21,7 +21,7 @@ public class Comparators
     }
 
     /**
-     *  Reserved Comparator to identify the aggregate itself in the {@link SchemaComparator}
+     *  Reserved Comparator to identify the aggregate itself in the {@link MetadataComparator}
      *
      * @param <T> type of the aggregate
      * @param <V> type of the key

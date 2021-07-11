@@ -2,7 +2,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimen
 
 
 @FunctionalInterface
-public interface SchemaComparator
+public interface MetadataComparator
 {
     <T,V> Comparator<T,V> getComparator();
 }

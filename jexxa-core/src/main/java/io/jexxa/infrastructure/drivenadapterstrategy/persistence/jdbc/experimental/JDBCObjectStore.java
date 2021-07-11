@@ -28,9 +28,9 @@ import org.slf4j.Logger;
 
 
 @SuppressWarnings("unused")
-public class JDBCMultiValueRepository<T,K, M extends Enum<M> & SchemaComparator> extends JDBCRepository implements IMultiValueRepository<T, K, M>
+public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extends JDBCRepository implements IObjectStore<T, K, M>
 {
-    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCMultiValueRepository.class);
+    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCObjectStore.class);
     private static final String SQL_NUMERIC = "NUMERIC";
 
     private final Function<T, K> keyFunction;
@@ -43,7 +43,7 @@ public class JDBCMultiValueRepository<T,K, M extends Enum<M> & SchemaComparator>
     private final M schemaValue;
 
 
-    public JDBCMultiValueRepository(
+    public JDBCObjectStore(
             Class<T> aggregateClazz,
             Function<T, K> keyFunction,
             Class<M> comparatorSchema,

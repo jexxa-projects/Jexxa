@@ -10,7 +10,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQ
 import io.jexxa.utils.json.JSONConverter;
 import io.jexxa.utils.json.JSONManager;
 
-public class JDBCQuery<T,S, M extends Enum<M> & SchemaComparator> implements IQuery<T, S>
+public class JDBCQuery<T,S, M extends Enum<M> & MetadataComparator> implements IQuery<T, S>
 {
     private final JDBCRepository jdbcRepository;
     private final Comparator<T, S> comparator;
@@ -37,7 +37,7 @@ public class JDBCQuery<T,S, M extends Enum<M> & SchemaComparator> implements IQu
     }
 
     @Override
-    public List<T> getFrom(S startValue)
+    public List<T> getGreaterOrEqualThan(S startValue)
     {
         var sqlStartValue = comparator.convertValue(startValue);
 
@@ -53,7 +53,23 @@ public class JDBCQuery<T,S, M extends Enum<M> & SchemaComparator> implements IQu
     }
 
     @Override
-    public List<T> getRange(S startValue, S endValue)
+    public List<T> getGreaterThan(S value)
+    {
+        var sqlStartValue = comparator.convertValue(value);
+
+        var jdbcQuery = jdbcRepository.getConnection()
+                .createQuery(comparatorSchema)
+                .select( schemaValue )
+                .from(aggregateClazz)
+                .where(nameOfRow)
+                .isGreaterThan(sqlStartValue)
+                .create();
+
+        return searchElements(jdbcQuery);
+    }
+
+    @Override
+    public List<T> getRangeClosed(S startValue, S endValue)
     {
         var sqlStartValue = comparator.convertValue(startValue);
         var sqlEndValue = comparator.convertValue(endValue);
@@ -73,7 +89,27 @@ public class JDBCQuery<T,S, M extends Enum<M> & SchemaComparator> implements IQu
     }
 
     @Override
-    public List<T> getUntil(S endValue)
+    public List<T> getRange(S startValue, S endValue)
+    {
+        var sqlStartValue = comparator.convertValue(startValue);
+        var sqlEndValue = comparator.convertValue(endValue);
+
+        var jdbcQuery = jdbcRepository.getConnection()
+                .createQuery(comparatorSchema)
+                .select( schemaValue )
+                .from(aggregateClazz)
+                .where(nameOfRow)
+                .isGreaterOrEqual(sqlStartValue)
+                .and(nameOfRow)
+                .isLessThan(sqlEndValue)
+                .create();
+
+
+        return searchElements(jdbcQuery);
+    }
+
+    @Override
+    public List<T> getLessOrEqualThan(S endValue)
     {
         var sqlEndValue = comparator.convertValue(endValue);
 
@@ -84,6 +120,23 @@ public class JDBCQuery<T,S, M extends Enum<M> & SchemaComparator> implements IQu
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isLessOrEqual(sqlEndValue)
+                .create();
+
+        return searchElements(jdbcQuery);
+    }
+
+    @Override
+    public List<T> getLessThan(S endValue)
+    {
+        var sqlEndValue = comparator.convertValue(endValue);
+
+        //"select value from %s where %s <= %s",
+        var jdbcQuery = jdbcRepository.getConnection()
+                .createQuery(comparatorSchema)
+                .select( schemaValue )
+                .from(aggregateClazz)
+                .where(nameOfRow)
+                .isLessThan(sqlEndValue)
                 .create();
 
         return searchElements(jdbcQuery);
@@ -118,7 +171,7 @@ public class JDBCQuery<T,S, M extends Enum<M> & SchemaComparator> implements IQu
     }
 
     @Override
-    public List<T> get(S value)
+    public List<T> getEqualTo(S value)
     {
         var sqlValue = comparator.convertValue(value);
         var jdbcQuery = jdbcRepository.getConnection()

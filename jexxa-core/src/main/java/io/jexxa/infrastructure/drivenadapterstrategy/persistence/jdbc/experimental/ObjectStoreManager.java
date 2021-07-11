@@ -11,15 +11,15 @@ import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.factory.ClassFactory;
 
 
-public final class MultiIndexRepositoryManager
+public final class ObjectStoreManager
 {
-    private static final MultiIndexRepositoryManager REPOSITORY_MANAGER = new MultiIndexRepositoryManager();
+    private static final ObjectStoreManager REPOSITORY_MANAGER = new ObjectStoreManager();
 
     private static final Map<Class<?> , Class<?>> strategyMap = new HashMap<>();
     private static Class<?> defaultStrategy = null;
 
 
-    public static  <T,K,M  extends Enum<?> & SchemaComparator> IMultiValueRepository<T,K, M> getRepository(
+    public static  <T,K,M  extends Enum<?> & MetadataComparator> IObjectStore<T,K, M> getObjectStore(
             Class<T> aggregateClazz,
             Function<T,K> keyFunction,
             Class<M> comparatorFunctions,
@@ -28,20 +28,20 @@ public final class MultiIndexRepositoryManager
         return REPOSITORY_MANAGER.getStrategy(aggregateClazz, keyFunction, comparatorFunctions, properties);
     }
 
-    public static <U extends IMultiValueRepository<?,?,?>, T > void setStrategy(Class<U> strategyType, Class<T> aggregateType)
+    public static <U extends IObjectStore<?,?,?>, T > void setStrategy(Class<U> strategyType, Class<T> aggregateType)
     {
         strategyMap.put(aggregateType, strategyType);
     }
 
-    public static <U extends IMultiValueRepository<?,?,?>> void setDefaultStrategy(Class<U> defaultStrategy)
+    public static <U extends IObjectStore<?,?,?>> void setDefaultStrategy(Class<U> defaultStrategy)
     {
-        MultiIndexRepositoryManager.defaultStrategy = defaultStrategy;
+        ObjectStoreManager.defaultStrategy = defaultStrategy;
     }
 
     @SuppressWarnings("unchecked")
     @CheckReturnValue
-    public <T,K,M  extends Enum<?> & SchemaComparator> IMultiValueRepository<T,K,M> getStrategy(
-            Class<T> aggregateClazz,
+    public <T,K,M  extends Enum<?> & MetadataComparator> IObjectStore<T,K,M> getStrategy(
+            Class<T> objectClazz,
             Function<T,K> keyFunction,
             Class<M> comparatorFunctions,
             Properties properties
@@ -50,11 +50,11 @@ public final class MultiIndexRepositoryManager
 
         try
         {
-            var strategy = getStrategy(aggregateClazz, properties);
+            var strategy = getStrategy(objectClazz, properties);
 
-            var result = ClassFactory.newInstanceOf(strategy, new Object[]{aggregateClazz, keyFunction, comparatorFunctions, properties});
+            var result = ClassFactory.newInstanceOf(strategy, new Object[]{objectClazz, keyFunction, comparatorFunctions, properties});
 
-            return (IMultiValueRepository<T, K,M>) result.orElseThrow();
+            return (IObjectStore<T, K,M>) result.orElseThrow();
         }
         catch (ReflectiveOperationException e)
         {
@@ -74,7 +74,7 @@ public final class MultiIndexRepositoryManager
     }
 
 
-    private MultiIndexRepositoryManager()
+    private ObjectStoreManager()
     {
         //Package protected constructor
     }
@@ -103,11 +103,11 @@ public final class MultiIndexRepositoryManager
         // 3. If a JDBC driver is stated in Properties => Use JDBCKeyValueRepository
         if (properties.containsKey(JDBCConnection.JDBC_DRIVER))
         {
-            return JDBCMultiValueRepository.class;
+            return JDBCObjectStore.class;
         }
 
         // 4. If everything fails, return a IMDBRepository
-        return IMDBMultiValueRepository.class;
+        return IMDBObjectStore.class;
     }
 
 }

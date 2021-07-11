@@ -1,4 +1,4 @@
-package io.jexxa.tutorials;
+package io.jexxa.tutorials.domaineventstore;
 
 /**
  * Hello world!
