@@ -1,18 +1,18 @@
 package io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.Comparators.instantComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.Comparators.keyComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.Comparators.numberComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.Comparators.valueComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.instantComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.keyComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.numberComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.valueComparator;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Properties;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.Comparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.IObjectStore;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.ObjectStoreManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IObjectStore;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.ObjectStoreManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
 import io.jexxa.tutorials.domaineventstore.domain.domainevent.MyDomainEvent;
 import io.jexxa.tutorials.domaineventstore.domain.valueobject.BatchNumber;
 import io.jexxa.tutorials.domaineventstore.domainservice.IDomainEventStore;

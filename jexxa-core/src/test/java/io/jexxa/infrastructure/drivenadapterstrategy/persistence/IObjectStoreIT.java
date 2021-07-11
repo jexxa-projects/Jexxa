@@ -1,9 +1,9 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.Comparators.keyComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.Comparators.numberComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.Comparators.converterComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental.Comparators.valueComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.converterComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.keyComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.numberComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.valueComparator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,6 +16,8 @@ import java.util.stream.Stream;
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -244,7 +246,7 @@ class IObjectStoreIT
         testData.forEach(objectUnderTest::add);
         //testData.forEach(objectUnderTest::update);
 
-        IQuery<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getIQuery( JexxaAggregateMetadata.AGGREGATE_KEY);
+        IObjectQuery<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getIQuery( JexxaAggregateMetadata.AGGREGATE_KEY);
 
         //Act
         var fromResult = irangedResult.getGreaterOrEqualThan(new JexxaValueObject(50));

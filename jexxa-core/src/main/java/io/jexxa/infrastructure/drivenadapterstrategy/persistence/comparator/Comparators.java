@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator;
 
 import java.math.BigDecimal;
 import java.time.Instant;

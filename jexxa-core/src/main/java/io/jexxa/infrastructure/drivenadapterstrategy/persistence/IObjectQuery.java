@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import java.util.List;
  * @param <T> Type of the managed object
  * @param <S> Type of the metadata that is used to find the objects
  */
-public interface IQuery<T, S >
+public interface IObjectQuery<T, S >
 {
     /**
      * Get all values which fulfill: {@code value <= metadata of the object}

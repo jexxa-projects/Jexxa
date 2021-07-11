@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -8,7 +8,10 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IObjectStore;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IObjectQuery;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
 
 public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>
 {
@@ -26,17 +29,17 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
     }
 
     @Override
-    public <S> IQuery<T, S> getIQuery(M strategy)
+    public <S> IObjectQuery<T, S> getIQuery(M metadata)
     {
-        if ( !comparatorFunctions.contains(strategy) )
+        if ( !comparatorFunctions.contains(metadata) )
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
 
-        return new IMBDQuery<>(getOwnAggregateMap(), strategy.getComparator());
+        return new IMBDObjectQuery<>(getOwnAggregateMap(), metadata.getComparator());
     }
 
-    public static class IMBDQuery<T, K, S> implements IQuery<T, S>
+    public static class IMBDObjectQuery<T, K, S> implements IObjectQuery<T, S>
     {
         Comparator<T, S> comparator;
         Map<K, T> internalMap;
@@ -46,7 +49,7 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
             return internalMap;
         }
 
-        public IMBDQuery(Map<K, T> internalMap, Comparator<T, S> comparator)
+        public IMBDObjectQuery(Map<K, T> internalMap, Comparator<T, S> comparator)
         {
             this.internalMap = internalMap;
             this.comparator = comparator;

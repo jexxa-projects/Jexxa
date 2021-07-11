@@ -1,6 +1,6 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.experimental;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
 
 /**
  * An {@link IObjectStore} extends an {@link IRepository} by adding additional metadata to managed objects.
@@ -20,9 +20,9 @@ public interface IObjectStore<V, K, R extends Enum<?> & MetadataComparator> exte
      * This method returns an IQuery object hat can be used to search for elements of type S
      * managed by the aggregate.
      *
-     * @param schemaEntry defines comparator strategy used for searching entries
-     * @param <S> defines the type of the searched element which is stored inside the
+     * @param metadata defines metadata-comparator used for searching objects
+     * @param <S> defines the type of the metadata used for searching nside the {@link IObjectStore}
      * @return interface to execute the query
      */
-    <S > IQuery<V, S > getIQuery(R schemaEntry);
+    <S > IObjectQuery<V, S > getIQuery(R metadata);
 }
