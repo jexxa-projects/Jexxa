@@ -57,9 +57,9 @@ public class Comparator<T, S>
      *
      * @param aggregate first aggregate
      * @param value that should be compared
-     * @return 0 If the value aggregate is equal to given value
-     *     -1 if value of aggregate1 < given value
-     *     1 if value of aggregate1 > value
+     * @return 0 If the value aggregate is equal to given value <br>
+     *     -1 if value of aggregate &lt; given value <br>
+     *     1 if value of aggregate &gt; value <br>
      */
     public int compareToValue(T aggregate, S value)
     {
@@ -77,9 +77,9 @@ public class Comparator<T, S>
      *
      * @param aggregate1 first aggregate
      * @param aggregate2 second aggregate
-     * @return 0 If the value of aggregate1 is equal to value aggregate2
-     *     -1 if value of aggregate1 < value of aggregate2
-     *     1 if value of aggregate1 > value of aggregate2
+     * @return 0 If the value of aggregate1 is equal to value aggregate2 <br>
+     *     -1 if value of aggregate1 &lt; value of aggregate2 <br>
+     *     1 if value of aggregate1 &gt; value of aggregate2 <br>
      */
     public int compareToAggregate(T aggregate1, T aggregate2)
     {
