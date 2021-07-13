@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import io.jexxa.utils.annotations.CheckReturnValue;
+
 class JDBCPreparedStatement
 {
     private final Supplier<JDBCConnection> jdbcConnection;
@@ -27,6 +29,7 @@ class JDBCPreparedStatement
      *
      * @return PreparedStatement that can be directly executed
      */
+    @CheckReturnValue
     protected PreparedStatement createPreparedStatement()
     {
         try
