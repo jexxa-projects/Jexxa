@@ -122,12 +122,10 @@ public final class BookRepository implements IBookRepository
     }
 
     @Override                    
-    public void add(Book book) { repository.add(book);
-    }
+    public void add(Book book) { repository.add(book); }
 
     @Override
-    public Book get(ISBN13 isbn13) { return repository.get(isbn13).orElseThrow();
-    }
+    public Book get(ISBN13 isbn13) { return repository.get(isbn13).orElseThrow(); }
 
     @Override
     public boolean isRegistered(ISBN13 isbn13)
@@ -303,7 +301,7 @@ First, add the following dependency to your tests.
     <dependency>
       <groupId>io.jexxa.jexxatest</groupId>
       <artifactId>jexxa-test</artifactId>
-      <version>3.0.5</version>
+      <version>3.0.6</version>
       <scope>test</scope>
     </dependency>
 ```

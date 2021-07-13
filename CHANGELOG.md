@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[3.0.6] - 2021-07-13
+### Fixed
+-   JDBCQuery: Corrected usage of PreparedStatement to correctly close the resource.  
+
 ## \[3.0.5] - 2021-07-10
 ### Fixed
 -   JDBCCommand / JDBCQuery: Internal used PreparedStatement is now correctly closed to avoid issues with dangling resources. 
