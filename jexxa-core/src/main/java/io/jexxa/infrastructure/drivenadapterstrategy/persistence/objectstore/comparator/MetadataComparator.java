@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator;
 
 
 @FunctionalInterface

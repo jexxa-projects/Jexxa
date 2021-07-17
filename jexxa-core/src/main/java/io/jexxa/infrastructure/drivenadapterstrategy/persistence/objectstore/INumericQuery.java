@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
 import java.util.List;
 
@@ -15,26 +15,26 @@ public interface INumericQuery<T, S >
      * @param value concrete value that is used for comparison
      * @return list of all objects that fulfill the condition {@code value <= metadata of the object}
      */
-    List<T> getGreaterOrEqualThan(S value);
+    List<T> isGreaterOrEqualThan(S value);
 
     /**  get all values which fulfill: {@code value < returnedValue}
      */
-    List<T> getGreaterThan(S value);
+    List<T> isGreaterThan(S value);
 
     /** get all values which fulfill:  {@code value <= endValue}
      */
-    List<T> getLessOrEqualThan(S endValue);
+    List<T> isLessOrEqualThan(S endValue);
 
     /** get all values which fulfill:  {@code value < endValue}
      */
-    List<T> getLessThan(S endValue);
+    List<T> isLessThan(S endValue);
 
     /**
      * Returns all elements equal to S
      * @param value specifies comparison value
      * @return list of elements that are equal to value
      */
-    List<T> getEqualTo(S value);
+    List<T> isEqualTo(S value);
 
 
     /** get all values which fulfill: {@code startValue <= value <= endValue}

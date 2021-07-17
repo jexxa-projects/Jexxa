@@ -1,9 +1,9 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.converterComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.keyComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.numberComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.valueComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.converterComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.keyComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.numberComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.valueComparator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,9 +16,11 @@ import java.util.stream.Stream;
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.NumericComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.parallel.Execution;
@@ -221,8 +223,8 @@ class IObjectStoreIT
         var subset = objectUnderTest.getNumericQuery( JexxaAggregateMetadata.INTERNAL_VALUE);
 
         //Act
-        var fromResult = subset.getGreaterOrEqualThan(50);
-        var untilResult = subset.getLessOrEqualThan(50);
+        var fromResult = subset.isGreaterOrEqualThan(50);
+        var untilResult = subset.isLessOrEqualThan(50);
         var rangedResult = subset.getRangeClosed(30,50);
 
         //Assert
@@ -249,8 +251,8 @@ class IObjectStoreIT
         INumericQuery<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getNumericQuery( JexxaAggregateMetadata.AGGREGATE_KEY);
 
         //Act
-        var fromResult = irangedResult.getGreaterOrEqualThan(new JexxaValueObject(50));
-        var untilResult = irangedResult.getLessOrEqualThan(new JexxaValueObject(50));
+        var fromResult = irangedResult.isGreaterOrEqualThan(new JexxaValueObject(50));
+        var untilResult = irangedResult.isLessOrEqualThan(new JexxaValueObject(50));
         var rangedResult = irangedResult.getRangeClosed(new JexxaValueObject(30),new JexxaValueObject(50));
 
         //Assert

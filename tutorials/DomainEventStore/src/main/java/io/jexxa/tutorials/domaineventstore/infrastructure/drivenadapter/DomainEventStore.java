@@ -1,18 +1,18 @@
 package io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.instantComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.keyComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.numberComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.valueComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.instantComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.keyComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.numberComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.valueComparator;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Properties;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.NumericComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IObjectStore;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.ObjectStoreManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
 import io.jexxa.tutorials.domaineventstore.domain.domainevent.ContractSigned;
 import io.jexxa.tutorials.domaineventstore.domain.valueobject.ContractNumber;
 import io.jexxa.tutorials.domaineventstore.domainservice.IDomainEventStore;
@@ -80,7 +80,7 @@ public class DomainEventStore implements IDomainEventStore
     {
         return objectStore
                 .getNumericQuery(DomainEventMetadata.CONTRACT_NUMBER)
-                .getLessThan(contractNumber);
+                .isLessThan(contractNumber);
     }
 
     @Override

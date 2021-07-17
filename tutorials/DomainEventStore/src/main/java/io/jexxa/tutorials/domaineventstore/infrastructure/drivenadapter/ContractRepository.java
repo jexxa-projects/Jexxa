@@ -1,17 +1,17 @@
 package io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.keyComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.valueComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.keyComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.valueComparator;
 import static io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter.ContractRepository.ContractMetadata.CONTRACT_TERMINATED;
 
 import java.util.List;
 import java.util.Properties;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IObjectStore;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.ObjectStoreManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.NumericComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
 import io.jexxa.tutorials.domaineventstore.domain.aggregate.Contract;
 import io.jexxa.tutorials.domaineventstore.domain.valueobject.ContractNumber;
 import io.jexxa.tutorials.domaineventstore.domainservice.IContractRepository;
@@ -68,7 +68,7 @@ public class ContractRepository  implements IContractRepository
     {
         return objectStore
                 .getNumericQuery(CONTRACT_TERMINATED)
-                .getEqualTo(true);
+                .isEqualTo(true);
     }
 
     @Override

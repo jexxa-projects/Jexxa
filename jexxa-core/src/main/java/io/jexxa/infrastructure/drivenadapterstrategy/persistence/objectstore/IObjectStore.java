@@ -1,6 +1,7 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
 
 /**
  * An {@link IObjectStore} extends an {@link IRepository} by adding additional metadata to managed objects.
@@ -17,12 +18,23 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Meta
 public interface IObjectStore<V, K, R extends Enum<?> & MetadataComparator> extends IRepository<V, K>
 {
     /**
-     * This method returns an IQuery object hat can be used to search for elements of type S
+     * This method returns an INumericQuery that can be used to search for elements of type S
      * managed by the aggregate.
      *
      * @param metadata defines metadata-comparator used for searching objects
-     * @param <S> defines the type of the metadata used for searching nside the {@link IObjectStore}
+     * @param <S> defines the type of the metadata used for searching inside the {@link IObjectStore}
      * @return interface to execute the query
      */
     <S > INumericQuery<V, S > getNumericQuery(R metadata);
+
+
+    /**
+     * This method returns an IStringQuery hat can be used to search for elements of type S
+     * managed by the aggregate.
+     *
+     * @param metadata defines metadata-comparator used for searching objects
+     * @param <S> defines the type of the metadata used for searching inside the {@link IObjectStore}
+     * @return interface to execute the query
+     */
+    <S > IStringQuery<V, S > getStringQuery(R metadata);
 }

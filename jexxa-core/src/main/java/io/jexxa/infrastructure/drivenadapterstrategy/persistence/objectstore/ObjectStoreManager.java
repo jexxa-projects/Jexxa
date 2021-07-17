@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection.JDBC_DRIVER;
@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBObjectStore;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCObjectStore;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb.IMDBObjectStore;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.jdbc.JDBCObjectStore;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.factory.ClassFactory;
 
