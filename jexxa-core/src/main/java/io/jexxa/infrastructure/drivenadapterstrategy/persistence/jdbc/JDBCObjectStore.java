@@ -19,9 +19,9 @@ import java.util.stream.Stream;
 import com.google.common.collect.Streams;
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IObjectStore;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IObjectQuery;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.NumericComparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONConverter;
@@ -214,19 +214,19 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
     }
 
 
-    public <S> IObjectQuery<T, S> getObjectQuery(M metadata)
+    public <S> INumericQuery<T, S> getObjectQuery(M metadata)
     {
         if (!comparatorFunctions.contains(metadata))
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
-        return new JDBCObjectQuery<>(this, metadata.getComparator(), metadata, aggregateClazz,comparatorSchema );
+        return new JDBCNumericQuery<>(this, metadata.getComparator(), metadata, aggregateClazz,comparatorSchema );
     }
 
-    private static class JDBCObjectQuery<T,S, M extends Enum<M> & MetadataComparator> implements IObjectQuery<T, S>
+    private static class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements INumericQuery<T, S>
     {
         private final JDBCRepository jdbcRepository;
-        private final Comparator<T, S> comparator;
+        private final NumericComparator<T, S> numericComparator;
 
         private final Class<T> aggregateClazz;
         private final JSONConverter jsonConverter = getJSONConverter();
@@ -235,12 +235,12 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         private final Class<M> comparatorSchema;
 
 
-        public JDBCObjectQuery(JDBCRepository jdbcRepository, Comparator<T, S> comparator, M nameOfRow, Class<T> aggregateClazz, Class<M> comparatorSchema)
+        public JDBCNumericQuery(JDBCRepository jdbcRepository, NumericComparator<T, S> numericComparator, M nameOfRow, Class<T> aggregateClazz, Class<M> comparatorSchema)
         {
             this.jdbcRepository = jdbcRepository;
             this.aggregateClazz = aggregateClazz;
             this.nameOfRow = nameOfRow;
-            this.comparator = comparator;
+            this.numericComparator = numericComparator;
 
             this.comparatorSchema = comparatorSchema;
             var comparatorFunctions = EnumSet.allOf(comparatorSchema);
@@ -252,7 +252,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         @Override
         public List<T> getGreaterOrEqualThan(S startValue)
         {
-            var sqlStartValue = comparator.convertValue(startValue);
+            var sqlStartValue = numericComparator.convertValue(startValue);
 
             var jdbcQuery = jdbcRepository.getConnection()
                     .createQuery(comparatorSchema)
@@ -268,7 +268,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         @Override
         public List<T> getGreaterThan(S value)
         {
-            var sqlStartValue = comparator.convertValue(value);
+            var sqlStartValue = numericComparator.convertValue(value);
 
             var jdbcQuery = jdbcRepository.getConnection()
                     .createQuery(comparatorSchema)
@@ -284,8 +284,8 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         @Override
         public List<T> getRangeClosed(S startValue, S endValue)
         {
-            var sqlStartValue = comparator.convertValue(startValue);
-            var sqlEndValue = comparator.convertValue(endValue);
+            var sqlStartValue = numericComparator.convertValue(startValue);
+            var sqlEndValue = numericComparator.convertValue(endValue);
 
             var jdbcQuery = jdbcRepository.getConnection()
                     .createQuery(comparatorSchema)
@@ -304,8 +304,8 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         @Override
         public List<T> getRange(S startValue, S endValue)
         {
-            var sqlStartValue = comparator.convertValue(startValue);
-            var sqlEndValue = comparator.convertValue(endValue);
+            var sqlStartValue = numericComparator.convertValue(startValue);
+            var sqlEndValue = numericComparator.convertValue(endValue);
 
             var jdbcQuery = jdbcRepository.getConnection()
                     .createQuery(comparatorSchema)
@@ -324,7 +324,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         @Override
         public List<T> getLessOrEqualThan(S endValue)
         {
-            var sqlEndValue = comparator.convertValue(endValue);
+            var sqlEndValue = numericComparator.convertValue(endValue);
 
             //"select value from %s where %s <= %s",
             var jdbcQuery = jdbcRepository.getConnection()
@@ -341,7 +341,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         @Override
         public List<T> getLessThan(S endValue)
         {
-            var sqlEndValue = comparator.convertValue(endValue);
+            var sqlEndValue = numericComparator.convertValue(endValue);
 
             //"select value from %s where %s <= %s",
             var jdbcQuery = jdbcRepository.getConnection()
@@ -370,6 +370,19 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         }
 
         @Override
+        public List<T> getAscending()
+        {
+            var jdbcQuery = jdbcRepository.getConnection()
+                    .createQuery(comparatorSchema)
+                    .select( schemaValue )
+                    .from(aggregateClazz)
+                    .orderBy(nameOfRow, SQLOrder.ASC)
+                    .create();
+
+            return searchElements(jdbcQuery);
+        }
+
+        @Override
         public List<T> getDescending(int amount)
         {
             var jdbcQuery = jdbcRepository.getConnection()
@@ -384,9 +397,22 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         }
 
         @Override
+        public List<T> getDescending()
+        {
+            var jdbcQuery = jdbcRepository.getConnection()
+                    .createQuery(comparatorSchema)
+                    .select( schemaValue )
+                    .from(aggregateClazz)
+                    .orderBy(nameOfRow, SQLOrder.DESC)
+                    .create();
+
+            return searchElements(jdbcQuery);
+        }
+
+        @Override
         public List<T> getEqualTo(S value)
         {
-            var sqlValue = comparator.convertValue(value);
+            var sqlValue = numericComparator.convertValue(value);
             var jdbcQuery = jdbcRepository.getConnection()
                     .createQuery(comparatorSchema)
                     .select( schemaValue )

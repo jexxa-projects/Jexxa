@@ -15,7 +15,7 @@ public class Comparators
      * @param <V> type of the key
      * @return Comparator to identify the key
      */
-    public static  <T, V> Comparator<T, V> keyComparator()
+    public static  <T, V> NumericComparator<T, V> keyComparator()
     {
         return null;
     }
@@ -27,7 +27,7 @@ public class Comparators
      * @param <V> type of the key
      * @return Comparator to identify the key
      */
-    public static  <T, V> Comparator<T, V> valueComparator()
+    public static  <T, V> NumericComparator<T, V> valueComparator()
     {
         return null;
     }
@@ -41,9 +41,9 @@ public class Comparators
      * @param <V> type of the value
      * @return Comparator wich compares defined value of an aggregate
      */
-    public static <T, V> Comparator<T, V> converterComparator(Function<T, V> accessorFunction, Function<V, ? extends Number> converterFunction)
+    public static <T, V> NumericComparator<T, V> converterComparator(Function<T, V> accessorFunction, Function<V, ? extends Number> converterFunction)
     {
-        return new Comparator<>(accessorFunction, converterFunction);
+        return new NumericComparator<>(accessorFunction, converterFunction);
     }
 
     /**
@@ -53,9 +53,9 @@ public class Comparators
      * @param <T> type of the aggregate
      * @return Comparator wich compares an {@link Instant} of an aggregate
      */
-    public static <T> InstantComparator<T> instantComparator(Function<T, Instant> accessorFunction )
+    public static <T> InstantNumericComparator<T> instantComparator(Function<T, Instant> accessorFunction )
     {
-        return new InstantComparator<>(accessorFunction);
+        return new InstantNumericComparator<>(accessorFunction);
     }
 
     /**
@@ -65,9 +65,9 @@ public class Comparators
      * @param <T> type of the aggregate
      * @return Comparator wich compares an {@link Instant} of an aggregate
      */
-    public static <T> Comparator<T, Boolean> booleanComparator(Function<T, Boolean> accessorFunction )
+    public static <T> NumericComparator<T, Boolean> booleanComparator(Function<T, Boolean> accessorFunction )
     {
-        return new Comparator<>(accessorFunction, value -> value ? 1 : 0 );
+        return new NumericComparator<>(accessorFunction, value -> value ? 1 : 0 );
     }
 
     /**
@@ -77,15 +77,15 @@ public class Comparators
      * @param <T> type of the aggregate
      * @return Comparator wich compares an {@link Number} of an aggregate
      */
-    public static <T, V extends Number> NumberComparator<T, V> numberComparator(Function<T,V> accessorFunction )
+    public static <T, V extends Number> NumericComparator<T, V> numberComparator(Function<T,V> accessorFunction )
     {
-        return new NumberComparator<>(accessorFunction);
+        return new NumberNumericComparator<>(accessorFunction);
     }
 
-    private static class InstantComparator<T> extends Comparator<T, Instant>
+    private static class InstantNumericComparator<T> extends NumericComparator<T, Instant>
     {
         public static final int NANO = 1000000000;
-        public InstantComparator(Function<T, Instant> accessorFunction)
+        public InstantNumericComparator(Function<T, Instant> accessorFunction)
         {
             super(accessorFunction
                     , instant -> BigDecimal.valueOf(instant.getEpochSecond() * NANO).add( BigDecimal.valueOf(instant.getNano()))
@@ -94,9 +94,9 @@ public class Comparators
 
     }
 
-    private static class NumberComparator<T, V extends Number> extends Comparator<T, V>
+    private static class NumberNumericComparator<T, V extends Number> extends NumericComparator<T, V>
     {
-        public NumberComparator(Function<T, V> accessorFunction)
+        public NumberNumericComparator(Function<T, V> accessorFunction)
         {
             super( accessorFunction, element -> element);
         }

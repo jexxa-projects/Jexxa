@@ -9,8 +9,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IObjectStore;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IObjectQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.INumericQuery;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.NumericComparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
 
 public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>
@@ -29,19 +29,19 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
     }
 
     @Override
-    public <S> IObjectQuery<T, S> getObjectQuery(M metadata)
+    public <S> INumericQuery<T, S> getObjectQuery(M metadata)
     {
         if ( !comparatorFunctions.contains(metadata) )
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
 
-        return new IMBDObjectQuery<>(getOwnAggregateMap(), metadata.getComparator());
+        return new IMBDNumericQuery<>(getOwnAggregateMap(), metadata.getComparator());
     }
 
-    public static class IMBDObjectQuery<T, K, S> implements IObjectQuery<T, S>
+    public static class IMBDNumericQuery<T, K, S> implements INumericQuery<T, S>
     {
-        Comparator<T, S> comparator;
+        NumericComparator<T, S> numericComparator;
         Map<K, T> internalMap;
 
         private Map<K, T> getOwnAggregateMap()
@@ -49,10 +49,10 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
             return internalMap;
         }
 
-        public IMBDObjectQuery(Map<K, T> internalMap, Comparator<T, S> comparator)
+        public IMBDNumericQuery(Map<K, T> internalMap, NumericComparator<T, S> numericComparator)
         {
             this.internalMap = internalMap;
-            this.comparator = comparator;
+            this.numericComparator = numericComparator;
         }
 
         @Override
@@ -61,7 +61,7 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .filter(element -> comparator.compareToValue(element, startValue) >= 0)
+                    .filter(element -> numericComparator.compareToValue(element, startValue) >= 0)
                     .collect(Collectors.toList());
         }
 
@@ -71,7 +71,7 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .filter(element -> comparator.compareToValue(element, value) > 0)
+                    .filter(element -> numericComparator.compareToValue(element, value) > 0)
                     .collect(Collectors.toList());
         }
 
@@ -81,8 +81,8 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .filter(element -> comparator.compareToValue(element, startValue) >= 0)
-                    .filter(element -> comparator.compareToValue(element, endValue) <= 0)
+                    .filter(element -> numericComparator.compareToValue(element, startValue) >= 0)
+                    .filter(element -> numericComparator.compareToValue(element, endValue) <= 0)
                     .collect(Collectors.toList());
         }
 
@@ -92,8 +92,8 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .filter(element -> comparator.compareToValue(element, startValue) >= 0)
-                    .filter(element -> comparator.compareToValue(element, endValue) < 0)
+                    .filter(element -> numericComparator.compareToValue(element, startValue) >= 0)
+                    .filter(element -> numericComparator.compareToValue(element, endValue) < 0)
                     .collect(Collectors.toList());
         }
 
@@ -103,7 +103,7 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .filter(element -> comparator.compareToValue(element, endValue) <= 0)
+                    .filter(element -> numericComparator.compareToValue(element, endValue) <= 0)
                     .collect(Collectors.toList());
         }
 
@@ -113,7 +113,7 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .filter(element -> comparator.compareToValue(element, endValue) < 0)
+                    .filter(element -> numericComparator.compareToValue(element, endValue) < 0)
                     .collect(Collectors.toList());
         }
 
@@ -123,8 +123,18 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .sorted((element1, element2) -> comparator.compareToAggregate(element1, element2))
+                    .sorted((element1, element2) -> numericComparator.compareToAggregate(element1, element2))
                     .limit(amount)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<T> getAscending()
+        {
+            return getOwnAggregateMap()
+                    .values()
+                    .stream()
+                    .sorted((element1, element2) -> numericComparator.compareToAggregate(element1, element2))
                     .collect(Collectors.toList());
         }
 
@@ -134,8 +144,18 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .sorted((element1, element2) -> comparator.compareToAggregate(element2, element1))
+                    .sorted((element1, element2) -> numericComparator.compareToAggregate(element2, element1))
                     .limit(amount)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<T> getDescending()
+        {
+            return getOwnAggregateMap()
+                    .values()
+                    .stream()
+                    .sorted((element1, element2) -> numericComparator.compareToAggregate(element2, element1))
                     .collect(Collectors.toList());
         }
 
@@ -145,7 +165,7 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
             return getOwnAggregateMap()
                     .values()
                     .stream()
-                    .filter(element-> comparator.compareToValue(element, value) == 0)
+                    .filter(element-> numericComparator.compareToValue(element, value) == 0)
                     .collect(Collectors.toList());
         }
 

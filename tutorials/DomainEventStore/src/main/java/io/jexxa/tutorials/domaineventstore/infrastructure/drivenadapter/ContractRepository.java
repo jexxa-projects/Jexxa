@@ -4,13 +4,12 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparat
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators.valueComparator;
 import static io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter.ContractRepository.ContractMetadata.CONTRACT_TERMINATED;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.ObjectStoreManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.NumericComparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparators;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
 import io.jexxa.tutorials.domaineventstore.domain.aggregate.Contract;
@@ -30,18 +29,18 @@ public class ContractRepository  implements IContractRepository
         //ADVISOR()
 
 
-        private final Comparator<Contract, ? > comparator;
+        private final NumericComparator<Contract, ? > numericComparator;
 
-        ContractMetadata(Comparator<Contract,?> comparator)
+        ContractMetadata(NumericComparator<Contract,?> numericComparator)
         {
-            this.comparator = comparator;
+            this.numericComparator = numericComparator;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public  Comparator<Contract, ?> getComparator()
+        public NumericComparator<Contract, ?> getComparator()
         {
-            return comparator;
+            return numericComparator;
         }
     }
 

@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Properties;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.NumericComparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.ObjectStoreManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
@@ -34,22 +34,22 @@ public class DomainEventStore implements IDomainEventStore
 
         VALUE(valueComparator()),
 
-        CONTRACT_NUMBER(numberComparator((domainEvent -> domainEvent.getBatchNumber().getValue())) ),
+        CONTRACT_NUMBER(numberComparator((domainEvent -> domainEvent.getContractNumber().getValue())) ),
 
         SIGNATURE_DATE(instantComparator(ContractSigned::getSignatureDate));
 
-        private final Comparator<ContractSigned, ? > comparator;
+        private final NumericComparator<ContractSigned, ? > numericComparator;
 
-        DomainEventMetadata(Comparator<ContractSigned,?> comparator)
+        DomainEventMetadata(NumericComparator<ContractSigned,?> numericComparator)
         {
-            this.comparator = comparator;
+            this.numericComparator = numericComparator;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public Comparator<ContractSigned, ?> getComparator()
+        public NumericComparator<ContractSigned, ?> getComparator()
         {
-            return comparator;
+            return numericComparator;
         }
     }
 
@@ -58,7 +58,7 @@ public class DomainEventStore implements IDomainEventStore
 
     public DomainEventStore(Properties properties)
     {
-        this.objectStore = ObjectStoreManager.getObjectStore(ContractSigned.class, ContractSigned::getBatchNumber, DomainEventMetadata.class, properties);
+        this.objectStore = ObjectStoreManager.getObjectStore(ContractSigned.class, ContractSigned::getContractNumber, DomainEventMetadata.class, properties);
     }
 
     @Override

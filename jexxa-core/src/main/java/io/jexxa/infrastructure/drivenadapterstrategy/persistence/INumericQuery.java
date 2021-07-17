@@ -7,7 +7,7 @@ import java.util.List;
  * @param <T> Type of the managed object
  * @param <S> Type of the metadata that is used to find the objects
  */
-public interface IObjectQuery<T, S >
+public interface INumericQuery<T, S >
 {
     /**
      * Get all values which fulfill: {@code value <= metadata of the object}
@@ -55,6 +55,12 @@ public interface IObjectQuery<T, S >
     List<T> getAscending(int amount);
 
     /**
+     * Sorts the entries by S in ascending order and returns elements
+     * @return list of elements limited by the given amount.
+     */
+    List<T> getAscending();
+
+    /**
      * Sorts the entries by S in descending order and returns the defined amount of elements
      * @param amount specifies the number of recent added aggregates that should be returned.
      * @return list of elements limited by the given amount.
@@ -62,4 +68,11 @@ public interface IObjectQuery<T, S >
      *         If amount is &lt; 0 then an empty list ist returned
      */
     List<T> getDescending(int amount);
+
+    /**
+     * Sorts the entries by S in descending order and returns elements
+     * @return list of elements limited by the given amount.
+     */
+    List<T> getDescending();
+
 }

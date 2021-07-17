@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.Comparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.NumericComparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,18 +61,18 @@ class IObjectStoreIT
 
         AGGREGATE_KEY(converterComparator(JexxaAggregate::getKey, JexxaValueObject::getValue));
 
-        private final Comparator<JexxaAggregate, ? > comparator;
+        private final NumericComparator<JexxaAggregate, ? > numericComparator;
 
-        JexxaAggregateMetadata(Comparator<JexxaAggregate,?> comparator)
+        JexxaAggregateMetadata(NumericComparator<JexxaAggregate,?> numericComparator)
         {
-            this.comparator = comparator;
+            this.numericComparator = numericComparator;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public Comparator<JexxaAggregate, ?> getComparator()
+        public NumericComparator<JexxaAggregate, ?> getComparator()
         {
-            return comparator;
+            return numericComparator;
         }
     }
 
@@ -246,7 +246,7 @@ class IObjectStoreIT
         testData.forEach(objectUnderTest::add);
         //testData.forEach(objectUnderTest::update);
 
-        IObjectQuery<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getObjectQuery( JexxaAggregateMetadata.AGGREGATE_KEY);
+        INumericQuery<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getObjectQuery( JexxaAggregateMetadata.AGGREGATE_KEY);
 
         //Act
         var fromResult = irangedResult.getGreaterOrEqualThan(new JexxaValueObject(50));

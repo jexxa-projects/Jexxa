@@ -17,7 +17,7 @@ public class ContractSigned
         this.signatureDate = signatureDate;
     }
 
-    public ContractNumber getBatchNumber()
+    public ContractNumber getContractNumber()
     {
         return contractNumber;
     }

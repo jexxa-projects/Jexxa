@@ -11,7 +11,7 @@ public class ContractNumber
         this.value = value;
     }
 
-    public double getValue()
+    public int getValue()
     {
         return value;
     }
