@@ -24,5 +24,5 @@ public interface IObjectStore<V, K, R extends Enum<?> & MetadataComparator> exte
      * @param <S> defines the type of the metadata used for searching nside the {@link IObjectStore}
      * @return interface to execute the query
      */
-    <S > INumericQuery<V, S > getObjectQuery(R metadata);
+    <S > INumericQuery<V, S > getNumericQuery(R metadata);
 }

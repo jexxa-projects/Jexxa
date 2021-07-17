@@ -8,10 +8,10 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.INumericQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.NumericComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.comparator.NumericComparator;
 
 public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>
 {
@@ -29,14 +29,16 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
     }
 
     @Override
-    public <S> INumericQuery<T, S> getObjectQuery(M metadata)
+    public <S> INumericQuery<T, S> getNumericQuery(M metadata)
     {
         if ( !comparatorFunctions.contains(metadata) )
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
 
-        return new IMBDNumericQuery<>(getOwnAggregateMap(), metadata.getComparator());
+        NumericComparator<T, S> numberComparator = (NumericComparator) metadata.getComparator();
+
+        return new IMBDNumericQuery<>(getOwnAggregateMap(), numberComparator);
     }
 
     public static class IMBDNumericQuery<T, K, S> implements INumericQuery<T, S>

@@ -12,7 +12,7 @@ import java.util.function.Function;
  * @param <T> Defines the type of the aggregate
  * @param <S> Defines the type of the value inside the aggregate
  */
-public class NumericComparator<T, S>
+public class NumericComparator<T, S>  implements Comparator<T, S, Number>
 {
     private final Function<T, S> valueAccessor;
     private final Function<S, ? extends Number> valueConverter;

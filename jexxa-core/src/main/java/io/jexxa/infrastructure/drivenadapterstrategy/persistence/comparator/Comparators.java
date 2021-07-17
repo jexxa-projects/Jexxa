@@ -53,9 +53,9 @@ public class Comparators
      * @param <T> type of the aggregate
      * @return Comparator wich compares an {@link Instant} of an aggregate
      */
-    public static <T> InstantNumericComparator<T> instantComparator(Function<T, Instant> accessorFunction )
+    public static <T> InstantComparator<T> instantComparator(Function<T, Instant> accessorFunction )
     {
-        return new InstantNumericComparator<>(accessorFunction);
+        return new InstantComparator<>(accessorFunction);
     }
 
     /**
@@ -67,7 +67,7 @@ public class Comparators
      */
     public static <T> NumericComparator<T, Boolean> booleanComparator(Function<T, Boolean> accessorFunction )
     {
-        return new NumericComparator<>(accessorFunction, value -> value ? 1 : 0 );
+        return new NumericComparator<>(accessorFunction, Boolean.TRUE::compareTo);
     }
 
     /**
@@ -79,13 +79,13 @@ public class Comparators
      */
     public static <T, V extends Number> NumericComparator<T, V> numberComparator(Function<T,V> accessorFunction )
     {
-        return new NumberNumericComparator<>(accessorFunction);
+        return new NumberComparator<>(accessorFunction);
     }
 
-    private static class InstantNumericComparator<T> extends NumericComparator<T, Instant>
+    private static class InstantComparator<T> extends NumericComparator<T, Instant>
     {
         public static final int NANO = 1000000000;
-        public InstantNumericComparator(Function<T, Instant> accessorFunction)
+        public InstantComparator(Function<T, Instant> accessorFunction)
         {
             super(accessorFunction
                     , instant -> BigDecimal.valueOf(instant.getEpochSecond() * NANO).add( BigDecimal.valueOf(instant.getNano()))
@@ -94,9 +94,9 @@ public class Comparators
 
     }
 
-    private static class NumberNumericComparator<T, V extends Number> extends NumericComparator<T, V>
+    private static class NumberComparator<T, V extends Number> extends NumericComparator<T, V>
     {
-        public NumberNumericComparator(Function<T, V> accessorFunction)
+        public NumberComparator(Function<T, V> accessorFunction)
         {
             super( accessorFunction, element -> element);
         }

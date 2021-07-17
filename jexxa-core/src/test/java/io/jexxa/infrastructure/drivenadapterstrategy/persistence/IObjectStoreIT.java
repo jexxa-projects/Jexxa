@@ -218,7 +218,7 @@ class IObjectStoreIT
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
         testData.forEach(objectUnderTest::add);
 
-        var subset = objectUnderTest.getObjectQuery( JexxaAggregateMetadata.INTERNAL_VALUE);
+        var subset = objectUnderTest.getNumericQuery( JexxaAggregateMetadata.INTERNAL_VALUE);
 
         //Act
         var fromResult = subset.getGreaterOrEqualThan(50);
@@ -246,7 +246,7 @@ class IObjectStoreIT
         testData.forEach(objectUnderTest::add);
         //testData.forEach(objectUnderTest::update);
 
-        INumericQuery<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getObjectQuery( JexxaAggregateMetadata.AGGREGATE_KEY);
+        INumericQuery<JexxaAggregate, JexxaValueObject> irangedResult = objectUnderTest.getNumericQuery( JexxaAggregateMetadata.AGGREGATE_KEY);
 
         //Act
         var fromResult = irangedResult.getGreaterOrEqualThan(new JexxaValueObject(50));
@@ -275,7 +275,7 @@ class IObjectStoreIT
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
         testData.forEach(objectUnderTest::add);
 
-        var subset = objectUnderTest.getObjectQuery( JexxaAggregateMetadata.INTERNAL_VALUE);
+        var subset = objectUnderTest.getNumericQuery( JexxaAggregateMetadata.INTERNAL_VALUE);
         var expectedResult = testData.stream()
                 .sorted(java.util.Comparator.comparing( JexxaAggregate::getInternalValue))
                 .collect(Collectors.toList());
@@ -303,7 +303,7 @@ class IObjectStoreIT
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
         testData.forEach(objectUnderTest::add);
 
-        var subset = objectUnderTest.getObjectQuery( JexxaAggregateMetadata.INTERNAL_VALUE);
+        var subset = objectUnderTest.getNumericQuery( JexxaAggregateMetadata.INTERNAL_VALUE);
         var limitAmount = 10 ;
         var expectedResult = testData.stream()
                 .sorted(java.util.Comparator.comparing( JexxaAggregate::getInternalValue))
@@ -333,7 +333,7 @@ class IObjectStoreIT
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
         testData.forEach(objectUnderTest::add);
 
-        var subset = objectUnderTest.getObjectQuery( JexxaAggregateMetadata.INTERNAL_VALUE);
+        var subset = objectUnderTest.getNumericQuery( JexxaAggregateMetadata.INTERNAL_VALUE);
         var expectedResult = testData.stream()
                 .sorted(java.util.Comparator.comparing( JexxaAggregate::getInternalValue).reversed())
                 .collect(Collectors.toList());
@@ -361,7 +361,7 @@ class IObjectStoreIT
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
         testData.forEach(objectUnderTest::add);
 
-        var subset = objectUnderTest.getObjectQuery( JexxaAggregateMetadata.INTERNAL_VALUE);
+        var subset = objectUnderTest.getNumericQuery( JexxaAggregateMetadata.INTERNAL_VALUE);
         var limitAmount = 10 ;
         var expectedResult = testData.stream()
                 .sorted(java.util.Comparator.comparing( JexxaAggregate::getInternalValue).reversed())
