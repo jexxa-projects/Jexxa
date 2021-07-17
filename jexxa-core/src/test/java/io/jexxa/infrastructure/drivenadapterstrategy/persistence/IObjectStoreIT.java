@@ -276,6 +276,34 @@ class IObjectStoreIT
         testData.forEach(objectUnderTest::add);
 
         var subset = objectUnderTest.getObjectQuery( JexxaAggregateMetadata.INTERNAL_VALUE);
+        var expectedResult = testData.stream()
+                .sorted(java.util.Comparator.comparing( JexxaAggregate::getInternalValue))
+                .collect(Collectors.toList());
+
+        //Act
+        var result = subset.getAscending();
+
+        //Assert
+        assertEquals(expectedResult, result);
+    }
+
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testGetAscendingWithLimit(Properties properties)
+    {
+        //Arrange
+        var objectUnderTest = ObjectStoreManager.getObjectStore(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                JexxaAggregateMetadata.class,
+                properties);
+
+        objectUnderTest.removeAll();
+
+        testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
+        testData.forEach(objectUnderTest::add);
+
+        var subset = objectUnderTest.getObjectQuery( JexxaAggregateMetadata.INTERNAL_VALUE);
         var limitAmount = 10 ;
         var expectedResult = testData.stream()
                 .sorted(java.util.Comparator.comparing( JexxaAggregate::getInternalValue))
@@ -292,6 +320,34 @@ class IObjectStoreIT
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
     void testGetDescending(Properties properties)
+    {
+        //Arrange
+        var objectUnderTest = ObjectStoreManager.getObjectStore(
+                JexxaAggregate.class,
+                JexxaAggregate::getKey,
+                JexxaAggregateMetadata.class,
+                properties);
+
+        objectUnderTest.removeAll();
+
+        testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
+        testData.forEach(objectUnderTest::add);
+
+        var subset = objectUnderTest.getObjectQuery( JexxaAggregateMetadata.INTERNAL_VALUE);
+        var expectedResult = testData.stream()
+                .sorted(java.util.Comparator.comparing( JexxaAggregate::getInternalValue).reversed())
+                .collect(Collectors.toList());
+
+        //Act
+        var result = subset.getDescending();
+
+        //Assert
+        assertEquals(expectedResult, result);
+    }
+
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testGetDescendingWithLimit(Properties properties)
     {
         //Arrange
         var objectUnderTest = ObjectStoreManager.getObjectStore(
