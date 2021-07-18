@@ -61,10 +61,11 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         this.comparatorSchema = comparatorSchema;
         this.comparatorFunctions = EnumSet.allOf(comparatorSchema);
 
-        var iterator =comparatorFunctions.iterator();
+        var iterator = comparatorFunctions.iterator();
         schemaKey =  iterator.next();
         schemaValue = iterator.next();
 
+        //TODO: This must be changed, because it is only valid in case the JDBCObjectStore creates the table by itself
         Validate.isTrue( "KEY".equals(schemaKey.name()), "First entry of ComparatorSchema must be 'KEY' ");
         Validate.isTrue( "VALUE".equals(schemaValue.name()), "Second entry of ComparatorSchema must be 'VALUE' ");
 

@@ -18,8 +18,8 @@ import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.parallel.Execution;
@@ -49,32 +49,39 @@ class IObjectStoreIT
 
     /**
      * Defines the meta data that we use:
-     * Conventions for real databases:
+     * Conventions for databases:
      * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
      * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
      */
     public enum JexxaAggregateMetadata implements MetadataComparator
     {
+        /**
+         * Defines the meta data including comparator to query the object store.
+         * The following information is specific to your implementation and must be adjusted.
+         */
         KEY(keyComparator()),
 
         VALUE(valueComparator()),
 
-        INTERNAL_VALUE(numberComparator(JexxaAggregate::getInternalValue)),
+        INT_VALUE(numberComparator(JexxaAggregate::getInternalValue)),
 
-        AGGREGATE_KEY(converterComparator(JexxaAggregate::getKey, JexxaValueObject::getValue));
+        VALUE_OBJECT(converterComparator(JexxaAggregate::getKey, JexxaValueObject::getValue));
 
-        private final NumericComparator<JexxaAggregate, ? > numericComparator;
+        /**
+         *  Defines the constructor of the enum. Following code is equal for all object stores.
+         */
+        private final Comparator<JexxaAggregate, ?, ? > comparator;
 
-        JexxaAggregateMetadata(NumericComparator<JexxaAggregate,?> numericComparator)
+        JexxaAggregateMetadata(Comparator<JexxaAggregate,?, ?> comparator)
         {
-            this.numericComparator = numericComparator;
+            this.comparator = comparator;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public NumericComparator<JexxaAggregate, ?> getComparator()
+        public Comparator<JexxaAggregate, ?, ?> getComparator()
         {
-            return numericComparator;
+            return comparator;
         }
     }
 
