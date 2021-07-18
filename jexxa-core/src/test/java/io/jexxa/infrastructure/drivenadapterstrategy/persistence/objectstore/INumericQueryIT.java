@@ -80,21 +80,41 @@ class INumericQueryIT
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
-    void testCompareInternalValue(Properties properties)
+    void testComparisonOperators_INT_VALUE(Properties properties)
     {
         //Arrange
         initObjectStore(properties);
         var objectUnderTest = objectStore.getNumericQuery( JexxaAggregateMetadata.INT_VALUE);
+        var greaterOrEqualThanExpected = IntStream.range(50,100).
+                mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var lessOrEqualThanThanExpected = IntStream.rangeClosed(0,50).
+                mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var greaterThanExpected = IntStream.range(51, 100).
+                mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var lessThanExpected = IntStream.range(0,50).
+                mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var rangeClosedExpected = IntStream.rangeClosed(30,50).
+                mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var rangeExpected = IntStream.range(30,50).
+                mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
 
         //Act
-        var fromResult = objectUnderTest.isGreaterOrEqualThan(50);
-        var untilResult = objectUnderTest.isLessOrEqualThan(50);
-        var rangedResult = objectUnderTest.getRangeClosed(30,50);
+        var greaterOrEqualThan = objectUnderTest.isGreaterOrEqualThan(50);
+        var lessOrEqualThan = objectUnderTest.isLessOrEqualThan(50);
+        var greaterThan = objectUnderTest.isGreaterThan(50);
+        var lessThan = objectUnderTest.isLessThan(50);
+        var rangeClosed = objectUnderTest.getRangeClosed(30,50);
+        var range = objectUnderTest.getRange(30,50);
 
         //Assert
-        assertEquals(50, fromResult.size());
-        assertEquals(51, untilResult.size());
-        assertEquals(21, rangedResult.size());
+        assertEquals(greaterOrEqualThanExpected, greaterOrEqualThan);
+        assertEquals(greaterThanExpected, greaterThan);
+
+        assertEquals(lessThanExpected, lessThan);
+        assertEquals(lessOrEqualThanThanExpected, lessOrEqualThan);
+
+        assertEquals(rangeClosedExpected, rangeClosed);
+        assertEquals(rangeExpected, range);
     }
 
     @ParameterizedTest
