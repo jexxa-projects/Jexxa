@@ -41,7 +41,7 @@ public class Comparators
      * @param <V> type of the value
      * @return Comparator wich compares defined value of an aggregate
      */
-    public static <T, V> NumericComparator<T, V> converterComparator(Function<T, V> accessorFunction, Function<V, ? extends Number> converterFunction)
+    public static <T, V> NumericComparator<T, V> numberComparator(Function<T, V> accessorFunction, Function<V, ? extends Number> converterFunction)
     {
         return new NumericComparator<>(accessorFunction, converterFunction);
     }

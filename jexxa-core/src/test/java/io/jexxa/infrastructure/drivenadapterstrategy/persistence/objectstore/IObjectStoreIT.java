@@ -1,6 +1,5 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.converterComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.keyComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.numberComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.valueComparator;
@@ -65,7 +64,7 @@ class IObjectStoreIT
 
         INT_VALUE(numberComparator(JexxaAggregate::getInternalValue)),
 
-        VALUE_OBJECT(converterComparator(JexxaAggregate::getKey, JexxaValueObject::getValue));
+        VALUE_OBJECT(numberComparator(JexxaAggregate::getKey, JexxaValueObject::getValue));
 
         /**
          *  Defines the constructor of the enum. Following code is equal for all object stores.

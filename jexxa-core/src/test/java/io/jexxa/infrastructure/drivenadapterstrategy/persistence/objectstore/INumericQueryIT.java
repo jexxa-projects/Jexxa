@@ -1,6 +1,5 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.converterComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.keyComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.numberComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.valueComparator;
@@ -57,7 +56,7 @@ class INumericQueryIT
 
         INT_VALUE(numberComparator(JexxaAggregate::getInternalValue)),
 
-        VALUE_OBJECT(converterComparator(JexxaAggregate::getKey, JexxaValueObject::getValue));
+        VALUE_OBJECT(numberComparator(JexxaAggregate::getKey, JexxaValueObject::getValue));
 
         /**
          *  Defines the constructor of the enum. Following code is equal for all object stores.
@@ -85,12 +84,14 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
         var objectUnderTest = objectStore.getNumericQuery( JexxaAggregateMetadata.INT_VALUE);
-        var greaterOrEqualThanExpected = IntStream.range(50,100).
-                mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
-        var lessOrEqualThanThanExpected = IntStream.rangeClosed(0,50).
-                mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
-        var greaterThanExpected = IntStream.range(51, 100).
-                mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
+
+        var greaterOrEqualThanExpected = IntStream.range(50,100)
+                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element)))
+                .collect(Collectors.toList());
+        var lessOrEqualThanThanExpected = IntStream.rangeClosed(0,50)
+                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var greaterThanExpected = IntStream.range(51, 100)
+                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
         var lessThanExpected = IntStream.range(0,50).
                 mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
         var rangeClosedExpected = IntStream.rangeClosed(30,50).
@@ -119,22 +120,45 @@ class INumericQueryIT
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
-    void testCompareAggregateKey(Properties properties)
+    void testComparisonOperator_VALUE_OBJECT(Properties properties)
     {
         //Arrange
         initObjectStore(properties);
 
         var objectUnderTest = objectStore.getNumericQuery( JexxaAggregateMetadata.VALUE_OBJECT);
 
+        var greaterOrEqualThanExpected = IntStream
+                .range(50,100)
+                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var lessOrEqualThanThanExpected = IntStream.rangeClosed(0,50)
+                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var greaterThanExpected = IntStream.range(51, 100)
+                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var lessThanExpected = IntStream.range(0,50)
+                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var rangeClosedExpected = IntStream.rangeClosed(30,50)
+                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var rangeExpected = IntStream.range(30,50)
+                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element))).collect(Collectors.toList());
+
+
         //Act
-        var fromResult = objectUnderTest.isGreaterOrEqualThan(new JexxaValueObject(50));
-        var untilResult = objectUnderTest.isLessOrEqualThan(new JexxaValueObject(50));
-        var rangedResult = objectUnderTest.getRangeClosed(new JexxaValueObject(30),new JexxaValueObject(50));
+        var greaterOrEqualThan = objectUnderTest.isGreaterOrEqualThan(new JexxaValueObject(50));
+        var lessOrEqualThan = objectUnderTest.isLessOrEqualThan(new JexxaValueObject(50));
+        var greaterThan = objectUnderTest.isGreaterThan(new JexxaValueObject(50));
+        var lessThan = objectUnderTest.isLessThan(new JexxaValueObject(50));
+        var rangeClosed = objectUnderTest.getRangeClosed(new JexxaValueObject(30),new JexxaValueObject(50));
+        var range = objectUnderTest.getRange(new JexxaValueObject(30),new JexxaValueObject(50));
 
         //Assert
-        assertEquals(50, fromResult.size());
-        assertEquals(51, untilResult.size());
-        assertEquals(21, rangedResult.size());
+        assertEquals(greaterOrEqualThanExpected, greaterOrEqualThan);
+        assertEquals(greaterThanExpected, greaterThan);
+
+        assertEquals(lessThanExpected, lessThan);
+        assertEquals(lessOrEqualThanThanExpected, lessOrEqualThan);
+
+        assertEquals(rangeClosedExpected, rangeClosed);
+        assertEquals(rangeExpected, range);
     }
 
     @ParameterizedTest
