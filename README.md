@@ -47,7 +47,7 @@ Maven:
 Gradle:
 
 ```groovy
-compile "io.Jexxa:jexxa-web:3.0.5"
+compile "io.Jexxa:jexxa-web:3.0.6"
 ``` 
  
 ### Start programming 
