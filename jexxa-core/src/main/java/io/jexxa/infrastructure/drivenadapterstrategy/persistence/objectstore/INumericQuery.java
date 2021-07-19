@@ -36,6 +36,13 @@ public interface INumericQuery<T, S >
      */
     List<T> isEqualTo(S value);
 
+    /**
+     * Returns all elements equal to S
+     * @param value specifies comparison value
+     * @return list of elements that are equal to value
+     */
+    List<T> isNotEqualTo(S value);
+
 
     /** get all values which fulfill: {@code startValue <= value <= endValue}
      */

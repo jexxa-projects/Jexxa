@@ -14,7 +14,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparator;
@@ -33,14 +32,14 @@ class IObjectStoreIT
     private static final String REPOSITORY_CONFIG = "repositoryConfig";
     private static final int TEST_DATA_SIZE = 100;
 
-    private List<JexxaAggregate> testData;
-    private IObjectStore<JexxaAggregate, JexxaValueObject, JexxaAggregateMetadata> objectUnderTest;
+    private List<JexxaObject> testData;
+    private IObjectStore<JexxaObject, JexxaValueObject, JexxaObjectMetadata> objectUnderTest;
 
     @BeforeEach
     void initTest()
     {
         testData = IntStream.range(0, TEST_DATA_SIZE)
-                .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element)))
+                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element)))
                 .collect(Collectors.toList());
 
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
@@ -52,7 +51,7 @@ class IObjectStoreIT
      * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
      * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
      */
-    public enum JexxaAggregateMetadata implements MetadataComparator
+    public enum JexxaObjectMetadata implements MetadataComparator
     {
         /**
          * Defines the meta data including comparator to query the object store.
@@ -62,23 +61,23 @@ class IObjectStoreIT
 
         VALUE(valueComparator()),
 
-        INT_VALUE(numberComparator(JexxaAggregate::getInternalValue)),
+        INT_VALUE(numberComparator(JexxaObject::getInternalValue)),
 
-        VALUE_OBJECT(numberComparator(JexxaAggregate::getKey, JexxaValueObject::getValue));
+        VALUE_OBJECT(numberComparator(JexxaObject::getKey, JexxaValueObject::getValue));
 
         /**
          *  Defines the constructor of the enum. Following code is equal for all object stores.
          */
-        private final Comparator<JexxaAggregate, ?, ? > comparator;
+        private final Comparator<JexxaObject, ?, ? > comparator;
 
-        JexxaAggregateMetadata(Comparator<JexxaAggregate,?, ?> comparator)
+        JexxaObjectMetadata(Comparator<JexxaObject,?, ?> comparator)
         {
             this.comparator = comparator;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public Comparator<JexxaAggregate, ?, ?> getComparator()
+        public Comparator<JexxaObject, ?, ?> getComparator()
         {
             return comparator;
         }
@@ -203,15 +202,15 @@ class IObjectStoreIT
         if (!properties.isEmpty())
         {
             var jdbcConnection = new JDBCConnection(properties);
-            jdbcConnection.createTableCommand(INumericQueryIT.JexxaAggregateMetadata.class)
-                    .dropTableIfExists(JexxaAggregate.class)
+            jdbcConnection.createTableCommand(JexxaObjectMetadata.class)
+                    .dropTableIfExists(JexxaObject.class)
                     .asIgnore();
         }
 
         objectUnderTest = ObjectStoreManager.getObjectStore(
-                JexxaAggregate.class,
-                JexxaAggregate::getKey,
-                JexxaAggregateMetadata.class,
+                JexxaObject.class,
+                JexxaObject::getKey,
+                JexxaObjectMetadata.class,
                 properties);
 
         objectUnderTest.removeAll();

@@ -137,4 +137,14 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<T> isNotEqualTo(S value)
+    {
+        return getOwnAggregateMap()
+                .values()
+                .stream()
+                .filter(element-> numericComparator.compareToValue(element, value) != 0)
+                .collect(Collectors.toList());
+    }
+
 }

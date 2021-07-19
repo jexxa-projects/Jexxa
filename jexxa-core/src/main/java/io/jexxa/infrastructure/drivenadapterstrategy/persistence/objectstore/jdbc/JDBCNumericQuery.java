@@ -221,6 +221,21 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
         return searchElements(jdbcQuery);
     }
 
+    @Override
+    public List<T> isNotEqualTo(S value)
+    {
+        var sqlValue = numericComparator.convertValue(value);
+        var jdbcQuery = jdbcConnection.get()
+                .createQuery(comparatorSchema)
+                .select( schemaValue )
+                .from(aggregateClazz)
+                .where(nameOfRow)
+                .isNotEqual(sqlValue)
+                .create();
+
+        return searchElements(jdbcQuery);
+    }
+
     protected List<T> searchElements(JDBCQuery query)
     {
         return query.asString()
