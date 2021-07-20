@@ -11,6 +11,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBReposi
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.StringComparator;
 
 public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>
 {
@@ -43,7 +44,14 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
     @Override
     public <S> IStringQuery<T, S> getStringQuery(M metadata)
     {
-        return null;
+        if ( !comparatorFunctions.contains(metadata) )
+        {
+            throw new IllegalArgumentException("Unknown strategy for IRangedResult");
+        }
+
+        StringComparator<T, S> stringComparator = (StringComparator) metadata.getComparator();
+
+        return new IMDBStringQuery<>(getOwnAggregateMap(), stringComparator);
     }
 
 }

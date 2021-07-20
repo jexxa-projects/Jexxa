@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -37,42 +38,72 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
     @Override
     public List<T> endsWith(S value)
     {
-        return null;
+        return getOwnAggregateMap()
+                .values()
+                .stream()
+                .filter( element -> stringComparator.convertAggregate(element).endsWith(value.toString()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<T> includes(S value)
     {
-        return null;
+        return getOwnAggregateMap()
+                .values()
+                .stream()
+                .filter( element -> stringComparator.convertAggregate(element).contains(value.toString()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<T> isEqualTo(S value)
     {
-        return null;
+        return getOwnAggregateMap()
+                .values()
+                .stream()
+                .filter( element -> stringComparator.convertAggregate(element).equals(value.toString()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<T> getAscending(int amount)
     {
-        return null;
+        return getOwnAggregateMap()
+                .values()
+                .stream()
+                .sorted(Comparator.comparing(element -> stringComparator.convertAggregate(element)))
+                .limit(amount)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<T> getAscending()
     {
-        return null;
+        return getOwnAggregateMap()
+                .values()
+                .stream()
+                .sorted((element1, element2) -> stringComparator.compareToAggregate(element1, element2))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<T> getDescending(int amount)
     {
-        return null;
+        return getOwnAggregateMap()
+                .values()
+                .stream()
+                .sorted((element1, element2) -> stringComparator.compareToAggregate(element2, element1))
+                .limit(amount)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<T> getDescending()
     {
-        return null;
+        return getOwnAggregateMap()
+                .values()
+                .stream()
+                .sorted((element1, element2) -> stringComparator.compareToAggregate(element2, element1))
+                .collect(Collectors.toList());
     }
 }
