@@ -31,6 +31,11 @@ public class JexxaObject
         return Optional.ofNullable(optionalString);
     }
 
+    public String getString()
+    {
+        return Optional.ofNullable(optionalString).orElse("null");
+    }
+
     public Optional<JexxaValueObject> getOptionalJexxaValue()
     {
         return Optional.ofNullable(optionalJexxaValue);
