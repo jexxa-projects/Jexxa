@@ -37,7 +37,7 @@ class INumericQueryIT
 
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue())); // set internal int value to an ascending number
 
-        testData.stream().limit(50).forEach( element -> element.setoptionalJexxaValue( element.getKey() )); // Set optional value to half ot the test data (0 to 49)
+        testData.stream().limit(50).forEach( element -> element.setOptionalJexxaValue( element.getKey() )); // Set optional value to half ot the test data (0 to 49)
     }
 
     /**
@@ -87,7 +87,7 @@ class INumericQueryIT
     {
         //Arrange
         initObjectStore(properties);
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE);
+        var objectUnderTest = objectStore. getNumericQuery( JexxaObjectMetadata.INT_VALUE, Integer.class);
 
         var greaterOrEqualThanExpected = IntStream.range(50,100)
                 .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element)))
@@ -140,7 +140,7 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.VALUE_OBJECT);
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.VALUE_OBJECT, JexxaValueObject.class);
 
         var greaterOrEqualThanExpected = IntStream
                 .range(50,100)
@@ -192,7 +192,7 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.VALUE_OBJECT);
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.VALUE_OBJECT, JexxaValueObject.class);
 
         var greaterOrEqualThanExpected = IntStream
                 .range(50,100)
@@ -235,7 +235,7 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE);
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE, Integer.class);
         var expectedResult = testData.stream()
                 .sorted(java.util.Comparator.comparing( JexxaObject::getInternalValue))
                 .collect(Collectors.toList());
@@ -254,7 +254,7 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE);
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE, Integer.class);
         var limitAmount = 10 ;
         var expectedResult = testData.stream()
                 .sorted(java.util.Comparator.comparing( JexxaObject::getInternalValue))
@@ -275,7 +275,7 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE);
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE, Integer.class);
         var expectedResult = testData.stream()
                 .sorted(java.util.Comparator.comparing( JexxaObject::getInternalValue).reversed())
                 .collect(Collectors.toList());
@@ -294,7 +294,7 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE);
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE, Integer.class);
         var limitAmount = 10 ;
         var expectedResult = testData.stream()
                 .sorted(java.util.Comparator.comparing( JexxaObject::getInternalValue).reversed())

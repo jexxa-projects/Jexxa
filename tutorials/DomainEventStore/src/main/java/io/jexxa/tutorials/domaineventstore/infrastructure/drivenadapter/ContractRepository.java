@@ -67,7 +67,7 @@ public class ContractRepository  implements IContractRepository
     public List<Contract> getTerminated()
     {
         return objectStore
-                .getNumericQuery(CONTRACT_TERMINATED)
+                .getNumericQuery(CONTRACT_TERMINATED, Boolean.class)
                 .isEqualTo(true);
     }
 

@@ -215,20 +215,20 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         }
     }
 
-
-    public <S> INumericQuery<T, S> getNumericQuery(M metadata)
+    public <S> INumericQuery<T, S> getNumericQuery(M metadata, Class<S> queryType)
     {
         if (!comparatorFunctions.contains(metadata))
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
+        //noinspection unchecked
         NumericComparator<T, S> numberComparator = (NumericComparator) metadata.getComparator();
 
-        return new JDBCNumericQuery<>(this::getConnection, numberComparator, metadata, aggregateClazz,comparatorSchema );
+        return new JDBCNumericQuery<>(this::getConnection, numberComparator, metadata, aggregateClazz,comparatorSchema, queryType );
     }
 
     @Override
-    public <S> IStringQuery<T, S> getStringQuery(M metadata)
+    public <S> IStringQuery<T, S> getStringQuery(M metadata, Class<S> queryType)
     {
         return null;
     }

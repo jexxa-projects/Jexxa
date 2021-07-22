@@ -29,29 +29,31 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
     }
 
     @Override
-    public <S> INumericQuery<T, S> getNumericQuery(M metadata)
+    public <S> INumericQuery<T, S> getNumericQuery(M metadata, Class<S> queryType)
     {
         if ( !comparatorFunctions.contains(metadata) )
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
 
+        //noinspection unchecked
         NumericComparator<T, S> numberComparator = (NumericComparator) metadata.getComparator();
 
-        return new IMDBNumericQuery<>(getOwnAggregateMap(), numberComparator);
+        return new IMDBNumericQuery<>(getOwnAggregateMap(), numberComparator, queryType);
     }
 
     @Override
-    public <S> IStringQuery<T, S> getStringQuery(M metadata)
+    public <S> IStringQuery<T, S> getStringQuery(M metadata, Class<S> queryType)
     {
         if ( !comparatorFunctions.contains(metadata) )
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
 
+        //noinspection unchecked
         StringComparator<T, S> stringComparator = (StringComparator) metadata.getComparator();
 
-        return new IMDBStringQuery<>(getOwnAggregateMap(), stringComparator);
+        return new IMDBStringQuery<>(getOwnAggregateMap(), stringComparator, queryType);
     }
 
 }

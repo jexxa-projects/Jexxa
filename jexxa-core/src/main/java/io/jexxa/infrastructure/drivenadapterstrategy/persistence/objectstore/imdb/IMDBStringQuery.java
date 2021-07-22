@@ -10,18 +10,21 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.com
 
 class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
 {
-    StringComparator<T, S> stringComparator;
-    Map<K, T> internalMap;
+    private final StringComparator<T, S> stringComparator;
+    private final Map<K, T> internalMap;
+    @SuppressWarnings("unused") // Type required for java type inference
+    private final Class<S> queryType;
 
     private Map<K, T> getOwnAggregateMap()
     {
         return internalMap;
     }
 
-    IMDBStringQuery(Map<K, T> internalMap, StringComparator<T, S> stringComparator)
+    IMDBStringQuery(Map<K, T> internalMap, StringComparator<T, S> stringComparator, Class<S> queryType)
     {
         this.internalMap = internalMap;
         this.stringComparator = stringComparator;
+        this.queryType = queryType;
     }
 
 
@@ -71,7 +74,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .sorted(Comparator.comparing(element -> stringComparator.convertAggregate(element)))
+                .sorted(Comparator.comparing(stringComparator::convertAggregate))
                 .limit(amount)
                 .collect(Collectors.toList());
     }
@@ -82,7 +85,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .sorted((element1, element2) -> stringComparator.compareToAggregate(element1, element2))
+                .sorted(stringComparator::compareToAggregate)
                 .collect(Collectors.toList());
     }
 
@@ -92,7 +95,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .sorted((element1, element2) -> stringComparator.compareToAggregate(element2, element1))
+                .sorted(stringComparator::compareToAggregate)
                 .limit(amount)
                 .collect(Collectors.toList());
     }
@@ -103,7 +106,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .sorted((element1, element2) -> stringComparator.compareToAggregate(element2, element1))
+                .sorted(stringComparator::compareToAggregate)
                 .collect(Collectors.toList());
     }
 }

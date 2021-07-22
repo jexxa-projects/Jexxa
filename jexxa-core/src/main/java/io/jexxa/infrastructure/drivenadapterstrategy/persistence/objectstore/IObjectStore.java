@@ -22,10 +22,10 @@ public interface IObjectStore<V, K, R extends Enum<?> & MetadataComparator> exte
      * managed by the aggregate.
      *
      * @param metadata defines metadata-comparator used for searching objects
-     * @param <S> defines the type of the metadata used for searching inside the {@link IObjectStore}
+     * @param queryType defines the type of the metadata used for searching inside the {@link IObjectStore}
      * @return interface to execute the query
      */
-    <S > INumericQuery<V, S > getNumericQuery(R metadata);
+    <S > INumericQuery<V, S > getNumericQuery(R metadata, Class<S> queryType);
 
 
     /**
@@ -33,8 +33,8 @@ public interface IObjectStore<V, K, R extends Enum<?> & MetadataComparator> exte
      * managed by the aggregate.
      *
      * @param metadata defines metadata-comparator used for searching objects
-     * @param <S> defines the type of the metadata used for searching inside the {@link IObjectStore}
+     * @param queryType defines the type of the metadata used for searching inside the {@link IObjectStore}
      * @return interface to execute the query
      */
-    <S > IStringQuery<V, S > getStringQuery(R metadata);
+    <S > IStringQuery<V, S > getStringQuery(R metadata, Class<S> queryType);
 }

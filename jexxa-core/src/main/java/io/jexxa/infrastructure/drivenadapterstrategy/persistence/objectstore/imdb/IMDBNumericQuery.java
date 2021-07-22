@@ -9,18 +9,22 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INu
 
 class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
 {
-    NumericComparator<T, S> numericComparator;
-    Map<K, T> internalMap;
+    private final NumericComparator<T, S> numericComparator;
+    private final Map<K, T> internalMap;
+
+    @SuppressWarnings("unused") //Type required for java type inference
+    private final Class<S> queryType;
 
     private Map<K, T> getOwnAggregateMap()
     {
         return internalMap;
     }
 
-    IMDBNumericQuery(Map<K, T> internalMap, NumericComparator<T, S> numericComparator)
+    IMDBNumericQuery(Map<K, T> internalMap, NumericComparator<T, S> numericComparator, Class<S> queryType)
     {
         this.internalMap = internalMap;
         this.numericComparator = numericComparator;
+        this.queryType = queryType;
     }
 
     @Override
@@ -91,7 +95,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .sorted((element1, element2) -> numericComparator.compareToAggregate(element1, element2))
+                .sorted(numericComparator::compareToAggregate)
                 .limit(amount)
                 .collect(Collectors.toList());
     }
@@ -102,7 +106,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .sorted((element1, element2) -> numericComparator.compareToAggregate(element1, element2))
+                .sorted(numericComparator::compareToAggregate)
                 .collect(Collectors.toList());
     }
 

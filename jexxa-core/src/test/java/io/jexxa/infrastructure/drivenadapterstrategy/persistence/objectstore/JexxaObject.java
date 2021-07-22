@@ -14,16 +14,14 @@ public class JexxaObject
     private final JexxaValueObject jexxaValueObject;
     private JexxaValueObject optionalJexxaValue;
 
-    public JexxaObject setoptionalJexxaValue(JexxaValueObject optionalJexxaValue)
+    public void setOptionalJexxaValue(JexxaValueObject optionalJexxaValue)
     {
         this.optionalJexxaValue = optionalJexxaValue;
-        return this;
     }
 
-    public JexxaObject setOptionalString(String optionalString)
+    public void setOptionalString(String optionalString)
     {
         this.optionalString = optionalString;
-        return this;
     }
 
     private String optionalString;

@@ -149,6 +149,7 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public JDBCCommandBuilder<T> set(Object[] element, Object[] value)
     {
         getStatementBuilder()

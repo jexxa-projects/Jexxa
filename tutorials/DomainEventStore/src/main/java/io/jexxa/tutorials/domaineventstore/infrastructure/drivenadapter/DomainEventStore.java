@@ -71,7 +71,7 @@ public class DomainEventStore implements IDomainEventStore
     public List<ContractSigned> get(Instant startTime, Instant endTime)
     {
         return objectStore
-                .getNumericQuery(DomainEventMetadata.SIGNATURE_DATE)
+                .getNumericQuery(DomainEventMetadata.SIGNATURE_DATE, Instant.class)
                 .getRangeClosed(startTime, endTime);
     }
 
@@ -79,7 +79,7 @@ public class DomainEventStore implements IDomainEventStore
     public List<ContractSigned> getBatchNumbersLessThan(ContractNumber contractNumber)
     {
         return objectStore
-                .getNumericQuery(DomainEventMetadata.CONTRACT_NUMBER)
+                .getNumericQuery(DomainEventMetadata.CONTRACT_NUMBER, ContractNumber.class)
                 .isLessThan(contractNumber);
     }
 
@@ -87,7 +87,7 @@ public class DomainEventStore implements IDomainEventStore
     public List<ContractSigned> getLatestBatches(int number)
     {
         return objectStore
-                .getNumericQuery(DomainEventMetadata.CONTRACT_NUMBER)
+                .getNumericQuery(DomainEventMetadata.CONTRACT_NUMBER, ContractNumber.class)
                 .getDescending(number);
     }
 }

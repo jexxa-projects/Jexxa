@@ -4,16 +4,17 @@ import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
 import io.jexxa.utils.json.JSONConverter;
 
 class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements INumericQuery<T, S>
@@ -27,19 +28,24 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
     private final M schemaValue;
     private final Class<M> comparatorSchema;
 
+    @SuppressWarnings("unused") //Type required for java type inference
+    private final Class<S> queryType;
+
 
     JDBCNumericQuery(Supplier<JDBCConnection> jdbcConnection,
                      NumericComparator<T, S> numericComparator,
                      M nameOfRow,
                      Class<T> aggregateClazz,
-                     Class<M> comparatorSchema)
+                     Class<M> comparatorSchema,
+                     Class<S> queryType)
     {
-        this.jdbcConnection = jdbcConnection;
-        this.aggregateClazz = aggregateClazz;
-        this.nameOfRow = nameOfRow;
-        this.numericComparator = numericComparator;
+        this.jdbcConnection = Objects.requireNonNull( jdbcConnection );
+        this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
+        this.nameOfRow = Objects.requireNonNull(nameOfRow);
+        this.numericComparator = Objects.requireNonNull(numericComparator);
+        this.comparatorSchema = Objects.requireNonNull(comparatorSchema);
+        this.queryType = Objects.requireNonNull(queryType);
 
-        this.comparatorSchema = comparatorSchema;
         var comparatorFunctions = EnumSet.allOf(comparatorSchema);
         var iterator = comparatorFunctions.iterator();
         iterator.next();
