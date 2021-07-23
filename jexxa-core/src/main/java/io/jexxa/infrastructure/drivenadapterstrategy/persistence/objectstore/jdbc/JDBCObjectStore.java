@@ -14,22 +14,20 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import com.google.common.collect.Streams;
 import com.google.gson.Gson;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.StringComparator;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONManager;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
-
 
 
 @SuppressWarnings("unused")
@@ -83,19 +81,16 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
                 .skip(1)
                 .toArray();
 
-        var comparatorValueSet = comparatorFunctions
-                .stream()
-                .skip(2) // Skip the key and value
-                .map( element -> element.getComparator().convertAggregate(aggregate) )
-                .collect(Collectors.toList());
-
         var valueSet = new ArrayList<>();
         valueSet.add(JSONManager.getJSONConverter().toJson(aggregate));
-        valueSet.addAll(comparatorValueSet);
+
+        comparatorFunctions
+                .stream()
+                .skip(2) // Skip the key and value
+                .forEach( element -> valueSet.add(element.getComparator().convertAggregate(aggregate)) );
 
         // Skip the key
         //"update %s where key = '%s' "  ComparatorValues... " '%s' = '%s' "
-
         var command = getConnection()
                 .createCommand(comparatorSchema)
                 .update(aggregateClazz)
@@ -136,18 +131,22 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
     public void add(T aggregate)
     {
         Objects.requireNonNull(aggregate);
+
         var jsonConverter = JSONManager.getJSONConverter();
+        var objectList = new ArrayList<>();
 
-        var keyValue = Stream.of(
-                jsonConverter.toJson(keyFunction.apply(aggregate)),
-                jsonConverter.toJson(aggregate));
+        objectList.add (jsonConverter.toJson(keyFunction.apply(aggregate)));
+        objectList.add (jsonConverter.toJson(aggregate));
 
-        var remainingData =  comparatorFunctions.stream().skip(2).map(element -> element.getComparator().convertAggregate(aggregate));
+        comparatorFunctions
+                .stream()
+                .skip(2)
+                .forEach(metadata -> objectList.add(metadata.getComparator().convertAggregate(aggregate)));
 
         var command = getConnection()
                 .createCommand(comparatorSchema)
                 .insertInto(aggregateClazz)
-                .values(Streams.concat(keyValue, remainingData).toArray())
+                .values(objectList.toArray())
                 .create();
 
         command.asUpdate();
@@ -203,7 +202,15 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
                         .addConstraint(PRIMARY_KEY)
                         .addColumn(schemaValue, TEXT);
 
-                comparatorFunctions.stream().skip(2).forEach( element -> command.addColumn(element, NUMERIC));
+                comparatorFunctions.stream().skip(2).forEach( element ->
+                {
+                    if ( element.getComparator() instanceof  NumericComparator)
+                    {
+                        command.addColumn(element, NUMERIC);
+                    } else {
+                        command.addColumn(element, TEXT);
+                    }
+                });
 
                 command.create().asIgnore();
 
@@ -230,6 +237,13 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
     @Override
     public <S> IStringQuery<T, S> getStringQuery(M metadata, Class<S> queryType)
     {
-        return null;
+        if (!comparatorFunctions.contains(metadata))
+        {
+            throw new IllegalArgumentException("Unknown strategy for IRangedResult");
+        }
+        //noinspection unchecked
+        StringComparator<T, S> stringComparator = (StringComparator) metadata.getComparator();
+
+        return new JDBCStringQuery<>(this::getConnection, stringComparator, metadata, aggregateClazz,comparatorSchema, queryType );
     }
 }

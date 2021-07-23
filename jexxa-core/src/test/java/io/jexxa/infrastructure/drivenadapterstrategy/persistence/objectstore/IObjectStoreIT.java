@@ -51,7 +51,7 @@ class IObjectStoreIT
      * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
      * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
      */
-    public enum JexxaObjectMetadata implements MetadataComparator
+    private enum JexxaObjectMetadata implements MetadataComparator
     {
         /**
          * Defines the meta data including comparator to query the object store.
