@@ -105,7 +105,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .sorted(stringComparator::compareToAggregate)
+                .sorted((element1, element2) -> stringComparator.compareToAggregate(element2, element1))
                 .limit(amount)
                 .collect(Collectors.toList());
     }
@@ -116,7 +116,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .sorted(stringComparator::compareToAggregate)
+                .sorted((element1, element2) -> stringComparator.compareToAggregate(element2, element1))
                 .collect(Collectors.toList());
     }
 }

@@ -6,6 +6,7 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectst
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.valueComparator;
 import static java.lang.Math.floor;
 import static java.lang.Math.log;
+import static java.util.Comparator.comparing;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
@@ -111,6 +112,64 @@ class IStringQueryIT
         assertEquals(71, notIncludesA.size());  // 100 - 29 (includesA.size()) = 71
     }
 
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testAscending_STRING(Properties properties)
+    {
+        //Arrange
+        initObjectStore(properties);
+        var limit = 10;
+
+        var objectUnderTest = objectStore.getStringQuery( JexxaObjectMetadata.STRING_OBJECT, String.class);
+
+        var expectedAscendingOrder = objectStore.get()
+                .stream()
+                .sorted(comparing(JexxaObject::getString))
+                .collect(Collectors.toList());
+
+        var expectedAscendingOrderLimit = expectedAscendingOrder
+                .stream()
+                .limit(10)
+                .collect(Collectors.toList());
+
+        //Act
+        var ascendingResult = objectUnderTest.getAscending();
+        var ascendingLimitResult = objectUnderTest.getAscending(limit);
+
+        //Assert
+        assertEquals(expectedAscendingOrder, ascendingResult);
+        assertEquals(expectedAscendingOrderLimit, ascendingLimitResult);
+    }
+
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testDescending_STRING(Properties properties)
+    {
+        //Arrange
+        initObjectStore(properties);
+        var limit = 10;
+
+        var objectUnderTest = objectStore.getStringQuery( JexxaObjectMetadata.STRING_OBJECT, String.class);
+
+        var expectedDescendingOrder = objectStore.get()
+                .stream()
+                .sorted(comparing(JexxaObject::getString).reversed())
+                .collect(Collectors.toList());
+
+        var expectedDescendingOrderLimit = expectedDescendingOrder
+                .stream()
+                .limit(10)
+                .collect(Collectors.toList());
+
+        //Act
+        var descendingResult = objectUnderTest.getDescending();
+        var descendingResultLimit = objectUnderTest.getDescending(limit);
+
+        //Assert
+        assertEquals(expectedDescendingOrder, descendingResult);
+        assertEquals(expectedDescendingOrderLimit, descendingResultLimit);
+    }
+
     @SuppressWarnings("unused")
     static Stream<Properties> repositoryConfig() {
        /* var postgresProperties = new Properties();
@@ -154,12 +213,13 @@ class IStringQueryIT
     }
 
     private static String createCharSequence(int n) {
-        char[] buf = new char[(int) floor(log(25 * (n + 1)) / log(26))];
+        var counter = n;
+        char[] buf = new char[(int) floor(log(25 * (counter + 1)) / log(26))];
         for (int i = buf.length - 1; i >= 0; i--)
         {
-            n--;
-            buf[i] = (char) ('A' + n % 26);
-            n /= 26;
+            counter--;
+            buf[i] = (char) ('A' + counter % 26);
+            counter /= 26;
         }
         return new String(buf);
     }
