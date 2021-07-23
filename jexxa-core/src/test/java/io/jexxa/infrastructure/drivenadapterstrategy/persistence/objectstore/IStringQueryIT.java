@@ -100,11 +100,15 @@ class IStringQueryIT
         var beginsWithA = objectUnderTest.beginsWith("A");
         var endsWithA = objectUnderTest.endsWith("A");
         var equalToA = objectUnderTest.isEqualTo("A");
+        var includesA = objectUnderTest.includes("A");
+        var notIncludesA = objectUnderTest.notIncludes("A");
 
         //Assert
-        assertEquals(27, beginsWithA.size()); //A + AA..AZ = 26
+        assertEquals(27, beginsWithA.size()); //A + AA..AZ = 27
         assertEquals(4, endsWithA.size());    // A + AA + BA + CA = 4
-        assertEquals(1, equalToA.size());
+        assertEquals(1, equalToA.size());     // Only 1x A
+        assertEquals(29, includesA.size());  // A + AA..AZ + BA + CA= 29
+        assertEquals(71, notIncludesA.size());  // 100 - 29 (includesA.size()) = 71
     }
 
     @SuppressWarnings("unused")

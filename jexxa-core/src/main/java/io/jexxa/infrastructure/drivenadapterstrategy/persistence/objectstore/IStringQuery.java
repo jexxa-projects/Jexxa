@@ -13,7 +13,7 @@ public interface IStringQuery<T, S >
     List<T> endsWith(S value);
     List<T> includes(S value);
     List<T> isEqualTo(S value);
-
+    List<T> notIncludes(S value);
 
 
     /**

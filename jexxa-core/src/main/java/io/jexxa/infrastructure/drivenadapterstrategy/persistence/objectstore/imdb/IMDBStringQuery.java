@@ -69,6 +69,16 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
     }
 
     @Override
+    public List<T> notIncludes(S value)
+    {
+        return getOwnAggregateMap()
+                .values()
+                .stream()
+                .filter( element -> !stringComparator.convertAggregate(element).contains(value.toString()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<T> getAscending(int amount)
     {
         return getOwnAggregateMap()
