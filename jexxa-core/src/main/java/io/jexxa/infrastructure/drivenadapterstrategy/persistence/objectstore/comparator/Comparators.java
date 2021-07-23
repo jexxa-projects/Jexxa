@@ -47,15 +47,15 @@ public class Comparators
     }
 
     /**
-     * Factory method to create comparator wich compares value of type {@link Instant} of an aggregate
+     * Factory method to create comparator wich compares value of type {@link Number} of an aggregate
      *
      * @param accessorFunction returns the Instant
      * @param <T> type of the aggregate
-     * @return Comparator wich compares an {@link Instant} of an aggregate
+     * @return Comparator wich compares an {@link Number} of an aggregate
      */
-    public static <T> InstantComparator<T> instantComparator(Function<T, Instant> accessorFunction )
+    public static <T, V extends Number> NumericComparator<T, V> numberComparator(Function<T,V> accessorFunction )
     {
-        return new InstantComparator<>(accessorFunction);
+        return new NumberComparator<>(accessorFunction);
     }
 
     /**
@@ -72,6 +72,17 @@ public class Comparators
         return new OptionalNumericComparator<>(accessorFunction, converterFunction);
     }
 
+    /**
+     * Factory method to create comparator wich compares value of type {@link Number} of an aggregate
+     *
+     * @param accessorFunction returns the Instant
+     * @param <T> type of the aggregate
+     * @return Comparator wich compares an {@link Number} of an aggregate
+     */
+    public static <T, V extends Number> OptionalNumericComparator<T, V> optionalNumberComparator(Function<T,V> accessorFunction )
+    {
+        return new OptionalNumberComparator<>(accessorFunction);
+    }
 
     /**
      * Factory method to create comparator wich compares value of type {@link Instant} of an aggregate
@@ -86,29 +97,28 @@ public class Comparators
     }
 
     /**
-     * Factory method to create comparator wich compares value of type {@link Number} of an aggregate
+     * Factory method to create comparator wich compares value of type {@link Instant} of an aggregate
      *
      * @param accessorFunction returns the Instant
      * @param <T> type of the aggregate
-     * @return Comparator wich compares an {@link Number} of an aggregate
+     * @return Comparator wich compares an {@link Instant} of an aggregate
      */
-    public static <T, V extends Number> NumericComparator<T, V> numberComparator(Function<T,V> accessorFunction )
+    public static <T> InstantComparator<T> instantComparator(Function<T, Instant> accessorFunction )
     {
-        return new NumberComparator<>(accessorFunction);
+        return new InstantComparator<>(accessorFunction);
     }
 
     /**
-     * Factory method to create comparator wich compares value of type {@link Number} of an aggregate
+     * Factory method to create comparator wich compares value of type {@link Instant} of an aggregate
      *
-     * @param accessorFunction returns the Instant
+     * @param accessorFunction returns the String
      * @param <T> type of the aggregate
-     * @return Comparator wich compares an {@link Number} of an aggregate
+     * @return Comparator wich compares an {@link String} of an aggregate
      */
-    public static <T, V extends Number> OptionalNumericComparator<T, V> optionalNumberComparator(Function<T,V> accessorFunction )
+    public static <T> StringComparator<T, String> stringComparator(Function<T, String> accessorFunction )
     {
-        return new OptionalNumberComparator<>(accessorFunction);
+        return new StringComparator<>(accessorFunction, element -> element);
     }
-
 
     private static class InstantComparator<T> extends NumericComparator<T, Instant>
     {

@@ -3,6 +3,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.keyComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.numberComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.optionalNumberComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.stringComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.valueComparator;
 import static java.lang.Math.floor;
 import static java.lang.Math.log;
@@ -68,7 +69,7 @@ class IStringQueryIT
 
         OPTIONAL_VALUE_OBJECT(optionalNumberComparator(element -> element.getOptionalJexxaValue().orElse(null), JexxaValueObject::getValue)),
 
-        STRING_OBJECT(new StringComparator<>(JexxaObject::getString, element -> element));
+        STRING_OBJECT(stringComparator(JexxaObject::getString));
 
         /**
          *  Defines the constructor of the enum. Following code is equal for all object stores.
