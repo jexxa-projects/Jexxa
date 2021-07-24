@@ -91,7 +91,7 @@ class IStringQueryIT
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
-    void testComparisonOperator_STRING(Properties properties)
+    void testStringComparisonOperator(Properties properties)
     {
         //Arrange
         initObjectStore(properties);
@@ -115,7 +115,7 @@ class IStringQueryIT
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
-    void testComparisonOperator_OPTONAL_STRING(Properties properties)
+    void testComparisonOperatorOptionalString(Properties properties)
     {
         //Arrange
         initObjectStore(properties);
@@ -143,7 +143,7 @@ class IStringQueryIT
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
-    void testAscending_STRING(Properties properties)
+    void testAscendingString(Properties properties)
     {
         //Arrange
         initObjectStore(properties);
@@ -172,7 +172,7 @@ class IStringQueryIT
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
-    void testDescending_STRING(Properties properties)
+    void testDescendingString(Properties properties)
     {
         //Arrange
         initObjectStore(properties);

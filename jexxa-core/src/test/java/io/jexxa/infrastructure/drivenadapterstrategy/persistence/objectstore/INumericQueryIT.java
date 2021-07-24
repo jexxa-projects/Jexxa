@@ -28,18 +28,6 @@ class INumericQueryIT
     private List<JexxaObject> testData;
     private IObjectStore<JexxaObject, JexxaValueObject, JexxaObjectMetadata> objectStore;
 
-    @BeforeEach
-    void initTestData()
-    {
-        testData = IntStream.range(0, TEST_DATA_SIZE)
-                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element)))
-                .collect(Collectors.toList());
-
-        testData.forEach(element -> element.setInternalValue(element.getKey().getValue())); // set internal int value to an ascending number
-
-        testData.stream().limit(50).forEach( element -> element.setOptionalValue( element.getKey() )); // Set optional value to half ot the test data (0 to 49)
-    }
-
     /**
      * Defines the meta data that we use:
      * Conventions for databases:
@@ -80,10 +68,22 @@ class INumericQueryIT
         }
     }
 
+    @BeforeEach
+    void initTestData()
+    {
+        testData = IntStream.range(0, TEST_DATA_SIZE)
+                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element)))
+                .collect(Collectors.toList());
+
+        testData.forEach(element -> element.setInternalValue(element.getKey().getValue())); // set internal int value to an ascending number
+
+        testData.stream().limit(50).forEach( element -> element.setOptionalValue( element.getKey() )); // Set optional value to half ot the test data (0 to 49)
+    }
+
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
-    void testComparisonOperators_INT_VALUE(Properties properties)
+    void testComparisonOperatorsIntValue(Properties properties)
     {
         //Arrange
         initObjectStore(properties);
@@ -135,7 +135,7 @@ class INumericQueryIT
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
-    void testComparisonOperator_VALUE_OBJECT(Properties properties)
+    void testComparisonOperatorValueObject(Properties properties)
     {
         //Arrange
         initObjectStore(properties);
@@ -187,7 +187,7 @@ class INumericQueryIT
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
-    void testComparisonOperator_OPTIONAL_VALUE_OBJECT(Properties properties)
+    void testComparisonOperatorOptionalValueObject(Properties properties)
     {
         //Arrange
         initObjectStore(properties);
