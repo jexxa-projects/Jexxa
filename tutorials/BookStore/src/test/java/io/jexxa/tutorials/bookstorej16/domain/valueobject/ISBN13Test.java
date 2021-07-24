@@ -3,7 +3,6 @@ package io.jexxa.tutorials.bookstorej16.domain.valueobject;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
 import org.junit.jupiter.api.Test;
 
 class ISBN13Test

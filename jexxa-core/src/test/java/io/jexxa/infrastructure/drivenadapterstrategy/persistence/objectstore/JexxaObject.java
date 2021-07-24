@@ -4,7 +4,6 @@ import static java.lang.Math.floor;
 import static java.lang.Math.log;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import io.jexxa.application.annotation.Aggregate;
 import io.jexxa.application.domain.aggregate.JexxaEntity;

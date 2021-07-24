@@ -3,7 +3,6 @@ package io.jexxa.application.domainservice;
 import java.util.List;
 import java.util.Optional;
 
-
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 
