@@ -1,11 +1,10 @@
 WIP!!!
 
-# Domain Event vs. Event Sourcing 
+# Domain Event vs. Event Sourcing
 https://www.innoq.com/en/blog/domain-events-versus-event-sourcing/
 
 
-
-# Production systems 
+# Production systems
 
 reference https://www.britannica.com/technology/production-system
 
@@ -22,7 +21,7 @@ There are three common types of basic production systems:
 
 Note, that batch and continues systems are often found in combination. 
 
-## Batch Process / Production 
+## Batch Process / Production
 
 reference: https://de.wikipedia.org/wiki/Chargenprozess 
 In the manufacturing batch production process, the machines are in chronological order directly related to the manufacturing process. The batch production method is also used so any temporary changes or modifications can be made to the product if necessary during the manufacturing process.[3] For example, if a product needed a sudden change in material or details changed, it can be done in between batches. A
@@ -30,10 +29,10 @@ In the manufacturing batch production process, the machines are in chronological
 Batch production process: A production process that results in the production of defined quantities of material by subjecting quantities of materials to be used are subjected to an orderly sequence of process activities using one or more pieces of manufacturing equipment within a delineated time period. 
 
 In terms of DDD the most important aspects are:
-* Defined quantities of materials to be used 
-* Using one or more pieces of manufacturing equipment
-* Within a defined period of time
-* An ordered sequence of process activities.
+*   Defined quantities of materials to be used 
+*   Using one or more pieces of manufacturing equipment
+*   Within a defined period of time
+*   An ordered sequence of process activities.
 
 
 When modeling a software using DDD, you will end up in a setup that is most likely in the following way. 
@@ -52,11 +51,7 @@ In case you are not sure which approach to be used in your context you should st
 
 *   Important: The process is linear. It is most unlikely that you can undo a specific production step. So in contrast to financial or insurance sector you typically do not have any transaction within the business domain. A failure in one production step typically leads to a some other production step(s) or to discard a specific production batch. 
 
-
-
-
-
-### Archive 
+### Archive
 
 Vorab:
 
