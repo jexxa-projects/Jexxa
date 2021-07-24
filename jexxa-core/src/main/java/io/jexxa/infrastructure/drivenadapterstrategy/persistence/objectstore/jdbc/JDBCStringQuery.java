@@ -138,6 +138,34 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
     }
 
     @Override
+    public List<T> isNull()
+    {
+        var jdbcQuery = jdbcConnection.get()
+                .createQuery(comparatorSchema)
+                .select( schemaValue )
+                .from(aggregateClazz)
+                .where(nameOfRow)
+                .isNull()
+                .create();
+
+        return searchElements(jdbcQuery);
+    }
+
+    @Override
+    public List<T> isNotNull()
+    {
+        var jdbcQuery = jdbcConnection.get()
+                .createQuery(comparatorSchema)
+                .select( schemaValue )
+                .from(aggregateClazz)
+                .where(nameOfRow)
+                .isNotNull()
+                .create();
+
+        return searchElements(jdbcQuery);
+    }
+
+    @Override
     public List<T> getAscending(int amount)
     {
         var jdbcQuery = jdbcConnection.get()
@@ -198,5 +226,4 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
                 .map( element -> jsonConverter.fromJson(element, aggregateClazz))
                 .collect(Collectors.toList());
     }
-
 }

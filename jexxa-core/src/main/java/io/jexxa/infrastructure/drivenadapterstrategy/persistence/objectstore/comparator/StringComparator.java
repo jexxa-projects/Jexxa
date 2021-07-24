@@ -22,7 +22,7 @@ public class StringComparator<T, S>  implements Comparator<T, S, String>
      * @param valueAccessor defines a function to access a specific value of the aggregate
      * @param valueConverter defines a function that converts a searched value into a Number for comparison
      */
-    public StringComparator(Function<T, S> valueAccessor,
+    StringComparator(Function<T, S> valueAccessor,
                             Function<S, ? extends String> valueConverter)
     {
         this.valueAccessor = Objects.requireNonNull( valueAccessor );

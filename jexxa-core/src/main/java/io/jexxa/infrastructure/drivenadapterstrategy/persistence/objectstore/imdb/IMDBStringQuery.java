@@ -34,7 +34,8 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .filter( element -> stringComparator.convertAggregate(element).startsWith(value.toString()))
+                .filter( element -> stringComparator.convertAggregate(element) != null)
+                .filter( element -> stringComparator.convertAggregate(element).startsWith(stringComparator.convertValue(value)))
                 .collect(Collectors.toList());
     }
 
@@ -44,7 +45,8 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .filter( element -> stringComparator.convertAggregate(element).endsWith(value.toString()))
+                .filter( element -> stringComparator.convertAggregate(element) != null)
+                .filter( element -> stringComparator.convertAggregate(element).endsWith(stringComparator.convertValue(value)))
                 .collect(Collectors.toList());
     }
 
@@ -54,7 +56,8 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .filter( element -> stringComparator.convertAggregate(element).contains(value.toString()))
+                .filter( element -> stringComparator.convertAggregate(element) != null)
+                .filter( element -> stringComparator.convertAggregate(element).contains(stringComparator.convertValue(value)))
                 .collect(Collectors.toList());
     }
 
@@ -64,7 +67,8 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .filter( element -> stringComparator.convertAggregate(element).equals(value.toString()))
+                .filter( element -> stringComparator.convertAggregate(element) != null)
+                .filter( element -> stringComparator.convertAggregate(element).equals(stringComparator.convertValue(value)))
                 .collect(Collectors.toList());
     }
 
@@ -74,7 +78,28 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .filter( element -> !stringComparator.convertAggregate(element).contains(value.toString()))
+                .filter( element -> stringComparator.convertAggregate(element) != null)
+                .filter( element -> !stringComparator.convertAggregate(element).contains(stringComparator.convertValue(value)))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<T> isNull()
+    {
+        return getOwnAggregateMap()
+                .values()
+                .stream()
+                .filter( element -> stringComparator.convertAggregate(element) == null)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<T> isNotNull()
+    {
+        return getOwnAggregateMap()
+                .values()
+                .stream()
+                .filter( element -> stringComparator.convertAggregate(element) != null)
                 .collect(Collectors.toList());
     }
 

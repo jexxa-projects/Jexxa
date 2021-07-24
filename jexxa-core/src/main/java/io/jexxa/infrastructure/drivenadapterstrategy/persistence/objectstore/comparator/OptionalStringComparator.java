@@ -1,6 +1,5 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -12,10 +11,10 @@ import java.util.function.Function;
  * @param <T> Defines the type of the aggregate
  * @param <S> Defines the type of the value inside the aggregate
  */
-public class NumericComparator<T, S>  implements Comparator<T, S, Number>
+public class OptionalStringComparator<T, S>  extends StringComparator<T, S>
 {
     private final Function<T, S> valueAccessor;
-    private final Function<S, ? extends Number> valueConverter;
+    private final Function<S, ? extends String> valueConverter;
 
     /**
      * Creates an Comparator object
@@ -23,9 +22,10 @@ public class NumericComparator<T, S>  implements Comparator<T, S, Number>
      * @param valueAccessor defines a function to access a specific value of the aggregate
      * @param valueConverter defines a function that converts a searched value into a Number for comparison
      */
-    NumericComparator(Function<T, S> valueAccessor,
-                             Function<S, ? extends Number> valueConverter)
+    OptionalStringComparator(Function<T, S> valueAccessor,
+                                    Function<S, ? extends String> valueConverter)
     {
+        super(valueAccessor, valueConverter);
         this.valueAccessor = Objects.requireNonNull( valueAccessor );
         this.valueConverter = Objects.requireNonNull( valueConverter );
     }
@@ -35,9 +35,16 @@ public class NumericComparator<T, S>  implements Comparator<T, S, Number>
      * @param aggregate which provides the aggregate including the value that should be converted
      * @return Number representing the value
      */
-    public Number convertAggregate(T aggregate)
+    @Override
+    public String convertAggregate(T aggregate)
     {
         Objects.requireNonNull(aggregate);
+        var value = valueAccessor.apply(aggregate);
+
+        if (value == null)
+        {
+            return null;
+        }
         return valueConverter.apply(valueAccessor.apply(aggregate));
     }
 
@@ -46,9 +53,12 @@ public class NumericComparator<T, S>  implements Comparator<T, S, Number>
      * @param value which provides the value that should be converted
      * @return Number representing the value
      */
-    public Number convertValue(S value)
+    @Override
+    public String convertValue(S value)
     {
-        Objects.requireNonNull(value);
+        if ( value == null ) {
+            return null;
+        }
         return valueConverter.apply(value);
     }
 
@@ -61,13 +71,14 @@ public class NumericComparator<T, S>  implements Comparator<T, S, Number>
      *     -1 if value of aggregate &lt; given value <br>
      *     1 if value of aggregate &gt; value <br>
      */
+    @Override
     public int compareToValue(T aggregate, S value)
     {
         Objects.requireNonNull(aggregate);
         Objects.requireNonNull(value);
 
-        var aggregateValue = new BigDecimal( convertAggregate(aggregate).toString() );
-        var givenValue = new BigDecimal( convertValue(value).toString());
+        var aggregateValue = convertAggregate(aggregate);
+        var givenValue = convertValue(value);
 
         return aggregateValue.compareTo(givenValue);
     }
@@ -81,16 +92,27 @@ public class NumericComparator<T, S>  implements Comparator<T, S, Number>
      *     -1 if value of aggregate1 &lt; value of aggregate2 <br>
      *     1 if value of aggregate1 &gt; value of aggregate2 <br>
      */
+    @Override
     public int compareToAggregate(T aggregate1, T aggregate2)
     {
         Objects.requireNonNull(aggregate1);
         Objects.requireNonNull(aggregate2);
 
-        var aggregateValue1 = new BigDecimal( convertAggregate(aggregate1).toString() );
-        var aggregateValue2 = new BigDecimal( convertAggregate(aggregate2).toString() );
+        var aggregateValue1 = convertAggregate(aggregate1);
+        var aggregateValue2 = convertAggregate(aggregate2);
+
+        if ( aggregateValue1 == null && aggregateValue2 == null)
+        {
+            return 0;
+        } else if ( aggregateValue1 == null)
+        {
+            return -1;
+        } else if ( aggregateValue2 == null)
+        {
+            return 1;
+        }
+
         return aggregateValue1.compareTo(aggregateValue2);
     }
-
-
 }
 

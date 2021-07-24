@@ -12,7 +12,7 @@ import java.util.function.Function;
  * @param <T> Defines the type of the aggregate
  * @param <S> Defines the type of the value inside the aggregate
  */
-public class OptionalNumericComparator<T, S>  implements Comparator<T, S, Number>
+class OptionalNumericComparator<T, S>  extends NumericComparator<T, S>
 {
     private final Function<T, S> valueAccessor;
     private final Function<S, ? extends Number> valueConverter;
@@ -26,6 +26,7 @@ public class OptionalNumericComparator<T, S>  implements Comparator<T, S, Number
     public OptionalNumericComparator(Function<T, S> valueAccessor,
                              Function<S, ? extends Number> valueConverter)
     {
+        super(valueAccessor, valueConverter);
         this.valueAccessor = Objects.requireNonNull( valueAccessor );
         this.valueConverter = Objects.requireNonNull( valueConverter );
     }
@@ -35,6 +36,7 @@ public class OptionalNumericComparator<T, S>  implements Comparator<T, S, Number
      * @param aggregate which provides the aggregate including the value that should be converted
      * @return Number representing the value
      */
+    @Override
     public Number convertAggregate(T aggregate)
     {
         Objects.requireNonNull(aggregate);
@@ -53,6 +55,7 @@ public class OptionalNumericComparator<T, S>  implements Comparator<T, S, Number
      * @param value which provides the value that should be converted
      * @return Number representing the value
      */
+    @Override
     public Number convertValue(S value)
     {
         if ( value == null ) {
@@ -70,9 +73,16 @@ public class OptionalNumericComparator<T, S>  implements Comparator<T, S, Number
      *     -1 if value of aggregate &lt; given value <br>
      *     1 if value of aggregate &gt; value <br>
      */
+    @Override
     public int compareToValue(T aggregate, S value)
     {
         Objects.requireNonNull(aggregate);
+        Objects.requireNonNull(value);
+        if(convertAggregate(aggregate) == null)
+        {
+            return 1;
+        }
+
 
         var aggregateValue = new BigDecimal( convertAggregate(aggregate).toString() );
         var givenValue = new BigDecimal( convertValue(value).toString());
@@ -89,32 +99,30 @@ public class OptionalNumericComparator<T, S>  implements Comparator<T, S, Number
      *     -1 if value of aggregate1 &lt; value of aggregate2 <br>
      *     1 if value of aggregate1 &gt; value of aggregate2 <br>
      */
+    @Override
     public int compareToAggregate(T aggregate1, T aggregate2)
     {
         Objects.requireNonNull(aggregate1);
         Objects.requireNonNull(aggregate2);
 
-        if ( convertAggregate(aggregate1) == null && convertAggregate(aggregate2) == null)
+        var aggregateValue1 = convertAggregate(aggregate1);
+        var aggregateValue2 = convertAggregate(aggregate2);
+
+        if ( aggregateValue1 == null && aggregateValue2 == null)
         {
             return 0;
-        }
-
-        if ( convertAggregate(aggregate1) == null && convertAggregate(aggregate2) != null)
+        } else if ( aggregateValue1 == null)
         {
-            return -1;
-        }
-
-        if ( convertAggregate(aggregate1) != null && convertAggregate(aggregate2) == null)
+            return 1;
+        } else if ( aggregateValue2 == null)
         {
             return -1;
         }
 
         //Handle both != null
-        var aggregateValue1 = new BigDecimal( convertAggregate(aggregate1).toString() );
-        var aggregateValue2 = new BigDecimal( convertAggregate(aggregate2).toString() );
-        return aggregateValue1.compareTo(aggregateValue2);
+        var aggregateValue1BD = new BigDecimal( convertAggregate(aggregate1).toString() );
+        var aggregateValue2BD = new BigDecimal( convertAggregate(aggregate2).toString() );
+        return aggregateValue1BD.compareTo(aggregateValue2BD);
     }
-
-
 }
 

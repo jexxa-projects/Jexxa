@@ -120,6 +120,18 @@ public class Comparators
         return new StringComparator<>(accessorFunction, element -> element);
     }
 
+    /**
+     * Factory method to create comparator wich compares value of type {@link Instant} of an aggregate
+     *
+     * @param accessorFunction returns the String
+     * @param <T> type of the aggregate
+     * @return Comparator wich compares an {@link String} of an aggregate
+     */
+    public static <T> OptionalStringComparator<T, String> optionalStringComparator(Function<T, String> accessorFunction )
+    {
+        return new OptionalStringComparator<>(accessorFunction, element -> element);
+    }
+
     private static class InstantComparator<T> extends NumericComparator<T, Instant>
     {
         public static final int NANO = 1000000000;

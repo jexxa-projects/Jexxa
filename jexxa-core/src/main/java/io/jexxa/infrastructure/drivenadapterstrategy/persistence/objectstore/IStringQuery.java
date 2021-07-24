@@ -14,6 +14,8 @@ public interface IStringQuery<T, S >
     List<T> includes(S value);
     List<T> isEqualTo(S value);
     List<T> notIncludes(S value);
+    List<T> isNull();
+    List<T> isNotNull();
 
 
     /**

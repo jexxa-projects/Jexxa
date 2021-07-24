@@ -1,6 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder;
 
-class SQLSyntax
+public class SQLSyntax
 {
     static final String SELECT = "SELECT ";
     static final String UPDATE = "UPDATE ";
@@ -27,7 +27,7 @@ class SQLSyntax
     static final String COMMA = ", ";
     static final String BLANK = " ";
 
-    enum SQLOperation
+    public enum SQLOperation
     {
         GREATER_THAN("> "),
         GREATER_THAN_OR_EQUAL(">= "),

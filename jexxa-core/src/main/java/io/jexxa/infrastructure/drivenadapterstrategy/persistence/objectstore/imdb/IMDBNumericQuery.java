@@ -33,6 +33,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
+                .filter( element -> numericComparator.convertAggregate(element) != null)
                 .filter(element -> numericComparator.compareToValue(element, startValue) >= 0)
                 .collect(Collectors.toList());
     }
@@ -43,6 +44,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
+                .filter( element -> numericComparator.convertAggregate(element) != null)
                 .filter(element -> numericComparator.compareToValue(element, value) > 0)
                 .collect(Collectors.toList());
     }
@@ -53,6 +55,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
+                .filter( element -> numericComparator.convertAggregate(element) != null)
                 .filter(element -> numericComparator.compareToValue(element, startValue) >= 0)
                 .filter(element -> numericComparator.compareToValue(element, endValue) <= 0)
                 .collect(Collectors.toList());
@@ -64,6 +67,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
+                .filter( element -> numericComparator.convertAggregate(element) != null)
                 .filter(element -> numericComparator.compareToValue(element, startValue) >= 0)
                 .filter(element -> numericComparator.compareToValue(element, endValue) < 0)
                 .collect(Collectors.toList());
@@ -75,6 +79,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
+                .filter( element -> numericComparator.convertAggregate(element) != null)
                 .filter(element -> numericComparator.compareToValue(element, endValue) <= 0)
                 .collect(Collectors.toList());
     }
@@ -85,6 +90,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
+                .filter( element -> numericComparator.convertAggregate(element) != null)
                 .filter(element -> numericComparator.compareToValue(element, endValue) < 0)
                 .collect(Collectors.toList());
     }
@@ -148,6 +154,26 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .values()
                 .stream()
                 .filter(element-> numericComparator.compareToValue(element, value) != 0)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<T> isNull()
+    {
+        return getOwnAggregateMap()
+                .values()
+                .stream()
+                .filter( element -> numericComparator.convertAggregate(element) == null)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<T> isNotNull()
+    {
+        return getOwnAggregateMap()
+                .values()
+                .stream()
+                .filter( element -> numericComparator.convertAggregate(element) != null)
                 .collect(Collectors.toList());
     }
 

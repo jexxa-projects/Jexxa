@@ -19,7 +19,7 @@ public class JexxaObject
     private String optionalString;
     private final String internalString;
 
-    public void setOptionalJexxaValue(JexxaValueObject optionalJexxaValue)
+    public void setOptionalValue(JexxaValueObject optionalJexxaValue)
     {
         this.optionalJexxaValue = optionalJexxaValue;
     }
@@ -29,9 +29,9 @@ public class JexxaObject
         this.optionalString = optionalString;
     }
 
-    public Optional<String> getOptionalString()
+    public String getOptionalString()
     {
-        return Optional.ofNullable(optionalString);
+        return optionalString;
     }
 
     public String getString()
@@ -39,9 +39,9 @@ public class JexxaObject
         return internalString;
     }
 
-    public Optional<JexxaValueObject> getOptionalJexxaValue()
+    public JexxaValueObject getOptionalValue()
     {
-        return Optional.ofNullable(optionalJexxaValue);
+        return optionalJexxaValue;
     }
 
     private JexxaObject(JexxaValueObject jexxaValueObject, String internalString)

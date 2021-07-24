@@ -4,6 +4,9 @@ import java.util.List;
 
 /**
  *
+ * TODO: Document comparison with null
+ * TODO: Document Ascending/descending with null
+ *
  * @param <T> Type of the managed object
  * @param <S> Type of the metadata that is used to find the objects
  */
@@ -49,6 +52,9 @@ public interface INumericQuery<T, S >
      */
     List<T> isNotEqualTo(S value);
 
+    List<T> isNull();
+
+    List<T> isNotNull();
 
     /**
      *  Get all values which fulfill: {@code startValue <= value <= endValue}. The returned list is in ascending

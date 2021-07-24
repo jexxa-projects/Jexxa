@@ -5,6 +5,7 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectst
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.keyComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.numberComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.optionalNumberComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.optionalStringComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.stringComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.valueComparator;
 import static java.util.Comparator.comparing;
@@ -30,21 +31,6 @@ class IStringQueryIT
     private List<JexxaObject> testData;
     private IObjectStore<JexxaObject, JexxaValueObject, JexxaObjectMetadata> objectStore;
 
-    @BeforeEach
-    void initTestData()
-    {
-        testData = IntStream.range(0, TEST_DATA_SIZE)
-                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element)))
-                .collect(Collectors.toList());
-
-        // set internal int value to an ascending number
-        // the internal string is set to  A, B, ..., AA, AB, ...
-        testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
-
-        testData.stream().limit(50).forEach(element -> element.setOptionalString(createCharSequence( element.getKey().getValue()))); // set internal
-        testData.stream().limit(50).forEach( element -> element.setOptionalJexxaValue( element.getKey() )); // Set optional string value to A, B, ..., AA, AB, ...
-    }
-
     /**
      * Defines the meta data that we use:
      * Conventions for databases:
@@ -65,11 +51,11 @@ class IStringQueryIT
 
         VALUE_OBJECT(numberComparator(JexxaObject::getKey, JexxaValueObject::getValue)),
 
-        OPTIONAL_VALUE_OBJECT(optionalNumberComparator(element -> element.getOptionalJexxaValue().orElse(null), JexxaValueObject::getValue)),
+        OPTIONAL_VALUE_OBJECT(optionalNumberComparator(JexxaObject::getOptionalValue, JexxaValueObject::getValue)),
 
-        STRING_OBJECT(stringComparator(JexxaObject::getString));
+        STRING_OBJECT(stringComparator(JexxaObject::getString)),
 
-        //TODO test optional string value
+        OPTIONAL_STRING_OBJECT(optionalStringComparator(JexxaObject::getOptionalString));
 
         /**
          *  Defines the constructor of the enum. Following code is equal for all object stores.
@@ -88,6 +74,22 @@ class IStringQueryIT
             return comparator;
         }
     }
+
+    @BeforeEach
+    void initTestData()
+    {
+        testData = IntStream.range(0, TEST_DATA_SIZE)
+                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element)))
+                .collect(Collectors.toList());
+
+        // set internal int value to an ascending number
+        // the internal string is set to  A, B, ..., AA, AB, ...
+        testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
+
+        testData.stream().limit(50).forEach(element -> element.setOptionalString(createCharSequence( element.getKey().getValue()))); // Set optional string in first 50 elements to A, B, ..., AA, AB, ...
+        testData.stream().limit(50).forEach( element -> element.setOptionalValue( element.getKey() )); // Set optional values in first 50 elements to 0, .. 49
+    }
+
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
@@ -111,6 +113,34 @@ class IStringQueryIT
         assertEquals(1, equalToA.size());     // Only 1x A
         assertEquals(29, includesA.size());  // A + AA..AZ + BA + CA= 29
         assertEquals(71, notIncludesA.size());  // 100 - 29 (includesA.size()) = 71
+    }
+
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testComparisonOperator_OPTONAL_STRING(Properties properties)
+    {
+        //Arrange
+        initObjectStore(properties);
+
+        var objectUnderTest = objectStore.getStringQuery( JexxaObjectMetadata.OPTIONAL_STRING_OBJECT, String.class);
+
+        //Act
+        var beginsWithA = objectUnderTest.beginsWith("A");
+        var endsWithA = objectUnderTest.endsWith("A");
+        var equalToA = objectUnderTest.isEqualTo("A");
+        var includesA = objectUnderTest.includes("A");
+        var notIncludesA = objectUnderTest.notIncludes("A");
+        var equalToNull = objectUnderTest.isNull();
+        var notEqualToNull = objectUnderTest.isNotNull();
+
+        //Assert
+        assertEquals(24, beginsWithA.size()); //A + AA..AW = 24
+        assertEquals(2, endsWithA.size());    // A + AA = 2
+        assertEquals(1, equalToA.size());     // Only 1x A
+        assertEquals(24, includesA.size());   // A + AA..AW = 24
+        assertEquals(26, notIncludesA.size());  // 50 - 24 (includesA.size()) = 26
+        assertEquals(50, equalToNull.size());
+        assertEquals(50, notEqualToNull.size());
     }
 
     @ParameterizedTest

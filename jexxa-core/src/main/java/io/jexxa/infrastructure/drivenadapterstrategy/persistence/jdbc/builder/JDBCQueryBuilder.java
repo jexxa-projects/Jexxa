@@ -159,7 +159,7 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
 
         getStatementBuilder().append(element.name())
                 .append(BLANK)
-                .append(order.name())
+                .append(order.getOrderName())
                 .append(BLANK);
 
         return this;
