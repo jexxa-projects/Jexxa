@@ -268,7 +268,28 @@ class INumericQueryIT
         var result = objectUnderTest.getAscending();
 
         //Assert
-        assertEquals(expectedResult, result);
+        assertEquals(expectedResult.size(), result.size());
+        assertEquals(expectedResult.stream().limit(50).collect(Collectors.toList()), result.stream().limit(50).collect(Collectors.toList()));//We can only compare the order of values without null because there is no additional rule how to order NULLs
+    }
+
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testGetDescendingWithOptionalValue(Properties properties)
+    {
+        //Arrange
+        initObjectStore(properties);
+
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.OPTIONAL_VALUE_OBJECT, JexxaValueObject.class);
+
+        var expectedResult = testData.stream().limit(50).sorted(comparing(JexxaObject::getInternalValue).reversed()).collect(Collectors.toList());
+        expectedResult.addAll(testData.stream().skip(50).collect(Collectors.toList()));
+
+        //Act
+        var result = objectUnderTest.getDescending();
+
+        //Assert
+        assertEquals(expectedResult.size(), result.size());
+        assertEquals(expectedResult.stream().limit(50).collect(Collectors.toList()), result.stream().limit(50).collect(Collectors.toList())); //We can only compare the order of values without null because there is no additional rule how to order NULLs
     }
 
     @ParameterizedTest

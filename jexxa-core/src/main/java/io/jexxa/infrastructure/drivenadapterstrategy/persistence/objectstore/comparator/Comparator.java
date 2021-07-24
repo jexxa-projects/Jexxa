@@ -7,14 +7,14 @@ public interface Comparator<T, S, V>
      * @param aggregate which provides the aggregate including the value that should be converted
      * @return Number representing the value
      */
-    public V convertAggregate(T aggregate);
+    V convertAggregate(T aggregate);
 
     /**
      * This method converts the value of type {@link S} stored in the aggregate to a Number by using the defined converter function
      * @param value which provides the value that should be converted
      * @return Number representing the value
      */
-    public V convertValue(S value);
+    V convertValue(S value);
 
     /**
      * Compares the value of the aggregate with given value
@@ -25,7 +25,7 @@ public interface Comparator<T, S, V>
      *     -1 if value of aggregate &lt; given value <br>
      *     1 if value of aggregate &gt; value <br>
      */
-    public abstract int compareToValue(T aggregate, S value);
+    int compareToValue(T aggregate, S value);
 
     /**
      * Compares the value of the two aggregates which each other
@@ -36,5 +36,5 @@ public interface Comparator<T, S, V>
      *     -1 if value of aggregate1 &lt; value of aggregate2 <br>
      *     1 if value of aggregate1 &gt; value of aggregate2 <br>
      */
-    public abstract int compareToAggregate(T aggregate1, T aggregate2);
+    int compareToAggregate(T aggregate1, T aggregate2);
 }

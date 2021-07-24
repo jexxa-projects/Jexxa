@@ -116,7 +116,7 @@ class OptionalNumericComparator<T, S>  extends NumericComparator<T, S>
             return 1;
         } else if ( aggregateValue2 == null)
         {
-            return -1;
+            return 1;
         }
 
         //Handle both != null
