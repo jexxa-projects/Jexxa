@@ -13,7 +13,6 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.bui
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.UPDATE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.WHERE;
 
-import java.util.EnumSet;
 import java.util.function.Supplier;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCCommand;
