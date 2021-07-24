@@ -25,7 +25,6 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.com
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.StringComparator;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.json.JSONManager;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 
@@ -82,7 +81,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
                 .toArray();
 
         var valueSet = new ArrayList<>();
-        valueSet.add(JSONManager.getJSONConverter().toJson(aggregate));
+        valueSet.add(getJSONConverter().toJson(aggregate));
 
         comparatorFunctions
                 .stream()
@@ -95,7 +94,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
                 .createCommand(comparatorSchema)
                 .update(aggregateClazz)
                 .set(keySet, valueSet.toArray() )
-                .where(schemaKey).isEqual(JSONManager.getJSONConverter().toJson( keyFunction.apply(aggregate) ))
+                .where(schemaKey).isEqual(getJSONConverter().toJson( keyFunction.apply(aggregate) ))
                 .create();
 
         command.asUpdate();
@@ -132,7 +131,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
     {
         Objects.requireNonNull(aggregate);
 
-        var jsonConverter = JSONManager.getJSONConverter();
+        var jsonConverter = getJSONConverter();
         var objectList = new ArrayList<>();
 
         objectList.add (jsonConverter.toJson(keyFunction.apply(aggregate)));
