@@ -13,6 +13,7 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.bui
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.UPDATE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.WHERE;
 
+import java.util.EnumSet;
 import java.util.function.Supplier;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCCommand;
@@ -149,18 +150,16 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         return this;
     }
 
-    @SuppressWarnings("unchecked")
-    public JDBCCommandBuilder<T> set(Object[] element, Object[] value)
+    public JDBCCommandBuilder<T> set(String[] element, Object[] value)
     {
         getStatementBuilder()
                 .append(SET);
 
         for (var i = 0; i < element.length; ++i)
         {
-            var currentElement = (T) element[i];
             addArgument(value[i]);
             getStatementBuilder()
-                    .append( currentElement.name())
+                    .append( element[i] )
                     .append(EQUAL)
                     .append(ARGUMENT_PLACEHOLDER);
             if ( i < element.length - 1)

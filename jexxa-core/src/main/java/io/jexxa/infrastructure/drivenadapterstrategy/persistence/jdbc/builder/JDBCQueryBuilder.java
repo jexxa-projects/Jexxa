@@ -56,6 +56,32 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         return this;
     }
 
+    public <S extends Enum<S>> JDBCQueryBuilder<T> select(Class<S> clazz, S element)
+    {
+        getStatementBuilder()
+                .append(SELECT)
+                .append(element.name())
+                .append(BLANK);
+
+        return this;
+    }
+
+    @SafeVarargs
+    public final <S extends Enum<S>> JDBCQueryBuilder<T> select(Class<S> clazz, S element, S... elements)
+    {
+        select(clazz, element);
+
+        Stream.of( elements )
+                .forEach( entry -> getStatementBuilder()
+                        .append(COMMA)
+                        .append(entry.name())
+                        .append(BLANK)
+                );
+
+        return this;
+    }
+
+
     public JDBCQueryBuilder<T> selectAll()
     {
         getStatementBuilder()

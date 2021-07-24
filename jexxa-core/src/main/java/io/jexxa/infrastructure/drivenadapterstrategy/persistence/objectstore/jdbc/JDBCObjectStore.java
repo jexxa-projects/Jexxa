@@ -25,13 +25,18 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.com
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.StringComparator;
 import io.jexxa.utils.JexxaLogger;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 
 
 @SuppressWarnings("unused")
 public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extends JDBCRepository implements IObjectStore<T, K, M>
 {
+    enum KeyValueSchema
+    {
+        KEY,
+        VALUE
+    }
+
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCObjectStore.class);
     private static final String SQL_NUMERIC = "NUMERIC";
 
@@ -41,9 +46,6 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
 
     private final Class<M> comparatorSchema;
     private final Set<M> comparatorFunctions;
-    private final M schemaKey;
-    private final M schemaValue;
-
 
     public JDBCObjectStore(
             Class<T> aggregateClazz,
@@ -59,12 +61,6 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         this.comparatorFunctions = EnumSet.allOf(comparatorSchema);
 
         var iterator = comparatorFunctions.iterator();
-        schemaKey =  iterator.next();
-        schemaValue = iterator.next();
-
-        //TODO: This must be changed, because it is only valid in case the JDBCObjectStore creates the table by itself
-        Validate.isTrue( "KEY".equals(schemaKey.name()), "First entry of ComparatorSchema must be 'KEY' ");
-        Validate.isTrue( "VALUE".equals(schemaValue.name()), "Second entry of ComparatorSchema must be 'VALUE' ");
 
         autocreateTable(properties);
     }
@@ -75,26 +71,21 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
     {
         Objects.requireNonNull(aggregate);
 
-        var keySet =comparatorFunctions
-                .stream()
-                .skip(1)
-                .toArray();
-
         var valueSet = new ArrayList<>();
+        List<String> keySet = new ArrayList<>();
+
         valueSet.add(getJSONConverter().toJson(aggregate));
+        comparatorFunctions.forEach( element -> valueSet.add(element.getComparator().convertAggregate(aggregate)) );
 
-        comparatorFunctions
-                .stream()
-                .skip(2) // Skip the key and value
-                .forEach( element -> valueSet.add(element.getComparator().convertAggregate(aggregate)) );
+        keySet.add(KeyValueSchema.VALUE.name());
+        comparatorFunctions.forEach(element -> keySet.add(element.name()));
 
-        // Skip the key
         //"update %s where key = '%s' "  ComparatorValues... " '%s' = '%s' "
         var command = getConnection()
-                .createCommand(comparatorSchema)
+                .createCommand(KeyValueSchema.class)
                 .update(aggregateClazz)
-                .set(keySet, valueSet.toArray() )
-                .where(schemaKey).isEqual(getJSONConverter().toJson( keyFunction.apply(aggregate) ))
+                .set(keySet.toArray(new String[0]), valueSet.toArray() )
+                .where(KeyValueSchema.KEY).isEqual(getJSONConverter().toJson( keyFunction.apply(aggregate) ))
                 .create();
 
         command.asUpdate();
@@ -106,9 +97,9 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         Objects.requireNonNull(key);
 
         var command = getConnection()
-                .createCommand(comparatorSchema)
+                .createCommand(KeyValueSchema.class)
                 .deleteFrom(aggregateClazz)
-                .where(this.schemaKey)
+                .where(KeyValueSchema.KEY)
                 .isEqual(getJSONConverter().toJson(key))
                 .create();
 
@@ -132,18 +123,14 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         Objects.requireNonNull(aggregate);
 
         var jsonConverter = getJSONConverter();
-        var objectList = new ArrayList<>();
 
+        var objectList = new ArrayList<>();
         objectList.add (jsonConverter.toJson(keyFunction.apply(aggregate)));
         objectList.add (jsonConverter.toJson(aggregate));
-
-        comparatorFunctions
-                .stream()
-                .skip(2)
-                .forEach(metadata -> objectList.add(metadata.getComparator().convertAggregate(aggregate)));
+        comparatorFunctions.forEach(metadata -> objectList.add(metadata.getComparator().convertAggregate(aggregate)));
 
         var command = getConnection()
-                .createCommand(comparatorSchema)
+                .createCommand(KeyValueSchema.class)
                 .insertInto(aggregateClazz)
                 .values(objectList.toArray())
                 .create();
@@ -156,8 +143,8 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
     @Override
     public List<T> get()
     {
-        var query = getConnection().createQuery(comparatorSchema)
-                .select(schemaValue)
+        var query = getConnection().createQuery(KeyValueSchema.class)
+                .select(KeyValueSchema.VALUE)
                 .from(aggregateClazz)
                 .create();
 
@@ -173,10 +160,10 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
     {
         Objects.requireNonNull(primaryKey);
 
-        var query = getConnection().createQuery(comparatorSchema)
-                .select(schemaValue)
+        var query = getConnection().createQuery(KeyValueSchema.class)
+                .select(KeyValueSchema.VALUE)
                 .from(aggregateClazz)
-                .where(schemaKey)
+                .where(KeyValueSchema.KEY)
                 .isEqual(getJSONConverter().toJson(primaryKey))
                 .create();
 
@@ -197,11 +184,11 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
 
                 var command = getConnection().createTableCommand(comparatorSchema)
                         .createTableIfNotExists(aggregateClazz)
-                        .addColumn(schemaKey, getMaxVarChar(properties.getProperty(JDBCConnection.JDBC_URL)))
+                        .addColumn(KeyValueSchema.KEY, getMaxVarChar(properties.getProperty(JDBCConnection.JDBC_URL)), KeyValueSchema.class)
                         .addConstraint(PRIMARY_KEY)
-                        .addColumn(schemaValue, TEXT);
+                        .addColumn(KeyValueSchema.VALUE, TEXT, KeyValueSchema.class);
 
-                comparatorFunctions.stream().skip(2).forEach( element ->
+                comparatorFunctions.forEach(element ->
                 {
                     if ( element.getComparator() instanceof  NumericComparator)
                     {

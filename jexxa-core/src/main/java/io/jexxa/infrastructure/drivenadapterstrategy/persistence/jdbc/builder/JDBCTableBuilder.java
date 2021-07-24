@@ -128,6 +128,20 @@ public class JDBCTableBuilder<T extends Enum<T>> extends JDBCBuilder<T>
             return this;
         }
 
+        public <S extends Enum<S>> JDBCColumnBuilder<T> addColumn(S element, SQLDataType dataType, Class<S> schemaClass)
+        {
+            addCommaSeparatorIfRequired();
+
+            commandBuilder
+                    .getStatementBuilder()
+                    .append(element.name())
+                    .append(BLANK)
+                    .append(dataType.toString());
+
+            return this;
+        }
+
+
         public JDBCColumnBuilder<T> addConstraint( SQLConstraint sqlConstraint)
         {
             commandBuilder

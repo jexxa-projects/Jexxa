@@ -9,30 +9,6 @@ import java.util.function.Function;
 public class Comparators
 {
     /**
-     *  Reserved Comparator to identify the Key of an aggregate in the {@link MetadataComparator}
-     *
-     * @param <T> type of the aggregate
-     * @param <V> type of the key
-     * @return Comparator to identify the key
-     */
-    public static  <T, V> NumericComparator<T, V> keyComparator()
-    {
-        return null;
-    }
-
-    /**
-     *  Reserved Comparator to identify the aggregate itself in the {@link MetadataComparator}
-     *
-     * @param <T> type of the aggregate
-     * @param <V> type of the key
-     * @return Comparator to identify the key
-     */
-    public static  <T, V> NumericComparator<T, V> valueComparator()
-    {
-        return null;
-    }
-
-    /**
      * Factory method to create comparator wich compares value of an aggregate using defined converter function
      *
      * @param accessorFunction defines the method to get the value to be compared

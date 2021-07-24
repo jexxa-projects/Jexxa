@@ -2,7 +2,6 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.jd
 
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,7 +24,6 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
     private final Class<T> aggregateClazz;
     private final JSONConverter jsonConverter = getJSONConverter();
     private final M nameOfRow;
-    private final M schemaValue;
     private final Class<M> comparatorSchema;
 
     @SuppressWarnings("unused") //Type required for java type inference
@@ -45,11 +43,6 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
         this.numericComparator = Objects.requireNonNull(numericComparator);
         this.comparatorSchema = Objects.requireNonNull(comparatorSchema);
         this.queryType = Objects.requireNonNull(queryType);
-
-        var comparatorFunctions = EnumSet.allOf(comparatorSchema);
-        var iterator = comparatorFunctions.iterator();
-        iterator.next();
-        schemaValue = iterator.next();
     }
 
     @Override
@@ -59,7 +52,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
 
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isGreaterOrEqual(sqlStartValue)
@@ -76,7 +69,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
 
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isGreaterThan(sqlStartValue)
@@ -94,7 +87,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
 
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isGreaterOrEqual(sqlStartValue)
@@ -115,7 +108,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
 
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isGreaterOrEqual(sqlStartValue)
@@ -136,7 +129,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
         //"select value from %s where %s <= %s",
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isLessOrEqual(sqlEndValue)
@@ -154,7 +147,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
         //"select value from %s where %s <= %s",
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isLessThan(sqlEndValue)
@@ -169,7 +162,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.ASC_NULLS_LAST)
                 .limit(amount)
@@ -183,7 +176,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.ASC_NULLS_LAST)
                 .create();
@@ -196,7 +189,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.DESC_NULLS_LAST)
                 .limit(amount)
@@ -210,7 +203,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.DESC_NULLS_LAST)
                 .create();
@@ -224,7 +217,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
         var sqlValue = numericComparator.convertValue(value);
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isEqual(sqlValue)
@@ -239,7 +232,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
         var sqlValue = numericComparator.convertValue(value);
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isNotEqual(sqlValue)
@@ -254,7 +247,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isNull()
@@ -268,7 +261,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isNotNull()

@@ -2,7 +2,6 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.jd
 
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,7 +24,6 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
     private final Class<T> aggregateClazz;
     private final JSONConverter jsonConverter = getJSONConverter();
     private final M nameOfRow;
-    private final M schemaValue;
     private final Class<M> comparatorSchema;
 
     @SuppressWarnings("unused") //Type required for java type inference
@@ -46,12 +44,8 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
         this.stringComparator = Objects.requireNonNull(stringComparator);
         this.comparatorSchema = Objects.requireNonNull(comparatorSchema);
         this.queryType = Objects.requireNonNull(queryType);
-
-        var comparatorFunctions = EnumSet.allOf(comparatorSchema);
-        var iterator = comparatorFunctions.iterator();
-        iterator.next();
-        schemaValue = iterator.next();
     }
+
     @Override
     public List<T> beginsWith(S value)
     {
@@ -59,7 +53,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
 
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlStartValue)
@@ -76,7 +70,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
 
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlEndValue)
@@ -93,7 +87,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
 
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlIncludeValue)
@@ -110,7 +104,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
 
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlEqualValue)
@@ -127,7 +121,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
 
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .notLike(sqlIncludeValue)
@@ -142,7 +136,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isNull()
@@ -156,7 +150,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isNotNull()
@@ -170,7 +164,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.ASC_NULLS_LAST)
                 .limit(amount)
@@ -184,7 +178,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.ASC_NULLS_LAST)
                 .create();
@@ -197,7 +191,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.DESC_NULLS_LAST)
                 .limit(amount)
@@ -211,7 +205,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( schemaValue )
+                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.DESC_NULLS_LAST)
                 .create();

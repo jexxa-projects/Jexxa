@@ -1,7 +1,5 @@
 package io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.keyComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.valueComparator;
 import static io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter.ContractRepository.ContractMetadata.CONTRACT_TERMINATED;
 
 import java.util.List;
@@ -20,10 +18,6 @@ public class ContractRepository  implements IContractRepository
 {
     enum ContractMetadata implements MetadataComparator
     {
-        KEY(keyComparator()),
-
-        VALUE(valueComparator()),
-
         CONTRACT_TERMINATED(Comparators.booleanComparator(Contract::isTerminated));
 
         //ADVISOR()

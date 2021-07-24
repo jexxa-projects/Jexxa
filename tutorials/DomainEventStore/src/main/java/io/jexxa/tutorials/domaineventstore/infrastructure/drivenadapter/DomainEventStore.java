@@ -1,9 +1,7 @@
 package io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.instantComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.keyComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.numberComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.valueComparator;
 
 import java.time.Instant;
 import java.util.List;
@@ -30,10 +28,6 @@ public class DomainEventStore implements IDomainEventStore
      */
     public enum DomainEventMetadata implements MetadataComparator
     {
-        KEY(keyComparator()),
-
-        VALUE(valueComparator()),
-
         CONTRACT_NUMBER(numberComparator((domainEvent -> domainEvent.getContractNumber().getValue())) ),
 
         SIGNATURE_DATE(instantComparator(ContractSigned::getSignatureDate));

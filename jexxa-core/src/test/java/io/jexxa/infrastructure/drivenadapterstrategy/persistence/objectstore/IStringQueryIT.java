@@ -2,10 +2,8 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.JexxaObject.createCharSequence;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreTestDatabase.REPOSITORY_CONFIG;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.keyComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.numberComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.stringComparator;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.valueComparator;
 import static java.util.Comparator.comparing;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -37,14 +35,6 @@ class IStringQueryIT
      */
     private enum JexxaObjectMetadata implements MetadataComparator
     {
-        /**
-         * Defines the meta data including comparator to query the object store.
-         * The following information is specific to your implementation and must be adjusted.
-         */
-        KEY(keyComparator()),
-
-        VALUE(valueComparator()),
-
         INT_VALUE(numberComparator(JexxaObject::getInternalValue)),
 
         VALUE_OBJECT(numberComparator(JexxaObject::getKey, JexxaValueObject::getValue)),
