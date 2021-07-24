@@ -117,7 +117,8 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
                 .orderBy(nameOfRow, SQLOrder.ASC)
                 .create();
 
-        return searchElements(jdbcQuery);    }
+        return searchElements(jdbcQuery);
+    }
 
     @Override
     public List<T> notIncludes(S value)

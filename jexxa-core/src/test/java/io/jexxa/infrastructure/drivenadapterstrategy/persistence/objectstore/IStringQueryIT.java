@@ -1,13 +1,12 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.JexxaObject.createCharSequence;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreTestDatabase.REPOSITORY_CONFIG;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.keyComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.numberComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.optionalNumberComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.stringComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.valueComparator;
-import static java.lang.Math.floor;
-import static java.lang.Math.log;
 import static java.util.Comparator.comparing;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
@@ -27,7 +25,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class IStringQueryIT
 {
-    private static final String REPOSITORY_CONFIG = "repositoryConfig";
     private static final int TEST_DATA_SIZE = 100;
 
     private List<JexxaObject> testData;
@@ -71,6 +68,8 @@ class IStringQueryIT
         OPTIONAL_VALUE_OBJECT(optionalNumberComparator(element -> element.getOptionalJexxaValue().orElse(null), JexxaValueObject::getValue)),
 
         STRING_OBJECT(stringComparator(JexxaObject::getString));
+
+        //TODO test optional string value
 
         /**
          *  Defines the constructor of the enum. Following code is equal for all object stores.
@@ -170,26 +169,6 @@ class IStringQueryIT
         //Assert
         assertEquals(expectedDescendingOrder, descendingResult);
         assertEquals(expectedDescendingOrderLimit, descendingResultLimit);
-    }
-
-    @SuppressWarnings("unused")
-    static Stream<Properties> repositoryConfig() {
-        var postgresProperties = new Properties();
-        postgresProperties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JDBCConnection.JDBC_PASSWORD, "admin");
-        postgresProperties.put(JDBCConnection.JDBC_USERNAME, "admin");
-        postgresProperties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/objectstoretest");
-        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
-
-        var h2Properties = new Properties();
-        h2Properties.put(JDBCConnection.JDBC_DRIVER, "org.h2.Driver");
-        h2Properties.put(JDBCConnection.JDBC_PASSWORD, "admin");
-        h2Properties.put(JDBCConnection.JDBC_USERNAME, "admin");
-        h2Properties.put(JDBCConnection.JDBC_URL, "jdbc:h2:mem:objectstoretest;DB_CLOSE_DELAY=-1");
-        h2Properties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
-
-        return Stream.of(new Properties(), postgresProperties, h2Properties);
     }
 
     void initObjectStore(Properties properties)

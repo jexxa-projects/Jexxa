@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreTestDatabase.REPOSITORY_CONFIG;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.keyComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.numberComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.valueComparator;
@@ -11,7 +12,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
@@ -29,7 +29,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 @Tag(TestConstants.INTEGRATION_TEST)
 class IObjectStoreIT
 {
-    private static final String REPOSITORY_CONFIG = "repositoryConfig";
     private static final int TEST_DATA_SIZE = 100;
 
     private List<JexxaObject> testData;
@@ -175,26 +174,6 @@ class IObjectStoreIT
 
         //Assert
         assertTrue(result.stream().allMatch( element -> element.getInternalValue() == TEST_DATA_SIZE));
-    }
-
-    @SuppressWarnings("unused")
-    static Stream<Properties> repositoryConfig() {
-        var postgresProperties = new Properties();
-        postgresProperties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JDBCConnection.JDBC_PASSWORD, "admin");
-        postgresProperties.put(JDBCConnection.JDBC_USERNAME, "admin");
-        postgresProperties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/multiindexrepository");
-        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
-
-        var h2Properties = new Properties();
-        h2Properties.put(JDBCConnection.JDBC_DRIVER, "org.h2.Driver");
-        h2Properties.put(JDBCConnection.JDBC_PASSWORD, "admin");
-        h2Properties.put(JDBCConnection.JDBC_USERNAME, "admin");
-        h2Properties.put(JDBCConnection.JDBC_URL, "jdbc:h2:mem:ComparableRepositoryTest;DB_CLOSE_DELAY=-1");
-        h2Properties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
-
-        return Stream.of(new Properties(), postgresProperties, h2Properties);
     }
 
     void initObjectStore(Properties properties)
