@@ -10,22 +10,26 @@ import java.util.List;
 public interface INumericQuery<T, S >
 {
     /**
-     * Get all values which fulfill: {@code value <= metadata of the object}
+     * Get all values which fulfill: {@code value <= metadata of the object}. The returned list is in ascending
+     * order by numeric representation of used value.
      *
      * @param value concrete value that is used for comparison
-     * @return list of all objects that fulfill the condition {@code value <= metadata of the object}
+     * @return an ordered list of all objects that fulfill the condition {@code value <= metadata of the object}.
      */
     List<T> isGreaterOrEqualThan(S value);
 
-    /**  get all values which fulfill: {@code value < returnedValue}
+    /**  get all values which fulfill: {@code value < returnedValue}. The returned list is in ascending
+     * order by numeric representation of used value.
      */
     List<T> isGreaterThan(S value);
 
-    /** get all values which fulfill:  {@code value <= endValue}
+    /** get all values which fulfill:  {@code value <= endValue}. The returned list is in ascending
+     * order by numeric representation of used value.
      */
     List<T> isLessOrEqualThan(S endValue);
 
-    /** get all values which fulfill:  {@code value < endValue}
+    /** get all values which fulfill:  {@code value < endValue}. The returned list is in ascending
+     * order by numeric representation of used value.
      */
     List<T> isLessThan(S endValue);
 
@@ -37,18 +41,32 @@ public interface INumericQuery<T, S >
     List<T> isEqualTo(S value);
 
     /**
-     * Returns all elements equal to S
+     * Returns all elements not equal to S. The returned list is in ascending
+     * order by numeric representation of used value.
+     *
      * @param value specifies comparison value
-     * @return list of elements that are equal to value
+     * @return an ordered list of elements that are equal to value
      */
     List<T> isNotEqualTo(S value);
 
 
-    /** get all values which fulfill: {@code startValue <= value <= endValue}
+    /**
+     *  Get all values which fulfill: {@code startValue <= value <= endValue}. The returned list is in ascending
+     *  order by numeric representation of used value.
+     *
+     * @param startValue defines the start value of the range
+     * @param endValue defines the end value of the range
+     * @return an ordered list of elements that are in a closed range.
      */
     List<T> getRangeClosed(S startValue, S endValue);
 
-    /** get all values which fulfill: {@code startValue <= value < endValue}
+    /**
+     *  Get all values which fulfill: {@code startValue <= value < endValue}. The returned list is in ascending
+     *  order by numeric representation of used value.
+     *
+     * @param startValue defines the start value of the range
+     * @param endValue defines the end value of the range
+     * @return an ordered list of elements that are in a open range.
      */
     List<T> getRange(S startValue, S endValue);
 

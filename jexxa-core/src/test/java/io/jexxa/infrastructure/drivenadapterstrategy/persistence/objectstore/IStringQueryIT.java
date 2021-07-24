@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.JexxaObject.createCharSequence;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.keyComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.numberComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.optionalNumberComparator;
@@ -20,7 +21,6 @@ import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.StringComparator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -40,10 +40,11 @@ class IStringQueryIT
                 .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element)))
                 .collect(Collectors.toList());
 
-        testData.forEach(element -> element.setInternalValue(element.getKey().getValue())); // set internal int value to an ascending number
+        // set internal int value to an ascending number
+        // the internal string is set to  A, B, ..., AA, AB, ...
+        testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
 
-        testData.forEach(element -> element.setOptionalString(createCharSequence( element.getKey().getValue()))); // set internal int value to an ascending number
-
+        testData.stream().limit(50).forEach(element -> element.setOptionalString(createCharSequence( element.getKey().getValue()))); // set internal
         testData.stream().limit(50).forEach( element -> element.setOptionalJexxaValue( element.getKey() )); // Set optional string value to A, B, ..., AA, AB, ...
     }
 
@@ -210,17 +211,5 @@ class IStringQueryIT
         objectStore.removeAll();
 
         testData.forEach(objectStore::add);
-    }
-
-    private static String createCharSequence(int n) {
-        var counter = n;
-        char[] buf = new char[(int) floor(log(25 * (counter + 1)) / log(26))];
-        for (int i = buf.length - 1; i >= 0; i--)
-        {
-            counter--;
-            buf[i] = (char) ('A' + counter % 26);
-            counter /= 26;
-        }
-        return new String(buf);
     }
 }

@@ -63,6 +63,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlStartValue)
+                .orderBy(nameOfRow, SQLOrder.ASC)
                 .create();
 
         return searchElements(jdbcQuery);
@@ -79,6 +80,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlEndValue)
+                .orderBy(nameOfRow, SQLOrder.ASC)
                 .create();
 
         return searchElements(jdbcQuery);
@@ -95,6 +97,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlIncludeValue)
+                .orderBy(nameOfRow, SQLOrder.ASC)
                 .create();
 
         return searchElements(jdbcQuery);
@@ -111,6 +114,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlEqualValue)
+                .orderBy(nameOfRow, SQLOrder.ASC)
                 .create();
 
         return searchElements(jdbcQuery);    }
@@ -126,6 +130,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .notLike(sqlIncludeValue)
+                .orderBy(nameOfRow, SQLOrder.ASC)
                 .create();
 
         return searchElements(jdbcQuery);

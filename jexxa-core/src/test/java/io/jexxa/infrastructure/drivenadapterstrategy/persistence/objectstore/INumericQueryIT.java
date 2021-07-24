@@ -4,6 +4,7 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectst
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.numberComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.optionalNumberComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.valueComparator;
+import static java.util.Comparator.comparing;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
@@ -237,7 +238,7 @@ class INumericQueryIT
 
         var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE, Integer.class);
         var expectedResult = testData.stream()
-                .sorted(java.util.Comparator.comparing( JexxaObject::getInternalValue))
+                .sorted(comparing( JexxaObject::getInternalValue))
                 .collect(Collectors.toList());
 
         //Act
@@ -257,7 +258,7 @@ class INumericQueryIT
         var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE, Integer.class);
         var limitAmount = 10 ;
         var expectedResult = testData.stream()
-                .sorted(java.util.Comparator.comparing( JexxaObject::getInternalValue))
+                .sorted(comparing( JexxaObject::getInternalValue))
                 .limit(limitAmount).collect(Collectors.toList());
 
         //Act
@@ -277,7 +278,7 @@ class INumericQueryIT
 
         var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE, Integer.class);
         var expectedResult = testData.stream()
-                .sorted(java.util.Comparator.comparing( JexxaObject::getInternalValue).reversed())
+                .sorted(comparing( JexxaObject::getInternalValue).reversed())
                 .collect(Collectors.toList());
 
         //Act
@@ -297,7 +298,7 @@ class INumericQueryIT
         var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE, Integer.class);
         var limitAmount = 10 ;
         var expectedResult = testData.stream()
-                .sorted(java.util.Comparator.comparing( JexxaObject::getInternalValue).reversed())
+                .sorted(comparing( JexxaObject::getInternalValue).reversed())
                 .limit(limitAmount).collect(Collectors.toList());
 
         //Act

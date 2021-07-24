@@ -63,6 +63,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isGreaterOrEqual(sqlStartValue)
+                .orderBy(nameOfRow, SQLOrder.ASC)
                 .create();
 
         return searchElements(jdbcQuery);
@@ -79,6 +80,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isGreaterThan(sqlStartValue)
+                .orderBy(nameOfRow, SQLOrder.ASC)
                 .create();
 
         return searchElements(jdbcQuery);
@@ -98,6 +100,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
                 .isGreaterOrEqual(sqlStartValue)
                 .and(nameOfRow)
                 .isLessOrEqual(sqlEndValue)
+                .orderBy(nameOfRow, SQLOrder.ASC)
                 .create();
 
 
@@ -118,6 +121,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
                 .isGreaterOrEqual(sqlStartValue)
                 .and(nameOfRow)
                 .isLessThan(sqlEndValue)
+                .orderBy(nameOfRow, SQLOrder.ASC)
                 .create();
 
 
@@ -136,6 +140,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isLessOrEqual(sqlEndValue)
+                .orderBy(nameOfRow, SQLOrder.ASC)
                 .create();
 
         return searchElements(jdbcQuery);
@@ -153,6 +158,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isLessThan(sqlEndValue)
+                .orderBy(nameOfRow, SQLOrder.ASC)
                 .create();
 
         return searchElements(jdbcQuery);
@@ -237,6 +243,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isNotEqual(sqlValue)
+                .orderBy(nameOfRow, SQLOrder.ASC)
                 .create();
 
         return searchElements(jdbcQuery);

@@ -1,5 +1,8 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
+import static java.lang.Math.floor;
+import static java.lang.Math.log;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -13,6 +16,8 @@ public class JexxaObject
     private final JexxaEntity jexxaEntity;
     private final JexxaValueObject jexxaValueObject;
     private JexxaValueObject optionalJexxaValue;
+    private String optionalString;
+    private final String internalString;
 
     public void setOptionalJexxaValue(JexxaValueObject optionalJexxaValue)
     {
@@ -24,8 +29,6 @@ public class JexxaObject
         this.optionalString = optionalString;
     }
 
-    private String optionalString;
-
     public Optional<String> getOptionalString()
     {
         return Optional.ofNullable(optionalString);
@@ -33,7 +36,7 @@ public class JexxaObject
 
     public String getString()
     {
-        return Optional.ofNullable(optionalString).orElse("null");
+        return internalString;
     }
 
     public Optional<JexxaValueObject> getOptionalJexxaValue()
@@ -41,12 +44,26 @@ public class JexxaObject
         return Optional.ofNullable(optionalJexxaValue);
     }
 
-    private JexxaObject(JexxaValueObject jexxaValueObject)
+    private JexxaObject(JexxaValueObject jexxaValueObject, String internalString)
     {
         this.jexxaEntity = JexxaEntity.create(jexxaValueObject);
         this.jexxaValueObject = jexxaValueObject;
+        this.internalString = internalString;
         this.optionalString = null;
         this.optionalJexxaValue = null;
+    }
+
+
+    public static String createCharSequence(int n) {
+        var counter = n;
+        char[] buf = new char[(int) floor(log(25 * (counter + 1)) / log(26))];
+        for (int i = buf.length - 1; i >= 0; i--)
+        {
+            counter--;
+            buf[i] = (char) ('A' + counter % 26);
+            counter /= 26;
+        }
+        return new String(buf);
     }
 
     public void setInternalValue(int value)
@@ -66,7 +83,7 @@ public class JexxaObject
 
     public static JexxaObject create(JexxaValueObject key)
     {
-        return new JexxaObject(key);
+        return new JexxaObject(key, createCharSequence(key.getValue()));
     }
 
     @Override
