@@ -23,7 +23,7 @@ public class StringComparator<T, S>  implements Comparator<T, S, String>
      * @param valueConverter defines a function that converts a searched value into a Number for comparison
      */
     StringComparator(Function<T, S> valueAccessor,
-                            Function<S, ? extends String> valueConverter)
+                     Function<S, ? extends String> valueConverter)
     {
         this.valueAccessor = Objects.requireNonNull( valueAccessor );
         this.valueConverter = Objects.requireNonNull( valueConverter );
@@ -34,9 +34,16 @@ public class StringComparator<T, S>  implements Comparator<T, S, String>
      * @param aggregate which provides the aggregate including the value that should be converted
      * @return Number representing the value
      */
+    @Override
     public String convertAggregate(T aggregate)
     {
         Objects.requireNonNull(aggregate);
+        var value = valueAccessor.apply(aggregate);
+
+        if (value == null)
+        {
+            return null;
+        }
         return valueConverter.apply(valueAccessor.apply(aggregate));
     }
 
@@ -45,9 +52,12 @@ public class StringComparator<T, S>  implements Comparator<T, S, String>
      * @param value which provides the value that should be converted
      * @return Number representing the value
      */
+    @Override
     public String convertValue(S value)
     {
-        Objects.requireNonNull(value);
+        if ( value == null ) {
+            return null;
+        }
         return valueConverter.apply(value);
     }
 
@@ -60,6 +70,7 @@ public class StringComparator<T, S>  implements Comparator<T, S, String>
      *     -1 if value of aggregate &lt; given value <br>
      *     1 if value of aggregate &gt; value <br>
      */
+    @Override
     public int compareToValue(T aggregate, S value)
     {
         Objects.requireNonNull(aggregate);
@@ -80,6 +91,7 @@ public class StringComparator<T, S>  implements Comparator<T, S, String>
      *     -1 if value of aggregate1 &lt; value of aggregate2 <br>
      *     1 if value of aggregate1 &gt; value of aggregate2 <br>
      */
+    @Override
     public int compareToAggregate(T aggregate1, T aggregate2)
     {
         Objects.requireNonNull(aggregate1);
@@ -87,9 +99,19 @@ public class StringComparator<T, S>  implements Comparator<T, S, String>
 
         var aggregateValue1 = convertAggregate(aggregate1);
         var aggregateValue2 = convertAggregate(aggregate2);
+
+        if ( aggregateValue1 == null && aggregateValue2 == null)
+        {
+            return 0;
+        } else if ( aggregateValue1 == null)
+        {
+            return -1;
+        } else if ( aggregateValue2 == null)
+        {
+            return 1;
+        }
+
         return aggregateValue1.compareTo(aggregateValue2);
     }
-
-
 }
 

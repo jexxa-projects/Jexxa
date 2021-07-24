@@ -3,9 +3,9 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder;
 public enum SQLOrder
 {
     ASC ("ASC"),
-    DESC ("DESCT"),
-    ASC_NULL_LAST("ASC NULLS LAST"),
-    DESC_NULL_LAST("DESC NULLS LAST");
+    DESC ("DESC"),
+    ASC_NULLS_LAST("ASC NULLS LAST"),
+    DESC_NULLS_LAST("DESC NULLS LAST");
 
     private final String orderName;
 

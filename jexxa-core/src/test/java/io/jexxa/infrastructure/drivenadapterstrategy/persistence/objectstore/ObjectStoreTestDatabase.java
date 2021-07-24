@@ -4,7 +4,6 @@ import java.util.Properties;
 import java.util.stream.Stream;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
 
 public class ObjectStoreTestDatabase
 {

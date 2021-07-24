@@ -172,7 +172,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
                 .createQuery(comparatorSchema)
                 .select( schemaValue )
                 .from(aggregateClazz)
-                .orderBy(nameOfRow, SQLOrder.ASC)
+                .orderBy(nameOfRow, SQLOrder.ASC_NULLS_LAST)
                 .limit(amount)
                 .create();
 
@@ -186,7 +186,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
                 .createQuery(comparatorSchema)
                 .select( schemaValue )
                 .from(aggregateClazz)
-                .orderBy(nameOfRow, SQLOrder.ASC)
+                .orderBy(nameOfRow, SQLOrder.ASC_NULLS_LAST)
                 .create();
 
         return searchElements( jdbcQuery );
@@ -199,7 +199,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
                 .createQuery(comparatorSchema)
                 .select( schemaValue )
                 .from(aggregateClazz)
-                .orderBy(nameOfRow, SQLOrder.DESC)
+                .orderBy(nameOfRow, SQLOrder.DESC_NULLS_LAST)
                 .limit(amount)
                 .create();
 
@@ -213,7 +213,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
                 .createQuery(comparatorSchema)
                 .select( schemaValue )
                 .from(aggregateClazz)
-                .orderBy(nameOfRow, SQLOrder.DESC)
+                .orderBy(nameOfRow, SQLOrder.DESC_NULLS_LAST)
                 .create();
 
         return searchElements( jdbcQuery );
