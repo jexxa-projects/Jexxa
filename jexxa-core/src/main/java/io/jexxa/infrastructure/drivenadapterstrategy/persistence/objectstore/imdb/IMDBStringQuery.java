@@ -3,6 +3,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.im
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
@@ -12,8 +13,6 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
 {
     private final StringComparator<T, S> stringComparator;
     private final Map<K, T> internalMap;
-    @SuppressWarnings("unused") // Type required for java type inference
-    private final Class<S> queryType;
 
     private Map<K, T> getOwnAggregateMap()
     {
@@ -24,7 +23,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
     {
         this.internalMap = internalMap;
         this.stringComparator = stringComparator;
-        this.queryType = queryType;
+        Objects.requireNonNull( queryType );//Type required for java type inference
     }
 
 

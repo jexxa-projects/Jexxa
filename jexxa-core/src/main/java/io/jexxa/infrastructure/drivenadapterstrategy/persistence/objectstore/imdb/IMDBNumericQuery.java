@@ -2,6 +2,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.im
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
@@ -12,9 +13,6 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
     private final NumericComparator<T, S> numericComparator;
     private final Map<K, T> internalMap;
 
-    @SuppressWarnings("unused") //Type required for java type inference
-    private final Class<S> queryType;
-
     private Map<K, T> getOwnAggregateMap()
     {
         return internalMap;
@@ -24,7 +22,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
     {
         this.internalMap = internalMap;
         this.numericComparator = numericComparator;
-        this.queryType = queryType;
+        Objects.requireNonNull( queryType );//Type required for java type inference
     }
 
     @Override
