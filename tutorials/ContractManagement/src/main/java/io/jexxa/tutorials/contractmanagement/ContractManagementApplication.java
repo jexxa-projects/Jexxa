@@ -1,8 +1,6 @@
 package io.jexxa.tutorials.contractmanagement;
 
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb.IMDBObjectStore;
@@ -53,7 +51,6 @@ public class ContractManagementApplication
     {
         var options = new Options();
         options.addOption("j", "jdbc", false, "jdbc driven adapter strategy");
-        options.addOption("J", "jms", false, "JMS message sender");
         return options;
     }
 
@@ -63,11 +60,11 @@ public class ContractManagementApplication
     {
         if (jdbcParameterAvailable(args))
         {
-            JexxaLogger.getLogger(ContractManagementApplication.class).info("Use persistence strategy: {} ", JDBCKeyValueRepository.class.getSimpleName());
+            JexxaLogger.getLogger(ContractManagementApplication.class).info("Use persistence strategy: {} ", JDBCObjectStore.class.getSimpleName());
             return JDBCObjectStore.class;
         }
 
-        JexxaLogger.getLogger(ContractManagementApplication.class).info("Use persistence strategy: {} ", IMDBRepository.class.getSimpleName());
+        JexxaLogger.getLogger(ContractManagementApplication.class).info("Use persistence strategy: {} ", IMDBObjectStore.class.getSimpleName());
         return IMDBObjectStore.class;
     }
 

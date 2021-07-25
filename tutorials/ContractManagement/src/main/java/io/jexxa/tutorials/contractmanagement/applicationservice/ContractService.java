@@ -54,7 +54,7 @@ public class ContractService
                 .collect(Collectors.toList());
     }
 
-    public List<ContractSigned> getSignedContracts()
+    public List<ContractSigned> getAllSignedContracts()
     {
         return domainEventStore.get();
     }
