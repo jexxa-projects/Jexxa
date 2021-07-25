@@ -75,6 +75,10 @@ public class StringComparator<T, S>  implements Comparator<T, S, String>
     {
         Objects.requireNonNull(aggregate);
         Objects.requireNonNull(value);
+        if(convertAggregate(aggregate) == null)
+        {
+            return 1;
+        }
 
         var aggregateValue = convertAggregate(aggregate);
         var givenValue = convertValue(value);
@@ -105,7 +109,7 @@ public class StringComparator<T, S>  implements Comparator<T, S, String>
             return 0;
         } else if ( aggregateValue1 == null)
         {
-            return -1;
+            return 1;
         } else if ( aggregateValue2 == null)
         {
             return 1;
