@@ -31,7 +31,7 @@ public class Comparators
      */
     public static <T, V extends Number> NumericComparator<T, V> numberComparator(Function<T,V> accessorFunction )
     {
-        return new NumberComparator<>(accessorFunction);
+        return new NumericComparator<>(accessorFunction, element -> element);
     }
 
     /**
@@ -41,9 +41,10 @@ public class Comparators
      * @param <T> type of the aggregate
      * @return Comparator wich compares an {@link Instant} of an aggregate
      */
+    @SuppressWarnings("java:S5411")
     public static <T> NumericComparator<T, Boolean> booleanComparator(Function<T, Boolean> accessorFunction )
     {
-        return new NumericComparator<>(accessorFunction, Boolean.TRUE::compareTo);
+        return new NumericComparator<>(accessorFunction, element -> element ? 1 : 0);
     }
 
     /**
@@ -82,13 +83,6 @@ public class Comparators
 
     }
 
-    private static class NumberComparator<T, V extends Number> extends NumericComparator<T, V>
-    {
-        public NumberComparator(Function<T, V> accessorFunction)
-        {
-            super( accessorFunction, element -> element);
-        }
-    }
 
     private Comparators()
     {
