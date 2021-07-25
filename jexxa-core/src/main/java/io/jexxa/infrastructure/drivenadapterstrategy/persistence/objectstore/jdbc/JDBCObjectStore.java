@@ -213,7 +213,12 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
     {
         if (!comparatorFunctions.contains(metadata))
         {
-            throw new IllegalArgumentException("Unknown strategy for IRangedResult");
+            throw new IllegalArgumentException(metadata.name() + " is not part of the schema -> Cannot provide a numeric query.");
+        }
+
+        if ( !Number.class.isAssignableFrom( metadata.getComparator().getValueType()) )
+        {
+            throw new IllegalArgumentException(metadata.name() + " does not use a numeric value -> Could not create a numeric query");
         }
 
         return new JDBCNumericQuery<>(this::getConnection, metadata.getComparator(), metadata, aggregateClazz,comparatorSchema, queryType );
@@ -224,7 +229,12 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
     {
         if (!comparatorFunctions.contains(metadata))
         {
-            throw new IllegalArgumentException("Unknown strategy for IRangedResult");
+            throw new IllegalArgumentException(metadata.name() + " is not part of the schema -> Cannot provide a string query.");
+        }
+
+        if ( !String.class.isAssignableFrom( metadata.getComparator().getValueType()) )
+        {
+            throw new IllegalArgumentException(metadata.name() + " does not use a numeric value -> Could not create a String query");
         }
 
         return new JDBCStringQuery<>(this::getConnection, metadata.getComparator(), metadata, aggregateClazz,comparatorSchema, queryType );
