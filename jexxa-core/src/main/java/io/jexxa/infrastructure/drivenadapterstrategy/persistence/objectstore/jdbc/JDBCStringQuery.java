@@ -12,14 +12,14 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnec
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.StringComparator;
 import io.jexxa.utils.json.JSONConverter;
 
 public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> implements IStringQuery<T, S>
 {
     private final Supplier<JDBCConnection> jdbcConnection;
-    private final StringComparator<T, S> stringComparator;
+    private final Comparator<T, S, ? extends String> stringComparator;
 
     private final Class<T> aggregateClazz;
     private final JSONConverter jsonConverter = getJSONConverter();
@@ -31,7 +31,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> impl
 
     public JDBCStringQuery(
             Supplier<JDBCConnection> jdbcConnection,
-            StringComparator<T, S> stringComparator,
+            Comparator<T, S, ? extends String> stringComparator,
             M nameOfRow,
             Class<T> aggregateClazz,
             Class<M> comparatorSchema,

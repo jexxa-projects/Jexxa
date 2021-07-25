@@ -12,14 +12,14 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnec
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
 import io.jexxa.utils.json.JSONConverter;
 
 class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements INumericQuery<T, S>
 {
     private final Supplier<JDBCConnection> jdbcConnection;
-    private final NumericComparator<T, S> numericComparator;
+    private final Comparator<T, S, ? extends Number> numericComparator;
 
     private final Class<T> aggregateClazz;
     private final JSONConverter jsonConverter = getJSONConverter();
@@ -31,7 +31,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> implements I
 
 
     JDBCNumericQuery(Supplier<JDBCConnection> jdbcConnection,
-                     NumericComparator<T, S> numericComparator,
+                     Comparator<T, S, ? extends Number> numericComparator,
                      M nameOfRow,
                      Class<T> aggregateClazz,
                      Class<M> comparatorSchema,

@@ -25,6 +25,12 @@ public class StringComparator<T, S>  extends Comparator<T, S, String>
     }
 
     @Override
+    public Class<String> getValueType()
+    {
+        return String.class;
+    }
+
+    @Override
     protected int typeSpecificCompareTo(String value1, String value2)
     {
         return value1.compareTo(value2);

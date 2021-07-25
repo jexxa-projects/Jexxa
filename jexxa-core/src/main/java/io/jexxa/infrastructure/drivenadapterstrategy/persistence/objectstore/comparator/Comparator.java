@@ -101,5 +101,7 @@ public abstract class Comparator<T, S, V>
         return typeSpecificCompareTo( aggregateValue1, aggregateValue2);
     }
 
+    public abstract Class<V> getValueType();
+
     protected abstract int typeSpecificCompareTo(V value1, V value2);
 }

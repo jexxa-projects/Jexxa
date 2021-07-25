@@ -22,8 +22,6 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INu
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.StringComparator;
 import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
@@ -190,11 +188,14 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
 
                 comparatorFunctions.forEach(element ->
                 {
-                    if ( element.getComparator() instanceof  NumericComparator)
+                    if ( Number.class.isAssignableFrom(element.getComparator().getValueType()) )
                     {
                         command.addColumn(element, NUMERIC);
-                    } else {
+                    } else if (String.class.isAssignableFrom(element.getComparator().getValueType())){
                         command.addColumn(element, TEXT);
+                    } else {
+                        throw new IllegalArgumentException("Unsupported Value type " + element.getComparator().getValueType().getName() +
+                                ". Supported Value types are subtypes of Number and String ");
                     }
                 });
 
@@ -214,10 +215,8 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
-        //noinspection unchecked
-        NumericComparator<T, S> numberComparator = (NumericComparator) metadata.getComparator();
 
-        return new JDBCNumericQuery<>(this::getConnection, numberComparator, metadata, aggregateClazz,comparatorSchema, queryType );
+        return new JDBCNumericQuery<>(this::getConnection, metadata.getComparator(), metadata, aggregateClazz,comparatorSchema, queryType );
     }
 
     @Override
@@ -227,9 +226,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
-        //noinspection unchecked
-        StringComparator<T, S> stringComparator = (StringComparator) metadata.getComparator();
 
-        return new JDBCStringQuery<>(this::getConnection, stringComparator, metadata, aggregateClazz,comparatorSchema, queryType );
+        return new JDBCStringQuery<>(this::getConnection, metadata.getComparator(), metadata, aggregateClazz,comparatorSchema, queryType );
     }
 }

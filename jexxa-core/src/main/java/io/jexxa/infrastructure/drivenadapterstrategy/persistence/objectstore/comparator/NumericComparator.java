@@ -26,6 +26,12 @@ public class NumericComparator<T, S>  extends Comparator<T, S, Number>
     }
 
     @Override
+    public Class<Number> getValueType()
+    {
+        return Number.class;
+    }
+
+    @Override
     protected int typeSpecificCompareTo(Number value1, Number value2)
     {
         //Handle both != null
