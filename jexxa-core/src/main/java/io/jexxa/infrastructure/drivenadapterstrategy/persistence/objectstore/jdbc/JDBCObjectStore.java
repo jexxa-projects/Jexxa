@@ -9,15 +9,13 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
@@ -27,16 +25,9 @@ import org.slf4j.Logger;
 
 
 @SuppressWarnings("unused")
-public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extends JDBCRepository implements IObjectStore<T, K, M>
+public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extends JDBCKeyValueRepository<T, K> implements IObjectStore<T, K, M>
 {
-    enum KeyValueSchema
-    {
-        KEY,
-        VALUE
-    }
-
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCObjectStore.class);
-    private static final String SQL_NUMERIC = "NUMERIC";
 
     private final Function<T, K> keyFunction;
     private final Class<T> aggregateClazz;
@@ -52,7 +43,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
             Properties properties
     )
     {
-        super(properties);
+        super(aggregateClazz, keyFunction, properties, false);
         this.keyFunction = keyFunction;
         this.aggregateClazz = aggregateClazz;
         this.comparatorSchema = comparatorSchema;
@@ -60,7 +51,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
 
         var iterator = comparatorFunctions.iterator();
 
-        autocreateTable(properties);
+        autocreateTableObjectStore(properties);
     }
 
 
@@ -89,31 +80,6 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         command.asUpdate();
     }
 
-    @Override
-    public void remove(K key)
-    {
-        Objects.requireNonNull(key);
-
-        var command = getConnection()
-                .createCommand(KeyValueSchema.class)
-                .deleteFrom(aggregateClazz)
-                .where(KeyValueSchema.KEY)
-                .isEqual(getJSONConverter().toJson(key))
-                .create();
-
-        command.asUpdate();
-    }
-
-    @Override
-    public void removeAll()
-    {
-        var command = getConnection()
-                .createCommand(comparatorSchema)
-                .deleteFrom(aggregateClazz)
-                .create();
-
-        command.asIgnore();
-    }
 
     @Override
     public void add(T aggregate)
@@ -136,78 +102,6 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         command.asUpdate();
     }
 
-
-
-    @Override
-    public List<T> get()
-    {
-        var query = getConnection().createQuery(KeyValueSchema.class)
-                .select(KeyValueSchema.VALUE)
-                .from(aggregateClazz)
-                .create();
-
-        return query
-                .asString()
-                .flatMap(Optional::stream)
-                .map( element -> getJSONConverter().fromJson(element, aggregateClazz))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Optional<T> get(K primaryKey)
-    {
-        Objects.requireNonNull(primaryKey);
-
-        var query = getConnection().createQuery(KeyValueSchema.class)
-                .select(KeyValueSchema.VALUE)
-                .from(aggregateClazz)
-                .where(KeyValueSchema.KEY)
-                .isEqual(getJSONConverter().toJson(primaryKey))
-                .create();
-
-        return query
-                .asString()
-                .flatMap(Optional::stream)
-                .findFirst()
-                .map(element -> getJSONConverter().fromJson(element, aggregateClazz))
-                .or(Optional::empty);
-    }
-
-    private void autocreateTable(Properties properties)
-    {
-        Objects.requireNonNull(properties);
-        if (properties.containsKey(JDBCConnection.JDBC_AUTOCREATE_TABLE))
-        {
-            try{
-
-                var command = getConnection().createTableCommand(comparatorSchema)
-                        .createTableIfNotExists(aggregateClazz)
-                        .addColumn(KeyValueSchema.KEY, getMaxVarChar(properties.getProperty(JDBCConnection.JDBC_URL)), KeyValueSchema.class)
-                        .addConstraint(PRIMARY_KEY)
-                        .addColumn(KeyValueSchema.VALUE, TEXT, KeyValueSchema.class);
-
-                comparatorFunctions.forEach(element ->
-                {
-                    if ( Number.class.isAssignableFrom(element.getComparator().getValueType()) )
-                    {
-                        command.addColumn(element, NUMERIC);
-                    } else if (String.class.isAssignableFrom(element.getComparator().getValueType())){
-                        command.addColumn(element, TEXT);
-                    } else {
-                        throw new IllegalArgumentException("Unsupported Value type " + element.getComparator().getValueType().getName() +
-                                ". Supported Value types are subtypes of Number and String ");
-                    }
-                });
-
-                command.create().asIgnore();
-
-            }
-            catch (RuntimeException e)
-            {
-                LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
-            }
-        }
-    }
 
     public <S> INumericQuery<T, S> getNumericQuery(M metadata, Class<S> queryType)
     {
@@ -238,5 +132,41 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         }
 
         return new JDBCStringQuery<>(this::getConnection, metadata.getComparator(), metadata, aggregateClazz,comparatorSchema, queryType );
+    }
+
+    private void autocreateTableObjectStore(Properties properties)
+    {
+        Objects.requireNonNull(properties);
+        if (properties.containsKey(JDBCConnection.JDBC_AUTOCREATE_TABLE))
+        {
+            try{
+
+                var command = getConnection().createTableCommand(comparatorSchema)
+                        .createTableIfNotExists(aggregateClazz)
+                        .addColumn(KeyValueSchema.KEY, getMaxVarChar(properties.getProperty(JDBCConnection.JDBC_URL)), KeyValueSchema.class)
+                        .addConstraint(PRIMARY_KEY)
+                        .addColumn(KeyValueSchema.VALUE, TEXT, KeyValueSchema.class);
+
+                comparatorFunctions.forEach(element ->
+                {
+                    if ( Number.class.isAssignableFrom(element.getComparator().getValueType()) )
+                    {
+                        command.addColumn(element, NUMERIC);
+                    } else if (String.class.isAssignableFrom(element.getComparator().getValueType())){
+                        command.addColumn(element, TEXT);
+                    } else {
+                        throw new IllegalArgumentException("Unsupported Value type " + element.getComparator().getValueType().getName() +
+                                ". Supported Value types are subtypes of Number and String. ");
+                    }
+                });
+
+                command.create().asIgnore();
+
+            }
+            catch (RuntimeException e)
+            {
+                LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
+            }
+        }
     }
 }

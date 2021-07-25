@@ -24,6 +24,12 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
 
+    public enum KeyValueSchema
+    {
+        KEY,
+        VALUE
+    }
+
     public JDBCKeyValueRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
     {
         super(properties);
@@ -31,7 +37,20 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         this.keyFunction = Objects.requireNonNull( keyFunction );
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
 
-        autocreateTable(properties);
+        autocreateTableKeyValue(properties);
+    }
+
+    protected JDBCKeyValueRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties, boolean autoCreateTable)
+    {
+        super(properties);
+
+        this.keyFunction = Objects.requireNonNull( keyFunction );
+        this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
+
+        if ( autoCreateTable )
+        {
+            autocreateTableKeyValue(properties);
+        }
     }
 
 
@@ -125,7 +144,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     }
 
 
-    private void autocreateTable(Properties properties)
+    private void autocreateTableKeyValue(Properties properties)
     {
         Objects.requireNonNull(properties);
         if (properties.containsKey(JDBCConnection.JDBC_AUTOCREATE_TABLE))
@@ -148,9 +167,4 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         }
     }
 
-    enum KeyValueSchema
-    {
-        KEY,
-        VALUE
-    }
 }
