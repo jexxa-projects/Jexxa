@@ -19,7 +19,7 @@ public class Contract
     private Contract(ContractNumber contractNumber, String advisor)
     {
         this.contractNumber = Objects.requireNonNull( contractNumber );
-        this.advisor = advisor;
+        this.advisor = Objects.requireNonNull( advisor );
         this.isTerminated = false;
     }
 
@@ -43,6 +43,7 @@ public class Contract
     {
         this.isTerminated = true;
     }
+
     public boolean isTerminated()
     {
         return isTerminated;

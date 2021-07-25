@@ -1,6 +1,7 @@
 package io.jexxa.tutorials.domaineventstore.domainservice;
 
 import java.util.List;
+import java.util.Optional;
 
 import io.jexxa.addend.applicationcore.Repository;
 import io.jexxa.tutorials.domaineventstore.domain.aggregate.Contract;
@@ -20,4 +21,6 @@ public interface IContractRepository
     Contract get(ContractNumber contractNumber);
 
     List<Contract> getAll();
+
+    Optional<Contract> getHighestContractNumber();
 }

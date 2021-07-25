@@ -1,8 +1,6 @@
-WIP!!!
-
 # Domain Event vs. Event Sourcing
-https://www.innoq.com/en/blog/domain-events-versus-event-sourcing/
 
+https://www.innoq.com/en/blog/domain-events-versus-event-sourcing/
 
 # Production systems
 
@@ -18,7 +16,6 @@ There are three common types of basic production systems:
 *   The project system:
     The third type of production system is the project, or “one-shot” system. For a single, one-of-a-kind product, for example, a building, a ship, or the prototype of a product such as an airplane. Because of the singular nature of project systems, special methods of management have been developed to contain the costs of production within reasonable levels.
     
-
 Note, that batch and continues systems are often found in combination. 
 
 ## Batch Process / Production
@@ -55,10 +52,10 @@ In case you are not sure which approach to be used in your context you should st
 
 Vorab:
 
-• Aus meiner Sicht ergeben sich aktuell 2(-3) Arten von DDD-Repositories für neue Anwendungen aufbauend auf Jexxa (Anbindung an Bestands-DBs sind in den folgenden Überlegungen erstmal ausgeschlossen)
-1. Repositories für Produktionsdaten => Ziel: Anwendungszustand kann nach Neustart der Anwendung rekonstruiert werden. (Kann aber prinzipiell bei einer Putzschicht komplett gelöscht werden. ) Daten sind nur innerhalb des Micro-Services relevant.
-2. Repositories Produktionsarchiv: Ziel: Persistiert die abgeschlossenen Geschäftsereignisse(Domain-Events): Leitet evtl. auch aus der Summe von mehreren DE-Events neue ab (z.B. RE-Charge produziert). Informationen werden von Berichtswesen und nachfolgenden Prozessschritten verwendet. Diese Daten sind kritisch und können so ohne weiteres nicht gelöscht werden ... => Ist hauptsächlich nur außerhalb des eigenen Kontextes relevant.
-3. Evtl:Repositories für Rohdaten erfassen von L1. Man weiß nicht ob man die Daten irgendwann nochmal braucht und hebt sie deswegen auf. Unklar, ob dies überhaupt ein 'DDD-Repository' ist...
+Aus meiner Sicht ergeben sich aktuell 2(-3) Arten von DDD-Repositories für neue Anwendungen aufbauend auf Jexxa (Anbindung an Bestands-DBs sind in den folgenden Überlegungen erstmal ausgeschlossen)
+1.  Repositories für Produktionsdaten => Ziel: Anwendungszustand kann nach Neustart der Anwendung rekonstruiert werden. (Kann aber prinzipiell bei einer Putzschicht komplett gelöscht werden. ) Daten sind nur innerhalb des Micro-Services relevant.
+2.  Repositories Produktionsarchiv: Ziel: Persistiert die abgeschlossenen Geschäftsereignisse(Domain-Events): Leitet evtl. auch aus der Summe von mehreren DE-Events neue ab (z.B. RE-Charge produziert). Informationen werden von Berichtswesen und nachfolgenden Prozessschritten verwendet. Diese Daten sind kritisch und können so ohne weiteres nicht gelöscht werden ... => Ist hauptsächlich nur außerhalb des eigenen Kontextes relevant.
+3.  Evtl:Repositories für Rohdaten erfassen von L1. Man weiß nicht ob man die Daten irgendwann nochmal braucht und hebt sie deswegen auf. Unklar, ob dies überhaupt ein 'DDD-Repository' ist...
 
 • Die jeweilige Art des Repositories sollte auch in der Software erkennbar sein.
 • Zu 1. Sollte ein Key-Value Repository ausreichend sein.

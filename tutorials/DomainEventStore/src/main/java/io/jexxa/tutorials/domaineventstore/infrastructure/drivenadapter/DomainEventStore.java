@@ -9,8 +9,8 @@ import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
 import io.jexxa.tutorials.domaineventstore.domain.domainevent.ContractSigned;
 import io.jexxa.tutorials.domaineventstore.domain.valueobject.ContractNumber;
 import io.jexxa.tutorials.domaineventstore.domainservice.IDomainEventStore;
@@ -32,18 +32,18 @@ public class DomainEventStore implements IDomainEventStore
 
         SIGNATURE_DATE(instantComparator(ContractSigned::getSignatureDate));
 
-        private final NumericComparator<ContractSigned, ? > numericComparator;
+        private final Comparator<ContractSigned, ?, ? > comparator;
 
-        DomainEventMetadata(NumericComparator<ContractSigned,?> numericComparator)
+        DomainEventMetadata(Comparator<ContractSigned,?, ?> comparator)
         {
-            this.numericComparator = numericComparator;
+            this.comparator = comparator;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public NumericComparator<ContractSigned, ?> getComparator()
+        public Comparator<ContractSigned, ?, ?> getComparator()
         {
-            return numericComparator;
+            return comparator;
         }
     }
 

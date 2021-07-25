@@ -1,42 +1,48 @@
 package io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter;
 
+import static io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter.ContractRepository.ContractMetadata.ADVISOR;
+import static io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter.ContractRepository.ContractMetadata.CONTRACT_NUMBER;
 import static io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter.ContractRepository.ContractMetadata.CONTRACT_TERMINATED;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
 import io.jexxa.tutorials.domaineventstore.domain.aggregate.Contract;
 import io.jexxa.tutorials.domaineventstore.domain.valueobject.ContractNumber;
 import io.jexxa.tutorials.domaineventstore.domainservice.IContractRepository;
 
+@SuppressWarnings("unused")
 public class ContractRepository  implements IContractRepository
 {
     enum ContractMetadata implements MetadataComparator
     {
-        CONTRACT_TERMINATED(Comparators.booleanComparator(Contract::isTerminated));
+        CONTRACT_NUMBER(Comparators.numberComparator(element -> element.getContractNumber().getValue())),
 
-        //ADVISOR()
+        CONTRACT_TERMINATED(Comparators.booleanComparator(Contract::isTerminated)),
 
+        ADVISOR(Comparators.stringComparator(Contract::getAdvisor));
 
-        private final NumericComparator<Contract, ? > numericComparator;
+        private final Comparator<Contract, ?, ? > comparator;
 
-        ContractMetadata(NumericComparator<Contract,?> numericComparator)
+        ContractMetadata(Comparator<Contract,?, ?> comparator)
         {
-            this.numericComparator = numericComparator;
+            this.comparator = comparator;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public NumericComparator<Contract, ?> getComparator()
+        public Comparator<Contract, ?, ?> getComparator()
         {
-            return numericComparator;
+            return comparator;
         }
     }
+
 
     private final IObjectStore<Contract, ContractNumber, ContractMetadata> objectStore;
 
@@ -68,19 +74,33 @@ public class ContractRepository  implements IContractRepository
     @Override
     public List<Contract> getByAdvisor(String advisor)
     {
-        return null;
+        return objectStore
+                .getStringQuery(ADVISOR, String.class)
+                .isEqualTo(advisor);
     }
 
     @Override
     public Contract get(ContractNumber contractNumber)
     {
-        return objectStore.get(contractNumber).orElseThrow(IllegalArgumentException::new);
+        return objectStore
+                .get(contractNumber)
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     @Override
     public List<Contract> getAll()
     {
         return objectStore.get();
+    }
+
+    @Override
+    public Optional<Contract> getHighestContractNumber()
+    {
+        return objectStore
+                .getNumericQuery(CONTRACT_NUMBER, Integer.class)
+                .getDescending(1)
+                .stream()
+                .findFirst();
     }
 
 }
