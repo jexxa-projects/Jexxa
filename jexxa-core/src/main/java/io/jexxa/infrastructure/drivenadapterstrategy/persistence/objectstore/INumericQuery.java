@@ -38,6 +38,7 @@ public interface INumericQuery<T, S >
 
     /**
      * Returns all elements equal to S
+     * @pre value must not be null
      * @param value specifies comparison value
      * @return list of elements that are equal to value
      */
@@ -47,13 +48,24 @@ public interface INumericQuery<T, S >
      * Returns all elements not equal to S. The returned list is in ascending
      * order by numeric representation of used value.
      *
+     * @pre value must not be null
      * @param value specifies comparison value
      * @return an ordered list of elements that are equal to value
      */
     List<T> isNotEqualTo(S value);
 
+    /**
+     * Returns all elements in which is S is null. The returned list is not ordered in any way.
+     *
+     * @return A list of elements that are equal to value
+     */
     List<T> isNull();
 
+    /**
+     * Returns all elements in which is S is not null. The returned list is not in ascending order
+     *
+     * @return A list of elements that are equal to value
+     */
     List<T> isNotNull();
 
     /**
