@@ -1,9 +1,9 @@
-package io.jexxa.tutorials.domaineventstore.domain.domainevent;
+package io.jexxa.tutorials.contractmanagement.domain.domainevent;
 
 import java.time.Instant;
 
 import io.jexxa.addend.applicationcore.DomainEvent;
-import io.jexxa.tutorials.domaineventstore.domain.valueobject.ContractNumber;
+import io.jexxa.tutorials.contractmanagement.domain.valueobject.ContractNumber;
 
 @DomainEvent
 public class ContractSigned

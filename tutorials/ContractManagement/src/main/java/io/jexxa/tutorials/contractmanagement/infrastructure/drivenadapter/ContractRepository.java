@@ -1,8 +1,8 @@
-package io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter;
+package io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter;
 
-import static io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter.ContractRepository.ContractMetadata.ADVISOR;
-import static io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter.ContractRepository.ContractMetadata.CONTRACT_NUMBER;
-import static io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter.ContractRepository.ContractMetadata.CONTRACT_TERMINATED;
+import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractMetadata.ADVISOR;
+import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractMetadata.CONTRACT_NUMBER;
+import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractMetadata.CONTRACT_SIGNED;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +13,9 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.Obj
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
-import io.jexxa.tutorials.domaineventstore.domain.aggregate.Contract;
-import io.jexxa.tutorials.domaineventstore.domain.valueobject.ContractNumber;
-import io.jexxa.tutorials.domaineventstore.domainservice.IContractRepository;
+import io.jexxa.tutorials.contractmanagement.domain.aggregate.Contract;
+import io.jexxa.tutorials.contractmanagement.domain.valueobject.ContractNumber;
+import io.jexxa.tutorials.contractmanagement.domainservice.IContractRepository;
 
 @SuppressWarnings("unused")
 public class ContractRepository  implements IContractRepository
@@ -24,7 +24,7 @@ public class ContractRepository  implements IContractRepository
     {
         CONTRACT_NUMBER(Comparators.numberComparator(element -> element.getContractNumber().getValue())),
 
-        CONTRACT_TERMINATED(Comparators.booleanComparator(Contract::isTerminated)),
+        CONTRACT_SIGNED(Comparators.booleanComparator(Contract::isSigned)),
 
         ADVISOR(Comparators.stringComparator(Contract::getAdvisor));
 
@@ -58,18 +58,17 @@ public class ContractRepository  implements IContractRepository
     }
 
     @Override
+    public void update(Contract contract)
+    {
+        objectStore.update(contract);
+    }
+
+    @Override
     public void remove(ContractNumber contractNumber)
     {
         objectStore.remove(contractNumber);
     }
 
-    @Override
-    public List<Contract> getTerminated()
-    {
-        return objectStore
-                .getNumericQuery(CONTRACT_TERMINATED, Boolean.class)
-                .isEqualTo(true);
-    }
 
     @Override
     public List<Contract> getByAdvisor(String advisor)
@@ -91,6 +90,22 @@ public class ContractRepository  implements IContractRepository
     public List<Contract> getAll()
     {
         return objectStore.get();
+    }
+
+    @Override
+    public List<Contract> getSignedContracts()
+    {
+        return objectStore
+                .getNumericQuery(CONTRACT_SIGNED, Boolean.class)
+                .isEqualTo(true);
+    }
+
+    @Override
+    public List<Contract> getUnsignedContracts()
+    {
+        return objectStore
+                .getNumericQuery(CONTRACT_SIGNED, Boolean.class)
+                .isEqualTo(false);
     }
 
     @Override

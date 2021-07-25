@@ -1,4 +1,4 @@
-package io.jexxa.tutorials.domaineventstore.infrastructure.drivenadapter;
+package io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.instantComparator;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.numberComparator;
@@ -11,9 +11,9 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IOb
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparator;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
-import io.jexxa.tutorials.domaineventstore.domain.domainevent.ContractSigned;
-import io.jexxa.tutorials.domaineventstore.domain.valueobject.ContractNumber;
-import io.jexxa.tutorials.domaineventstore.domainservice.IDomainEventStore;
+import io.jexxa.tutorials.contractmanagement.domain.domainevent.ContractSigned;
+import io.jexxa.tutorials.contractmanagement.domain.valueobject.ContractNumber;
+import io.jexxa.tutorials.contractmanagement.domainservice.IDomainEventStore;
 
 @SuppressWarnings("unused")
 public class DomainEventStore implements IDomainEventStore
@@ -70,18 +70,8 @@ public class DomainEventStore implements IDomainEventStore
     }
 
     @Override
-    public List<ContractSigned> getBatchNumbersLessThan(ContractNumber contractNumber)
+    public List<ContractSigned> get()
     {
-        return objectStore
-                .getNumericQuery(DomainEventMetadata.CONTRACT_NUMBER, ContractNumber.class)
-                .isLessThan(contractNumber);
-    }
-
-    @Override
-    public List<ContractSigned> getLatestBatches(int number)
-    {
-        return objectStore
-                .getNumericQuery(DomainEventMetadata.CONTRACT_NUMBER, ContractNumber.class)
-                .getDescending(number);
+        return objectStore.get();
     }
 }

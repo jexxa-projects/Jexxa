@@ -1,4 +1,4 @@
-package io.jexxa.tutorials.domaineventstore.domain.aggregate;
+package io.jexxa.tutorials.contractmanagement.domain.aggregate;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -6,21 +6,21 @@ import java.util.Objects;
 import io.jexxa.addend.applicationcore.Aggregate;
 import io.jexxa.addend.applicationcore.AggregateFactory;
 import io.jexxa.addend.applicationcore.AggregateID;
-import io.jexxa.tutorials.domaineventstore.domain.domainevent.ContractSigned;
-import io.jexxa.tutorials.domaineventstore.domain.valueobject.ContractNumber;
+import io.jexxa.tutorials.contractmanagement.domain.domainevent.ContractSigned;
+import io.jexxa.tutorials.contractmanagement.domain.valueobject.ContractNumber;
 
 @Aggregate
 public class Contract
 {
     private final ContractNumber contractNumber;
     private String advisor;
-    private boolean isTerminated;
+    private boolean isSigned;
 
     private Contract(ContractNumber contractNumber, String advisor)
     {
         this.contractNumber = Objects.requireNonNull( contractNumber );
         this.advisor = Objects.requireNonNull( advisor );
-        this.isTerminated = false;
+        this.isSigned = false;
     }
 
     @AggregateID
@@ -39,20 +39,15 @@ public class Contract
         this.advisor = advisor;
     }
 
-    public void terminate()
-    {
-        this.isTerminated = true;
-    }
-
-    public boolean isTerminated()
-    {
-        return isTerminated;
-    }
-
-
     public ContractSigned sign()
     {
+        isSigned = true;
         return new ContractSigned(contractNumber, Instant.now());
+    }
+
+    public boolean isSigned()
+    {
+        return isSigned;
     }
 
     @AggregateFactory(Contract.class)

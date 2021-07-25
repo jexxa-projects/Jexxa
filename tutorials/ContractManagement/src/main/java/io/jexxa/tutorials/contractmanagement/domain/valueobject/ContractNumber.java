@@ -1,4 +1,4 @@
-package io.jexxa.tutorials.domaineventstore.domain.valueobject;
+package io.jexxa.tutorials.contractmanagement.domain.valueobject;
 
 import io.jexxa.addend.applicationcore.ValueObject;
 

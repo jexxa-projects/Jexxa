@@ -8,11 +8,11 @@
   </parent>
 
 
-  <artifactId>domaineventstore</artifactId>
-  <name>DomainEventStore</name>
+  <artifactId>contractmanagement</artifactId>
+  <name>ContractManagement</name>
 
   <properties>
-    <main.class>io.jexxa.tutorials.domaineventstore.DomainEventStoreApplication</main.class>
+    <main.class>io.jexxa.tutorials.contractmanagement.ContractManagementApplication</main.class>
     <jmx.port>1090</jmx.port>
   </properties>
 
