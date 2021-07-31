@@ -102,7 +102,7 @@
 
             <!-- expose ports -->
             <ports>
-              <port>7000</port>
+              <port>7500</port>
               <port>${jmx.port}</port>
             </ports>
           </container>

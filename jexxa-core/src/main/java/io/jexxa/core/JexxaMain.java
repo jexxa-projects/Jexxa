@@ -155,12 +155,12 @@ public final class JexxaMain
     }
 
     @SuppressWarnings("java:S2629")
-    public BoundedContext start()
+    public JexxaMain start()
     {
         if ( boundedContext.isRunning() )
         {
             LOGGER.warn("BoundedContext '{}' already started", getBoundedContext().contextName());
-            return boundedContext;
+            return this;
         }
 
         printStartupInfo();
@@ -170,7 +170,7 @@ public final class JexxaMain
 
         printStartupDuration();
 
-        return boundedContext;
+        return this;
     }
 
     @SuppressWarnings("java:S2629")
@@ -203,6 +203,12 @@ public final class JexxaMain
             LOGGER.info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
         }
     }
+
+    public JexxaMain waitForShutdown()
+    {
+        return getBoundedContext().waitForShutdown();
+    }
+
 
     @CheckReturnValue
     public BoundedContext getBoundedContext()

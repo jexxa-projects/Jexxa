@@ -52,7 +52,7 @@ public class BoundedContext
         return isRunning;
     }
 
-    public synchronized JexxaMain waitForShutdown()
+    synchronized JexxaMain waitForShutdown()
     {
         setupSignalHandler();
         isWaiting = true;

@@ -29,9 +29,9 @@ java -Dio.jexxa.rest.open_api_path=swagger-docs -jar target/bookstorej-jar-with-
 You will see following (or similar) output
 ```console
 ...
-[main] INFO io.javalin.Javalin - Listening on http://0.0.0.0:7000/
+[main] INFO io.javalin.Javalin - Listening on http://0.0.0.0:7500/
 [main] INFO io.javalin.Javalin - Javalin started in 188ms \o/
-[main] INFO io.javalin.Javalin - OpenAPI documentation available at: http://0.0.0.0:7000/swagger-docs
+[main] INFO io.javalin.Javalin - OpenAPI documentation available at: http://0.0.0.0:7500/swagger-docs
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'BookStoreJApplication' successfully started in 1.299 seconds
 
 ```          

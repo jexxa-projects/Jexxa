@@ -278,7 +278,7 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - Start BoundedContext 'TimeService' with 2 Driving Adapter 
 [main] INFO org.eclipse.jetty.util.log - Logging initialized @644ms to org.eclipse.jetty.util.log.Slf4jLog
 [main] INFO io.javalin.Javalin - Starting Javalin ...
-[main] INFO io.javalin.Javalin - Listening on http://localhost:7000/
+[main] INFO io.javalin.Javalin - Listening on http://localhost:7500/
 [main] INFO io.javalin.Javalin - Javalin started in 121ms \o/
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'TimeService' successfully started in 0.649 seconds
 ```          
@@ -287,7 +287,7 @@ You will see following (or similar) output
 
 You can use curl to publish the time.  
 ```Console
-curl -X POST http://localhost:7000/TimeService/publishTime
+curl -X POST http://localhost:7500/TimeService/publishTime
 ```
 
 Each time you execute curl you should see following output on the console: 
@@ -311,7 +311,7 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - Start BoundedContext 'TimeService' with 2 Driving Adapter 
 [main] INFO org.eclipse.jetty.util.log - Logging initialized @644ms to org.eclipse.jetty.util.log.Slf4jLog
 [main] INFO io.javalin.Javalin - Starting Javalin ...
-[main] INFO io.javalin.Javalin - Listening on http://localhost:7000/
+[main] INFO io.javalin.Javalin - Listening on http://localhost:7500/
 [main] INFO io.javalin.Javalin - Javalin started in 121ms \o/
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'TimeService' successfully started in 0.649 seconds
 ```          
@@ -320,7 +320,7 @@ You will see following (or similar) output
  
 You can use curl to publish the time.  
 ```Console
-curl -X POST http://localhost:7000/TimeService/publishTime
+curl -X POST http://localhost:7500/TimeService/publishTime
 ```
 
 Each time you execute curl you should see following output on the console: 

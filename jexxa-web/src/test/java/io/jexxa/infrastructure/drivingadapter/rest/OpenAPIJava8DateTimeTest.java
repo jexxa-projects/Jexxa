@@ -29,7 +29,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 @Tag(TestConstants.INTEGRATION_TEST)
 class OpenAPIJava8DateTimeTest
 {
-    private static final String OPENAPI_PATH = "http://localhost:7000/swagger-docs/";
+    private static final String OPENAPI_PATH = "http://localhost:7500/swagger-docs/";
     private final Java8DateTimeApplicationService java8DateTimeApplicationService = new Java8DateTimeApplicationService();
 
 
@@ -40,7 +40,7 @@ class OpenAPIJava8DateTimeTest
         //Setup
         var properties = new Properties();
         var defaultHost = "localhost";
-        var defaultPort = 7000;
+        var defaultPort = 7500;
 
         properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
         properties.put(HTTP_PORT_PROPERTY, Integer.toString(defaultPort));

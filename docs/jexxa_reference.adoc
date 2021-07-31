@@ -107,7 +107,7 @@ a|
 URIs for Java objects are generated as follows for all `public` methods:
 
 * http://<hostname>:<port>/<Java's simple class name>/<method name>
-* Example URI: http://localhost:7000/MyApplicationService/myMethod
+* Example URI: http://localhost:7500/MyApplicationService/myMethod
 
 [IMPORTANT]
 .This implies following consequences:

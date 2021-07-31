@@ -75,7 +75,7 @@ class MultipleRESTClientsIT
         while ( applicationService.getCounter() < MAX_COUNTER )
         {
             //Act
-            var restPath = "http://localhost:7000/IncrementApplicationService/";
+            var restPath = "http://localhost:7500/IncrementApplicationService/";
             var response = Unirest.post(restPath + METHOD_GET_SIMPLE_VALUE)
                     .header(CONTENT_TYPE, APPLICATION_TYPE)
                     .asJson();

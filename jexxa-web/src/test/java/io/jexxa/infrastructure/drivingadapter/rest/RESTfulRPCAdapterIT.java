@@ -36,8 +36,8 @@ class RESTfulRPCAdapterIT
 {
     private static final String METHOD_GET_SIMPLE_VALUE = "getSimpleValue";
 
-    private static final String REST_PATH = "http://localhost:7000/SimpleApplicationService/";
-    private static final String STATIC_TEST_PAGE = "http://localhost:7000/index.html";
+    private static final String REST_PATH = "http://localhost:7500/SimpleApplicationService/";
+    private static final String STATIC_TEST_PAGE = "http://localhost:7500/index.html";
 
 
     private static final int DEFAULT_VALUE = 42;
@@ -53,7 +53,7 @@ class RESTfulRPCAdapterIT
 
         var properties = new Properties();
         var defaultHost = "localhost";
-        var defaultPort = 7000;
+        var defaultPort = 7500;
 
         properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
         properties.put(HTTP_PORT_PROPERTY, Integer.toString(defaultPort));

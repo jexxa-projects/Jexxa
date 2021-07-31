@@ -41,8 +41,8 @@ public final class HelloJexxa
                 .bind(RESTfulRPCAdapter.class).to(HelloJexxa.class)
 
                 //Start Jexxa and all bindings
-                // - Open following URL in browser to get greetings: http://localhost:7000/HelloJexxa/greetings
-                // - You can also use curl: `curl -X GET http://localhost:7000/HelloJexxa/greetings`
+                // - Open following URL in browser to get greetings: http://localhost:7500/HelloJexxa/greetings
+                // - You can also use curl: `curl -X GET http://localhost:7500/HelloJexxa/greetings`
                 .start()
 
                 //Wait until shutdown is called by one of the following options:
@@ -66,7 +66,7 @@ You will see following (or similar) output
 [main] INFO io.jexxa.core.JexxaMain - Start BoundedContext 'HelloJexxa' with 2 Driving Adapter 
 [main] INFO org.eclipse.jetty.util.log - Logging initialized @446ms to org.eclipse.jetty.util.log.Slf4jLog
 [main] INFO io.javalin.Javalin - Starting Javalin ...
-[main] INFO io.javalin.Javalin - Listening on http://localhost:7000/
+[main] INFO io.javalin.Javalin - Listening on http://localhost:7500/
 [main] INFO io.javalin.Javalin - Javalin started in 194ms \o/
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'HelloJexxa' successfully started in 0.549 seconds
 ```
@@ -75,7 +75,7 @@ You will see following (or similar) output
 
 ### Using a web browser ###
 *   Get name of the bounded context:
-    *   URL: http://localhost:7000/HelloJexxa/greetings
+    *   URL: http://localhost:7500/HelloJexxa/greetings
     *   Result: 
     ```Json 
         Hello Jexxa 
@@ -89,7 +89,7 @@ The most interesting one here is `io.jexxa.rest.port` that allows to define the 
 #Settings for RESTfulRPCAdapter
 #Note: Setting host to 0.0.0.0 starts listening on all network devices 
 io.jexxa.rest.host=0.0.0.0
-io.jexxa.rest.port=7000
+io.jexxa.rest.port=7500
 ```
 
 ### Access provided web pages ###
@@ -104,7 +104,7 @@ Note: This directory is relative to the class path of the application. From a we
 
 This tutorial provides a simple web page which performs the previous `GET`. The html page itself can be found [here](src/main/resources/public/index.html).
 
-The web page can be accessed via following link [http://localhost:7000/index.html](http://localhost:7000/index.html) and looks as follows: 
+The web page can be accessed via following link [http://localhost:7500/index.html](http://localhost:7500/index.html) and looks as follows: 
 
 ![Webpage](images/Webpage.jpg)
     

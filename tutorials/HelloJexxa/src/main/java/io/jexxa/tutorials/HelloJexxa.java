@@ -18,16 +18,16 @@ public final class HelloJexxa
         var jexxaMain = new JexxaMain("HelloJexxa");
 
         jexxaMain
-                // Bind a JMX adapter to our BoundedContext object.
-                // It allows to access the public methods of the object via `jconsole`
+                // Bind a JMX adapter to our to Jexxa's BoundedContext object.
+                // It allows to access and control the running application via `jconsole`
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
 
                 // Bind a REST adapter to a HelloJexxa object
                 .bind(RESTfulRPCAdapter.class).to(HelloJexxa.class)
 
                 //Start Jexxa and all bindings
-                // - Open following URL in browser to get greetings: http://localhost:7000/HelloJexxa/greetings
-                // - You can also use curl: `curl -X GET http://localhost:7000/HelloJexxa/greetings`
+                // - Open following URL in browser to get greetings: http://localhost:7500/HelloJexxa/greetings
+                // - You can also use curl: `curl -X GET http://localhost:7500/HelloJexxa/greetings`
                 .start()
 
                 //Wait until shutdown is called by one of the following options:

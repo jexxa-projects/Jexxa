@@ -156,9 +156,9 @@ You will see following (or similar) output
 [main] INFO io.jexxa.tutorials.bookstorej16.BookStoreJ16Application - Use messaging strategy: MessageLogger 
 [main] INFO org.eclipse.jetty.util.log - Logging initialized @429ms to org.eclipse.jetty.util.log.Slf4jLog
 
-[main] INFO io.javalin.Javalin - Listening on http://0.0.0.0:7000/
+[main] INFO io.javalin.Javalin - Listening on http://0.0.0.0:7500/
 [main] INFO io.javalin.Javalin - Javalin started in 92ms \o/
-[main] INFO io.javalin.Javalin - OpenAPI documentation available at: http://0.0.0.0:7000/swagger-docs
+[main] INFO io.javalin.Javalin - OpenAPI documentation available at: http://0.0.0.0:7500/swagger-docs
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'BookStoreJ16Application' successfully started in 0.754 seconds
 
 ```          
@@ -189,7 +189,7 @@ Note: In case you want to use a difference database, you have to:
 
 Command: 
 ```Console
-curl -X GET  http://localhost:7000/BookStoreService/getBooks
+curl -X GET  http://localhost:7500/BookStoreService/getBooks
 ```
 
 Response: 
@@ -203,7 +203,7 @@ Command:
 ```Console
 curl -X POST -H "Content-Type: application/json" \
     -d '"978-1-891830-85-3"' \
-    http://localhost:7000/BookStoreService/inStock                 
+    http://localhost:7500/BookStoreService/inStock                 
 ```
 
 Response: 
@@ -217,7 +217,7 @@ Command:
 ```Console
 curl -X POST -H "Content-Type: application/json" \
     -d '["978-1-891830-85-3", 5]' \
-    http://localhost:7000/BookStoreService/addToStock                 
+    http://localhost:7500/BookStoreService/addToStock                 
 ```
 Response: No output  
 ```Console
@@ -229,7 +229,7 @@ Command:
 ```Console
 curl -X POST -H "Content-Type: application/json" \
     -d '"978-1-891830-85-3"' \
-    http://localhost:7000/BookStoreService/inStock                 
+    http://localhost:7500/BookStoreService/inStock                 
 ```
 
 Response: 

@@ -27,6 +27,7 @@ class BoundedContextTest
         //Arrange
         var thread = new Thread(this::waitForShutDown);
         thread.start();
+        objectUnderTest = jexxaMain.getBoundedContext();
 
         await().atMost(1, TimeUnit.SECONDS).until(() -> (objectUnderTest != null && objectUnderTest.isRunning()));
 
@@ -37,7 +38,6 @@ class BoundedContextTest
 
     void waitForShutDown()
     {
-        objectUnderTest = jexxaMain.start();
-        objectUnderTest.waitForShutdown();
+        jexxaMain.start().waitForShutdown();
     }
 }

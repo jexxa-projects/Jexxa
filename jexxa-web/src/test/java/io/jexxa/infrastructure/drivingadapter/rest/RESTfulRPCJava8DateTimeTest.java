@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 class RESTfulRPCJava8DateTimeTest
 {
-    private static final String REST_PATH = "http://localhost:7000/Java8DateTimeApplicationService/";
+    private static final String REST_PATH = "http://localhost:7500/Java8DateTimeApplicationService/";
 
     private final Java8DateTimeApplicationService java8DateTimeApplicationService = new Java8DateTimeApplicationService();
 
@@ -37,7 +37,7 @@ class RESTfulRPCJava8DateTimeTest
         //Setup
         var properties = new Properties();
         var defaultHost = "localhost";
-        var defaultPort = 7000;
+        var defaultPort = 7500;
 
         properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
         properties.put(HTTP_PORT_PROPERTY, Integer.toString(defaultPort));
