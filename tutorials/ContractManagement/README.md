@@ -1,92 +1,87 @@
-# Domain Event vs. Event Sourcing
+# Contract Management 
 
-https://www.innoq.com/en/blog/domain-events-versus-event-sourcing/
+## What You Learn
 
-# Production systems
+*   When to use Jexxa's Repository or ObjectStore
+*   How to use Jexxa's ObjectStore
 
-reference https://www.britannica.com/technology/production-system
+## What you need
 
-There are three common types of basic production systems: 
-*   The batch system:
-    In a batch system, general-purpose equipment and methods are used to produce small quantities of output (goods or services) with specifications that could vary greatly from one batch to the next. Examples include systems for producing specialized machine tools or heavy-duty construction equipment, specialty chemicals, and processed food products
-    
-*   The continuous system:
-    In the continuous system, items to be processed flow through a series of steps, that are common to most other products being processed. Since large volumes of throughput are expected, specially designed equipment and methods are often used so that lower production costs can be achieved. Examples include systems for assembling automobile engines and automobiles themselves, as well as other consumer products such as televisions, washing machines, and personal computers. Therefore, continuous production systems are often referred to as assembly systems or assembly line systems and, as noted below, are common in mass production operations.
-    
-*   The project system:
-    The third type of production system is the project, or “one-shot” system. For a single, one-of-a-kind product, for example, a building, a ship, or the prototype of a product such as an airplane. Because of the singular nature of project systems, special methods of management have been developed to contain the costs of production within reasonable levels.
-    
-Note, that batch and continues systems are often found in combination. 
+*   Understand tutorial `BookStoreJ` because we explain only new aspects
+*   30 minutes
+*   JDK 11 (or higher) installed
+*   Maven 3.6 (or higher) installed
+*   curl or jconsole to trigger the application
+*   A postgres DB (if you start the application with option `-jdbc')
 
-## Batch Process / Production
+## Motivation 
 
-reference: https://de.wikipedia.org/wiki/Chargenprozess 
-In the manufacturing batch production process, the machines are in chronological order directly related to the manufacturing process. The batch production method is also used so any temporary changes or modifications can be made to the product if necessary during the manufacturing process.[3] For example, if a product needed a sudden change in material or details changed, it can be done in between batches. A
+When developing an enterprise application you should focus on how the business domain and how to represent
+it within your application. Technical aspects such as the database schema should be hidden as good as possible. 
+Within Jexxa we try to support this by providing strategies for implementing a Repository.   
 
-Batch production process: A production process that results in the production of defined quantities of material by subjecting quantities of materials to be used are subjected to an orderly sequence of process activities using one or more pieces of manufacturing equipment within a delineated time period. 
+### When to choose `IRepository`  
 
-In terms of DDD the most important aspects are:
-*   Defined quantities of materials to be used 
-*   Using one or more pieces of manufacturing equipment
-*   Within a defined period of time
-*   An ordered sequence of process activities.
+The `IRepository` interface is very limited regarding querying a managed object. Either you query an object by its unique key, or you request all 
+objects. If you want to offer advanced querying mechanisms, you have to implement them by yourself based on querying all objects. Even though this 
+sounds very limiting choosing an `IRepository` for your object should be your first choice. Especially during development phase of a new application or
+bounded context, it gives you the time to learn which query interface you really need from the applications point of view. 
 
+In general, you should use an `IRepository` in following scenarios: 
 
-When modeling a software using DDD, you will end up in a setup that is most likely in the following way. 
+* You query the managed objects only be their unique key.
+* In case you need more advanced query operations, the lifetime of the managed objects is short, so that the amount of managed objects is relatively small.
 
-*   Manufacturing equipment is modelled as an DDD-Aggregate and typically grouped into aggregates that can be grouped into one or multiple DDD-contexts
+Especially the second case happens quite often in production systems, especially in batch systems. Here, it is quite common that software controlling 
+a specific manufacturing unit requires only to know the batches that are currently processed. As soon as the processing step is finished, a corresponding 
+`DomainEvent` is published and the software object can be removed from the repository.         
+                                                                                      
+Please do not underestimate this aspect because it supports you separating your production data from your archive data.  
 
-*   Within a defined period of time: In general this means that the used equipment which is represented by DDD-aggregates is used for producing the production batch. So the relation between the production batch and the equipment is limited for a defined period of time. In addition, there is in general no relation between a production batch and the predecessor or succeeding batch. 
+### When to choose `IObjectStore`
+                               
+The `IObjectStore` provides more sophisticated interfaces to query managed objects by all kind of data. Available strategies make explicit use
+of optimization mechanism of the underlying technology so that the performance depends on chosen technology stack. This kind of repository should 
+be your second choice. As soon as you see that an `IRepository` is not sufficient, you should switch the implementation of the driven adapter to an 
+`IObjectStore`. Please note that this step should be transparent to your application core because it uses a single interface which is not affected. 
+Only the underlying strategy is changed.   
 
-*   The end of a specific process activity is in general an important event within the domain.  
-    *   This it is modeled as Domainevent
-    *   It potentially starts the next processing step
+In general, you should use an `IObjectStore` in following scenarios:
 
-*   So a modelling approach using events-sourcing might only be recommended if there is strong auditing, especially if all incoming state transitions must be captured. If it is 'only' required to record the used material together with some using Domain Events is sufficient. 
-In case you are not sure which approach to be used in your context you should start with DomainEvents because event sourcing introduces additional complexity. You should really be sure that and why you need it. 
+* You need several ways to request managed objects and
+* the lifetime of the managed objects is high, so that the amount of managed objects will continuously increase.
+* The metadata to find objects is fixed and will not change over time.
 
+At first thought, the last requirement sounds like a severe restriction. Especially this kind of change typically happens some time after the 
+software is in production. But please keep in mind that your application core is protected by your application specific interface. So changing the 
+implementation will not affect the application core itself. In addition, you have a lot of knowledge based from production and change requests which 
+underlying technology or database stack should be used. Now it is the right point in time to switch to a specific implementation without using a 
+specific strategy or to provide your own strategy using technologies such as liquibase for versioning your database schema.    
 
-*   Important: The process is linear. It is most unlikely that you can undo a specific production step. So in contrast to financial or insurance sector you typically do not have any transaction within the business domain. A failure in one production step typically leads to a some other production step(s) or to discard a specific production batch. 
+Typical use cases to select an `IObjectStore` are:
+* An archive of the domain events.
+* A bounded context managing objects with a very long lifetime such as contracts.
 
-### Archive
+### Strategies for `IRepository` and `IObjectStore`
 
-Vorab:
+At the moment, Jexxa provides driven adapter strategies for in memory storage and JDBC. To query an `IRegistry` or `IObjectStore` you use the
+`RegistryManager` or `ObjectStoreManager` respectively. A significant advantage of using these strategies is to write tests against your 
+Repository without the need of a database. This typically speed up your tests significantly.   
 
-Aus meiner Sicht ergeben sich aktuell 2(-3) Arten von DDD-Repositories für neue Anwendungen aufbauend auf Jexxa (Anbindung an Bestands-DBs sind in den folgenden Überlegungen erstmal ausgeschlossen)
-1.  Repositories für Produktionsdaten => Ziel: Anwendungszustand kann nach Neustart der Anwendung rekonstruiert werden. (Kann aber prinzipiell bei einer Putzschicht komplett gelöscht werden. ) Daten sind nur innerhalb des Micro-Services relevant.
-2.  Repositories Produktionsarchiv: Ziel: Persistiert die abgeschlossenen Geschäftsereignisse(Domain-Events): Leitet evtl. auch aus der Summe von mehreren DE-Events neue ab (z.B. RE-Charge produziert). Informationen werden von Berichtswesen und nachfolgenden Prozessschritten verwendet. Diese Daten sind kritisch und können so ohne weiteres nicht gelöscht werden ... => Ist hauptsächlich nur außerhalb des eigenen Kontextes relevant.
-3.  Evtl:Repositories für Rohdaten erfassen von L1. Man weiß nicht ob man die Daten irgendwann nochmal braucht und hebt sie deswegen auf. Unklar, ob dies überhaupt ein 'DDD-Repository' ist...
+By default, both manager classes select a strategy depending on your application configuration and the `Property` object passed to Jexxa as follows: 
 
-• Die jeweilige Art des Repositories sollte auch in der Software erkennbar sein.
-• Zu 1. Sollte ein Key-Value Repository ausreichend sein.
-• Zu 2. Ist momentan so nicht unterstützt.
-• Zu 3. Haben wir meines Wissens beim RE-Projekt nicht gebraucht. Evtl. reicht dann aber auch ein einfacher Key-Value Store, da man sowieso nicht weiß welche Daten irgendwann mal relevant werden.
+1. Check if the application defined a strategy for a specific object type is registered.
+2. Check if the application defined a default strategy for all kind of objects. 
+3. Check if the `Property` object defines a JDBC driver. In this case the `JDBCKeyValueRepository` or `JDBCObjectStore` is used.
+4. Otherwise, an in memory strategy `IMDBKeyValueRepository` or `IMDBObjectStore` is used. 
 
-• Annahmen zu Repositories für Produktionsarchiv
-• Bei einem Produktionsarchiv reicht eine einfache Key-Value Suche nicht aus, da wir z.B. auch über Teilinformationen suchen müssen (z.B. Zeitraum) => Suche nur über bei Projektumsetzung bekannte Use-Cases zur Produktionsunterstütztung (z.B. Berichtswesen)
-• Erfasste Produktionsdaten sind recht 'generisch' d.h. wir kennen den Aufbau der/aller DomainEvents nicht komplett. Wir kennen nur die Such-Parameter wie Z.b. RE-Chargennummer, Zeitstempel,... => Eine Objekt-Notation wie z.B. JSON ist erforderlich ist.
-• Such-Keys für Produktionsunterstützung sind meiner Einschätzung nach bei der Implementierung bekannt. Änderungen für Produktionsunterstützung sind in der Zukunft eher selten. Wenn, dann ist es Fachlogik für die wohl auch ein neues Aggregate erforderlich ist (z.B. es muss ab sofort irgendetwas neues quittiert werden)
-• Such-Keys auf echten Archiv-Daten kommt eher aus Forschung => Diese User-Cases werden nur insofern berücksichtigt, dass sie die JSON-Repräsentation abfragen können. Auswertungen müssen dann selbst gemacht werden
-• TI-Entwickler kennt sich momentan (nur) mit klassischen Features relationaler Datenbanken aus. => Erste Implementierung mit klassischen JDBC und nicht mit JSON-Features der relationalen DBs.
+## Example ContractManagement
 
-Meine (Haupt-)Motivation des MultiIndexRepository:
+This tutorial defines following requirements: 
+* `IContractRepository`: Manage contracts with a very high lifetime and must be searched by different metadata.  
+* `IDomainEventStore`: Archive all domain events that must be searched by different metadata.    
 
-• Explizite Repräsentation dieser Art von Repositories durch Repository-Typ/Namen, um Divide & Conquer der Daten zu ermöglichen und zu unterstützen. Nur diese Daten sollten außerhalb ihres Kontextes relevant sein und angeboten werden.
-• Einführen einer API welche die zum Zeitpunkt der Entwicklung bekannten Use-Cases unterstützt so dass sie
-• Von einem 'Junior' Entwickler verwendbar ist
-• Falsche Verwendung gerade der Such-Parameter bei einem Review einfach erkennbar macht (Bsp.: Ich speichere mein Objekt als Json + alle Felder des Objekts auch noch in separaten Spalten um sicher zu sein...)
-• Mindset für Black-Box Tests unterstützen. (Wenn ich sowieso schon mit JDBC direkt auf die DB gehe, MUSS ich mir ja auch in meinen Tests meinen Datenhaushalt manuell in der DB erstellen, oder Mock verwenden, oder ....)
-• Abgrenzung: Zukünftige Use-Cases die nicht direkt produktionskritisch/unterstützend sind werden nur insofern berücksichtigt, dass man die JSON-Notation (wie auch immer) zugänglich machen kann.
+Based on the requirements, both interface should be implemented using an `IObjectStore`.
 
-Daher bräuchte ich nochmal Rückmeldung von euch zu folgenden Punkten:
-
-• Sind die Annahmen zu Repositories nachvollziehbar und passend?
-• Wie oft kam es in der Vergangenheit bei Phoenix vor, dass Tabellen um weitere Spalten erweitert werden mussten, um produktionsunterstützende Abläufe umzusetzen? Wenn ja, welche? (Hier interessieren mich nicht Erweiterungen, die erforderlich waren damit neue Kontexte Daten reinschreiben konnten)
-
-• Zur API: Im Anhang findet Ihr die initiale Version der Repository-Implementierung (JdbcProzessAbweichungRepository), sowie die 'optimierte' Version. Hierbei wäre folgendes wichtig:
-• Versteht man die neue Implementierung 'besser' / einfacher
-• Ist der Ansatz mit den Such-Strategien über Enums nachvollziehbar und für Reviews gut geeignet bzw. ausreichend explizit ?
-• Ein Beispiel mit mehreren Strategien findet ihr unter
-• https://github.com/repplix/Jexxa/blob/2.7.0-SNAPSHOT/jexxa-core/src/test/java/io/jexxa/infrastructure/drivenadapterstrategy/persistence/jdbc/experimental/MultiIndexRepositoryTest.java
-• Falls euch die Implementierung interessiert: https://github.com/repplix/Jexxa/tree/2.7.0-SNAPSHOT/jexxa-core/src/main/java/io/jexxa/infrastructure/drivenadapterstrategy/persistence/jdbc/experimental
+                                                                                        
 

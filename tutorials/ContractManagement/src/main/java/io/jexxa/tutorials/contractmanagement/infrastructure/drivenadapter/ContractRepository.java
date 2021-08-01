@@ -20,6 +20,14 @@ import io.jexxa.tutorials.contractmanagement.domainservice.IContractRepository;
 @SuppressWarnings("unused")
 public class ContractRepository  implements IContractRepository
 {
+    /**
+     * Here we define the values to query contracts. Apart from their key, elements should be queried by following information: <br>
+     * <ol>
+     *    <li>Contract number</li>
+     *    <li>Contract signed flag</li>
+     *    <li>Advisor of the contract</li>
+     * </ol>
+     */
     enum ContractMetadata implements MetadataComparator
     {
         CONTRACT_NUMBER(Comparators.numberComparator(element -> element.getContractNumber().getValue())),

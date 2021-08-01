@@ -14,10 +14,6 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-/**
- * Hello world!
- *
- */
 public class ContractManagementApplication
 {
     //Declare the packages that should be used by Jexxa
@@ -26,7 +22,7 @@ public class ContractManagementApplication
 
     public static void main(String[] args)
     {
-        // Define the default strategies.
+        // Define the default strategies via command line.
         // In this tutorial we use an ObjectStore which is either an IMDB database or a JDBC based repository.
         ObjectStoreManager.setDefaultStrategy(getRepositoryStrategy(args));
 
@@ -83,7 +79,6 @@ public class ContractManagementApplication
         }
         return false;
     }
-
 
 
     private ContractManagementApplication()

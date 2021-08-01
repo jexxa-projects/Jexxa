@@ -18,30 +18,25 @@ import io.jexxa.tutorials.contractmanagement.domainservice.IDomainEventStore;
 @SuppressWarnings("unused")
 public class DomainEventStore implements IDomainEventStore
 {
-
     /**
-     * In this Schema we define the values that we use to query DomainEvents
-     *
-     * Conventions for JDBC databases:
-     * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
-     * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
+     * Here we define the values to query DomainEvents. The domain events should be queried by following information:
+     * <ol>
+     *  <li>Contract number</li>
+     *  <li>Date of the signature</li>
+     * </ol>
      */
     public enum DomainEventMetadata implements MetadataComparator
     {
         CONTRACT_NUMBER(numberComparator((domainEvent -> domainEvent.getContractNumber().getValue())) ),
-
         SIGNATURE_DATE(instantComparator(ContractSigned::getSignatureDate));
 
+        // The following code is always the same and required to use by the ObjectStore
         private final Comparator<ContractSigned, ?, ? > comparator;
-
         DomainEventMetadata(Comparator<ContractSigned,?, ?> comparator)
         {
             this.comparator = comparator;
         }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public Comparator<ContractSigned, ?, ?> getComparator()
+        @Override @SuppressWarnings("unchecked") public Comparator<ContractSigned, ?, ?> getComparator()
         {
             return comparator;
         }
