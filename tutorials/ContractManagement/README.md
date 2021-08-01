@@ -83,5 +83,79 @@ This tutorial defines following requirements:
 
 Based on the requirements, both interface should be implemented using an `IObjectStore`.
 
-                                                                                        
+### Implementing `IContractRepositroy`                                                                                        
 
+### Implementing `IDomainEventStore`                                                                                        
+
+
+## Run the application
+
+### Use an in memory database
+
+```console                                                          
+mvn clean install
+java -jar target/contractmanagement-jar-with-dependencies.jar 
+```
+You will see following (or similar) output
+```console
+main] INFO io.jexxa.tutorials.contractmanagement.ContractManagementApplication - Use persistence strategy: IMDBObjectStore 
+[main] INFO org.eclipse.jetty.util.log - Logging initialized @375ms to org.eclipse.jetty.util.log.Slf4jLog
+[main] INFO io.jexxa.core.JexxaMain - Jexxa-Core 3.1.0-SNAPSHOT; built: 2021-07-31 15:50; git: scm:git:https://github.com/repplix/Jexxa.git/jexxa-core;
+
+[main] INFO io.javalin.Javalin - Javalin started in 166ms \o/
+[main] INFO io.javalin.Javalin - OpenAPI documentation available at: http://0.0.0.0:7001/swagger-docs
+[main] INFO io.jexxa.core.JexxaMain - BoundedContext 'ContractManagementApplication' successfully started in 1.543 seconds
+
+```          
+
+### Use a Postgres database
+
+You can run this application using a Postgres database because the corresponding driver is included in the pom file. The
+configured username and password is `admin`/`admin`. You can change it in the [jexxa-application.properties](src/main/resources/jexxa-application.properties)
+file if required.
+
+```console                                                          
+mvn clean install
+java -jar target/contractmanagement-jar-with-dependencies.jar  -jdbc 
+```
+In contrast to the above output Jexxa will state that you use JDBC persistence strategy now:
+```console
+[main] INFO io.jexxa.tutorials.contractmanagement.ContractManagementApplication - Use persistence strategy: JDBCObjectStore 
+```
+
+Note: In case you want to use a difference database, you have to:
+
+1.  Add the corresponding jdbc driver to [pom.xml](pom.xml) to dependencies section.
+2.  Adjust the section `#Settings for JDBCConnection to postgres DB` in [jexxa-application.properties](src/main/resources/jexxa-application.properties).
+
+### Execute some commands using curl
+
+#### Create a new contract which is managed by Paul 
+
+Command:
+```Console
+curl -X POST -H "Content-Type: application/json" \
+    -d '"Paul"' \
+    http://localhost:7500/ContractService/createNewContract                 
+```
+
+Response: The number of the contract
+```Console
+{"value":1}
+```
+
+Note: This command can be repeated several times to create more contracts 
+
+#### Query for a specific advisor 
+
+Command:
+```Console
+curl -X POST -H "Content-Type: application/json" \
+    -d '"Paul"' \
+    http://localhost:7500/ContractService/getContractsByAdvisor                 
+```
+Response: The contract numbers of all contracts managed by Paul. Note that we called previous method 9 times.  
+```Console
+[{"value":1},{"value":2},{"value":4},{"value":5},{"value":6},{"value":7},{"value":3},{"value":8},{"value":9}]
+
+```
