@@ -103,7 +103,7 @@ main] INFO io.jexxa.tutorials.contractmanagement.ContractManagementApplication -
 [main] INFO io.jexxa.core.JexxaMain - Jexxa-Core 3.1.0-SNAPSHOT; built: 2021-07-31 15:50; git: scm:git:https://github.com/repplix/Jexxa.git/jexxa-core;
 
 [main] INFO io.javalin.Javalin - Javalin started in 166ms \o/
-[main] INFO io.javalin.Javalin - OpenAPI documentation available at: http://0.0.0.0:7001/swagger-docs
+[main] INFO io.javalin.Javalin - OpenAPI documentation available at: http://0.0.0.0:7500/swagger-docs
 [main] INFO io.jexxa.core.JexxaMain - BoundedContext 'ContractManagementApplication' successfully started in 1.543 seconds
 
 ```          
