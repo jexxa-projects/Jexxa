@@ -50,7 +50,7 @@ In general, you should use an `IObjectStore` in following scenarios:
 
 * You need several ways to request managed objects and
 * the lifetime of the managed objects is high, so that the amount of managed objects will continuously increase.
-* The metadata to find objects is fixed and will not change over time.
+* The metadata to find objects is fixed and will not change over time. In addition, the order of defined metadata must not be changed. 
 
 At first thought, the last requirement sounds like a severe restriction. Especially this kind of change typically happens some time after the 
 software is in production. But please keep in mind that your application core is protected by your application specific interface. So changing the 
@@ -83,11 +83,109 @@ This tutorial defines following requirements:
 
 Based on the requirements, both interface should be implemented using an `IObjectStore`.
 
-### Implementing `IContractRepositroy`                                                                                        
+### Implementing `IContractRepositroy`
 
-### Implementing `IDomainEventStore`                                                                                        
+Using an ObjectStore is quite similar to a Repository. The main difference is in defining the metadata used to query objects. To ensure type safety, Jexxa requires that all metadata is defined as enum together with a `Comparator` used for comparing the value. In the following example, we define the three different values to query objects. Please note that the following code belongs to the infrastructure of your application which means that your application just sees the `IContractRepository`:
 
+```java
+public class ContractRepository  implements IContractRepository
+{
+    enum ContractMetadata implements MetadataComparator
+    {
+        // This enum represents the contract number. To compare this value, we use numberComparator. 
+        // As most predefined comparators, it just requires an accessor function to get the value from 
+        // the managed object.
+        CONTRACT_NUMBER(Comparators.numberComparator(element -> element.getContractNumber().getValue())),
+    
+        // This enum represents a boolean to query if a contract is signed or not. Here, we use 
+        // booleanComparator together with the corresponding accessor function.
+        CONTRACT_SIGNED(Comparators.booleanComparator(Contract::isSigned)),
 
+        // Finally, define an enum to query contracts by current advisor. Just like before, we define a 
+        // String comparator together with the accessor function. 
+        ADVISOR(Comparators.stringComparator(Contract::getAdvisor));
+
+        // The following code is always the same and required to implement the MetadataComparator interface.
+        private final Comparator<Contract, ?, ? > comparator;
+        
+        ContractMetadata(Comparator<Contract,?, ?> comparator)
+        {
+            this.comparator = comparator;
+        }
+        @Override
+        @SuppressWarnings("unchecked")
+        public Comparator<Contract, ?, ?> getComparator()
+        {
+            return comparator;
+        }
+    }
+    // ...
+}
+```
+
+After defining the metadata, we can implement the interface.
+
+```java
+public class ContractRepository  implements IContractRepository
+{
+    // ...
+
+    private final IObjectStore<Contract, ContractNumber, ContractMetadata> objectStore;
+
+    public ContractRepository(Properties properties)
+    {
+        // To request an ObjectStore strategy we need to pass following information to the manager: 
+        // 1. Type information of the managed object
+        // 2. Method to get the unique key
+        // 3. The previous defined metadata
+        // 4. Finally, the application specific Property file 
+        this.objectStore = ObjectStoreManager.getObjectStore(
+                Contract.class, 
+                Contract::getContractNumber, 
+                ContractMetadata.class, 
+                properties);
+    }
+
+    // We skip the implementation of the IRepository methods here and focus on the methods
+    // using the extension in IObjectStore.
+    // ...
+
+    // Implementing the specific query methods is straight forward.     
+    @Override
+    public List<Contract> getByAdvisor(String advisor)
+    {
+        return objectStore
+                .getStringQuery(ADVISOR, String.class)
+                .isEqualTo(advisor);
+    }
+    
+    @Override
+    public List<Contract> getSignedContracts()
+    {
+        return objectStore
+                .getNumericQuery(CONTRACT_SIGNED, Boolean.class)
+                .isEqualTo(true);
+    }
+
+    @Override
+    public List<Contract> getUnsignedContracts()
+    {
+        return objectStore
+                .getNumericQuery(CONTRACT_SIGNED, Boolean.class)
+                .isEqualTo(false);
+    }
+
+    @Override
+    public Optional<Contract> getHighestContractNumber()
+    {
+        return objectStore
+                .getNumericQuery(CONTRACT_NUMBER, Integer.class)
+                .getDescending(1)
+                .stream()
+                .findFirst();
+    }
+}
+```
 ## Run the application
 
 ### Use an in memory database
