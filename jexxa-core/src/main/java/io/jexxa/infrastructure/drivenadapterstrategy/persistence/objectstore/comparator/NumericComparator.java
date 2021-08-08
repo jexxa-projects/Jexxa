@@ -1,6 +1,5 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator;
 
-import java.math.BigDecimal;
 import java.util.function.Function;
 
 /**
@@ -31,13 +30,5 @@ public class NumericComparator<T, S>  extends Comparator<T, S, Number>
         return Number.class;
     }
 
-    @Override
-    protected int typeSpecificCompareTo(Number value1, Number value2)
-    {
-        //Handle both != null
-        var aggregateValue1BD = new BigDecimal( value1.toString() );
-        var aggregateValue2BD = new BigDecimal( value2.toString() );
-        return aggregateValue1BD.compareTo(aggregateValue2BD);
-    }
 }
 

@@ -119,7 +119,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .sorted(stringComparator::compareToAggregate)
+                .sorted(this::compareToAggregate)
                 .collect(Collectors.toList());
     }
 
@@ -129,7 +129,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .sorted((element1, element2) -> stringComparator.compareToAggregate(element2, element1))
+                .sorted((element1, element2) -> compareToAggregate(element2, element1))
                 .limit(amount)
                 .collect(Collectors.toList());
     }
@@ -140,7 +140,43 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return getOwnAggregateMap()
                 .values()
                 .stream()
-                .sorted((element1, element2) -> stringComparator.compareToAggregate(element2, element1))
+                .sorted((element1, element2) -> compareToAggregate(element2, element1))
                 .collect(Collectors.toList());
+    }
+
+    protected int typeSpecificCompareTo(String value1, String value2)
+    {
+        return value1.compareTo(value2);
+    }
+
+    /**
+     * Compares the value of the two aggregates which each other
+     *
+     * @param aggregate1 first aggregate
+     * @param aggregate2 second aggregate
+     * @return 0 If the value of aggregate1 is equal to value aggregate2 <br>
+     *     -1 if value of aggregate1 &lt; value of aggregate2 <br>
+     *     1 if value of aggregate1 &gt; value of aggregate2 <br>
+     */
+    private int compareToAggregate(T aggregate1, T aggregate2)
+    {
+        Objects.requireNonNull(aggregate1);
+        Objects.requireNonNull(aggregate2);
+
+        var aggregateValue1 = stringComparator.convertAggregate(aggregate1);
+        var aggregateValue2 = stringComparator.convertAggregate(aggregate2);
+
+        if ( aggregateValue1 == null && aggregateValue2 == null)
+        {
+            return 0;
+        } else if ( aggregateValue1 == null)
+        {
+            return 1;
+        } else if ( aggregateValue2 == null)
+        {
+            return 1;
+        }
+
+        return typeSpecificCompareTo( aggregateValue1, aggregateValue2);
     }
 }
