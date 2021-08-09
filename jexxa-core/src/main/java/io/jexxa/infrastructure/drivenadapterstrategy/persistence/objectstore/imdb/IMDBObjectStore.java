@@ -9,11 +9,11 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBReposi
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.NumericTag;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.StringTag;
 
-public class IMDBObjectStore<T, K, M extends Enum<M> & Metadata>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>
+public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataSchema>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>
 {
     private final Set<M> comparatorFunctions;
 
@@ -37,9 +37,9 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & Metadata>  extends IMDBRe
         }
 
         //noinspection unchecked
-        NumericTag<T, S> numberComparator = (NumericTag) metaTag.getMetaTag();
+        NumericTag<T, S> numericTag = (NumericTag) metaTag.getTag();
 
-        return new IMDBNumericQuery<>(getOwnAggregateMap(), numberComparator, queryType);
+        return new IMDBNumericQuery<>(getOwnAggregateMap(), numericTag, queryType);
     }
 
     @Override
@@ -51,9 +51,9 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & Metadata>  extends IMDBRe
         }
 
         //noinspection unchecked
-        StringTag<T, S> stringComparator = (StringTag) metaTag.getMetaTag();
+        StringTag<T, S> stringTag = (StringTag) metaTag.getTag();
 
-        return new IMDBStringQuery<>(getOwnAggregateMap(), stringComparator, queryType);
+        return new IMDBStringQuery<>(getOwnAggregateMap(), stringTag, queryType);
     }
 
 }

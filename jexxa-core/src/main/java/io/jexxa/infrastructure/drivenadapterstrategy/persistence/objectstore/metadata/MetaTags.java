@@ -17,7 +17,7 @@ public class MetaTags
      * @param <V> type of the value
      * @return Comparator wich compares defined value of an aggregate
      */
-    public static <T, V> NumericTag<T, V> numberTag(Function<T, V> accessor, IConverter<V, ? extends Number> converter)
+    public static <T, V> NumericTag<T, V> numberTag(Function<T, V> accessor, Function<V, ? extends Number> converter)
     {
         return new NumericTag<>(accessor, converter);
     }

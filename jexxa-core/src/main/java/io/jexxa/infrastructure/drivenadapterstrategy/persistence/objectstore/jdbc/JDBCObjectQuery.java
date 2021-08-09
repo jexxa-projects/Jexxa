@@ -12,10 +12,10 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnec
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.utils.json.JSONConverter;
 
-class JDBCObjectQuery <T, S, M extends Enum<M> & Metadata>
+class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
 {
     private final Supplier<JDBCConnection> jdbcConnection;
 

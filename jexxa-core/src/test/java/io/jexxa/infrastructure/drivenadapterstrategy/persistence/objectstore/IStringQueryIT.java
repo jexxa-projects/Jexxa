@@ -15,8 +15,7 @@ import java.util.stream.IntStream;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -26,7 +25,7 @@ class IStringQueryIT
     private static final int TEST_DATA_SIZE = 100;
 
     private List<JexxaObject> testData;
-    private IObjectStore<JexxaObject, JexxaValueObject, JexxaObjectMetadata> objectStore;
+    private IObjectStore<JexxaObject, JexxaValueObject, JexxaObjectMetadataSchema> objectStore;
 
     /**
      * Defines the meta data that we use:
@@ -34,9 +33,9 @@ class IStringQueryIT
      * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
      * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
      */
-    private enum JexxaObjectMetadata implements Metadata
+    private enum JexxaObjectMetadataSchema implements MetadataSchema
     {
-        INT_VALUE(MetaTags.numberTag(JexxaObject::getInternalValue)),
+        INT_VALUE(numberTag(JexxaObject::getInternalValue)),
 
         VALUE_OBJECT(numberTag(JexxaObject::getKey, JexxaValueObject::getValue)),
 
@@ -51,14 +50,14 @@ class IStringQueryIT
          */
         private final MetaTag<JexxaObject, ?, ? > metaTag;
 
-        JexxaObjectMetadata(MetaTag<JexxaObject,?, ?> metaTag)
+        JexxaObjectMetadataSchema(MetaTag<JexxaObject,?, ?> metaTag)
         {
             this.metaTag = metaTag;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public MetaTag<JexxaObject, ?, ?> getMetaTag()
+        public MetaTag<JexxaObject, ?, ?> getTag()
         {
             return metaTag;
         }
@@ -87,7 +86,7 @@ class IStringQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getStringQuery( JexxaObjectMetadata.STRING_OBJECT, String.class);
+        var objectUnderTest = objectStore.getStringQuery( JexxaObjectMetadataSchema.STRING_OBJECT, String.class);
 
         //Act
         var beginsWithA = objectUnderTest.beginsWith("A");
@@ -111,7 +110,7 @@ class IStringQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getStringQuery( JexxaObjectMetadata.OPTIONAL_STRING_OBJECT, String.class);
+        var objectUnderTest = objectStore.getStringQuery( JexxaObjectMetadataSchema.OPTIONAL_STRING_OBJECT, String.class);
 
         //Act
         var beginsWithA = objectUnderTest.beginsWith("A");
@@ -140,7 +139,7 @@ class IStringQueryIT
         initObjectStore(properties);
         var limit = 10;
 
-        var objectUnderTest = objectStore.getStringQuery( JexxaObjectMetadata.STRING_OBJECT, String.class);
+        var objectUnderTest = objectStore.getStringQuery( JexxaObjectMetadataSchema.STRING_OBJECT, String.class);
 
         var expectedAscendingOrder = objectStore.get()
                 .stream()
@@ -169,7 +168,7 @@ class IStringQueryIT
         initObjectStore(properties);
         var limit = 10;
 
-        var objectUnderTest = objectStore.getStringQuery( JexxaObjectMetadata.STRING_OBJECT, String.class);
+        var objectUnderTest = objectStore.getStringQuery( JexxaObjectMetadataSchema.STRING_OBJECT, String.class);
 
         var expectedDescendingOrder = objectStore.get()
                 .stream()
@@ -195,7 +194,7 @@ class IStringQueryIT
         if (!properties.isEmpty())
         {
             var jdbcConnection = new JDBCConnection(properties);
-            jdbcConnection.createTableCommand(JexxaObjectMetadata.class)
+            jdbcConnection.createTableCommand(JexxaObjectMetadataSchema.class)
                     .dropTableIfExists(JexxaObject.class)
                     .asIgnore();
         }
@@ -203,7 +202,7 @@ class IStringQueryIT
         objectStore = ObjectStoreManager.getObjectStore(
                 JexxaObject.class,
                 JexxaObject::getKey,
-                JexxaObjectMetadata.class,
+                JexxaObjectMetadataSchema.class,
                 properties);
 
         objectStore.removeAll();

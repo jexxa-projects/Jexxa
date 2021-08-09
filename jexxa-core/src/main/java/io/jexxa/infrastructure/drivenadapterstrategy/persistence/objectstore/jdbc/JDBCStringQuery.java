@@ -9,9 +9,9 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyVal
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
 
-public class JDBCStringQuery <T, S, M extends Enum<M> & Metadata> extends JDBCObjectQuery<T, S, M> implements IStringQuery<T, S>
+public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataSchema> extends JDBCObjectQuery<T, S, M> implements IStringQuery<T, S>
 {
     private final MetaTag<T, S, ? extends String> stringMetaTag;
 
@@ -31,14 +31,14 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & Metadata> extends JDBCOb
 
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
         this.nameOfRow = Objects.requireNonNull(metaTag);
-        this.stringMetaTag = nameOfRow.getMetaTag();
+        this.stringMetaTag = nameOfRow.getTag();
         this.comparatorSchema = Objects.requireNonNull(comparatorSchema);
     }
 
     @Override
     public List<T> beginsWith(S value)
     {
-        var sqlStartValue = stringMetaTag.convertValue(value) + "%";
+        var sqlStartValue = stringMetaTag.getFromValue(value) + "%";
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
@@ -55,7 +55,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & Metadata> extends JDBCOb
     @Override
     public List<T> endsWith(S value)
     {
-        var sqlEndValue = "%" + stringMetaTag.convertValue(value);
+        var sqlEndValue = "%" + stringMetaTag.getFromValue(value);
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
@@ -72,7 +72,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & Metadata> extends JDBCOb
     @Override
     public List<T> includes(S value)
     {
-        var sqlIncludeValue = "%" + stringMetaTag.convertValue(value) + "%";
+        var sqlIncludeValue = "%" + stringMetaTag.getFromValue(value) + "%";
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
@@ -89,7 +89,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & Metadata> extends JDBCOb
     @Override
     public List<T> isEqualTo(S value)
     {
-        var sqlEqualValue = stringMetaTag.convertValue(value) ;
+        var sqlEqualValue = stringMetaTag.getFromValue(value) ;
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
@@ -106,7 +106,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & Metadata> extends JDBCOb
     @Override
     public List<T> notIncludes(S value)
     {
-        var sqlIncludeValue = "%" + stringMetaTag.convertValue(value) + "%";
+        var sqlIncludeValue = "%" + stringMetaTag.getFromValue(value) + "%";
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)

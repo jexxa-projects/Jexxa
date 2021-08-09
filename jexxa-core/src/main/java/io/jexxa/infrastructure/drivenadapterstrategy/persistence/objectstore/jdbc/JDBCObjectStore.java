@@ -19,13 +19,13 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyVal
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
 
 @SuppressWarnings("unused")
-public class JDBCObjectStore<T,K, M extends Enum<M> & Metadata> extends JDBCKeyValueRepository<T, K> implements IObjectStore<T, K, M>
+public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JDBCKeyValueRepository<T, K> implements IObjectStore<T, K, M>
 {
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCObjectStore.class);
 
@@ -62,7 +62,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & Metadata> extends JDBCKeyV
         List<String> keySet = new ArrayList<>();
 
         valueSet.add(getJSONConverter().toJson(aggregate));
-        jdbcSchema.forEach(element -> valueSet.add(element.getMetaTag().convertAggregate(aggregate)) );
+        jdbcSchema.forEach(element -> valueSet.add(element.getTag().getFromAggregate(aggregate)) );
 
         keySet.add(KeyValueSchema.VALUE.name());
         jdbcSchema.forEach(element -> keySet.add(element.name()));
@@ -89,7 +89,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & Metadata> extends JDBCKeyV
         var objectList = new ArrayList<>();
         objectList.add (jsonConverter.toJson(keyFunction.apply(aggregate)));
         objectList.add (jsonConverter.toJson(aggregate));
-        jdbcSchema.forEach(metaTag -> objectList.add(metaTag.getMetaTag().convertAggregate(aggregate)));
+        jdbcSchema.forEach(metaTag -> objectList.add(metaTag.getTag().getFromAggregate(aggregate)));
 
         var command = getConnection()
                 .createCommand(KeyValueSchema.class)
@@ -108,7 +108,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & Metadata> extends JDBCKeyV
             throw new IllegalArgumentException(metaTag.name() + " is not part of the schema -> Cannot provide a numeric query.");
         }
 
-        if ( !Number.class.isAssignableFrom( metaTag.getMetaTag().getValueType()) )
+        if ( !Number.class.isAssignableFrom( metaTag.getTag().getConvertedType()) )
         {
             throw new IllegalArgumentException(metaTag.name() + " does not use a numeric value -> Could not create a numeric query");
         }
@@ -124,7 +124,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & Metadata> extends JDBCKeyV
             throw new IllegalArgumentException(metaTag.name() + " is not part of the schema -> Cannot provide a string query.");
         }
 
-        if ( !String.class.isAssignableFrom( metaTag.getMetaTag().getValueType()) )
+        if ( !String.class.isAssignableFrom( metaTag.getTag().getConvertedType()) )
         {
             throw new IllegalArgumentException(metaTag.name() + " does not use a numeric value -> Could not create a String query");
         }
@@ -147,13 +147,13 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & Metadata> extends JDBCKeyV
 
                 jdbcSchema.forEach(element ->
                 {
-                    if ( Number.class.isAssignableFrom(element.getMetaTag().getValueType()) )
+                    if ( Number.class.isAssignableFrom(element.getTag().getConvertedType()) )
                     {
                         command.addColumn(element, NUMERIC);
-                    } else if (String.class.isAssignableFrom(element.getMetaTag().getValueType())){
+                    } else if (String.class.isAssignableFrom(element.getTag().getConvertedType())){
                         command.addColumn(element, TEXT);
                     } else {
-                        throw new IllegalArgumentException("Unsupported Value type " + element.getMetaTag().getValueType().getName() +
+                        throw new IllegalArgumentException("Unsupported Value type " + element.getTag().getConvertedType().getName() +
                                 ". Supported Value types are subtypes of Number and String. ");
                     }
                 });

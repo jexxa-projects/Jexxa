@@ -9,37 +9,37 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyVal
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
 
-class JDBCNumericQuery<T,S, M extends Enum<M> & Metadata> extends JDBCObjectQuery<T, S, M> implements INumericQuery<T, S>
+class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataSchema> extends JDBCObjectQuery<T, S, M> implements INumericQuery<T, S>
 {
-    private final MetaTag<T, S, ? extends Number> numericMetaTag;
+    private final MetaTag<T, S, ? extends Number> numericTag;
 
     private final Class<T> aggregateClazz;
     private final M nameOfRow;
-    private final Class<M> comparatorSchema;
+    private final Class<M> metaDataSchema;
 
     JDBCNumericQuery(Supplier<JDBCConnection> jdbcConnection,
-                     M metaTag,
+                     M metaData,
                      Class<T> aggregateClazz,
-                     Class<M> comparatorSchema,
+                     Class<M> metaDataSchema,
                      Class<S> queryType)
     {
-        super(jdbcConnection, metaTag, aggregateClazz, comparatorSchema, queryType);
+        super(jdbcConnection, metaData, aggregateClazz, metaDataSchema, queryType);
 
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
-        this.nameOfRow = Objects.requireNonNull(metaTag);
-        this.numericMetaTag = Objects.requireNonNull(metaTag.getMetaTag());
-        this.comparatorSchema = Objects.requireNonNull(comparatorSchema);
+        this.nameOfRow = Objects.requireNonNull(metaData);
+        this.numericTag = Objects.requireNonNull(metaData.getTag());
+        this.metaDataSchema = Objects.requireNonNull(metaDataSchema);
     }
 
     @Override
     public List<T> isGreaterOrEqualThan(S startValue)
     {
-        var sqlStartValue = numericMetaTag.convertValue(startValue);
+        var sqlStartValue = numericTag.getFromValue(startValue);
 
         var jdbcQuery = getConnection()
-                .createQuery(comparatorSchema)
+                .createQuery(metaDataSchema)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
@@ -53,10 +53,10 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & Metadata> extends JDBCObjectQuer
     @Override
     public List<T> isGreaterThan(S value)
     {
-        var sqlStartValue = numericMetaTag.convertValue(value);
+        var sqlStartValue = numericTag.getFromValue(value);
 
         var jdbcQuery = getConnection()
-                .createQuery(comparatorSchema)
+                .createQuery(metaDataSchema)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
@@ -70,11 +70,11 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & Metadata> extends JDBCObjectQuer
     @Override
     public List<T> getRangeClosed(S startValue, S endValue)
     {
-        var sqlStartValue = numericMetaTag.convertValue(startValue);
-        var sqlEndValue = numericMetaTag.convertValue(endValue);
+        var sqlStartValue = numericTag.getFromValue(startValue);
+        var sqlEndValue = numericTag.getFromValue(endValue);
 
         var jdbcQuery = getConnection()
-                .createQuery(comparatorSchema)
+                .createQuery(metaDataSchema)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
@@ -91,11 +91,11 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & Metadata> extends JDBCObjectQuer
     @Override
     public List<T> getRange(S startValue, S endValue)
     {
-        var sqlStartValue = numericMetaTag.convertValue(startValue);
-        var sqlEndValue = numericMetaTag.convertValue(endValue);
+        var sqlStartValue = numericTag.getFromValue(startValue);
+        var sqlEndValue = numericTag.getFromValue(endValue);
 
         var jdbcQuery = getConnection()
-                .createQuery(comparatorSchema)
+                .createQuery(metaDataSchema)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
@@ -112,11 +112,11 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & Metadata> extends JDBCObjectQuer
     @Override
     public List<T> isLessOrEqualThan(S endValue)
     {
-        var sqlEndValue = numericMetaTag.convertValue(endValue);
+        var sqlEndValue = numericTag.getFromValue(endValue);
 
         //"select value from %s where %s <= %s",
         var jdbcQuery = getConnection()
-                .createQuery(comparatorSchema)
+                .createQuery(metaDataSchema)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
@@ -130,11 +130,11 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & Metadata> extends JDBCObjectQuer
     @Override
     public List<T> isLessThan(S endValue)
     {
-        var sqlEndValue = numericMetaTag.convertValue(endValue);
+        var sqlEndValue = numericTag.getFromValue(endValue);
 
         //"select value from %s where %s <= %s",
         var jdbcQuery = getConnection()
-                .createQuery(comparatorSchema)
+                .createQuery(metaDataSchema)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
@@ -148,9 +148,9 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & Metadata> extends JDBCObjectQuer
     @Override
     public List<T> isEqualTo(S value)
     {
-        var sqlValue = numericMetaTag.convertValue(value);
+        var sqlValue = numericTag.getFromValue(value);
         var jdbcQuery = getConnection()
-                .createQuery(comparatorSchema)
+                .createQuery(metaDataSchema)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
@@ -163,9 +163,9 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & Metadata> extends JDBCObjectQuer
     @Override
     public List<T> isNotEqualTo(S value)
     {
-        var sqlValue = numericMetaTag.convertValue(value);
+        var sqlValue = numericTag.getFromValue(value);
         var jdbcQuery = getConnection()
-                .createQuery(comparatorSchema)
+                .createQuery(metaDataSchema)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)

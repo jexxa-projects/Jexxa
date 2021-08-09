@@ -10,7 +10,7 @@ import java.util.Properties;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.tutorials.contractmanagement.domain.domainevent.ContractSigned;
 import io.jexxa.tutorials.contractmanagement.domain.valueobject.ContractNumber;
 import io.jexxa.tutorials.contractmanagement.domainservice.IDomainEventStore;
@@ -25,7 +25,7 @@ public class DomainEventStore implements IDomainEventStore
      *  <li>Date of the signature</li>
      * </ol>
      */
-    public enum DomainEventTags implements Metadata
+    public enum DomainEventTags implements MetadataSchema
     {
         CONTRACT_NUMBER(numberTag((domainEvent -> domainEvent.getContractNumber().getValue())) ),
 
@@ -41,7 +41,7 @@ public class DomainEventStore implements IDomainEventStore
 
         @Override
         @SuppressWarnings("unchecked")
-        public MetaTag<ContractSigned, ?, ?> getMetaTag()
+        public MetaTag<ContractSigned, ?, ?> getTag()
         {
             return metaTag;
         }

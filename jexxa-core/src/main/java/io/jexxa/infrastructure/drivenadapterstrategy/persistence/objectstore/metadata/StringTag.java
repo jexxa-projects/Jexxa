@@ -19,13 +19,13 @@ public class StringTag<T, S>  extends MetaTag<T, S, String>
      * @param valueIConverter defines a function that converts a searched value into a Number for comparison
      */
     StringTag(Function<T, S> valueAccessor,
-              IConverter<S, ? extends String> valueIConverter)
+              Function<S, ? extends String> valueIConverter)
     {
         super(valueAccessor, valueIConverter);
     }
 
     @Override
-    public Class<String> getValueType()
+    public Class<String> getConvertedType()
     {
         return String.class;
     }

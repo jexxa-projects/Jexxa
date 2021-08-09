@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,7 +25,7 @@ class INumericQueryIT
     private static final int TEST_DATA_SIZE = 100;
 
     private List<JexxaObject> testData;
-    private IObjectStore<JexxaObject, JexxaValueObject, JexxaObjectMetadata> objectStore;
+    private IObjectStore<JexxaObject, JexxaValueObject, JexxaObjectMetadataSchema> objectStore;
 
     /**
      * Defines the meta data that we use:
@@ -33,7 +33,7 @@ class INumericQueryIT
      * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
      * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
      */
-    private enum JexxaObjectMetadata implements Metadata
+    private enum JexxaObjectMetadataSchema implements MetadataSchema
     {
         INT_VALUE(MetaTags.numberTag(JexxaObject::getInternalValue)),
 
@@ -46,14 +46,14 @@ class INumericQueryIT
          */
         private final MetaTag<JexxaObject, ?, ? > metaTag;
 
-        JexxaObjectMetadata(MetaTag<JexxaObject,?, ?> metaTag)
+        JexxaObjectMetadataSchema(MetaTag<JexxaObject,?, ?> metaTag)
         {
             this.metaTag = metaTag;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public MetaTag<JexxaObject, ?, ?> getMetaTag()
+        public MetaTag<JexxaObject, ?, ?> getTag()
         {
             return metaTag;
         }
@@ -78,7 +78,7 @@ class INumericQueryIT
     {
         //Arrange
         initObjectStore(properties);
-        var objectUnderTest = objectStore. getNumericQuery( JexxaObjectMetadata.INT_VALUE, Integer.class);
+        var objectUnderTest = objectStore. getNumericQuery( JexxaObjectMetadataSchema.INT_VALUE, Integer.class);
 
         var greaterOrEqualThanExpected = IntStream.range(50,100)
                 .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element)))
@@ -131,7 +131,7 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.VALUE_OBJECT, JexxaValueObject.class);
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadataSchema.VALUE_OBJECT, JexxaValueObject.class);
 
         var greaterOrEqualThanExpected = IntStream
                 .range(50,100)
@@ -183,7 +183,7 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.OPTIONAL_VALUE_OBJECT, JexxaValueObject.class);
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadataSchema.OPTIONAL_VALUE_OBJECT, JexxaValueObject.class);
 
         var lessOrEqualThanThanExpected = IntStream.rangeClosed(0,49)
                 .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
@@ -229,7 +229,7 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE, Integer.class);
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadataSchema.INT_VALUE, Integer.class);
         var expectedResult = testData.stream()
                 .sorted(comparing( JexxaObject::getInternalValue))
                 .collect(Collectors.toList());
@@ -248,7 +248,7 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.OPTIONAL_VALUE_OBJECT, JexxaValueObject.class);
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadataSchema.OPTIONAL_VALUE_OBJECT, JexxaValueObject.class);
 
         var expectedResult = testData.stream()
                 .sorted(comparing( JexxaObject::getInternalValue))
@@ -269,7 +269,7 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.OPTIONAL_VALUE_OBJECT, JexxaValueObject.class);
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadataSchema.OPTIONAL_VALUE_OBJECT, JexxaValueObject.class);
 
         var expectedResult = testData.stream().limit(50).sorted(comparing(JexxaObject::getInternalValue).reversed()).collect(Collectors.toList());
         expectedResult.addAll(testData.stream().skip(50).collect(Collectors.toList()));
@@ -289,7 +289,7 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE, Integer.class);
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadataSchema.INT_VALUE, Integer.class);
         var limitAmount = 10 ;
         var expectedResult = testData.stream()
                 .sorted(comparing( JexxaObject::getInternalValue))
@@ -310,7 +310,7 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE, Integer.class);
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadataSchema.INT_VALUE, Integer.class);
         var expectedResult = testData.stream()
                 .sorted(comparing( JexxaObject::getInternalValue).reversed())
                 .collect(Collectors.toList());
@@ -329,7 +329,7 @@ class INumericQueryIT
         //Arrange
         initObjectStore(properties);
 
-        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadata.INT_VALUE, Integer.class);
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectMetadataSchema.INT_VALUE, Integer.class);
         var limitAmount = 10 ;
         var expectedResult = testData.stream()
                 .sorted(comparing( JexxaObject::getInternalValue).reversed())
@@ -348,7 +348,7 @@ class INumericQueryIT
         if (!properties.isEmpty())
         {
             var jdbcConnection = new JDBCConnection(properties);
-            jdbcConnection.createTableCommand(JexxaObjectMetadata.class)
+            jdbcConnection.createTableCommand(JexxaObjectMetadataSchema.class)
                     .dropTableIfExists(JexxaObject.class)
                     .asIgnore();
         }
@@ -356,7 +356,7 @@ class INumericQueryIT
         objectStore = ObjectStoreManager.getObjectStore(
                 JexxaObject.class,
                 JexxaObject::getKey,
-                JexxaObjectMetadata.class,
+                JexxaObjectMetadataSchema.class,
                 properties);
 
         objectStore.removeAll();

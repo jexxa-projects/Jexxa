@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb.IMDBObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.jdbc.JDBCObjectStore;
 import io.jexxa.utils.annotations.CheckReturnValue;
@@ -24,7 +24,7 @@ public final class ObjectStoreManager
     private static Class<?> defaultStrategy = null;
 
 
-    public static  <T,K,M  extends Enum<?> & Metadata> IObjectStore<T,K, M> getObjectStore(
+    public static  <T,K,M  extends Enum<?> & MetadataSchema> IObjectStore<T,K, M> getObjectStore(
             Class<T> aggregateClazz,
             Function<T,K> keyFunction,
             Class<M> comparatorFunctions,
@@ -45,7 +45,7 @@ public final class ObjectStoreManager
 
     @SuppressWarnings("unchecked")
     @CheckReturnValue
-    public <T,K,M  extends Enum<?> & Metadata> IObjectStore<T,K,M> getStrategy(
+    public <T,K,M  extends Enum<?> & MetadataSchema> IObjectStore<T,K,M> getStrategy(
             Class<T> objectClazz,
             Function<T,K> keyFunction,
             Class<M> comparatorFunctions,

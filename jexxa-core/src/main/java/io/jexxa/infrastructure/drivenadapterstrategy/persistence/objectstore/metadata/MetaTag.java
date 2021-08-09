@@ -6,13 +6,13 @@ import java.util.function.Function;
 public abstract class MetaTag<T, S, V>
 {
     Function<T, S> valueAccessor;
-    IConverter<S, ? extends V> valueIConverter;
+    Function<S, ? extends V> valueConverter;
 
     protected MetaTag(Function<T, S> valueAccessor,
-                      IConverter<S, ? extends V> valueIConverter)
+                      Function<S, ? extends V> valueConverter)
     {
         this.valueAccessor = Objects.requireNonNull( valueAccessor );
-        this.valueIConverter = Objects.requireNonNull(valueIConverter);
+        this.valueConverter = Objects.requireNonNull(valueConverter);
     }
 
     /**
@@ -20,7 +20,7 @@ public abstract class MetaTag<T, S, V>
      * @param aggregate which provides the aggregate including the value that should be converted
      * @return Number representing the value
      */
-    public V convertAggregate(T aggregate)
+    public V getFromAggregate(T aggregate)
     {
         Objects.requireNonNull(aggregate);
         var value = valueAccessor.apply(aggregate);
@@ -30,7 +30,7 @@ public abstract class MetaTag<T, S, V>
             return null;
         }
 
-        return valueIConverter.convert(value);
+        return valueConverter.apply(value);
     }
 
     /**
@@ -38,13 +38,13 @@ public abstract class MetaTag<T, S, V>
      * @param value which provides the value that should be converted
      * @return Number representing the value
      */
-    public V convertValue(S value)
+    public V getFromValue(S value)
     {
         if ( value == null ) {
             return null;
         }
-        return valueIConverter.convert(value);
+        return valueConverter.apply(value);
     }
 
-    public abstract Class<V> getValueType();
+    public abstract Class<V> getConvertedType();
 }

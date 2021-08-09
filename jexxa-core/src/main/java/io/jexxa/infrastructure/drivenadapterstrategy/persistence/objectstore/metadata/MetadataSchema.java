@@ -1,8 +1,7 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata;
 
 
-@FunctionalInterface
-public interface Metadata
+public interface MetadataSchema
 {
-    <T, S, V> MetaTag<T, S, V> getMetaTag();
+    <T, S, V> MetaTag<T, S, V> getTag();
 }

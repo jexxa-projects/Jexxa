@@ -19,13 +19,13 @@ public class NumericTag<T, S>  extends MetaTag<T, S, Number>
      * @param valueIConverter defines a function that converts a searched value into a Number for comparison
      */
     public NumericTag(Function<T, S> valueAccessor,
-                      IConverter<S, ? extends Number> valueIConverter)
+                      Function<S, ? extends Number> valueIConverter)
     {
         super(valueAccessor, valueIConverter);
     }
 
     @Override
-    public Class<Number> getValueType()
+    public Class<Number> getConvertedType()
     {
         return Number.class;
     }
