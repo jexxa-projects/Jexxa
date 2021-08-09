@@ -7,12 +7,12 @@ import java.util.function.Supplier;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
 
-public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> extends JDBCObjectQuery<T, S, M> implements IStringQuery<T, S>
+public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataConverter> extends JDBCObjectQuery<T, S, M> implements IStringQuery<T, S>
 {
-    private final Comparator<T, S, ? extends String> stringComparator;
+    private final Converter<T, S, ? extends String> stringConverter;
 
     private final Class<T> aggregateClazz;
     private final M nameOfRow;
@@ -20,7 +20,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> exte
 
     public JDBCStringQuery(
             Supplier<JDBCConnection> jdbcConnection,
-            Comparator<T, S, ? extends String> stringComparator,
+            Converter<T, S, ? extends String> stringConverter,
             M nameOfRow,
             Class<T> aggregateClazz,
             Class<M> comparatorSchema,
@@ -31,14 +31,14 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> exte
 
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
         this.nameOfRow = Objects.requireNonNull(nameOfRow);
-        this.stringComparator = Objects.requireNonNull(stringComparator);
+        this.stringConverter = Objects.requireNonNull(stringConverter);
         this.comparatorSchema = Objects.requireNonNull(comparatorSchema);
     }
 
     @Override
     public List<T> beginsWith(S value)
     {
-        var sqlStartValue = stringComparator.convertValue(value) + "%";
+        var sqlStartValue = stringConverter.convertValue(value) + "%";
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
@@ -55,7 +55,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> exte
     @Override
     public List<T> endsWith(S value)
     {
-        var sqlEndValue = "%" + stringComparator.convertValue(value);
+        var sqlEndValue = "%" + stringConverter.convertValue(value);
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
@@ -72,7 +72,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> exte
     @Override
     public List<T> includes(S value)
     {
-        var sqlIncludeValue = "%" + stringComparator.convertValue(value) + "%";
+        var sqlIncludeValue = "%" + stringConverter.convertValue(value) + "%";
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
@@ -89,7 +89,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> exte
     @Override
     public List<T> isEqualTo(S value)
     {
-        var sqlEqualValue = stringComparator.convertValue(value) ;
+        var sqlEqualValue = stringConverter.convertValue(value) ;
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
@@ -106,7 +106,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataComparator> exte
     @Override
     public List<T> notIncludes(S value)
     {
-        var sqlIncludeValue = "%" + stringComparator.convertValue(value) + "%";
+        var sqlIncludeValue = "%" + stringConverter.convertValue(value) + "%";
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)

@@ -58,7 +58,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 -   `RESTfulRPCAdapter`: 
-    -   OpenAPI plugin uses global JSONManager for creating prototypes so that specific type converter can be registered    
+    -   OpenAPI plugin uses global JSONManager for creating prototypes so that specific type IConverter can be registered    
     
 ## \[2.8.1] - 2021-02-27
 ### Fixed

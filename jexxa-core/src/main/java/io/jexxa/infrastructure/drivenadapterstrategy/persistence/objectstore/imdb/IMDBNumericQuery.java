@@ -7,11 +7,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.NumericConverter;
 
 class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
 {
-    private final NumericComparator<T, S> numericComparator;
+    private final NumericConverter<T, S> numericComparator;
     private final Map<K, T> internalMap;
 
     private Map<K, T> getOwnAggregateMap()
@@ -19,7 +19,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
         return internalMap;
     }
 
-    IMDBNumericQuery(Map<K, T> internalMap, NumericComparator<T, S> numericComparator, Class<S> queryType)
+    IMDBNumericQuery(Map<K, T> internalMap, NumericConverter<T, S> numericComparator, Class<S> queryType)
     {
         this.internalMap = internalMap;
         this.numericComparator = numericComparator;

@@ -1,7 +1,7 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
 
 /**
  * An {@link IObjectStore} extends an {@link IRepository} by adding additional metadata to managed objects.
@@ -15,7 +15,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.com
  * @param <R> Defines the type of the Schema of the aggregate which defines
  *           an enum for each searchable value of the aggregate
  */
-public interface IObjectStore<V, K, R extends Enum<?> & MetadataComparator> extends IRepository<V, K>
+public interface IObjectStore<V, K, R extends Enum<?> & MetadataConverter> extends IRepository<V, K>
 {
     /**
      * This method returns an INumericQuery that can be used to search for elements of type S

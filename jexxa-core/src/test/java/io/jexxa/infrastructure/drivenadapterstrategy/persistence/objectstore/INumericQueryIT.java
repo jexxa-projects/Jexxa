@@ -1,7 +1,7 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreTestDatabase.REPOSITORY_CONFIG;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators.numberComparator;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converters.numberConverter;
 import static java.util.Comparator.comparing;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,8 +13,9 @@ import java.util.stream.IntStream;
 
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -32,29 +33,29 @@ class INumericQueryIT
      * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
      * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
      */
-    private enum JexxaObjectMetadata implements MetadataComparator
+    private enum JexxaObjectMetadata implements MetadataConverter
     {
-        INT_VALUE(numberComparator(JexxaObject::getInternalValue)),
+        INT_VALUE(Converters.numberConverter(JexxaObject::getInternalValue)),
 
-        VALUE_OBJECT(numberComparator(JexxaObject::getKey, JexxaValueObject::getValue)),
+        VALUE_OBJECT(numberConverter(JexxaObject::getKey, JexxaValueObject::getValue)),
 
-        OPTIONAL_VALUE_OBJECT(numberComparator(JexxaObject::getOptionalValue, JexxaValueObject::getValue));
+        OPTIONAL_VALUE_OBJECT(numberConverter(JexxaObject::getOptionalValue, JexxaValueObject::getValue));
 
         /**
          *  Defines the constructor of the enum. Following code is equal for all object stores.
          */
-        private final Comparator<JexxaObject, ?, ? > comparator;
+        private final Converter<JexxaObject, ?, ? > converter;
 
-        JexxaObjectMetadata(Comparator<JexxaObject,?, ?> comparator)
+        JexxaObjectMetadata(Converter<JexxaObject,?, ?> converter)
         {
-            this.comparator = comparator;
+            this.converter = converter;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public Comparator<JexxaObject, ?, ?> getComparator()
+        public Converter<JexxaObject, ?, ?> getValueConverter()
         {
-            return comparator;
+            return converter;
         }
     }
 

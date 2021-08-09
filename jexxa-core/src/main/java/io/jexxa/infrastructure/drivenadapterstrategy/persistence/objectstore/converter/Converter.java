@@ -1,18 +1,18 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter;
 
 import java.util.Objects;
 import java.util.function.Function;
 
-public abstract class Comparator<T, S, V>
+public abstract class Converter<T, S, V>
 {
     Function<T, S> valueAccessor;
-    Function<S, ? extends V> valueConverter;
+    IConverter<S, ? extends V> valueIConverter;
 
-    Comparator(Function<T, S> valueAccessor,
-               Function<S, ? extends V> valueConverter)
+    protected Converter(Function<T, S> valueAccessor,
+              IConverter<S, ? extends V> valueIConverter)
     {
         this.valueAccessor = Objects.requireNonNull( valueAccessor );
-        this.valueConverter = Objects.requireNonNull( valueConverter );
+        this.valueIConverter = Objects.requireNonNull(valueIConverter);
     }
 
     /**
@@ -30,7 +30,7 @@ public abstract class Comparator<T, S, V>
             return null;
         }
 
-        return valueConverter.apply(value);
+        return valueIConverter.convert(value);
     }
 
     /**
@@ -43,7 +43,7 @@ public abstract class Comparator<T, S, V>
         if ( value == null ) {
             return null;
         }
-        return valueConverter.apply(value);
+        return valueIConverter.convert(value);
     }
 
     public abstract Class<V> getValueType();

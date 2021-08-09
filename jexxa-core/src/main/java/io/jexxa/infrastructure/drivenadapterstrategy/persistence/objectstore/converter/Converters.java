@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -6,77 +6,77 @@ import java.util.function.Function;
 
 
 @SuppressWarnings({"unused","java:S1452"})
-public class Comparators
+public class Converters
 {
     /**
      * Factory method to create comparator wich compares value of an aggregate using defined converter function
      *
-     * @param accessorFunction defines the method to get the value to be compared
-     * @param converterFunction defines the converter function converting the value into a number
+     * @param accessor defines the method to get the value to be compared
+     * @param converter defines the converter function converting the value into a number
      * @param <T> type of the aggregate
      * @param <V> type of the value
      * @return Comparator wich compares defined value of an aggregate
      */
-    public static <T, V> NumericComparator<T, V> numberComparator(Function<T, V> accessorFunction, Function<V, ? extends Number> converterFunction)
+    public static <T, V> NumericConverter<T, V> numberConverter(Function<T, V> accessor, IConverter<V, ? extends Number> converter)
     {
-        return new NumericComparator<>(accessorFunction, converterFunction);
+        return new NumericConverter<>(accessor, converter);
     }
 
     /**
      * Factory method to create comparator wich compares value of type {@link Number} of an aggregate
      *
-     * @param accessorFunction returns the Instant
+     * @param accessorfunction returns the Instant
      * @param <T> type of the aggregate
      * @return Comparator wich compares an {@link Number} of an aggregate
      */
-    public static <T, V extends Number> NumericComparator<T, V> numberComparator(Function<T,V> accessorFunction )
+    public static <T, V extends Number> NumericConverter<T, V> numberConverter(Function<T,V> accessorfunction )
     {
-        return new NumericComparator<>(accessorFunction, element -> element);
+        return new NumericConverter<>(accessorfunction, element -> element);
     }
 
     /**
      * Factory method to create comparator wich compares value of type {@link Instant} of an aggregate
      *
-     * @param accessorFunction returns the Instant
+     * @param accessor returns the Instant
      * @param <T> type of the aggregate
      * @return Comparator wich compares an {@link Instant} of an aggregate
      */
     @SuppressWarnings("java:S5411")
-    public static <T> NumericComparator<T, Boolean> booleanComparator(Function<T, Boolean> accessorFunction )
+    public static <T> NumericConverter<T, Boolean> booleanConverter(Function<T, Boolean> accessor )
     {
-        return new NumericComparator<>(accessorFunction, element -> element ? 1 : 0);
+        return new NumericConverter<>(accessor, element -> element ? 1 : 0);
     }
 
     /**
      * Factory method to create comparator wich compares value of type {@link Instant} of an aggregate
      *
-     * @param accessorFunction returns the Instant
+     * @param accessor returns the Instant
      * @param <T> type of the aggregate
      * @return Comparator wich compares an {@link Instant} of an aggregate
      */
-    public static <T> InstantComparator<T> instantComparator(Function<T, Instant> accessorFunction )
+    public static <T> InstantConverter<T> instantConverter(Function<T, Instant> accessor )
     {
-        return new InstantComparator<>(accessorFunction);
+        return new InstantConverter<>(accessor);
     }
 
     /**
      * Factory method to create comparator wich compares value of type {@link Instant} of an aggregate
      *
-     * @param accessorFunction returns the String
+     * @param accessor returns the String
      * @param <T> type of the aggregate
      * @return Comparator wich compares an {@link String} of an aggregate
      */
-    public static <T> StringComparator<T, String> stringComparator(Function<T, String> accessorFunction )
+    public static <T> StringConverter<T, String> stringConverter(Function<T, String> accessor )
     {
-        return new StringComparator<>(accessorFunction, element -> element);
+        return new StringConverter<>(accessor, element -> element);
     }
 
-    private static class InstantComparator<T> extends NumericComparator<T, Instant>
+    private static class InstantConverter<T> extends NumericConverter<T, Instant>
     {
         public static final int NANO = 1000000000;
-        public InstantComparator(Function<T, Instant> accessorFunction)
+        public InstantConverter(Function<T, Instant> accessor)
         {
-            super(accessorFunction
+            super(accessor
                     , instant -> BigDecimal.valueOf(instant.getEpochSecond() * NANO).add( BigDecimal.valueOf(instant.getNano()))
                     );
         }
@@ -84,7 +84,7 @@ public class Comparators
     }
 
 
-    private Comparators()
+    private Converters()
     {
         //private constructor
     }

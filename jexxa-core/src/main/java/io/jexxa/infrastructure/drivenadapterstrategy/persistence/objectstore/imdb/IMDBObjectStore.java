@@ -9,11 +9,11 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBReposi
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.NumericComparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.StringComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.NumericConverter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.StringConverter;
 
-public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>
+public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataConverter>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>
 {
     private final Set<M> comparatorFunctions;
 
@@ -37,7 +37,7 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
         }
 
         //noinspection unchecked
-        NumericComparator<T, S> numberComparator = (NumericComparator) metadata.getComparator();
+        NumericConverter<T, S> numberComparator = (NumericConverter) metadata.getValueConverter();
 
         return new IMDBNumericQuery<>(getOwnAggregateMap(), numberComparator, queryType);
     }
@@ -51,7 +51,7 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataComparator>  exte
         }
 
         //noinspection unchecked
-        StringComparator<T, S> stringComparator = (StringComparator) metadata.getComparator();
+        StringConverter<T, S> stringComparator = (StringConverter) metadata.getValueConverter();
 
         return new IMDBStringQuery<>(getOwnAggregateMap(), stringComparator, queryType);
     }

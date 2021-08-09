@@ -19,13 +19,13 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyVal
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
 import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
 
 @SuppressWarnings("unused")
-public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extends JDBCKeyValueRepository<T, K> implements IObjectStore<T, K, M>
+public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataConverter> extends JDBCKeyValueRepository<T, K> implements IObjectStore<T, K, M>
 {
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCObjectStore.class);
 
@@ -64,7 +64,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         List<String> keySet = new ArrayList<>();
 
         valueSet.add(getJSONConverter().toJson(aggregate));
-        comparatorFunctions.forEach( element -> valueSet.add(element.getComparator().convertAggregate(aggregate)) );
+        comparatorFunctions.forEach( element -> valueSet.add(element.getValueConverter().convertAggregate(aggregate)) );
 
         keySet.add(KeyValueSchema.VALUE.name());
         comparatorFunctions.forEach(element -> keySet.add(element.name()));
@@ -91,7 +91,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
         var objectList = new ArrayList<>();
         objectList.add (jsonConverter.toJson(keyFunction.apply(aggregate)));
         objectList.add (jsonConverter.toJson(aggregate));
-        comparatorFunctions.forEach(metadata -> objectList.add(metadata.getComparator().convertAggregate(aggregate)));
+        comparatorFunctions.forEach(metadata -> objectList.add(metadata.getValueConverter().convertAggregate(aggregate)));
 
         var command = getConnection()
                 .createCommand(KeyValueSchema.class)
@@ -110,12 +110,12 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
             throw new IllegalArgumentException(metadata.name() + " is not part of the schema -> Cannot provide a numeric query.");
         }
 
-        if ( !Number.class.isAssignableFrom( metadata.getComparator().getValueType()) )
+        if ( !Number.class.isAssignableFrom( metadata.getValueConverter().getValueType()) )
         {
             throw new IllegalArgumentException(metadata.name() + " does not use a numeric value -> Could not create a numeric query");
         }
 
-        return new JDBCNumericQuery<>(this::getConnection, metadata.getComparator(), metadata, aggregateClazz,comparatorSchema, queryType );
+        return new JDBCNumericQuery<>(this::getConnection, metadata.getValueConverter(), metadata, aggregateClazz,comparatorSchema, queryType );
     }
 
     @Override
@@ -126,12 +126,12 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
             throw new IllegalArgumentException(metadata.name() + " is not part of the schema -> Cannot provide a string query.");
         }
 
-        if ( !String.class.isAssignableFrom( metadata.getComparator().getValueType()) )
+        if ( !String.class.isAssignableFrom( metadata.getValueConverter().getValueType()) )
         {
             throw new IllegalArgumentException(metadata.name() + " does not use a numeric value -> Could not create a String query");
         }
 
-        return new JDBCStringQuery<>(this::getConnection, metadata.getComparator(), metadata, aggregateClazz,comparatorSchema, queryType );
+        return new JDBCStringQuery<>(this::getConnection, metadata.getValueConverter(), metadata, aggregateClazz,comparatorSchema, queryType );
     }
 
     private void autocreateTableObjectStore(Properties properties)
@@ -149,13 +149,13 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataComparator> extend
 
                 comparatorFunctions.forEach(element ->
                 {
-                    if ( Number.class.isAssignableFrom(element.getComparator().getValueType()) )
+                    if ( Number.class.isAssignableFrom(element.getValueConverter().getValueType()) )
                     {
                         command.addColumn(element, NUMERIC);
-                    } else if (String.class.isAssignableFrom(element.getComparator().getValueType())){
+                    } else if (String.class.isAssignableFrom(element.getValueConverter().getValueType())){
                         command.addColumn(element, TEXT);
                     } else {
-                        throw new IllegalArgumentException("Unsupported Value type " + element.getComparator().getValueType().getName() +
+                        throw new IllegalArgumentException("Unsupported Value type " + element.getValueConverter().getValueType().getName() +
                                 ". Supported Value types are subtypes of Number and String. ");
                     }
                 });

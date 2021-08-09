@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
 import io.jexxa.utils.json.JSONConverter;
 
-class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataComparator>
+class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataConverter>
 {
     private final Supplier<JDBCConnection> jdbcConnection;
 

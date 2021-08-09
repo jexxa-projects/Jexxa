@@ -1,5 +1,8 @@
 package io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter;
 
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converters.booleanConverter;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converters.numberConverter;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converters.stringConverter;
 import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractMetadata.ADVISOR;
 import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractMetadata.CONTRACT_NUMBER;
 import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractMetadata.CONTRACT_SIGNED;
@@ -10,9 +13,8 @@ import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparators;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
 import io.jexxa.tutorials.contractmanagement.domain.aggregate.Contract;
 import io.jexxa.tutorials.contractmanagement.domain.valueobject.ContractNumber;
 import io.jexxa.tutorials.contractmanagement.domainservice.IContractRepository;
@@ -28,26 +30,26 @@ public class ContractRepository  implements IContractRepository
      *    <li>Advisor of the contract</li>
      * </ol>
      */
-    enum ContractMetadata implements MetadataComparator
+    enum ContractMetadata implements MetadataConverter
     {
-        CONTRACT_NUMBER(Comparators.numberComparator(element -> element.getContractNumber().getValue())),
+        CONTRACT_NUMBER(numberConverter(element -> element.getContractNumber().getValue())),
 
-        CONTRACT_SIGNED(Comparators.booleanComparator(Contract::isSigned)),
+        CONTRACT_SIGNED(booleanConverter(Contract::isSigned)),
 
-        ADVISOR(Comparators.stringComparator(Contract::getAdvisor));
+        ADVISOR(stringConverter(Contract::getAdvisor));
 
-        private final Comparator<Contract, ?, ? > comparator;
+        private final Converter<Contract, ?, ? > converter;
 
-        ContractMetadata(Comparator<Contract,?, ?> comparator)
+        ContractMetadata(Converter<Contract,?, ?> converter)
         {
-            this.comparator = comparator;
+            this.converter = converter;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public Comparator<Contract, ?, ?> getComparator()
+        public Converter<Contract, ?, ?> getValueConverter()
         {
-            return comparator;
+            return converter;
         }
     }
 

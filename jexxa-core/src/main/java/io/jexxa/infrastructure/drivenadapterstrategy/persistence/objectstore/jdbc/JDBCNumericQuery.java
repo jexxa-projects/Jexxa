@@ -5,21 +5,22 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.Comparator;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.comparator.MetadataComparator;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
 
-class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> extends JDBCObjectQuery<T, S, M> implements INumericQuery<T, S>
+class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataConverter> extends JDBCObjectQuery<T, S, M> implements INumericQuery<T, S>
 {
-    private final Comparator<T, S, ? extends Number> numericComparator;
+    private final Converter<T, S, ? extends Number> numericConverter;
 
     private final Class<T> aggregateClazz;
     private final M nameOfRow;
     private final Class<M> comparatorSchema;
 
     JDBCNumericQuery(Supplier<JDBCConnection> jdbcConnection,
-                     Comparator<T, S, ? extends Number> numericComparator,
+                     Converter<T, S, ? extends Number> numericConverter,
                      M nameOfRow,
                      Class<T> aggregateClazz,
                      Class<M> comparatorSchema,
@@ -29,18 +30,18 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> extends JDBC
 
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
         this.nameOfRow = Objects.requireNonNull(nameOfRow);
-        this.numericComparator = Objects.requireNonNull(numericComparator);
+        this.numericConverter = Objects.requireNonNull(numericConverter);
         this.comparatorSchema = Objects.requireNonNull(comparatorSchema);
     }
 
     @Override
     public List<T> isGreaterOrEqualThan(S startValue)
     {
-        var sqlStartValue = numericComparator.convertValue(startValue);
+        var sqlStartValue = numericConverter.convertValue(startValue);
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isGreaterOrEqual(sqlStartValue)
@@ -53,11 +54,11 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> extends JDBC
     @Override
     public List<T> isGreaterThan(S value)
     {
-        var sqlStartValue = numericComparator.convertValue(value);
+        var sqlStartValue = numericConverter.convertValue(value);
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isGreaterThan(sqlStartValue)
@@ -70,12 +71,12 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> extends JDBC
     @Override
     public List<T> getRangeClosed(S startValue, S endValue)
     {
-        var sqlStartValue = numericComparator.convertValue(startValue);
-        var sqlEndValue = numericComparator.convertValue(endValue);
+        var sqlStartValue = numericConverter.convertValue(startValue);
+        var sqlEndValue = numericConverter.convertValue(endValue);
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isGreaterOrEqual(sqlStartValue)
@@ -91,12 +92,12 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> extends JDBC
     @Override
     public List<T> getRange(S startValue, S endValue)
     {
-        var sqlStartValue = numericComparator.convertValue(startValue);
-        var sqlEndValue = numericComparator.convertValue(endValue);
+        var sqlStartValue = numericConverter.convertValue(startValue);
+        var sqlEndValue = numericConverter.convertValue(endValue);
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isGreaterOrEqual(sqlStartValue)
@@ -112,12 +113,12 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> extends JDBC
     @Override
     public List<T> isLessOrEqualThan(S endValue)
     {
-        var sqlEndValue = numericComparator.convertValue(endValue);
+        var sqlEndValue = numericConverter.convertValue(endValue);
 
         //"select value from %s where %s <= %s",
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isLessOrEqual(sqlEndValue)
@@ -130,12 +131,12 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> extends JDBC
     @Override
     public List<T> isLessThan(S endValue)
     {
-        var sqlEndValue = numericComparator.convertValue(endValue);
+        var sqlEndValue = numericConverter.convertValue(endValue);
 
         //"select value from %s where %s <= %s",
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isLessThan(sqlEndValue)
@@ -148,10 +149,10 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> extends JDBC
     @Override
     public List<T> isEqualTo(S value)
     {
-        var sqlValue = numericComparator.convertValue(value);
+        var sqlValue = numericConverter.convertValue(value);
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isEqual(sqlValue)
@@ -163,10 +164,10 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataComparator> extends JDBC
     @Override
     public List<T> isNotEqualTo(S value)
     {
-        var sqlValue = numericComparator.convertValue(value);
+        var sqlValue = numericConverter.convertValue(value);
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isNotEqual(sqlValue)

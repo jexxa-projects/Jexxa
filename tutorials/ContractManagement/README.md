@@ -102,21 +102,21 @@ public class ContractRepository  implements IContractRepository
         CONTRACT_SIGNED(Comparators.booleanComparator(Contract::isSigned)),
 
         // Finally, define an enum to query contracts by current advisor. Just like before, we define a 
-        // String comparator together with the accessor function. 
-        ADVISOR(Comparators.stringComparator(Contract::getAdvisor));
+        // String valueIConverter together with the accessor function. 
+        ADVISOR(Comparators.stringConverter(Contract::getAdvisor));
 
         // The following code is always the same and required to implement the MetadataComparator interface.
-        private final Comparator<Contract, ?, ? > comparator;
+        private final Comparator<Contract, ?, ? > valueIConverter;
         
-        ContractMetadata(Comparator<Contract,?, ?> comparator)
+        ContractMetadata(Comparator<Contract,?, ?> valueIConverter)
         {
-            this.comparator = comparator;
+            this.valueIConverter = valueIConverter;
         }
         @Override
         @SuppressWarnings("unchecked")
         public Comparator<Contract, ?, ?> getComparator()
         {
-            return comparator;
+            return valueIConverter;
         }
     }
     // ...
