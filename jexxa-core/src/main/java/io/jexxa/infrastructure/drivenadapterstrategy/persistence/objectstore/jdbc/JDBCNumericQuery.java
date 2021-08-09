@@ -8,36 +8,35 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnec
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converter;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
 
-class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataConverter> extends JDBCObjectQuery<T, S, M> implements INumericQuery<T, S>
+class JDBCNumericQuery<T,S, M extends Enum<M> & Metadata> extends JDBCObjectQuery<T, S, M> implements INumericQuery<T, S>
 {
-    private final Converter<T, S, ? extends Number> numericConverter;
+    private final MetaTag<T, S, ? extends Number> numericMetaTag;
 
     private final Class<T> aggregateClazz;
     private final M nameOfRow;
     private final Class<M> comparatorSchema;
 
     JDBCNumericQuery(Supplier<JDBCConnection> jdbcConnection,
-                     Converter<T, S, ? extends Number> numericConverter,
-                     M nameOfRow,
+                     M metaTag,
                      Class<T> aggregateClazz,
                      Class<M> comparatorSchema,
                      Class<S> queryType)
     {
-        super(jdbcConnection, nameOfRow, aggregateClazz, comparatorSchema, queryType);
+        super(jdbcConnection, metaTag, aggregateClazz, comparatorSchema, queryType);
 
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
-        this.nameOfRow = Objects.requireNonNull(nameOfRow);
-        this.numericConverter = Objects.requireNonNull(numericConverter);
+        this.nameOfRow = Objects.requireNonNull(metaTag);
+        this.numericMetaTag = Objects.requireNonNull(metaTag.getMetaTag());
         this.comparatorSchema = Objects.requireNonNull(comparatorSchema);
     }
 
     @Override
     public List<T> isGreaterOrEqualThan(S startValue)
     {
-        var sqlStartValue = numericConverter.convertValue(startValue);
+        var sqlStartValue = numericMetaTag.convertValue(startValue);
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
@@ -54,7 +53,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataConverter> extends JDBCO
     @Override
     public List<T> isGreaterThan(S value)
     {
-        var sqlStartValue = numericConverter.convertValue(value);
+        var sqlStartValue = numericMetaTag.convertValue(value);
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
@@ -71,8 +70,8 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataConverter> extends JDBCO
     @Override
     public List<T> getRangeClosed(S startValue, S endValue)
     {
-        var sqlStartValue = numericConverter.convertValue(startValue);
-        var sqlEndValue = numericConverter.convertValue(endValue);
+        var sqlStartValue = numericMetaTag.convertValue(startValue);
+        var sqlEndValue = numericMetaTag.convertValue(endValue);
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
@@ -92,8 +91,8 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataConverter> extends JDBCO
     @Override
     public List<T> getRange(S startValue, S endValue)
     {
-        var sqlStartValue = numericConverter.convertValue(startValue);
-        var sqlEndValue = numericConverter.convertValue(endValue);
+        var sqlStartValue = numericMetaTag.convertValue(startValue);
+        var sqlEndValue = numericMetaTag.convertValue(endValue);
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
@@ -113,7 +112,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataConverter> extends JDBCO
     @Override
     public List<T> isLessOrEqualThan(S endValue)
     {
-        var sqlEndValue = numericConverter.convertValue(endValue);
+        var sqlEndValue = numericMetaTag.convertValue(endValue);
 
         //"select value from %s where %s <= %s",
         var jdbcQuery = getConnection()
@@ -131,7 +130,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataConverter> extends JDBCO
     @Override
     public List<T> isLessThan(S endValue)
     {
-        var sqlEndValue = numericConverter.convertValue(endValue);
+        var sqlEndValue = numericMetaTag.convertValue(endValue);
 
         //"select value from %s where %s <= %s",
         var jdbcQuery = getConnection()
@@ -149,7 +148,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataConverter> extends JDBCO
     @Override
     public List<T> isEqualTo(S value)
     {
-        var sqlValue = numericConverter.convertValue(value);
+        var sqlValue = numericMetaTag.convertValue(value);
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
@@ -164,7 +163,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataConverter> extends JDBCO
     @Override
     public List<T> isNotEqualTo(S value)
     {
-        var sqlValue = numericConverter.convertValue(value);
+        var sqlValue = numericMetaTag.convertValue(value);
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )

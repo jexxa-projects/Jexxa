@@ -1,8 +1,8 @@
 package io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converters.booleanConverter;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converters.numberConverter;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converters.stringConverter;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.booleanTag;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numberTag;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.stringTag;
 import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractMetadata.ADVISOR;
 import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractMetadata.CONTRACT_NUMBER;
 import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractMetadata.CONTRACT_SIGNED;
@@ -13,8 +13,8 @@ import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converter;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
 import io.jexxa.tutorials.contractmanagement.domain.aggregate.Contract;
 import io.jexxa.tutorials.contractmanagement.domain.valueobject.ContractNumber;
 import io.jexxa.tutorials.contractmanagement.domainservice.IContractRepository;
@@ -30,26 +30,27 @@ public class ContractRepository  implements IContractRepository
      *    <li>Advisor of the contract</li>
      * </ol>
      */
-    enum ContractMetadata implements MetadataConverter
+    enum ContractMetadata implements Metadata
     {
-        CONTRACT_NUMBER(numberConverter(element -> element.getContractNumber().getValue())),
+        CONTRACT_NUMBER(numberTag(element -> element.getContractNumber().getValue())),
 
-        CONTRACT_SIGNED(booleanConverter(Contract::isSigned)),
+        CONTRACT_SIGNED(booleanTag(Contract::isSigned)),
 
-        ADVISOR(stringConverter(Contract::getAdvisor));
+        ADVISOR(stringTag(Contract::getAdvisor));
 
-        private final Converter<Contract, ?, ? > converter;
+        // The remaining code is always the same for all metadata specifications
+        private final MetaTag<Contract, ?, ? > metaTag;
 
-        ContractMetadata(Converter<Contract,?, ?> converter)
+        ContractMetadata(MetaTag<Contract,?, ?> metaTag)
         {
-            this.converter = converter;
+            this.metaTag = metaTag;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public Converter<Contract, ?, ?> getValueConverter()
+        public MetaTag<Contract, ?, ?> getMetaTag()
         {
-            return converter;
+            return metaTag;
         }
     }
 

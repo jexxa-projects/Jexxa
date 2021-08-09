@@ -9,12 +9,13 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
 import io.jexxa.utils.json.JSONConverter;
 
-class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataConverter>
+class JDBCObjectQuery <T, S, M extends Enum<M> & Metadata>
 {
     private final Supplier<JDBCConnection> jdbcConnection;
 
@@ -43,7 +44,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataConverter>
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.ASC_NULLS_LAST)
                 .limit(amount)
@@ -56,7 +57,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataConverter>
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.ASC_NULLS_LAST)
                 .create();
@@ -68,7 +69,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataConverter>
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.DESC_NULLS_LAST)
                 .limit(amount)
@@ -81,7 +82,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataConverter>
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.DESC_NULLS_LAST)
                 .create();
@@ -93,7 +94,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataConverter>
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isNull()
@@ -106,7 +107,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataConverter>
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isNotNull()

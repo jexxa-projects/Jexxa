@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 
 @SuppressWarnings({"unused","java:S1452"})
-public class Converters
+public class MetaTags
 {
     /**
      * Factory method to create comparator wich compares value of an aggregate using defined converter function
@@ -17,9 +17,9 @@ public class Converters
      * @param <V> type of the value
      * @return Comparator wich compares defined value of an aggregate
      */
-    public static <T, V> NumericConverter<T, V> numberConverter(Function<T, V> accessor, IConverter<V, ? extends Number> converter)
+    public static <T, V> NumericTag<T, V> numberTag(Function<T, V> accessor, IConverter<V, ? extends Number> converter)
     {
-        return new NumericConverter<>(accessor, converter);
+        return new NumericTag<>(accessor, converter);
     }
 
     /**
@@ -29,9 +29,9 @@ public class Converters
      * @param <T> type of the aggregate
      * @return Comparator wich compares an {@link Number} of an aggregate
      */
-    public static <T, V extends Number> NumericConverter<T, V> numberConverter(Function<T,V> accessorfunction )
+    public static <T, V extends Number> NumericTag<T, V> numberTag(Function<T,V> accessorfunction )
     {
-        return new NumericConverter<>(accessorfunction, element -> element);
+        return new NumericTag<>(accessorfunction, element -> element);
     }
 
     /**
@@ -42,9 +42,9 @@ public class Converters
      * @return Comparator wich compares an {@link Instant} of an aggregate
      */
     @SuppressWarnings("java:S5411")
-    public static <T> NumericConverter<T, Boolean> booleanConverter(Function<T, Boolean> accessor )
+    public static <T> NumericTag<T, Boolean> booleanTag(Function<T, Boolean> accessor )
     {
-        return new NumericConverter<>(accessor, element -> element ? 1 : 0);
+        return new NumericTag<>(accessor, element -> element ? 1 : 0);
     }
 
     /**
@@ -54,9 +54,9 @@ public class Converters
      * @param <T> type of the aggregate
      * @return Comparator wich compares an {@link Instant} of an aggregate
      */
-    public static <T> InstantConverter<T> instantConverter(Function<T, Instant> accessor )
+    public static <T> InstantTag<T> instantTag(Function<T, Instant> accessor )
     {
-        return new InstantConverter<>(accessor);
+        return new InstantTag<>(accessor);
     }
 
     /**
@@ -66,15 +66,15 @@ public class Converters
      * @param <T> type of the aggregate
      * @return Comparator wich compares an {@link String} of an aggregate
      */
-    public static <T> StringConverter<T, String> stringConverter(Function<T, String> accessor )
+    public static <T> StringTag<T, String> stringTag(Function<T, String> accessor )
     {
-        return new StringConverter<>(accessor, element -> element);
+        return new StringTag<>(accessor, element -> element);
     }
 
-    private static class InstantConverter<T> extends NumericConverter<T, Instant>
+    private static class InstantTag<T> extends NumericTag<T, Instant>
     {
         public static final int NANO = 1000000000;
-        public InstantConverter(Function<T, Instant> accessor)
+        public InstantTag(Function<T, Instant> accessor)
         {
             super(accessor
                     , instant -> BigDecimal.valueOf(instant.getEpochSecond() * NANO).add( BigDecimal.valueOf(instant.getNano()))
@@ -84,7 +84,7 @@ public class Converters
     }
 
 
-    private Converters()
+    private MetaTags()
     {
         //private constructor
     }

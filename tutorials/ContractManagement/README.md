@@ -103,7 +103,7 @@ public class ContractRepository  implements IContractRepository
 
         // Finally, define an enum to query contracts by current advisor. Just like before, we define a 
         // String valueIConverter together with the accessor function. 
-        ADVISOR(Comparators.stringConverter(Contract::getAdvisor));
+        ADVISOR(Comparators.stringMetaTag(Contract::getAdvisor));
 
         // The following code is always the same and required to implement the MetadataComparator interface.
         private final Comparator<Contract, ?, ? > valueIConverter;

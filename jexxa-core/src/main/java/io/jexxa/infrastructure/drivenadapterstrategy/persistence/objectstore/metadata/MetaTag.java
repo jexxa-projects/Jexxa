@@ -1,15 +1,15 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata;
 
 import java.util.Objects;
 import java.util.function.Function;
 
-public abstract class Converter<T, S, V>
+public abstract class MetaTag<T, S, V>
 {
     Function<T, S> valueAccessor;
     IConverter<S, ? extends V> valueIConverter;
 
-    protected Converter(Function<T, S> valueAccessor,
-              IConverter<S, ? extends V> valueIConverter)
+    protected MetaTag(Function<T, S> valueAccessor,
+                      IConverter<S, ? extends V> valueIConverter)
     {
         this.valueAccessor = Objects.requireNonNull( valueAccessor );
         this.valueIConverter = Objects.requireNonNull(valueIConverter);

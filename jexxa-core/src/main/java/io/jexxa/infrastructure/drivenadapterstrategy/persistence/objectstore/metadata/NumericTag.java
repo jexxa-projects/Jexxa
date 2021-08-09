@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata;
 
 import java.util.function.Function;
 
@@ -10,7 +10,7 @@ import java.util.function.Function;
  * @param <T> Defines the type of the aggregate
  * @param <S> Defines the type of the value inside the aggregate
  */
-public class StringConverter<T, S>  extends Converter<T, S, String>
+public class NumericTag<T, S>  extends MetaTag<T, S, Number>
 {
     /**
      * Creates an Comparator object
@@ -18,16 +18,16 @@ public class StringConverter<T, S>  extends Converter<T, S, String>
      * @param valueAccessor defines a function to access a specific value of the aggregate
      * @param valueIConverter defines a function that converts a searched value into a Number for comparison
      */
-    StringConverter(Function<T, S> valueAccessor,
-                    IConverter<S, ? extends String> valueIConverter)
+    public NumericTag(Function<T, S> valueAccessor,
+                      IConverter<S, ? extends Number> valueIConverter)
     {
         super(valueAccessor, valueIConverter);
     }
 
     @Override
-    public Class<String> getValueType()
+    public Class<Number> getValueType()
     {
-        return String.class;
+        return Number.class;
     }
 
 }

@@ -19,13 +19,13 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyVal
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
 import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
 
 @SuppressWarnings("unused")
-public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataConverter> extends JDBCKeyValueRepository<T, K> implements IObjectStore<T, K, M>
+public class JDBCObjectStore<T,K, M extends Enum<M> & Metadata> extends JDBCKeyValueRepository<T, K> implements IObjectStore<T, K, M>
 {
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCObjectStore.class);
 
@@ -33,23 +33,21 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataConverter> extends
     private final Class<T> aggregateClazz;
     private final Gson gson = new Gson();
 
-    private final Class<M> comparatorSchema;
-    private final Set<M> comparatorFunctions;
+    private final Class<M> metaData;
+    private final Set<M> jdbcSchema;
 
     public JDBCObjectStore(
             Class<T> aggregateClazz,
             Function<T, K> keyFunction,
-            Class<M> comparatorSchema,
+            Class<M> metaData,
             Properties properties
     )
     {
         super(aggregateClazz, keyFunction, properties, false);
         this.keyFunction = keyFunction;
         this.aggregateClazz = aggregateClazz;
-        this.comparatorSchema = comparatorSchema;
-        this.comparatorFunctions = EnumSet.allOf(comparatorSchema);
-
-        var iterator = comparatorFunctions.iterator();
+        this.metaData = metaData;
+        this.jdbcSchema = EnumSet.allOf(metaData);
 
         autocreateTableObjectStore(properties);
     }
@@ -64,10 +62,10 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataConverter> extends
         List<String> keySet = new ArrayList<>();
 
         valueSet.add(getJSONConverter().toJson(aggregate));
-        comparatorFunctions.forEach( element -> valueSet.add(element.getValueConverter().convertAggregate(aggregate)) );
+        jdbcSchema.forEach(element -> valueSet.add(element.getMetaTag().convertAggregate(aggregate)) );
 
         keySet.add(KeyValueSchema.VALUE.name());
-        comparatorFunctions.forEach(element -> keySet.add(element.name()));
+        jdbcSchema.forEach(element -> keySet.add(element.name()));
 
         //"update %s where key = '%s' "  ComparatorValues... " '%s' = '%s' "
         var command = getConnection()
@@ -91,7 +89,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataConverter> extends
         var objectList = new ArrayList<>();
         objectList.add (jsonConverter.toJson(keyFunction.apply(aggregate)));
         objectList.add (jsonConverter.toJson(aggregate));
-        comparatorFunctions.forEach(metadata -> objectList.add(metadata.getValueConverter().convertAggregate(aggregate)));
+        jdbcSchema.forEach(metaTag -> objectList.add(metaTag.getMetaTag().convertAggregate(aggregate)));
 
         var command = getConnection()
                 .createCommand(KeyValueSchema.class)
@@ -103,35 +101,35 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataConverter> extends
     }
 
 
-    public <S> INumericQuery<T, S> getNumericQuery(M metadata, Class<S> queryType)
+    public <S> INumericQuery<T, S> getNumericQuery(M metaTag, Class<S> queryType)
     {
-        if (!comparatorFunctions.contains(metadata))
+        if (!jdbcSchema.contains(metaTag))
         {
-            throw new IllegalArgumentException(metadata.name() + " is not part of the schema -> Cannot provide a numeric query.");
+            throw new IllegalArgumentException(metaTag.name() + " is not part of the schema -> Cannot provide a numeric query.");
         }
 
-        if ( !Number.class.isAssignableFrom( metadata.getValueConverter().getValueType()) )
+        if ( !Number.class.isAssignableFrom( metaTag.getMetaTag().getValueType()) )
         {
-            throw new IllegalArgumentException(metadata.name() + " does not use a numeric value -> Could not create a numeric query");
+            throw new IllegalArgumentException(metaTag.name() + " does not use a numeric value -> Could not create a numeric query");
         }
 
-        return new JDBCNumericQuery<>(this::getConnection, metadata.getValueConverter(), metadata, aggregateClazz,comparatorSchema, queryType );
+        return new JDBCNumericQuery<>(this::getConnection, metaTag, aggregateClazz, metaData, queryType );
     }
 
     @Override
-    public <S> IStringQuery<T, S> getStringQuery(M metadata, Class<S> queryType)
+    public <S> IStringQuery<T, S> getStringQuery(M metaTag, Class<S> queryType)
     {
-        if (!comparatorFunctions.contains(metadata))
+        if (!jdbcSchema.contains(metaTag))
         {
-            throw new IllegalArgumentException(metadata.name() + " is not part of the schema -> Cannot provide a string query.");
+            throw new IllegalArgumentException(metaTag.name() + " is not part of the schema -> Cannot provide a string query.");
         }
 
-        if ( !String.class.isAssignableFrom( metadata.getValueConverter().getValueType()) )
+        if ( !String.class.isAssignableFrom( metaTag.getMetaTag().getValueType()) )
         {
-            throw new IllegalArgumentException(metadata.name() + " does not use a numeric value -> Could not create a String query");
+            throw new IllegalArgumentException(metaTag.name() + " does not use a numeric value -> Could not create a String query");
         }
 
-        return new JDBCStringQuery<>(this::getConnection, metadata.getValueConverter(), metadata, aggregateClazz,comparatorSchema, queryType );
+        return new JDBCStringQuery<>(this::getConnection, metaTag, aggregateClazz, metaData, queryType );
     }
 
     private void autocreateTableObjectStore(Properties properties)
@@ -141,21 +139,21 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataConverter> extends
         {
             try{
 
-                var command = getConnection().createTableCommand(comparatorSchema)
+                var command = getConnection().createTableCommand(metaData)
                         .createTableIfNotExists(aggregateClazz)
                         .addColumn(KeyValueSchema.KEY, getMaxVarChar(properties.getProperty(JDBCConnection.JDBC_URL)), KeyValueSchema.class)
                         .addConstraint(PRIMARY_KEY)
                         .addColumn(KeyValueSchema.VALUE, TEXT, KeyValueSchema.class);
 
-                comparatorFunctions.forEach(element ->
+                jdbcSchema.forEach(element ->
                 {
-                    if ( Number.class.isAssignableFrom(element.getValueConverter().getValueType()) )
+                    if ( Number.class.isAssignableFrom(element.getMetaTag().getValueType()) )
                     {
                         command.addColumn(element, NUMERIC);
-                    } else if (String.class.isAssignableFrom(element.getValueConverter().getValueType())){
+                    } else if (String.class.isAssignableFrom(element.getMetaTag().getValueType())){
                         command.addColumn(element, TEXT);
                     } else {
-                        throw new IllegalArgumentException("Unsupported Value type " + element.getValueConverter().getValueType().getName() +
+                        throw new IllegalArgumentException("Unsupported Value type " + element.getMetaTag().getValueType().getName() +
                                 ". Supported Value types are subtypes of Number and String. ");
                     }
                 });

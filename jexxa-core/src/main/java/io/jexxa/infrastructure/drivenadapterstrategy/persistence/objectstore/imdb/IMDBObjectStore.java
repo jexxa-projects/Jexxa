@@ -9,11 +9,11 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBReposi
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.NumericConverter;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.StringConverter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.NumericTag;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.StringTag;
 
-public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataConverter>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>
+public class IMDBObjectStore<T, K, M extends Enum<M> & Metadata>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>
 {
     private final Set<M> comparatorFunctions;
 
@@ -29,29 +29,29 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataConverter>  exten
     }
 
     @Override
-    public <S> INumericQuery<T, S> getNumericQuery(M metadata, Class<S> queryType)
+    public <S> INumericQuery<T, S> getNumericQuery(M metaTag, Class<S> queryType)
     {
-        if ( !comparatorFunctions.contains(metadata) )
+        if ( !comparatorFunctions.contains(metaTag) )
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
 
         //noinspection unchecked
-        NumericConverter<T, S> numberComparator = (NumericConverter) metadata.getValueConverter();
+        NumericTag<T, S> numberComparator = (NumericTag) metaTag.getMetaTag();
 
         return new IMDBNumericQuery<>(getOwnAggregateMap(), numberComparator, queryType);
     }
 
     @Override
-    public <S> IStringQuery<T, S> getStringQuery(M metadata, Class<S> queryType)
+    public <S> IStringQuery<T, S> getStringQuery(M metaTag, Class<S> queryType)
     {
-        if ( !comparatorFunctions.contains(metadata) )
+        if ( !comparatorFunctions.contains(metaTag) )
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
 
         //noinspection unchecked
-        StringConverter<T, S> stringComparator = (StringConverter) metadata.getValueConverter();
+        StringTag<T, S> stringComparator = (StringTag) metaTag.getMetaTag();
 
         return new IMDBStringQuery<>(getOwnAggregateMap(), stringComparator, queryType);
     }

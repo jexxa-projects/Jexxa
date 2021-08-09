@@ -1,7 +1,7 @@
 package io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converters.instantConverter;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converters.numberConverter;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.instantTag;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numberTag;
 
 import java.time.Instant;
 import java.util.List;
@@ -9,8 +9,8 @@ import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converter;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
 import io.jexxa.tutorials.contractmanagement.domain.domainevent.ContractSigned;
 import io.jexxa.tutorials.contractmanagement.domain.valueobject.ContractNumber;
 import io.jexxa.tutorials.contractmanagement.domainservice.IDomainEventStore;
@@ -25,29 +25,34 @@ public class DomainEventStore implements IDomainEventStore
      *  <li>Date of the signature</li>
      * </ol>
      */
-    public enum DomainEventMetadata implements MetadataConverter
+    public enum DomainEventTags implements Metadata
     {
-        CONTRACT_NUMBER(numberConverter((domainEvent -> domainEvent.getContractNumber().getValue())) ),
-        SIGNATURE_DATE(instantConverter(ContractSigned::getSignatureDate));
+        CONTRACT_NUMBER(numberTag((domainEvent -> domainEvent.getContractNumber().getValue())) ),
 
-        // The following code is always the same and required to use by the ObjectStore
-        private final Converter<ContractSigned, ?, ? > converter;
-        DomainEventMetadata(Converter<ContractSigned,?, ?> converter)
+        SIGNATURE_DATE(instantTag(ContractSigned::getSignatureDate));
+
+        // The remaining code is always the same for all metadata specifications
+        private final MetaTag<ContractSigned, ?, ? > metaTag;
+
+        DomainEventTags(MetaTag<ContractSigned,?, ?> metaTag)
         {
-            this.converter = converter;
+            this.metaTag = metaTag;
         }
-        @Override @SuppressWarnings("unchecked") public Converter<ContractSigned, ?, ?> getValueConverter()
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public MetaTag<ContractSigned, ?, ?> getMetaTag()
         {
-            return converter;
+            return metaTag;
         }
     }
 
-    private final IObjectStore<ContractSigned, ContractNumber, DomainEventMetadata> objectStore;
+    private final IObjectStore<ContractSigned, ContractNumber, DomainEventTags> objectStore;
 
 
     public DomainEventStore(Properties properties)
     {
-        this.objectStore = ObjectStoreManager.getObjectStore(ContractSigned.class, ContractSigned::getContractNumber, DomainEventMetadata.class, properties);
+        this.objectStore = ObjectStoreManager.getObjectStore(ContractSigned.class, ContractSigned::getContractNumber, DomainEventTags.class, properties);
     }
 
     @Override
@@ -60,7 +65,7 @@ public class DomainEventStore implements IDomainEventStore
     public List<ContractSigned> get(Instant startTime, Instant endTime)
     {
         return objectStore
-                .getNumericQuery(DomainEventMetadata.SIGNATURE_DATE, Instant.class)
+                .getNumericQuery(DomainEventTags.SIGNATURE_DATE, Instant.class)
                 .getRangeClosed(startTime, endTime);
     }
 

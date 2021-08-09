@@ -5,14 +5,15 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converter;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
 
-public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataConverter> extends JDBCObjectQuery<T, S, M> implements IStringQuery<T, S>
+public class JDBCStringQuery <T, S, M extends Enum<M> & Metadata> extends JDBCObjectQuery<T, S, M> implements IStringQuery<T, S>
 {
-    private final Converter<T, S, ? extends String> stringConverter;
+    private final MetaTag<T, S, ? extends String> stringMetaTag;
 
     private final Class<T> aggregateClazz;
     private final M nameOfRow;
@@ -20,29 +21,28 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataConverter> exten
 
     public JDBCStringQuery(
             Supplier<JDBCConnection> jdbcConnection,
-            Converter<T, S, ? extends String> stringConverter,
-            M nameOfRow,
+            M metaTag,
             Class<T> aggregateClazz,
             Class<M> comparatorSchema,
             Class<S> queryType
     )
     {
-        super(jdbcConnection, nameOfRow, aggregateClazz, comparatorSchema, queryType);
+        super(jdbcConnection, metaTag, aggregateClazz, comparatorSchema, queryType);
 
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
-        this.nameOfRow = Objects.requireNonNull(nameOfRow);
-        this.stringConverter = Objects.requireNonNull(stringConverter);
+        this.nameOfRow = Objects.requireNonNull(metaTag);
+        this.stringMetaTag = nameOfRow.getMetaTag();
         this.comparatorSchema = Objects.requireNonNull(comparatorSchema);
     }
 
     @Override
     public List<T> beginsWith(S value)
     {
-        var sqlStartValue = stringConverter.convertValue(value) + "%";
+        var sqlStartValue = stringMetaTag.convertValue(value) + "%";
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlStartValue)
@@ -55,11 +55,11 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataConverter> exten
     @Override
     public List<T> endsWith(S value)
     {
-        var sqlEndValue = "%" + stringConverter.convertValue(value);
+        var sqlEndValue = "%" + stringMetaTag.convertValue(value);
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlEndValue)
@@ -72,11 +72,11 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataConverter> exten
     @Override
     public List<T> includes(S value)
     {
-        var sqlIncludeValue = "%" + stringConverter.convertValue(value) + "%";
+        var sqlIncludeValue = "%" + stringMetaTag.convertValue(value) + "%";
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlIncludeValue)
@@ -89,11 +89,11 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataConverter> exten
     @Override
     public List<T> isEqualTo(S value)
     {
-        var sqlEqualValue = stringConverter.convertValue(value) ;
+        var sqlEqualValue = stringMetaTag.convertValue(value) ;
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlEqualValue)
@@ -106,11 +106,11 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataConverter> exten
     @Override
     public List<T> notIncludes(S value)
     {
-        var sqlIncludeValue = "%" + stringConverter.convertValue(value) + "%";
+        var sqlIncludeValue = "%" + stringMetaTag.convertValue(value) + "%";
 
         var jdbcQuery = getConnection()
                 .createQuery(comparatorSchema)
-                .select( JDBCObjectStore.KeyValueSchema.class, JDBCObjectStore.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .notLike(sqlIncludeValue)

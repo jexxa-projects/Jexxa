@@ -2,8 +2,8 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.JexxaObject.createCharSequence;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreTestDatabase.REPOSITORY_CONFIG;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converters.numberConverter;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converters.stringConverter;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numberTag;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.stringTag;
 import static java.util.Comparator.comparing;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,9 +14,9 @@ import java.util.stream.IntStream;
 
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converter;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.MetadataConverter;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.Converters;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.Metadata;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -34,33 +34,33 @@ class IStringQueryIT
      * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
      * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
      */
-    private enum JexxaObjectMetadata implements MetadataConverter
+    private enum JexxaObjectMetadata implements Metadata
     {
-        INT_VALUE(Converters.numberConverter(JexxaObject::getInternalValue)),
+        INT_VALUE(MetaTags.numberTag(JexxaObject::getInternalValue)),
 
-        VALUE_OBJECT(numberConverter(JexxaObject::getKey, JexxaValueObject::getValue)),
+        VALUE_OBJECT(numberTag(JexxaObject::getKey, JexxaValueObject::getValue)),
 
-        OPTIONAL_VALUE_OBJECT(numberConverter(JexxaObject::getOptionalValue, JexxaValueObject::getValue)),
+        OPTIONAL_VALUE_OBJECT(numberTag(JexxaObject::getOptionalValue, JexxaValueObject::getValue)),
 
-        STRING_OBJECT(stringConverter(JexxaObject::getString)),
+        STRING_OBJECT(stringTag(JexxaObject::getString)),
 
-        OPTIONAL_STRING_OBJECT(stringConverter(JexxaObject::getOptionalString));
+        OPTIONAL_STRING_OBJECT(stringTag(JexxaObject::getOptionalString));
 
         /**
          *  Defines the constructor of the enum. Following code is equal for all object stores.
          */
-        private final Converter<JexxaObject, ?, ? > converter;
+        private final MetaTag<JexxaObject, ?, ? > metaTag;
 
-        JexxaObjectMetadata(Converter<JexxaObject,?, ?> converter)
+        JexxaObjectMetadata(MetaTag<JexxaObject,?, ?> metaTag)
         {
-            this.converter = converter;
+            this.metaTag = metaTag;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public Converter<JexxaObject, ?, ?> getValueConverter()
+        public MetaTag<JexxaObject, ?, ?> getMetaTag()
         {
-            return converter;
+            return metaTag;
         }
     }
 

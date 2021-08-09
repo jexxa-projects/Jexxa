@@ -7,11 +7,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.converter.StringConverter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.StringTag;
 
 class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
 {
-    private final StringConverter<T, S> stringComparator;
+    private final StringTag<T, S> stringComparator;
     private final Map<K, T> internalMap;
 
     private Map<K, T> getOwnAggregateMap()
@@ -19,7 +19,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
         return internalMap;
     }
 
-    IMDBStringQuery(Map<K, T> internalMap, StringConverter<T, S> stringComparator, Class<S> queryType)
+    IMDBStringQuery(Map<K, T> internalMap, StringTag<T, S> stringComparator, Class<S> queryType)
     {
         this.internalMap = internalMap;
         this.stringComparator = stringComparator;

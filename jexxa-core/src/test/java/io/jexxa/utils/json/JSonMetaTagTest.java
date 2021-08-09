@@ -16,7 +16,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
 
-class JSonConverterTest
+class JSonMetaTagTest
 {
 
     private final JSONConverter objectUnderTest = JSONManager.getJSONConverter();
