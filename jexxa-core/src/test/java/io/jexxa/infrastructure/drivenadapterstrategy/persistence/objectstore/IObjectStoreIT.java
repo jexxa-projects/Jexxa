@@ -31,7 +31,7 @@ class IObjectStoreIT
     private static final int TEST_DATA_SIZE = 100;
 
     private List<JexxaObject> testData;
-    private IObjectStore<JexxaObject, JexxaValueObject, JexxaObjectMetadataSchema> objectUnderTest;
+    private IObjectStore<JexxaObject, JexxaValueObject, JexxaObjectSchema> objectUnderTest;
 
     @BeforeEach
     void initTest()
@@ -49,7 +49,7 @@ class IObjectStoreIT
      * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
      * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
      */
-    private enum JexxaObjectMetadataSchema implements MetadataSchema
+    private enum JexxaObjectSchema implements MetadataSchema
     {
         INT_VALUE(MetaTags.numberTag(JexxaObject::getInternalValue)),
 
@@ -60,7 +60,7 @@ class IObjectStoreIT
          */
         private final MetaTag<JexxaObject, ?, ? > metaTag;
 
-        JexxaObjectMetadataSchema(MetaTag<JexxaObject,?, ?> metaTag)
+        JexxaObjectSchema(MetaTag<JexxaObject,?, ?> metaTag)
         {
             this.metaTag = metaTag;
         }
@@ -172,7 +172,7 @@ class IObjectStoreIT
         if (!properties.isEmpty())
         {
             var jdbcConnection = new JDBCConnection(properties);
-            jdbcConnection.createTableCommand(JexxaObjectMetadataSchema.class)
+            jdbcConnection.createTableCommand(JexxaObjectSchema.class)
                     .dropTableIfExists(JexxaObject.class)
                     .asIgnore();
         }
@@ -180,7 +180,7 @@ class IObjectStoreIT
         objectUnderTest = ObjectStoreManager.getObjectStore(
                 JexxaObject.class,
                 JexxaObject::getKey,
-                JexxaObjectMetadataSchema.class,
+                JexxaObjectSchema.class,
                 properties);
 
         objectUnderTest.removeAll();

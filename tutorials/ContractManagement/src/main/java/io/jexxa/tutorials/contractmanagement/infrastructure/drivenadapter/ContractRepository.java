@@ -3,9 +3,9 @@ package io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.booleanTag;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numberTag;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.stringTag;
-import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractMetadataSchema.ADVISOR;
-import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractMetadataSchema.CONTRACT_NUMBER;
-import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractMetadataSchema.CONTRACT_SIGNED;
+import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractSchema.ADVISOR;
+import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractSchema.CONTRACT_NUMBER;
+import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractSchema.CONTRACT_SIGNED;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +30,7 @@ public class ContractRepository  implements IContractRepository
      *    <li>Advisor of the contract</li>
      * </ol>
      */
-    enum ContractMetadataSchema implements MetadataSchema
+    enum ContractSchema implements MetadataSchema
     {
         CONTRACT_NUMBER(numberTag(element -> element.getContractNumber().getValue())),
 
@@ -41,7 +41,7 @@ public class ContractRepository  implements IContractRepository
         // The remaining code is always the same for all metadata specifications
         private final MetaTag<Contract, ?, ? > metaTag;
 
-        ContractMetadataSchema(MetaTag<Contract,?, ?> metaTag)
+        ContractSchema(MetaTag<Contract,?, ?> metaTag)
         {
             this.metaTag = metaTag;
         }
@@ -55,11 +55,11 @@ public class ContractRepository  implements IContractRepository
     }
 
 
-    private final IObjectStore<Contract, ContractNumber, ContractMetadataSchema> objectStore;
+    private final IObjectStore<Contract, ContractNumber, ContractSchema> objectStore;
 
     public ContractRepository(Properties properties)
     {
-        this.objectStore = ObjectStoreManager.getObjectStore(Contract.class, Contract::getContractNumber, ContractMetadataSchema.class, properties);
+        this.objectStore = ObjectStoreManager.getObjectStore(Contract.class, Contract::getContractNumber, ContractSchema.class, properties);
     }
 
     @Override

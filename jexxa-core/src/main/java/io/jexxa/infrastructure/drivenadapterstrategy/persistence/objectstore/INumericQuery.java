@@ -3,10 +3,13 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 import java.util.List;
 
 /**
+ * Interface to search numeric based meta tags
  *
- * TODO: Document comparison with null
- * TODO: Document Ascending/descending with null
- *
+ * A note on NULL values:
+ * <li>Null values are supported </li>
+ * <li>When comparing values with a null value then a null value is treated always greater then a non-null value </li>
+ * <li>When getting objects in ascending or descending order, null values are always at the end of the list </li>
+ * </ol>
  * @param <T> Type of the managed object
  * @param <S> Type of the metadata that is used to find the objects
  */
@@ -21,18 +24,30 @@ public interface INumericQuery<T, S >
      */
     List<T> isGreaterOrEqualThan(S value);
 
-    /**  get all values which fulfill: {@code value < returnedValue}. The returned list is in ascending
+    /**
+     * Get all values which fulfill: {@code value < returnedValue}. The returned list is in ascending
      * order by numeric representation of used value.
+     *
+     * @param value value to be compared to
+     * @return list of objects fulfilling the condition
      */
     List<T> isGreaterThan(S value);
 
-    /** get all values which fulfill:  {@code value <= endValue}. The returned list is in ascending
+    /**
+     * get all values which fulfill:  {@code value <= endValue}. The returned list is in ascending
      * order by numeric representation of used value.
+     *
+     * @param endValue value to be compared to
+     * @return list of objects fulfilling the condition
      */
     List<T> isLessOrEqualThan(S endValue);
 
-    /** get all values which fulfill:  {@code value < endValue}. The returned list is in ascending
+    /**
+     * get all values which fulfill:  {@code value < endValue}. The returned list is in ascending
      * order by numeric representation of used value.
+     *
+     * @param endValue value to be compared to
+     * @return list of objects fulfilling the condition
      */
     List<T> isLessThan(S endValue);
 

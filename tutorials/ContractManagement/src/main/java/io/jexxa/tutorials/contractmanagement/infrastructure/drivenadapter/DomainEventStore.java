@@ -25,7 +25,7 @@ public class DomainEventStore implements IDomainEventStore
      *  <li>Date of the signature</li>
      * </ol>
      */
-    public enum DomainEventTags implements MetadataSchema
+    public enum DomainEventSchema implements MetadataSchema
     {
         CONTRACT_NUMBER(numberTag((domainEvent -> domainEvent.getContractNumber().getValue())) ),
 
@@ -34,7 +34,7 @@ public class DomainEventStore implements IDomainEventStore
         // The remaining code is always the same for all metadata specifications
         private final MetaTag<ContractSigned, ?, ? > metaTag;
 
-        DomainEventTags(MetaTag<ContractSigned,?, ?> metaTag)
+        DomainEventSchema(MetaTag<ContractSigned,?, ?> metaTag)
         {
             this.metaTag = metaTag;
         }
@@ -47,12 +47,12 @@ public class DomainEventStore implements IDomainEventStore
         }
     }
 
-    private final IObjectStore<ContractSigned, ContractNumber, DomainEventTags> objectStore;
+    private final IObjectStore<ContractSigned, ContractNumber, DomainEventSchema> objectStore;
 
 
     public DomainEventStore(Properties properties)
     {
-        this.objectStore = ObjectStoreManager.getObjectStore(ContractSigned.class, ContractSigned::getContractNumber, DomainEventTags.class, properties);
+        this.objectStore = ObjectStoreManager.getObjectStore(ContractSigned.class, ContractSigned::getContractNumber, DomainEventSchema.class, properties);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class DomainEventStore implements IDomainEventStore
     public List<ContractSigned> get(Instant startTime, Instant endTime)
     {
         return objectStore
-                .getNumericQuery(DomainEventTags.SIGNATURE_DATE, Instant.class)
+                .getNumericQuery(DomainEventSchema.SIGNATURE_DATE, Instant.class)
                 .getRangeClosed(startTime, endTime);
     }
 
