@@ -25,7 +25,7 @@ public class NumericTag<T, S>  extends MetaTag<T, S, Number>
     }
 
     @Override
-    public Class<Number> getConvertedType()
+    public Class<Number> getTagType()
     {
         return Number.class;
     }

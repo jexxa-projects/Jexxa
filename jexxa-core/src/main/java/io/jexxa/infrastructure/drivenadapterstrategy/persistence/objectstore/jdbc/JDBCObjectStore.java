@@ -108,7 +108,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
             throw new IllegalArgumentException(metaTag.name() + " is not part of the schema -> Cannot provide a numeric query.");
         }
 
-        if ( !Number.class.isAssignableFrom( metaTag.getTag().getConvertedType()) )
+        if ( !Number.class.isAssignableFrom( metaTag.getTag().getTagType()) )
         {
             throw new IllegalArgumentException(metaTag.name() + " does not use a numeric value -> Could not create a numeric query");
         }
@@ -124,7 +124,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
             throw new IllegalArgumentException(metaTag.name() + " is not part of the schema -> Cannot provide a string query.");
         }
 
-        if ( !String.class.isAssignableFrom( metaTag.getTag().getConvertedType()) )
+        if ( !String.class.isAssignableFrom( metaTag.getTag().getTagType()) )
         {
             throw new IllegalArgumentException(metaTag.name() + " does not use a numeric value -> Could not create a String query");
         }
@@ -147,13 +147,13 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
 
                 jdbcSchema.forEach(element ->
                 {
-                    if ( Number.class.isAssignableFrom(element.getTag().getConvertedType()) )
+                    if ( Number.class.isAssignableFrom(element.getTag().getTagType()) )
                     {
                         command.addColumn(element, NUMERIC);
-                    } else if (String.class.isAssignableFrom(element.getTag().getConvertedType())){
+                    } else if (String.class.isAssignableFrom(element.getTag().getTagType())){
                         command.addColumn(element, TEXT);
                     } else {
-                        throw new IllegalArgumentException("Unsupported Value type " + element.getTag().getConvertedType().getName() +
+                        throw new IllegalArgumentException("Unsupported Value type " + element.getTag().getTagType().getName() +
                                 ". Supported Value types are subtypes of Number and String. ");
                     }
                 });

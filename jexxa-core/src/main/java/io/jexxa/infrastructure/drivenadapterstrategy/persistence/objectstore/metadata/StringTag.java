@@ -25,7 +25,7 @@ public class StringTag<T, S>  extends MetaTag<T, S, String>
     }
 
     @Override
-    public Class<String> getConvertedType()
+    public Class<String> getTagType()
     {
         return String.class;
     }

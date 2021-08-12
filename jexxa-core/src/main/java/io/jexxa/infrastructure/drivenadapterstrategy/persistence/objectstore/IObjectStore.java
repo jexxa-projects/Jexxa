@@ -12,8 +12,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.met
  *
  * @param <V> Defines the type of the object managed by the repository
  * @param <K> Defines the type of the key identifying the managed object
- * @param <R> Defines the type of the Schema of the aggregate which defines
- *           an enum for each searchable value of the aggregate
+ * @param <R> Defines the type of the metadata schema
  */
 public interface IObjectStore<V, K, R extends Enum<?> & MetadataSchema> extends IRepository<V, K>
 {

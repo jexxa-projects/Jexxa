@@ -46,5 +46,10 @@ public abstract class MetaTag<T, S, V>
         return valueConverter.apply(value);
     }
 
-    public abstract Class<V> getConvertedType();
+    /**
+     * Returns the concrete type information of the tag that is used for performing all queries
+     *
+     * @return concrete type information of the tag that is used for performing all queries
+     */
+    public abstract Class<V> getTagType();
 }
