@@ -3,6 +3,13 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.me
 import java.util.Objects;
 import java.util.function.Function;
 
+/**
+ * This class provides all information to perform queries with a concrete meta information.
+ *
+ * @param <T> Type of the managed aggregate/object
+ * @param <S> Type of the metadata as it is used inside the aggregate/object
+ * @param <V> Type that that is used by the meta tag to perform query operations
+ */
 public abstract class MetaTag<T, S, V>
 {
     Function<T, S> valueAccessor;
@@ -16,9 +23,9 @@ public abstract class MetaTag<T, S, V>
     }
 
     /**
-     * This method converts the value of type {@link S} stored in the aggregate to a Number by using the defined converter function
+     * This method converts the value of type {@link S} stored in the aggregate {@link T} to type {@link V} by using the defined value converter
      * @param aggregate which provides the aggregate including the value that should be converted
-     * @return Number representing the value
+     * @return {@link V} representing the value of the MetaTag
      */
     public V getFromAggregate(T aggregate)
     {
@@ -34,9 +41,9 @@ public abstract class MetaTag<T, S, V>
     }
 
     /**
-     * This method converts the value of type {@link S} stored in the aggregate to a Number by using the defined converter function
+     * This method converts the value of type {@link S} stored in the aggregate to {@link V} by using the defined converter function
      * @param value which provides the value that should be converted
-     * @return Number representing the value
+     * @return {@link V} representing the value
      */
     public V getFromValue(S value)
     {

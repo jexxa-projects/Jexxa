@@ -13,15 +13,15 @@ import java.util.function.Function;
 public class NumericTag<T, S>  extends MetaTag<T, S, Number>
 {
     /**
-     * Creates an Comparator object
+     * Creates a NumericTag
      *
      * @param valueAccessor defines a function to access a specific value of the aggregate
-     * @param valueIConverter defines a function that converts a searched value into a Number for comparison
+     * @param valueConverter defines a function that converts a searched value into a Number for comparison
      */
     public NumericTag(Function<T, S> valueAccessor,
-                      Function<S, ? extends Number> valueIConverter)
+                      Function<S, ? extends Number> valueConverter)
     {
-        super(valueAccessor, valueIConverter);
+        super(valueAccessor, valueConverter);
     }
 
     @Override
