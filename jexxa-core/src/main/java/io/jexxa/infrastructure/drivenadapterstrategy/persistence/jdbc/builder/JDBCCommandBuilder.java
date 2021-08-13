@@ -13,10 +13,13 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.bui
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.UPDATE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.WHERE;
 
+import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCCommand;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import org.checkerframework.checker.units.qual.C;
 
 @SuppressWarnings("unused")
 public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
@@ -79,6 +82,21 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
             getStatementBuilder().append( COMMA );
             getStatementBuilder().append( ARGUMENT_PLACEHOLDER );
             addArgument(args[i]);
+        }
+        getStatementBuilder().append(")");
+
+        return this;
+    }
+
+    public JDBCCommandBuilder<T> columns(String... args)
+    {
+        getStatementBuilder().append("( ");
+        getStatementBuilder().append(args[0]);
+
+        for(var i = 1;  i < args.length; ++i ) // Handle remaining entries(with leading COMMA)
+        {
+            getStatementBuilder().append( COMMA );
+            getStatementBuilder().append( args[i] );
         }
         getStatementBuilder().append(")");
 

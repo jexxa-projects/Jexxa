@@ -86,6 +86,12 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
 
         var jsonConverter = getJSONConverter();
 
+        List<String> keySet = new ArrayList<>();
+        keySet.add(KeyValueSchema.KEY.name());
+        keySet.add(KeyValueSchema.VALUE.name());
+        jdbcSchema.forEach(element -> keySet.add(element.name()));
+
+
         var objectList = new ArrayList<>();
         objectList.add (jsonConverter.toJson(keyFunction.apply(aggregate)));
         objectList.add (jsonConverter.toJson(aggregate));
@@ -94,6 +100,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         var command = getConnection()
                 .createCommand(KeyValueSchema.class)
                 .insertInto(aggregateClazz)
+                .columns(keySet.toArray(new String[0]))
                 .values(objectList.toArray())
                 .create();
 
