@@ -1,4 +1,4 @@
-# Contract Management 
+# Contract Management - Using an ObjectStore 
 
 ## What You Learn
 
@@ -7,7 +7,7 @@
 
 ## What you need
 
-*   Understand tutorial `BookStoreJ` because we explain only new aspects
+*   Understand tutorial `BookStore` because we explain only new aspects
 *   30 minutes
 *   JDK 11 (or higher) installed
 *   Maven 3.6 (or higher) installed
@@ -16,11 +16,11 @@
 
 ## Motivation 
 
-When developing an enterprise application you should focus on how the business domain and how to represent
+When developing an enterprise application you should focus on the business domain and how to represent
 it within your application. Technical aspects such as the database schema should be hidden as good as possible. 
-Within Jexxa we try to support this by providing strategies for implementing a Repository.   
+Within Jexxa we support this by providing different strategies for implementing a Repository.   
 
-### When to choose `IRepository`  
+### Driven Adapter Strategy: `IRepository`  
 
 The `IRepository` interface is very limited regarding querying a managed object. Either you query an object by its unique key, or you request all 
 objects. If you want to offer advanced querying mechanisms, you have to implement them by yourself based on querying all objects. Even though this 
@@ -38,7 +38,7 @@ a specific manufacturing unit requires only to know the batches that are current
                                                                                       
 Please do not underestimate this aspect because it supports you separating your production data from your archive data.  
 
-### When to choose `IObjectStore`
+### Driven Adapter Strategy: `IObjectStore`
                                
 The `IObjectStore` provides more sophisticated interfaces to query managed objects by all kind of data. Available strategies make explicit use
 of optimization mechanism of the underlying technology so that the performance depends on chosen technology stack. This kind of repository should 
@@ -54,9 +54,9 @@ In general, you should use an `IObjectStore` in following scenarios:
 
 At first thought, the last requirement sounds like a severe restriction. Especially this kind of change typically happens some time after the 
 software is in production. But please keep in mind that your application core is protected by your application specific interface. So changing the 
-implementation will not affect the application core itself. In addition, you have a lot of knowledge based from production and change requests which 
-underlying technology or database stack should be used. Now it is the right point in time to switch to a specific implementation without using a 
-specific strategy or to provide your own strategy using technologies such as liquibase for versioning your database schema.    
+implementation will not affect the application core itself. If a change request occurs, you have a lot of knowledge based from production and other 
+change requests which underlying technology or database stack should be used. Now it is the right point in time to switch to a specific implementation
+without using a specific strategy or to provide your own strategy using technologies such as liquibase for versioning your database schema.    
 
 Typical use cases to select an `IObjectStore` are:
 * An archive of the domain events.
@@ -81,7 +81,8 @@ This tutorial defines following requirements:
 * `IContractRepository`: Manage contracts with a very high lifetime and must be searched by different metadata.  
 * `IDomainEventStore`: Archive all domain events that must be searched by different metadata.    
 
-Based on the requirements, both interface should be implemented using an `IObjectStore`.
+Based on the requirements, both interface should be implemented using an `IObjectStore`. In the reset of this section we describe the implementation 
+of `IContractRepositroy`. Since the implementation of `IDomainEventStore` is quite similar please refer to its source code.  
 
 ### Implementing `IContractRepositroy`
 

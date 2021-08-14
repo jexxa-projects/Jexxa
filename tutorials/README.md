@@ -12,20 +12,23 @@ All tutorials focus on the usage of Jexxa. Therefore, the business logic in thes
 ## HelloJexxa
 See documentation [HelloJexxa](HelloJexxa/)
 
-## TimeService
+## TimeService - Async messaging
 See documentation [TimeService](TimeService/)
 
 ## TimeService - Flow of Control
 See documentation [TimeService - Flow of Control](TimeService/README-FlowOfControl.md)
 
-## BookStore
+## BookStore - Using a repository  
 See documentation [BookStore](BookStore/)
 
-## BookStoreJ
+## BookStoreJ - 
 See documentation [BookStoreJ](BookStoreJ/)
 
 ## BookStoreJ - With OpenAPI support 
 See documentation [BookStoreJ - With OpenAPI support](BookStoreJ/README-OPENAPI.md)
 
-## BookStoreJ16
+## BookStoreJ16 - How to use Java Records
 See documentation [BookStoreJ16](BookStoreJ16/)
+
+## ContractManagement - Using an ObjectStore  
+See documentation [ContractManagement](ContractManagement/) 
