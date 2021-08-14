@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb.IMDBObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.jdbc.JDBCObjectStore;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.factory.ClassFactory;
 

@@ -16,7 +16,6 @@ import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.parallel.Execution;
