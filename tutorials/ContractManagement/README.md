@@ -29,8 +29,8 @@ bounded context, it gives you the time to learn which query interface you really
 
 In general, you should use an `IRepository` in following scenarios: 
 
-* You query the managed objects only be their unique key.
-* In case you need more advanced query operations, the lifetime of the managed objects is short, so that the amount of managed objects is relatively small.
+*   You query the managed objects only be their unique key.
+*   In case you need more advanced query operations, the lifetime of the managed objects is short, so that the amount of managed objects is relatively small.
 
 Especially the second case happens quite often in production systems, especially in batch systems. Here, it is quite common that software controlling 
 a specific manufacturing unit requires only to know the batches that are currently processed. As soon as the processing step is finished, a corresponding 
@@ -48,9 +48,9 @@ Only the underlying strategy is changed.
 
 In general, you should use an `IObjectStore` in following scenarios:
 
-* You need several ways to request managed objects and
-* the lifetime of the managed objects is high, so that the amount of managed objects will continuously increase.
-* The metadata to find objects is fixed and will not change over time.  
+*   You need several ways to request managed objects and
+*   the lifetime of the managed objects is high, so that the amount of managed objects will continuously increase.
+*   The metadata to find objects is fixed and will not change over time.  
 
 At first thought, the last requirement sounds like a severe restriction. Especially this kind of change typically happens some time after the 
 software is in production. But please keep in mind that your application core is protected by your application specific interface. So changing the 
@@ -59,8 +59,8 @@ change requests which underlying technology or database stack should be used. No
 without using a specific strategy or to provide your own strategy using technologies such as liquibase for versioning your database schema.    
 
 Typical use cases to select an `IObjectStore` are:
-* An archive of the domain events.
-* A bounded context managing objects with a very long lifetime such as contracts.
+*   An archive of the domain events.
+*   A bounded context managing objects with a very long lifetime such as contracts.
 
 ### Strategies for `IRepository` and `IObjectStore`
 
@@ -78,8 +78,8 @@ By default, both manager classes select a strategy depending on your application
 ## Example ContractManagement
 
 This tutorial defines following requirements: 
-* `IContractRepository`: Manage contracts with a very high lifetime and must be searched by different metadata.  
-* `IDomainEventStore`: Archive all domain events that must be searched by different metadata.    
+*   `IContractRepository`: Manage contracts with a very high lifetime and must be searched by different metadata.  
+*   `IDomainEventStore`: Archive all domain events that must be searched by different metadata.    
 
 Based on the requirements, both interface should be implemented using an `IObjectStore`. In the reset of this section we describe the implementation 
 of `IContractRepositroy`. Since the implementation of `IDomainEventStore` is quite similar please refer to its source code.  
