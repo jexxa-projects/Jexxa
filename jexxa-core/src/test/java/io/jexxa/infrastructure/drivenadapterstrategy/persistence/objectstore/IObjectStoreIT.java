@@ -51,7 +51,7 @@ class IObjectStoreIT
      */
     private enum JexxaObjectSchema implements MetadataSchema
     {
-        INT_VALUE(MetaTags.numberTag(JexxaObject::getInternalValue)),
+        INT_VALUE(numberTag(JexxaObject::getInternalValue)),
 
         VALUE_OBJECT(numberTag(JexxaObject::getKey, JexxaValueObject::getValue));
 
