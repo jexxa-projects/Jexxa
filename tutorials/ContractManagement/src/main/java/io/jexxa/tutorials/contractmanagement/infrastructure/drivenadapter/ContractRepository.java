@@ -32,10 +32,22 @@ public class ContractRepository  implements IContractRepository
      */
     enum ContractSchema implements MetadataSchema
     {
+        /**
+         * This MetaTag represents the contract number. Since contract number is a  numeric value we use a numberTag. As most
+         * predefined {@link MetaTag} class, we just provide an accessor function to get the value from the managed object.
+         */
         CONTRACT_NUMBER(numberTag(element -> element.getContractNumber().getValue())),
 
+        /**
+         * This MetaTag represents a boolean if the contract is signed or not.  Here, we use booleanTag together with the
+         * corresponding accessor function.
+         */
         CONTRACT_SIGNED(booleanTag(Contract::isSigned)),
 
+        /**
+         * This MetaTag allows for searching for the advisor of the contract. Here, we use stringTag together with the corresponding
+         * accessor function.
+         */
         ADVISOR(stringTag(Contract::getAdvisor));
 
         // The remaining code is always the same for all metadata specifications

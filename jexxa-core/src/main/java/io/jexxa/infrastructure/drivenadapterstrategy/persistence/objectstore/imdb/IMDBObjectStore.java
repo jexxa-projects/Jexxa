@@ -15,23 +15,23 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.met
 
 public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataSchema>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>
 {
-    private final Set<M> comparatorFunctions;
+    private final Set<M> metaData;
 
     public IMDBObjectStore(
             Class<T> aggregateClazz,
             Function<T, K> keyFunction,
-            Class<M> comparatorSchema,
+            Class<M> metaData,
             Properties properties
             )
     {
         super(aggregateClazz, keyFunction, properties);
-        this.comparatorFunctions = EnumSet.allOf(comparatorSchema);
+        this.metaData = EnumSet.allOf(metaData);
     }
 
     @Override
     public <S> INumericQuery<T, S> getNumericQuery(M metaTag, Class<S> queryType)
     {
-        if ( !comparatorFunctions.contains(metaTag) )
+        if ( !metaData.contains(metaTag) )
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }
@@ -45,7 +45,7 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataSchema>  extends 
     @Override
     public <S> IStringQuery<T, S> getStringQuery(M metaTag, Class<S> queryType)
     {
-        if ( !comparatorFunctions.contains(metaTag) )
+        if ( !metaData.contains(metaTag) )
         {
             throw new IllegalArgumentException("Unknown strategy for IRangedResult");
         }

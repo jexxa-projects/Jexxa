@@ -17,22 +17,22 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataSchema> extends 
 
     private final Class<T> aggregateClazz;
     private final M nameOfRow;
-    private final Class<M> comparatorSchema;
+    private final Class<M> metaData;
 
     public JDBCStringQuery(
             Supplier<JDBCConnection> jdbcConnection,
             M metaTag,
             Class<T> aggregateClazz,
-            Class<M> comparatorSchema,
+            Class<M> metaData,
             Class<S> queryType
     )
     {
-        super(jdbcConnection, metaTag, aggregateClazz, comparatorSchema, queryType);
+        super(jdbcConnection, metaTag, aggregateClazz, metaData, queryType);
 
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
         this.nameOfRow = Objects.requireNonNull(metaTag);
         this.stringMetaTag = nameOfRow.getTag();
-        this.comparatorSchema = Objects.requireNonNull(comparatorSchema);
+        this.metaData = Objects.requireNonNull(metaData);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataSchema> extends 
         var sqlStartValue = stringMetaTag.getFromValue(value) + "%";
 
         var jdbcQuery = getConnection()
-                .createQuery(comparatorSchema)
+                .createQuery(metaData)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
@@ -58,7 +58,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataSchema> extends 
         var sqlEndValue = "%" + stringMetaTag.getFromValue(value);
 
         var jdbcQuery = getConnection()
-                .createQuery(comparatorSchema)
+                .createQuery(metaData)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
@@ -75,7 +75,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataSchema> extends 
         var sqlIncludeValue = "%" + stringMetaTag.getFromValue(value) + "%";
 
         var jdbcQuery = getConnection()
-                .createQuery(comparatorSchema)
+                .createQuery(metaData)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
@@ -92,7 +92,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataSchema> extends 
         var sqlEqualValue = stringMetaTag.getFromValue(value) ;
 
         var jdbcQuery = getConnection()
-                .createQuery(comparatorSchema)
+                .createQuery(metaData)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
@@ -109,7 +109,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataSchema> extends 
         var sqlIncludeValue = "%" + stringMetaTag.getFromValue(value) + "%";
 
         var jdbcQuery = getConnection()
-                .createQuery(comparatorSchema)
+                .createQuery(metaData)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)

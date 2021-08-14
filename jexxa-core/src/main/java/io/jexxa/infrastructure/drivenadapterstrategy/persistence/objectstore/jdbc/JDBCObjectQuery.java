@@ -22,20 +22,20 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
     private final Class<T> aggregateClazz;
     private final JSONConverter jsonConverter = getJSONConverter();
     private final M nameOfRow;
-    private final Class<M> comparatorSchema;
+    private final Class<M> metaData;
 
     public JDBCObjectQuery(
             Supplier<JDBCConnection> jdbcConnection,
             M nameOfRow,
             Class<T> aggregateClazz,
-            Class<M> comparatorSchema,
+            Class<M> metaData,
             Class<S> queryType
     )
     {
         this.jdbcConnection = Objects.requireNonNull( jdbcConnection );
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
         this.nameOfRow = Objects.requireNonNull(nameOfRow);
-        this.comparatorSchema = Objects.requireNonNull(comparatorSchema);
+        this.metaData = Objects.requireNonNull(metaData);
         //Type required for java type inference
         Objects.requireNonNull(queryType);
     }
@@ -43,7 +43,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
     public List<T> getAscending(int amount)
     {
         var jdbcQuery = jdbcConnection.get()
-                .createQuery(comparatorSchema)
+                .createQuery(metaData)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.ASC_NULLS_LAST)
@@ -56,7 +56,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
     public List<T> getAscending()
     {
         var jdbcQuery = jdbcConnection.get()
-                .createQuery(comparatorSchema)
+                .createQuery(metaData)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.ASC_NULLS_LAST)
@@ -68,7 +68,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
     public List<T> getDescending(int amount)
     {
         var jdbcQuery = jdbcConnection.get()
-                .createQuery(comparatorSchema)
+                .createQuery(metaData)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.DESC_NULLS_LAST)
@@ -81,7 +81,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
     public List<T> getDescending()
     {
         var jdbcQuery = jdbcConnection.get()
-                .createQuery(comparatorSchema)
+                .createQuery(metaData)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.DESC_NULLS_LAST)
@@ -93,7 +93,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
     public List<T> isNull()
     {
         var jdbcQuery = jdbcConnection.get()
-                .createQuery(comparatorSchema)
+                .createQuery(metaData)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)
@@ -106,7 +106,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
     public List<T> isNotNull()
     {
         var jdbcQuery = jdbcConnection.get()
-                .createQuery(comparatorSchema)
+                .createQuery(metaData)
                 .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
                 .from(aggregateClazz)
                 .where(nameOfRow)

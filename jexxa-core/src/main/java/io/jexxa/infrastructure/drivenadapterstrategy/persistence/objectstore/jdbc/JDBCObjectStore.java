@@ -67,7 +67,6 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         keySet.add(KeyValueSchema.VALUE.name());
         jdbcSchema.forEach(element -> keySet.add(element.name()));
 
-        //"update %s where key = '%s' "  ComparatorValues... " '%s' = '%s' "
         var command = getConnection()
                 .createCommand(KeyValueSchema.class)
                 .update(aggregateClazz)

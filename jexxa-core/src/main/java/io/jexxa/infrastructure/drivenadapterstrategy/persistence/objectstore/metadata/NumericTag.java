@@ -3,7 +3,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.me
 import java.util.function.Function;
 
 /**
- * A comparator provides a strategy to compare a specific element of an aggregate.
+ * This class provides a strategy to a specific element of an aggregate as a numeric MetaTag.
  *
  * Note: The specific value must be convertible to a number
  *

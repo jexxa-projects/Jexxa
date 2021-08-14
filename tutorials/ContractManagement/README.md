@@ -50,7 +50,7 @@ In general, you should use an `IObjectStore` in following scenarios:
 
 * You need several ways to request managed objects and
 * the lifetime of the managed objects is high, so that the amount of managed objects will continuously increase.
-* The metadata to find objects is fixed and will not change over time. In addition, the order of defined metadata must not be changed. 
+* The metadata to find objects is fixed and will not change over time.  
 
 At first thought, the last requirement sounds like a severe restriction. Especially this kind of change typically happens some time after the 
 software is in production. But please keep in mind that your application core is protected by your application specific interface. So changing the 
@@ -85,40 +85,58 @@ Based on the requirements, both interface should be implemented using an `IObjec
 
 ### Implementing `IContractRepositroy`
 
-Using an ObjectStore is quite similar to a Repository. The main difference is in defining the metadata used to query objects. To ensure type safety, Jexxa requires that all metadata is defined as enum together with a `Comparator` used for comparing the value. In the following example, we define the three different values to query objects. Please note that the following code belongs to the infrastructure of your application which means that your application just sees the `IContractRepository`:
+Using an ObjectStore is quite similar to a Repository. The main difference is in defining the metadata used to query objects. To ensure type safety, 
+Jexxa requires that all metadata is defined as enum together with a `MetaTag` used for converting the value into a base type such as a numeric or 
+string representation. In the following example, we define the three different values to query objects. Please note that the following code belongs 
+to the infrastructure of your application which means that your application just sees the `IContractRepository` and not the schema specification:
 
 ```java
 public class ContractRepository  implements IContractRepository
 {
-    enum ContractMetadata implements MetadataComparator
+    /**
+     * Here we define the values to query contracts. Apart from their key, elements should be queried by following information: <br>
+     * <ol>
+     *    <li>Contract number</li>
+     *    <li>Contract signed flag</li>
+     *    <li>Advisor of the contract</li>
+     * </ol>
+     */
+    enum ContractSchema implements MetadataSchema
     {
-        // This enum represents the contract number. To compare this value, we use numberComparator. 
-        // As most predefined comparators, it just requires an accessor function to get the value from 
-        // the managed object.
-        CONTRACT_NUMBER(Comparators.numberComparator(element -> element.getContractNumber().getValue())),
-    
-        // This enum represents a boolean to query if a contract is signed or not. Here, we use 
-        // booleanComparator together with the corresponding accessor function.
-        CONTRACT_SIGNED(Comparators.booleanComparator(Contract::isSigned)),
+        /**
+         * This MetaTag represents the contract number. Since contract number is a  numeric value we use a numberTag. As most
+         * predefined {@link MetaTag} class, we just provide an accessor function to get the value from the managed object.
+         */
+        CONTRACT_NUMBER(numberTag(element -> element.getContractNumber().getValue())),
 
-        // Finally, define an enum to query contracts by current advisor. Just like before, we define a 
-        // String valueIConverter together with the accessor function. 
-        ADVISOR(Comparators.stringMetaTag(Contract::getAdvisor));
+        /**
+         * This MetaTag represents a boolean if the contract is signed or not.  Here, we use booleanTag together with the
+         * corresponding accessor function.
+         */
+        CONTRACT_SIGNED(booleanTag(Contract::isSigned)),
 
-        // The following code is always the same and required to implement the MetadataComparator interface.
-        private final Comparator<Contract, ?, ? > valueIConverter;
-        
-        ContractMetadata(Comparator<Contract,?, ?> valueIConverter)
+        /**
+         * This MetaTag allows for searching for the advisor of the contract. Here, we use stringTag together with the corresponding
+         * accessor function.
+         */
+        ADVISOR(stringTag(Contract::getAdvisor));
+
+        // The remaining code is always the same for all metadata specifications
+        private final MetaTag<Contract, ?, ? > metaTag;
+
+        ContractSchema(MetaTag<Contract,?, ?> metaTag)
         {
-            this.valueIConverter = valueIConverter;
+            this.metaTag = metaTag;
         }
+
         @Override
         @SuppressWarnings("unchecked")
-        public Comparator<Contract, ?, ?> getComparator()
+        public MetaTag<Contract, ?, ?> getTag()
         {
-            return valueIConverter;
+            return metaTag;
         }
     }
+
     // ...
 }
 ```

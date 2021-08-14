@@ -9,13 +9,13 @@ import java.util.function.Function;
 public class MetaTags
 {
     /**
-     * Factory method to create comparator wich compares value of an aggregate using defined converter function
+     * Factory method to create a MetaTag wich compares value of an aggregate using defined converter function
      *
      * @param accessor defines the method to get the value to be compared
      * @param converter defines the converter function converting the value into a number
      * @param <T> type of the aggregate
      * @param <V> type of the value
-     * @return Comparator wich compares defined value of an aggregate
+     * @return a MetaTag wich compares defined value of an aggregate
      */
     public static <T, V> NumericTag<T, V> numberTag(Function<T, V> accessor, Function<V, ? extends Number> converter)
     {
@@ -23,11 +23,11 @@ public class MetaTags
     }
 
     /**
-     * Factory method to create comparator wich compares value of type {@link Number} of an aggregate
+     * Factory method to create a MetaTag wich compares value of type {@link Number} of an aggregate
      *
      * @param accessorfunction returns the Instant
      * @param <T> type of the aggregate
-     * @return Comparator wich compares an {@link Number} of an aggregate
+     * @return a MetaTag wich compares an {@link Number} of an aggregate
      */
     public static <T, V extends Number> NumericTag<T, V> numberTag(Function<T,V> accessorfunction )
     {
@@ -35,11 +35,11 @@ public class MetaTags
     }
 
     /**
-     * Factory method to create comparator wich compares value of type {@link Instant} of an aggregate
+     * Factory method to create a MetaTag wich compares value of type {@link Instant} of an aggregate
      *
      * @param accessor returns the Instant
      * @param <T> type of the aggregate
-     * @return Comparator wich compares an {@link Instant} of an aggregate
+     * @return a MetaTag wich compares an {@link Instant} of an aggregate
      */
     @SuppressWarnings("java:S5411")
     public static <T> NumericTag<T, Boolean> booleanTag(Function<T, Boolean> accessor )
@@ -48,11 +48,11 @@ public class MetaTags
     }
 
     /**
-     * Factory method to create comparator wich compares value of type {@link Instant} of an aggregate
+     * Factory method to create a MetaTag wich compares value of type {@link Instant} of an aggregate
      *
      * @param accessor returns the Instant
      * @param <T> type of the aggregate
-     * @return Comparator wich compares an {@link Instant} of an aggregate
+     * @return a MetaTag wich compares an {@link Instant} of an aggregate
      */
     public static <T> InstantTag<T> instantTag(Function<T, Instant> accessor )
     {
@@ -60,11 +60,11 @@ public class MetaTags
     }
 
     /**
-     * Factory method to create comparator wich compares value of type {@link Instant} of an aggregate
+     * Factory method to create a MetaTag wich compares value of type {@link Instant} of an aggregate
      *
      * @param accessor returns the String
      * @param <T> type of the aggregate
-     * @return Comparator wich compares an {@link String} of an aggregate
+     * @return a MetaTag wich compares an {@link String} of an aggregate
      */
     public static <T> StringTag<T, String> stringTag(Function<T, String> accessor )
     {

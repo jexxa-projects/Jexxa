@@ -27,10 +27,10 @@ public final class ObjectStoreManager
     public static  <T,K,M  extends Enum<?> & MetadataSchema> IObjectStore<T,K, M> getObjectStore(
             Class<T> aggregateClazz,
             Function<T,K> keyFunction,
-            Class<M> comparatorFunctions,
+            Class<M> metaData,
             Properties properties)
     {
-        return REPOSITORY_MANAGER.getStrategy(aggregateClazz, keyFunction, comparatorFunctions, properties);
+        return REPOSITORY_MANAGER.getStrategy(aggregateClazz, keyFunction, metaData, properties);
     }
 
     public static <U extends IObjectStore<?,?,?>, T > void setStrategy(Class<U> strategyType, Class<T> aggregateType)
@@ -48,7 +48,7 @@ public final class ObjectStoreManager
     public <T,K,M  extends Enum<?> & MetadataSchema> IObjectStore<T,K,M> getStrategy(
             Class<T> objectClazz,
             Function<T,K> keyFunction,
-            Class<M> comparatorFunctions,
+            Class<M> metaData,
             Properties properties
     )
     {
@@ -57,7 +57,7 @@ public final class ObjectStoreManager
         {
             var strategy = getStrategy(objectClazz, properties);
 
-            var result = ClassFactory.newInstanceOf(strategy, new Object[]{objectClazz, keyFunction, comparatorFunctions, properties});
+            var result = ClassFactory.newInstanceOf(strategy, new Object[]{objectClazz, keyFunction, metaData, properties});
 
             return (IObjectStore<T, K,M>) result.orElseThrow();
         }
