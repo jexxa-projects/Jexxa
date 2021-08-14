@@ -70,10 +70,10 @@ Repository without the need of a database. This typically speed up your tests si
 
 By default, both manager classes select a strategy depending on your application configuration and the `Property` object passed to Jexxa as follows: 
 
-1. Check if the application defined a strategy for a specific object type is registered.
-2. Check if the application defined a default strategy for all kind of objects. 
-3. Check if the `Property` object defines a JDBC driver. In this case the `JDBCKeyValueRepository` or `JDBCObjectStore` is used.
-4. Otherwise, an in memory strategy `IMDBKeyValueRepository` or `IMDBObjectStore` is used. 
+1.   Check if the application defined a strategy for a specific object type is registered.
+2.   Check if the application defined a default strategy for all kind of objects. 
+3.   Check if the `Property` object defines a JDBC driver. In this case the `JDBCKeyValueRepository` or `JDBCObjectStore` is used.
+4.   Otherwise, an in memory strategy `IMDBKeyValueRepository` or `IMDBObjectStore` is used. 
 
 ## Example ContractManagement
 
