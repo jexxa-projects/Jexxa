@@ -141,10 +141,12 @@ Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology f
 
 <<JexxaComponents>> shows the separation of a Jexxa application into packages, the included components, and the relationship of the components among each other.
 
+IMPORTANT: <<JexxaComponents>> shows that you can focus on your application core. The infrastructure of your application is just an ultra-thin facade to be independent of Jexxa.
+
 
 [plantuml, images/JexxaComponents, svg, align=center]
 [reftext="Figure {counter:local-figure-number}"]
-.This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages labeled with `\<<Jexxa>>` are provided by Jexxa. Packages labeled with `\<<Application>>` have to be realized by the application.
+.This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages  labeled with `\<<Jexxa>>` and light grey background are provided by Jexxa. Packages labeled with `\<<Application>>` have to be realized by the application.
 [[JexxaComponents]]
 ....
 @startuml
@@ -152,13 +154,13 @@ skinparam PackagePadding 20
 skinparam linetype ortho
 
 
-package JexxaCore <<Jexxa>> {
+package JexxaCore <<Jexxa>> #DDDDDD {
 [Convention] <<Inversion of Control>>
 [Core] <<Jexxa API>>
 [Factory] <<Inversion of Control>>
 }
 
-package JexxaInfrastructure <<Jexxa>> {
+package JexxaInfrastructure <<Jexxa>> #DDDDDD {
 [Generic Driving Adapters]  <<Driving Adapter>>
 [Specific Driving Adapters] <<Driving Adapter>>
 [Driven Adapter Strategies] <<Driven Adapter Strategy>>
