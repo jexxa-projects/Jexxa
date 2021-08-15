@@ -141,7 +141,7 @@ Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology f
 
 <<JexxaComponents>> shows the separation of a Jexxa application into packages, the included components, and the relationship of the components among each other.
 
-IMPORTANT: <<JexxaComponents>> shows that you can focus on your application core. The infrastructure of your application is just an ultra-thin facade to be independent of Jexxa.
+IMPORTANT: <<JexxaComponents>> shows that you can focus on your application core. The infrastructure package is just an ultra-thin facade to attach Jexxa to the application core.
 
 
 [plantuml, images/JexxaComponents, svg, align=center]
