@@ -49,11 +49,10 @@ Applications without well-defined boundaries between technology stacks and appli
 * In the long term, such structural issues could (and in reality will) affect your enterprise architecture, so neighboring systems need to be aware of and take special actions for legacy systems.
 
 == General Design Decisions
-In contrast to technology companies, the focus of special software development at companies from the production, finance or insurance sectors is
-generally not on the technical side.  The big challenge is to understand the business domain and how to achieve added value for the customer. The
-use of technology stacks itself does not add value as long as the business domain itself is not changed. At best, costs can be reduced.
+In contrast to technology companies, the focus of special software development at companies from the production, finance or
+insurance sectors is generally not on the technical side. The big challenge for software developers is to understand the business domain and how to achieve added value for the customer. The essence of this knowledge is then written in a domain specific software in order to increase the value for the company and customers. Typically, the use of technology stacks itself does not add value as long as the business domain itself is not changed. At best, costs can be reduced.
 
-This actually leads to a rather obvious conclusion about team structures within IT, which in my experience is often ignored:
+This actually leads to a rather obvious conclusion about team structures within developing teams, which in my experience is often ignored:
 
 * Senior developers should focus on the application core. By working with the business experts, they can learn sufficient domain knowledge to map the
 business domain to a suitable application core.
@@ -61,7 +60,7 @@ business domain to a suitable application core.
 * The intermediate developers then support the implementation of the application core.
 
 * Because your senior and intermediate developers focus on the application core, your junior developers must focus on the technology stack.
-Therefore, your framework should be as simple as possible and not an `egg-laying wool-milk sow`.
+Therefore, your technology stack should be as simple as possible and not an `egg-laying wool-milk sow`.
 
 
 IMPORTANT: Using a lightweight framework ensures that junior developers get the time to learn the craftsmanship of software development, methods of software
@@ -80,9 +79,8 @@ The rest of this section describes the most important design decisions and how t
 
 ===  Visible flow of control
 
-Most today's frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency and rebuild the
-application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and
-adapters architecture. This is especially true for the entry points of your application.
+Most today's frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency
+and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and adapters architecture. This is especially true for the entry points of your application.
 
 This might be obvious to incoming synchronous calls (RMI), but can be hard to see for incoming asynchronous messaging.
 
