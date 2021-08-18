@@ -1,4 +1,4 @@
-# BookStoreJ 
+# BookStoreJ - Pattern Language 
 
 ## What You Learn
 

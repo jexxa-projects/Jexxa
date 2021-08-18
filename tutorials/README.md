@@ -21,7 +21,7 @@ See documentation [TimeService - Flow of Control](TimeService/README-FlowOfContr
 ## BookStore - Using a repository  
 See documentation [BookStore](BookStore/)
 
-## BookStoreJ - 
+## BookStoreJ - Pattern Language 
 See documentation [BookStoreJ](BookStoreJ/)
 
 ## BookStoreJ - With OpenAPI support 
