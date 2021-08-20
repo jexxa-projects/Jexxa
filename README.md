@@ -7,13 +7,14 @@
 
 # Jexxa - A Ports and Adapters Framework for Java
 
-Jexxa is a lightweight framework to implement durable business applications based on a [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/) architecture. 
+Jexxa is a lightweight framework to implement durable business applications based on a [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/) architecture. It is particularly suitable for 
+the implementation of microservices in conjunction with Domain Driven Design.
 
 Goal of this framework is to support the development of _durable_ business applications as good as possible. Therefore, Jexxa stresses the following aspects in particular:
 
-*   **Aligned development**: Framework is tailored to the needs of teams developing durable business applications. See [Jexxa's General Design Decisions](https://repplix.github.io/Jexxa/jexxa_architecture.html#_general_design_decisions) for more information. 
+*   **Aligned development**: The framework is tailored to the needs of teams developing durable business applications. See [Jexxa's General Design Decisions](https://repplix.github.io/Jexxa/jexxa_architecture.html#_general_design_decisions) for more information. 
 *   **Visible flow of control**: Simplified navigation through your business application. Checkout [this tutorial](tutorials/TimeService/README-FlowOfControl.md) for more information.      
-*   **Technology agnostic**: Even IoC concepts such as dependency injection do not require any framework specific @Annotations.
+*   **Technology agnostic**: IoC concepts such as dependency injection do not require any framework specific @Annotations. See [here](https://repplix.github.io/Jexxa/jexxa_architecture.html#_ioc_without_annotations) for more information.  
 *   **Well-defined API**: Allows for the integration of arbitrary (old and new) technology stacks. 
 
 In addition, Jexxa offers following production-proven features:    
