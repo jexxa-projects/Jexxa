@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[3.1.1] - 2021-mm-dd
+### Fixed
+-   JexxaTest: Corrected default configuration for ObjectStore so that IMDBObjectStore is used in case of unit tests.
+
 ## \[3.1.0] - 2021-08-14
 ### Added 
 -   Added ObjectStore which provides sophisticated API for querying managed objects. See tutorial [Contract Management](https://github.com/repplix/Jexxa/blob/master/tutorials/ContractManagement/README.md)  
