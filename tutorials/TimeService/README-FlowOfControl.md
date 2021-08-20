@@ -76,9 +76,10 @@ Now, we know following parts of our application:
 *   Used `Driving Adapter`: `RESTfulRPCAdapter` and `JMXAdapter`
 *   Used `Inbound Port`: `TimeService`
 
-Please note that most large frameworks such as Spring or J2EE hide these aspects because it is seen as boiler plate code. You will see that this is 
-true to a certain extend if you check Jexxa's tutorials. Anyway, please remember the quote `code is written once but read many times`. 
-Since this code represents our starting point and greatly simplifies the navigation through the application, it is worth the effort. 
+Please note that frameworks such as Spring or J2EE allow to hide this step because it is seen as boiler plate code. You will see that 
+this is true to a certain extend if you check Jexxa's tutorials. Especially the main-class which includes this step is quite similar. 
+Anyway, please remember the quote `code is written once but read many times`. Since the main-class represents our starting point and 
+greatly simplifies the navigation through the application, it is worth the effort. 
 
 Based on this source code we can navigate into two different directions using some hotkeys of our IDE. Either we dive deep into a concrete 
 `Driving Adapter` such as `RESTfulRPCAdapter`. Or we follow direction `Inbound Port` &rarr; `Outbound Port` by selecting `TimeService` and enter 
@@ -100,25 +101,27 @@ Please remember the characteristics of an `Outbound Port`:
 *   It provides **required** methods to the application core.
 *   It must be an interface because it can be implemented by different technology stacks.
 
-In most object-oriented languages it is the job of the constructor to define all required attributes. Therefore, the constructor of an `Inbound Port`
-must define its required `Outbound Ports` and this represents `Inbound Port` &rarr; `Outbound Port`. Jexxa enforces this rule and requires that all
-parameters of the constructor must be `Outbound Ports`. These are the only parameters that are essential to create an `Inbound Port`. If you need any
-other parameters in the constructor of your `inbound port` it is most likely that you have an issue in your software design. 
+In most object-oriented languages it is the job of the constructor to define all required attributes. Therefore, the constructor of an 
+`Inbound Port` must define its required `Outbound Ports` and this represents `Inbound Port` &rarr; `Outbound Port`. Jexxa enforces this 
+rule and requires that all parameters of the constructor must be `Outbound Ports`. These are the only parameters that are essential to 
+create an `Inbound Port`. If you need any other parameters in the constructor of your `inbound port` it is most likely that you have an 
+issue in your software design. 
 
-Obviously, the constructor of an `inbound port` should only take these `outbound ports` that are required for its own use cases. Even in a large 
-application, the constructor should take only a few parameters. Otherwise, you should think about splitting your `Inbound Port`.
-Especially in a large application, you automatically fade out a lot of source code.
+Obviously, the constructor of an `inbound port` should only take these `outbound ports` that are required for its own use cases. Even in 
+a large application, the constructor should take only a few parameters. Otherwise, you should think about splitting your `Inbound Port`.
+Especially for a large application, you automatically hide a lot of source code and can focus on the source code for a specific use case.
 
 At this point, we have following additional information:
 *   Current `inbound port`: `TimeService`
 *   Required `outbound ports`: `ITimePublisher` and `IMessageDisplay`
 
 Again, we can navigate into two different directions. Either we dive deep into the application core by checking the implementation 
-of `TimeService`. Please note that within a large application core you should use a so-called micro architecture that supports the navigation through 
-your application core. Please check tutorial [BookStore](https://github.com/repplix/Jexxa/tree/master/tutorials/BookStore) to see a potential mapping 
-of an onion architecture for your application core.   
+of `TimeService`. Please note that within a large application core you should use a so-called micro architecture that supports the
+navigation through your application core. Please check tutorial [BookStore](https://github.com/repplix/Jexxa/tree/master/tutorials/BookStore)
+to see a potential mapping of an onion architecture for your application core.   
 
-Alternatively, you can select one of the two `Outbound Ports` from your IDE to continue in the direction of `Outbound Port` &rarr; `Driven Adapter`.
+Alternatively, you can select one of the two `Outbound Ports` from your IDE to continue in the direction of `Outbound Port` &rarr; 
+`Driven Adapter`.
    
 ### Leave the application core ###
 
