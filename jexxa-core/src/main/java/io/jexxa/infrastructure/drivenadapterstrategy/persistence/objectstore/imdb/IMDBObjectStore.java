@@ -13,6 +13,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.met
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.NumericTag;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.StringTag;
 
+@SuppressWarnings("rawtypes")
 public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataSchema>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>
 {
     private final Set<M> metaData;

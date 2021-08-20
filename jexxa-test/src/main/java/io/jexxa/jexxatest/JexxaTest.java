@@ -6,6 +6,8 @@ import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb.IMDBObjectStore;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorderManager;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
@@ -51,6 +53,7 @@ public class JexxaTest
     private void initForUnitTests( )
     {
         RepositoryManager.setDefaultStrategy(IMDBRepository.class);
+        ObjectStoreManager.setDefaultStrategy(IMDBObjectStore.class);
         MessageSenderManager.setDefaultStrategy(MessageRecordingStrategy.class);
 
         IMDBRepository.clear();

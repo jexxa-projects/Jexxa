@@ -12,8 +12,8 @@ import java.util.function.Function;
  */
 public abstract class MetaTag<T, S, V>
 {
-    Function<T, S> valueAccessor;
-    Function<S, ? extends V> valueConverter;
+    private final Function<T, S> valueAccessor;
+    private final Function<S, ? extends V> valueConverter;
 
     protected MetaTag(Function<T, S> valueAccessor,
                       Function<S, ? extends V> valueConverter)

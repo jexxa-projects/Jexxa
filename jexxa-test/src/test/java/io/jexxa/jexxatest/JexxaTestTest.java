@@ -29,6 +29,7 @@ class JexxaTestTest
 {
     private JexxaTest jexxaTest;
 
+
     @BeforeEach
     void setUp()
     {
@@ -58,6 +59,7 @@ class JexxaTestTest
         //Assert
         assertFalse(jexxaRepository.get().isEmpty());
     }
+
 
     @Test
     void validateMessageToTopic()
@@ -118,5 +120,6 @@ class JexxaTestTest
         //Act/Assert
         assertThrows( InvalidAdapterException.class, () -> jexxaTest.getRepository(IInvalidConstructor.class) );
     }
+
 
 }
