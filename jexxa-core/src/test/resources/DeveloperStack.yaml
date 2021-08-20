@@ -1,0 +1,27 @@
+version: "3.7"
+
+services:
+  ActiveMQ:
+    container_name: ActiveMQ
+    image: rmohr/activemq
+    restart: always
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+
+  Postgres:
+    container_name: Postgres
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+
+  SwaggerUI:
+    container_name: SwaggerUI
+    image: swaggerapi/swagger-ui:latest
+    restart: always
+    ports:
+      - '8080:8080'
