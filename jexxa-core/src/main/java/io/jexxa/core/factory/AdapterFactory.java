@@ -12,7 +12,7 @@ import java.util.Properties;
 import io.jexxa.utils.factory.ClassFactory;
 
 /**
- * Creates all kind of adapters (driving and driving) which fulfill one of the following conventions:
+ * Creates all kind of adapters (driving and driven) which fulfill one of the following conventions:
  * <ol>
  *   <li>Public Default constructor available</li>
  *   <li>Public constructor with one Properties as attribute is available</li>

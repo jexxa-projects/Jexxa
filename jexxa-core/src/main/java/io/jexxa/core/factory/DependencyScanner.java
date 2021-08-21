@@ -23,13 +23,6 @@ final class DependencyScanner
         return this;
     }
 
-    DependencyScanner acceptPackages(List<String> packageList)
-    {
-        acceptedPackages.addAll(packageList);
-        scanResult = null; //Reset scan result so that it is recreated with new white listed packages
-        return this;
-    }
-
     List<String> getAcceptPackages()
     {
         return acceptedPackages;
