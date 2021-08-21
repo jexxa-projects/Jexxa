@@ -16,11 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.common.collect.Ordering;
 import io.jexxa.TestConstants;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
 import org.junit.jupiter.api.Tag;
@@ -194,8 +196,8 @@ class JDBCQueryIT
         //Assert
         assertEquals(3, result.size());
 
-        assertFalse(Ordering.natural().reverse().isOrdered(result));
-        assertTrue(Ordering.natural().isOrdered(result));
+        assertTrue(isSorted(result));
+        assertFalse(isReverseSorted(result));
     }
 
     @ParameterizedTest
@@ -217,8 +219,8 @@ class JDBCQueryIT
         //Assert
         assertEquals(3, result.size());
 
-        assertTrue(Ordering.natural().reverse().isOrdered(result));
-        assertFalse(Ordering.natural().isOrdered(result));
+        assertTrue(isReverseSorted(result));
+        assertFalse(isSorted(result));
     }
 
     // Begin> Utility methods used in this test
@@ -244,5 +246,20 @@ class JDBCQueryIT
         );
     }
 
+    boolean isSorted(List<Integer> intList)
+    {
+        var sortedList = new ArrayList<>(intList);
+        Collections.sort(sortedList);
+
+        return intList.equals(sortedList);
+    }
+
+    boolean isReverseSorted(List<Integer> intList)
+    {
+        var reverseSortedList = new ArrayList<>(intList);
+        reverseSortedList.sort(Collections.reverseOrder());
+
+        return intList.equals(reverseSortedList);
+    }
 
 }
