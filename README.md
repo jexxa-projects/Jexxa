@@ -41,14 +41,14 @@ Maven:
 <dependency>
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa-web</artifactId>
-  <version>3.1.0</version>
+  <version>3.1.1</version>
 </dependency> 
 ```
 
 Gradle:
 
 ```groovy
-compile "io.Jexxa:jexxa-web:3.1.0"
+compile "io.Jexxa:jexxa-web:3.1.1"
 ``` 
  
 ### Start programming 
