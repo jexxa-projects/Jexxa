@@ -1,4 +1,4 @@
-# BookStore 
+# BookStore - Using a Repository
 
 ## What You Learn
 

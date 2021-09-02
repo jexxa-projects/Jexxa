@@ -1,4 +1,4 @@
-# BookStoreJ - With OpenAPI support 
+# BookStoreJ - OpenAPI Support 
 
 ## What You Learn
 

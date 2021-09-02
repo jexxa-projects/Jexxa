@@ -1,4 +1,4 @@
-# BookStoreJ16 - How to use Java Records 
+# BookStoreJ16 - Java Records 
 
 ## What You Learn
 
