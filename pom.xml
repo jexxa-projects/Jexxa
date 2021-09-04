@@ -91,9 +91,9 @@
 
     <!-- version of tutorials dependencies -->
     <addendj.version>1.0.1</addendj.version>
-    <aspectj.version>1.9.7</aspectj.version>
-    <aspectjtools.version>1.9.7</aspectjtools.version>
-    <aspectjrt.version>1.9.7</aspectjrt.version>
+    <aspectj.version>1.9.8.M1</aspectj.version>
+    <aspectjtools.version>1.9.8.M1</aspectjtools.version>
+    <aspectjrt.version>1.9.8.M1</aspectjrt.version>
     <commons.cli.version>1.4</commons.cli.version>
 
     <!-- version of maven dependencies for tutorials -->
