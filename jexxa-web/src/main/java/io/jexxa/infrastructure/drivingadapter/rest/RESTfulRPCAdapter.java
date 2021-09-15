@@ -16,7 +16,8 @@ import com.google.gson.JsonParser;
 import io.javalin.Javalin;
 import io.javalin.core.JavalinConfig;
 import io.javalin.http.Context;
-import io.javalin.plugin.json.JavalinJson;
+import io.javalin.http.staticfiles.Location;
+import io.javalin.plugin.json.JsonMapper;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
 import io.jexxa.utils.JexxaLogger;
@@ -25,6 +26,7 @@ import io.jexxa.utils.json.JSONManager;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.jetbrains.annotations.NotNull;
 
 
 public class RESTfulRPCAdapter implements IDrivingAdapter
@@ -92,12 +94,12 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
             javalin.start();
 
             if (httpConnector != null ) {
-                openAPIConvention.getPath().ifPresent(path -> Javalin.log.info("OpenAPI documentation available at: {}"
+                openAPIConvention.getPath().ifPresent(path -> JexxaLogger.getLogger(this.getClass()).info("OpenAPI documentation available at: {}"
                         , "http://" + httpConnector.getHost() + ":" + httpConnector.getPort() +  path ) );
             }
             if (sslConnector != null ) {
-                openAPIConvention.getPath().ifPresent(path -> Javalin.log.info("OpenAPI documentation available at: {}"
-                        , "http://" + sslConnector.getHost() + ":" + sslConnector.getPort() + path ) );
+                openAPIConvention.getPath().ifPresent(path -> JexxaLogger.getLogger(this.getClass()).info("OpenAPI documentation available at: {}"
+                        , "https://" + sslConnector.getHost() + ":" + sslConnector.getPort() + path ) );
             }
         } catch (RuntimeException e)
         {
@@ -312,12 +314,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         return paramArray;
     }
 
-    @SuppressWarnings("NullableProblems") // setToJsonMapper(GSON::toJson) causes this warning because toJson is not annotated
     private void setupJavalin()
     {
-        JavalinJson.setFromJsonMapper(jsonConverter::fromJson);
-        JavalinJson.setToJsonMapper(jsonConverter::toJson);
-
         this.javalin = Javalin.create(this::getJavalinConfig);
     }
 
@@ -325,9 +323,10 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     {
         javalinConfig.server(this::getServer);
         javalinConfig.showJavalinBanner = false;
+        javalinConfig.jsonMapper(new JexxaJSONMapper());
         if ( properties.containsKey(STATIC_FILES_ROOT) )
         {
-            javalinConfig.addStaticFiles(properties.getProperty(STATIC_FILES_ROOT));
+            javalinConfig.addStaticFiles(properties.getProperty(STATIC_FILES_ROOT), Location.CLASSPATH );
         }
 
         this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig );
@@ -372,6 +371,22 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         {
             throw new IllegalArgumentException(message);
         }
+    }
+
+    private static class JexxaJSONMapper implements JsonMapper
+    {
+        @NotNull
+        @Override
+        public String toJsonString(@NotNull Object obj) {
+            return JSONManager.getJSONConverter().toJson(obj);
+        }
+
+        @NotNull
+        @Override
+        public  <T> T fromJsonString(@NotNull String json, @NotNull Class<T> targetClass) {
+            return JSONManager.getJSONConverter().fromJson(json, targetClass);
+        }
+
     }
 
 }
