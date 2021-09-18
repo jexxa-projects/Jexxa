@@ -75,7 +75,7 @@
     <javalin.version>3.13.10</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
     <jackson.databind.version>2.12.4</jackson.databind.version>
-    <jackson.core.version>2.12.4</jackson.core.version>
+    <jackson.core.version>2.12.5</jackson.core.version>
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
 
     <!-- version of test dependencies -->
