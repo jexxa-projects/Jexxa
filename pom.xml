@@ -49,7 +49,8 @@
     <maven.reports.plugin>3.1.0</maven.reports.plugin>
     <maven.enforcer.plugin>3.0.0-M3</maven.enforcer.plugin>
     <maven.javadoc.plugin>3.2.0</maven.javadoc.plugin>
-    <maven.teplating.plugin>1.0.0</maven.teplating.plugin>
+    <maven.templating.plugin>1.0.0</maven.templating.plugin>
+    <maven.versions.plugin>2.8.1</maven.versions.plugin>
 
     <!--information for filtered sources  -->
     <build.timestamp>${maven.build.timestamp}</build.timestamp>
@@ -74,14 +75,14 @@
     <gson.version>2.8.8</gson.version>
     <javalin.version>4.0.0</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
-    <jackson.databind.version>2.12.4</jackson.databind.version>
-    <jackson.core.version>2.12.4</jackson.core.version>
+    <jackson.databind.version>2.12.5</jackson.databind.version>
+    <jackson.core.version>2.12.5</jackson.core.version>
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
 
     <!-- version of test dependencies -->
     <activemq.client.version>5.16.3</activemq.client.version>
     <postgres.version>42.2.23</postgres.version>
-    <unirest.java.version>3.11.11</unirest.java.version>
+    <unirest.java.version>3.13.0</unirest.java.version>
     <junit.platform.launcher.version>1.8.0</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.8.0</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.8.0</junit.jupiter.params.version>
@@ -118,7 +119,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>templating-maven-plugin</artifactId>
-          <version>${maven.teplating.plugin}</version>
+          <version>${maven.templating.plugin}</version>
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -173,6 +174,14 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
           <version>${maven.shade.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>${maven.versions.plugin}</version>
+          <configuration>
+            <rulesUri>file:///${session.executionRootDirectory}/mavenVersionRules.xml</rulesUri>
+          </configuration>
         </plugin>
 
 
