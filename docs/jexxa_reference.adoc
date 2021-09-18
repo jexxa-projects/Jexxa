@@ -32,7 +32,7 @@ a| Provides the core functionality of Jexxa as described in <<Jexxa Features>>. 
 In addition, it provides following driving- and driven-adapter strategies written against Java standard APIs:
 
 * Driving-Adapter: `JMXAdapter`, `JMSAdapter`
-* Driven-Adapter Strategies: `JDBCKeyValueRepository`, `JMSSender`
+* Driven-Adapter Strategies: `JDBCKeyValueRepository`, `JDBCObjectStore`, `JMSSender`
 
 NOTE: In order to use these adapters, you need to bind a concrete implementation of the used API, such as an ActiveMQ client, or a concrete database driver.
 
