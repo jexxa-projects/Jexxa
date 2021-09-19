@@ -60,9 +60,9 @@ frameworks, Jexxa requires some code to explicitly configure your application fo
 The steps for configuring your application are always similar as you can see in all https://github.com/repplix/Jexxa/blob/master/tutorials/README.md[tutorials]:
 
 
-1. Define packages with your application core with `JexxaMain.addToApplicationCore()`. In general this is only required if you access them by annotations instead of defining the type.
+1. Define packages that include your driven adapter `JexxaMain.addToApplicationCore()`.
 
-2. Define packages with your application specific driven adapter with `JexxaMain.addToInfrastructure()`.
+2. Define packages with your application specific driving and driven adapter with `JexxaMain.addToInfrastructure()`.
 
 3. Bind technology stacks to application core with `JexxaMain.bind(<DrivingAdapter>.class).to(<port>.class)`.
 
@@ -91,6 +91,9 @@ Jexxa defines some conventions for realizing implicit constructor injection whic
 === RESTfulRPCAdapter
 
 The `RESTfulRPCAdapter` is a simple RPC mechanism utilizing REST. Based on the https://martinfowler.com/articles/richardsonMaturityModel.html[REST maturity model] from Richardson it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST on a higher maturity level.
+
+[NOTE]
+When you start using this adapter, I recommend enabling OpenAPI support at least during development as described https://github.com/repplix/Jexxa/blob/master/tutorials/BookStoreJ/README-OPENAPI.md[here]. It simplifies understanding the REST API.
 
 This adapter uses following conventions:
 
@@ -145,7 +148,7 @@ a| HTML Response: Return value
 a|
 * HTTP status code: 200
 * Return value as a singe Json object
-                                 ^
+
 a| HTML Response: Exception
 a|
 * HTTP status code: 400
@@ -167,7 +170,7 @@ Java8 introduces a new API for date and time for good reason. Even if there is a
 
 IMPORTANT: `RESTfulRPCAdapter` supports only Java8 Date API and represents a date as JSON-string in https://en.wikipedia.org/wiki/ISO_8601[ISO 8601] string format.
 
-NOTE: If ou need some example how `RESTfulRPCAdapter` maps Java's Date and Time API to JSON please see https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java[here].
+NOTE: If ou need some example how `RESTfulRPCAdapter` maps Java's Date and Time API to JSON please see https://github.com/repplix/Jexxa/blob/master/jexxa-web/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java[here].
 
 
 [cols="1,3"]

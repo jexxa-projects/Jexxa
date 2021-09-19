@@ -584,10 +584,10 @@ frameworks, Jexxa requires some code to explicitly configure your application fo
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Define packages with your application core with <code>JexxaMain.addToApplicationCore()</code>. In general this is only required if you access them by annotations instead of defining the type.</p>
+<p>Define packages that include your driven adapter <code>JexxaMain.addToApplicationCore()</code>.</p>
 </li>
 <li>
-<p>Define packages with your application specific driven adapter with <code>JexxaMain.addToInfrastructure()</code>.</p>
+<p>Define packages with your application specific driving and driven adapter with <code>JexxaMain.addToInfrastructure()</code>.</p>
 </li>
 <li>
 <p>Bind technology stacks to application core with <code>JexxaMain.bind(&lt;DrivingAdapter&gt;.class).to(&lt;port&gt;.class)</code>.</p>
@@ -650,6 +650,18 @@ The <code>BoundedContext</code> objects provides methods to stop you running app
 <h3 id="_restfulrpcadapter"><a class="anchor" href="#_restfulrpcadapter"></a>3.1. RESTfulRPCAdapter</h3>
 <div class="paragraph">
 <p>The <code>RESTfulRPCAdapter</code> is a simple RPC mechanism utilizing REST. Based on the <a href="https://martinfowler.com/articles/richardsonMaturityModel.html">REST maturity model</a> from Richardson it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST on a higher maturity level.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title=":information_source:"></i>
+</td>
+<td class="content">
+When you start using this adapter, I recommend enabling OpenAPI support at least during development as described <a href="https://github.com/repplix/Jexxa/blob/master/tutorials/BookStoreJ/README-OPENAPI.md">here</a>. It simplifies understanding the REST API.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>This adapter uses following conventions:</p>
@@ -796,8 +808,7 @@ The order of the attributes in the Json array must match to the order of attribu
 <p>HTTP status code: 200</p>
 </li>
 <li>
-<p>Return value as a singe Json object
-^</p>
+<p>Return value as a singe Json object</p>
 </li>
 </ul>
 </div></div></td>
@@ -869,7 +880,7 @@ The order of the attributes in the Json array must match to the order of attribu
 <i class="fa icon-note" title=":information_source:"></i>
 </td>
 <td class="content">
-If ou need some example how <code>RESTfulRPCAdapter</code> maps Java&#8217;s Date and Time API to JSON please see <a href="https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java">here</a>.
+If ou need some example how <code>RESTfulRPCAdapter</code> maps Java&#8217;s Date and Time API to JSON please see <a href="https://github.com/repplix/Jexxa/blob/master/jexxa-web/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java">here</a>.
 </td>
 </tr>
 </table>
@@ -1096,7 +1107,7 @@ Please check the tutorial <a href="https://github.com/repplix/Jexxa/tree/master/
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-09-18 15:38:34 +0200
+Last updated 2021-09-19 07:49:01 +0200
 </div>
 </div>
 </body>
