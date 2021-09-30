@@ -1,4 +1,4 @@
-package io.jexxa.tutorials.bookstorej16.domain.valueobject;
+package io.jexxa.tutorials.bookstore.domain.valueobject;
 
 import java.util.Objects;
 
