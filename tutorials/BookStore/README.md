@@ -248,12 +248,9 @@ Response:
 ```
 
 #### Query available books
-
 Command:
 ```Console
-curl -X POST -H "Content-Type: application/json" \
-    -d '"978-1-891830-85-3"' \
-    http://localhost:7500/BookStoreService/inStock                 
+curl -X POST -H "Content-Type: application/json" -d '"978-1-891830-85-3"' http://localhost:7500/BookStoreService/inStock       
 ```
 
 Response: 
@@ -262,30 +259,26 @@ false
 ```
 
 #### Add some books
-
 Command:
 ```Console
-curl -X POST -H "Content-Type: application/json" \
-    -d '["978-1-891830-85-3", 5]' \
-    http://localhost:7500/BookStoreService/addToStock                 
+curl -X POST -H "Content-Type: application/json" -d "["978-1-891830-85-3", 5]" http://localhost:7500/BookStoreService/addToStock
 ```
+
 Response: No output  
 ```Console
 ```
 
 #### Ask again if a specific book is in stock
-
 Command:
 ```Console
-curl -X POST -H "Content-Type: application/json" \
-    -d '"978-1-891830-85-3"' \
-    http://localhost:7500/BookStoreService/inStock                 
+curl -X POST -H "Content-Type: application/json" -d '"978-1-891830-85-3"' http://localhost:7500/BookStoreService/inStock       
 ```
 
 Response: 
 ```Console
 true
 ```
+
 ## 4. Write some tests
 Writing some tests with Jexxa is quite easy. If you implement your driven adapters using Jexxa's driven adapter strategies you can use 
 package **jexxa-test**. It automatically provides stubs so that you do not need any mock framework. Main advantages are: 
