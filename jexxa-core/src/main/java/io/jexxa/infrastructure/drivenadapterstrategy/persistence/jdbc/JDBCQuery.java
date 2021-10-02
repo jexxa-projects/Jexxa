@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -21,20 +20,17 @@ public class JDBCQuery extends JDBCPreparedStatement
         R apply(T t) throws SQLException;
     }
 
-    public JDBCQuery(Supplier<JDBCConnection> jdbcConnection, String sqlQuery, List<Object> arguments)
-    {
-        super(jdbcConnection, sqlQuery, arguments);
-    }
-
     /**
      * Creates a JDBC query
      *
      * @param jdbcConnection used connection
-     * @param sqlQuery must include the complete command with all attributes included
+     * @param sqlQuery must include the complete command with all attributes included. Note: The sqlQuery can include a
+     *                '?' as placeholder for arguments
+     * @param arguments includes all arguments of the sqlQuery
      */
-    JDBCQuery(Supplier<JDBCConnection> jdbcConnection, String sqlQuery)
+    public JDBCQuery(Supplier<JDBCConnection> jdbcConnection, String sqlQuery, List<Object> arguments)
     {
-        super(jdbcConnection, sqlQuery, Collections.emptyList());
+        super(jdbcConnection, sqlQuery, arguments);
     }
 
     public Stream<Optional<String>> asString()
