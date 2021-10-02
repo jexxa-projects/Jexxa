@@ -36,8 +36,8 @@ In addition, Jexxa offers following production-proven features:
 
 Jexxa internally uses following frameworks:
 
-* [ClassGraph](https://github.com/classgraph/classgraph)
-* [javalin](http://javalin.io/)
+*   [ClassGraph](https://github.com/classgraph/classgraph)
+*   [javalin](http://javalin.io/)
 
 ## Quickstart
 

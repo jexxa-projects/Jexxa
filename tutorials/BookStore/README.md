@@ -204,7 +204,7 @@ java -jar target/bookstore-jar-with-dependencies.jar
 ```
 You will see following (or similar) output
 ```console
-[main] INFO io.jexxa.tutorials.bookstorej16.BookStoreJ16Application - Use persistence strategy: IMDBRepository 
+[main] INFO io.jexxa.tutorials.bookstore.BookStoreApplication - Use persistence strategy: IMDBRepository 
 [main] INFO io.jexxa.core.JexxaMain - Start BoundedContext 'BookStoreApplication' with 2 Driving Adapter 
 [main] INFO org.eclipse.jetty.util.log - Logging initialized @474ms to org.eclipse.jetty.util.log.Slf4jLog
 [main] INFO io.javalin.Javalin - Starting Javalin ...
@@ -225,7 +225,7 @@ java -jar target/bookstore-jar-with-dependencies.jar -jdbc
 ```
 In contrast to the above output Jexxa will state that you use JDBC persistence strategy now:
 ```console
-[main] INFO io.jexxa.tutorials.bookstorej16.BookStoreJ16Application - Use persistence strategy: JDBCKeyValueRepository 
+[main] INFO io.jexxa.tutorials.bookstore.BookStoreApplication - Use persistence strategy: JDBCKeyValueRepository 
 ```
 
 Note: In case you want to use a difference database, you have to: 
@@ -248,12 +248,9 @@ Response:
 ```
 
 #### Query available books
-
 Command:
 ```Console
-curl -X POST -H "Content-Type: application/json" \
-    -d '"978-1-891830-85-3"' \
-    http://localhost:7500/BookStoreService/inStock                 
+curl -X POST -H "Content-Type: application/json" -d '"978-1-891830-85-3"' http://localhost:7500/BookStoreService/inStock       
 ```
 
 Response: 
@@ -262,30 +259,26 @@ false
 ```
 
 #### Add some books
-
 Command:
 ```Console
-curl -X POST -H "Content-Type: application/json" \
-    -d '["978-1-891830-85-3", 5]' \
-    http://localhost:7500/BookStoreService/addToStock                 
+curl -X POST -H "Content-Type: application/json" -d "["978-1-891830-85-3", 5]" http://localhost:7500/BookStoreService/addToStock
 ```
+
 Response: No output  
 ```Console
 ```
 
 #### Ask again if a specific book is in stock
-
 Command:
 ```Console
-curl -X POST -H "Content-Type: application/json" \
-    -d '"978-1-891830-85-3"' \
-    http://localhost:7500/BookStoreService/inStock                 
+curl -X POST -H "Content-Type: application/json" -d '"978-1-891830-85-3"' http://localhost:7500/BookStoreService/inStock       
 ```
 
 Response: 
 ```Console
 true
 ```
+
 ## 4. Write some tests
 Writing some tests with Jexxa is quite easy. If you implement your driven adapters using Jexxa's driven adapter strategies you can use 
 package **jexxa-test**. It automatically provides stubs so that you do not need any mock framework. Main advantages are: 

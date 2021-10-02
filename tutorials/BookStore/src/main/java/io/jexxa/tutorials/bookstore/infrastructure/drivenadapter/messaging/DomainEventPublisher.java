@@ -1,12 +1,12 @@
-package io.jexxa.tutorials.bookstorej16.infrastructure.drivenadapter.messaging;
+package io.jexxa.tutorials.bookstore.infrastructure.drivenadapter.messaging;
 
 import java.util.Objects;
 import java.util.Properties;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
-import io.jexxa.tutorials.bookstorej16.domain.domainevent.BookSoldOut;
-import io.jexxa.tutorials.bookstorej16.domainservice.IDomainEventPublisher;
+import io.jexxa.tutorials.bookstore.domain.domainevent.BookSoldOut;
+import io.jexxa.tutorials.bookstore.domainservice.IDomainEventPublisher;
 
 @SuppressWarnings("unused")
 public class DomainEventPublisher implements IDomainEventPublisher

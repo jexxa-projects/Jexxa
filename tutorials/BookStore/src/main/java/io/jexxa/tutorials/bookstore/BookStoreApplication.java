@@ -1,4 +1,4 @@
-package io.jexxa.tutorials.bookstorej16;
+package io.jexxa.tutorials.bookstore;
 
 
 import io.jexxa.core.JexxaMain;
@@ -12,8 +12,8 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBReposi
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
-import io.jexxa.tutorials.bookstorej16.applicationservice.BookStoreService;
-import io.jexxa.tutorials.bookstorej16.domainservice.ReferenceLibrary;
+import io.jexxa.tutorials.bookstore.applicationservice.BookStoreService;
+import io.jexxa.tutorials.bookstore.domainservice.ReferenceLibrary;
 import io.jexxa.utils.JexxaLogger;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
