@@ -155,7 +155,7 @@
         <configuration>
           <allowInsecureRegistries>true</allowInsecureRegistries>
           <from>
-            <image>adoptopenjdk/openjdk11:alpine-jre</image>
+            <image>eclipse-temurin:11-jre</image>
           </from>
           <to>
             <image>localhost:10001/repository/tiho/${project.groupId}/${project.artifactId}:${project.version}</image>
