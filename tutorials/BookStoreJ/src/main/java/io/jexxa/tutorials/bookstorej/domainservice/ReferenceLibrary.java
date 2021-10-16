@@ -21,7 +21,7 @@ public class ReferenceLibrary
     public void addLatestBooks()
     {
         getLatestBooks()
-                .filter(book -> ! bookRepository.isRegistered(book))
+                .filter(book -> ! bookRepository.isRegistered(book)) // Filter already maintained books.
                 .forEach(isbn13 -> bookRepository.add(Book.newBook(isbn13)));
     }
 

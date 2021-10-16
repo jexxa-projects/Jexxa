@@ -368,8 +368,25 @@ public final class JexxaMain
         }
 
         public void uncaughtException(Thread t, Throwable e) {
-            LOGGER.error("\nCould not startup Jexxa! {}", e.getMessage());
+            LOGGER.error("Could not startup Jexxa! {}", getOutputMessage(e));
+
             jexxaMain.stop();
+        }
+
+        String getOutputMessage( Throwable e)
+        {
+            var stringBuilder = new StringBuilder();
+            var jexxaMessage = e.getMessage();
+            var detailedMessage = "Not available";
+            if (e.getCause() != null && e.getCause().getMessage() != null)
+            {
+                detailedMessage = e.getCause().getMessage();
+            }
+
+            stringBuilder.append("\n* Jexxa-Message: ").append(jexxaMessage);
+            stringBuilder.append("\n* Detailed-Message: ").append(detailedMessage);
+
+            return stringBuilder.toString();
         }
     }
 }
