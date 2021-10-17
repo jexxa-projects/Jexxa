@@ -52,7 +52,7 @@
         <version>${maven.jib.plugin}</version>
         <configuration>
           <from>
-            <image>adoptopenjdk/openjdk11:jre-11.0.8_10-alpine</image>
+            <image>eclipse-temurin:11-jre</image>
           </from>
           <to>
             <image>${project.groupId}/${project.artifactId}:${project.version}</image>

@@ -102,7 +102,7 @@
         <version>${maven.jib.plugin}</version>
         <configuration>
           <from>
-            <image>adoptopenjdk/openjdk16:jdk-16_36-alpine</image>
+            <image>eclipse-temurin:17-alpine</image>
           </from>
           <to>
             <image>${project.groupId}/${project.artifactId}:${project.version}</image>

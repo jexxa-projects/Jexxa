@@ -26,6 +26,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 @SuppressWarnings("unused")
 class JexxaTestConfigTest
 {
+    public static final String REPOSITORY_CONFIG = "repositoryConfig";
+    public static final String MESSAGE_SENDER_CONFIG = "messageSenderConfig";
+
     @SuppressWarnings("FieldCanBeLocal")
     private JexxaTest jexxaTest;
 
@@ -50,7 +53,7 @@ class JexxaTestConfigTest
         var repository = RepositoryManager.getRepository(JexxaObject.class, JexxaObject::getKey, properties);
 
         //Act / Assert : Since we initialized JexxaTest, we should always get an IMDBRepository, independent of the Properties
-        assertDoesNotThrow(() -> (IMDBRepository) repository );
+        assertDoesNotThrow(() -> (IMDBRepository<JexxaObject, JexxaValueObject>) repository );
     }
 
     @ParameterizedTest
@@ -61,7 +64,7 @@ class JexxaTestConfigTest
         var objectStore = ObjectStoreManager.getObjectStore(JexxaObject.class, JexxaObject::getKey, JexxaObjectSchema.class, properties);
 
         //Act / Assert : Since we initialized JexxaTest, we should always get an IMDBObjectStore, independent of the Properties
-        assertDoesNotThrow(() -> (IMDBObjectStore) objectStore );
+        assertDoesNotThrow(() -> (IMDBObjectStore<JexxaObject, JexxaValueObject, JexxaObjectSchema>) objectStore );
     }
 
     @ParameterizedTest
@@ -106,9 +109,6 @@ class JexxaTestConfigTest
         }
     }
 
-
-    public static final String REPOSITORY_CONFIG = "repositoryConfig";
-    public static final String MESSAGE_SENDER_CONFIG = "messageSenderConfig";
 
     @SuppressWarnings("unused")
     private static Stream<Properties> repositoryConfig() {

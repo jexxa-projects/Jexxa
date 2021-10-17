@@ -1,7 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -9,24 +8,22 @@ import java.util.function.Supplier;
 public class JDBCCommand extends JDBCPreparedStatement
 {
     private static final String SQL_STATEMENT_FAILED = "Could not execute SQL Statement : ";
-    public JDBCCommand(Supplier<JDBCConnection> jdbcConnection, String sqlQuery, List<Object> arguments)
-    {
-        super(jdbcConnection, sqlQuery, arguments);
-    }
-
     /**
      * Creates a JDBCCommand
      *
      * @param jdbcConnection used connection to execute command
-     * @param sqlCommand must include the complete command with all attributes included
+     * @param sqlCommand mmust include the complete command with all attributes included. Note: The sqlCommand can include a
+     *                   '?' as placeholder for arguments
+     * @param arguments includes all arguments of the sqlCommand
      */
-    JDBCCommand(Supplier<JDBCConnection> jdbcConnection, String sqlCommand)
+    public JDBCCommand(Supplier<JDBCConnection> jdbcConnection, String sqlCommand, List<Object> arguments)
     {
-        super(jdbcConnection, sqlCommand, Collections.emptyList());
+        super(jdbcConnection, sqlCommand, arguments);
     }
 
+
     /**
-     * Number of rows must not change
+     * Execute command as 'update' so that number of rows must not change
      *
      */
     public void asUpdate()
@@ -45,8 +42,7 @@ public class JDBCCommand extends JDBCPreparedStatement
     }
 
     /**
-     * Number of rows must change
-     *
+     * Execute command as 'empty' so that number of rows must change
      */
     public void asEmpty( )
     {
