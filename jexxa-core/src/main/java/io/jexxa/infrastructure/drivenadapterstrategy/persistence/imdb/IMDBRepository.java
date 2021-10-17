@@ -1,18 +1,13 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
+import io.jexxa.utils.json.JSONManager;
+
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
 
-/**
- */
 public class IMDBRepository<T, K>  implements IRepository<T, K>
 {
     // Each IMDB repository is represented by a map for a specific type.
@@ -40,7 +35,12 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
         Objects.requireNonNull(aggregate);
         if (! getOwnAggregateMap().containsKey( keyFunction.apply(aggregate)))
         {
-            throw new IllegalArgumentException("An object with given key does not exists");
+            var keyAsString = keyFunction.apply(aggregate).getClass().getSimpleName()
+                    + JSONManager.getJSONConverter().toJson(keyFunction.apply(aggregate));
+            throw new IllegalArgumentException(IMDBRepository.class.getSimpleName()
+                    + ": An object with given key "
+                    + keyAsString
+                    + " does not exists");
         }
     }
 
@@ -49,7 +49,11 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     {
         if ( getOwnAggregateMap().remove( key ) == null)
         {
-            throw new IllegalArgumentException("An object with given key does not exists");
+            var keyAsString = key.getClass().getSimpleName() + JSONManager.getJSONConverter().toJson(key);
+            throw new IllegalArgumentException(IMDBRepository.class.getSimpleName()
+                    + ": An object with given "
+                    + keyAsString
+                    + "key does not exists");
         }
     }
 
@@ -64,7 +68,12 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     {
         if (getOwnAggregateMap().containsKey( keyFunction.apply(aggregate)))
         {
-            throw new IllegalArgumentException("An object with given key already exists");
+            var keyAsString = keyFunction.apply(aggregate).getClass().getSimpleName()
+                    + JSONManager.getJSONConverter().toJson(keyFunction.apply(aggregate));
+            throw new IllegalArgumentException(IMDBRepository.class.getSimpleName()
+                    + ": An object with given key "
+                    + keyAsString
+                    + " already exists");
         }
         getOwnAggregateMap().put(keyFunction.apply(aggregate), aggregate);
     }
