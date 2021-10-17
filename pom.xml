@@ -5,7 +5,7 @@
 
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa</artifactId>
-  <version>3.1.3</version>
+  <version>3.1.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <!-- Project Information -->
@@ -29,7 +29,7 @@
     <connection>scm:git:https://github.com/repplix/Jexxa.git</connection>
     <url>https://github.com/repplix/Jexxa</url>
     <developerConnection>scm:git:https://github.com/repplix/Jexxa.git</developerConnection>
-    <tag>jexxa-3.1.3</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <properties>
@@ -70,22 +70,22 @@
     <argLine>-Xmx2048m -Xms1024m</argLine>
 
     <!-- version of compile dependencies -->
-    <classgraph.version>4.8.128</classgraph.version>
+    <classgraph.version>4.8.116</classgraph.version>
     <commons.lang3.version>3.12.0</commons.lang3.version>
     <gson.version>2.8.8</gson.version>
-    <javalin.version>4.1.1</javalin.version>
+    <javalin.version>4.0.0</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
-    <jackson.databind.version>2.13.0</jackson.databind.version>
-    <jackson.core.version>2.13.0</jackson.core.version>
+    <jackson.databind.version>2.12.5</jackson.databind.version>
+    <jackson.core.version>2.12.5</jackson.core.version>
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
 
     <!-- version of test dependencies -->
     <activemq.client.version>5.16.3</activemq.client.version>
-    <postgres.version>42.2.24</postgres.version>
+    <postgres.version>42.2.23</postgres.version>
     <unirest.java.version>3.13.0</unirest.java.version>
-    <junit.platform.launcher.version>1.8.1</junit.platform.launcher.version>
-    <junit.jupiter.engine.version>5.8.1</junit.jupiter.engine.version>
-    <junit.jupiter.params.version>5.8.1</junit.jupiter.params.version>
+    <junit.platform.launcher.version>1.8.0</junit.platform.launcher.version>
+    <junit.jupiter.engine.version>5.8.0</junit.jupiter.engine.version>
+    <junit.jupiter.params.version>5.8.0</junit.jupiter.params.version>
     <slf4j.simple.version>1.7.32</slf4j.simple.version>
     <slf4j.api.version>1.7.32</slf4j.api.version>
     <awaitility.version>4.1.0</awaitility.version>
@@ -99,7 +99,7 @@
 
     <!-- version of maven dependencies for tutorials -->
     <aspectj.maven.plugin.version>1.12.6</aspectj.maven.plugin.version>
-    <maven.jib.plugin>3.1.4</maven.jib.plugin>
+    <maven.jib.plugin>3.1.2</maven.jib.plugin>
     <maven.shade.plugin>3.2.4</maven.shade.plugin>
   </properties>
 
