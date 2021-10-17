@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
  
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+## \[3.1.3] - 2021-10-17
+### Changed
+-   Maintenance release: Updated dependencies
+-   Improved error messages if starting the application fails 
 
 ## \[3.1.2] - 2021-09-18
 ### Changed
