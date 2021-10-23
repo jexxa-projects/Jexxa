@@ -14,7 +14,7 @@
 //Hinweis: Die counter:local-table-number und counter:local-figure-number werden verwendet, damit im Fliesstext als Referenz die Nummer der Tabelle bzw. Abbildung angezeigt wird, also z.B. "wie in Abbildung 5 zu sehen ist"
 
 == Vision
-Jexxa is a lightweight framework to implement business applications based on a https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/[ports and adapters] architecture. It allows for easily connecting technology stacks, called adapters, to interfaces of a technology agnostic application core which are called ports. For this purpose Jexxa offers:
+Jexxa is a lightweight framework to implement business applications based on a https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/[ports and adapters] architecture. It allows for easily connecting technology stacks, called adapters, to interfaces of a technology-agnostic application core which are called ports. For this purpose Jexxa offers:
 
 * A fluent API to connect available adapters to your application core.
 * Explicit representation of the binding between ports and adapters in the main method so that you can exchange technology stacks independently.
@@ -121,8 +121,7 @@ IMPORTANT: Jexxa provides `driven adapter strategies` so that the implementation
 between the API of outbound ports to corresponding API of the strategy.
 
 This approach seems to be so obvious, so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern
-especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so
-called aggregates (please refer to tutorial https://jexxa.io/tree/master/tutorials/BookStore[BookStore] to see the source code):
+especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial https://jexxa.io/tree/master/tutorials/BookStore[BookStore] to see the source code):
 
 * Regarding your business domain, your junior developers will learn at least the name of the most important business objects, because `Aggregates` include the business logic of this domain.
 * From a software engineering point of view your junior developer gets familiar with the strategy design pattern.
@@ -208,10 +207,10 @@ a|Package
 |Description
 
 a|`ApplicationCore`
-| This package includes your technology agnostic business application.
+| This package includes your technology-agnostic business application.
 
 a|`Infrastructure`
-a| This package includes the glue code to bind your technology agnostic business application to the package `JexxaInfrastructure`.
+a| This package includes the glue code to bind your technology-agnostic business application to the package `JexxaInfrastructure`.
 
 a|`JexxaInfrastructure`
 | This package includes the provided driving adapter of Jexxa as well as the driven adapter strategies which simplify the application specific driven adapter
@@ -238,7 +237,7 @@ a|Components
 a|`Inbound Ports`
 | Inbound ports belong to the application core and provide use cases that can be started by a driving adapter. Depending on the design of your application core a port might be an interface or a specific implementation of a set of use cases.
 a| * Jexxa provides implicit constructor injection for your inbound ports which is described in <<Dependency Injection (DI)>>.
-* Jexxa also allows to instantiate and manage ports yourself using the provided driving adapters and driven adapter strategies.
+* Jexxa also allows instantiating and manage ports yourself using the provided driving adapters and driven adapter strategies.
 
 a|Outbound Ports
 a| Outbound ports belong to the application core but only as interface. These interfaces are implemented in package `Infrastructure` by a driving adapter which provides access to a specific technology stack such as a database driver.
@@ -266,7 +265,7 @@ a|Components
 
 |Driven Adapters
 
-|Driven adapters implement the outbound ports and can be injected into the inbound ports which in turn operates on these interfaces. Typically they map domain objects to a specific technology stack.
+|Driven adapters implement the outbound ports and can be injected into the inbound ports which in turn operates on these interfaces. Typically, they map domain objects to a specific technology stack.
 | Jexxa provides _driven adapter strategies_ to simplify the development of driven adapters of an application.
 
 
@@ -300,7 +299,7 @@ a| Jexxa provides a convention and configuration approach for driving adapters.
 
 A __generic__ driving adapter automatically exposes methods from connected inbound ports by using a convention. For example this can be used for an RPC mechanism.
 
-A __specific__ driving adapter is used if a convention cannot be applied. Instead you have to implement a configuration within the infrastructure of your application in form of a __port adapter__. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the __port adapter__.
+A __specific__ driving adapter is used if a convention cannot be applied. Instead, you have to implement a configuration within the infrastructure of your application in form of a __port adapter__. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the __port adapter__.
 
 
 |Driven Adapter Strategies
@@ -327,14 +326,14 @@ a|Components
 
 a| Core
 a| This component includes class `JexxaMain` which is the entry point in the main-method of your application to use Jexxa.
-a| `JexxaMain` provides a fluent API to explicitly show the binding of technology stacks to your inbound ports. In addition it provides a `BoundedContext` which allows to control your application in your environment.
+a| `JexxaMain` provides a fluent API to explicitly show the binding of technology stacks to your inbound ports. In addition, it provides a `BoundedContext` which allows to control your application in your environment.
 
 a| Factory
 a| Instantiates ports and adapters and manages their life cycle.
 a| Jexxa supports implicit constructor injection which is described in <<Dependency Injection (DI)>>.
 
 a| Convention
-a| Provides classes to validate the compliance with conventions of ports and adapters.
+a| Provide classes to validate the compliance with conventions of ports and adapters.
 a| Jexxa provides a fast fail approach regarding conventions. The conventions are described in <<Dependency Injection (DI)>>.
 
 |===
@@ -413,7 +412,7 @@ NOTE: A driven adapter gets the same `Properties` object as `JexxaMain`.
 
 
 | Port Adapter
-a| 1. A single public constructor with a single attribute. The attribute is the concrete type of a specific port.
+a| 1. A single public constructor with a single attribute. The attribute is the concrete type of specific port.
 a| 1. A port adapter is tightly coupled to a specific port. Therefore, it gets its concrete type injected.
 
 |===
@@ -482,7 +481,7 @@ The singleton scope supports designing stateless outbound ports which is in gene
 
 | Port Adapter
 a| Is always created new and not reused.
-a| Allows fine grained control of how a driving adapter should expose the included port. For example you can define that specific ports are only available via a management IP address.
+a| Allows fine-grained control of how a driving adapter should expose the included port. For example, you can define that specific ports are only available via a management IP address.
 |===
 
 === Transactions

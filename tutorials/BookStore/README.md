@@ -53,7 +53,7 @@ First we map the functionality of the application to DDD patterns
 *   `DomainService:` 
     *   `IDomainEventPublisher:` We need to publish our domain events in some way. Since the implementation requires a technology stack we can only define an interface.   
     *   `IBookRepository:` Interface to manage `Book` instances. Since the implementation requires a technology stack we can only define an interface.  
-    *   `ReferenceLibrary:` Return latest books. For simplicity, we assume that it is a service which does not related to our domain core directly.             
+    *   `ReferenceLibrary:` Return latest books. For simplicity, we assume that it is a service which does not relate to our domain core directly.             
 
 *   `BusinessException:`
     *   `BookNotInStockException:` In case we try to sell a book that is currently not available   
@@ -95,7 +95,7 @@ Implementation of `IDomainEventPublisher` just prints the `DomainEvent` to the c
 ### Implement the repository 
 When using Jexxa's `RepositoryManager` implementing a repository is just a mapping to the `IRepository` interface which provides typical CRUD operations.   
   
-The requirement are: 
+The requirements are: 
 
 *   The managed object provides a so called key-function which returns a key to uniquely identify the object. In case of this tutorial it is the method `getISBN`.
 *   The key itself must provide a valid implementation of method equals and hashcode to validate equality.     
@@ -318,7 +318,7 @@ class BookStoreServiceTest
     @BeforeAll
     static void initBeforeAll()
     {
-        // We recommend to instantiate JexxaMain only once for each test class.
+        // We recommend instantiating JexxaMain only once for each test class.
         // If you have larger tests this speeds up Jexxa's dependency injection 
         // Note: For unit-tests you just need to bind any driving adapter  
         jexxaMain = new JexxaMain(BookStoreServiceTest.class.getSimpleName());
@@ -329,7 +329,7 @@ class BookStoreServiceTest
     @BeforeEach
     void initTest()
     {
-        // JexxaTest is created for each tests. It provides and cleans up stubs before each test
+        // JexxaTest is created for each test. It provides and cleans up stubs before each test
         // Actually, JexxaTest provides stubs for repositories and send messages
         JexxaTest jexxaTest = new JexxaTest(jexxaMain);
 

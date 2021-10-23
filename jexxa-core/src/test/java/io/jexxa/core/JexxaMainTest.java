@@ -112,7 +112,6 @@ class JexxaMainTest
 
 
         //Assert
-        //Assert
         var result = objectUnderTest.getDrivingAdapter(ProxyAdapter.class)
                 .getPortList()
                 .stream()

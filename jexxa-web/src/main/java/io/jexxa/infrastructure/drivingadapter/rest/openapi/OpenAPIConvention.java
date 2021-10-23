@@ -163,7 +163,7 @@ public class OpenAPIConvention
             var schema = createSchema(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]);
             schema.setExample(createExampleInstance(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]));
 
-            //For some reason I have to add requests as DocumentedContent. Otherwise components seems to be not correctly created
+            //For some reason I have to add requests as DocumentedContent. Otherwise, components seems to be not correctly created
             openApiDocumentation.body(List.of(new DocumentedContent(method.getParameterTypes()[0], isJsonArray(method.getParameterTypes()[0]), APPLICATION_TYPE_JSON )));
             openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
         }  else if ( method.getParameters().length > 1 )
@@ -183,7 +183,7 @@ public class OpenAPIConvention
             }
 
             schema.setExample(exampleObjects);
-            //For some reason I have to add requests as DocumentedContent. Otherwise components seems to be not correctly created
+            //For some reason I have to add requests as DocumentedContent. Otherwise, components seems to be not correctly created
             openApiDocumentation.body(documentedContend);
             openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
         }
@@ -243,7 +243,7 @@ public class OpenAPIConvention
     {
         try
         {
-            // We create a JsonSchema and try to create an instance from it
+            // We create a JsonSchema and try to create an instance of given class from it.
             // Motivation is that if we cannot create an Object via class -> JsonSchema -> Object it is most unlikely that we can handle attribute in some meaningful way
             var schemaString = createJsonSchema(clazz);
             var jsonObject = JsonParser.parseString(schemaString).getAsJsonObject();

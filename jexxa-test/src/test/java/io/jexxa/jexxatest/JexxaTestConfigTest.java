@@ -80,7 +80,7 @@ class JexxaTestConfigTest
 
 
     /**
-     * Defines the meta data that we use:
+     * Defines the metadata that we use:
      * Conventions for databases:
      * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
      * - Adding a new strategy in code after initial usage requires that the database is extended in some woy

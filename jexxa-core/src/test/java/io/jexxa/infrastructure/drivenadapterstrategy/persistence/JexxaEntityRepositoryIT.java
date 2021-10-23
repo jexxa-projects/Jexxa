@@ -108,7 +108,7 @@ class JexxaEntityRepositoryIT
 
     @ParameterizedTest
     @MethodSource(ALL_REPOSITORY_CONFIGS)
-    void testPreconditionRemoveggregate(Properties repositoryProperties)
+    void testPreconditionRemoveAggregate(Properties repositoryProperties)
     {
         //Arrange
         var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);

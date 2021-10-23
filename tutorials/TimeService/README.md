@@ -4,7 +4,7 @@
 
 *   How to write an application service acting as a so called inbound-port 
 *   How to declare an outbound-port sending current time (which represents some kind of measuring point)    
-*   How to provide an implementation of this outbound-port, a so called driving adapter, with console output
+*   How to provide an implementation of this outbound-port, a so-called driving adapter, with console output
 *   How to provide an implementation of this outbound-port using `DrivenAdapterStrategy` from Jexxa for JMS.
 *   How to use a so called `specific adapter` provided by Jexxa together with an application specific driving adapter    
 
@@ -136,9 +136,9 @@ public class MessageDisplay implements IMessageDisplay
 
 Jexxa provides so called `DrivenAdapterStrategy` for various Java-APIs such as JMS. When using these strategies the implementation of a driven adapter 
 is just a facade and maps domain specific methods to the technology stack. In the main application we can adjust the default strategy so that we can 
-define either to use JMS or a simple logger. Moreover, within tests, we can define a MessageRecorder and uint-test our infrastructure as well.  
+define either to use JMS or a simple logger. Moreover, within tests, we can define a MessageRecorder and unit-test our infrastructure as well.  
 
-Note: Since `TimePublisher` requires information from a `Properties` we must provide a constructor or static factory method with a `Properties` attribute. By default, Jexxa hands in all information from jexxa-application.properties file. This file can extended by application specific information such as the topic name if required.
+Note: Since `TimePublisher` requires information from a `Properties` we must provide a constructor or static factory method with a `Properties` attribute. By default, Jexxa hands in all information from jexxa-application.properties file. This file can be extended by application specific information such as the topic name if required.
 
 In this example, sending a time is just a representation for any kind of measuring point. In real world applications this kind of information has no additional semantic meaning. Typically, it is also send in a fixed interval. So, we just have to define a notation to publish this information. The 
 following code shows how to publish a LocalTime in JSON format.                
@@ -182,7 +182,7 @@ java.naming.password=admin
 ```                       
 
 ## Implement the port adapter to receive JMS messages ##
-When receiving asynchronous messages we have to convert it into business data which is defined in the application core and forward it to a specific method within the application core. Since this cannot be done by convention meaningful, we have to use a configuration approach. As described in [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa.html), we have to implement a so called port adapter.   
+When receiving asynchronous messages we have to convert it into business data which is defined in the application core and forward it to a specific method within the application core. Since this cannot be done by convention meaningful, we have to use a configuration approach. As described in [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa.html), we have to implement a so-called port adapter.   
   
 Implementing a port adapter for JMS is quite easy.
 *   Within the constructor we define our class from the application core that will be called. Jexxa automatically injects this object when creating the port adapter. By convention, this is the only object defined in the constructor.  

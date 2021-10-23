@@ -44,7 +44,7 @@ public class JMSSender extends MessageSender implements AutoCloseable
     public JMSSender(Properties properties)
     {
         this.properties = properties;
-        Objects.requireNonNull(getConnection()); //Try create a connection to ensure fail fast
+        Objects.requireNonNull(getConnection()); //Try to create a connection to ensure fail fast
     }
 
     protected void sendToTopic(String message, String topicName, Properties messageProperties, MessageType messageType)
@@ -141,7 +141,7 @@ public class JMSSender extends MessageSender implements AutoCloseable
             var connection = connectionFactory.createConnection(properties.getProperty(JNDI_USER_KEY), properties.getProperty(JNDI_PASSWORD_KEY));
 
             //Register an exception listener that closes the connection as soon as the error occurs. This approach ensure that we recreate a connection
-            // as soon as next message must be send and we cab handle a temporarily error in between sending two messages. If the error still exist, the
+            // as soon as next message must be sent, and we can handle a temporary error in between sending two messages. If the error still exist, the
             // application will get a RuntimeError
             connection.setExceptionListener( exception -> {
                 JexxaLogger.getLogger(JMSSender.class).error(exception.getMessage());

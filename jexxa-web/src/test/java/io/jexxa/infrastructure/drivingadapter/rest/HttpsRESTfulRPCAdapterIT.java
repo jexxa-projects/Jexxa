@@ -49,7 +49,7 @@ class HttpsRESTfulRPCAdapterIT
         //Arrange
         SSLContext sslContext =  new SSLContextBuilder().loadTrustMaterial(
                 HttpsRESTfulRPCAdapterIT.class.getResource("/trustStore.jks"), //path to jks file
-                "changeit".toCharArray(), //enters in the truststore password for use
+                "changeit".toCharArray(), //enters the truststore password for use
                 new TrustSelfSignedStrategy() //will trust own CA and all self-signed certs
         ).build();
 

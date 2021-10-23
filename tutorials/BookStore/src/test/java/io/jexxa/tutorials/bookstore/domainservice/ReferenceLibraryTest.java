@@ -39,7 +39,7 @@ class ReferenceLibraryTest
         //Act
         objectUnderTest.addLatestBooks();
 
-        //Assert: After adding books via our service, our bookstore must know theses books
+        //Assert: After adding books via our service, our bookstore must know these books
         assertFalse( bookStore.getBooks().isEmpty() );
     }
 }

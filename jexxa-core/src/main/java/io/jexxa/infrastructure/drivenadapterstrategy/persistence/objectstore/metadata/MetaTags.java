@@ -25,13 +25,13 @@ public class MetaTags
     /**
      * Factory method to create a MetaTag wich compares value of type {@link Number} of an aggregate
      *
-     * @param accessorfunction returns the Instant
+     * @param accessorFunction returns the Instant
      * @param <T> type of the aggregate
      * @return a MetaTag wich compares an {@link Number} of an aggregate
      */
-    public static <T, V extends Number> NumericTag<T, V> numberTag(Function<T,V> accessorfunction )
+    public static <T, V extends Number> NumericTag<T, V> numberTag(Function<T,V> accessorFunction )
     {
-        return new NumericTag<>(accessorfunction, element -> element);
+        return new NumericTag<>(accessorFunction, element -> element);
     }
 
     /**

@@ -56,7 +56,7 @@ public final class ClassFactory
     }
 
     /**
-     * This method tries tor create an instance of  {@code Class<T>} using a static factory method of given factory class information.
+     * This method tries to create an instance of  {@code Class<T>} using a static factory method of given factory class information.
      * This method expects that the factory method does not need any parameters to create the new instance.
      *
      * @param interfaceType Class information of return type of the factory method
@@ -80,7 +80,7 @@ public final class ClassFactory
     }
 
     /**
-     * This method tries tor create an instance of {@code Class<T>}using a static factory method of given factory class information.
+     * This method tries to create an instance of {@code Class<T>}using a static factory method of given factory class information.
      * This method expects that the factory method does not need any parameters to create the new instance.
      *
      * @param interfaceType Class information of return type of the factory method

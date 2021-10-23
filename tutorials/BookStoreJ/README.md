@@ -77,7 +77,7 @@ Important note: This decision is a trade-off between using a technology stack wi
 
 In case you would like to use AspectJ together with pattern language of DDD we recommend project [AddendJ](https://addendj.jexxa.io/).     
 
-In the following you see the implementation of class `ISBN13` without an implementation of equals and hashcode. These methods are weaved into the source code during compile time.    
+In the following you see the implementation of class `ISBN13` without an implementation of equals and hashcode. These methods are woven into the source code during compile time.    
  
 ```java
 @ValueObject
@@ -108,7 +108,7 @@ public class ISBN13
 
 ## Implement the Application
 
-If your application core is annotated with your pattern language, you can use it together wih Jexxa. This requires to changes in contrast to initial `BookStore` application.
+If your application core is annotated with your pattern language, you can use it together wih Jexxa. This requires to change the initial `BookStore` application as follows:
 1.  You have to add package names providing your annotated classes to Jexxa by using method `addToApplicationCore`. This is required because Jexxa scans only the specified package names.    
 2.  You have to bind driving adapters using method `bindToAnnotation`. In this case alle inbound ports annotated with given annotation are bind to the driving adapter.    
 
