@@ -42,6 +42,7 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
     }
 
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public final JDBCQueryBuilder<T> select(T element, T... elements)
     {
         select(element);
@@ -67,7 +68,8 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
     }
 
     @SafeVarargs
-    public final <S extends Enum<S>> JDBCQueryBuilder<T> select(Class<S> clazz, S element, S... elements)
+    @SuppressWarnings("varargs")
+public final <S extends Enum<S>> JDBCQueryBuilder<T> select(Class<S> clazz, S element, S... elements)
     {
         select(clazz, element);
 
