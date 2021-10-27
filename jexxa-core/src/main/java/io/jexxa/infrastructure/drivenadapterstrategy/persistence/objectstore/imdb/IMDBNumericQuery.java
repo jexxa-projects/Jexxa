@@ -218,10 +218,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
         if ( aggregateValue1 == null && aggregateValue2 == null)
         {
             return 0;
-        } else if ( aggregateValue1 == null)
-        {
-            return 1;
-        } else if ( aggregateValue2 == null)
+        } else if ( aggregateValue1 == null || aggregateValue2 == null)
         {
             return 1;
         }
