@@ -206,6 +206,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
      * @return 0 If the value of aggregate1 is equal to value aggregate2 <br>
      *     -1 if value of aggregate1 &lt; value of aggregate2 <br>
      *     1 if value of aggregate1 &gt; value of aggregate2 <br>
+     *     1 if one of the given values is null <br>
      */
     private int compareToAggregate(T aggregate1, T aggregate2)
     {
