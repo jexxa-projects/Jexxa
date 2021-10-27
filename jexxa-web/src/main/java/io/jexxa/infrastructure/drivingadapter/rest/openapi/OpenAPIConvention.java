@@ -393,12 +393,12 @@ public class OpenAPIConvention
         return (Class<?>)parameterType.getActualTypeArguments()[0];
     }
 
-    @SuppressWarnings({"java:S1104", "java:S116", "unused"})
-    public static class BadRequestResponse
+    @SuppressWarnings({"java:S1104", "java:S116", "java:S1170","unused"})
+    private static class BadRequestResponse
     {
-        public String Exception;
-        public String ExceptionType;
-        public String ApplicationType = APPLICATION_TYPE_JSON;
+        public final String Exception = "";
+        public final String ExceptionType = "";
+        public final String ApplicationType = APPLICATION_TYPE_JSON;
         BadRequestResponse()
         {
             //private constructor

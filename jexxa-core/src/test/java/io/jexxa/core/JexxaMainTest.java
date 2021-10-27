@@ -56,7 +56,6 @@ class JexxaMainTest
         {
             objectUnderTest.stop();
         }
-        //Unirest.shutDown();
     }
 
 
