@@ -34,7 +34,7 @@
 
   <properties>
     <!--version of  maven plugins  -->
-    <gpg.plugin.version>1.6</gpg.plugin.version>
+    <gpg.plugin.version>3.0.1</gpg.plugin.version>
     <maven.clean.plugin>3.1.0</maven.clean.plugin>
     <maven.compiler.plugin>3.8.1</maven.compiler.plugin>
     <maven.deploy.plugin>3.0.0-M1</maven.deploy.plugin>
@@ -44,11 +44,11 @@
     <maven.resources.plugin>3.2.0</maven.resources.plugin>
     <maven.site.plugin>3.9.1</maven.site.plugin>
     <maven.surefire.plugin>3.0.0-M5</maven.surefire.plugin>
-    <maven.release.plugin>3.0.0-M1</maven.release.plugin>
+    <maven.release.plugin>3.0.0-M4</maven.release.plugin>
     <maven.jacoco.plugin>0.8.7</maven.jacoco.plugin>
-    <maven.reports.plugin>3.1.0</maven.reports.plugin>
-    <maven.enforcer.plugin>3.0.0-M3</maven.enforcer.plugin>
-    <maven.javadoc.plugin>3.2.0</maven.javadoc.plugin>
+    <maven.reports.plugin>3.1.2</maven.reports.plugin>
+    <maven.enforcer.plugin>3.0.0</maven.enforcer.plugin>
+    <maven.javadoc.plugin>3.3.1</maven.javadoc.plugin>
     <maven.templating.plugin>1.0.0</maven.templating.plugin>
     <maven.versions.plugin>2.8.1</maven.versions.plugin>
 
@@ -70,36 +70,36 @@
     <argLine>-Xmx2048m -Xms1024m</argLine>
 
     <!-- version of compile dependencies -->
-    <classgraph.version>4.8.116</classgraph.version>
+    <classgraph.version>4.8.129</classgraph.version>
     <commons.lang3.version>3.12.0</commons.lang3.version>
-    <gson.version>2.8.8</gson.version>
-    <javalin.version>4.0.0</javalin.version>
+    <gson.version>2.8.9</gson.version>
+    <javalin.version>4.1.1</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
-    <jackson.databind.version>2.12.5</jackson.databind.version>
-    <jackson.core.version>2.12.5</jackson.core.version>
+    <jackson.databind.version>2.13.0</jackson.databind.version>
+    <jackson.core.version>2.13.0</jackson.core.version>
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
 
     <!-- version of test dependencies -->
     <activemq.client.version>5.16.3</activemq.client.version>
-    <postgres.version>42.2.23</postgres.version>
-    <unirest.java.version>3.13.0</unirest.java.version>
-    <junit.platform.launcher.version>1.8.0</junit.platform.launcher.version>
-    <junit.jupiter.engine.version>5.8.0</junit.jupiter.engine.version>
-    <junit.jupiter.params.version>5.8.0</junit.jupiter.params.version>
+    <postgres.version>42.3.1</postgres.version>
+    <unirest.java.version>3.13.2</unirest.java.version>
+    <junit.platform.launcher.version>1.8.1</junit.platform.launcher.version>
+    <junit.jupiter.engine.version>5.8.1</junit.jupiter.engine.version>
+    <junit.jupiter.params.version>5.8.1</junit.jupiter.params.version>
     <slf4j.simple.version>1.7.32</slf4j.simple.version>
     <slf4j.api.version>1.7.32</slf4j.api.version>
-    <awaitility.version>4.1.0</awaitility.version>
+    <awaitility.version>4.1.1</awaitility.version>
 
     <!-- version of tutorials dependencies -->
     <addendj.version>1.0.1</addendj.version>
     <aspectj.version>1.9.8.M1</aspectj.version>
     <aspectjtools.version>1.9.8.M1</aspectjtools.version>
     <aspectjrt.version>1.9.8.M1</aspectjrt.version>
-    <commons.cli.version>1.4</commons.cli.version>
+    <commons.cli.version>1.5.0</commons.cli.version>
 
     <!-- version of maven dependencies for tutorials -->
     <aspectj.maven.plugin.version>1.12.6</aspectj.maven.plugin.version>
-    <maven.jib.plugin>3.1.2</maven.jib.plugin>
+    <maven.jib.plugin>3.1.4</maven.jib.plugin>
     <maven.shade.plugin>3.2.4</maven.shade.plugin>
   </properties>
 
@@ -268,7 +268,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>${maven.javadoc.plugin}</version>
         <configuration>
           <tags>
             <tag>
@@ -524,6 +524,11 @@
   </profiles>
 
   <pluginRepositories>
+      <pluginRepository>
+        <id>default</id>
+        <name>maven</name>
+        <url>https://repo1.maven.org/maven2/</url>
+      </pluginRepository>
     <pluginRepository>
       <id>jacoco-snapshot</id>
       <name>jacoco-snapshot</name>

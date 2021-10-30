@@ -1,15 +1,6 @@
 package io.jexxa.core;
 
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
-import static io.jexxa.TestConstants.JEXXA_DRIVING_ADAPTER;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import io.jexxa.TestConstants;
 import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.annotation.InvalidApplicationService;
 import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
@@ -20,6 +11,7 @@ import io.jexxa.application.domainservice.IJexxaEntityRepository;
 import io.jexxa.application.domainservice.InitializeJexxaEntities;
 import io.jexxa.application.infrastructure.drivingadapter.ProxyAdapter;
 import io.jexxa.application.infrastructure.drivingadapter.ProxyPortAdapter;
+import io.jexxa.application.infrastructure.drivingadapter.ThrowingPortAdapter;
 import io.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
 import io.jexxa.core.convention.PortConventionViolation;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
@@ -31,8 +23,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static io.jexxa.TestConstants.JEXXA_DRIVING_ADAPTER;
+import static io.jexxa.TestConstants.UNIT_TEST;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+
 @Execution(ExecutionMode.SAME_THREAD)
-@Tag(TestConstants.UNIT_TEST)
+@Tag(UNIT_TEST)
 class JexxaMainTest
 {
     private JexxaMain objectUnderTest;
@@ -56,7 +59,6 @@ class JexxaMainTest
         {
             objectUnderTest.stop();
         }
-        //Unirest.shutDown();
     }
 
 
@@ -111,7 +113,6 @@ class JexxaMainTest
                 .start();
 
 
-        //Assert
         //Assert
         var result = objectUnderTest.getDrivingAdapter(ProxyAdapter.class)
                 .getPortList()
@@ -187,6 +188,20 @@ class JexxaMainTest
         assertEquals(expectedProxyAdapterInstanceCount, ProxyPortAdapter.getInstanceCount());
     }
 
+    @Test
+    void bindToThrowingAdapter()
+    {
+        //Arrange
+        ProxyAdapter.resetInstanceCount();
+
+        //Act
+        var result = objectUnderTest.bind(ProxyAdapter.class);
+
+        //Assert
+        assertThrows( RuntimeException.class, () -> result.to(ThrowingPortAdapter.class));
+
+    }
+
 
     @Test
     void bootstrapService()
@@ -223,6 +238,19 @@ class JexxaMainTest
 
         //Act/Assert
         assertNotNull( objectUnderTest.getInstanceOfPort(IJexxaEntityRepository.class));
+    }
+
+    @Test
+    void testJexxaException()
+    {
+        //Arrange
+        var jexxaException = new JexxaMain.JexxaExceptionHandler(objectUnderTest);
+
+        //Act
+        jexxaException.uncaughtException(Thread.currentThread(), new IllegalStateException("Test Exception Handler", new Throwable("Test Exception Handler as part of Unit tests")));
+
+        //Assert
+        assertFalse(objectUnderTest.getBoundedContext().isRunning());
     }
 
 }

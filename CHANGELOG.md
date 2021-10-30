@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
  
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+## \[3.1.4] - 2021-10-30
+### Changed
+-   Maintenance release: Updated dependencies
+
 ## \[3.1.3] - 2021-10-17
 ### Changed
 -   Maintenance release: Updated dependencies
@@ -24,7 +29,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -   Added ObjectStore which provides sophisticated API for querying managed objects. See tutorial [Contract Management](https://github.com/repplix/Jexxa/blob/master/tutorials/ContractManagement/README.md)  
 
 ### Changed
--   Default port for tutorials from 7000 -> 7500 because MacOS Monterey uses port 7000 for its control center
+-   Default port for tutorials from 7000 -> 7500 because macOS Monterey uses port 7000 for its control center
 -   Updated dependencies 
 
 ## \[3.0.6] - 2021-07-13
@@ -48,7 +53,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[3.0.3] - 2021-06-05
 ### Fixed
--   Corrected javadoc und READMEs  
+-   Corrected javadoc und README files  
 
 ### Changed
 -   Updated dependencies on patch level
@@ -166,7 +171,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 -   RESTfulRPCAdapter: 
-    -   Corrected handling of Java8 Date API so that a date is handled as a string which is conform to ISO 8601
+    -   Corrected handling of Java8 Date API so that a date is handled as a string which is conformed to ISO 8601
     -   Added tests that show how to use this from a client side. See [here](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java) for more information.       
     
 ### Changed
@@ -388,7 +393,7 @@ times in case of reconnect.
 ## \[1.1] - 2020-03-18
  
 ### Fixed
--   Maven build and release on Github
+-   Maven build and release on GitHub
    
 ## \[1.0] - 2020-03-18
  

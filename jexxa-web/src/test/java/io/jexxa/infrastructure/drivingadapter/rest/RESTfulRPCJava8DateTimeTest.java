@@ -71,7 +71,6 @@ class RESTfulRPCJava8DateTimeTest
 
         LocalDate recreated = JSONManager.getJSONConverter().fromJson(json, LocalDate.class);
         assertEquals(now, recreated);
-        System.out.println("SUCCESS");
     }
 
 
@@ -156,8 +155,6 @@ class RESTfulRPCJava8DateTimeTest
         //Arrange
         LocalTime localTime = LocalTime.now();
 
-        System.out.println( JSONManager.getJSONConverter().toJson(localTime) );
-
         //Act
         var response = Unirest.post(REST_PATH + "setLocalTime")
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
@@ -201,7 +198,6 @@ class RESTfulRPCJava8DateTimeTest
     {
         //Arrange
         Duration duration = Duration.ofDays(2);
-        System.out.println( JSONManager.getJSONConverter().toJson(duration));
 
         //Act
         var response = Unirest.post(REST_PATH + "setDuration")

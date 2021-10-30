@@ -23,15 +23,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-@SuppressWarnings("unused")
 class JexxaTestConfigTest
 {
     public static final String REPOSITORY_CONFIG = "repositoryConfig";
     public static final String MESSAGE_SENDER_CONFIG = "messageSenderConfig";
-
-    @SuppressWarnings("FieldCanBeLocal")
-    private JexxaTest jexxaTest;
-
 
     @BeforeEach
     void setUp()
@@ -41,7 +36,7 @@ class JexxaTestConfigTest
         jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
                 .addToInfrastructure("io.jexxa.application.infrastructure");
 
-        jexxaTest = new JexxaTest(jexxaMain);
+        new JexxaTest(jexxaMain); //Configure JexxaMain for Unit testing
     }
 
 
@@ -80,15 +75,16 @@ class JexxaTestConfigTest
 
 
     /**
-     * Defines the meta data that we use:
+     * Defines the metadata that we use:
      * Conventions for databases:
      * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
      * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
      */
     private enum JexxaObjectSchema implements MetadataSchema
     {
+        @SuppressWarnings("unused")
         INT_VALUE(numberTag(JexxaObject::getInternalValue)),
-
+        @SuppressWarnings("unused")
         VALUE_OBJECT(numberTag(JexxaObject::getKey, JexxaValueObject::getValue));
 
         /**
@@ -130,6 +126,7 @@ class JexxaTestConfigTest
         return Stream.of(new Properties(), postgresProperties, h2Properties);
     }
 
+    @SuppressWarnings("unused")
     private static Stream<Properties> messageSenderConfig() {
         var jmsProperties = new Properties();
 

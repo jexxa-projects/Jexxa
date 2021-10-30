@@ -36,7 +36,7 @@ class BookStoreServiceTest
     @BeforeAll
     static void initBeforeAll()
     {
-        // We recommend to instantiate JexxaMain only once for each test class.
+        // We recommend instantiating JexxaMain only once for each test class.
         // If you have larger tests this speeds up Jexxa's dependency injection
         // Note: For unit-tests you just need to bind any driving adapter
         jexxaMain = new JexxaMain(BookStoreServiceTest.class.getSimpleName());
@@ -48,7 +48,7 @@ class BookStoreServiceTest
     @BeforeEach
     void initTest()
     {
-        // JexxaTest is created for each tests. It provides and cleans up stubs before each test
+        // JexxaTest is created for each test. It provides and cleans up stubs before each test
         // Actually, JexxaTest provides stubs for repositories and send messages
         JexxaTest jexxaTest = new JexxaTest(jexxaMain);
 

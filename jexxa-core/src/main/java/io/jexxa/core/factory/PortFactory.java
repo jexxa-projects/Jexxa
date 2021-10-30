@@ -71,7 +71,7 @@ public class PortFactory
 
 
     /**
-     * Checks if an instance of given inbound port was already created using this methods and returns this instance.
+     * Checks if an instance of given inbound port was already created using this method and returns this instance.
      * Only if no instance was created so far using this method a new one is created.
      *
      * @see #newInstanceOf(Class, Properties)

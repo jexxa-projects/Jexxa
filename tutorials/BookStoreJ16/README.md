@@ -74,7 +74,7 @@ an `Object`. Anyway, the most important aspects are:
 *   To avoid entering technology aspects into the application core, or vice versa, you should provide a clean guideline how to handle this.   
     
 Please do not underestimate such aspects if your application runs for several decades and is maintained by different developer teams. So you should
-discuss and docment such aspects with your colleagues and/or software architects. 
+discuss and document such aspects with your colleagues and/or software architects. 
 
 Finally, the following code shows how to use the annotation to add a runtime test. 
 

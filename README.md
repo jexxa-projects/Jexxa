@@ -34,7 +34,7 @@ In addition, Jexxa offers following production-proven features:
 
 ## Built With
 
-Jexxa internally uses following frameworks:
+Apart from some other great open source libraries, Jexxa mainly utilises the following libraries and frameworks:
 
 *   [ClassGraph](https://github.com/classgraph/classgraph)
 *   [javalin](http://javalin.io/)
@@ -48,14 +48,14 @@ Maven:
 <dependency>
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa-web</artifactId>
-  <version>3.1.3</version>
+  <version>3.1.4</version>
 </dependency> 
 ```
 
 Gradle:
 
 ```groovy
-compile "io.jexxa:jexxa-web:3.1.3"
+compile "io.jexxa:jexxa-web:3.1.4"
 ``` 
  
 ### Start programming 

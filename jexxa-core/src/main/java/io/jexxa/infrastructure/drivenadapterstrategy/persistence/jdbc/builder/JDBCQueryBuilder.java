@@ -1,5 +1,11 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder;
 
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
+
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.AND;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.ARGUMENT_PLACEHOLDER;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.BLANK;
@@ -12,11 +18,6 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.bui
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SELECT_COUNT;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.WHERE;
 
-import java.util.function.Supplier;
-import java.util.stream.Stream;
-
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 
 @SuppressWarnings("unused")
 public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
@@ -42,6 +43,7 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
     }
 
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public final JDBCQueryBuilder<T> select(T element, T... elements)
     {
         select(element);
@@ -67,7 +69,8 @@ public class JDBCQueryBuilder<T extends Enum<T>> extends JDBCBuilder<T>
     }
 
     @SafeVarargs
-    public final <S extends Enum<S>> JDBCQueryBuilder<T> select(Class<S> clazz, S element, S... elements)
+    @SuppressWarnings("varargs")
+public final <S extends Enum<S>> JDBCQueryBuilder<T> select(Class<S> clazz, S element, S... elements)
     {
         select(clazz, element);
 

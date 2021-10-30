@@ -76,8 +76,8 @@ Now, we know following parts of our application:
 *   Used `Driving Adapter`: `RESTfulRPCAdapter` and `JMXAdapter`
 *   Used `Inbound Port`: `TimeService`
 
-Please note that frameworks such as Spring or J2EE allow to hide this step because it is seen as boiler plate code. You will see that 
-this is true to a certain extend if you check Jexxa's tutorials. Especially the main-class which includes this step is quite similar. 
+Please note that frameworks such as Spring or J2EE allow to hide this step because it is seen as boilerplate code. You will see that 
+this is true to a certain extent if you check Jexxa's tutorials. Especially the main-class which includes this step is quite similar. 
 Anyway, please remember the quote `code is written once but read many times`. Since the main-class represents our starting point and 
 greatly simplifies the navigation through the application, it is worth the effort. 
 

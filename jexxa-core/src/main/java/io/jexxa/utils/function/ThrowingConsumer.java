@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import io.jexxa.utils.JexxaLogger;
 
 /**
- * This utility class allows to run methods which throw a checked exception inside a java stream 
+ * This utility class allows running methods which throw a checked exception inside a java stream
  *
  * Example:
  * <pre>
@@ -20,7 +20,7 @@ import io.jexxa.utils.JexxaLogger;
  * </pre>
  *
  *
- * @param <T> Lambda expression 
+ * @param <T> Lambda expression
  * @param <E> Type of the exception
  */
 @FunctionalInterface

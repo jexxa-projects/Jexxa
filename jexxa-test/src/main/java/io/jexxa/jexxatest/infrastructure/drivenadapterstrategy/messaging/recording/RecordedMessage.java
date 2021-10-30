@@ -6,7 +6,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 
 /**
- * Stores a message that is send via JMS messaging API
+ * Stores a message that is sent via JMS messaging API
  */
 public class RecordedMessage
 {

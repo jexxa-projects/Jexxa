@@ -12,7 +12,7 @@ public class JDBCCommand extends JDBCPreparedStatement
      * Creates a JDBCCommand
      *
      * @param jdbcConnection used connection to execute command
-     * @param sqlCommand mmust include the complete command with all attributes included. Note: The sqlCommand can include a
+     * @param sqlCommand must include the complete command with all attributes included. Note: The sqlCommand can include a
      *                   '?' as placeholder for arguments
      * @param arguments includes all arguments of the sqlCommand
      */

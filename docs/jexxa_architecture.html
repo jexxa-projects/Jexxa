@@ -483,7 +483,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_vision"><a class="anchor" href="#_vision"></a>1. Vision</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Jexxa is a lightweight framework to implement business applications based on a <a href="https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/">ports and adapters</a> architecture. It allows for easily connecting technology stacks, called adapters, to interfaces of a technology agnostic application core which are called ports. For this purpose Jexxa offers:</p>
+<p>Jexxa is a lightweight framework to implement business applications based on a <a href="https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/">ports and adapters</a> architecture. It allows for easily connecting technology stacks, called adapters, to interfaces of a technology-agnostic application core which are called ports. For this purpose Jexxa offers:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -558,9 +558,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_general_design_decisions"><a class="anchor" href="#_general_design_decisions"></a>3. General Design Decisions</h2>
 <div class="sectionbody">
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
+</td>
+<td class="content">
+All considerations and design decisions were made in the context of durable business applications. Therefore, they cannot be applied to other applications without further ado.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>In contrast to technology companies, the focus of special software development at companies from the production, finance or
-insurance sectors is generally not on the technical side. The big challenge for software developers is to understand the business domain and how to achieve added value for the customer. The essence of this knowledge is then written in a domain specific software in order to increase the value for the company and customers. Typically, the use of technology stacks itself does not add value as long as the business domain itself is not changed. At best, costs can be reduced.</p>
+<p>In contrast to technology companies, the focus of business software development at companies from the production,
+finance or insurance sectors is generally not on the technical side. The big challenge for software developers is
+to understand the business domain and how to achieve added value for the customer. The essence of this knowledge is
+then written in a domain specific software in order to increase the value for the company and customers. Typically,
+the use of technology stacks itself does not add value as long as the business domain itself is not changed. At
+best, costs can be reduced.</p>
 </div>
 <div class="paragraph">
 <p>This actually leads to a rather obvious conclusion about team structures within developing teams, which in my experience is often ignored:</p>
@@ -622,7 +638,7 @@ and rebuild the application. Unfortunately, you hide the flow of control which m
 <i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
 </td>
 <td class="content">
-Jexxa uses explicit binding for driving adapters so that developers directly see from the main method which incoming messages are handled by which object.
+Jexxa uses explicit binding for driving adapters so that the main method represents the starting point of the flow of control.
 </td>
 </tr>
 </table>
@@ -664,7 +680,7 @@ Jexxa provides a super simple <a href="https://github.com/repplix/Jexxa/blob/mas
 <h3 id="_ioc_without_annotations"><a class="anchor" href="#_ioc_without_annotations"></a>3.3. IoC without annotations</h3>
 <div class="paragraph">
 <p>Like any other framework, Jexxa takes control about part of your application core. Especially in Java this is often done with framework specific
-annotations. The bad thing is that these annotations tightly couple your application core to a specific technology stack.</p>
+annotations. The downside is that these annotations tightly couple your application core to a specific technology stack.</p>
 </div>
 <div class="paragraph">
 <p>Based on my experience, I can only recommend annotations within the application core for the following reasons:</p>
@@ -716,8 +732,7 @@ between the API of outbound ports to corresponding API of the strategy.
 </div>
 <div class="paragraph">
 <p>This approach seems to be so obvious, so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern
-especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so
-called aggregates (please refer to tutorial <a href="https://jexxa.io/tree/master/tutorials/BookStore">BookStore</a> to see the source code):</p>
+especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial <a href="https://jexxa.io/tree/master/tutorials/BookStore">BookStore</a> to see the source code):</p>
 </div>
 <div class="ulist">
 <ul>
@@ -788,14 +803,14 @@ called aggregates (please refer to tutorial <a href="https://jexxa.io/tree/maste
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>ApplicationCore</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">This package includes your technology agnostic business application.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This package includes your technology-agnostic business application.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>Infrastructure</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>This package includes the glue code to bind your technology agnostic business application to the package <code>JexxaInfrastructure</code>.</p>
+<p>This package includes the glue code to bind your technology-agnostic business application to the package <code>JexxaInfrastructure</code>.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -843,7 +858,7 @@ called aggregates (please refer to tutorial <a href="https://jexxa.io/tree/maste
 <p>Jexxa provides implicit constructor injection for your inbound ports which is described in <a href="#_dependency_injection_di">Dependency Injection (DI)</a>.</p>
 </li>
 <li>
-<p>Jexxa also allows to instantiate and manage ports yourself using the provided driving adapters and driven adapter strategies.</p>
+<p>Jexxa also allows instantiating and manage ports yourself using the provided driving adapters and driven adapter strategies.</p>
 </li>
 </ul>
 </div></div></td>
@@ -856,7 +871,7 @@ called aggregates (please refer to tutorial <a href="https://jexxa.io/tree/maste
 <p>Outbound ports belong to the application core but only as interface. These interfaces are implemented in package <code>Infrastructure</code> by a driving adapter which provides access to a specific technology stack such as a database driver.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Outbound ports are 'just' interfaces that must be defined by your application core. Jexxa provides support to implement these interfaces by so called <em>driven adapter strategies</em>.</p>
+<p>Outbound ports are 'just' interfaces that must be defined by your application core. Jexxa provides support to implement these interfaces by so-called <em>driven adapter strategies</em>.</p>
 </div></div></td>
 </tr>
 </tbody>
@@ -884,7 +899,7 @@ called aggregates (please refer to tutorial <a href="https://jexxa.io/tree/maste
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapters</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Driven adapters implement the outbound ports and can be injected into the inbound ports which in turn operates on these interfaces. Typically they map domain objects to a specific technology stack.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Driven adapters implement the outbound ports and can be injected into the inbound ports which in turn operates on these interfaces. Typically, they map domain objects to a specific technology stack.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Jexxa provides <em>driven adapter strategies</em> to simplify the development of driven adapters of an application.</p></td>
 </tr>
 <tr>
@@ -929,7 +944,7 @@ called aggregates (please refer to tutorial <a href="https://jexxa.io/tree/maste
 <p>A <em>generic</em> driving adapter automatically exposes methods from connected inbound ports by using a convention. For example this can be used for an RPC mechanism.</p>
 </div>
 <div class="paragraph">
-<p>A <em>specific</em> driving adapter is used if a convention cannot be applied. Instead you have to implement a configuration within the infrastructure of your application in form of a <em>port adapter</em>. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the <em>port adapter</em>.</p>
+<p>A <em>specific</em> driving adapter is used if a convention cannot be applied. Instead, you have to implement a configuration within the infrastructure of your application in form of a <em>port adapter</em>. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the <em>port adapter</em>.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -966,7 +981,7 @@ called aggregates (please refer to tutorial <a href="https://jexxa.io/tree/maste
 <p>This component includes class <code>JexxaMain</code> which is the entry point in the main-method of your application to use Jexxa.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>JexxaMain</code> provides a fluent API to explicitly show the binding of technology stacks to your inbound ports. In addition it provides a <code>BoundedContext</code> which allows to control your application in your environment.</p>
+<p><code>JexxaMain</code> provides a fluent API to explicitly show the binding of technology stacks to your inbound ports. In addition, it provides a <code>BoundedContext</code> which allows to control your application in your environment.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -985,7 +1000,7 @@ called aggregates (please refer to tutorial <a href="https://jexxa.io/tree/maste
 <p>Convention</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Provides classes to validate the compliance with conventions of ports and adapters.</p>
+<p>Provide classes to validate the compliance with conventions of ports and adapters.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>Jexxa provides a fast fail approach regarding conventions. The conventions are described in <a href="#_dependency_injection_di">Dependency Injection (DI)</a>.</p>
@@ -1042,8 +1057,8 @@ called aggregates (please refer to tutorial <a href="https://jexxa.io/tree/maste
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>One of the following constructors must be available (checked in this order).</p>
 </div>
-<div class="ulist">
-<ul>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p>Public Default constructor</p>
 </li>
@@ -1051,12 +1066,12 @@ called aggregates (please refer to tutorial <a href="https://jexxa.io/tree/maste
 <p>Public constructor with a single <code>Properties</code> attribute</p>
 </li>
 <li>
-<p>Public static factory method that gets no parameters and returns the type of the driving adapter</p>
+<p>Public static factory method without parameters and returns the type of the driving adapter</p>
 </li>
 <li>
 <p>Public static factory method with a single <code>Properties</code> parameter and returns the type of the requested driving adapter</p>
 </li>
-</ul>
+</ol>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>Using constructors or factory methods do not require any special annotations. Using <code>Properties</code> is a standard approach in Java to provide configuration information.</p>
@@ -1125,8 +1140,8 @@ A driving adapter gets the same <code>Properties</code> object as <code>JexxaMai
 </li>
 <li>
 <p>One of the following constructors must be available (checked in this order):</p>
-<div class="ulist">
-<ul>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p>Public default constructor</p>
 </li>
@@ -1139,7 +1154,7 @@ A driving adapter gets the same <code>Properties</code> object as <code>JexxaMai
 <li>
 <p>Public static factory method with a single <code>Properties</code> parameter and returns the type of the outbound port (and not the type of the driven adapter).</p>
 </li>
-</ul>
+</ol>
 </div>
 </li>
 </ol>
@@ -1172,7 +1187,7 @@ A driven adapter gets the same <code>Properties</code> object as <code>JexxaMain
 <td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>A single public constructor with a single attribute. The attribute is the concrete type of a specific port.</p>
+<p>A single public constructor with a single attribute. The attribute is the concrete type of specific port.</p>
 </li>
 </ol>
 </div></div></td>
@@ -1324,7 +1339,7 @@ In case you need a strict control how objects are exposed for example to differe
 <p>Is always created new and not reused.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Allows fine grained control of how a driving adapter should expose the included port. For example you can define that specific ports are only available via a management IP address.</p>
+<p>Allows fine-grained control of how a driving adapter should expose the included port. For example, you can define that specific ports are only available via a management IP address.</p>
 </div></div></td>
 </tr>
 </tbody>
@@ -1345,7 +1360,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-09-30 07:26:23 +0200
+Last updated 2021-10-25 06:11:00 +0200
 </div>
 </div>
 </body>

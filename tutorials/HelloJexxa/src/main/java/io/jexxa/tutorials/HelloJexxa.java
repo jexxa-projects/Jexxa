@@ -18,8 +18,8 @@ public final class HelloJexxa
         var jexxaMain = new JexxaMain("HelloJexxa");
 
         jexxaMain
-                // Bind a JMX adapter to our to Jexxa's BoundedContext object.
-                // It allows to access and control the running application via `jconsole`
+                // Bind a JMX adapter to our Jexxa's BoundedContext object.
+                // It allows accessing and control the running application via `jconsole`
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
 
                 // Bind a REST adapter to a HelloJexxa object
@@ -35,7 +35,7 @@ public final class HelloJexxa
                 // - Use `jconsole` to connect to this application and invoke method shutdown
                 .waitForShutdown()
 
-                //Finally invoke stop() for proper cleanup
+                //Finally, invoke stop() for proper cleanup
                 .stop();
     }
 }

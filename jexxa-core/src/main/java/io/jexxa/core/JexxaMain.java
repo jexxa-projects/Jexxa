@@ -45,7 +45,7 @@ public final class JexxaMain
 
     /**
      * Creates the JexxaMain instance for your application with given context name.
-     * In addition the properties file jexxa-application.properties is load if available in class path.
+     * In addition, the properties file jexxa-application.properties is load if available in class path.
      *
      * Note: When a driving or driven adapter is created, it gets the properties read from properties file.
      *
@@ -74,11 +74,11 @@ public final class JexxaMain
         this.boundedContext = new BoundedContext(contextName, this);
 
         // Handle properties in following forder:
-        // 1. Load properties from application.properties because they have lowest priority
+        // 1. Load properties from application.properties because they have the lowest priority
         loadJexxaApplicationProperties(this.properties);
-        // 2. Use System properties because they have mid priority
+        // 2. Use System properties because they have mid-priority
         this.properties.putAll( System.getProperties() );  //add/overwrite system properties
-        // 3. Use given properties because they have highest priority
+        // 3. Use given properties because they have the highest priority
         this.properties.putAll( properties );  //add/overwrite given properties
 
         this.properties.put(JEXXA_CONTEXT_NAME, contextName);
@@ -313,7 +313,7 @@ public final class JexxaMain
 
     /**
      * CompositeDrivingAdapter starts all registered IDrivingAdapter
-     * In case of an failure starting a single IDrivingAdapter all registered and already started IDrivingAdapter are stopped
+     * In case of a failure starting a single IDrivingAdapter all registered and already started IDrivingAdapter are stopped
      */
     static class CompositeDrivingAdapter implements IDrivingAdapter
     {

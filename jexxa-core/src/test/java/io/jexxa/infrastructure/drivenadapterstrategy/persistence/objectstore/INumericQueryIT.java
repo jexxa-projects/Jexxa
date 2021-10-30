@@ -73,7 +73,7 @@ class INumericQueryIT
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
-    void testComparisonOperatorsIntValue(Properties properties)
+    void testInequalityOperatorsIntValue(Properties properties)
     {
         //Arrange
         initObjectStore(properties);
@@ -88,25 +88,12 @@ class INumericQueryIT
                 .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
         var lessThanExpected = IntStream.range(0,50).
                 mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
-        var rangeClosedExpected = IntStream.rangeClosed(30,50).
-                mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
-        var rangeExpected = IntStream.range(30,50).
-                mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
-
-        var equalToExpected = IntStream.rangeClosed(0,0).
-                mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
-        var notEqualToExpected = IntStream.range(1,100).
-                mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
 
         //Act
         var greaterOrEqualThan = objectUnderTest.isGreaterOrEqualThan(50);
         var lessOrEqualThan = objectUnderTest.isLessOrEqualThan(50);
         var greaterThan = objectUnderTest.isGreaterThan(50);
         var lessThan = objectUnderTest.isLessThan(50);
-        var rangeClosed = objectUnderTest.getRangeClosed(30,50);
-        var range = objectUnderTest.getRange(30,50);
-        var equalTo = objectUnderTest.isEqualTo(0);
-        var notEqualTo = objectUnderTest.isNotEqualTo(0);
 
         //Assert
         assertEquals(greaterOrEqualThanExpected, greaterOrEqualThan);
@@ -114,18 +101,55 @@ class INumericQueryIT
 
         assertEquals(lessThanExpected, lessThan);
         assertEquals(lessOrEqualThanThanExpected, lessOrEqualThan);
+    }
 
-        assertEquals(rangeClosedExpected, rangeClosed);
-        assertEquals(rangeExpected, range);
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testEqualityOperatorsIntValue(Properties properties)
+    {
+        //Arrange
+        initObjectStore(properties);
+        var objectUnderTest = objectStore. getNumericQuery( JexxaObjectSchema.INT_VALUE, Integer.class);
 
+        var equalToExpected = IntStream.rangeClosed(0,0).
+                mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var notEqualToExpected = IntStream.range(1,100).
+                mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
+
+        //Act
+        var equalTo = objectUnderTest.isEqualTo(0);
+        var notEqualTo = objectUnderTest.isNotEqualTo(0);
+
+        //Assert
         assertEquals(notEqualToExpected, notEqualTo);
         assertEquals(equalToExpected, equalTo);
     }
 
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testRangeOperatorsIntValue(Properties properties)
+    {
+        //Arrange
+        initObjectStore(properties);
+        var objectUnderTest = objectStore. getNumericQuery( JexxaObjectSchema.INT_VALUE, Integer.class);
+
+        var rangeClosedExpected = IntStream.rangeClosed(30,50).
+                mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var rangeExpected = IntStream.range(30,50).
+                mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
+
+        //Act
+        var rangeClosed = objectUnderTest.getRangeClosed(30,50);
+        var range = objectUnderTest.getRange(30,50);
+
+        //Assert
+        assertEquals(rangeClosedExpected, rangeClosed);
+        assertEquals(rangeExpected, range);
+    }
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
-    void testComparisonOperatorValueObject(Properties properties)
+    void testInequalityOperatorValueObject(Properties properties)
     {
         //Arrange
         initObjectStore(properties);
@@ -141,25 +165,12 @@ class INumericQueryIT
                 .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
         var lessThanExpected = IntStream.range(0,50)
                 .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
-        var rangeClosedExpected = IntStream.rangeClosed(30,50)
-                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
-        var rangeExpected = IntStream.range(30,50)
-                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
-        var equalToExpected = IntStream.rangeClosed(0,0).
-                mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
-        var notEqualToExpected = IntStream.range(1,100).
-                mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
-
 
         //Act
         var greaterOrEqualThan = objectUnderTest.isGreaterOrEqualThan(new JexxaValueObject(50));
         var lessOrEqualThan = objectUnderTest.isLessOrEqualThan(new JexxaValueObject(50));
         var greaterThan = objectUnderTest.isGreaterThan(new JexxaValueObject(50));
         var lessThan = objectUnderTest.isLessThan(new JexxaValueObject(50));
-        var rangeClosed = objectUnderTest.getRangeClosed(new JexxaValueObject(30),new JexxaValueObject(50));
-        var range = objectUnderTest.getRange(new JexxaValueObject(30),new JexxaValueObject(50));
-        var equalTo = objectUnderTest.isEqualTo(new JexxaValueObject(0));
-        var notEqualTo = objectUnderTest.isNotEqualTo(new JexxaValueObject(0));
 
         //Assert
         assertEquals(greaterOrEqualThanExpected, greaterOrEqualThan);
@@ -167,17 +178,57 @@ class INumericQueryIT
 
         assertEquals(lessThanExpected, lessThan);
         assertEquals(lessOrEqualThanThanExpected, lessOrEqualThan);
+    }
 
-        assertEquals(rangeClosedExpected, rangeClosed);
-        assertEquals(rangeExpected, range);
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testEqualityOperatorValueObject(Properties properties)
+    {
+        //Arrange
+        initObjectStore(properties);
 
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectSchema.VALUE_OBJECT, JexxaValueObject.class);
+
+        var equalToExpected = IntStream.rangeClosed(0,0).
+                mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var notEqualToExpected = IntStream.range(1,100).
+                mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
+
+        //Act
+        var equalTo = objectUnderTest.isEqualTo(new JexxaValueObject(0));
+        var notEqualTo = objectUnderTest.isNotEqualTo(new JexxaValueObject(0));
+
+        //Assert
         assertEquals(notEqualToExpected, notEqualTo);
         assertEquals(equalToExpected, equalTo);
     }
 
     @ParameterizedTest
     @MethodSource(REPOSITORY_CONFIG)
-    void testComparisonOperatorOptionalValueObject(Properties properties)
+    void testRangeOperatorValueObject(Properties properties)
+    {
+        //Arrange
+        initObjectStore(properties);
+
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectSchema.VALUE_OBJECT, JexxaValueObject.class);
+
+        var rangeClosedExpected = IntStream.rangeClosed(30,50)
+                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var rangeExpected = IntStream.range(30,50)
+                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
+
+        //Act
+        var rangeClosed = objectUnderTest.getRangeClosed(new JexxaValueObject(30),new JexxaValueObject(50));
+        var range = objectUnderTest.getRange(new JexxaValueObject(30),new JexxaValueObject(50));
+
+        //Assert
+        assertEquals(rangeClosedExpected, rangeClosed);
+        assertEquals(rangeExpected, range);
+    }
+
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testInequalityOperatorOptionalValueObject(Properties properties)
     {
         //Arrange
         initObjectStore(properties);
@@ -188,24 +239,12 @@ class INumericQueryIT
                 .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
         var lessThanExpected = IntStream.rangeClosed(0,49)
                 .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
-        var rangeClosedExpected = IntStream.rangeClosed(30,49)
-                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
-        var rangeExpected = IntStream.rangeClosed(30,49)
-                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
-        var isNotNullExpected = IntStream.rangeClosed(0,49)
-                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
-        var isNullExpected = IntStream.range(50,100)
-                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
 
         //Act
         var greaterOrEqualThan = objectUnderTest.isGreaterOrEqualThan(new JexxaValueObject(50));
         var lessOrEqualThan = objectUnderTest.isLessOrEqualThan(new JexxaValueObject(50));
         var greaterThan = objectUnderTest.isGreaterThan(new JexxaValueObject(50));
         var lessThan = objectUnderTest.isLessThan(new JexxaValueObject(50));
-        var rangeClosed = objectUnderTest.getRangeClosed(new JexxaValueObject(30),new JexxaValueObject(50));
-        var range = objectUnderTest.getRange(new JexxaValueObject(30),new JexxaValueObject(50));
-        var isNull = objectUnderTest.isNull();
-        var isNotNull = objectUnderTest.isNotNull();
 
         //Assert
         assertEquals(Collections.emptyList(), greaterOrEqualThan);
@@ -213,12 +252,52 @@ class INumericQueryIT
 
         assertEquals(lessThanExpected, lessThan);
         assertEquals(lessOrEqualThanThanExpected, lessOrEqualThan);
+    }
 
-        assertEquals(rangeClosedExpected, rangeClosed);
-        assertEquals(rangeExpected, range);
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testEqualityOperatorOptionalValueObject(Properties properties)
+    {
+        //Arrange
+        initObjectStore(properties);
 
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectSchema.OPTIONAL_VALUE_OBJECT, JexxaValueObject.class);
+
+        var isNotNullExpected = IntStream.rangeClosed(0,49)
+                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var isNullExpected = IntStream.range(50,100)
+                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
+
+        //Act
+        var isNull = objectUnderTest.isNull();
+        var isNotNull = objectUnderTest.isNotNull();
+
+        //Assert
         assertEquals(isNullExpected, isNull);
         assertEquals(isNotNullExpected, isNotNull);
+    }
+
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testRangeOperatorOptionalValueObject(Properties properties)
+    {
+        //Arrange
+        initObjectStore(properties);
+
+        var objectUnderTest = objectStore.getNumericQuery( JexxaObjectSchema.OPTIONAL_VALUE_OBJECT, JexxaValueObject.class);
+
+        var rangeClosedExpected = IntStream.rangeClosed(30,49)
+                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
+        var rangeExpected = IntStream.rangeClosed(30,49)
+                .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element))).collect(Collectors.toList());
+
+        //Act
+        var rangeClosed = objectUnderTest.getRangeClosed(new JexxaValueObject(30),new JexxaValueObject(50));
+        var range = objectUnderTest.getRange(new JexxaValueObject(30),new JexxaValueObject(50));
+
+        //Assert
+        assertEquals(rangeClosedExpected, rangeClosed);
+        assertEquals(rangeExpected, range);
     }
 
     @ParameterizedTest

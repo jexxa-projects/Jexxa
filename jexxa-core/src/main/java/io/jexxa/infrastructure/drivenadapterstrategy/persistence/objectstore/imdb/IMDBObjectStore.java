@@ -30,11 +30,12 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataSchema>  extends 
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <S> INumericQuery<T, S> getNumericQuery(M metaTag, Class<S> queryType)
     {
         if ( !metaData.contains(metaTag) )
         {
-            throw new IllegalArgumentException("Unknown strategy for IRangedResult");
+            throw new IllegalArgumentException("Unknown strategy for "+ metaTag.name());
         }
 
         //noinspection unchecked
@@ -44,11 +45,12 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataSchema>  extends 
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <S> IStringQuery<T, S> getStringQuery(M metaTag, Class<S> queryType)
     {
         if ( !metaData.contains(metaTag) )
         {
-            throw new IllegalArgumentException("Unknown strategy for IRangedResult");
+            throw new IllegalArgumentException("Unknown strategy for " + metaTag.name());
         }
 
         //noinspection unchecked
