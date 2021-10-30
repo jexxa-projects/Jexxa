@@ -23,15 +23,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-@SuppressWarnings("unused")
 class JexxaTestConfigTest
 {
     public static final String REPOSITORY_CONFIG = "repositoryConfig";
     public static final String MESSAGE_SENDER_CONFIG = "messageSenderConfig";
-
-    @SuppressWarnings("FieldCanBeLocal")
-    private JexxaTest jexxaTest;
-
 
     @BeforeEach
     void setUp()
@@ -41,7 +36,7 @@ class JexxaTestConfigTest
         jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
                 .addToInfrastructure("io.jexxa.application.infrastructure");
 
-        jexxaTest = new JexxaTest(jexxaMain);
+        new JexxaTest(jexxaMain); //Configure JexxaMain for Unit testing
     }
 
 
@@ -87,8 +82,9 @@ class JexxaTestConfigTest
      */
     private enum JexxaObjectSchema implements MetadataSchema
     {
+        @SuppressWarnings("unused")
         INT_VALUE(numberTag(JexxaObject::getInternalValue)),
-
+        @SuppressWarnings("unused")
         VALUE_OBJECT(numberTag(JexxaObject::getKey, JexxaValueObject::getValue));
 
         /**
@@ -130,6 +126,7 @@ class JexxaTestConfigTest
         return Stream.of(new Properties(), postgresProperties, h2Properties);
     }
 
+    @SuppressWarnings("unused")
     private static Stream<Properties> messageSenderConfig() {
         var jmsProperties = new Properties();
 
