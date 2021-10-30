@@ -1,7 +1,6 @@
 package io.jexxa.core;
 
 
-import io.jexxa.TestConstants;
 import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.annotation.InvalidApplicationService;
 import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
@@ -24,11 +23,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-import static io.jexxa.TestConstants.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static io.jexxa.TestConstants.JEXXA_DRIVING_ADAPTER;
+import static io.jexxa.TestConstants.UNIT_TEST;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 @Execution(ExecutionMode.SAME_THREAD)
-@Tag(TestConstants.UNIT_TEST)
+@Tag(UNIT_TEST)
 class JexxaMainTest
 {
     private JexxaMain objectUnderTest;
