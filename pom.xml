@@ -44,11 +44,11 @@
     <maven.resources.plugin>3.2.0</maven.resources.plugin>
     <maven.site.plugin>3.9.1</maven.site.plugin>
     <maven.surefire.plugin>3.0.0-M5</maven.surefire.plugin>
-    <maven.release.plugin>3.0.0-M1</maven.release.plugin>
+    <maven.release.plugin>3.0.0-M4</maven.release.plugin>
     <maven.jacoco.plugin>0.8.7</maven.jacoco.plugin>
-    <maven.reports.plugin>3.1.0</maven.reports.plugin>
-    <maven.enforcer.plugin>3.0.0-M3</maven.enforcer.plugin>
-    <maven.javadoc.plugin>3.2.0</maven.javadoc.plugin>
+    <maven.reports.plugin>3.1.2</maven.reports.plugin>
+    <maven.enforcer.plugin>3.0.0</maven.enforcer.plugin>
+    <maven.javadoc.plugin>3.3.1</maven.javadoc.plugin>
     <maven.templating.plugin>1.0.0</maven.templating.plugin>
     <maven.versions.plugin>2.8.1</maven.versions.plugin>
 
@@ -99,7 +99,7 @@
 
     <!-- version of maven dependencies for tutorials -->
     <aspectj.maven.plugin.version>1.12.6</aspectj.maven.plugin.version>
-    <maven.jib.plugin>3.1.2</maven.jib.plugin>
+    <maven.jib.plugin>3.1.4</maven.jib.plugin>
     <maven.shade.plugin>3.2.4</maven.shade.plugin>
   </properties>
 
@@ -268,7 +268,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>${maven.javadoc.plugin}</version>
         <configuration>
           <tags>
             <tag>
@@ -524,6 +524,11 @@
   </profiles>
 
   <pluginRepositories>
+      <pluginRepository>
+        <id>default</id>
+        <name>maven</name>
+        <url>https://repo1.maven.org/maven2/</url>
+      </pluginRepository>
     <pluginRepository>
       <id>jacoco-snapshot</id>
       <name>jacoco-snapshot</name>
