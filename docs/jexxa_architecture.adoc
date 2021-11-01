@@ -81,8 +81,8 @@ of a full-stack developer...
 Jexxa was developed to ideally support the above team structure as well as the learning process. Therefore, the development of Jexxa is very much
 driven by which aspects should be made explicit or hidden.
 
-To make certain aspects explicit, typically a certain design pattern or a fluent API is used. If certain aspects are to be hidden, conventions are used.
-The rest of this section describes the most important design decisions and how they should support the learning process of your teams.
+For design aspects that should be made explicit within a business application, Jexxa provides either a specific design
+pattern or a Fluent API. Design aspects that should be hidden in the business application are defined in Jexxa by conventions.
 
 ===  Visible flow of control
 
@@ -150,7 +150,7 @@ IMPORTANT: <<JexxaComponents>> shows that you can focus on your application core
 
 [plantuml, images/JexxaComponents, svg, align=center]
 [reftext="Figure {counter:local-figure-number}"]
-.This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages  labeled with `\<<Jexxa>>` and light grey background are provided by Jexxa. Packages labeled with `\<<Application>>` have to be realized by the application.
+.This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages  labeled with `\<<Jexxa>>` and light grey background are provided by Jexxa. Packages labeled with `\<<Application>>` have to be implemented.
 [[JexxaComponents]]
 ....
 @startuml
