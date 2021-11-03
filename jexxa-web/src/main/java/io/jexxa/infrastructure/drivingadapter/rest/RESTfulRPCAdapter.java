@@ -38,6 +38,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public static final String KEYSTORE_PASSWORD = "io.jexxa.rest.keystore_password";
     public static final String OPEN_API_PATH = "io.jexxa.rest.open_api_path";
     public static final String STATIC_FILES_ROOT = "io.jexxa.rest.static_files_root";
+    public static final String STATIC_FILES_EXTERNAL = "io.jexxa.rest.static_files_external";
+
 
     private final JSONConverter jsonConverter = JSONManager.getJSONConverter();
     private final Properties properties;
@@ -324,9 +326,16 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         javalinConfig.server(this::getServer);
         javalinConfig.showJavalinBanner = false;
         javalinConfig.jsonMapper(new JexxaJSONMapper());
+        Location location = Location.CLASSPATH;
+
+        if ( properties.getProperty(STATIC_FILES_EXTERNAL, "false").equalsIgnoreCase("true") )
+        {
+            location = Location.EXTERNAL;
+        }
+
         if ( properties.containsKey(STATIC_FILES_ROOT) )
         {
-            javalinConfig.addStaticFiles(properties.getProperty(STATIC_FILES_ROOT), Location.CLASSPATH );
+            javalinConfig.addStaticFiles(properties.getProperty(STATIC_FILES_ROOT), location );
         }
 
         this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig );
