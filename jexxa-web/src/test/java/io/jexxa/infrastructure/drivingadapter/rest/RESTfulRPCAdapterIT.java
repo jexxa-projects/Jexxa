@@ -1,18 +1,5 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.STATIC_FILES_ROOT;
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
-import java.util.Properties;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -29,6 +16,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
+import java.util.List;
+import java.util.Properties;
+
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.STATIC_FILES_EXTERNAL;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.STATIC_FILES_ROOT;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @SuppressWarnings("SameParameterValue")
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
@@ -44,6 +45,7 @@ class RESTfulRPCAdapterIT
     private final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
 
     private RESTfulRPCAdapter objectUnderTest;
+    private final Properties properties = new Properties();
 
     @BeforeEach
     void setupTests()
@@ -51,7 +53,6 @@ class RESTfulRPCAdapterIT
         //Setup
         simpleApplicationService.setSimpleValue(42);
 
-        var properties = new Properties();
         var defaultHost = "localhost";
         var defaultPort = 7500;
 
@@ -350,4 +351,31 @@ class RESTfulRPCAdapterIT
         //Assert
         assertTrue(response.isSuccess());
     }
+
+    @Test
+    void testStaticWebPageExternalPath()
+    {
+        //Arrange
+        objectUnderTest.stop();
+        properties.put(STATIC_FILES_ROOT, "src/test/resources/public/");
+        properties.put(STATIC_FILES_EXTERNAL, "true");
+
+        objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
+        objectUnderTest.register(simpleApplicationService);
+        objectUnderTest.start();
+
+        //Act
+        var response = Unirest.get(STATIC_TEST_PAGE)
+                .asEmpty();
+
+        //Assert
+        assertTrue(response.isSuccess());
+    }
+
+    @AfterEach
+    void tearDown()
+    {
+        objectUnderTest.stop();
+    }
+
 }
