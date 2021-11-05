@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[3.2.0] - 2021-11-05
+### Added
+- Jexxa-Web: Added possibility to configure an external path by using property `io.jexxa.rest.static_files_external=true`.
+ See [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information.   
+
+### Changed
+-   Updated dependencies
+
 ## \[3.1.4] - 2021-10-30
 ### Changed
 -   Maintenance release: Updated dependencies
@@ -213,7 +221,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     
 ## \[2.5.0] - 2020-10-21
 ### Added
--   `RESTfulRPCAdapter`: Added OpenAPI support (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/main/resources/jexxa-application.properties) for more information).  
+-   `RESTfulRPCAdapter`: Added OpenAPI support (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information).  
 -   `JexxaMain`: Improved fluent API in `JexxaMain` with `conditionalBind()` which performs a binding only if a condition statement evaluates to true. See tutorial [`TimeService`](https://github.com/repplix/Jexxa/tree/master/tutorials/TimeService) for example.
 -   Added a [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html).   
   
@@ -265,7 +273,7 @@ times in case of reconnect.
 
 ## \[2.3.0] - 2020-08-23
 ### Added
--   [Issue #6](https://github.com/repplix/Jexxa/issues/6) Added HTTPS support in RESTfulRPCAdapter (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/main/resources/jexxa-application.properties) for more information).                                             
+-   [Issue #6](https://github.com/repplix/Jexxa/issues/6) Added HTTPS support in RESTfulRPCAdapter (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information).                                             
 ### Fixed
 -   [Issue #5](https://github.com/repplix/Jexxa/issues/5) Avoid warn a message "Uncaught Exception Handler already set" with JUnit 
 -   Fixed Issue with including correct jexxa-application.properties in tutorials jar with all dependencies. Switched from jar-plugin to maven-shade plugin to define correct jexxa-application.properties.   
@@ -344,7 +352,7 @@ times in case of reconnect.
 
 ### Changed
 -   Documentation about Jexxa in doc/jexxa.adoc
--   Properties for JDBC databases (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/main/resources/jexxa-application.properties))
+-   Properties for JDBC databases (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties))
 
 ### Fixed
 -   Checking Jexxa's conventions for ports and adapters with a fail fast approach
