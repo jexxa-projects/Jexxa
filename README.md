@@ -5,7 +5,8 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=io.jexxa%3Ajexxa&metric=alert_status)](https://sonarcloud.io/dashboard?id=io.jexxa%3Ajexxa)
  ![Java CI](https://github.com/repplix/Jexxa/workflows/Java%20CI/badge.svg)
 
-# Jexxa - A Ports and Adapters Framework for Java
+# Jexxa
+## A Ports and Adapters Framework for Java
 
 Jexxa is a lightweight framework to implement durable business applications based on a [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/) architecture. It is particularly suitable for 
 the implementation of microservices in conjunction with Domain Driven Design.
