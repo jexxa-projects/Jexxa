@@ -70,7 +70,7 @@
     <argLine>-Xmx2048m -Xms1024m</argLine>
 
     <!-- version of compile dependencies -->
-    <classgraph.version>4.8.132</classgraph.version>
+    <classgraph.version>4.8.134</classgraph.version>
     <commons.lang3.version>3.12.0</commons.lang3.version>
     <gson.version>2.8.9</gson.version>
     <javalin.version>4.1.1</javalin.version>
@@ -82,7 +82,7 @@
     <!-- version of test dependencies -->
     <activemq.client.version>5.16.3</activemq.client.version>
     <postgres.version>42.3.1</postgres.version>
-    <unirest.java.version>3.13.3</unirest.java.version>
+    <unirest.java.version>3.13.4</unirest.java.version>
     <junit.platform.launcher.version>1.8.1</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.8.1</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.8.1</junit.jupiter.params.version>
@@ -92,9 +92,9 @@
 
     <!-- version of tutorials dependencies -->
     <addendj.version>1.0.1</addendj.version>
-    <aspectj.version>1.9.8.M1</aspectj.version>
-    <aspectjtools.version>1.9.8.M1</aspectjtools.version>
-    <aspectjrt.version>1.9.8.M1</aspectjrt.version>
+    <aspectj.version>1.9.8.RC2</aspectj.version>
+    <aspectjtools.version>1.9.8.RC2</aspectjtools.version>
+    <aspectjrt.version>1.9.8.RC2</aspectjrt.version>
     <commons.cli.version>1.5.0</commons.cli.version>
 
     <!-- version of maven dependencies for tutorials -->
