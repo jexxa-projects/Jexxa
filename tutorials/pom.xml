@@ -33,9 +33,20 @@
   </dependencies>
 
   <build>
+      <pluginManagement>
+          <plugins>
+              <plugin>
+                  <artifactId>maven-deploy-plugin</artifactId>
+                  <configuration>
+                      <skip>true</skip>
+                  </configuration>
+              </plugin>
+          </plugins>
+      </pluginManagement>
 
       <plugins>
-        <plugin>
+
+          <plugin>
           <artifactId>maven-shade-plugin</artifactId>
           <executions>
             <execution>
