@@ -7,7 +7,7 @@
 
 # Jexxa - A Ports and Adapters Framework for Java
 
-Jexxa is a lightweight framework to implement durable business applications based on a [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/) architecture. Most people still use the original name _hexagonal architecture_. Following the UNIX philosophy `do one thing and do it well`, Jexxa is designed to implement durable business applications based on a ports-and-adapters architecture in conjunction with Domain Driven Design. It is no general purpose framework such as Spring or J2EE.
+Jexxa is a lightweight framework to implement durable business applications based on a [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/) architecture. Most people still use the original name _hexagonal architecture_. Following the UNIX philosophy `do one thing and do it well`, Jexxa is no general purpose framework such as Spring or J2EE. Instead, Jexxa is especially designed to implement durable business applications based on a ports-and-adapters architecture in conjunction with Domain Driven Design. 
 
 Goal of this framework is to support the development of _durable_ business applications as good as possible. Therefore, Jexxa stresses the following aspects in particular:
 
