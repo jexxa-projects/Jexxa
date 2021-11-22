@@ -112,6 +112,32 @@ class JMSAdapterIT
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
+    @Test
+    void startJMSAdapterJexxaSecretFile() throws IOException
+    {
+        //Arrange
+        var messageListener = new TopicListener();
+        var properties = new Properties();
+        properties.load(getClass().getResourceAsStream("/jexxa-secrets.properties"));
+
+        JexxaMain jexxaMain = new JexxaMain("JMSAdapterTest", properties);
+
+        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
+                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+                .bind(JMSAdapter.class).to(messageListener)
+                .start();
+
+        ITMessageSender myProducer = new ITMessageSender(jexxaMain.getProperties(), TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+
+        //Act
+        myProducer.send(MESSAGE);
+
+        //Assert
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !messageListener.getMessages().isEmpty());
+
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
 
     @Test
     void invalidProperties()

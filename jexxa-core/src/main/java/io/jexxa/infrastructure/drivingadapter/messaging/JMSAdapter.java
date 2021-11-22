@@ -1,15 +1,10 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.utils.JexxaLogger;
+import io.jexxa.utils.function.ThrowingConsumer;
+import org.apache.commons.lang3.Validate;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -21,11 +16,18 @@ import javax.jms.MessageListener;
 import javax.jms.Session;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-
-import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.function.ThrowingConsumer;
-import org.apache.commons.lang3.Validate;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public class JMSAdapter implements AutoCloseable, IDrivingAdapter
@@ -34,6 +36,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     public static final String JNDI_USER_KEY = "java.naming.user";
     public static final String JNDI_PASSWORD_KEY = "java.naming.password";
     public static final String JNDI_FACTORY_KEY = "java.naming.factory.initial";
+    public static final String JNDI_PASSWORD_FILE = "java.naming.password_file";
 
 
     public static final String DEFAULT_JNDI_PROVIDER_URL = "tcp://localhost:61616";
@@ -153,7 +156,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         {
             var initialContext = new InitialContext(properties);
             var connectionFactory = (ConnectionFactory) initialContext.lookup("ConnectionFactory");
-            return connectionFactory.createConnection(properties.getProperty(JNDI_USER_KEY), properties.getProperty(JNDI_PASSWORD_KEY));
+            return connectionFactory.createConnection(properties.getProperty(JNDI_USER_KEY), getPassword(properties));
         }
         catch (NamingException e)
         {
@@ -304,6 +307,22 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
                 JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error("Failed to restart JMS Listener");
                 JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error(e.getMessage());
             }
+        }
+    }
+
+    private static String getPassword(Properties properties)
+    {
+        try {
+            if (properties.containsKey(JNDI_PASSWORD_FILE)) {
+                return Files
+                        .readAllLines(Path.of(properties.getProperty(JNDI_PASSWORD_FILE)))
+                        .get(0);
+            }
+
+            return properties.getProperty(JNDI_PASSWORD_KEY);
+        } catch (IOException e)
+        {
+            throw new IllegalArgumentException(e);
         }
     }
 }

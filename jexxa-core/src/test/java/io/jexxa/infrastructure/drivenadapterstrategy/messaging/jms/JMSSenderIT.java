@@ -3,6 +3,8 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 
 import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender.JNDI_PASSWORD_FILE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender.JNDI_PASSWORD_KEY;
 import static io.jexxa.infrastructure.utils.messaging.QueueListener.QUEUE_DESTINATION;
 import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTINATION;
 import static org.awaitility.Awaitility.await;
@@ -10,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import java.time.Duration;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import javax.jms.BytesMessage;
@@ -168,6 +171,31 @@ class JMSSenderIT
     void sendByteMessageToQueue()
     {
         //Arrange --
+
+        //Act
+        objectUnderTest
+                .sendByteMessage(message)
+                .toQueue(QUEUE_DESTINATION)
+                .addHeader(TYPE, message.getClass().getSimpleName())
+                .asJson();
+
+        //Assert
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
+
+        assertDoesNotThrow(() -> (BytesMessage)queueListener.getMessages().get(0));
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
+    @Test
+    void testPasswordFile()
+    {
+        //Arrange
+        var properties = new Properties();
+        properties.putAll(jexxaMain.getProperties());
+        properties.remove(JNDI_PASSWORD_KEY);
+        properties.put(JNDI_PASSWORD_FILE, "src/test/resources/secrets/jndiPassword");
+
+        objectUnderTest = MessageSenderManager.getMessageSender(properties);
 
         //Act
         objectUnderTest
