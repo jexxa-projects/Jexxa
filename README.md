@@ -105,9 +105,12 @@ public final class HelloJexxa
 ```    
 
 ### Adding a logger
-Whenever possible, Jexxa is developed against standard APIs. This allows a business application to use the preferred technology stacks. For further information please refer to [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html#_jexxa_modules).
+Whenever possible, Jexxa is developed against standard APIs. This allows a business application to use the preferred 
+technology stacks. For further information please refer to [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html#_jexxa_modules).
 
-Therefore, Jexxa does not include a logger, which means that you have to add your own logger to your application. If you do not add a logger, you will get a warning message to your console. In case your application has not any special requirements you can add the following dependency to your project:
+Therefore, Jexxa does not include a logger, which means that you have to add your own logger to your application. If you
+do not add a logger, you will get a warning message to your console. In case your application has no special 
+requirements you can add the following dependency to your project:
 
 Maven: 
 ```xml
@@ -125,7 +128,8 @@ compile "org.slf4j:slf4j-simple:1.7.32"
 
 ### Configure your Jexxa application  
 
-By default, a JexxaMain instance looks for the following properties file
+By default, a JexxaMain instance looks for the following properties file. For more information please refer to the 
+[reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html#_application_configuration). 
 
 ```maven
 resources/jexxa-application.properties
