@@ -165,18 +165,26 @@ public class JMSSender extends MessageSender implements AutoCloseable
 
     private static String getPassword(Properties properties)
     {
+        if (properties.getProperty(JNDI_PASSWORD_KEY) != null
+                && !properties.getProperty(JNDI_PASSWORD_KEY).isEmpty())
+        {
+            return properties.getProperty(JNDI_PASSWORD_KEY);
+        }
+
         try {
-            if (properties.containsKey(JNDI_PASSWORD_FILE)) {
+            if (properties.getProperty(JNDI_PASSWORD_FILE) != null
+                    && !properties.getProperty(JNDI_PASSWORD_FILE).isEmpty())
+            {
                 return Files
                         .readAllLines(Path.of(properties.getProperty(JNDI_PASSWORD_FILE)))
                         .get(0);
             }
-
-            return properties.getProperty(JNDI_PASSWORD_KEY);
         } catch (IOException e)
         {
             throw new IllegalArgumentException(e);
         }
+
+        return "";
     }
 
     @Override
