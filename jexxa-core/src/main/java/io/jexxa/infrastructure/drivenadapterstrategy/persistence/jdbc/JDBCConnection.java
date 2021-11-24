@@ -1,5 +1,14 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCCommandBuilder;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCQueryBuilder;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder;
+import io.jexxa.utils.JexxaLogger;
+import io.jexxa.utils.function.ThrowingConsumer;
+import io.jexxa.utils.properties.Secret;
+import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,19 +18,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCCommandBuilder;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCQueryBuilder;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder;
-import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.function.ThrowingConsumer;
-import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-
 public class JDBCConnection implements AutoCloseable
 {
     public static final String JDBC_URL = "io.jexxa.jdbc.url";
     public static final String JDBC_USERNAME = "io.jexxa.jdbc.username";
+    public static final String JDBC_USERNAME_FILE = "io.jexxa.file.username";
     public static final String JDBC_PASSWORD = "io.jexxa.jdbc.password";
+    public static final String JDBC_PASSWORD_FILE = "io.jexxa.jdbc.file.password";
     public static final String JDBC_DRIVER = "io.jexxa.jdbc.driver";
     public static final String JDBC_AUTOCREATE_DATABASE = "io.jexxa.jdbc.autocreate.database";
     public static final String JDBC_AUTOCREATE_TABLE = "io.jexxa.jdbc.autocreate.table";
@@ -55,11 +58,14 @@ public class JDBCConnection implements AutoCloseable
             var creationProperties = new Properties();
             creationProperties.putAll(properties);
 
+            var username = new Secret(creationProperties, JDBC_USERNAME, JDBC_USERNAME_FILE);
+            var password = new Secret(creationProperties, JDBC_PASSWORD, JDBC_PASSWORD_FILE);
+
             try (var setupConnection = DriverManager.
                     getConnection(
                             creationProperties.getProperty(JDBC_AUTOCREATE_DATABASE),
-                            creationProperties.getProperty(JDBC_USERNAME),
-                            creationProperties.getProperty(JDBC_PASSWORD));
+                            username.getSecret(),
+                            password.getSecret());
                  var statement = setupConnection.createStatement())
             {
                 setupConnection.setAutoCommit(true);
@@ -185,14 +191,16 @@ public class JDBCConnection implements AutoCloseable
         return connection;
     }
 
-    private static Connection initJDBCConnection(final Properties properties)
+    private static Connection initJDBCConnection(Properties properties)
     {
+        var username = new Secret(properties, JDBC_USERNAME, JDBC_USERNAME_FILE);
+        var password = new Secret(properties, JDBC_PASSWORD, JDBC_PASSWORD_FILE);
 
         try {
             var connection = DriverManager.getConnection(
                     properties.getProperty(JDBC_URL),
-                    properties.getProperty(JDBC_USERNAME),
-                    properties.getProperty(JDBC_PASSWORD)
+                    username.getSecret(),
+                    password.getSecret()
             );
 
             connection.setAutoCommit(true);

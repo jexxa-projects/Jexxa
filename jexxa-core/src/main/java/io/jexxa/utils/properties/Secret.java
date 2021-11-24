@@ -5,6 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
+/**
+ * This class can be used to read a secret from a Property. The secret can be either directly stored in Properties
+ * with first key, or it is read from a file defined by the second key.
+ */
 public class Secret {
     private final Properties properties;
     private final String key;

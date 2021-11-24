@@ -23,6 +23,7 @@ import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONConverter;
 import io.jexxa.utils.json.JSONManager;
+import io.jexxa.utils.properties.Secret;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -36,6 +37,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     public static final String HTTPS_PORT_PROPERTY = "io.jexxa.rest.https_port";
     public static final String KEYSTORE = "io.jexxa.rest.keystore";
     public static final String KEYSTORE_PASSWORD = "io.jexxa.rest.keystore_password";
+    public static final String KEYSTORE_PASSWORD_FILE = "io.jexxa.rest.file.keystore_password";
     public static final String OPEN_API_PATH = "io.jexxa.rest.open_api_path";
     public static final String STATIC_FILES_ROOT = "io.jexxa.rest.static_files_root";
     public static final String STATIC_FILES_EXTERNAL = "io.jexxa.rest.static_files_external";
@@ -60,7 +62,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         if ( isHTTPSEnabled() )
         {
             validateIsTrue( properties.containsKey( KEYSTORE ), "You need to define a location for keystore ("+ KEYSTORE+ ")");
-            validateIsTrue( properties.containsKey( KEYSTORE_PASSWORD ) , "You need to define a location for keystore-password ("+ KEYSTORE_PASSWORD+ ")");
+            validateIsTrue( properties.containsKey( KEYSTORE_PASSWORD ) || properties.containsKey( KEYSTORE_PASSWORD_FILE )
+                    , "You need to define a location for keystore-password ("+ KEYSTORE_PASSWORD+ "or" + KEYSTORE_PASSWORD_FILE+ ")");
         }
 
         setupJavalin();
@@ -171,7 +174,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     String getKeystorePassword()
     {
-        return properties.getProperty(KEYSTORE_PASSWORD, "");
+        return new Secret(properties, KEYSTORE_PASSWORD, KEYSTORE_PASSWORD_FILE)
+                .getSecret();
     }
 
 
