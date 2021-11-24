@@ -4,6 +4,7 @@ package io.jexxa.infrastructure.drivingadapter.messaging;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
+import io.jexxa.utils.properties.Secret;
 import org.apache.commons.lang3.Validate;
 
 import javax.jms.Connection;
@@ -16,9 +17,6 @@ import javax.jms.MessageListener;
 import javax.jms.Session;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +34,8 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     public static final String JNDI_USER_KEY = "java.naming.user";
     public static final String JNDI_PASSWORD_KEY = "java.naming.password";
     public static final String JNDI_FACTORY_KEY = "java.naming.factory.initial";
-    public static final String JNDI_PASSWORD_FILE = "java.naming.password_file";
+    public static final String JNDI_PASSWORD_FILE = "java.naming.file.password";
+    public static final String JNDI_USER_FILE = "java.naming.file.user";
 
 
     public static final String DEFAULT_JNDI_PROVIDER_URL = "tcp://localhost:61616";
@@ -129,7 +128,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         {
             throw new IllegalStateException(
                     "Registration of of Driving Adapter " + object.getClass().getName() + " failed. Please check the JMSConfiguration.\n"  +
-                            " Error messsage from JMS subsystem: " + e.getMessage()
+                            " Error message from JMS subsystem: " + e.getMessage()
                     , e
             );
         }
@@ -152,11 +151,14 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     @SuppressWarnings("DuplicatedCode")
     public static Connection createConnection(Properties properties)
     {
+        var username = new Secret(properties, JNDI_USER_KEY, JNDI_USER_FILE);
+        var password = new Secret(properties, JNDI_PASSWORD_KEY, JNDI_PASSWORD_FILE);
+
         try
         {
             var initialContext = new InitialContext(properties);
             var connectionFactory = (ConnectionFactory) initialContext.lookup("ConnectionFactory");
-            return connectionFactory.createConnection(properties.getProperty(JNDI_USER_KEY), getPassword(properties));
+            return connectionFactory.createConnection(username.getSecret(), password.getSecret());
         }
         catch (NamingException e)
         {
@@ -310,27 +312,4 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
     }
 
-    private static String getPassword(Properties properties)
-    {
-        if (properties.getProperty(JNDI_PASSWORD_KEY) != null
-                && !properties.getProperty(JNDI_PASSWORD_KEY).isEmpty())
-        {
-            return properties.getProperty(JNDI_PASSWORD_KEY);
-        }
-
-        try {
-            if (properties.getProperty(JNDI_PASSWORD_FILE) != null
-                    && !properties.getProperty(JNDI_PASSWORD_FILE).isEmpty())
-            {
-                return Files
-                        .readAllLines(Path.of(properties.getProperty(JNDI_PASSWORD_FILE)))
-                        .get(0);
-            }
-        } catch (IOException e)
-        {
-            throw new IllegalArgumentException(e);
-        }
-
-        return "";
-    }
 }

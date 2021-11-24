@@ -3,6 +3,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
+import io.jexxa.utils.properties.Secret;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -13,9 +14,6 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,8 +24,9 @@ public class JMSSender extends MessageSender implements AutoCloseable
 {
     public static final String JNDI_PROVIDER_URL_KEY = "java.naming.provider.url";
     public static final String JNDI_USER_KEY = "java.naming.user";
+    public static final String JNDI_USER_FILE = "java.naming.file.user";
     public static final String JNDI_PASSWORD_KEY = "java.naming.password";
-    public static final String JNDI_PASSWORD_FILE = "java.naming.password_file";
+    public static final String JNDI_PASSWORD_FILE = "java.naming.file.password";
     public static final String JNDI_FACTORY_KEY = "java.naming.factory.initial";
 
 
@@ -41,12 +40,14 @@ public class JMSSender extends MessageSender implements AutoCloseable
     public static final String DEFAULT_JNDI_FACTORY = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 
     private final Properties properties;
+
     private Connection connection;
     private Session session;
 
     public JMSSender(Properties properties)
     {
         this.properties = properties;
+
         Objects.requireNonNull(getConnection()); //Try to create a connection to ensure fail fast
     }
 
@@ -137,11 +138,14 @@ public class JMSSender extends MessageSender implements AutoCloseable
     @SuppressWarnings("java:S2095")
     private static Connection createConnection(Properties properties, JMSSender jmsSender)
     {
+        var username = new Secret(properties, JNDI_USER_KEY, JNDI_USER_FILE);
+        var password = new Secret(properties, JNDI_PASSWORD_KEY, JNDI_PASSWORD_FILE);
+
         try
         {
             var initialContext = new InitialContext(properties);
             var connectionFactory = (ConnectionFactory) initialContext.lookup("ConnectionFactory");
-            var connection = connectionFactory.createConnection(properties.getProperty(JNDI_USER_KEY), getPassword(properties));
+            var connection = connectionFactory.createConnection(username.getSecret(), password.getSecret());
 
             //Register an exception listener that closes the connection as soon as the error occurs. This approach ensure that we recreate a connection
             // as soon as next message must be sent, and we can handle a temporary error in between sending two messages. If the error still exist, the
@@ -161,30 +165,6 @@ public class JMSSender extends MessageSender implements AutoCloseable
         {
             throw new IllegalStateException("Can not connect to " + properties.get(JNDI_PROVIDER_URL_KEY), e);
         }
-    }
-
-    private static String getPassword(Properties properties)
-    {
-        if (properties.getProperty(JNDI_PASSWORD_KEY) != null
-                && !properties.getProperty(JNDI_PASSWORD_KEY).isEmpty())
-        {
-            return properties.getProperty(JNDI_PASSWORD_KEY);
-        }
-
-        try {
-            if (properties.getProperty(JNDI_PASSWORD_FILE) != null
-                    && !properties.getProperty(JNDI_PASSWORD_FILE).isEmpty())
-            {
-                return Files
-                        .readAllLines(Path.of(properties.getProperty(JNDI_PASSWORD_FILE)))
-                        .get(0);
-            }
-        } catch (IOException e)
-        {
-            throw new IllegalArgumentException(e);
-        }
-
-        return "";
     }
 
     @Override
