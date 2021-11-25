@@ -42,6 +42,10 @@ public class BoundedContext
     }
 
 
+    public JexxaVersion getJexxaVersion()
+    {
+        return JexxaVersion.getJexxaVersion();
+    }
 
     public boolean isRunning()
     {
