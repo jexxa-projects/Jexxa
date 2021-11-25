@@ -1,5 +1,6 @@
 package io.jexxa.utils.json.gson;
 
+import java.io.Reader;
 import java.lang.reflect.Type;
 import java.time.Duration;
 import java.time.Instant;
@@ -59,6 +60,16 @@ public class GsonConverter implements JSONConverter
     public <T> T fromJson(String json, Type typeOfT)
     {
            return getGson().fromJson(json, typeOfT);
+    }
+
+    @Override
+    public <T> T fromJson(Reader jsonStream, Class<T> clazz) {
+        return getGson().fromJson(jsonStream, clazz);
+    }
+
+    @Override
+    public <T> T fromJson(Reader jsonStream, Type typeOfT) {
+        return getGson().fromJson(jsonStream, typeOfT);
     }
 
     @Override
