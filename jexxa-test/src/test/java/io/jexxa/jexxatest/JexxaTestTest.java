@@ -28,13 +28,14 @@ import org.junit.jupiter.api.Test;
 class JexxaTestTest
 {
     private JexxaTest jexxaTest;
+    private JexxaMain jexxaMain;
 
 
     @BeforeEach
     void setUp()
     {
         //Arrange
-        var jexxaMain = new JexxaMain(JexxaTestTest.class.getSimpleName(), new Properties());
+        jexxaMain = new JexxaMain(JexxaTestTest.class.getSimpleName(), new Properties());
         jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
                 .addToInfrastructure("io.jexxa.application.infrastructure");
 
@@ -119,6 +120,13 @@ class JexxaTestTest
 
         //Act/Assert
         assertThrows( InvalidAdapterException.class, () -> jexxaTest.getRepository(IInvalidConstructor.class) );
+    }
+
+    @Test
+    void jexxaTestProperties()
+    {
+        //Act/Assert
+        assertTrue( jexxaMain.getProperties().containsKey("io.jexxa.test.project") );
     }
 
 

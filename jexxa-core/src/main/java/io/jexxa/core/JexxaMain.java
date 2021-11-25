@@ -311,6 +311,11 @@ public final class JexxaMain
         }
     }
 
+    public void addProperties(Properties properties)
+    {
+        this.properties.putAll(properties);
+    }
+
     /**
      * CompositeDrivingAdapter starts all registered IDrivingAdapter
      * In case of a failure starting a single IDrivingAdapter all registered and already started IDrivingAdapter are stopped

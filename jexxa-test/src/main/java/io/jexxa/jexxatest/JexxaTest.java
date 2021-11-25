@@ -1,7 +1,5 @@
 package io.jexxa.jexxatest;
 
-import java.util.Objects;
-
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
@@ -11,6 +9,12 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imd
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorderManager;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
+import io.jexxa.utils.JexxaLogger;
+import io.jexxa.utils.function.ThrowingConsumer;
+
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
 
 /**
  * This class supports unit testing of your application core, at least if you use driven adapter strategies
@@ -24,12 +28,15 @@ import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recordi
  */
 public class JexxaTest
 {
+    public static final String JEXXA_TEST_PROPERTIES = "/jexxa-test.properties";
+
     private final JexxaMain jexxaMain;
 
     public JexxaTest(JexxaMain jexxaMain)
     {
         Objects.requireNonNull(jexxaMain);
         this.jexxaMain = jexxaMain;
+        this.jexxaMain.addProperties( loadProperties() );
 
         initForUnitTests();
     }
@@ -58,5 +65,16 @@ public class JexxaTest
 
         IMDBRepository.clear();
         MessageRecorderManager.clear();
+    }
+
+    private Properties loadProperties()
+    {
+        var properties = new Properties();
+        Optional.ofNullable(JexxaMain.class.getResourceAsStream(JEXXA_TEST_PROPERTIES))
+                .ifPresentOrElse(
+                        ThrowingConsumer.exceptionLogger(properties::load),
+                        () -> JexxaLogger.getLogger(this.getClass()).warn("NO PROPERTIES FILE FOUND {}", JEXXA_TEST_PROPERTIES)
+                );
+        return properties;
     }
 }
