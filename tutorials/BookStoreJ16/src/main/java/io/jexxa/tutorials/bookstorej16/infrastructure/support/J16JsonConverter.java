@@ -1,8 +1,10 @@
 package io.jexxa.tutorials.bookstorej16.infrastructure.support;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -43,6 +45,24 @@ public class J16JsonConverter implements JSONConverter
     {
         return gson.toJson(object);
     }
+
+
+    @Override
+    public <T> T fromJson(String json, Type typeOfT)
+    {
+        return gson.fromJson(json, typeOfT);
+    }
+
+    @Override
+    public <T> T fromJson(Reader jsonStream, Class<T> clazz) {
+        return gson.fromJson(jsonStream, clazz);
+    }
+
+    @Override
+    public <T> T fromJson(Reader jsonStream, Type typeOfT) {
+        return gson.fromJson(jsonStream, typeOfT);
+    }
+
 
     public static class RecordTypeAdapterFactory implements TypeAdapterFactory
     {
