@@ -33,6 +33,17 @@
   </dependencies>
 
   <build>
+      <pluginManagement>
+          <plugins>
+              <plugin>
+                  <artifactId>maven-deploy-plugin</artifactId>
+                  <configuration>
+                      <skip>true</skip>
+                  </configuration>
+              </plugin>
+          </plugins>
+      </pluginManagement>
+
       <resources>
           <resource>
              <directory>src/main/resources</directory>
