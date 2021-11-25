@@ -1,10 +1,10 @@
 package io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording;
 
+import io.jexxa.utils.annotations.CheckReturnValue;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import io.jexxa.utils.annotations.CheckReturnValue;
 
 /**
  * This class is the API for unit test to access and validate recorded messages.
@@ -14,6 +14,7 @@ public class MessageRecorder
     private final List<RecordedMessage> recordedMessageList = new ArrayList<>();
 
     @CheckReturnValue
+    @SuppressWarnings("unused")
     public List<RecordedMessage> getMessages()
     {
         return recordedMessageList;
