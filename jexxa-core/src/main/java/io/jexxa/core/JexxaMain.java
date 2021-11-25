@@ -64,25 +64,28 @@ public final class JexxaMain
      * jexxa-application.properties and the given properties object, the one from properties object is used.
      *
      * @param contextName Name of the BoundedContext. Typically, you should use the name of your application.
-     * @param properties Properties that are defined by your application.
+     * @param applicationProperties Properties that are defined by your application.
      */
-    public JexxaMain(String contextName, Properties properties)
+    public JexxaMain(String contextName, Properties applicationProperties)
     {
-        Objects.requireNonNull(properties);
+        Objects.requireNonNull(applicationProperties);
         Objects.requireNonNull(contextName);
 
-        this.boundedContext = new BoundedContext(contextName, this);
-
         // Handle properties in following forder:
+        // 0. Add default JEXXA_CONTEXT_MAIN
+        this.properties.put(JEXXA_CONTEXT_NAME, contextName);
+
         // 1. Load properties from application.properties because they have the lowest priority
         loadJexxaApplicationProperties(this.properties);
         // 2. Use System properties because they have mid-priority
         this.properties.putAll( System.getProperties() );  //add/overwrite system properties
         // 3. Use given properties because they have the highest priority
-        this.properties.putAll( properties );  //add/overwrite given properties
+        this.properties.putAll( applicationProperties );  //add/overwrite given properties
 
-        this.properties.put(JEXXA_CONTEXT_NAME, contextName);
         this.addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
+
+        //Create BoundedContext
+        this.boundedContext = new BoundedContext(this.properties.getProperty(JEXXA_CONTEXT_NAME), this);
 
         setExceptionHandler();
     }
@@ -176,12 +179,7 @@ public final class JexxaMain
     @SuppressWarnings("java:S2629")
     void printStartupInfo()
     {
-        LOGGER.info("{} {}; built: {}; git: {};"
-                , JexxaVersion.PROJECT_NAME
-                ,JexxaVersion.VERSION
-                ,JexxaVersion.BUILD_TIMESTAMP
-                ,JexxaVersion.REPOSITORY);
-
+        LOGGER.info( getBoundedContext().getJexxaVersion().toString());
 
         LOGGER.info("Start BoundedContext '{}' with {} Driving Adapter ", getBoundedContext().contextName(), compositeDrivingAdapter.size());
     }

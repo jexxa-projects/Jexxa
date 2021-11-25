@@ -3,6 +3,7 @@ package io.jexxa.tutorials;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
+import io.jexxa.utils.JexxaLogger;
 
 public final class HelloJexxa
 {
@@ -16,6 +17,10 @@ public final class HelloJexxa
     {
         //Create your jexxaMain for this application
         var jexxaMain = new JexxaMain("HelloJexxa");
+
+        //print some application information
+        JexxaLogger.getLogger(HelloJexxa.class)
+                .info( "{}", jexxaMain.getBoundedContext().getContextVersion() );
 
         jexxaMain
                 // Bind a JMX adapter to our Jexxa's BoundedContext object.

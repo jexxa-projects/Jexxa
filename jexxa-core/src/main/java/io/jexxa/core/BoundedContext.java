@@ -10,6 +10,11 @@ import io.jexxa.utils.JexxaLogger;
 @SuppressWarnings("unused")
 public class BoundedContext
 {
+    public static final String CONTEXT_VERSION = "io.jexxa.context.version";
+    public static final String CONTEXT_REPOSITORY = "io.jexxa.context.repository";
+    public static final String CONTEXT_NAME = "io.jexxa.context.name";
+    public static final String CONTEXT_TIMESTAMP = "io.jexxa.context.build.timestamp";
+
     private boolean isRunning = false;
     private boolean isWaiting = false;
 
@@ -35,6 +40,10 @@ public class BoundedContext
         return contextName;
     }
 
+    /**
+     * @deprecated Will be removed in future releases, so that this class can be exposed to get Information about
+     * the context
+     */
     @Deprecated(forRemoval = true)
     public synchronized void shutdown()
     {
@@ -42,10 +51,23 @@ public class BoundedContext
     }
 
 
-    public JexxaVersion getJexxaVersion()
+    public VersionInfo getJexxaVersion()
     {
         return JexxaVersion.getJexxaVersion();
     }
+
+    public VersionInfo getContextVersion()
+    {
+        var properties = jexxaMain.getProperties();
+
+        return VersionInfo.of()
+                .version(properties.getProperty(CONTEXT_VERSION, ""))
+                .repository(properties.getProperty(CONTEXT_REPOSITORY, ""))
+                .buildTimestamp(properties.getProperty(CONTEXT_TIMESTAMP, ""))
+                .projectName(properties.getProperty(CONTEXT_NAME, ""))
+                .create();
+    }
+
 
     public boolean isRunning()
     {

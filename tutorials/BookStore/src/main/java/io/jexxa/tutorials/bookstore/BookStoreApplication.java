@@ -43,6 +43,9 @@ public final class BookStoreApplication
 
         var jexxaMain = new JexxaMain(BookStoreApplication.class.getSimpleName());
 
+        //print some application information
+        JexxaLogger.getLogger(BookStoreApplication.class)
+                .info( "{}", jexxaMain.getBoundedContext().getContextVersion() );
         jexxaMain
                 //Define which outbound ports should be managed by Jexxa
                 .addToApplicationCore(OUTBOUND_PORTS)

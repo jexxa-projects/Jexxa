@@ -42,6 +42,10 @@ public final class BookStoreJApplication
 
         var jexxaMain = new JexxaMain(BookStoreJApplication.class.getSimpleName());
 
+        //print some application information
+        JexxaLogger.getLogger(BookStoreJApplication.class)
+                .info( "{}", jexxaMain.getBoundedContext().getContextVersion() );
+
         jexxaMain
                 // In order to find ports by annotation we must add packages that are searched by Jexxa.
                 // Therefore, we must also add inbound ports to application core

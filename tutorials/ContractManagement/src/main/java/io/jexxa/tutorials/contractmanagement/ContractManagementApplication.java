@@ -28,6 +28,10 @@ public class ContractManagementApplication
 
         var jexxaMain = new JexxaMain(ContractManagementApplication.class.getSimpleName());
 
+        //print some application information
+        JexxaLogger.getLogger(ContractManagementApplication.class)
+                .info( "{}", jexxaMain.getBoundedContext().getContextVersion() );
+
         jexxaMain
                 //Define which outbound ports should be managed by Jexxa
                 .addToApplicationCore(OUTBOUND_PORTS)
