@@ -32,7 +32,7 @@ class BoundedContextTest
         await().atMost(1, TimeUnit.SECONDS).until(() -> (objectUnderTest != null && objectUnderTest.isRunning()));
 
         //Act
-        objectUnderTest.shutdown();
+        objectUnderTest.stop();
         assertTimeout(Duration.ofSeconds(1), (Executable) thread::join);
     }
 

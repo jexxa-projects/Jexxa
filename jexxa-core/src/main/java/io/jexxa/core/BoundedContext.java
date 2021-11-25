@@ -36,14 +36,10 @@ public class BoundedContext
         return contextName;
     }
 
-
+    @Deprecated(forRemoval = true)
     public synchronized void shutdown()
     {
-        if ( isWaiting )
-        {
-            isWaiting = false;
-            notifyAll();
-        }
+        internalShutdown();
     }
 
 
@@ -80,7 +76,7 @@ public class BoundedContext
     protected void stop()
     {
         isRunning = false;
-        shutdown();
+        internalShutdown();
     }
 
     private void setupSignalHandler() {
@@ -90,5 +86,13 @@ public class BoundedContext
         }));
     }
 
+    private synchronized void internalShutdown()
+    {
+        if ( isWaiting )
+        {
+            isWaiting = false;
+            notifyAll();
+        }
+    }
 
 }
