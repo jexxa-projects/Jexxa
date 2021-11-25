@@ -56,6 +56,12 @@ public class GsonConverter implements JSONConverter
     }
 
     @Override
+    public <T> T fromJson(String json, Type typeOfT)
+    {
+           return getGson().fromJson(json, typeOfT);
+    }
+
+    @Override
     public <T> String toJson(T object)
     {
         return getGson().toJson(object);
