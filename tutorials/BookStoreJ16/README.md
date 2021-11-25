@@ -134,8 +134,7 @@ public final class BookStoreJApplication
     public static void main(String[] args)
     {
         //Set a JsonConverter that support java records
-        JSONManager.setJSONConverter(new J16JsonConverter());
-   
+        J16JsonConverter.registerRecordFactory();   
         ...
     }
 

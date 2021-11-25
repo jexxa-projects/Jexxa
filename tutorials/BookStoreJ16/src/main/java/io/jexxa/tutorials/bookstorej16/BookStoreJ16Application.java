@@ -16,7 +16,6 @@ import io.jexxa.tutorials.bookstorej16.applicationservice.BookStoreService;
 import io.jexxa.tutorials.bookstorej16.domainservice.ReferenceLibrary;
 import io.jexxa.tutorials.bookstorej16.infrastructure.support.J16JsonConverter;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.json.JSONManager;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -32,7 +31,7 @@ public final class BookStoreJ16Application
     public static void main(String[] args)
     {
         //Set a JsonConverter that support java records
-        JSONManager.setJSONConverter(new J16JsonConverter());
+        J16JsonConverter.registerRecordFactory();
 
         // Define the default strategies.
         // In this tutorial the Repository is either an IMDB database or a JDBC based repository.

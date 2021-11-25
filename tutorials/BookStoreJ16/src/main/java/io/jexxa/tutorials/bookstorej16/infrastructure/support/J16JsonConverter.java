@@ -18,51 +18,21 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONConverter;
+import io.jexxa.utils.json.JSONManager;
 import io.jexxa.utils.json.gson.GsonConverter;
 
-public class J16JsonConverter implements JSONConverter
+public class J16JsonConverter
 {
-
-    private final Gson gson;
-
-    public J16JsonConverter()
+    private J16JsonConverter()
     {
-        var gsonBuilder = new GsonBuilder();
-        GsonConverter.registerDateTimeAdapter(gsonBuilder);
-        gsonBuilder.registerTypeAdapterFactory(new RecordTypeAdapterFactory());
-        gson = gsonBuilder.create();
+        //Private constructor
     }
 
-
-    @Override
-    public <T> T fromJson(String jsonString, Class<T> clazz)
+    public static void registerRecordFactory()
     {
-        return gson.fromJson(jsonString, clazz);
+        GsonConverter.registerTypeAdapterFactory( new RecordTypeAdapterFactory() );
+        JSONManager.setJSONConverter(new GsonConverter());
     }
-
-    @Override
-    public <T> String toJson(T object)
-    {
-        return gson.toJson(object);
-    }
-
-
-    @Override
-    public <T> T fromJson(String json, Type typeOfT)
-    {
-        return gson.fromJson(json, typeOfT);
-    }
-
-    @Override
-    public <T> T fromJson(Reader jsonStream, Class<T> clazz) {
-        return gson.fromJson(jsonStream, clazz);
-    }
-
-    @Override
-    public <T> T fromJson(Reader jsonStream, Type typeOfT) {
-        return gson.fromJson(jsonStream, typeOfT);
-    }
-
 
     public static class RecordTypeAdapterFactory implements TypeAdapterFactory
     {
