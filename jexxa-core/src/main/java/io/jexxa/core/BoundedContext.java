@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import io.jexxa.utils.JexxaLogger;
 
+@SuppressWarnings("unused")
 public class BoundedContext
 {
     private boolean isRunning = false;
@@ -24,13 +25,11 @@ public class BoundedContext
         this.jexxaMain = Objects.requireNonNull(jexxaMain);
     }
 
-    @SuppressWarnings("unused")
     public Duration uptime()
     {
         return Duration.between(startTime, clock.instant());
     }
 
-    @SuppressWarnings("unused")
     public String contextName()
     {
         return contextName;
@@ -41,6 +40,7 @@ public class BoundedContext
     {
         internalShutdown();
     }
+
 
 
     public boolean isRunning()
