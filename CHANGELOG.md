@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[3.3.0] - 2021-11-05
+### Added
+- Jexxa-Core/web: Added new properties to read credentials from file and to define some application values.
+  See [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information.
+
+- Jexxa-Core: JSon serializer allows now to read a Type in addition to Clazz and to read from a `Reader`
+
+### Changed
+-   Updated dependencies
+
 ## \[3.2.0] - 2021-11-05
 ### Added
 - Jexxa-Web: Added possibility to configure an external path by using property `io.jexxa.rest.static_files_external=true`.
