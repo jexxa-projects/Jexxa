@@ -47,7 +47,7 @@ Maven:
 <dependency>
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa-web</artifactId>
-  <version>3.2.0</version>
+  <version>3.3.0</version>
 </dependency> 
 ```
 
