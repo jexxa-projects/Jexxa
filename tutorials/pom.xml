@@ -14,14 +14,14 @@
   <name>Tutorials</name>
 
   <properties>
-      <jexxa-core.version>${project.version}</jexxa-core.version>
+      <jexxa-core.version>3.3.0</jexxa-core.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>io.jexxa</groupId>
       <artifactId>jexxa-web</artifactId>
-      <version>${jexxa-core.version}</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
