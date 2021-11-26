@@ -449,7 +449,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_jexxamain">2.1. JexxaMain</a></li>
 <li><a href="#_boundedcontext">2.2. BoundedContext</a></li>
-<li><a href="#_application_configuration">2.3. Application Configuration</a></li>
+<li><a href="#_application_configuration">2.3. Application Configuration</a>
+<ul class="sectlevel3">
+<li><a href="#_properties_files">2.3.1. Properties files</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_conventions">3. Conventions</a>
@@ -636,6 +640,25 @@ The <code>BoundedContext</code> objects provides methods to stop you running app
 <p>Property file <code>jexxa-application.properties</code> inside the jar archive</p>
 </li>
 </ol>
+</div>
+<div class="sect3">
+<h4 id="_properties_files"><a class="anchor" href="#_properties_files"></a>2.3.1. Properties files</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Default configuration</strong>: By default, Jexxa loads <code>jexxa-application.properties</code> (if available) and provides included properties to all infrastructure components. This property file is loaded as soon as you create a <code>JexxaApplication</code>. So this file should include your base configuration which is equal to all environments.</p>
+</li>
+<li>
+<p><strong>Extensions</strong>: Sometimes it is quite hard or even not meaningful to provide equal properties to different environments such as a developer- or test systems. In these cases you can add another properties file for the specific environment including only the differences or extensions. This hierarchical approach makes differences between environments more transparent.</p>
+</li>
+<li>
+<p><strong>Testing</strong>: When using <code>JexxaTest</code>, the properties <code>jexxa-test.properties</code> is loaded (if available) and extends or adjusts the default configuration provided in <code>jexxa-application.properties</code>.</p>
+</li>
+<li>
+<p><strong>Secrets</strong>: One of the most crucial aspects with productive systems is the handling of secrets such as usernames, passwords, or private keys. Jexxa addresses this problem with two approaches. First, you can provide all secrets unencrypted as properties which is only recommended for testing purpose. For example, you can use <code>io.jexxa.jdbc.password</code> to define the password for your JDBC connection. Secondly, you can provide these properties with a file. In this case, you have to use <code>io.jexxa.jdbc.file.password</code>. This approach enables a seamless integration of security mechanisms from virtualization environments such as docker and is recommended for all productive systems.</p>
+</li>
+</ol>
+</div>
 </div>
 </div>
 </div>
@@ -1107,7 +1130,7 @@ Please check the tutorial <a href="https://github.com/repplix/Jexxa/tree/master/
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-11-22 05:42:27 +0100
+Last updated 2021-11-26 06:20:43 +0100
 </div>
 </div>
 </body>
