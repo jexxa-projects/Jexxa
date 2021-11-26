@@ -22,7 +22,7 @@ public class JDBCConnection implements AutoCloseable
 {
     public static final String JDBC_URL = "io.jexxa.jdbc.url";
     public static final String JDBC_USERNAME = "io.jexxa.jdbc.username";
-    public static final String JDBC_USERNAME_FILE = "io.jexxa.file.username";
+    public static final String JDBC_USERNAME_FILE = "io.jexxa.jdbc.file.username";
     public static final String JDBC_PASSWORD = "io.jexxa.jdbc.password";
     public static final String JDBC_PASSWORD_FILE = "io.jexxa.jdbc.file.password";
     public static final String JDBC_DRIVER = "io.jexxa.jdbc.driver";
