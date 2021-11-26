@@ -6,13 +6,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[3.3.0] - 2021-11-05
 ### Added
-- Jexxa-Core/web: Added new properties to read credentials from file and to define some application values.
+- Jexxa-Core/web: Added new properties to read credentials from files.
+  See [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information.
+
+- Jexxa-Core/web: Added new properties to automatically load version information of applications from build system.
   See [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information.
 
 - Jexxa-Core: JSon serializer allows now to read a Type in addition to Clazz and to read from a `Reader`
 
 ### Changed
--   Updated dependencies
+- Reference guide: Updated description of application configuration  
+    See [here](https://repplix.github.io/Jexxa/jexxa_reference.html#_application_configuration) for more information.
+
+- Updated dependencies
 
 ## \[3.2.0] - 2021-11-05
 ### Added
