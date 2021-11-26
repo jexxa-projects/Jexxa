@@ -14,7 +14,7 @@
   <name>Tutorials</name>
 
   <properties>
-      <jexxa-core.version>3.3.0-SNAPSHOT</jexxa-core.version>
+      <jexxa-core.version>${project.version}</jexxa-core.version>
   </properties>
 
   <dependencies>
