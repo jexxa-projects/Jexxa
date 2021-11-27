@@ -19,6 +19,29 @@
 
     <plugins>
       <plugin>
+        <groupId>org.graalvm.nativeimage</groupId>
+        <artifactId>native-image-maven-plugin</artifactId>
+        <version>21.0.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>native-image</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <skip>false</skip>
+          <imageName>hellojexxa-native</imageName>
+          <buildArgs>
+            --no-fallback
+            --report-unsupported-elements-at-runtime
+            -H:+AllowIncompleteClasspath
+            -H:+ReportExceptionStackTraces
+          </buildArgs>
+        </configuration>
+      </plugin>
+      <plugin>
         <artifactId>maven-shade-plugin</artifactId> <!-- Extend configuration from parent-pom by main class-->
         <executions>
           <execution>
