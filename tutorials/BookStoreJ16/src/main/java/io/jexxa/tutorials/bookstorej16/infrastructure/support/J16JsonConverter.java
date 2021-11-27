@@ -1,15 +1,6 @@
 package io.jexxa.tutorials.bookstorej16.infrastructure.support;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.HashMap;
-
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
@@ -17,9 +8,14 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.json.JSONConverter;
 import io.jexxa.utils.json.JSONManager;
 import io.jexxa.utils.json.gson.GsonConverter;
+
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class J16JsonConverter
 {
