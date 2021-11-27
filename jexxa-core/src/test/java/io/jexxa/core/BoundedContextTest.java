@@ -38,6 +38,8 @@ class BoundedContextTest
 
     void waitForShutDown()
     {
-        jexxaMain.start().waitForShutdown();
+        jexxaMain.start()
+                .waitForShutdown()
+                .stop();
     }
 }

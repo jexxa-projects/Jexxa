@@ -40,17 +40,6 @@ public class BoundedContext
         return contextName;
     }
 
-    /**
-     * @deprecated Will be removed in future releases, so that this class can be exposed to get Information about
-     * the context
-     */
-    @Deprecated(forRemoval = true)
-    public synchronized void shutdown()
-    {
-        internalShutdown();
-    }
-
-
     public VersionInfo getJexxaVersion()
     {
         return JexxaVersion.getJexxaVersion();
