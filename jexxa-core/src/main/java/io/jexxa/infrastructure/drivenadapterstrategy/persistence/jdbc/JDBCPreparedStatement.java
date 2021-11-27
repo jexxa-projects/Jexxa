@@ -48,22 +48,6 @@ class JDBCPreparedStatement
         }
     }
 
-    /**
-     * This method creates a new PreparedStatement including sql statement and all arguments.
-     *
-     * Important note: The caller of this method is responsible to close the PreparedStatement, e.g. by calling it
-     * in a try-with-resources statement.
-     *
-     * @deprecated This method is deprecated because it easy to misuse. Please use createPreparedStatement instead.
-     *
-     * @return PreparedStatement that can be directly executed
-     */
-    @Deprecated(forRemoval = true)
-    public PreparedStatement getStatement()
-    {
-        return createPreparedStatement();
-    }
-
     protected String getSQLStatement()
     {
         return sqlStatement;

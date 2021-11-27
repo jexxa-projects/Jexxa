@@ -32,11 +32,6 @@ public class JMSSender extends MessageSender implements AutoCloseable
 
     public static final String DEFAULT_JNDI_PROVIDER_URL = "tcp://localhost:61616";
     public static final String DEFAULT_JNDI_USER = "admin";
-    /**
-     * @deprecated to be removed in future releases to ensure that no default PWs are used
-     */
-    @Deprecated(forRemoval = true)
-    public static final String DEFAULT_JNDI_PASSWORD = "admin";
     public static final String DEFAULT_JNDI_FACTORY = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 
     private final Properties properties;
