@@ -33,14 +33,17 @@ gu install native-image
         michael@Michaels-Mini HelloJexxa % mvn clean install -e (damit reflection stuff eingebunden wird) 
 
 ## Works
-*   michael@Michaels-Mini HelloJexxa % ./target/hellojexxa-native
-*   michael@Michaels-Mini ~ % curl -X GET http://localhost:7000/HelloJexxa/greetings
+* michael@Michaels-Mini HelloJexxa % ./target/hellojexxa-native
+* michael@Michaels-Mini ~ % curl -X GET http://localhost:7500/HelloJexxa/greetings
     "Hello Jexxa"%
-  
+
+* Michaels-Mini:HelloJexxa michael$ curl -k -X GET https://localhost:8081/HelloJexxa/greetings
+"Hello Jexxa"(base) Michaels-Mini:HelloJexxa michael$
+
 ## Known issues
 
-*   Static HTML files do not work  
-*   JMX Access does not work at least when using JConsole
+* Static HTML files (included in jar) do not work 
+* JMX Access does not work at least when using JConsole
 
 ## Untested
 *   Everything else 
