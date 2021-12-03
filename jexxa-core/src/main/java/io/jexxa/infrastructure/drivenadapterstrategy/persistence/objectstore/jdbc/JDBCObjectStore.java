@@ -36,6 +36,8 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
     private final Class<M> metaData;
     private final Set<M> jdbcSchema;
 
+    private final Properties properties;
+
     public JDBCObjectStore(
             Class<T> aggregateClazz,
             Function<T, K> keyFunction,
@@ -48,6 +50,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         this.aggregateClazz = aggregateClazz;
         this.metaData = metaData;
         this.jdbcSchema = EnumSet.allOf(metaData);
+        this.properties = properties;
 
         autocreateTableObjectStore(properties);
     }
@@ -67,11 +70,17 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         keySet.add(KeyValueSchema.VALUE.name());
         jdbcSchema.forEach(element -> keySet.add(element.name()));
 
+        var typeList = new ArrayList<String>();
+        //typeList.add(getSQLValuePlaceHolder(properties));
+        typeList.add(getSQLValuePlaceHolder(properties));
+        jdbcSchema.forEach(metaTag -> typeList.add("?"));
+
+
         var command = getConnection()
                 .createCommand(KeyValueSchema.class)
                 .update(aggregateClazz)
-                .set(keySet.toArray(new String[0]), valueSet.toArray() )
-                .where(KeyValueSchema.KEY).isEqual(getJSONConverter().toJson( keyFunction.apply(aggregate) ))
+                .set(keySet.toArray(new String[0]), valueSet.toArray(), typeList.toArray(new String[0]) )
+                .where(KeyValueSchema.KEY).isEqual(getJSONConverter().toJson( keyFunction.apply(aggregate) ), getSQLValuePlaceHolder(properties))
                 .create();
 
         command.asUpdate();
@@ -90,17 +99,21 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         keySet.add(KeyValueSchema.VALUE.name());
         jdbcSchema.forEach(element -> keySet.add(element.name()));
 
-
         var objectList = new ArrayList<>();
         objectList.add (jsonConverter.toJson(keyFunction.apply(aggregate)));
         objectList.add (jsonConverter.toJson(aggregate));
         jdbcSchema.forEach(metaTag -> objectList.add(metaTag.getTag().getFromAggregate(aggregate)));
 
+        var typeList = new ArrayList<String>();
+        typeList.add(getSQLValuePlaceHolder(properties));
+        typeList.add(getSQLValuePlaceHolder(properties));
+        jdbcSchema.forEach(metaTag -> typeList.add("?"));
+
         var command = getConnection()
                 .createCommand(KeyValueSchema.class)
                 .insertInto(aggregateClazz)
                 .columns(keySet.toArray(new String[0]))
-                .values(objectList.toArray())
+                .values(objectList.toArray(), typeList.toArray(new String[0]))
                 .create();
 
         command.asUpdate();
@@ -147,9 +160,9 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
 
                 var command = getConnection().createTableCommand(metaData)
                         .createTableIfNotExists(aggregateClazz)
-                        .addColumn(KeyValueSchema.KEY, getMaxVarChar(properties.getProperty(JDBCConnection.JDBC_URL)), KeyValueSchema.class)
+                        .addColumn(KeyValueSchema.KEY, getKeyDataType(properties), KeyValueSchema.class)
                         .addConstraint(PRIMARY_KEY)
-                        .addColumn(KeyValueSchema.VALUE, TEXT, KeyValueSchema.class);
+                        .addColumn(KeyValueSchema.VALUE, getValueDataType(properties), KeyValueSchema.class);
 
                 jdbcSchema.forEach(element ->
                 {

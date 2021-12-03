@@ -52,4 +52,9 @@ public class SQLSyntax
         }
     }
 
+    public static String TYPED_ARGUMENT_PLACEHOLDER(String method, String type)
+    {
+        return method + "(?::"+ type + ")";
+    }
+
 }

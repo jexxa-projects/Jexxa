@@ -1,12 +1,12 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
+import io.jexxa.utils.annotations.CheckReturnValue;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
-
-import io.jexxa.utils.annotations.CheckReturnValue;
 
 class JDBCPreparedStatement
 {
@@ -34,11 +34,13 @@ class JDBCPreparedStatement
     {
         try
         {
+            System.out.println(sqlStatement);
             var preparedStatement = jdbcConnection.get().prepareStatement(sqlStatement);
 
             for (var i = 0; i < arguments.size(); ++i)
             {
-                preparedStatement.setObject(i+1, arguments.get(i));
+                //System.out.println("Add Object "+ arguments.get(i).toString());
+                preparedStatement.setObject(i+1, arguments.get(i)/*, java.sql.Types.OTHER*/);
             }
 
             return preparedStatement;

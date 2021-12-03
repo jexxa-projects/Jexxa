@@ -68,7 +68,7 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         return this;
     }
 
-    public JDBCCommandBuilder<T> values(Object... args)
+    public JDBCCommandBuilder<T> values(Object[] args)
     {
         getStatementBuilder().append("values ( ");
         getStatementBuilder().append( ARGUMENT_PLACEHOLDER ); // Handle first entry (without COMMA)
@@ -78,6 +78,23 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         {
             getStatementBuilder().append( COMMA );
             getStatementBuilder().append( ARGUMENT_PLACEHOLDER );
+            addArgument(args[i]);
+        }
+        getStatementBuilder().append(")");
+
+        return this;
+    }
+
+    public JDBCCommandBuilder<T> values(Object[] args, String[] typedPlaceholder)
+    {
+        getStatementBuilder().append("values ( ");
+        getStatementBuilder().append( typedPlaceholder[0] ); // Handle first entry (without COMMA)
+        addArgument(args[0]);
+
+        for(var i = 1;  i < args.length; ++i ) // Handle remaining entries(with leading COMMA)
+        {
+            getStatementBuilder().append( COMMA );
+            getStatementBuilder().append( typedPlaceholder[i] );
             addArgument(args[i]);
         }
         getStatementBuilder().append(")");
@@ -154,11 +171,16 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
 
     public JDBCCommandBuilder<T> set(T element, Object value)
     {
+        return set(element, value, ARGUMENT_PLACEHOLDER);
+    }
+
+    public JDBCCommandBuilder<T> set(T element, Object value, String argumentPlaceholder)
+    {
         getStatementBuilder()
                 .append(SET)
                 .append(element.name())
                 .append(EQUAL)
-                .append(ARGUMENT_PLACEHOLDER);
+                .append(argumentPlaceholder);
 
         addArgument(value);
         return this;
@@ -176,6 +198,27 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
                     .append( element[i] )
                     .append(EQUAL)
                     .append(ARGUMENT_PLACEHOLDER);
+            if ( i < element.length - 1)
+            {
+                getStatementBuilder().append(COMMA);
+            }
+        }
+        return this;
+    }
+
+
+    public JDBCCommandBuilder<T> set(String[] element, Object[] value, String[] argumentPlaceHolder)
+    {
+        getStatementBuilder()
+                .append(SET);
+
+        for (var i = 0; i < element.length; ++i)
+        {
+            addArgument(value[i]);
+            getStatementBuilder()
+                    .append( element[i] )
+                    .append(EQUAL)
+                    .append(argumentPlaceHolder[i]);
             if ( i < element.length - 1)
             {
                 getStatementBuilder().append(COMMA);

@@ -114,18 +114,18 @@ public class JDBCTestDatabase
     {
         var insertNullValues = jdbcConnection.createCommand(JDBCTestSchema.class)
                 .insertInto(JDBCTestDatabase.class)
-                .values(PRIMARY_KEY_WITH_NULL_VALUES, null, null, null, null, null, null )
+                .values(new Object[]{PRIMARY_KEY_WITH_NULL_VALUES, null, null, null, null, null, null} )
                 .create();
 
         var insertNonNullValues = jdbcConnection.createCommand(JDBCTestSchema.class)
                 .insertInto(JDBCTestDatabase.class)
-                .values(PRIMARY_KEY_WITH_NONNULL_VALUES, TEST_INT_VALUE, TEST_NUMERIC_VALUE, TEST_FLOAT_VALUE, TEST_DOUBLE_VALUE, TEST_STRING, TEST_TIMESTAMP)
+                .values(new Object[]{PRIMARY_KEY_WITH_NONNULL_VALUES, TEST_INT_VALUE, TEST_NUMERIC_VALUE, TEST_FLOAT_VALUE, TEST_DOUBLE_VALUE, TEST_STRING, TEST_TIMESTAMP})
                 .create();
 
         var insertNonNullValuesDuplicate = jdbcConnection.createCommand(JDBCTestSchema.class)
                 .insertInto(JDBCTestDatabase.class)
-                .values(PRIMARY_KEY_WITH_NONNULL_VALUES_DUPLICATE, TEST_INT_VALUE, TEST_NUMERIC_VALUE, TEST_FLOAT_VALUE, TEST_DOUBLE_VALUE, TEST_STRING,
-                        TEST_TIMESTAMP)
+                .values(new Object[]{PRIMARY_KEY_WITH_NONNULL_VALUES_DUPLICATE, TEST_INT_VALUE, TEST_NUMERIC_VALUE, TEST_FLOAT_VALUE, TEST_DOUBLE_VALUE, TEST_STRING,
+                        TEST_TIMESTAMP})
                 .create();
 
         insertNullValues.asUpdate();

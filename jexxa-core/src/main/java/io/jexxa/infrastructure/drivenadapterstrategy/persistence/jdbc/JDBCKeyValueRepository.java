@@ -3,7 +3,9 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.KEY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.VALUE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.JSONB;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.TEXT;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.TYPED_ARGUMENT_PLACEHOLDER;
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
@@ -23,6 +26,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
+    private final Properties properties;
 
     public enum KeyValueSchema
     {
@@ -36,6 +40,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
         this.keyFunction = Objects.requireNonNull( keyFunction );
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
+        this.properties = properties;
 
         autocreateTableKeyValue(properties);
     }
@@ -46,6 +51,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
         this.keyFunction = Objects.requireNonNull( keyFunction );
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
+        this.properties = properties;
 
         if ( autoCreateTable )
         {
@@ -62,7 +68,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .deleteFrom(aggregateClazz)
                 .where(KEY)
-                .isEqual(getJSONConverter().toJson(key))
+                .isEqual(getJSONConverter().toJson(key), getSQLValuePlaceHolder(properties))
                 .create();
 
         command.asUpdate();
@@ -86,7 +92,8 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .insertInto(aggregateClazz)
-                .values(getJSONConverter().toJson(keyFunction.apply(aggregate)), getJSONConverter().toJson(aggregate))
+                .values(new String[]{getJSONConverter().toJson(keyFunction.apply(aggregate)), getJSONConverter().toJson(aggregate)},
+                        new String[]{getSQLValuePlaceHolder(properties), getSQLValuePlaceHolder(properties)})
                 .create();
 
         command.asUpdate();
@@ -100,9 +107,9 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .update(aggregateClazz)
-                .set(VALUE, getJSONConverter().toJson(aggregate) )
+                .set(VALUE, getJSONConverter().toJson(aggregate), getSQLValuePlaceHolder(properties))
                 .where(KEY)
-                .isEqual(getJSONConverter().toJson(keyFunction.apply(aggregate)))
+                .isEqual(getJSONConverter().toJson(keyFunction.apply(aggregate)), getSQLValuePlaceHolder(properties))
                 .create();
 
         command.asUpdate();
@@ -117,7 +124,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
                 .select(VALUE)
                 .from(aggregateClazz)
                 .where(KEY)
-                .isEqual(getJSONConverter().toJson(primaryKey))
+                .isEqual(getJSONConverter().toJson(primaryKey), getSQLValuePlaceHolder(properties))
                 .create();
 
         return  query
@@ -139,7 +146,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         return query
                 .asString()
                 .flatMap(Optional::stream)
-                .map( element -> getJSONConverter().fromJson(element, aggregateClazz))
+                .map( element -> {System.out.println(element);return getJSONConverter().fromJson(element, aggregateClazz);})
                 .collect(Collectors.toList());
     }
 
@@ -153,9 +160,9 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
                 var command = getConnection().createTableCommand(KeyValueSchema.class)
                         .createTableIfNotExists(aggregateClazz)
-                        .addColumn(KEY, getMaxVarChar(properties.getProperty(JDBCConnection.JDBC_URL)))
+                        .addColumn(KEY, getKeyDataType(properties))
                         .addConstraint(PRIMARY_KEY)
-                        .addColumn(VALUE, TEXT)
+                        .addColumn(VALUE, getValueDataType(properties))
                         .create();
 
                 command.asIgnore();
@@ -165,6 +172,38 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
                 LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
             }
         }
+    }
+
+    protected SQLDataType getValueDataType(Properties properties)
+    {
+        var jdbcDriver = properties.getProperty(JDBCConnection.JDBC_URL);
+        if ( jdbcDriver.toLowerCase().contains("postgres") )
+        {
+           return JSONB;
+        }
+        return TEXT;
+    }
+
+    protected SQLDataType getKeyDataType(Properties properties)
+    {
+        var jdbcDriver = properties.getProperty(JDBCConnection.JDBC_URL);
+        if ( jdbcDriver.toLowerCase().contains("postgres") )
+        {
+            return JSONB;
+        }
+
+       return getMaxVarChar(properties.getProperty(JDBCConnection.JDBC_URL));
+    }
+
+    protected String getSQLValuePlaceHolder(Properties properties )
+    {
+        var jdbcDriver = properties.getProperty(JDBCConnection.JDBC_URL);
+        if ( jdbcDriver.toLowerCase().contains("postgres") )
+        {
+            return TYPED_ARGUMENT_PLACEHOLDER("", JSONB.toString());
+        }
+
+        return "? ";
     }
 
 }

@@ -17,7 +17,22 @@ public class MetaTags
      * @param <V> type of the value
      * @return a MetaTag wich compares defined value of an aggregate
      */
+    @Deprecated(forRemoval = true)
     public static <T, V> NumericTag<T, V> numberTag(Function<T, V> accessor, Function<V, ? extends Number> converter)
+    {
+        return new NumericTag<>(accessor, converter);
+    }
+
+    /**
+     * Factory method to create a MetaTag wich compares value of an aggregate using defined converter function
+     *
+     * @param accessor defines the method to get the value to be compared
+     * @param converter defines the converter function converting the value into a number
+     * @param <T> type of the aggregate
+     * @param <V> type of the value
+     * @return a MetaTag wich compares defined value of an aggregate
+     */
+    public static <T, V> NumericTag<T, V> numericTag(Function<T, V> accessor, Function<V, ? extends Number> converter)
     {
         return new NumericTag<>(accessor, converter);
     }
@@ -29,7 +44,20 @@ public class MetaTags
      * @param <T> type of the aggregate
      * @return a MetaTag wich compares an {@link Number} of an aggregate
      */
+    @Deprecated(forRemoval = true)
     public static <T, V extends Number> NumericTag<T, V> numberTag(Function<T,V> accessorFunction )
+    {
+        return new NumericTag<>(accessorFunction, element -> element);
+    }
+
+    /**
+     * Factory method to create a MetaTag wich compares value of type {@link Number} of an aggregate
+     *
+     * @param accessorFunction returns the Instant
+     * @param <T> type of the aggregate
+     * @return a MetaTag wich compares an {@link Number} of an aggregate
+     */
+    public static <T, V extends Number> NumericTag<T, V> numericTag(Function<T,V> accessorFunction )
     {
         return new NumericTag<>(accessorFunction, element -> element);
     }

@@ -56,6 +56,11 @@ public class  JDBCBuilder <T extends Enum<T>>
             return is(EQUAL, value);
         }
 
+        public T isEqual(Object value, String argumentPlaceHolder)
+        {
+            return is(EQUAL, value, argumentPlaceHolder);
+        }
+
         public T isNull()
         {
             queryBuilder.getStatementBuilder()
@@ -110,9 +115,14 @@ public class  JDBCBuilder <T extends Enum<T>>
 
         public T is(SQLSyntax.SQLOperation operation, Object attribute)
         {
+            return is(operation, attribute, ARGUMENT_PLACEHOLDER);
+        }
+
+        public T is(SQLSyntax.SQLOperation operation, Object attribute, String argumentPlaceHolder)
+        {
             queryBuilder.getStatementBuilder()
                     .append(operation.toString())
-                    .append(ARGUMENT_PLACEHOLDER);
+                    .append(argumentPlaceHolder);
 
             queryBuilder.addArgument(attribute);
 

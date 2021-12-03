@@ -11,6 +11,7 @@ public class SQLDataType
     public static final SQLDataType TIMESTAMP = new SQLDataType("TIMESTAMP ");
     public static final SQLDataType TEXT = new SQLDataType("TEXT ");
     public static final SQLDataType VARCHAR = new SQLDataType("VARCHAR ");
+    public static final SQLDataType JSONB = new SQLDataType("JSONB ");
 
     @SuppressWarnings({"java:S100", "java:S1845"}) // Explicit naming for fluent API style
     public static SQLDataType VARCHAR(int maxSize) { return new SQLDataType("VARCHAR("+maxSize +") ");}

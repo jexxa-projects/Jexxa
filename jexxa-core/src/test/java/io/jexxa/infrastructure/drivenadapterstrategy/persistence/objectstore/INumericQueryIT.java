@@ -1,16 +1,5 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreTestDatabase.REPOSITORY_CONFIG;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numberTag;
-import static java.util.Comparator.comparing;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
@@ -18,6 +7,17 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.met
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreTestDatabase.REPOSITORY_CONFIG;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numericTag;
+import static java.util.Comparator.comparing;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class INumericQueryIT
 {
@@ -34,11 +34,11 @@ class INumericQueryIT
      */
     private enum JexxaObjectSchema implements MetadataSchema
     {
-        INT_VALUE(numberTag(JexxaObject::getInternalValue)),
+        INT_VALUE(numericTag(JexxaObject::getInternalValue)),
 
-        VALUE_OBJECT(numberTag(JexxaObject::getKey, JexxaValueObject::getValue)),
+        VALUE_OBJECT(numericTag(JexxaObject::getKey, JexxaValueObject::getValue)),
 
-        OPTIONAL_VALUE_OBJECT(numberTag(JexxaObject::getOptionalValue, JexxaValueObject::getValue));
+        OPTIONAL_VALUE_OBJECT(numericTag(JexxaObject::getOptionalValue, JexxaValueObject::getValue));
 
         /**
          *  Defines the constructor of the enum. Following code is equal for all object stores.
