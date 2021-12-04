@@ -3,7 +3,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.jd
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCObject;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.DatabaseManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.IDatabase;
@@ -63,7 +63,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         var valueSet = new ArrayList<JDBCObject>();
         List<String> keySet = new ArrayList<>();
 
-        valueSet.add(new JDBCObject( getJSONConverter().toJson(aggregate), database.matchDataType(JSONB)));
+        valueSet.add(valueToJSONB(aggregate));
 
         jdbcSchema.forEach(element -> valueSet.add( new JDBCObject(
                 element.getTag().getFromAggregate(aggregate),
@@ -72,7 +72,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         keySet.add(KeyValueSchema.VALUE.name());
         jdbcSchema.forEach(element -> keySet.add(element.name()));
 
-        var jdbcKey = new JDBCObject(getJSONConverter().toJson( keyFunction.apply(aggregate)), database.matchDataType(JSONB));
+        var jdbcKey = primaryKeyToJSONB(keyFunction.apply(aggregate));
 
         var command = getConnection()
                 .createCommand(KeyValueSchema.class)
@@ -98,9 +98,11 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         jdbcSchema.forEach(element -> keySet.add(element.name()));
 
         var objectList = new ArrayList<JDBCObject>();
-        objectList.add (new JDBCObject( jsonConverter.toJson(keyFunction.apply(aggregate)), database.matchDataType(JSONB) ));
-        objectList.add (new JDBCObject( jsonConverter.toJson(aggregate), database.matchDataType(JSONB) ));
-        jdbcSchema.forEach(metaTag -> objectList.add( new JDBCObject( metaTag.getTag().getFromAggregate(aggregate), typeToSQL(metaTag.getTag().getTagType()))));
+        objectList.add (primaryKeyToJSONB(keyFunction.apply(aggregate)));
+        objectList.add (valueToJSONB(aggregate));
+        jdbcSchema.forEach(metaTag -> objectList.add(
+                new JDBCObject( metaTag.getTag().getFromAggregate(aggregate), typeToSQL(metaTag.getTag().getTagType())))
+        );
 
         var command = getConnection()
                 .createCommand(KeyValueSchema.class)

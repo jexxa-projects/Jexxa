@@ -1,6 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
-
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder;
 
 public class JDBCObject {
     private final Object jdbcValue;
@@ -23,5 +21,4 @@ public class JDBCObject {
     {
         return "(?::" + getSqlDataType() + ")";
     }
-
 }

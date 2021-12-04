@@ -1,9 +1,11 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.DatabaseManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.IDatabase;
 import io.jexxa.utils.JexxaLogger;
+import io.jexxa.utils.json.JSONManager;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -91,13 +93,12 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(aggregate);
 
-        var jdbcKey = new JDBCObject(getJSONConverter().toJson(keyFunction.apply(aggregate)), database.matchDataType(JSONB));
-        var jdbcValue = new JDBCObject(getJSONConverter().toJson(aggregate), database.matchDataType(JSONB));
-
-
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .insertInto(aggregateClazz)
-                .values(new JDBCObject[]{jdbcKey, jdbcValue})
+                .values(new JDBCObject[]{
+                        primaryKeyToJSONB(keyFunction.apply(aggregate)),
+                        valueToJSONB(aggregate)}
+                )
                 .create();
 
         command.asUpdate();
@@ -109,14 +110,11 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(aggregate);
 
-        var jdbcKey = new JDBCObject(getJSONConverter().toJson(keyFunction.apply(aggregate)), database.matchDataType(JSONB));
-        var jdbcValue = new JDBCObject(getJSONConverter().toJson(aggregate), database.matchDataType(JSONB));
-
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .update(aggregateClazz)
-                .set(VALUE, jdbcValue)
+                .set(VALUE, valueToJSONB(aggregate))
                 .where(KEY)
-                .isEqual(jdbcKey)
+                .isEqual(primaryKeyToJSONB(keyFunction.apply(aggregate)))
                 .create();
 
         command.asUpdate();
@@ -127,13 +125,11 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(primaryKey);
 
-        var jdbcKey = new JDBCObject(getJSONConverter().toJson(primaryKey), database.matchDataType(JSONB));
-
         var query = getConnection().createQuery(KeyValueSchema.class)
                 .select(VALUE)
                 .from(aggregateClazz)
                 .where(KEY)
-                .isEqual(jdbcKey)
+                .isEqual(primaryKeyToJSONB(primaryKey))
                 .create();
 
         return  query
@@ -196,4 +192,13 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         return "? ";
     }
 
+    protected JDBCObject primaryKeyToJSONB(Object value)
+    {
+        return new JDBCObject(JSONManager.getJSONConverter().toJson(value), database.matchPrimaryKey(JSONB));
+    }
+
+    protected JDBCObject valueToJSONB(Object value)
+    {
+        return new JDBCObject(JSONManager.getJSONConverter().toJson(value), database.matchDataType(JSONB));
+    }
 }

@@ -2,7 +2,6 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCCommand;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCObject;
 
 import java.util.function.Supplier;
 
