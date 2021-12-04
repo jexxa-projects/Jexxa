@@ -1,6 +1,7 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 
 import java.util.Properties;
@@ -21,11 +22,6 @@ public class GenericSQLDatabase implements IDatabase
         if ( jdbcDriver.toLowerCase().contains("oracle") )
         {
             return SQLDataType.VARCHAR(4000);
-        }
-
-        if ( jdbcDriver.toLowerCase().contains("postgres") )
-        {
-            return SQLDataType.VARCHAR; // Note in general Postgres does not have a real upper limit.
         }
 
         if ( jdbcDriver.toLowerCase().contains("h2") )
@@ -50,4 +46,16 @@ public class GenericSQLDatabase implements IDatabase
     public String getBindParameter() {
         return "? ";
     }
+
+    @Override
+    public JDBCObject getJDBCObject(Object value) {
+        return new JDBCObject(value, getBindParameter());
+    }
+
+    @Override
+    public JDBCObject getJDBCObject(Object value, SQLDataType sqlDataType) {
+        return new JDBCObject( value, "? ");
+    }
+
+
 }

@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder;
 
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCObject;
+
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.ARGUMENT_PLACEHOLDER;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SQLOperation.EQUAL;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SQLOperation.GREATER_THAN;
@@ -56,9 +58,15 @@ public class  JDBCBuilder <T extends Enum<T>>
             return is(EQUAL, value);
         }
 
+        @Deprecated(forRemoval = true)
         public T isEqual(Object value, String argumentPlaceHolder)
         {
             return is(EQUAL, value, argumentPlaceHolder);
+        }
+
+        public T isEqual(JDBCObject value)
+        {
+            return is(EQUAL, value.getJdbcValue(), value.getBindParameter());
         }
 
         public T isNull()
@@ -118,6 +126,7 @@ public class  JDBCBuilder <T extends Enum<T>>
             return is(operation, attribute, ARGUMENT_PLACEHOLDER);
         }
 
+        @Deprecated(forRemoval = true)
         public T is(SQLSyntax.SQLOperation operation, Object attribute, String argumentPlaceHolder)
         {
             queryBuilder.getStatementBuilder()

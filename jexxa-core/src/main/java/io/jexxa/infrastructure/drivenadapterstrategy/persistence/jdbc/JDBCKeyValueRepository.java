@@ -26,7 +26,6 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
-    private final Properties properties;
     private final IDatabase database;
 
     public enum KeyValueSchema
@@ -41,7 +40,6 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
         this.keyFunction = Objects.requireNonNull( keyFunction );
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
-        this.properties = properties;
         this.database = DatabaseManager.getDatabase(properties);
 
         autocreateTableKeyValue(properties);
@@ -53,7 +51,6 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
         this.keyFunction = Objects.requireNonNull( keyFunction );
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
-        this.properties = properties;
         this.database = DatabaseManager.getDatabase(properties);
 
         if ( autoCreateTable )
@@ -67,11 +64,12 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     public void remove(K key)
     {
         Objects.requireNonNull(key);
+        var jdbcKey = database.getJDBCObject(getJSONConverter().toJson(key));
 
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .deleteFrom(aggregateClazz)
                 .where(KEY)
-                .isEqual(getJSONConverter().toJson(key), database.getBindParameter())
+                .isEqual(jdbcKey)
                 .create();
 
         command.asUpdate();
@@ -93,10 +91,13 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(aggregate);
 
+        var jdbcKey = database.getJDBCObject(getJSONConverter().toJson(keyFunction.apply(aggregate)));
+        var jdbcValue = database.getJDBCObject(getJSONConverter().toJson(aggregate));
+
+
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .insertInto(aggregateClazz)
-                .values(new String[]{getJSONConverter().toJson(keyFunction.apply(aggregate)), getJSONConverter().toJson(aggregate)},
-                        new String[]{getSQLValuePlaceHolder(properties), database.getBindParameter()})
+                .values(new JDBCObject[]{jdbcKey, jdbcValue})
                 .create();
 
         command.asUpdate();
@@ -108,11 +109,14 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(aggregate);
 
+        var jdbcKey = database.getJDBCObject(getJSONConverter().toJson(keyFunction.apply(aggregate)));
+        var jdbcValue = database.getJDBCObject(getJSONConverter().toJson(aggregate));
+
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .update(aggregateClazz)
-                .set(VALUE, getJSONConverter().toJson(aggregate), getSQLValuePlaceHolder(properties))
+                .set(VALUE, jdbcValue)
                 .where(KEY)
-                .isEqual(getJSONConverter().toJson(keyFunction.apply(aggregate)), database.getBindParameter())
+                .isEqual(jdbcKey)
                 .create();
 
         command.asUpdate();
@@ -123,18 +127,20 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(primaryKey);
 
+        var jdbcKey = database.getJDBCObject(getJSONConverter().toJson(primaryKey));
+
         var query = getConnection().createQuery(KeyValueSchema.class)
                 .select(VALUE)
                 .from(aggregateClazz)
                 .where(KEY)
-                .isEqual(getJSONConverter().toJson(primaryKey), database.getBindParameter())
+                .isEqual(jdbcKey)
                 .create();
 
         return  query
                 .asString()
                 .flatMap(Optional::stream)
                 .findFirst()
-                .map( element -> getJSONConverter().fromJson(element, aggregateClazz))
+                .map( element -> {System.out.println("bla _ "  + element); return getJSONConverter().fromJson(element, aggregateClazz);})
                 .or(Optional::empty);
     }
 
