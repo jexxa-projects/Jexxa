@@ -63,15 +63,16 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         var valueSet = new ArrayList<JDBCObject>();
         List<String> keySet = new ArrayList<>();
 
-        valueSet.add(new JDBCObject( getJSONConverter().toJson(aggregate), database.getBindParameter()));
-        jdbcSchema.forEach(element -> valueSet.add( database.getJDBCObject(
+        valueSet.add(new JDBCObject( getJSONConverter().toJson(aggregate), database.matchDataType(JSONB)));
+
+        jdbcSchema.forEach(element -> valueSet.add( new JDBCObject(
                 element.getTag().getFromAggregate(aggregate),
                 typeToSQL(element.getTag().getTagType())) ));
 
         keySet.add(KeyValueSchema.VALUE.name());
         jdbcSchema.forEach(element -> keySet.add(element.name()));
 
-        var jdbcKey = database.getJDBCObject(getJSONConverter().toJson( keyFunction.apply(aggregate)), JSONB);
+        var jdbcKey = new JDBCObject(getJSONConverter().toJson( keyFunction.apply(aggregate)), database.matchDataType(JSONB));
 
         var command = getConnection()
                 .createCommand(KeyValueSchema.class)
@@ -97,9 +98,9 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         jdbcSchema.forEach(element -> keySet.add(element.name()));
 
         var objectList = new ArrayList<JDBCObject>();
-        objectList.add (database.getJDBCObject( jsonConverter.toJson(keyFunction.apply(aggregate)) ));
-        objectList.add (database.getJDBCObject( jsonConverter.toJson(aggregate) ));
-        jdbcSchema.forEach(metaTag -> objectList.add( database.getJDBCObject( metaTag.getTag().getFromAggregate(aggregate), typeToSQL(metaTag.getTag().getTagType()))));
+        objectList.add (new JDBCObject( jsonConverter.toJson(keyFunction.apply(aggregate)), database.matchDataType(JSONB) ));
+        objectList.add (new JDBCObject( jsonConverter.toJson(aggregate), database.matchDataType(JSONB) ));
+        jdbcSchema.forEach(metaTag -> objectList.add( new JDBCObject( metaTag.getTag().getFromAggregate(aggregate), typeToSQL(metaTag.getTag().getTagType()))));
 
         var command = getConnection()
                 .createCommand(KeyValueSchema.class)
@@ -152,9 +153,9 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
 
                 var command = getConnection().createTableCommand(metaData)
                         .createTableIfNotExists(aggregateClazz)
-                        .addColumn(KeyValueSchema.KEY, database.getKeyDataType(), KeyValueSchema.class)
+                        .addColumn(KeyValueSchema.KEY, database.matchPrimaryKey(JSONB), KeyValueSchema.class)
                         .addConstraint(PRIMARY_KEY)
-                        .addColumn(KeyValueSchema.VALUE, database.getValueDataType(), KeyValueSchema.class);
+                        .addColumn(KeyValueSchema.VALUE, database.matchDataType(JSONB), KeyValueSchema.class);
 
                 jdbcSchema.forEach(element -> command.addColumn(element, typeToSQL(element.getTag().getTagType())) );
 

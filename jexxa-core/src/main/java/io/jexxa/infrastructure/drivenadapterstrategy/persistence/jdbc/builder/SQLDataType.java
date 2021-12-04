@@ -14,9 +14,10 @@ public class SQLDataType
     public static final SQLDataType JSONB = new SQLDataType("JSONB ");
 
     @SuppressWarnings({"java:S100", "java:S1845"}) // Explicit naming for fluent API style
+    @Deprecated(forRemoval = true)
     public static SQLDataType VARCHAR(int maxSize) { return new SQLDataType("VARCHAR("+maxSize +") ");}
 
-    protected SQLDataType(String name){string = name;}
+    public SQLDataType(String name){string = name;}
 
     @Override
     public String toString()

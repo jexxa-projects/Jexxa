@@ -1,27 +1,27 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
+
 public class JDBCObject {
     private final Object jdbcValue;
-    //private final SQLType sqlType;
-    private final String bindParameter;
+    private final SQLDataType sqlDataType;
 
-    public JDBCObject(Object jdbcValue, /*SQLType sqlType,*/ String bindParameter) {
+    public JDBCObject(Object jdbcValue, SQLDataType sqlDataType) {
         this.jdbcValue = jdbcValue;
-        //this.sqlType = sqlType;
-        this.bindParameter = bindParameter;
+        this.sqlDataType = sqlDataType;
     }
 
     public Object getJdbcValue() {
         return jdbcValue;
     }
 
-    /*public SQLType getSqlType() {
-        return sqlType;
-    }*/
+    public SQLDataType getSqlDataType() {
+        return sqlDataType;
+    }
 
     public String getBindParameter()
     {
-        return bindParameter;
+        return "(?::" + getSqlDataType() + ")";
     }
 
 }

@@ -1,7 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 
 import java.util.Properties;
@@ -15,47 +14,47 @@ public class GenericSQLDatabase implements IDatabase
         this.properties = properties;
     }
 
-    @Override
-    public SQLDataType getKeyDataType() {
+    private SQLDataType getMaxVarChar() {
         var jdbcDriver = properties.getProperty(JDBCConnection.JDBC_URL);
 
         if ( jdbcDriver.toLowerCase().contains("oracle") )
         {
-            return SQLDataType.VARCHAR(4000);
+            return maxVarChar(4000);
         }
 
         if ( jdbcDriver.toLowerCase().contains("h2") )
         {
-            return SQLDataType.VARCHAR(Integer.MAX_VALUE);
+            return maxVarChar(Integer.MAX_VALUE);
         }
 
         if ( jdbcDriver.toLowerCase().contains("mysql") )
         {
-            return SQLDataType.VARCHAR(65535);
+            return maxVarChar(65535);
         }
 
-        return SQLDataType.VARCHAR(255);
+        return maxVarChar(255);
     }
 
     @Override
-    public SQLDataType getValueDataType() {
-        return SQLDataType.TEXT;
+    public SQLDataType matchPrimaryKey(SQLDataType sqlDataType) {
+        if (sqlDataType.equals(SQLDataType.TEXT) || sqlDataType.equals(SQLDataType.VARCHAR) || sqlDataType.equals(SQLDataType.JSONB))
+        {
+            return getMaxVarChar();
+        }
+
+        return sqlDataType;
     }
 
     @Override
-    public String getBindParameter() {
-        return "? ";
+    public SQLDataType matchDataType(SQLDataType sqlDataType) {
+        if (sqlDataType.equals(SQLDataType.JSONB))
+        {
+            return SQLDataType.TEXT;
+        }
+
+        return sqlDataType;
     }
 
-    @Override
-    public JDBCObject getJDBCObject(Object value) {
-        return new JDBCObject(value, getBindParameter());
-    }
-
-    @Override
-    public JDBCObject getJDBCObject(Object value, SQLDataType sqlDataType) {
-        return new JDBCObject( value, "? ");
-    }
-
+    private static SQLDataType maxVarChar(int maxSize) { return new SQLDataType("VARCHAR("+maxSize +") ");}
 
 }

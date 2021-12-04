@@ -64,7 +64,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     public void remove(K key)
     {
         Objects.requireNonNull(key);
-        var jdbcKey = database.getJDBCObject(getJSONConverter().toJson(key));
+        var jdbcKey = new JDBCObject(getJSONConverter().toJson(key), database.matchDataType(JSONB));
 
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .deleteFrom(aggregateClazz)
@@ -91,8 +91,8 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(aggregate);
 
-        var jdbcKey = database.getJDBCObject(getJSONConverter().toJson(keyFunction.apply(aggregate)));
-        var jdbcValue = database.getJDBCObject(getJSONConverter().toJson(aggregate));
+        var jdbcKey = new JDBCObject(getJSONConverter().toJson(keyFunction.apply(aggregate)), database.matchDataType(JSONB));
+        var jdbcValue = new JDBCObject(getJSONConverter().toJson(aggregate), database.matchDataType(JSONB));
 
 
         var command = getConnection().createCommand(KeyValueSchema.class)
@@ -109,8 +109,8 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(aggregate);
 
-        var jdbcKey = database.getJDBCObject(getJSONConverter().toJson(keyFunction.apply(aggregate)));
-        var jdbcValue = database.getJDBCObject(getJSONConverter().toJson(aggregate));
+        var jdbcKey = new JDBCObject(getJSONConverter().toJson(keyFunction.apply(aggregate)), database.matchDataType(JSONB));
+        var jdbcValue = new JDBCObject(getJSONConverter().toJson(aggregate), database.matchDataType(JSONB));
 
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .update(aggregateClazz)
@@ -127,7 +127,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     {
         Objects.requireNonNull(primaryKey);
 
-        var jdbcKey = database.getJDBCObject(getJSONConverter().toJson(primaryKey));
+        var jdbcKey = new JDBCObject(getJSONConverter().toJson(primaryKey), database.matchDataType(JSONB));
 
         var query = getConnection().createQuery(KeyValueSchema.class)
                 .select(VALUE)
@@ -169,9 +169,9 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
                 var command = getConnection().createTableCommand(KeyValueSchema.class)
                         .createTableIfNotExists(aggregateClazz)
-                        .addColumn(KEY, database.getKeyDataType())
+                        .addColumn(KEY, database.matchPrimaryKey(JSONB))
                         .addConstraint(PRIMARY_KEY)
-                        .addColumn(VALUE, database.getValueDataType())
+                        .addColumn(VALUE, database.matchDataType(JSONB))
                         .create();
 
                 command.asIgnore();
