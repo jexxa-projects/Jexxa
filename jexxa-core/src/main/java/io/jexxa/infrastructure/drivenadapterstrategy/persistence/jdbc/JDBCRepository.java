@@ -1,10 +1,9 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
+import io.jexxa.utils.function.ThrowingConsumer;
+
 import java.util.Objects;
 import java.util.Properties;
-
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
-import io.jexxa.utils.function.ThrowingConsumer;
 
 public abstract class JDBCRepository  implements AutoCloseable
 {
@@ -33,31 +32,6 @@ public abstract class JDBCRepository  implements AutoCloseable
     public final JDBCConnection getConnection()
     {
         return jdbcConnection.validateConnection();
-    }
-
-    protected static SQLDataType getMaxVarChar(String jdbcDriver)
-    {
-        if ( jdbcDriver.toLowerCase().contains("oracle") )
-        {
-            return SQLDataType.VARCHAR(4000);
-        }
-
-        if ( jdbcDriver.toLowerCase().contains("postgres") )
-        {
-            return SQLDataType.VARCHAR; // Note in general Postgres does not have a real upper limit.
-        }
-
-        if ( jdbcDriver.toLowerCase().contains("h2") )
-        {
-            return SQLDataType.VARCHAR(Integer.MAX_VALUE);
-        }
-
-        if ( jdbcDriver.toLowerCase().contains("mysql") )
-        {
-            return SQLDataType.VARCHAR(65535);
-        }
-
-        return SQLDataType.VARCHAR(255);
     }
 
 }

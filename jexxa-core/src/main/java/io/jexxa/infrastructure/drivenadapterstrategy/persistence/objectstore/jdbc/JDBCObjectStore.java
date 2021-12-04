@@ -16,6 +16,8 @@ import java.util.function.Function;
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.DatabaseManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.IDatabase;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
@@ -37,6 +39,8 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
     private final Set<M> jdbcSchema;
 
     private final Properties properties;
+    private final IDatabase database;
+
 
     public JDBCObjectStore(
             Class<T> aggregateClazz,
@@ -51,6 +55,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         this.metaData = metaData;
         this.jdbcSchema = EnumSet.allOf(metaData);
         this.properties = properties;
+        this.database = DatabaseManager.getDatabase(properties);
 
         autocreateTableObjectStore(properties);
     }
@@ -71,7 +76,6 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         jdbcSchema.forEach(element -> keySet.add(element.name()));
 
         var typeList = new ArrayList<String>();
-        //typeList.add(getSQLValuePlaceHolder(properties));
         typeList.add(getSQLValuePlaceHolder(properties));
         jdbcSchema.forEach(metaTag -> typeList.add("?"));
 
@@ -80,7 +84,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
                 .createCommand(KeyValueSchema.class)
                 .update(aggregateClazz)
                 .set(keySet.toArray(new String[0]), valueSet.toArray(), typeList.toArray(new String[0]) )
-                .where(KeyValueSchema.KEY).isEqual(getJSONConverter().toJson( keyFunction.apply(aggregate) ), getSQLValuePlaceHolder(properties))
+                .where(KeyValueSchema.KEY).isEqual(getJSONConverter().toJson( keyFunction.apply(aggregate) ), database.getBindParameter())
                 .create();
 
         command.asUpdate();
@@ -160,9 +164,9 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
 
                 var command = getConnection().createTableCommand(metaData)
                         .createTableIfNotExists(aggregateClazz)
-                        .addColumn(KeyValueSchema.KEY, getKeyDataType(properties), KeyValueSchema.class)
+                        .addColumn(KeyValueSchema.KEY, database.getKeyDataType(), KeyValueSchema.class)
                         .addConstraint(PRIMARY_KEY)
-                        .addColumn(KeyValueSchema.VALUE, getValueDataType(properties), KeyValueSchema.class);
+                        .addColumn(KeyValueSchema.VALUE, database.getValueDataType(), KeyValueSchema.class);
 
                 jdbcSchema.forEach(element ->
                 {

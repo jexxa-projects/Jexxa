@@ -1,12 +1,10 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.KEY;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.VALUE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.JSONB;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.TEXT;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.TYPED_ARGUMENT_PLACEHOLDER;
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.DatabaseManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.IDatabase;
+import io.jexxa.utils.JexxaLogger;
+import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,10 +13,12 @@ import java.util.Properties;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
-import io.jexxa.utils.JexxaLogger;
-import org.slf4j.Logger;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.VALUE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.JSONB;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.TYPED_ARGUMENT_PLACEHOLDER;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
 public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRepository<T, K>
 {
@@ -27,6 +27,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
     private final Properties properties;
+    private final IDatabase database;
 
     public enum KeyValueSchema
     {
@@ -41,6 +42,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         this.keyFunction = Objects.requireNonNull( keyFunction );
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
         this.properties = properties;
+        this.database = DatabaseManager.getDatabase(properties);
 
         autocreateTableKeyValue(properties);
     }
@@ -52,6 +54,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         this.keyFunction = Objects.requireNonNull( keyFunction );
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
         this.properties = properties;
+        this.database = DatabaseManager.getDatabase(properties);
 
         if ( autoCreateTable )
         {
@@ -68,7 +71,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .deleteFrom(aggregateClazz)
                 .where(KEY)
-                .isEqual(getJSONConverter().toJson(key), getSQLValuePlaceHolder(properties))
+                .isEqual(getJSONConverter().toJson(key), database.getBindParameter())
                 .create();
 
         command.asUpdate();
@@ -93,7 +96,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .insertInto(aggregateClazz)
                 .values(new String[]{getJSONConverter().toJson(keyFunction.apply(aggregate)), getJSONConverter().toJson(aggregate)},
-                        new String[]{getSQLValuePlaceHolder(properties), getSQLValuePlaceHolder(properties)})
+                        new String[]{getSQLValuePlaceHolder(properties), database.getBindParameter()})
                 .create();
 
         command.asUpdate();
@@ -109,7 +112,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
                 .update(aggregateClazz)
                 .set(VALUE, getJSONConverter().toJson(aggregate), getSQLValuePlaceHolder(properties))
                 .where(KEY)
-                .isEqual(getJSONConverter().toJson(keyFunction.apply(aggregate)), getSQLValuePlaceHolder(properties))
+                .isEqual(getJSONConverter().toJson(keyFunction.apply(aggregate)), database.getBindParameter())
                 .create();
 
         command.asUpdate();
@@ -124,7 +127,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
                 .select(VALUE)
                 .from(aggregateClazz)
                 .where(KEY)
-                .isEqual(getJSONConverter().toJson(primaryKey), getSQLValuePlaceHolder(properties))
+                .isEqual(getJSONConverter().toJson(primaryKey), database.getBindParameter())
                 .create();
 
         return  query
@@ -160,9 +163,9 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
                 var command = getConnection().createTableCommand(KeyValueSchema.class)
                         .createTableIfNotExists(aggregateClazz)
-                        .addColumn(KEY, getKeyDataType(properties))
+                        .addColumn(KEY, database.getKeyDataType())
                         .addConstraint(PRIMARY_KEY)
-                        .addColumn(VALUE, getValueDataType(properties))
+                        .addColumn(VALUE, database.getValueDataType())
                         .create();
 
                 command.asIgnore();
@@ -174,26 +177,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         }
     }
 
-    protected SQLDataType getValueDataType(Properties properties)
-    {
-        var jdbcDriver = properties.getProperty(JDBCConnection.JDBC_URL);
-        if ( jdbcDriver.toLowerCase().contains("postgres") )
-        {
-           return JSONB;
-        }
-        return TEXT;
-    }
 
-    protected SQLDataType getKeyDataType(Properties properties)
-    {
-        var jdbcDriver = properties.getProperty(JDBCConnection.JDBC_URL);
-        if ( jdbcDriver.toLowerCase().contains("postgres") )
-        {
-            return JSONB;
-        }
-
-       return getMaxVarChar(properties.getProperty(JDBCConnection.JDBC_URL));
-    }
 
     protected String getSQLValuePlaceHolder(Properties properties )
     {
