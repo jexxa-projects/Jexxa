@@ -136,7 +136,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
                 .asString()
                 .flatMap(Optional::stream)
                 .findFirst()
-                .map( element -> {System.out.println("bla _ "  + element); return getJSONConverter().fromJson(element, aggregateClazz);})
+                .map( element -> getJSONConverter().fromJson(element, aggregateClazz))
                 .or(Optional::empty);
     }
 
@@ -151,7 +151,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         return query
                 .asString()
                 .flatMap(Optional::stream)
-                .map( element -> {System.out.println(element);return getJSONConverter().fromJson(element, aggregateClazz);})
+                .map( element -> getJSONConverter().fromJson(element, aggregateClazz))
                 .collect(Collectors.toList());
     }
 

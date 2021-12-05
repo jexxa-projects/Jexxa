@@ -34,12 +34,10 @@ class JDBCPreparedStatement
     {
         try
         {
-            System.out.println(sqlStatement);
             var preparedStatement = jdbcConnection.get().prepareStatement(sqlStatement);
 
             for (var i = 0; i < arguments.size(); ++i)
             {
-                //System.out.println("Add Object "+ arguments.get(i).toString());
                 preparedStatement.setObject(i+1, arguments.get(i));
             }
 

@@ -26,7 +26,6 @@ public class JMXAdapter implements IDrivingAdapter
 
     public void register(Object object)
     {
-        System.out.println("Register object " + object.getClass().getName());
         Objects.requireNonNull(object);
 
         var mbs = ManagementFactory.getPlatformMBeanServer();
