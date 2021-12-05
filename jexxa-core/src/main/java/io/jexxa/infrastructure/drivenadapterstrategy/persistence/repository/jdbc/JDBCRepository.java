@@ -1,5 +1,6 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc;
 
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.utils.function.ThrowingConsumer;
 
 import java.util.Objects;

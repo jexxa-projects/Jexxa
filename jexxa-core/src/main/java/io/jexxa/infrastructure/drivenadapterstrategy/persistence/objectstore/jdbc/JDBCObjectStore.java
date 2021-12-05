@@ -2,7 +2,6 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.jd
 
 import com.google.gson.Gson;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.DatabaseManager;
@@ -11,6 +10,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INu
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
@@ -51,7 +51,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         this.jdbcSchema = EnumSet.allOf(metaData);
         this.database = DatabaseManager.getDatabase(properties);
 
-        autocreateTableObjectStore(properties);
+        manageObjectStore(properties);
     }
 
 
@@ -146,28 +146,34 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         return new JDBCStringQuery<>(this::getConnection, metaTag, aggregateClazz, metaData, queryType );
     }
 
-    private void autocreateTableObjectStore(Properties properties)
+    private void manageObjectStore(Properties properties)
     {
         Objects.requireNonNull(properties);
         if (properties.containsKey(JDBCConnection.JDBC_AUTOCREATE_TABLE))
         {
-            try{
+            autoCreateDatabase();
+            alterKeyValueRows();
+        }
+    }
 
-                var command = getConnection().createTableCommand(metaData)
-                        .createTableIfNotExists(aggregateClazz)
-                        .addColumn(KeyValueSchema.KEY, database.matchPrimaryKey(JSONB), KeyValueSchema.class)
-                        .addConstraint(PRIMARY_KEY)
-                        .addColumn(KeyValueSchema.VALUE, database.matchDataType(JSONB), KeyValueSchema.class);
+    private void autoCreateDatabase()
+    {
+        try{
 
-                jdbcSchema.forEach(element -> command.addColumn(element, typeToSQL(element.getTag().getTagType())) );
+            var command = getConnection().createTableCommand(metaData)
+                    .createTableIfNotExists(aggregateClazz)
+                    .addColumn(KeyValueSchema.KEY, database.matchPrimaryKey(JSONB), KeyValueSchema.class)
+                    .addConstraint(PRIMARY_KEY)
+                    .addColumn(KeyValueSchema.VALUE, database.matchDataType(JSONB), KeyValueSchema.class);
 
-                command.create().asIgnore();
+            jdbcSchema.forEach(element -> command.addColumn(element, typeToSQL(element.getTag().getTagType())) );
 
-            }
-            catch (RuntimeException e)
-            {
-                LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
-            }
+            command.create().asIgnore();
+
+        }
+        catch (RuntimeException e)
+        {
+            LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
         }
     }
 

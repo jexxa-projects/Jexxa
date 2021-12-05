@@ -1,6 +1,7 @@
 package io.jexxa.jexxatest;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numberTag;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numericTag;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.Properties;
@@ -10,8 +11,8 @@ import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.JexxaObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
@@ -83,9 +84,9 @@ class JexxaTestConfigTest
     private enum JexxaObjectSchema implements MetadataSchema
     {
         @SuppressWarnings("unused")
-        INT_VALUE(numberTag(JexxaObject::getInternalValue)),
+        INT_VALUE(numericTag(JexxaObject::getInternalValue)),
         @SuppressWarnings("unused")
-        VALUE_OBJECT(numberTag(JexxaObject::getKey, JexxaValueObject::getValue));
+        VALUE_OBJECT(numericTag(JexxaObject::getKey, JexxaValueObject::getValue));
 
         /**
          *  Defines the constructor of the enum. Following code is equal for all object stores.

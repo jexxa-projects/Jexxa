@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository;
 
 
 import java.util.HashMap;
@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.factory.ClassFactory;
 

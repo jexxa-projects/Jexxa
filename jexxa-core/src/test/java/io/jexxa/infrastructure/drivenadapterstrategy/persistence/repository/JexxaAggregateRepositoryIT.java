@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBC_REPOSITORY_CONFIG;
 import static java.util.stream.Collectors.toList;

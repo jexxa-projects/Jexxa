@@ -1,9 +1,10 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.DatabaseManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.IDatabase;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONManager;
 import org.slf4j.Logger;
@@ -15,11 +16,10 @@ import java.util.Properties;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.KEY;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository.KeyValueSchema.VALUE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.JSONB;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.TYPED_ARGUMENT_PLACEHOLDER;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository.KeyValueSchema.KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository.KeyValueSchema.VALUE;
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
 public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRepository<T, K>
@@ -44,10 +44,10 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
         this.database = DatabaseManager.getDatabase(properties);
 
-        autocreateTableKeyValue(properties);
+        manageDBTable(properties);
     }
 
-    protected JDBCKeyValueRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties, boolean autoCreateTable)
+    protected JDBCKeyValueRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties, boolean manageTable)
     {
         super(properties);
 
@@ -55,9 +55,9 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
         this.database = DatabaseManager.getDatabase(properties);
 
-        if ( autoCreateTable )
+        if ( manageTable )
         {
-            autocreateTableKeyValue(properties);
+            manageDBTable(properties);
         }
     }
 
@@ -155,42 +155,52 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
                 .collect(Collectors.toList());
     }
 
-
-    private void autocreateTableKeyValue(Properties properties)
+    private void manageDBTable(Properties properties)
     {
-        Objects.requireNonNull(properties);
         if (properties.containsKey(JDBCConnection.JDBC_AUTOCREATE_TABLE))
         {
-            try{
-
-                var command = getConnection().createTableCommand(KeyValueSchema.class)
-                        .createTableIfNotExists(aggregateClazz)
-                        .addColumn(KEY, database.matchPrimaryKey(JSONB))
-                        .addConstraint(PRIMARY_KEY)
-                        .addColumn(VALUE, database.matchDataType(JSONB))
-                        .create();
-
-                command.asIgnore();
-            }
-            catch (RuntimeException e)
-            {
-                LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
-            }
+            autocreateTableKeyValue();
+            alterKeyValueRows();
         }
     }
 
-
-
-    protected String getSQLValuePlaceHolder(Properties properties )
+    private void autocreateTableKeyValue()
     {
-        var jdbcDriver = properties.getProperty(JDBCConnection.JDBC_URL);
-        if ( jdbcDriver.toLowerCase().contains("postgres") )
-        {
-            return TYPED_ARGUMENT_PLACEHOLDER("", JSONB.toString());
-        }
+        try{
 
-        return "? ";
+            var command = getConnection().createTableCommand(KeyValueSchema.class)
+                    .createTableIfNotExists(aggregateClazz)
+                    .addColumn(KEY, database.matchPrimaryKey(JSONB))
+                    .addConstraint(PRIMARY_KEY)
+                    .addColumn(VALUE, database.matchDataType(JSONB))
+                    .create();
+
+            command.asIgnore();
+        }
+        catch (RuntimeException e)
+        {
+            LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
+        }
     }
+
+    protected void alterKeyValueRows()
+    {
+        var keyRow = getConnection().createTableCommand(KeyValueSchema.class)
+                .alterTable(aggregateClazz)
+                .alterColumn(KEY, database.alterPrimaryKeyTo(JSONB), database.alterColumnUsingStatement(KEY, JSONB))
+                .create();
+
+        keyRow.asIgnore();
+
+        var valueRow = getConnection().createTableCommand(KeyValueSchema.class)
+                .alterTable(aggregateClazz)
+                .alterColumn(VALUE, database.alterDataTypeTo(JSONB), database.alterColumnUsingStatement(KEY, JSONB))
+                .create();
+
+        valueRow.asIgnore();
+
+    }
+
 
     protected JDBCObject primaryKeyToJSONB(Object value)
     {

@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.utils.messaging.ITMessageSender;
 import io.jexxa.infrastructure.utils.messaging.QueueListener;
 import io.jexxa.infrastructure.utils.messaging.TopicListener;

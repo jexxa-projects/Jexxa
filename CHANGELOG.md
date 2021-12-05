@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[4.0.0] - yyyy-mm-dd
+### Changed - Required for migration
+- Jexxa-Core: Repository related interfaces and classes were moved from `...persistence` into sub-package `...persistence.repository` -> You have to update your imports
+
+
 ## \[3.3.1] - 2021-11-26
 ### Fixed
 - Jexxa-Core: Corrected JDBC properties from `io.jexxa.file.username` -> `io.jexxa.jdbc.file.username` 

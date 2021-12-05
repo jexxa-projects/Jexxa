@@ -5,7 +5,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.function.Function;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;

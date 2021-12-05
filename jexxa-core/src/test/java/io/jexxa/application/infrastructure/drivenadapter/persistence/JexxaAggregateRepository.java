@@ -7,8 +7,8 @@ import java.util.Properties;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.domainservice.IJexxaAggregateRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
 
 @SuppressWarnings("unsused")
 public class JexxaAggregateRepository implements IJexxaAggregateRepository

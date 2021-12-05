@@ -1,6 +1,6 @@
-package io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb;
+package io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
 import io.jexxa.utils.json.JSONManager;
 
 import java.util.ArrayList;

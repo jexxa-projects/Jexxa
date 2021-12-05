@@ -2,6 +2,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
+import io.jexxa.utils.JexxaLogger;
 
 import java.util.Properties;
 
@@ -50,6 +51,28 @@ public class GenericSQLDatabase implements IDatabase
         if (sqlDataType.equals(SQLDataType.JSONB))
         {
             return SQLDataType.TEXT;
+        }
+
+        return sqlDataType;
+    }
+
+    @Override
+    public SQLDataType alterDataTypeTo(SQLDataType sqlDataType) {
+        return matchDataType(sqlDataType);
+    }
+
+    @Override
+    public String alterColumnUsingStatement(Enum<?> columnName, SQLDataType sqlDataType) {
+        JexxaLogger.getLogger(getClass()).warn("Alter column: No 'USING' statement available to alter column {}  with type {} ", columnName, sqlDataType);
+        return "";
+    }
+
+
+    @Override
+    public SQLDataType alterPrimaryKeyTo(SQLDataType sqlDataType) {
+        if (sqlDataType.equals(SQLDataType.TEXT) || sqlDataType.equals(SQLDataType.VARCHAR) || sqlDataType.equals(SQLDataType.JSONB))
+        {
+            return SQLDataType.VARCHAR;
         }
 
         return sqlDataType;

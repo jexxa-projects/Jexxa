@@ -14,4 +14,22 @@ public class PostgresDatabase implements IDatabase
         return sqlDataType;
     }
 
+    @Override
+    public SQLDataType alterDataTypeTo(SQLDataType sqlDataType)
+    {
+        return sqlDataType;
+    }
+
+    @Override
+    public String alterColumnUsingStatement(Enum<?> columnName, SQLDataType sqlDataType)
+    {
+        return " USING " + columnName.name() + "::" + sqlDataType.toString();
+    }
+
+    @Override
+    public SQLDataType alterPrimaryKeyTo(SQLDataType sqlDataType)
+    {
+        return sqlDataType;
+    }
+
 }

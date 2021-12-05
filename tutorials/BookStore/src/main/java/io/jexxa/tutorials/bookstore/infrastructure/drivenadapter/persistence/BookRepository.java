@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
 import io.jexxa.tutorials.bookstore.domain.aggregate.Book;
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
 import io.jexxa.tutorials.bookstore.domainservice.IBookRepository;
