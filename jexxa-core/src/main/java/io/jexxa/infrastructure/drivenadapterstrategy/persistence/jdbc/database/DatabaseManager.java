@@ -12,7 +12,7 @@ public class DatabaseManager
 
         if ( jdbcDriver.toLowerCase().contains("postgres") )
         {
-            return new PostgresDatabase();
+            return new PostgresDatabase(properties);
         }
 
         return new GenericSQLDatabase(properties);

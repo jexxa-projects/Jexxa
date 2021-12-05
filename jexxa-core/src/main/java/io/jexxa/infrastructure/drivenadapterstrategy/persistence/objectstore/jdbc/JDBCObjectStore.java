@@ -69,7 +69,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
                 element.getTag().getFromAggregate(aggregate),
                 typeToSQL(element.getTag().getTagType())) ));
 
-        keySet.add(KeyValueSchema.VALUE.name());
+        keySet.add(KeyValueSchema.REPOSITORY_VALUE.name());
         jdbcSchema.forEach(element -> keySet.add(element.name()));
 
         var jdbcKey = primaryKeyToJSONB(keyFunction.apply(aggregate));
@@ -78,7 +78,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
                 .createCommand(KeyValueSchema.class)
                 .update(aggregateClazz)
                 .set(keySet.toArray(new String[0]), valueSet.toArray(new JDBCObject[0]))
-                .where(KeyValueSchema.KEY).isEqual(jdbcKey)
+                .where(KeyValueSchema.REPOSITORY_KEY).isEqual(jdbcKey)
                 .create();
 
         command.asUpdate();
@@ -93,8 +93,8 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         var jsonConverter = getJSONConverter();
 
         List<String> keySet = new ArrayList<>();
-        keySet.add(KeyValueSchema.KEY.name());
-        keySet.add(KeyValueSchema.VALUE.name());
+        keySet.add(KeyValueSchema.REPOSITORY_KEY.name());
+        keySet.add(KeyValueSchema.REPOSITORY_VALUE.name());
         jdbcSchema.forEach(element -> keySet.add(element.name()));
 
         var objectList = new ArrayList<JDBCObject>();
@@ -152,6 +152,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         if (properties.containsKey(JDBCConnection.JDBC_AUTOCREATE_TABLE))
         {
             autoCreateDatabase();
+            renameKeyValueColumns();
             alterKeyValueRows();
         }
     }
@@ -162,9 +163,9 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
 
             var command = getConnection().createTableCommand(metaData)
                     .createTableIfNotExists(aggregateClazz)
-                    .addColumn(KeyValueSchema.KEY, database.matchPrimaryKey(JSONB), KeyValueSchema.class)
+                    .addColumn(KeyValueSchema.REPOSITORY_KEY, database.matchingPrimaryKey(JSONB), KeyValueSchema.class)
                     .addConstraint(PRIMARY_KEY)
-                    .addColumn(KeyValueSchema.VALUE, database.matchDataType(JSONB), KeyValueSchema.class);
+                    .addColumn(KeyValueSchema.REPOSITORY_VALUE, database.matchingValue(JSONB), KeyValueSchema.class);
 
             jdbcSchema.forEach(element -> command.addColumn(element, typeToSQL(element.getTag().getTagType())) );
 

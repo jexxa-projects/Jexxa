@@ -1,9 +1,11 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database;
 
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCCommand;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
-import io.jexxa.utils.JexxaLogger;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 
+import java.util.List;
 import java.util.Properties;
 
 public class GenericSQLDatabase implements IDatabase
@@ -37,45 +39,57 @@ public class GenericSQLDatabase implements IDatabase
     }
 
     @Override
-    public SQLDataType matchPrimaryKey(SQLDataType sqlDataType) {
-        if (sqlDataType.equals(SQLDataType.TEXT) || sqlDataType.equals(SQLDataType.VARCHAR) || sqlDataType.equals(SQLDataType.JSONB))
+    public SQLDataType matchingPrimaryKey(SQLDataType requestedDataType) {
+        if (requestedDataType.equals(SQLDataType.TEXT) || requestedDataType.equals(SQLDataType.VARCHAR) || requestedDataType.equals(SQLDataType.JSONB))
         {
             return getMaxVarChar();
         }
 
-        return sqlDataType;
+        return requestedDataType;
     }
 
     @Override
-    public SQLDataType matchDataType(SQLDataType sqlDataType) {
-        if (sqlDataType.equals(SQLDataType.JSONB))
+    public SQLDataType matchingValue(SQLDataType requestedDataType) {
+        if (requestedDataType.equals(SQLDataType.JSONB))
         {
             return SQLDataType.TEXT;
         }
 
-        return sqlDataType;
+        return requestedDataType;
     }
 
     @Override
-    public SQLDataType alterDataTypeTo(SQLDataType sqlDataType) {
-        return matchDataType(sqlDataType);
+    public void alterColumnType(JDBCConnection jdbcConnection, Class<?> tableName, String columnName, SQLDataType sqlDataType) {
+        var keyRow = jdbcConnection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
+                .alterTable(tableName)
+                .alterColumn(columnName, sqlDataType)
+                .create();
+
+        keyRow.asIgnore();
     }
 
+
     @Override
-    public String alterColumnUsingStatement(Enum<?> columnName, SQLDataType sqlDataType) {
-        JexxaLogger.getLogger(getClass()).warn("Alter column: No 'USING' statement available to alter column {}  with type {} ", columnName, sqlDataType);
-        return "";
+    public void renameColumn(JDBCConnection jdbcConnection, String tableName, String oldColumnName, String newColumnName) {
+        var renameColumnCommand =  "ALTER TABLE "
+                + tableName.toLowerCase()
+                + " RENAME COLUMN "
+                + oldColumnName.toLowerCase()
+                + " TO "
+                +  newColumnName.toLowerCase();
+
+        var renameCommand = new JDBCCommand(
+                ()->jdbcConnection,
+                renameColumnCommand,
+                List.of()
+        );
+        renameCommand.asIgnore();
     }
 
 
     @Override
-    public SQLDataType alterPrimaryKeyTo(SQLDataType sqlDataType) {
-        if (sqlDataType.equals(SQLDataType.TEXT) || sqlDataType.equals(SQLDataType.VARCHAR) || sqlDataType.equals(SQLDataType.JSONB))
-        {
-            return SQLDataType.VARCHAR;
-        }
-
-        return sqlDataType;
+    public boolean columnExist(JDBCConnection jdbcConnection, String tableName, String columnName) {
+        return false;
     }
 
     private static SQLDataType maxVarChar(int maxSize) { return new SQLDataType("VARCHAR("+maxSize +") ");}

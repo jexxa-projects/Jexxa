@@ -124,21 +124,30 @@ public class JDBCTableBuilder<T extends Enum<T>> extends JDBCBuilder<T>
             return alterColumn(element, newDataType, "");
         }
 
+        public JDBCTableBuilder<T> alterColumn(String element, SQLDataType newDataType )
+        {
+            return alterColumn(element, newDataType, "");
+        }
+
         public JDBCTableBuilder<T> alterColumn(T element, SQLDataType newDataType, String usingStatement )
+        {
+            return alterColumn(element.name(), newDataType, usingStatement);
+        }
+
+        public JDBCTableBuilder<T> alterColumn(String element, SQLDataType newDataType, String usingStatement )
         {
             addCommaSeparatorIfRequired();
 
             commandBuilder
                     .getStatementBuilder()
                     .append(ALTER_COLUMN)
-                    .append(element.name())
+                    .append(element)
                     .append(BLANK)
                     .append(TYPE)
                     .append(newDataType.toString())
                     .append(usingStatement);
 
-            return commandBuilder;
-        }
+            return commandBuilder;        }
 
 
         public JDBCColumnBuilder<T> addColumn(T element, SQLDataType dataType)

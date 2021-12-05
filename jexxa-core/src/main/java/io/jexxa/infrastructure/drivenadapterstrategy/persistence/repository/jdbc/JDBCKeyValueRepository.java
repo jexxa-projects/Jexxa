@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.JSONB;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository.KeyValueSchema.KEY;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository.KeyValueSchema.VALUE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE;
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
 public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRepository<T, K>
@@ -32,8 +32,8 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
     public enum KeyValueSchema
     {
-        KEY,
-        VALUE
+        REPOSITORY_KEY,
+        REPOSITORY_VALUE
     }
 
     public JDBCKeyValueRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
@@ -66,11 +66,11 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     public void remove(K key)
     {
         Objects.requireNonNull(key);
-        var jdbcKey = new JDBCObject(getJSONConverter().toJson(key), database.matchDataType(JSONB));
+        var jdbcKey = new JDBCObject(getJSONConverter().toJson(key), database.matchingValue(JSONB));
 
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .deleteFrom(aggregateClazz)
-                .where(KEY)
+                .where(REPOSITORY_KEY)
                 .isEqual(jdbcKey)
                 .create();
 
@@ -112,8 +112,8 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
         var command = getConnection().createCommand(KeyValueSchema.class)
                 .update(aggregateClazz)
-                .set(VALUE, valueToJSONB(aggregate))
-                .where(KEY)
+                .set(REPOSITORY_VALUE, valueToJSONB(aggregate))
+                .where(REPOSITORY_KEY)
                 .isEqual(primaryKeyToJSONB(keyFunction.apply(aggregate)))
                 .create();
 
@@ -126,9 +126,9 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         Objects.requireNonNull(primaryKey);
 
         var query = getConnection().createQuery(KeyValueSchema.class)
-                .select(VALUE)
+                .select(REPOSITORY_VALUE)
                 .from(aggregateClazz)
-                .where(KEY)
+                .where(REPOSITORY_KEY)
                 .isEqual(primaryKeyToJSONB(primaryKey))
                 .create();
 
@@ -144,7 +144,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
     public List<T> get()
     {
         var query = getConnection().createQuery(KeyValueSchema.class)
-                .select(VALUE)
+                .select(REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .create();
 
@@ -160,6 +160,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         if (properties.containsKey(JDBCConnection.JDBC_AUTOCREATE_TABLE))
         {
             autocreateTableKeyValue();
+            renameKeyValueColumns();
             alterKeyValueRows();
         }
     }
@@ -170,9 +171,9 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
             var command = getConnection().createTableCommand(KeyValueSchema.class)
                     .createTableIfNotExists(aggregateClazz)
-                    .addColumn(KEY, database.matchPrimaryKey(JSONB))
+                    .addColumn(REPOSITORY_KEY, database.matchingPrimaryKey(JSONB))
                     .addConstraint(PRIMARY_KEY)
-                    .addColumn(VALUE, database.matchDataType(JSONB))
+                    .addColumn(REPOSITORY_VALUE, database.matchingValue(JSONB))
                     .create();
 
             command.asIgnore();
@@ -185,30 +186,32 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
     protected void alterKeyValueRows()
     {
-        var keyRow = getConnection().createTableCommand(KeyValueSchema.class)
-                .alterTable(aggregateClazz)
-                .alterColumn(KEY, database.alterPrimaryKeyTo(JSONB), database.alterColumnUsingStatement(KEY, JSONB))
-                .create();
+        database.alterColumnType(getConnection(), aggregateClazz, REPOSITORY_KEY.name(), database.matchingPrimaryKey(JSONB));
 
-        keyRow.asIgnore();
+        database.alterColumnType(getConnection(), aggregateClazz, REPOSITORY_VALUE.name(), database.matchingValue(JSONB));
+    }
 
-        var valueRow = getConnection().createTableCommand(KeyValueSchema.class)
-                .alterTable(aggregateClazz)
-                .alterColumn(VALUE, database.alterDataTypeTo(JSONB), database.alterColumnUsingStatement(VALUE, JSONB))
-                .create();
+    protected void renameKeyValueColumns()
+    {
+        if (database.columnExist(getConnection(), aggregateClazz.getSimpleName(), "key"))
+        {
+            database.renameColumn(getConnection(), aggregateClazz.getSimpleName(), "key", REPOSITORY_KEY.name());
+        }
 
-        valueRow.asIgnore();
-
+        if (database.columnExist(getConnection(), aggregateClazz.getSimpleName(), "value"))
+        {
+            database.renameColumn(getConnection(), aggregateClazz.getSimpleName(), "value", REPOSITORY_VALUE.name());
+        }
     }
 
 
     protected JDBCObject primaryKeyToJSONB(Object value)
     {
-        return new JDBCObject(JSONManager.getJSONConverter().toJson(value), database.matchPrimaryKey(JSONB));
+        return new JDBCObject(JSONManager.getJSONConverter().toJson(value), database.matchingPrimaryKey(JSONB));
     }
 
     protected JDBCObject valueToJSONB(Object value)
     {
-        return new JDBCObject(JSONManager.getJSONConverter().toJson(value), database.matchDataType(JSONB));
+        return new JDBCObject(JSONManager.getJSONConverter().toJson(value), database.matchingValue(JSONB));
     }
 }

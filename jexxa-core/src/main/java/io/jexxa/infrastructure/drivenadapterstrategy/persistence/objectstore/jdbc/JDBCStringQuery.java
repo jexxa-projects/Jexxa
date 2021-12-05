@@ -42,7 +42,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataSchema> extends 
 
         var jdbcQuery = getConnection()
                 .createQuery(metaData)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlStartValue)
@@ -59,7 +59,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataSchema> extends 
 
         var jdbcQuery = getConnection()
                 .createQuery(metaData)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlEndValue)
@@ -76,7 +76,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataSchema> extends 
 
         var jdbcQuery = getConnection()
                 .createQuery(metaData)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlIncludeValue)
@@ -93,7 +93,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataSchema> extends 
 
         var jdbcQuery = getConnection()
                 .createQuery(metaData)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .like(sqlEqualValue)
@@ -110,7 +110,7 @@ public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataSchema> extends 
 
         var jdbcQuery = getConnection()
                 .createQuery(metaData)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .notLike(sqlIncludeValue)

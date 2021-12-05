@@ -40,7 +40,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataSchema> extends JDBCObje
 
         var jdbcQuery = getConnection()
                 .createQuery(metaDataSchema)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isGreaterOrEqual(sqlStartValue)
@@ -57,7 +57,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataSchema> extends JDBCObje
 
         var jdbcQuery = getConnection()
                 .createQuery(metaDataSchema)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isGreaterThan(sqlStartValue)
@@ -75,7 +75,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataSchema> extends JDBCObje
 
         var jdbcQuery = getConnection()
                 .createQuery(metaDataSchema)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isGreaterOrEqual(sqlStartValue)
@@ -96,7 +96,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataSchema> extends JDBCObje
 
         var jdbcQuery = getConnection()
                 .createQuery(metaDataSchema)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isGreaterOrEqual(sqlStartValue)
@@ -117,7 +117,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataSchema> extends JDBCObje
         //"select value from %s where %s <= %s",
         var jdbcQuery = getConnection()
                 .createQuery(metaDataSchema)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isLessOrEqual(sqlEndValue)
@@ -135,7 +135,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataSchema> extends JDBCObje
         //"select value from %s where %s <= %s",
         var jdbcQuery = getConnection()
                 .createQuery(metaDataSchema)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isLessThan(sqlEndValue)
@@ -151,7 +151,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataSchema> extends JDBCObje
         var sqlValue = numericTag.getFromValue(value);
         var jdbcQuery = getConnection()
                 .createQuery(metaDataSchema)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isEqual(sqlValue)
@@ -166,7 +166,7 @@ class JDBCNumericQuery<T,S, M extends Enum<M> & MetadataSchema> extends JDBCObje
         var sqlValue = numericTag.getFromValue(value);
         var jdbcQuery = getConnection()
                 .createQuery(metaDataSchema)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isNotEqual(sqlValue)

@@ -1,16 +1,32 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database;
 
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 
+/**
+ * IDatabase pro
+ */
 public interface IDatabase
 {
-    SQLDataType matchPrimaryKey(SQLDataType sqlDataType);
+    /**
+     * Match the desired data type for primary keys to a data type suppoerted by the database.
+     *
+     * @param requestedDataType data type that is requested by the application
+     * @return SQL data type that is supported by the database and most likely fits to the requested data type
+     */
+    SQLDataType matchingPrimaryKey(SQLDataType requestedDataType);
 
-    SQLDataType matchDataType(SQLDataType sqlDataType);
+    /**
+     * Match the desired data type for values to a data type suppoerted by the database
+     *
+     * @param requestedDataType data type that is requested by the application
+     * @return SQL data type that is supported by the database and most likely fits to the requested data type
+     */
+    SQLDataType matchingValue(SQLDataType requestedDataType);
 
-    SQLDataType alterDataTypeTo(SQLDataType sqlDataType);
+    void alterColumnType(JDBCConnection jdbcConnection, Class<?> tableName, String columnName, SQLDataType sqlDataType);
 
-    String alterColumnUsingStatement(Enum<?> columnName, SQLDataType sqlDataType);
+    void renameColumn(JDBCConnection jdbcConnection, String tableName, String oldColumnName, String newColumnName);
 
-    SQLDataType alterPrimaryKeyTo(SQLDataType sqlDataType);
+    boolean columnExist(JDBCConnection jdbcConnection, String tableName, String columnName);
 }
