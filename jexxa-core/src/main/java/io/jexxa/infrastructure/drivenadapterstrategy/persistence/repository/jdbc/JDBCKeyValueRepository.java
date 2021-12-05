@@ -194,7 +194,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
         var valueRow = getConnection().createTableCommand(KeyValueSchema.class)
                 .alterTable(aggregateClazz)
-                .alterColumn(VALUE, database.alterDataTypeTo(JSONB), database.alterColumnUsingStatement(KEY, JSONB))
+                .alterColumn(VALUE, database.alterDataTypeTo(JSONB), database.alterColumnUsingStatement(VALUE, JSONB))
                 .create();
 
         valueRow.asIgnore();
