@@ -98,9 +98,9 @@ class MessageListenerIT
 
         @Override
         @JMSConfiguration(destination = TOPIC_DESTINATION, messagingType = JMSConfiguration.MessagingType.TOPIC)
-        public void onMessage(TextMessage textMessage) throws JMSException
+        public void onMessage(String textMessage)
         {
-            this.textMessage = textMessage.getText();
+            this.textMessage = textMessage;
 
         }
 

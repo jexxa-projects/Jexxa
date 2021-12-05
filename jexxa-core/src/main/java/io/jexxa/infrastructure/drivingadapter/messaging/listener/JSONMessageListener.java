@@ -3,13 +3,11 @@ package io.jexxa.infrastructure.drivingadapter.messaging.listener;
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
+import javax.jms.*;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -18,19 +16,29 @@ import io.jexxa.utils.JexxaLogger;
 @SuppressWarnings("unused")
 public abstract class JSONMessageListener implements MessageListener
 {
-    private TextMessage currentMessage;
+    private Message currentMessage;
     private String currentMessageText;
 
-    public abstract void onMessage(TextMessage message) throws JMSException;
+    public abstract void onMessage(String message);
 
     @Override
     public final void onMessage(Message message)
     {
         try
         {
-            this.currentMessage = (TextMessage) message;
-            this.currentMessageText = currentMessage.getText();
-            onMessage( currentMessage );
+            this.currentMessage = message;
+            if (message instanceof TextMessage)
+            {
+                TextMessage textMessage = (TextMessage)currentMessage;
+                this.currentMessageText = textMessage.getText();
+            } else if ( message instanceof BytesMessage) {
+                BytesMessage byteMessage = (BytesMessage) currentMessage;
+                byte[] payload = new byte[(int) byteMessage.getBodyLength()];
+                byteMessage.readBytes(payload);
+                this.currentMessageText = Arrays.toString(payload);
+            }
+
+            onMessage( currentMessageText );
         }
         catch (RuntimeException | JMSException exception)
         {
@@ -40,7 +48,7 @@ public abstract class JSONMessageListener implements MessageListener
         currentMessageText = null;
     }
 
-    protected final TextMessage getCurrentMessage()
+    protected final Message getCurrentMessage()
     {
         return currentMessage;
     }
