@@ -3,7 +3,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.DOUBLE_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.FLOAT_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.INTEGER_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.REPOSITORY_KEY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.NUMERIC_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.STRING_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.TIMESTAMP_TYPE;
@@ -47,7 +47,7 @@ class JDBCQueryIT
         var querySelectOr = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(STRING_TYPE)
                 .from(JDBCTestDatabase.class)
-                .where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .where(REPOSITORY_KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .or(STRING_TYPE).isNull()
                 .create();
 
@@ -66,7 +66,7 @@ class JDBCQueryIT
         var querySelectAnd = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(STRING_TYPE)
                 .from(JDBCTestDatabase.class)
-                .where(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .where(REPOSITORY_KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .and(STRING_TYPE).isNull()
                 .create();
 
@@ -85,7 +85,7 @@ class JDBCQueryIT
         var queryMultiSelect = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .select(STRING_TYPE, INTEGER_TYPE)
                 .from(JDBCTestDatabase.class)
-                .where(KEY)
+                .where(REPOSITORY_KEY)
                 .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
 
@@ -104,7 +104,7 @@ class JDBCQueryIT
         var querySelectAll = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
                 .selectAll()
                 .from(JDBCTestDatabase.class)
-                .where(KEY)
+                .where(REPOSITORY_KEY)
                 .isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
 
@@ -142,7 +142,7 @@ class JDBCQueryIT
         jdbcConnection = setupDatabase(properties);
 
         var querySelectAll = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
-                .selectCount(KEY)
+                .selectCount(REPOSITORY_KEY)
                 .from(JDBCTestDatabase.class)
                 .create();
 
@@ -185,9 +185,9 @@ class JDBCQueryIT
         jdbcConnection = setupDatabase(properties);
 
         var querySelectAsc = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
-                .select(KEY)
+                .select(REPOSITORY_KEY)
                 .from(JDBCTestDatabase.class)
-                .orderBy(KEY, SQLOrder.ASC)
+                .orderBy(REPOSITORY_KEY, SQLOrder.ASC)
                 .create();
 
         //Act
@@ -208,9 +208,9 @@ class JDBCQueryIT
         jdbcConnection = setupDatabase(properties);
 
         var querySelectDesc = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
-                .select(KEY)
+                .select(REPOSITORY_KEY)
                 .from(JDBCTestDatabase.class)
-                .orderBy(KEY, SQLOrder.DESC)
+                .orderBy(REPOSITORY_KEY, SQLOrder.DESC)
                 .create();
 
         //Act
@@ -236,7 +236,7 @@ class JDBCQueryIT
     private Stream<String> readSelectAll(ResultSet resultSet ) throws SQLException
     {
         return Stream.of(
-                String.valueOf( resultSet.getInt(KEY.name())),
+                String.valueOf( resultSet.getInt(REPOSITORY_KEY.name())),
                 resultSet.getString(STRING_TYPE.name()),
                 String.valueOf( resultSet.getInt(INTEGER_TYPE.name())),
                 String.valueOf( resultSet.getFloat(FLOAT_TYPE.name())),

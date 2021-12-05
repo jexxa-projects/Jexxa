@@ -3,7 +3,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.DOUBLE_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.FLOAT_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.INTEGER_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.REPOSITORY_KEY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.NUMERIC_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.STRING_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.TIMESTAMP_TYPE;
@@ -38,7 +38,7 @@ public class JDBCTestDatabase
 
     enum JDBCTestSchema
     {
-        KEY,
+        REPOSITORY_KEY,
         INTEGER_TYPE,
         NUMERIC_TYPE,
         FLOAT_TYPE,
@@ -90,7 +90,7 @@ public class JDBCTestDatabase
     {
         var createTableCommand = jdbcConnection.createTableCommand(JDBCTestSchema.class)
                 .createTableIfNotExists(JDBCTestDatabase.class)
-                .addColumn(KEY, INTEGER)
+                .addColumn(REPOSITORY_KEY, INTEGER)
                 .addConstraint(PRIMARY_KEY)
                 .addColumn(INTEGER_TYPE, INTEGER)
                 .addColumn(NUMERIC_TYPE, NUMERIC)

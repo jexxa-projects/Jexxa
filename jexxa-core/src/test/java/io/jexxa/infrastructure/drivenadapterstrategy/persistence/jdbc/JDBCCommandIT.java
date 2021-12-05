@@ -1,6 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.REPOSITORY_KEY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.STRING_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBC_REPOSITORY_CONFIG;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_WITH_NONNULL_VALUES;
@@ -11,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Properties;
 
 import io.jexxa.TestConstants;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCObject;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -30,8 +32,8 @@ class JDBCCommandIT
 
         var deleteAllRowsQuery = jdbcConnection.createCommand(JDBCTestDatabase.JDBCTestSchema.class)
                 .deleteFrom(JDBCTestDatabase.class)
-                .where(KEY).isNotEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
-                .or(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .where(REPOSITORY_KEY).isNotEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .or(REPOSITORY_KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
 
         var validateNoEntriesQuery = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
@@ -56,9 +58,9 @@ class JDBCCommandIT
 
         var updateQuery = jdbcConnection.createCommand(JDBCTestDatabase.JDBCTestSchema.class) //Simulate an equal statement
                 .update(JDBCTestDatabase.class)
-                .set(STRING_TYPE, updatedString)
-                .where(KEY).isGreaterOrEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
-                .and(KEY).isLessOrEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .set(STRING_TYPE, new JDBCObject( updatedString, SQLDataType.TEXT ))
+                .where(REPOSITORY_KEY).isGreaterOrEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .and(REPOSITORY_KEY).isLessOrEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
 
         var validateUpdate = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
