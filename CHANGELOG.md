@@ -5,9 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[4.0.0] - yyyy-mm-dd
-### Changed - Required for migration
+### Changed - Required for migration!
 - Jexxa-Core: Repository related interfaces and classes were moved from `...persistence` into sub-package `...persistence.repository` -> You have to update your imports
 
+- Jexxa-Core: `JDBCKeyValueRepository` and `JDBCObjectStore` store data in `JSONB` format if a Postgres DB is used. IMPORTANT NOTE: 
+  - If `io.jexxa.jdbc.autocreate.table` is set to true key value fields are automatically converted to JSONB. 
+  - If `io.jexxa.jdbc.autocreate.table` is not set you have to update the tables by yourself to type `JSONB`.
+  - In case you have to downgrade to Jexxa < 4.0.0 you have to alter your tables manually back to `VCHAR` for row `KEY` and `TEXT` for row `VALUE`.    
 
 ## \[3.3.1] - 2021-11-26
 ### Fixed
