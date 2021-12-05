@@ -147,8 +147,8 @@ public class JDBCTableBuilder<T extends Enum<T>> extends JDBCBuilder<T>
                     .append(newDataType.toString())
                     .append(usingStatement);
 
-            return commandBuilder;        }
-
+            return commandBuilder;
+        }
 
         public JDBCColumnBuilder<T> addColumn(T element, SQLDataType dataType)
         {
