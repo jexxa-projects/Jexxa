@@ -4,7 +4,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnec
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 
 /**
- * IDatabase pro
+ * IDatabase provides a uniform interface to database operations that are vendor specific.
  */
 public interface IDatabase
 {
@@ -24,6 +24,13 @@ public interface IDatabase
      */
     SQLDataType matchingValue(SQLDataType requestedDataType);
 
+    /** Alter the type of a column 
+     * 
+     * @param jdbcConnection connection to execute the command 
+     * @param tableName type of the class that is affected 
+     * @param columnName name of the column 
+     * @param sqlDataType new data type which must be available for this database. To avoid conflicts call {@link #matchingPrimaryKey(SQLDataType)} or {@link #matchingValue(SQLDataType)}
+     */
     void alterColumnType(JDBCConnection jdbcConnection, Class<?> tableName, String columnName, SQLDataType sqlDataType);
 
     void renameColumn(JDBCConnection jdbcConnection, String tableName, String oldColumnName, String newColumnName);
