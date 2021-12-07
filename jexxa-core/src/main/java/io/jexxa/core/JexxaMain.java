@@ -1,15 +1,5 @@
 package io.jexxa.core;
 
-import java.lang.annotation.Annotation;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.Set;
-import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
-
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
@@ -18,6 +8,11 @@ import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.function.ThrowingConsumer;
 import org.slf4j.Logger;
+
+import java.lang.annotation.Annotation;
+import java.util.*;
+import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 
 /**
  * JexxaMain is the main entry point for your application to use Jexxa. Within each application only a single instance
@@ -32,6 +27,7 @@ public final class JexxaMain
 {
     public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
     private static final String JEXXA_CONTEXT_NAME =  "io.jexxa.context.name";
+    private static final String JEXXA_IMPORT =  "io.jexxa.config.import";
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JexxaMain.class);
 
@@ -55,6 +51,15 @@ public final class JexxaMain
     {
         this(contextName, System.getProperties());
     }
+    public JexxaMain(Class<?> context)
+    {
+        this(context.getSimpleName(), System.getProperties());
+    }
+    public JexxaMain(Class<?> context, Properties properties)
+    {
+        this(context.getSimpleName(), properties);
+    }
+
 
     /**
      * Creates the JexxaMain instance for your application with given context name.
@@ -81,6 +86,11 @@ public final class JexxaMain
         this.properties.putAll( System.getProperties() );  //add/overwrite system properties
         // 3. Use given properties because they have the highest priority
         this.properties.putAll( applicationProperties );  //add/overwrite given properties
+        // 4. import properties that are defined by '"io.jexxa.config.import"'
+        if( this.properties.containsKey(JEXXA_IMPORT) )
+        {
+            importProperties(this.properties.getProperty(JEXXA_IMPORT));
+        }
 
         this.addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
 
@@ -207,6 +217,15 @@ public final class JexxaMain
         return getBoundedContext().waitForShutdown();
     }
 
+    public void importProperties(String resource)
+    {
+        Optional.ofNullable(JexxaMain.class.getResourceAsStream(resource))
+                .ifPresentOrElse(
+                        ThrowingConsumer.exceptionLogger(properties::load),
+                        () -> {throw new IllegalArgumentException("Properties file " + resource + " not available. Please check the filename!");}
+                );
+
+    }
 
     @CheckReturnValue
     public BoundedContext getBoundedContext()

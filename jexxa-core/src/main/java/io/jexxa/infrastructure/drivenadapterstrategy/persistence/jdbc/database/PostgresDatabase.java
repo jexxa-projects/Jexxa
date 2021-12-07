@@ -13,18 +13,21 @@ public class PostgresDatabase extends GenericSQLDatabase
     }
 
     @Override
-    public SQLDataType matchingPrimaryKey(SQLDataType requestedDataType) {
+    public SQLDataType matchingPrimaryKey(SQLDataType requestedDataType)
+    {
         return requestedDataType;
     }
 
     @Override
-    public SQLDataType matchingValue(SQLDataType requestedDataType) {
+    public SQLDataType matchingValue(SQLDataType requestedDataType)
+    {
         return requestedDataType;
     }
 
 
     @Override
-    public void alterColumnType(JDBCConnection jdbcConnection, Class<?> tableName, String columnName, SQLDataType sqlDataType) {
+    public void alterColumnType(JDBCConnection jdbcConnection, Class<?> tableName, String columnName, SQLDataType sqlDataType)
+    {
         var keyRow = jdbcConnection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
                 .alterTable(tableName)
                 .alterColumn(columnName, sqlDataType, " USING " + columnName + "::" + sqlDataType)

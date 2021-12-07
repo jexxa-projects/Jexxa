@@ -41,7 +41,8 @@ public class GenericSQLDatabase implements IDatabase
     }
 
     @Override
-    public SQLDataType matchingPrimaryKey(SQLDataType requestedDataType) {
+    public SQLDataType matchingPrimaryKey(SQLDataType requestedDataType)
+    {
         if (requestedDataType.equals(SQLDataType.TEXT) || requestedDataType.equals(SQLDataType.VARCHAR) || requestedDataType.equals(SQLDataType.JSONB))
         {
             return getMaxVarChar();
@@ -51,7 +52,8 @@ public class GenericSQLDatabase implements IDatabase
     }
 
     @Override
-    public SQLDataType matchingValue(SQLDataType requestedDataType) {
+    public SQLDataType matchingValue(SQLDataType requestedDataType)
+    {
         if (requestedDataType.equals(SQLDataType.JSONB))
         {
             return SQLDataType.TEXT;
@@ -61,18 +63,19 @@ public class GenericSQLDatabase implements IDatabase
     }
 
     @Override
-    public void alterColumnType(JDBCConnection jdbcConnection, Class<?> tableName, String columnName, SQLDataType sqlDataType) {
-        var keyRow = jdbcConnection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
+    public void alterColumnType(JDBCConnection jdbcConnection, Class<?> tableName, String columnName, SQLDataType sqlDataType)
+    {
+        jdbcConnection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
                 .alterTable(tableName)
                 .alterColumn(columnName, sqlDataType)
-                .create();
-
-        keyRow.asIgnore();
+                .create()
+                .asIgnore();
     }
 
 
     @Override
-    public void renameColumn(JDBCConnection jdbcConnection, String tableName, String oldColumnName, String newColumnName) {
+    public void renameColumn(JDBCConnection jdbcConnection, String tableName, String oldColumnName, String newColumnName)
+    {
         var renameColumnCommand =  "ALTER TABLE "
                 + tableName.toLowerCase()
                 + " RENAME COLUMN "
@@ -90,7 +93,8 @@ public class GenericSQLDatabase implements IDatabase
 
 
     @Override
-    public boolean columnExist(JDBCConnection jdbcConnection, String tableName, String columnName) {
+    public boolean columnExist(JDBCConnection jdbcConnection, String tableName, String columnName)
+    {
         var columnExist = "SELECT column_name FROM information_schema.columns WHERE table_name= ?  and column_name= ? ";
         var query = new JDBCQuery(() -> jdbcConnection,
                 columnExist,
@@ -103,6 +107,9 @@ public class GenericSQLDatabase implements IDatabase
                 .findAny().isPresent();
     }
 
-    private static SQLDataType maxVarChar(int maxSize) { return new SQLDataType("VARCHAR("+maxSize +") ");}
+    private static SQLDataType maxVarChar(int maxSize)
+    {
+        return new SQLDataType("VARCHAR("+maxSize +") ");
+    }
 
 }
