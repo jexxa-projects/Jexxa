@@ -8,28 +8,23 @@ https://www.graalvm.org/java/quickstart/
 * XCODE (unter Macosx) muss installiert sein. Sonst Fehlermeldung, dass Foundation/Foundation.h nicht gefunden wird!! Es kann gut sein, dass auf anderen System ebenfalls System spezifische Entwicklungsumgebungen installiert werden müssen. 
 
 * set JAVA_HOME and path to graalvm directory
-  * export JAVA_HOME=/Volumes/WorkspaceMac/Entwicklung/Java/graalvm-ce-java17-21.3.0/Contents/Home
-      * export PATH=$JAVA_HOME/bin:$PATH
+  * export JAVA_HOME=/Volumes/WorkspaceMac/Entwicklung/Java/graalvm-ce-java11-21.3.0/Contents/Home
+  * export PATH=$JAVA_HOME/bin:$PATH
 
-      *   michael@Michaels-Mini HelloJexxa % echo $JAVA_HOME
-          *   /Volumes/WorkspaceMac/Entwicklung/Java/graalvm-ce-java17-21.3.0/Contents/Home
-      *   michael@Michaels-Mini HelloJexxa % echo $PATH
-          *   /Volumes/WorkspaceMac/Entwicklung/Java/graalvm-ce-java17-21.3.0/Contents/Home:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/Volumes/WorkspaceMac/Entwicklung/Java/jdk-11.0.2.jdk/Contents/Home/bin/:/opt/local/bin:/Volumes/WorkspaceMac/Applications/anaconda3/bin/:/opt/local/sbin:/Volumes/WorkspaceMac/Applications/apache-maven/bin/
-
-gu install native-image
+  * michael@Michaels-Mini HelloJexxa %  echo $JAVA_HOME  
+    * /Volumes/WorkspaceMac/Entwicklung/Java/graalvm-ce-java11-21.3.0/Contents/Hom
+    
+  * michael@Michaels-Mini HelloJexxa % echo $PATH
+      * /Volumes/WorkspaceMac/Entwicklung/Java/graalvm-ce-java11-21.3.0/Contents/Home/bin:/Volumes/WorkspaceMac/Entwicklung/Java/graalvm-ce-java11-21.0.0/Contents/Home/bin:/Volumes/WorkspaceMac/Entwicklung/Java/graalvm-ce-java17-21.3.0/Contents/Home/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/Volumes/WorkspaceMac/Entwicklung/Java/jdk-11.0.2.jdk/Contents/Home//bin:/Volumes/WorkspaceMac/Entwicklung/Java/jdk-11.0.2.jdk/Contents/Home/bin/:/opt/local/bin:/Volumes/WorkspaceMac/Applications/anaconda3/bin/:/opt/local/sbin:/Volumes/WorkspaceMac/Applications/apache-maven/bin/
+      * gu install native-image
 
 *   mvn clean install
 
 *   Resources require explicit config file -> https://www.graalvm.org/reference-manual/native-image/Resources/ 
     *   michael@Michaels-Mini HelloJexxa % java -agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/native-image -jar target/hellojexxa-jar-with-dependencies.jar
 
-    * Entfernen aus src/main/resources/META-INF/native-image/reflect-config.json  {
-        "name":"org.graalvm.compiler.hotspot.management.AggregatedMemoryPoolBean",
-        "allPublicConstructors":true
-    
-      },
-    
-    *   In tutorial HelloJexxa nochmal 
+   
+*   In tutorial HelloJexxa nochmal 
         michael@Michaels-Mini HelloJexxa % mvn clean install -e (damit reflection stuff eingebunden wird) 
 
 ## Works
@@ -44,6 +39,7 @@ gu install native-image
 
 * Static HTML files (included in jar) do not work 
 * JMX Access does not work at least when using JConsole
+* Graalvm graalvm-ce-java17-21.3.0 does not work for some reason -> Error message when starting the application  
 
 ## Untested
 *   Everything else 

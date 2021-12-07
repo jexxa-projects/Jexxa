@@ -39,6 +39,38 @@
   "name":"[Z"}
 ,
 {
+  "name":"apple.security.AppleProvider",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+  "name":"com.sun.crypto.provider.AESCipher$General",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+  "name":"com.sun.crypto.provider.ARCFOURCipher",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+  "name":"com.sun.crypto.provider.ChaCha20Cipher$ChaCha20Poly1305",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+  "name":"com.sun.crypto.provider.DESCipher",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+  "name":"com.sun.crypto.provider.DESedeCipher",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+  "name":"com.sun.crypto.provider.DHParameters",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+  "name":"com.sun.crypto.provider.GaloisCounterMode$AESGCM",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
   "name":"com.sun.crypto.provider.HmacPKCS12PBECore$HmacPKCS12PBE_SHA1",
   "methods":[{"name":"<init>","parameterTypes":[] }]}
 ,
@@ -121,59 +153,39 @@
   "name":"io.jexxa.tutorials.HelloJexxa",
   "queryAllPublicMethods":true,
   "queryAllPublicConstructors":true,
-  "methods":[
-    {"name":"<init>","parameterTypes":[] }, 
-    {"name":"greetings","parameterTypes":[] }
-  ]}
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
 ,
 {
   "name":"java.lang.Boolean",
-  "fields":[{"name":"TYPE"}],
-  "queriedMethods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]}
+  "fields":[{"name":"TYPE"}]}
 ,
 {
   "name":"java.lang.Byte",
-  "fields":[{"name":"TYPE"}],
-  "queriedMethods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]}
+  "fields":[{"name":"TYPE"}]}
 ,
 {
   "name":"java.lang.Character",
   "fields":[{"name":"TYPE"}]}
 ,
 {
-  "name":"java.lang.Class",
-  "methods":[{"name":"getModule","parameterTypes":[] }]}
+  "name":"java.lang.Deprecated",
+  "queryAllPublicMethods":true}
 ,
 {
   "name":"java.lang.Double",
-  "fields":[{"name":"TYPE"}],
-  "queriedMethods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]}
+  "fields":[{"name":"TYPE"}]}
 ,
 {
   "name":"java.lang.Float",
-  "fields":[{"name":"TYPE"}],
-  "queriedMethods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]}
+  "fields":[{"name":"TYPE"}]}
 ,
 {
   "name":"java.lang.Integer",
-  "fields":[{"name":"TYPE"}],
-  "queriedMethods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]}
+  "fields":[{"name":"TYPE"}]}
 ,
 {
   "name":"java.lang.Long",
-  "fields":[{"name":"TYPE"}],
-  "queriedMethods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]}
-,
-{
-  "name":"java.lang.Module",
-  "methods":[
-    {"name":"getLayer","parameterTypes":[] }, 
-    {"name":"getName","parameterTypes":[] }
-  ]}
-,
-{
-  "name":"java.lang.ModuleLayer",
-  "methods":[{"name":"configuration","parameterTypes":[] }]}
+  "fields":[{"name":"TYPE"}]}
 ,
 {
   "name":"java.lang.Object",
@@ -181,8 +193,7 @@
 ,
 {
   "name":"java.lang.Short",
-  "fields":[{"name":"TYPE"}],
-  "queriedMethods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]}
+  "fields":[{"name":"TYPE"}]}
 ,
 {
   "name":"java.lang.StackTraceElement",
@@ -253,22 +264,6 @@
   "queryAllPublicMethods":true}
 ,
 {
-  "name":"java.lang.module.Configuration",
-  "methods":[{"name":"findModule","parameterTypes":["java.lang.String"] }]}
-,
-{
-  "name":"java.lang.module.ModuleReference",
-  "methods":[{"name":"location","parameterTypes":[] }]}
-,
-{
-  "name":"java.lang.module.ResolvedModule",
-  "methods":[{"name":"reference","parameterTypes":[] }]}
-,
-{
-  "name":"java.lang.reflect.AccessibleObject",
-  "fields":[{"name":"override"}]}
-,
-{
   "name":"java.math.BigDecimal"}
 ,
 {
@@ -281,13 +276,13 @@
   "name":"java.security.KeyStoreSpi"}
 ,
 {
-  "name":"java.security.MessageDigestSpi"}
-,
-{
   "name":"java.security.SecureRandomParameters"}
 ,
 {
-  "name":"java.sql.Date"}
+  "name":"java.security.interfaces.RSAPrivateKey"}
+,
+{
+  "name":"java.security.interfaces.RSAPublicKey"}
 ,
 {
   "name":"java.util.Date"}
@@ -364,10 +359,6 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]}
 ,
 {
-  "name":"org.eclipse.jetty.util.ModuleLocation",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
   "name":"org.eclipse.jetty.util.log.Slf4jLog",
   "methods":[{"name":"<init>","parameterTypes":[] }]}
 ,
@@ -411,11 +402,15 @@
   "queryAllPublicConstructors":true}
 ,
 {
-  "name":"sun.misc.Unsafe",
-  "fields":[{"name":"theUnsafe"}]}
+  "name":"sun.security.pkcs12.PKCS12KeyStore",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
 ,
 {
-  "name":"sun.security.pkcs12.PKCS12KeyStore",
+  "name":"sun.security.provider.DSA$SHA224withDSA",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+  "name":"sun.security.provider.DSA$SHA256withDSA",
   "methods":[{"name":"<init>","parameterTypes":[] }]}
 ,
 {
@@ -435,11 +430,43 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]}
 ,
 {
+  "name":"sun.security.provider.SHA2$SHA224",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+  "name":"sun.security.provider.SHA2$SHA256",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+  "name":"sun.security.provider.SHA5$SHA384",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+  "name":"sun.security.provider.SHA5$SHA512",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
   "name":"sun.security.provider.X509Factory",
   "methods":[{"name":"<init>","parameterTypes":[] }]}
 ,
 {
+  "name":"sun.security.rsa.PSSParameters",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
   "name":"sun.security.rsa.RSAKeyFactory$Legacy",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+  "name":"sun.security.rsa.RSAPSSSignature",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+  "name":"sun.security.rsa.RSASignature$SHA224withRSA",
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+  "name":"sun.security.rsa.RSASignature$SHA256withRSA",
   "methods":[{"name":"<init>","parameterTypes":[] }]}
 ,
 {
