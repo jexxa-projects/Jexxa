@@ -372,8 +372,14 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private SslContextFactory getSslContextFactory()
     {
+        var keystoreURL = RESTfulRPCAdapter.class.getResource("/" + getKeystore());
+        if ( keystoreURL == null )
+        {
+            throw new IllegalArgumentException("Keystore " + getKeystore() + " is not available! Please check the setting " + KEYSTORE);
+        }
+
         var sslContextFactory = new SslContextFactory.Server();
-        sslContextFactory.setKeyStorePath(Objects.requireNonNull(RESTfulRPCAdapter.class.getResource("/" + getKeystore())).toExternalForm());
+        sslContextFactory.setKeyStorePath(keystoreURL.toExternalForm());
         sslContextFactory.setKeyStorePassword(getKeystorePassword());
         return sslContextFactory;
     }
