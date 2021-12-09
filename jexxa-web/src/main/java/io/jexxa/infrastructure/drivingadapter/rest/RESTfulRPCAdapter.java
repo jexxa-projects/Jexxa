@@ -1,15 +1,5 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -28,6 +18,15 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
+
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
 
 
 public class RESTfulRPCAdapter implements IDrivingAdapter
@@ -372,10 +371,24 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private SslContextFactory getSslContextFactory()
     {
-        var keystoreURL = RESTfulRPCAdapter.class.getResource("/" + getKeystore());
+        URL keystoreURL = RESTfulRPCAdapter.class.getResource("/" + getKeystore());
+
         if ( keystoreURL == null )
         {
-            throw new IllegalArgumentException("Keystore " + getKeystore() + " is not available! Please check the setting " + KEYSTORE);
+            File file = new File(getKeystore());
+            if(file.exists() && !file.isDirectory())
+            {
+                try
+                {
+                    keystoreURL =file.toURI().toURL();
+                } catch (MalformedURLException e)
+                {
+                    throw new IllegalArgumentException(e);
+                }
+            } else
+            {
+                throw new IllegalArgumentException("File Keystore " + getKeystore() + " is not available! Please check the setting " + KEYSTORE);
+            }
         }
 
         var sslContextFactory = new SslContextFactory.Server();
