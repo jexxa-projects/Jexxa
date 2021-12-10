@@ -13,7 +13,7 @@ import java.util.Properties;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
+import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_PORT;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RESTfulRPCJava8DateTimeTest
@@ -31,8 +31,8 @@ class RESTfulRPCJava8DateTimeTest
         var defaultHost = "localhost";
         var defaultPort = 7500;
 
-        properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
-        properties.put(HTTP_PORT_PROPERTY, Integer.toString(defaultPort));
+        properties.put(JexxaWebProperties.JEXXA_REST_HOST, defaultHost);
+        properties.put(JEXXA_REST_PORT, Integer.toString(defaultPort));
 
         objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
         objectUnderTest.register(java8DateTimeApplicationService);

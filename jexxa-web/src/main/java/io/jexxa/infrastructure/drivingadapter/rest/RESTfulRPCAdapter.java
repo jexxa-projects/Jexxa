@@ -31,15 +31,6 @@ import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.c
 
 public class RESTfulRPCAdapter implements IDrivingAdapter
 {
-    public static final String HOST_PROPERTY = "io.jexxa.rest.host";
-    public static final String HTTP_PORT_PROPERTY = "io.jexxa.rest.port";
-    public static final String HTTPS_PORT_PROPERTY = "io.jexxa.rest.https_port";
-    public static final String KEYSTORE = "io.jexxa.rest.keystore";
-    public static final String KEYSTORE_PASSWORD = "io.jexxa.rest.keystore_password";
-    public static final String KEYSTORE_PASSWORD_FILE = "io.jexxa.rest.file.keystore_password";
-    public static final String OPEN_API_PATH = "io.jexxa.rest.open_api_path";
-    public static final String STATIC_FILES_ROOT = "io.jexxa.rest.static_files_root";
-    public static final String STATIC_FILES_EXTERNAL = "io.jexxa.rest.static_files_external";
 
 
     private final JSONConverter jsonConverter = JSONManager.getJSONConverter();
@@ -56,13 +47,13 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     {
         this.properties = properties;
 
-        validateIsTrue(isHTTPEnabled() || isHTTPSEnabled(), "Neither HTTP (" + HTTP_PORT_PROPERTY + ") nor HTTPS (" + HTTPS_PORT_PROPERTY + ") is enabled!");
+        validateIsTrue(isHTTPEnabled() || isHTTPSEnabled(), "Neither HTTP (" + JexxaWebProperties.JEXXA_REST_PORT + ") nor HTTPS (" + JexxaWebProperties.JEXXA_REST_HTTPS_PORT + ") is enabled!");
 
         if ( isHTTPSEnabled() )
         {
-            validateIsTrue( properties.containsKey( KEYSTORE ), "You need to define a location for keystore ("+ KEYSTORE+ ")");
-            validateIsTrue( properties.containsKey( KEYSTORE_PASSWORD ) || properties.containsKey( KEYSTORE_PASSWORD_FILE )
-                    , "You need to define a location for keystore-password ("+ KEYSTORE_PASSWORD+ "or" + KEYSTORE_PASSWORD_FILE+ ")");
+            validateIsTrue( properties.containsKey( JexxaWebProperties.JEXXA_REST_KEYSTORE), "You need to define a location for keystore ("+ JexxaWebProperties.JEXXA_REST_KEYSTORE + ")");
+            validateIsTrue( properties.containsKey( JexxaWebProperties.JEXXA_REST_KEYSTORE_PASSWORD) || properties.containsKey( JexxaWebProperties.JEXXA_REST_FILE_KEYSTORE_PASSWORD)
+                    , "You need to define a location for keystore-password ("+ JexxaWebProperties.JEXXA_REST_KEYSTORE_PASSWORD + "or" + JexxaWebProperties.JEXXA_REST_FILE_KEYSTORE_PASSWORD + ")");
         }
 
         setupJavalin();
@@ -153,39 +144,39 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     boolean isHTTPEnabled()
     {
-        return properties.containsKey(HTTP_PORT_PROPERTY);
+        return properties.containsKey(JexxaWebProperties.JEXXA_REST_PORT);
     }
 
     boolean isHTTPSEnabled()
     {
-        return properties.containsKey(HTTPS_PORT_PROPERTY);
+        return properties.containsKey(JexxaWebProperties.JEXXA_REST_HTTPS_PORT);
     }
 
     String getHostname()
     {
-        return properties.getProperty(HOST_PROPERTY, "0.0.0.0");
+        return properties.getProperty(JexxaWebProperties.JEXXA_REST_HOST, "0.0.0.0");
     }
 
     String getKeystore()
     {
-        return properties.getProperty(KEYSTORE, "");
+        return properties.getProperty(JexxaWebProperties.JEXXA_REST_KEYSTORE, "");
     }
 
     String getKeystorePassword()
     {
-        return new Secret(properties, KEYSTORE_PASSWORD, KEYSTORE_PASSWORD_FILE)
+        return new Secret(properties, JexxaWebProperties.JEXXA_REST_KEYSTORE_PASSWORD, JexxaWebProperties.JEXXA_REST_FILE_KEYSTORE_PASSWORD)
                 .getSecret();
     }
 
 
     private int getHTTPPortFromProperties()
     {
-        return Integer.parseInt(properties.getProperty(HTTP_PORT_PROPERTY, "0"));
+        return Integer.parseInt(properties.getProperty(JexxaWebProperties.JEXXA_REST_PORT, "0"));
     }
 
     private int getHTTPSPortFromProperties()
     {
-        return Integer.parseInt(properties.getProperty(HTTPS_PORT_PROPERTY, "0"));
+        return Integer.parseInt(properties.getProperty(JexxaWebProperties.JEXXA_REST_HTTPS_PORT, "0"));
     }
 
     /**
@@ -331,14 +322,14 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         javalinConfig.jsonMapper(new JexxaJSONMapper());
         Location location = Location.CLASSPATH;
 
-        if ( properties.getProperty(STATIC_FILES_EXTERNAL, "false").equalsIgnoreCase("true") )
+        if ( properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_EXTERNAL, "false").equalsIgnoreCase("true") )
         {
             location = Location.EXTERNAL;
         }
 
-        if ( properties.containsKey(STATIC_FILES_ROOT) )
+        if ( properties.containsKey(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT) )
         {
-            javalinConfig.addStaticFiles(properties.getProperty(STATIC_FILES_ROOT), location );
+            javalinConfig.addStaticFiles(properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT), location );
         }
 
         this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig );
@@ -387,7 +378,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                 }
             } else
             {
-                throw new IllegalArgumentException("File Keystore " + getKeystore() + " is not available! Please check the setting " + KEYSTORE);
+                throw new IllegalArgumentException("File Keystore " + getKeystore() + " is not available! Please check the setting " + JexxaWebProperties.JEXXA_REST_KEYSTORE);
             }
         }
 

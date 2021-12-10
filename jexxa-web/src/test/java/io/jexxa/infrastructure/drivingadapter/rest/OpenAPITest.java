@@ -20,8 +20,8 @@ import java.util.Properties;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.OPEN_API_PATH;
+import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_PORT;
+import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -41,9 +41,9 @@ class OpenAPITest
         var defaultHost = "localhost";
         var defaultPort = 7500;
 
-        properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
-        properties.put(HTTP_PORT_PROPERTY, Integer.toString(defaultPort));
-        properties.put(OPEN_API_PATH, "swagger-docs");
+        properties.put(JexxaWebProperties.JEXXA_REST_HOST, defaultHost);
+        properties.put(JEXXA_REST_PORT, Integer.toString(defaultPort));
+        properties.put(JEXXA_REST_OPEN_API_PATH, "swagger-docs");
 
         objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
         objectUnderTest.register(simpleApplicationService);

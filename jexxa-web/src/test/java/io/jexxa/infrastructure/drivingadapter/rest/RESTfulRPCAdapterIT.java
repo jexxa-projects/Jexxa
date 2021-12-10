@@ -21,7 +21,6 @@ import java.util.Properties;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.*;
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,9 +50,9 @@ class RESTfulRPCAdapterIT
         var defaultHost = "localhost";
         var defaultPort = 7500;
 
-        properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
-        properties.put(HTTP_PORT_PROPERTY, Integer.toString(defaultPort));
-        properties.put(STATIC_FILES_ROOT, "/public");
+        properties.put(JexxaWebProperties.JEXXA_REST_HOST, defaultHost);
+        properties.put(JexxaWebProperties.JEXXA_REST_PORT, Integer.toString(defaultPort));
+        properties.put(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT, "/public");
 
         objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
         objectUnderTest.register(simpleApplicationService);
@@ -93,7 +92,7 @@ class RESTfulRPCAdapterIT
     {
         //Arrange
         Properties properties = new Properties();
-        properties.setProperty(HTTP_PORT_PROPERTY, String.valueOf(0));
+        properties.setProperty(JexxaWebProperties.JEXXA_REST_PORT, String.valueOf(0));
 
         var secondAdapter = RESTfulRPCAdapter.createAdapter(properties);
         secondAdapter.register(simpleApplicationService);
@@ -352,8 +351,8 @@ class RESTfulRPCAdapterIT
     {
         //Arrange
         objectUnderTest.stop();
-        properties.put(STATIC_FILES_ROOT, "src/test/resources/public/");
-        properties.put(STATIC_FILES_EXTERNAL, "true");
+        properties.put(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT, "src/test/resources/public/");
+        properties.put(JexxaWebProperties.JEXXA_REST_STATIC_FILES_EXTERNAL, "true");
 
         objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
         objectUnderTest.register(simpleApplicationService);

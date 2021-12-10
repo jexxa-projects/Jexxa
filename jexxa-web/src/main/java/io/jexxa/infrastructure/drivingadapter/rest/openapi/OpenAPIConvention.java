@@ -31,7 +31,10 @@ import java.time.*;
 import java.util.*;
 
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_ENUMS_USING_TO_STRING;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.OPEN_API_PATH;
+import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
+import static io.jexxa.utils.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
+import static io.jexxa.utils.JexxaCoreProperties.JEXXA_CONTEXT_VERSION;
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 
 @SuppressWarnings("java:S1602") // required to avoid ambiguous warnings
 public class OpenAPIConvention
@@ -52,15 +55,15 @@ public class OpenAPIConvention
     }
     private void initOpenAPI()
     {
-        if (properties.containsKey(OPEN_API_PATH))
+        if (properties.containsKey(JEXXA_REST_OPEN_API_PATH))
         {
             var applicationInfo = new Info()
-                    .version("1.0")
-                    .description(properties.getProperty("io.jexxa.context.name", "Unknown Context"))
-                    .title(properties.getProperty("io.jexxa.context.name", "Unknown Context"));
+                    .version(properties.getProperty(JEXXA_CONTEXT_VERSION, "1.0"))
+                    .description("Auto generated OpenAPI for " + properties.getProperty(JEXXA_CONTEXT_NAME, "Unknown Context"))
+                    .title(properties.getProperty(JEXXA_CONTEXT_NAME, "Unknown Context"));
 
             openApiOptions = new OpenApiOptions(applicationInfo)
-                    .path("/" + properties.getProperty(OPEN_API_PATH));
+                    .path("/" + properties.getProperty(JEXXA_REST_OPEN_API_PATH));
 
             //Show all fields of an ValueObject
             openApiOptions.getJacksonMapper().setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
@@ -69,8 +72,8 @@ public class OpenAPIConvention
             javalinConfig.enableCorsForAllOrigins();
 
             openApiOptions.defaultDocumentation(doc -> {
-                doc.json("400", BadRequestResponse.class);
-                doc.json("400", BadRequestResponse.class);
+                doc.json(String.valueOf(HTTP_BAD_REQUEST), BadRequestResponse.class);
+                doc.json(String.valueOf(HTTP_BAD_REQUEST), BadRequestResponse.class);
             });
         }
     }
@@ -83,7 +86,7 @@ public class OpenAPIConvention
     public Optional<String> getPath()
     {
         if (isEnabled()) {
-            return Optional.of("/" + properties.getProperty(OPEN_API_PATH));
+            return Optional.of("/" + properties.getProperty(JEXXA_REST_OPEN_API_PATH));
         }
 
         return Optional.empty();
