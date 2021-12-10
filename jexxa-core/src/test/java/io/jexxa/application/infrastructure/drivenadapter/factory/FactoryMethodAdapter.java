@@ -1,9 +1,9 @@
 package io.jexxa.application.infrastructure.drivenadapter.factory;
 
+import io.jexxa.application.domainservice.IFactoryMethodService;
+
 import java.util.Objects;
 import java.util.Properties;
-
-import io.jexxa.application.domainservice.IFactoryMethodService;
 
 /**
  * Simulate a valid driven adapter with static factory method expecting a Properties

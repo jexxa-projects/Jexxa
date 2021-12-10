@@ -1,10 +1,10 @@
 package io.jexxa.tutorials.bookstore.domain.aggregate;
 
-import java.util.Optional;
-
+import io.jexxa.tutorials.bookstore.domain.businessexception.BookNotInStockException;
 import io.jexxa.tutorials.bookstore.domain.domainevent.BookSoldOut;
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
-import io.jexxa.tutorials.bookstore.domain.businessexception.BookNotInStockException;
+
+import java.util.Optional;
 
 public final class Book
 {

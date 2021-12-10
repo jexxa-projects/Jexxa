@@ -1,19 +1,16 @@
 package io.jexxa.core;
 
+import io.jexxa.utils.JexxaCoreProperties;
+import io.jexxa.utils.JexxaLogger;
+
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 
-import io.jexxa.utils.JexxaLogger;
-
 @SuppressWarnings("unused")
 public class BoundedContext
 {
-    public static final String CONTEXT_VERSION = "io.jexxa.context.version";
-    public static final String CONTEXT_REPOSITORY = "io.jexxa.context.repository";
-    public static final String CONTEXT_NAME = "io.jexxa.context.name";
-    public static final String CONTEXT_TIMESTAMP = "io.jexxa.context.build.timestamp";
 
     private boolean isRunning = false;
     private boolean isWaiting = false;
@@ -50,10 +47,10 @@ public class BoundedContext
         var properties = jexxaMain.getProperties();
 
         return VersionInfo.of()
-                .version(properties.getProperty(CONTEXT_VERSION, ""))
-                .repository(properties.getProperty(CONTEXT_REPOSITORY, ""))
-                .buildTimestamp(properties.getProperty(CONTEXT_TIMESTAMP, ""))
-                .projectName(properties.getProperty(CONTEXT_NAME, ""))
+                .version(properties.getProperty(JexxaCoreProperties.JEXXA_CONTEXT_VERSION, ""))
+                .repository(properties.getProperty(JexxaCoreProperties.JEXXA_CONTEXT_REPOSITORY, ""))
+                .buildTimestamp(properties.getProperty(JexxaCoreProperties.JEXXA_CONTEXT_BUILD_TIMESTAMP, ""))
+                .projectName(properties.getProperty(JexxaCoreProperties.JEXXA_CONTEXT_NAME, ""))
                 .create();
     }
 

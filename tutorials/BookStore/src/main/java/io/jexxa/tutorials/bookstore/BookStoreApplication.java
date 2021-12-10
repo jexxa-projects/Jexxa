@@ -15,11 +15,7 @@ import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import io.jexxa.tutorials.bookstore.applicationservice.BookStoreService;
 import io.jexxa.tutorials.bookstore.domainservice.ReferenceLibrary;
 import io.jexxa.utils.JexxaLogger;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 
 public final class BookStoreApplication
 {

@@ -1,19 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.DOUBLE_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.FLOAT_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.INTEGER_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.REPOSITORY_KEY;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.NUMERIC_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.STRING_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.TIMESTAMP_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.DOUBLE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.FLOAT;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.INTEGER;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.NUMERIC;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.TEXT;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.TIMESTAMP;
+import io.jexxa.utils.JexxaJDBCProperties;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -21,6 +8,10 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Properties;
 import java.util.stream.Stream;
+
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.*;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.*;
 
 public class JDBCTestDatabase
 {
@@ -52,19 +43,19 @@ public class JDBCTestDatabase
     @SuppressWarnings("unused")
     public static Stream<Properties> repositoryConfigJDBC() {
         var postgresProperties = new Properties();
-        postgresProperties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JDBCConnection.JDBC_PASSWORD, ADMIN);
-        postgresProperties.put(JDBCConnection.JDBC_USERNAME, ADMIN);
-        postgresProperties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
-        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_DRIVER, "org.postgresql.Driver");
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_PASSWORD, ADMIN);
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_USERNAME, ADMIN);
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE, "true");
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
 
         var h2Properties = new Properties();
-        h2Properties.put(JDBCConnection.JDBC_DRIVER, "org.h2.Driver");
-        h2Properties.put(JDBCConnection.JDBC_PASSWORD, ADMIN);
-        h2Properties.put(JDBCConnection.JDBC_USERNAME, ADMIN);
-        h2Properties.put(JDBCConnection.JDBC_URL, "jdbc:h2:mem:jexxa;DB_CLOSE_DELAY=-1");
-        h2Properties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
+        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_DRIVER, "org.h2.Driver");
+        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_PASSWORD, ADMIN);
+        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_USERNAME, ADMIN);
+        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_URL, "jdbc:h2:mem:jexxa;DB_CLOSE_DELAY=-1");
+        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE, "true");
 
         return Stream.of(postgresProperties, h2Properties);
     }

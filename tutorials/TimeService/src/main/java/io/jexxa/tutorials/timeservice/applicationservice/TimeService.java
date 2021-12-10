@@ -1,11 +1,11 @@
 package io.jexxa.tutorials.timeservice.applicationservice;
 
+import io.jexxa.tutorials.timeservice.domainservice.IMessageDisplay;
+import io.jexxa.tutorials.timeservice.domainservice.ITimePublisher;
+
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-
-import io.jexxa.tutorials.timeservice.domainservice.IMessageDisplay;
-import io.jexxa.tutorials.timeservice.domainservice.ITimePublisher;
 
 @SuppressWarnings("unused")
 public class TimeService

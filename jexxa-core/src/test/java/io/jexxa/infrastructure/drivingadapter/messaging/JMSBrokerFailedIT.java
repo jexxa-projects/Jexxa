@@ -1,20 +1,19 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
-import java.time.Duration;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import javax.jms.Connection;
-import javax.jms.JMSException;
-
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.utils.messaging.ITMessageSender;
 import io.jexxa.infrastructure.utils.messaging.TopicListener;
 import org.junit.jupiter.api.Test;
+
+import javax.jms.Connection;
+import javax.jms.JMSException;
+import java.time.Duration;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class JMSBrokerFailedIT
 {

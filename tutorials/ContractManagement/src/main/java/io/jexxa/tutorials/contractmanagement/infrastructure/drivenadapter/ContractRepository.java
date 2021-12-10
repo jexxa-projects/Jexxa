@@ -1,16 +1,5 @@
 package io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.booleanTag;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numberTag;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.stringTag;
-import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractSchema.ADVISOR;
-import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractSchema.CONTRACT_NUMBER;
-import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractSchema.CONTRACT_SIGNED;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
@@ -18,6 +7,13 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.met
 import io.jexxa.tutorials.contractmanagement.domain.aggregate.Contract;
 import io.jexxa.tutorials.contractmanagement.domain.valueobject.ContractNumber;
 import io.jexxa.tutorials.contractmanagement.domainservice.IContractRepository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.*;
+import static io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter.ContractRepository.ContractSchema.*;
 
 @SuppressWarnings("unused")
 public class ContractRepository  implements IContractRepository

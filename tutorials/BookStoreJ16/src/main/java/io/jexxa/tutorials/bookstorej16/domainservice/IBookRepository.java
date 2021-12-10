@@ -1,11 +1,11 @@
 package io.jexxa.tutorials.bookstorej16.domainservice;
 
-import java.util.List;
-import java.util.Optional;
-
 import io.jexxa.addend.applicationcore.Repository;
 import io.jexxa.tutorials.bookstorej16.domain.aggregate.Book;
 import io.jexxa.tutorials.bookstorej16.domain.valueobject.ISBN13;
+
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IBookRepository

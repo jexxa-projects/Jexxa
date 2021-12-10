@@ -1,7 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.jdbc;
 
 import com.google.gson.Gson;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.DatabaseManager;
@@ -11,6 +10,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IOb
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
+import io.jexxa.utils.JexxaJDBCProperties;
 import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
@@ -149,7 +149,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
     private void manageObjectStore(Properties properties)
     {
         Objects.requireNonNull(properties);
-        if (properties.containsKey(JDBCConnection.JDBC_AUTOCREATE_TABLE))
+        if (properties.containsKey(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE))
         {
             autoCreateDatabase();
             renameKeyValueColumns();

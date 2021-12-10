@@ -1,13 +1,13 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb;
 
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.NumericTag;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.NumericTag;
 
 class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
 {

@@ -1,9 +1,5 @@
 package io.jexxa.tutorials.bookstorej16.domainservice;
 
-import static io.jexxa.tutorials.bookstorej16.domain.domainevent.BookSoldOut.bookSoldOut;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import io.jexxa.core.JexxaMain;
 import io.jexxa.jexxatest.JexxaTest;
 import io.jexxa.tutorials.bookstorej16.BookStoreJ16Application;
@@ -11,6 +7,10 @@ import io.jexxa.tutorials.bookstorej16.domain.domainevent.BookSoldOut;
 import io.jexxa.tutorials.bookstorej16.domain.valueobject.ISBN13;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static io.jexxa.tutorials.bookstorej16.domain.domainevent.BookSoldOut.bookSoldOut;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class IDomainEventPublisherTest
 {

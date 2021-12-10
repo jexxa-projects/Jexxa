@@ -1,17 +1,16 @@
 package io.jexxa.infrastructure.drivingadapter.messaging.listener;
 
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import io.jexxa.utils.JexxaLogger;
 
+import javax.jms.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import javax.jms.*;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import io.jexxa.utils.JexxaLogger;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
 @SuppressWarnings("unused")
 public abstract class JSONMessageListener implements MessageListener

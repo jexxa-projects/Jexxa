@@ -1,17 +1,16 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
+import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.utils.function.ThrowingConsumer;
+
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.MBeanRegistrationException;
+import javax.management.NotCompliantMBeanException;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
-
-import javax.management.InstanceAlreadyExistsException;
-import javax.management.MBeanRegistrationException;
-import javax.management.NotCompliantMBeanException;
-
-import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.jexxa.utils.function.ThrowingConsumer;
 
 public class JMXAdapter implements IDrivingAdapter
 {

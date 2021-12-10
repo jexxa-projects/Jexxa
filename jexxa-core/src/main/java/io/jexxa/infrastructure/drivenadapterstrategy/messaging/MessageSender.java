@@ -1,8 +1,8 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
-import java.util.Properties;
-
 import io.jexxa.utils.annotations.CheckReturnValue;
+
+import java.util.Properties;
 
 public abstract class MessageSender
 {

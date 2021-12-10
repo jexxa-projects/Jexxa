@@ -1,6 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import io.jexxa.utils.JexxaJDBCProperties;
 
 import java.util.Properties;
 
@@ -8,7 +8,7 @@ public class DatabaseManager
 {
     public static IDatabase getDatabase(Properties properties)
     {
-        var jdbcDriver = properties.getProperty(JDBCConnection.JDBC_URL);
+        var jdbcDriver = properties.getProperty(JexxaJDBCProperties.JEXXA_JDBC_URL);
 
         if ( jdbcDriver.toLowerCase().contains("postgres") )
         {

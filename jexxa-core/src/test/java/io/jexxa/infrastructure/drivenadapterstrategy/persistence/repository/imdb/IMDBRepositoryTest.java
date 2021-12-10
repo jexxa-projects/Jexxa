@@ -1,22 +1,17 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Properties;
-
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+
+import java.util.Properties;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.UNIT_TEST)

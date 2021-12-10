@@ -1,15 +1,15 @@
 package io.jexxa.tutorials.bookstorej.applicationservice;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import io.jexxa.addend.applicationcore.ApplicationService;
 import io.jexxa.tutorials.bookstorej.domain.aggregate.Book;
 import io.jexxa.tutorials.bookstorej.domain.businessexception.BookNotInStockException;
 import io.jexxa.tutorials.bookstorej.domain.valueobject.ISBN13;
 import io.jexxa.tutorials.bookstorej.domainservice.IBookRepository;
 import io.jexxa.tutorials.bookstorej.domainservice.IDomainEventPublisher;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 @ApplicationService

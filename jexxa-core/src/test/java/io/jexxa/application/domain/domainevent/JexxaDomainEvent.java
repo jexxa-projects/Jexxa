@@ -1,9 +1,9 @@
 package io.jexxa.application.domain.domainevent;
 
-import java.util.Objects;
-
 import io.jexxa.application.annotation.DomainEvent;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
+
+import java.util.Objects;
 
 @DomainEvent
 public class JexxaDomainEvent

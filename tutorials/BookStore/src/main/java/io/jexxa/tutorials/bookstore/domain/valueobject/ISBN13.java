@@ -1,8 +1,8 @@
 package io.jexxa.tutorials.bookstore.domain.valueobject;
 
-import java.util.Objects;
-
 import org.apache.commons.lang3.Validate;
+
+import java.util.Objects;
 
 /**
  * IMPORTANT NOTE: This is a simplified ISBN13 number which only validates the checksum because this is sufficient for this tutorial

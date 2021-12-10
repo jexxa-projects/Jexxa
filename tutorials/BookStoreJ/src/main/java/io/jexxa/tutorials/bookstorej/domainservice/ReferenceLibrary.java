@@ -1,11 +1,11 @@
 package io.jexxa.tutorials.bookstorej.domainservice;
 
-import java.util.Objects;
-import java.util.stream.Stream;
-
 import io.jexxa.addend.applicationcore.DomainService;
 import io.jexxa.tutorials.bookstorej.domain.aggregate.Book;
 import io.jexxa.tutorials.bookstorej.domain.valueobject.ISBN13;
+
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @DomainService
 public class ReferenceLibrary

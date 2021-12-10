@@ -1,12 +1,12 @@
 package io.jexxa.application.infrastructure.drivenadapter.messaging;
 
-import java.util.Properties;
-
 import io.jexxa.application.domain.domainevent.JexxaDomainEvent;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.domainservice.IJexxaPublisher;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
+
+import java.util.Properties;
 
 @SuppressWarnings("unused")
 public class JexxaMessageSender implements IJexxaPublisher

@@ -1,10 +1,10 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.DatabaseManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.IDatabase;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
+import io.jexxa.utils.JexxaJDBCProperties;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONManager;
 import org.slf4j.Logger;
@@ -157,7 +157,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
     private void manageDBTable(Properties properties)
     {
-        if (properties.containsKey(JDBCConnection.JDBC_AUTOCREATE_TABLE))
+        if (properties.containsKey(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE))
         {
             autocreateTableKeyValue();
             renameKeyValueColumns();

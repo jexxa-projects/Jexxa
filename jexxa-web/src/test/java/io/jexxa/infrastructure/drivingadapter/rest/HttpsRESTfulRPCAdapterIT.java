@@ -1,20 +1,5 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.util.Properties;
-import java.util.stream.Stream;
-
-import javax.net.ssl.SSLContext;
-
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import kong.unirest.Unirest;
 import kong.unirest.apache.ApacheClient;
@@ -27,6 +12,20 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import javax.net.ssl.SSLContext;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.util.Properties;
+import java.util.stream.Stream;
+
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class HttpsRESTfulRPCAdapterIT
 {

@@ -7,25 +7,14 @@ import io.jexxa.utils.function.ThrowingConsumer;
 import io.jexxa.utils.properties.Secret;
 import org.apache.commons.lang3.Validate;
 
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
-import javax.jms.Session;
+import javax.jms.*;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.lang.IllegalStateException;
 
 
 public class JMSAdapter implements AutoCloseable, IDrivingAdapter

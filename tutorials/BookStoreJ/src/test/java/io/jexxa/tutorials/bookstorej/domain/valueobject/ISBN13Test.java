@@ -1,8 +1,8 @@
 package io.jexxa.tutorials.bookstorej.domain.valueobject;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ISBN13Test
 {

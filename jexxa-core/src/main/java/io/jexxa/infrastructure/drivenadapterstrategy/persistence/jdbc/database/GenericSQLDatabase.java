@@ -5,6 +5,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnec
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
+import io.jexxa.utils.JexxaJDBCProperties;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class GenericSQLDatabase implements IDatabase
     }
 
     private SQLDataType getMaxVarChar() {
-        var jdbcDriver = properties.getProperty(JDBCConnection.JDBC_URL);
+        var jdbcDriver = properties.getProperty(JexxaJDBCProperties.JEXXA_JDBC_URL);
 
         if ( jdbcDriver.toLowerCase().contains("oracle") )
         {

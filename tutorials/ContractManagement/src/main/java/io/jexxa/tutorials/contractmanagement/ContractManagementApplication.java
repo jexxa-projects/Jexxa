@@ -8,11 +8,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.jdb
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import io.jexxa.tutorials.contractmanagement.applicationservice.ContractService;
 import io.jexxa.utils.JexxaLogger;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 
 public class ContractManagementApplication
 {

@@ -1,15 +1,15 @@
 package io.jexxa.core.factory;
 
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ScanResult;
+import org.apache.commons.lang3.Validate;
+
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import io.github.classgraph.ClassGraph;
-import io.github.classgraph.ScanResult;
-import org.apache.commons.lang3.Validate;
 
 final class DependencyScanner
 {

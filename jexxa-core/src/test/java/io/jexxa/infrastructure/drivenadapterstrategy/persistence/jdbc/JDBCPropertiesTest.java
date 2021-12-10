@@ -1,16 +1,17 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.util.Properties;
-
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
+import io.jexxa.utils.JexxaJDBCProperties;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+
+import java.util.Properties;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Tag(TestConstants.UNIT_TEST)
 @Execution(ExecutionMode.CONCURRENT)
@@ -29,8 +30,8 @@ class JDBCPropertiesTest
 
         //2.Arrange invalid properties: Invalid Driver
         Properties propertiesInvalidDriver = new Properties();
-        propertiesInvalidDriver.put(JDBCConnection.JDBC_DRIVER, "org.unknown.Driver");
-        propertiesInvalidDriver.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
+        propertiesInvalidDriver.put(JexxaJDBCProperties.JEXXA_JDBC_DRIVER, "org.unknown.Driver");
+        propertiesInvalidDriver.put(JexxaJDBCProperties.JEXXA_JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
 
         //2.Assert invalid properties: Invalid Driver
         assertThrows(IllegalArgumentException.class, () -> new JDBCKeyValueRepository<>(
@@ -41,8 +42,8 @@ class JDBCPropertiesTest
 
         //3. Arrange invalid properties: Invalid URL
         Properties propertiesInvalidURL = new Properties();
-        propertiesInvalidURL.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
-        propertiesInvalidURL.put(JDBCConnection.JDBC_URL, "jdbc:unknown://localhost:5432/jexxa");
+        propertiesInvalidURL.put(JexxaJDBCProperties.JEXXA_JDBC_DRIVER, "org.postgresql.Driver");
+        propertiesInvalidURL.put(JexxaJDBCProperties.JEXXA_JDBC_URL, "jdbc:unknown://localhost:5432/jexxa");
 
         //3.Assert invalid properties: Invalid URL
         assertThrows(IllegalArgumentException.class, () -> new JDBCKeyValueRepository<>(

@@ -1,10 +1,10 @@
 package io.jexxa.tutorials.contractmanagement.domainservice;
 
-import java.time.Instant;
-import java.util.List;
-
 import io.jexxa.addend.applicationcore.InfrastructureService;
 import io.jexxa.tutorials.contractmanagement.domain.domainevent.ContractSigned;
+
+import java.time.Instant;
+import java.util.List;
 
 @InfrastructureService
 public interface IDomainEventStore

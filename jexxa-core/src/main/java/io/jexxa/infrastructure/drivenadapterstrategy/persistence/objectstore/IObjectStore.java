@@ -1,7 +1,7 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
 
 /**
  * An {@link IObjectStore} extends an {@link IRepository} by adding additional metadata to managed objects.

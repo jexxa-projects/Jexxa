@@ -1,13 +1,10 @@
 package io.jexxa.infrastructure.drivingadapter.messaging.listener;
 
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import io.jexxa.utils.JexxaLogger;
 
 import java.util.Objects;
 
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
-
-import io.jexxa.utils.JexxaLogger;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
 @SuppressWarnings("unused")
 public abstract class TypedMessageListener<T> extends JSONMessageListener

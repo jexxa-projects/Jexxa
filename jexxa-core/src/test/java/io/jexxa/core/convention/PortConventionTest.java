@@ -1,13 +1,13 @@
 package io.jexxa.core.convention;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import io.jexxa.application.applicationservice.InvalidConstructorApplicationService;
+import io.jexxa.application.domainservice.IJexxaEntityRepository;
+import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 import java.util.Properties;
 
-import io.jexxa.application.applicationservice.InvalidConstructorApplicationService;
-import io.jexxa.application.domainservice.IJexxaEntityRepository;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PortConventionTest
 {

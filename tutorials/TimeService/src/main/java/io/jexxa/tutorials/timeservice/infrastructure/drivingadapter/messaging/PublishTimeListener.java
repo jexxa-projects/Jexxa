@@ -1,12 +1,12 @@
 package io.jexxa.tutorials.timeservice.infrastructure.drivingadapter.messaging;
 
-import static io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration.MessagingType.TOPIC;
-
-import java.time.LocalTime;
-
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.TypedMessageListener;
 import io.jexxa.tutorials.timeservice.applicationservice.TimeService;
+
+import java.time.LocalTime;
+
+import static io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration.MessagingType.TOPIC;
 
 @SuppressWarnings("unused")
 public final class PublishTimeListener extends TypedMessageListener<LocalTime>

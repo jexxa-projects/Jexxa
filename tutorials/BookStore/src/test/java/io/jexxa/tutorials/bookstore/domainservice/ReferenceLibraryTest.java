@@ -1,14 +1,14 @@
 package io.jexxa.tutorials.bookstore.domainservice;
 
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import io.jexxa.core.JexxaMain;
 import io.jexxa.jexxatest.JexxaTest;
 import io.jexxa.tutorials.bookstore.BookStoreApplication;
 import io.jexxa.tutorials.bookstore.applicationservice.BookStoreService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class ReferenceLibraryTest
 {

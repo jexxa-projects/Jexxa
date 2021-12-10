@@ -1,9 +1,9 @@
 package io.jexxa.application.infrastructure.drivingadapter;
 
+import io.jexxa.application.applicationservice.SimpleApplicationService;
+
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import io.jexxa.application.applicationservice.SimpleApplicationService;
 
 public class ProxyPortAdapter
 {

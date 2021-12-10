@@ -1,25 +1,24 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
-import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTimeout;
-
-import java.time.Duration;
-import java.util.List;
-import java.util.Properties;
-import java.util.stream.IntStream;
-
-import javax.jms.Message;
-import javax.jms.MessageListener;
-
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.IncrementApplicationService;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.utils.messaging.ITMessageSender;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import java.time.Duration;
+import java.util.List;
+import java.util.Properties;
+import java.util.stream.IntStream;
+
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 @Tag(TestConstants.INTEGRATION_TEST)
 class MultipleJMSReceiverIT

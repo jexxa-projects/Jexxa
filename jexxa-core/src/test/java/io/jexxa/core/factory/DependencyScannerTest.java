@@ -1,14 +1,5 @@
 package io.jexxa.core.factory;
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVING_ADAPTER;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
-
 import io.jexxa.TestConstants;
 import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.annotation.UnavailableDuringRuntime;
@@ -18,6 +9,12 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+
+import java.util.List;
+
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DRIVING_ADAPTER;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Execution(ExecutionMode.CONCURRENT)
 @Tag(TestConstants.UNIT_TEST)

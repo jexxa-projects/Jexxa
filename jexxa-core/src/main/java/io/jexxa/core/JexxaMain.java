@@ -4,6 +4,7 @@ import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.utils.JexxaCoreProperties;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.function.ThrowingConsumer;
@@ -26,8 +27,6 @@ import java.util.function.Consumer;
 public final class JexxaMain
 {
     public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
-    private static final String JEXXA_CONTEXT_NAME =  "io.jexxa.context.name";
-    private static final String JEXXA_IMPORT =  "io.jexxa.config.import";
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JexxaMain.class);
 
@@ -78,7 +77,7 @@ public final class JexxaMain
 
         // Handle properties in following forder:
         // 0. Add default JEXXA_CONTEXT_MAIN
-        this.properties.put(JEXXA_CONTEXT_NAME, contextName);
+        this.properties.put(JexxaCoreProperties.JEXXA_CONTEXT_NAME, contextName);
 
         // 1. Load properties from application.properties because they have the lowest priority
         loadJexxaApplicationProperties(this.properties);
@@ -87,15 +86,15 @@ public final class JexxaMain
         // 3. Use given properties because they have the highest priority
         this.properties.putAll( applicationProperties );  //add/overwrite given properties
         // 4. import properties that are defined by '"io.jexxa.config.import"'
-        if( this.properties.containsKey(JEXXA_IMPORT) )
+        if( this.properties.containsKey(JexxaCoreProperties.JEXXA_CONFIG_IMPORT) )
         {
-            importProperties(this.properties.getProperty(JEXXA_IMPORT));
+            importProperties(this.properties.getProperty(JexxaCoreProperties.JEXXA_CONFIG_IMPORT));
         }
 
         this.addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
 
         //Create BoundedContext
-        this.boundedContext = new BoundedContext(this.properties.getProperty(JEXXA_CONTEXT_NAME), this);
+        this.boundedContext = new BoundedContext(this.properties.getProperty(JexxaCoreProperties.JEXXA_CONTEXT_NAME), this);
 
         setExceptionHandler();
     }

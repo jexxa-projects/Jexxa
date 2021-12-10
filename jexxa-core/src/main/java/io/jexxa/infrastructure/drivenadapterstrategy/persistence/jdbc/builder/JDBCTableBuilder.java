@@ -1,9 +1,9 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder;
 
-import java.util.function.Supplier;
-
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCCommand;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+
+import java.util.function.Supplier;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.*;
 

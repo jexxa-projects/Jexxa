@@ -1,9 +1,9 @@
 package io.jexxa.application.domain.aggregate;
 
-import java.util.Objects;
-
 import io.jexxa.application.annotation.Aggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
+
+import java.util.Objects;
 
 @Aggregate
 public class JexxaAggregate

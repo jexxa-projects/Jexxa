@@ -21,14 +21,9 @@ import java.util.Properties;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.STATIC_FILES_EXTERNAL;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.STATIC_FILES_ROOT;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.*;
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("SameParameterValue")
 @Execution(ExecutionMode.SAME_THREAD)

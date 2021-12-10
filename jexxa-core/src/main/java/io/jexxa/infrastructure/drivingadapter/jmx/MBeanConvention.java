@@ -1,10 +1,11 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
 
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
-import static java.util.stream.Collectors.toList;
-import static javax.management.MBeanOperationInfo.UNKNOWN;
+import com.google.gson.JsonObject;
+import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.utils.JexxaLogger;
 
+import javax.management.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -14,23 +15,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import javax.management.Attribute;
-import javax.management.AttributeList;
-import javax.management.DynamicMBean;
-import javax.management.MBeanInfo;
-import javax.management.MBeanOperationInfo;
-import javax.management.MBeanParameterInfo;
-import javax.management.MalformedObjectNameException;
-import javax.management.ObjectName;
-
-import com.google.gson.JsonObject;
-import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.jexxa.utils.JexxaLogger;
+import static io.jexxa.utils.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import static java.util.stream.Collectors.toList;
+import static javax.management.MBeanOperationInfo.UNKNOWN;
 
 public class MBeanConvention implements DynamicMBean
 {
-    public static final String JEXXA_CONTEXT_NAME = "io.jexxa.context.name";
-
     private final Object object;
     private final String contextName;
 

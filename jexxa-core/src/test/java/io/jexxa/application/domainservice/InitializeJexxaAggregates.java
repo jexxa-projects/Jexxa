@@ -1,9 +1,9 @@
 package io.jexxa.application.domainservice;
 
-import java.util.stream.IntStream;
-
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
+
+import java.util.stream.IntStream;
 
 public class InitializeJexxaAggregates
 {

@@ -1,11 +1,11 @@
 package io.jexxa.tutorials.contractmanagement.domainservice;
 
-import java.util.List;
-import java.util.Optional;
-
 import io.jexxa.addend.applicationcore.Repository;
 import io.jexxa.tutorials.contractmanagement.domain.aggregate.Contract;
 import io.jexxa.tutorials.contractmanagement.domain.valueobject.ContractNumber;
+
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IContractRepository

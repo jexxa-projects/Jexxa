@@ -1,21 +1,20 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository;
 
-import static io.jexxa.TestConstants.INTEGRATION_TEST;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.getPostgresProperties;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.util.Properties;
-
 import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+
+import java.util.Properties;
+
+import static io.jexxa.TestConstants.INTEGRATION_TEST;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.getPostgresProperties;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(INTEGRATION_TEST)

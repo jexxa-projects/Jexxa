@@ -1,18 +1,8 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.IOException;
-import java.util.Optional;
-import java.util.Properties;
-
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +10,13 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+
+import java.io.IOException;
+import java.util.Optional;
+import java.util.Properties;
+
+import static io.jexxa.core.JexxaMain.JEXXA_APPLICATION_PROPERTIES;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
@@ -34,7 +31,7 @@ class JDBCKeyValueRepositoryIT
         //Arrange
         aggregate = JexxaEntity.create(new JexxaValueObject(42));
         var properties = new Properties();
-        properties.load(getClass().getResourceAsStream(JexxaMain.JEXXA_APPLICATION_PROPERTIES));
+        properties.load(getClass().getResourceAsStream(JEXXA_APPLICATION_PROPERTIES));
 
         objectUnderTest = new JDBCKeyValueRepository<>(
                 JexxaEntity.class,

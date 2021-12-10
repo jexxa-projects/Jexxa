@@ -1,9 +1,9 @@
 package io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording;
 
+import io.jexxa.utils.annotations.CheckReturnValue;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import io.jexxa.utils.annotations.CheckReturnValue;
 
 /**
  * Singleton which manages all instances of MessageRecorder

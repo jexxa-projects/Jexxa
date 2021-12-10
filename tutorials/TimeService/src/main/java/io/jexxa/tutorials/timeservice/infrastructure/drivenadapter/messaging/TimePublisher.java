@@ -1,11 +1,11 @@
 package io.jexxa.tutorials.timeservice.infrastructure.drivenadapter.messaging;
 
-import java.time.LocalTime;
-import java.util.Properties;
-
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.tutorials.timeservice.domainservice.ITimePublisher;
+
+import java.time.LocalTime;
+import java.util.Properties;
 
 @SuppressWarnings("unused")
 public class TimePublisher implements ITimePublisher
