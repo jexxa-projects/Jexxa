@@ -10,11 +10,16 @@ import org.apache.commons.lang3.Validate;
 import javax.jms.*;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.util.*;
+import java.lang.IllegalStateException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.lang.IllegalStateException;
 
 
 public class JMSAdapter implements AutoCloseable, IDrivingAdapter
@@ -66,7 +71,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
         catch (JMSException e)
         {
-            throw new IllegalStateException("Driving Adapter could not start receiving messages", e);
+            throw new java.lang.IllegalStateException("Driving Adapter could not start receiving messages", e);
         }
 
     }
@@ -109,13 +114,13 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             {
                 consumer = session.createConsumer(destination, jmsConfiguration.selector());
             }
-            consumer.setMessageListener(new SynchronizedMessageListener(messageListener));
+            consumer.setMessageListener( message -> IDrivingAdapter.acquireLock().invoke(messageListener::onMessage, message) );
             consumerList.add(consumer);
             registeredListener.add(object);
         }
         catch (JMSException e)
         {
-            throw new IllegalStateException(
+            throw new java.lang.IllegalStateException(
                     "Registration of of Driving Adapter " + object.getClass().getName() + " failed. Please check the JMSConfiguration.\n"  +
                             " Error message from JMS subsystem: " + e.getMessage()
                     , e
@@ -199,27 +204,6 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     {
         Validate.isTrue(properties.containsKey(JNDI_PROVIDER_URL_KEY), "Property + " + JNDI_PROVIDER_URL_KEY + " is missing ");
         Validate.isTrue(properties.containsKey(JNDI_FACTORY_KEY), "Property + " + JNDI_FACTORY_KEY + " is missing ");
-    }
-
-    static class SynchronizedMessageListener implements MessageListener
-    {
-        private final MessageListener jmsListener;
-
-        SynchronizedMessageListener(MessageListener jmsListener)
-        {
-            Objects.requireNonNull(jmsListener);
-            this.jmsListener = jmsListener;
-        }
-
-
-        @Override
-        public void onMessage(Message message)
-        {
-            synchronized (IDrivingAdapter.acquireLock().getSynchronizationObject())
-            {
-                jmsListener.onMessage(message);
-            }
-        }
     }
 
     /**
