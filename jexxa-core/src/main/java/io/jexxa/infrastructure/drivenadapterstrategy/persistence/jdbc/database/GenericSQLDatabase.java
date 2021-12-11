@@ -30,7 +30,7 @@ public class GenericSQLDatabase implements IDatabase
 
         if ( jdbcDriver.toLowerCase().contains("h2") )
         {
-            return maxVarChar(Integer.MAX_VALUE);
+            return SQLDataType.VARCHAR;
         }
 
         if ( jdbcDriver.toLowerCase().contains("mysql") )

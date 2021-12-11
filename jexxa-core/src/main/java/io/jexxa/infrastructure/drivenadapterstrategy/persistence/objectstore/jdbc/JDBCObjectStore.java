@@ -174,7 +174,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         }
         catch (RuntimeException e)
         {
-            LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
+            LOGGER.debug("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
         }
     }
 
