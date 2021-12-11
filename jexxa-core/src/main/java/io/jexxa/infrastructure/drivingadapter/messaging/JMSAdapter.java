@@ -10,7 +10,6 @@ import org.apache.commons.lang3.Validate;
 import javax.jms.*;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.lang.IllegalStateException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -114,7 +113,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             {
                 consumer = session.createConsumer(destination, jmsConfiguration.selector());
             }
-            consumer.setMessageListener( message -> IDrivingAdapter.acquireLock().invoke(messageListener::onMessage, message) );
+            consumer.setMessageListener( message -> IDrivingAdapter.acquireLock().invoke(messageListener::onMessage, message, messageListener.getClass(), "onMessage" ));
             consumerList.add(consumer);
             registeredListener.add(object);
         }
@@ -156,11 +155,11 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
         catch (NamingException e)
         {
-            throw new IllegalStateException("No ConnectionFactory available via : " + properties.get(JNDI_PROVIDER_URL_KEY), e);
+            throw new java.lang.IllegalStateException("No ConnectionFactory available via : " + properties.get(JNDI_PROVIDER_URL_KEY), e);
         }
         catch (JMSException e)
         {
-            throw new IllegalStateException("Can not connect to " + properties.get(JNDI_PROVIDER_URL_KEY), e);
+            throw new java.lang.IllegalStateException("Can not connect to " + properties.get(JNDI_PROVIDER_URL_KEY), e);
         }
     }
 
@@ -277,7 +276,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
                         JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).warn("Restarted Listener {}", element.getClass().getSimpleName())
                 );
             }
-            catch (JMSException | IllegalStateException e)
+            catch (JMSException | java.lang.IllegalStateException e)
             {
                 JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error("Failed to restart JMS Listener");
                 JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error(e.getMessage());
