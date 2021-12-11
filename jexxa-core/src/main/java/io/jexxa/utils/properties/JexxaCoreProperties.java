@@ -1,4 +1,4 @@
-package io.jexxa.utils;
+package io.jexxa.utils.properties;
 
 public final class JexxaCoreProperties
 {

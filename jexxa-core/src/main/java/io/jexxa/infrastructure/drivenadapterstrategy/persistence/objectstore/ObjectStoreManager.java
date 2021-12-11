@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
-import static io.jexxa.utils.JexxaJDBCProperties.JEXXA_JDBC_DRIVER;
+import static io.jexxa.utils.properties.JexxaJDBCProperties.JEXXA_JDBC_DRIVER;
 
 
 @SuppressWarnings("unused")

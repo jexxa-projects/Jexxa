@@ -4,7 +4,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JD
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.DatabaseManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.IDatabase;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
-import io.jexxa.utils.JexxaJDBCProperties;
+import io.jexxa.utils.properties.JexxaJDBCProperties;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONManager;
 import org.slf4j.Logger;

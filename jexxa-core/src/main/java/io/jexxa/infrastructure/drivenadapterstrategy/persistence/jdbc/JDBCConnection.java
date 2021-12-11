@@ -3,7 +3,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCCommandBuilder;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCQueryBuilder;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder;
-import io.jexxa.utils.JexxaJDBCProperties;
+import io.jexxa.utils.properties.JexxaJDBCProperties;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
 import io.jexxa.utils.properties.Secret;

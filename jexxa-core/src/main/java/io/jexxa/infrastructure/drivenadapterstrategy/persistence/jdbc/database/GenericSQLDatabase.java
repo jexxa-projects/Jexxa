@@ -5,7 +5,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnec
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
-import io.jexxa.utils.JexxaJDBCProperties;
+import io.jexxa.utils.properties.JexxaJDBCProperties;
 
 import java.util.List;
 import java.util.Optional;

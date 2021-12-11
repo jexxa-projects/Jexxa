@@ -1,6 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database;
 
-import io.jexxa.utils.JexxaJDBCProperties;
+import io.jexxa.utils.properties.JexxaJDBCProperties;
 
 import java.util.Properties;
 

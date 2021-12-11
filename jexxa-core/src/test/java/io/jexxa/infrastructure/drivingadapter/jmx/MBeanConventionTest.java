@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import static io.jexxa.utils.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 import static org.junit.jupiter.api.Assertions.*;
 

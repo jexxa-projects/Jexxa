@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.utils.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 import static java.util.stream.Collectors.toList;
 import static javax.management.MBeanOperationInfo.UNKNOWN;

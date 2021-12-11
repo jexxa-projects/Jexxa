@@ -1,6 +1,6 @@
 package io.jexxa.core;
 
-import io.jexxa.utils.JexxaCoreProperties;
+import io.jexxa.utils.properties.JexxaCoreProperties;
 import io.jexxa.utils.JexxaLogger;
 
 import java.time.Clock;

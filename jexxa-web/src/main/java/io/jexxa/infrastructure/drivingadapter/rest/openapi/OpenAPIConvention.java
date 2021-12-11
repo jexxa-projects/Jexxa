@@ -32,8 +32,8 @@ import java.util.*;
 
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_ENUMS_USING_TO_STRING;
 import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
-import static io.jexxa.utils.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
-import static io.jexxa.utils.JexxaCoreProperties.JEXXA_CONTEXT_VERSION;
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_VERSION;
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 
 @SuppressWarnings("java:S1602") // required to avoid ambiguous warnings

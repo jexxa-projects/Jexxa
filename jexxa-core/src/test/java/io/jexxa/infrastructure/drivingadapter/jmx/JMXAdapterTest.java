@@ -14,7 +14,7 @@ import java.lang.management.ManagementFactory;
 import java.util.Properties;
 import java.util.Set;
 
-import static io.jexxa.utils.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Execution(ExecutionMode.CONCURRENT)
