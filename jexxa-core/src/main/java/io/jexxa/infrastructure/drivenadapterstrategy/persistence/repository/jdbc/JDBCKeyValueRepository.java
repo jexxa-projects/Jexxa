@@ -180,7 +180,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         }
         catch (RuntimeException e)
         {
-            LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
+            LOGGER.debug("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
         }
     }
 

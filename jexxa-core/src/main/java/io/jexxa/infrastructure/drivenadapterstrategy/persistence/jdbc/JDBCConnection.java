@@ -63,11 +63,11 @@ public class JDBCConnection implements AutoCloseable
             {
                 setupConnection.setAutoCommit(true);
                 statement.execute(String.format("create DATABASE %s ", dbName));
-                LOGGER.info("Database {} successfully created ", dbName);
+                LOGGER.debug("Database {} successfully created ", dbName);
             }
             catch (SQLException e)
             {
-                LOGGER.warn("Could not create database {} => Assume that database already exists", dbName);
+                LOGGER.debug("Could not create database {} => Assume that database already exists", dbName);
             }
         }
     }
