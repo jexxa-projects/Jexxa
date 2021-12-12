@@ -38,8 +38,10 @@ public interface IDrivingAdapter
      *
      * @return SynchronizationFacade which must be used to ensure synchronized access to ports   
      */
+    @Deprecated(forRemoval = true)
     static SynchronizationFacade acquireLock()
     {
-        return new SynchronizationFacade();
+        return SynchronizationFacade.acquireLock(null);
     }
+
 }

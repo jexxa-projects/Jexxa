@@ -2,6 +2,7 @@ package io.jexxa.infrastructure.drivingadapter.messaging;
 
 
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.infrastructure.drivingadapter.SynchronizationFacade;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
 import io.jexxa.utils.properties.Secret;
@@ -113,7 +114,10 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             {
                 consumer = session.createConsumer(destination, jmsConfiguration.selector());
             }
-            consumer.setMessageListener( message -> IDrivingAdapter.acquireLock().invoke(messageListener::onMessage, message, messageListener.getClass(), "onMessage" ));
+            consumer.setMessageListener( message ->
+                    SynchronizationFacade.acquireLock(messageListener.getClass())
+                            .invoke(messageListener::onMessage, message)
+            );
             consumerList.add(consumer);
             registeredListener.add(object);
         }

@@ -9,6 +9,7 @@ import java.util.function.Function;
 public class SynchronizationFacade
 {
     private static final Object GLOBAL_SYNCHRONIZATION_OBJECT = new Object();
+    private static SynchronizationFacade defaultSynchronizationFacade = new SynchronizationFacade();
 
     /**
      * This method performs a synchronized method invocation on given method. Note: If this method is not used by a driving adapter it must
@@ -40,7 +41,7 @@ public class SynchronizationFacade
      * @param consumer Consumer that should be called. Must not be null
      * @param argument argument that should be called
      */
-    public <T> void invoke(Consumer<T> consumer, T argument )
+    public <T> void invoke(Consumer<T> consumer, T argument)
     {
         Objects.requireNonNull(consumer);
         Objects.requireNonNull(argument);
@@ -79,6 +80,21 @@ public class SynchronizationFacade
     public Object getSynchronizationObject()
     {
         return GLOBAL_SYNCHRONIZATION_OBJECT;
+    }
+
+    /**
+     * Returns a SynchronizationFacade that must be used to ensure synchronized access to ports
+     *
+     * @return SynchronizationFacade which must be used to ensure synchronized access to ports
+     */
+    public static SynchronizationFacade acquireLock(Class<?> invokedClazz)
+    {
+        return defaultSynchronizationFacade;
+    }
+
+    protected static void setSynchronizationFacade(SynchronizationFacade synchronizationFacade)
+    {
+        defaultSynchronizationFacade = synchronizationFacade;
     }
 
     SynchronizationFacade()

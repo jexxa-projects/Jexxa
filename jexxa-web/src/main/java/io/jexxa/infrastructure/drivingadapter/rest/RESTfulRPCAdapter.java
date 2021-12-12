@@ -9,6 +9,7 @@ import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JsonMapper;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.infrastructure.drivingadapter.SynchronizationFacade;
 import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONConverter;
@@ -252,8 +253,8 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         Object[] methodParameters = deserializeParameters(httpContext.body(), method.getMethod());
 
         var result = Optional.ofNullable(
-                IDrivingAdapter
-                        .acquireLock()
+                SynchronizationFacade
+                        .acquireLock(object.getClass())
                         .invoke(method.getMethod(), object, methodParameters)
         );
 

@@ -3,6 +3,7 @@ package io.jexxa.infrastructure.drivingadapter.jmx;
 
 import com.google.gson.JsonObject;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.infrastructure.drivingadapter.SynchronizationFacade;
 import io.jexxa.utils.JexxaLogger;
 
 import javax.management.*;
@@ -66,8 +67,8 @@ public class MBeanConvention implements DynamicMBean
                 orElseThrow(UnsupportedOperationException::new);
 
             Object[] parameter = deserializeObjects(method.getParameterTypes(), params);
-            Object result = IDrivingAdapter
-                    .acquireLock()
+            Object result = SynchronizationFacade
+                    .acquireLock(object.getClass())
                     .invoke(method, object, parameter);
 
             return serializeComplexReturnValue(result);
