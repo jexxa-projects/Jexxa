@@ -19,10 +19,6 @@ import org.apache.commons.cli.*;
 
 public final class BookStoreApplication
 {
-    //Declare the packages that should be used by Jexxa
-    private static final String DRIVEN_ADAPTER  = BookStoreApplication.class.getPackageName() + ".infrastructure.drivenadapter";
-    private static final String OUTBOUND_PORTS  = BookStoreApplication.class.getPackageName() + ".domainservice";
-
     public static void main(String[] args)
     {
         // Define the default strategies.
@@ -44,8 +40,7 @@ public final class BookStoreApplication
                 .info( "{}", jexxaMain.getBoundedContext().getContextVersion() );
         jexxaMain
                 //Define which outbound ports should be managed by Jexxa
-                .addToApplicationCore(OUTBOUND_PORTS)
-                .addToInfrastructure(DRIVEN_ADAPTER)
+                .addDDDPackages(BookStoreApplication.class)
 
                 //Get the latest books when starting the application
                 .bootstrap(ReferenceLibrary.class).with(ReferenceLibrary::addLatestBooks)

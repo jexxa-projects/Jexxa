@@ -12,10 +12,6 @@ import org.apache.commons.cli.*;
 
 public class ContractManagementApplication
 {
-    //Declare the packages that should be used by Jexxa
-    private static final String DRIVEN_ADAPTER  = ContractManagementApplication.class.getPackageName() + ".infrastructure.drivenadapter";
-    private static final String OUTBOUND_PORTS  = ContractManagementApplication.class.getPackageName() + ".domainservice";
-
     public static void main(String[] args)
     {
         // Define the default strategies via command line.
@@ -30,8 +26,7 @@ public class ContractManagementApplication
 
         jexxaMain
                 //Define which outbound ports should be managed by Jexxa
-                .addToApplicationCore(OUTBOUND_PORTS)
-                .addToInfrastructure(DRIVEN_ADAPTER)
+                .addDDDPackages(ContractManagementApplication.class)
 
                 .bind(RESTfulRPCAdapter.class).to(ContractService.class)
 

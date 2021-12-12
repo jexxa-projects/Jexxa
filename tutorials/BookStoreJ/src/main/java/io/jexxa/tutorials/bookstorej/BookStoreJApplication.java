@@ -19,12 +19,6 @@ import org.apache.commons.cli.*;
 
 public final class BookStoreJApplication
 {
-    //Declare the packages that should be used by Jexxa
-    private static final String DRIVEN_ADAPTER  = BookStoreJApplication.class.getPackageName() + ".infrastructure.drivenadapter";
-    private static final String OUTBOUND_PORTS  = BookStoreJApplication.class.getPackageName() + ".domainservice";
-    //Add also package name with inbound ports so that they are scanned by Jexxa
-    private static final String INBOUND_PORTS   = BookStoreJApplication.class.getPackageName() + ".applicationservice";
-
     public static void main(String[] args)
     {
         // Define the default strategies.
@@ -43,11 +37,7 @@ public final class BookStoreJApplication
                 .info( "{}", jexxaMain.getBoundedContext().getContextVersion() );
 
         jexxaMain
-                // In order to find ports by annotation we must add packages that are searched by Jexxa.
-                // Therefore, we must also add inbound ports to application core
-                .addToApplicationCore(INBOUND_PORTS)
-                .addToApplicationCore(OUTBOUND_PORTS)
-                .addToInfrastructure(DRIVEN_ADAPTER)
+                .addDDDPackages(BookStoreJApplication.class)
 
                 //Get the latest books when starting the application
                 .bootstrap(ReferenceLibrary.class).with(ReferenceLibrary::addLatestBooks)

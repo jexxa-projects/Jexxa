@@ -26,6 +26,13 @@ import java.util.function.Consumer;
  */
 public final class JexxaMain
 {
+    private static final String DRIVEN_ADAPTER_PACKAGE = ".infrastructure.drivenadapter";
+    private static final String DRIVING_ADAPTER_PACKAGE = ".infrastructure.drivenadapter";
+    private static final String DOMAIN_SERVICE = ".domainservice";
+    private static final String DOMAIN_PROCESS_SERVICE = ".domainprocessservice";
+    private static final String APPLICATION_SERVICE = ".applicationservice";
+
+
     public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JexxaMain.class);
@@ -108,6 +115,17 @@ public final class JexxaMain
     public JexxaMain addToInfrastructure(String packageName)
     {
         drivenAdapterFactory.acceptPackage(packageName);
+        return this;
+    }
+
+    public JexxaMain addDDDPackages(Class<?> mainApplication)
+    {
+        addToInfrastructure( mainApplication.getPackageName() + DRIVEN_ADAPTER_PACKAGE);
+        addToInfrastructure( mainApplication.getPackageName() + DRIVING_ADAPTER_PACKAGE);
+        addToApplicationCore( mainApplication.getPackageName() + DOMAIN_SERVICE);
+        addToApplicationCore( mainApplication.getPackageName() + DOMAIN_PROCESS_SERVICE);
+        addToApplicationCore( mainApplication.getPackageName() + APPLICATION_SERVICE);
+
         return this;
     }
 
