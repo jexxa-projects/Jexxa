@@ -111,8 +111,7 @@ The web page can be accessed via following link [http://localhost:7500/index.htm
 ### Use JConsole ###
 
 *   Start jconsole and select the MBean `BoundedContext` as shown in screenshot below
-*   Now you can execute all methods of this object 
-*   Execute `shutdown` to end the application 
+*   Now you can execute all methods of this object
 
 ![JConsole](images/JConsole.png) 
 

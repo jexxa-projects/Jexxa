@@ -24,9 +24,8 @@ public final class HelloJexxa
 
         jexxaMain
                 // Bind a JMX adapter to our Jexxa's BoundedContext object.
-                // It allows accessing and control the running application via `jconsole`
+                // It allows accessing status information about the running application via `jconsole`
                 .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
-                //.bind(RESTfulRPCAdapter.class).to(jexxaMain.getBoundedContext())
 
                 // Bind a REST adapter to a HelloJexxa object
                .bind(RESTfulRPCAdapter.class).to(HelloJexxa.class)
