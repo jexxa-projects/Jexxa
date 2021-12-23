@@ -7,19 +7,19 @@ Date: 2021-12-18
 Accepted
 
 ## Context
+Most today’s frameworks bind technology stacks automatically to your application core. If at all, you have to add a new 
+dependency and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners 
+to understand an application which is based on a ports and adapters architecture. This is especially true for the entry 
+points of your application.
 
+This might be obvious to incoming synchronous calls (RMI), but can be hard to see for incoming asynchronous messaging.
+Most frameworks use annotations here, but the developer must be aware of them.
 
-We need to visualize the flow of control to simplify the understanding of a large business application. Ideally the  
-developer is guided through the business application on source code level as follows.  
-
-*   `Driving Adapter` &rarr; `Inbound Port` &rarr; `Outbound Port` &rarr; `Driven Adapter`
 
 ## Decision
+* Jexxa uses explicit binding for driving adapters so that the main method represents the single starting point for 
+ the flow of control.
 
-* The main method explicitly binds driving adapter to the application core. Even though this causes some boilerplate code
-  which is tolerated because the main method represents the unique starting point of the flow of control.
-* The attributes of the constructor of an inbound port are the outbound ports and must be interfaces. No other objects are
-  accepted.   
 * See tutorial [TimeService - Flow of Control](../../tutorials/TimeService/README-FlowOfControl.md) for further information. 
 
 ## Consequences
