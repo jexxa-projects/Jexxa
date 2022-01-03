@@ -18,7 +18,7 @@
     <dependency>
       <groupId>io.jexxa</groupId>
       <artifactId>jexxa-core</artifactId>
-      <version>3.3.2-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
 
