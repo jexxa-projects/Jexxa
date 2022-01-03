@@ -1,20 +1,11 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence;
 
-import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
-import java.util.Properties;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaEntityRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -22,6 +13,17 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.List;
+import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -44,6 +46,7 @@ class JexxaEntityRepositoryIT
     void addAggregate(Properties repositoryProperties)
     {
         //Arrange
+        dropTable(repositoryProperties);
         var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
 
@@ -59,6 +62,7 @@ class JexxaEntityRepositoryIT
     void testPreconditionAddAggregate(Properties repositoryProperties)
     {
         //Arrange
+        dropTable(repositoryProperties);
         var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
@@ -74,6 +78,7 @@ class JexxaEntityRepositoryIT
     void getAggregateByID(Properties repositoryProperties)
     {
         //Arrange
+        dropTable(repositoryProperties);
         var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
@@ -92,6 +97,7 @@ class JexxaEntityRepositoryIT
     void removeAggregate(Properties repositoryProperties)
     {
         //Arrange
+        dropTable(repositoryProperties);
         var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
@@ -111,6 +117,7 @@ class JexxaEntityRepositoryIT
     void testPreconditionRemoveAggregate(Properties repositoryProperties)
     {
         //Arrange
+        dropTable(repositoryProperties);
         var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
 
@@ -128,6 +135,7 @@ class JexxaEntityRepositoryIT
     void updateAggregate(Properties repositoryProperties)
     {
         //Arrange
+        dropTable(repositoryProperties);
         var objectUnderTest = JexxaEntityRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
@@ -146,6 +154,16 @@ class JexxaEntityRepositoryIT
     static Stream<Properties> repositoryConfig()
     {
         return Stream.concat(Stream.of(new Properties()), JDBCTestDatabase.repositoryConfigJDBC());
+    }
+
+    private void dropTable(Properties properties)
+    {
+        if (!properties.isEmpty()) {
+            JDBCConnection connection = new JDBCConnection(properties);
+            connection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
+                    .dropTableIfExists(JexxaEntity.class)
+                    .asIgnore();
+        }
     }
 
 }
