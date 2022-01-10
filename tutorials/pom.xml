@@ -14,7 +14,7 @@
   <name>Tutorials</name>
 
   <properties>
-      <jexxa-core.version>3.3.1</jexxa-core.version>
+      <jexxa-core-stable.version>3.3.2</jexxa-core-stable.version>
   </properties>
 
   <dependencies>

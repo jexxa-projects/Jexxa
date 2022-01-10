@@ -33,12 +33,16 @@ class JDBCKeyValueRepositoryIT
         var properties = new Properties();
         properties.load(getClass().getResourceAsStream(JEXXA_APPLICATION_PROPERTIES));
 
+        JDBCConnection connection = new JDBCConnection(properties);
+        connection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
+                .dropTableIfExists(JexxaEntity.class)
+                .asIgnore();
+
         objectUnderTest = new JDBCKeyValueRepository<>(
                 JexxaEntity.class,
                 JexxaEntity::getKey,
                 properties
         );
-        objectUnderTest.removeAll();
     }
 
     @AfterEach

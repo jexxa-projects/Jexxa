@@ -4,6 +4,8 @@ import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaAggregate;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaAggregateRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.parallel.Execution;
@@ -41,6 +43,7 @@ class JexxaAggregateRepositoryIT
     void addAggregate(Properties repositoryProperties)
     {
         //Arrange
+        dropTable(repositoryProperties);
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
 
@@ -57,6 +60,7 @@ class JexxaAggregateRepositoryIT
     void getAggregateByID(Properties repositoryProperties)
     {
         //Arrange
+        dropTable(repositoryProperties);
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
@@ -75,6 +79,7 @@ class JexxaAggregateRepositoryIT
     void removeAggregate(Properties repositoryProperties)
     {
         //Arrange
+        dropTable(repositoryProperties);
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
@@ -95,6 +100,7 @@ class JexxaAggregateRepositoryIT
     void updateAggregate(Properties repositoryProperties)
     {
         //Arrange
+        dropTable(repositoryProperties);
         var objectUnderTest = JexxaAggregateRepository.create(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
@@ -109,5 +115,12 @@ class JexxaAggregateRepositoryIT
         objectUnderTest.get().forEach( element -> assertEquals(aggregateValue, element.getInternalValue()) );
     }
 
+    private void dropTable(Properties properties)
+    {
+        JDBCConnection connection = new JDBCConnection(properties);
+        connection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
+                .dropTableIfExists(JexxaAggregate.class)
+                .asIgnore();
+    }
 }
 

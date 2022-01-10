@@ -7,10 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[4.0.0] - yyyy-mm-dd
 ### Changed - Important Information!
 - Jexxa-Core: Major changes to the persistence layer, which prevent downgrading applications to older Jexxa versions
-  - `JDBCKeyValueRepository` and `JDBCObjectStore` use now `JSONB` format if a Postgres DB is used. Existing database are automatically converted to `JSONB`
-  - `JDBCKeyValueRepository` and `JDBCObjectStore` use now column name `REGISTRY_KEY` and `REGISTRY_VALUE` instead `KEY` and `VALUE`. This avoids conflicts with reserved SQL statements. Existing database are automatically updated.
-  - `Repository` related interfaces and classes were moved from `...persistence` into sub-package `...persistence.repository` -> You have to update your imports in your application
+    - `JDBCKeyValueRepository` and `JDBCObjectStore` use now `JSONB` format if a Postgres DB is used. Existing database are automatically converted to `JSONB`
+    - `JDBCKeyValueRepository` and `JDBCObjectStore` use now column name `REGISTRY_KEY` and `REGISTRY_VALUE` instead `KEY` and `VALUE`. This avoids conflicts with reserved SQL statements. Existing database are automatically updated.
+    - `Repository` related interfaces and classes were moved from `...persistence` into sub-package `...persistence.repository` -> You have to update your imports in your application
 
+
+## \[3.3.2] - 2022-01-03
+### Changed
+- Updated dependencies
 
 ## \[3.3.1] - 2021-11-26
 ### Fixed
