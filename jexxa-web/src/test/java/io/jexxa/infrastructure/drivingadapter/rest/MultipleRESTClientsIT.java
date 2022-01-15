@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -77,7 +75,7 @@ class MultipleRESTClientsIT
             //Act
             var restPath = "http://localhost:7500/IncrementApplicationService/";
             var response = Unirest.post(restPath + METHOD_GET_SIMPLE_VALUE)
-                    .header(CONTENT_TYPE, APPLICATION_TYPE)
+                    .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                     .asJson();
             if (!response.isSuccess())
             {

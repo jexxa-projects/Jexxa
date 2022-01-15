@@ -1,5 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter;
 
+import io.jexxa.adapterapi.invocation.SynchronizationFacade;
+
 /**
  * Generic interface that must be implemented by a DrivingAdapter
  *

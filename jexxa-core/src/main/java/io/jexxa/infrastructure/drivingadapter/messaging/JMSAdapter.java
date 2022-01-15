@@ -2,7 +2,7 @@ package io.jexxa.infrastructure.drivingadapter.messaging;
 
 
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.jexxa.infrastructure.drivingadapter.SynchronizationFacade;
+import io.jexxa.adapterapi.invocation.SynchronizationFacade;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
 import io.jexxa.utils.properties.Secret;

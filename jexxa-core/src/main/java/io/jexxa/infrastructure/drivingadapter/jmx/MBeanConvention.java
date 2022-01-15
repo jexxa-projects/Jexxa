@@ -2,8 +2,7 @@ package io.jexxa.infrastructure.drivingadapter.jmx;
 
 
 import com.google.gson.JsonObject;
-import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.jexxa.infrastructure.drivingadapter.SynchronizationFacade;
+import io.jexxa.adapterapi.invocation.SynchronizationFacade;
 import io.jexxa.utils.JexxaLogger;
 
 import javax.management.*;

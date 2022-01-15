@@ -19,8 +19,6 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.util.List;
 import java.util.Properties;
 
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -77,7 +75,7 @@ class RESTfulRPCAdapterIT
 
         //Act
         Integer result = Unirest.get(REST_PATH + METHOD_GET_SIMPLE_VALUE)
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
 
@@ -102,7 +100,7 @@ class RESTfulRPCAdapterIT
 
         //Act using secondAdapter
         Integer result = Unirest.get(secondRestPath + METHOD_GET_SIMPLE_VALUE)
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
 
@@ -134,13 +132,13 @@ class RESTfulRPCAdapterIT
 
         //Act
         var response = Unirest.post(REST_PATH + "setSimpleValue")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(newValue)
                 .asJson();
 
         //Assert
         Integer newResult = Unirest.get(REST_PATH + METHOD_GET_SIMPLE_VALUE)
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
         assertTrue(response.isSuccess());
@@ -157,13 +155,13 @@ class RESTfulRPCAdapterIT
 
         //Act
         var response = Unirest.post(REST_PATH + "setSimpleValueObject")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(newValue)
                 .asJson();
 
         //Assert
         Integer newResult = Unirest.get(REST_PATH + METHOD_GET_SIMPLE_VALUE)
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
         assertTrue(response.isSuccess());
@@ -180,7 +178,7 @@ class RESTfulRPCAdapterIT
 
         //Act
         var response = Unirest.post(REST_PATH + "setMessages")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(messageList)
                 .asEmpty();
 
@@ -204,12 +202,12 @@ class RESTfulRPCAdapterIT
         jsonArray.add(gson.toJsonTree(messageList));
 
         var response = Unirest.post(REST_PATH + "setValueObjectsAndMessages")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(jsonArray)
                 .asEmpty();
 
         var result = Unirest.get(REST_PATH + "getMessages")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(new GenericType<List<String>>() {} ).getBody();
 
         //Assert
@@ -228,13 +226,13 @@ class RESTfulRPCAdapterIT
 
         //Act
         var response = Unirest.post(REST_PATH + "setSimpleValueObjectTwice")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(paramList)
                 .asEmpty();
 
         //Assert
         Integer newResult = Unirest.get(REST_PATH + METHOD_GET_SIMPLE_VALUE)
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
         assertTrue(response.isSuccess());
@@ -251,7 +249,7 @@ class RESTfulRPCAdapterIT
 
         //Act
         var oldValue = Unirest.post(REST_PATH + "setGetSimpleValue")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(newValue)
                 .asObject(Integer.class).getBody();
 
@@ -259,7 +257,7 @@ class RESTfulRPCAdapterIT
         //Act
         //Assert
         Integer newResult = Unirest.get(REST_PATH + METHOD_GET_SIMPLE_VALUE)
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
         //Assert
@@ -276,7 +274,7 @@ class RESTfulRPCAdapterIT
 
         //Act
         var response = Unirest.post(REST_PATH + "throwExceptionTest")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asJson();
         JsonObject error = response.mapError(JsonObject.class);
 
@@ -299,7 +297,7 @@ class RESTfulRPCAdapterIT
 
         //Act
         SpecialCasesValueObject result = Unirest.get(REST_PATH + "getSpecialCasesValueObject")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(SpecialCasesValueObject.class).getBody();
 
 
@@ -317,7 +315,7 @@ class RESTfulRPCAdapterIT
 
         //Act
         var response = Unirest.get(REST_PATH + "throwNullPointerException")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asJson();
         JsonObject error = response.mapError(JsonObject.class);
 

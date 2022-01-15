@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_PORT;
 import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,7 +63,7 @@ class OpenAPIJava8DateTimeTest
 
         //Act
        JsonObject result = Unirest.get(OPENAPI_PATH)
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
 
         //Assert - Fields of basic openAPI structure
@@ -81,7 +79,7 @@ class OpenAPIJava8DateTimeTest
     {
         //Arrange
         JsonObject openAPI = Unirest.get(OPENAPI_PATH)
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
 
         //Act
@@ -89,7 +87,7 @@ class OpenAPIJava8DateTimeTest
 
         //Assert - Fields of basic openAPI structure
         assertFalse( result.isEmpty() );
-        result.forEach( element -> assertNotNull( element.getAsJsonObject().get(APPLICATION_TYPE) ) );
+        result.forEach( element -> assertNotNull( element.getAsJsonObject().get(RESTConstants.APPLICATION_TYPE) ) );
     }
 
    @Test
@@ -99,7 +97,7 @@ class OpenAPIJava8DateTimeTest
         var resTfulRPCConvention = new RESTfulRPCConvention(java8DateTimeApplicationService);
 
         JsonObject openAPI = Unirest.get(OPENAPI_PATH)
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
 
         //Act

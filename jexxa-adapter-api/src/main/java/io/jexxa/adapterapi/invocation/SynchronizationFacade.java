@@ -1,12 +1,11 @@
-package io.jexxa.infrastructure.drivingadapter;
+package io.jexxa.adapterapi.invocation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
-public class SynchronizationFacade
+public class SynchronizationFacade implements Interceptor
 {
     private static final Object GLOBAL_SYNCHRONIZATION_OBJECT = new Object();
     private static SynchronizationFacade defaultSynchronizationFacade = new SynchronizationFacade();
@@ -24,15 +23,19 @@ public class SynchronizationFacade
      */
     public Object invoke(Method method, Object object, Object[] args ) throws InvocationTargetException, IllegalAccessException
     {
-        Objects.requireNonNull(method);
-        Objects.requireNonNull(object);
-        Objects.requireNonNull(args);
+        var invocationContext = new InvocationContext(method, object, args);
+        surround(invocationContext);
+        return invocationContext.getReturnValue();
+    }
 
+    @Override
+    public void surround( InvocationContext invocationContext ) throws InvocationTargetException, IllegalAccessException {
         synchronized (GLOBAL_SYNCHRONIZATION_OBJECT)
         {
-            return method.invoke(object, args);
+            invocationContext.invoke();
         }
     }
+
 
     /**
      * This method performs a synchronized method invocation on given method. Note: If this method is not used by a driving adapter it must
@@ -59,7 +62,7 @@ public class SynchronizationFacade
      * @param function Consumer that should be called. Must not be null
      * @param argument argument that should be called
      */
-    public <T, R> R invoke(Function<T, R> function, T argument )
+    /*public <T, R> R invoke(Function<T, R> function, T argument )
     {
         Objects.requireNonNull(function);
         Objects.requireNonNull(argument);
@@ -68,7 +71,7 @@ public class SynchronizationFacade
         {
             return function.apply(argument);
         }
-    }
+    }*/
 
     /**
      * If a driving adapter does not use {@link #invoke(Method, Object, Object[])} to call an

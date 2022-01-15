@@ -22,8 +22,6 @@ import java.security.cert.CertificateException;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -82,7 +80,7 @@ class HttpsRESTfulRPCAdapterIT
 
         //Act
         Integer result = Unirest.get(restPath + METHOD_GET_SIMPLE_VALUE)
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(Integer.class).getBody();
 
 

@@ -65,8 +65,8 @@ A simple ``Hello World`` example can be found [here](https://github.com/repplix/
 package io.jexxa.tutorials;
 
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
-import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
+import JMXAdapter;
+import RESTfulRPCAdapter;
 
 public final class HelloJexxa
 {
