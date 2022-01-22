@@ -31,7 +31,7 @@ public class InvocationContext {
         return method;
     }
 
-    public Object getObject() {
+    public Object getTarget() {
         return object;
     }
 

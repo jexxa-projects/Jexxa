@@ -52,8 +52,14 @@ class RootInterceptorTest {
     public static class DoubleInterceptor implements Interceptor
     {
         @Override
-        public void before(InvocationContext invocationContext) throws InvocationTargetException, IllegalAccessException {
-            invocationContext.invoke();
+        public void before(InvocationContext invocationContext)
+        {
+            try {
+                invocationContext.getMethod().invoke(invocationContext.getTarget(), invocationContext.getArgs());
+            } catch (InvocationTargetException | IllegalAccessException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 

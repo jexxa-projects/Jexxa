@@ -6,22 +6,14 @@ import java.util.List;
 
 public class RootInterceptor implements Interceptor, InvocationHandler
 {
-    private List<Interceptor> beforeList = new ArrayList<>();
-    private List<Interceptor> afterList = new ArrayList<>();
-    private List<Interceptor> surroundList = new ArrayList<>();
+    private final List<Interceptor> beforeList = new ArrayList<>();
+    private final List<Interceptor> afterList = new ArrayList<>();
+    private final List<Interceptor> surroundList = new ArrayList<>();
 
     @Override
     public void before( InvocationContext invocationContext )
     {
-        beforeList.forEach( element -> {
-            try {
-                element.before(invocationContext);
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        });
+        beforeList.forEach(element -> element.before(invocationContext));
     }
 
     @Override
