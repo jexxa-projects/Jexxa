@@ -2,10 +2,17 @@ package io.jexxa.infrastructure.drivingadapter.jmx;
 
 
 import com.google.gson.JsonObject;
-import io.jexxa.adapterapi.invocation.SynchronizationFacade;
+import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.utils.JexxaLogger;
 
-import javax.management.*;
+import javax.management.Attribute;
+import javax.management.AttributeList;
+import javax.management.DynamicMBean;
+import javax.management.MBeanInfo;
+import javax.management.MBeanOperationInfo;
+import javax.management.MBeanParameterInfo;
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -15,8 +22,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
 import static java.util.stream.Collectors.toList;
 import static javax.management.MBeanOperationInfo.UNKNOWN;
 
@@ -66,9 +73,8 @@ public class MBeanConvention implements DynamicMBean
                 orElseThrow(UnsupportedOperationException::new);
 
             Object[] parameter = deserializeObjects(method.getParameterTypes(), params);
-            Object result = SynchronizationFacade
-                    .acquireLock(object.getClass())
-                    .invoke(method, object, parameter);
+            var invocationHandler = InvocationManager.getInvocationHandler(object);
+            var result = invocationHandler.invoke(method, object, parameter);
 
             return serializeComplexReturnValue(result);
         }

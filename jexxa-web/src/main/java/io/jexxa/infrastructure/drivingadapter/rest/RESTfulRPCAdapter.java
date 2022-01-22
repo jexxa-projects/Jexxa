@@ -8,9 +8,9 @@ import io.javalin.core.JavalinConfig;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JsonMapper;
-import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
+import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.jexxa.adapterapi.invocation.SynchronizationFacade;
+import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONConverter;
 import io.jexxa.utils.json.JSONManager;
@@ -25,7 +25,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
 
@@ -251,11 +255,11 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private void invokeMethod(Object object, RESTfulRPCConvention.RESTfulRPCMethod method, Context httpContext ) throws InvocationTargetException, IllegalAccessException
     {
         Object[] methodParameters = deserializeParameters(httpContext.body(), method.getMethod());
+        var invocationHandler = InvocationManager.getInvocationHandler(object);
+
 
         var result = Optional.ofNullable(
-                SynchronizationFacade
-                        .acquireLock(object.getClass())
-                        .invoke(method.getMethod(), object, methodParameters)
+                invocationHandler.invoke(method.getMethod(), object, methodParameters)
         );
 
         //At the moment we do not handle any credentials

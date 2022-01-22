@@ -1,7 +1,5 @@
 package io.jexxa.infrastructure.drivingadapter;
 
-import io.jexxa.adapterapi.invocation.SynchronizationFacade;
-
 /**
  * Generic interface that must be implemented by a DrivingAdapter
  *
@@ -11,7 +9,6 @@ import io.jexxa.adapterapi.invocation.SynchronizationFacade;
  * - {@link #start()} which performs a state change into state STARTED
  * STARTED:
  * - Within this state incoming calls can be forwarded to ports
- * - Important note: Before forwarding an incoming call a Driving Adapter has to ensure that this call is synchronized using {@link #acquireLock()}
  * - {@link #stop()} to change into state STOPPED
  * STOPPED:
  * - In this state a driving adapter can no longer be used
@@ -34,16 +31,5 @@ public interface IDrivingAdapter
      * As soon as an object is stopped it is not required that it can be started again. 
      */
     void stop();
-
-    /**
-     * Returns a SynchronizationFacade that must be used to ensure synchronized access to ports
-     *
-     * @return SynchronizationFacade which must be used to ensure synchronized access to ports   
-     */
-    @Deprecated(forRemoval = true)
-    static SynchronizationFacade acquireLock()
-    {
-        return SynchronizationFacade.acquireLock(null);
-    }
 
 }

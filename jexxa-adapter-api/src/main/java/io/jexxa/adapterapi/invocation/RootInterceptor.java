@@ -1,6 +1,7 @@
 package io.jexxa.adapterapi.invocation;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,8 @@ public class RootInterceptor implements Interceptor, InvocationHandler
     private final List<Interceptor> beforeList = new ArrayList<>();
     private final List<Interceptor> afterList = new ArrayList<>();
     private final List<Interceptor> surroundList = new ArrayList<>();
+
+    private static final Object GLOBAL_SYNCHRONIZATION_OBJECT = new Object();
 
     @Override
     public void before( InvocationContext invocationContext )
@@ -34,10 +37,26 @@ public class RootInterceptor implements Interceptor, InvocationHandler
         surroundList.add(interceptor);
     }
 
+
     @Override
-    public void invoke(InvocationContext invocationContext) throws InvocationTargetException, IllegalAccessException {
-        before(invocationContext);
-        surround(invocationContext);
-        after(invocationContext);
+    public void invoke(InvocationContext invocationContext) throws InvocationTargetException, IllegalAccessException
+    {
+        synchronized (GLOBAL_SYNCHRONIZATION_OBJECT)
+        {
+            before(invocationContext);
+            surround(invocationContext);
+            after(invocationContext);
+        }
+    }
+
+    @Override
+    public Object invoke(Method method, Object object, Object[] args) throws InvocationTargetException, IllegalAccessException
+    {
+        synchronized (GLOBAL_SYNCHRONIZATION_OBJECT)
+        {
+            var invocationContex = new InvocationContext(method, object, args);
+            invoke(invocationContex);
+            return invocationContex.getReturnValue();
+        }
     }
 }
