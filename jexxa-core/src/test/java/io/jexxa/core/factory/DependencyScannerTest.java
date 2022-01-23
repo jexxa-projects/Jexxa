@@ -4,7 +4,7 @@ import io.jexxa.TestConstants;
 import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.annotation.UnavailableDuringRuntime;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
-import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;

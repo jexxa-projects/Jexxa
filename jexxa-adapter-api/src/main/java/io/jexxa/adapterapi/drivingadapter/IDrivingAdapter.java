@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.drivingadapter;
+package io.jexxa.adapterapi.drivingadapter;
 
 /**
  * Generic interface that must be implemented by a DrivingAdapter

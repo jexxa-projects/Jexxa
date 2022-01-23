@@ -9,7 +9,7 @@ import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JsonMapper;
 import io.jexxa.adapterapi.invocation.InvocationManager;
-import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONConverter;

@@ -1,12 +1,14 @@
-package io.jexxa.adapterapi.invocation;
+package io.jexxa.adapterapi.interceptor;
+
+import io.jexxa.adapterapi.invocation.InvocationContext;
+import io.jexxa.adapterapi.invocation.InvocationHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RootInterceptor implements Interceptor, InvocationHandler
-{
+public class RootInterceptor implements Interceptor, InvocationHandler {
     private final List<Interceptor> beforeList = new ArrayList<>();
     private final List<Interceptor> afterList = new ArrayList<>();
     private final List<Interceptor> surroundList = new ArrayList<>();
@@ -14,24 +16,21 @@ public class RootInterceptor implements Interceptor, InvocationHandler
     private static final Object GLOBAL_SYNCHRONIZATION_OBJECT = new Object();
 
     @Override
-    public void before( InvocationContext invocationContext )
-    {
+    public void before(InvocationContext invocationContext) {
         beforeList.forEach(element -> element.before(invocationContext));
     }
 
     @Override
-    public void after( InvocationContext invocationContext )
-    {
-        afterList.forEach( element -> element.after(invocationContext));
+    public void after(InvocationContext invocationContext) {
+        afterList.forEach(element -> element.after(invocationContext));
     }
 
     @Override
-    public void surround( InvocationContext invocationContext ) throws InvocationTargetException, IllegalAccessException {
+    public void surround(InvocationContext invocationContext) throws InvocationTargetException, IllegalAccessException {
         invocationContext.invoke();
     }
 
-    public void register(Interceptor interceptor)
-    {
+    public void register(Interceptor interceptor) {
         beforeList.add(interceptor);
         afterList.add(interceptor);
         surroundList.add(interceptor);
@@ -39,10 +38,8 @@ public class RootInterceptor implements Interceptor, InvocationHandler
 
 
     @Override
-    public void invoke(InvocationContext invocationContext) throws InvocationTargetException, IllegalAccessException
-    {
-        synchronized (GLOBAL_SYNCHRONIZATION_OBJECT)
-        {
+    public void invoke(InvocationContext invocationContext) throws InvocationTargetException, IllegalAccessException {
+        synchronized (GLOBAL_SYNCHRONIZATION_OBJECT) {
             before(invocationContext);
             surround(invocationContext);
             after(invocationContext);
@@ -50,10 +47,8 @@ public class RootInterceptor implements Interceptor, InvocationHandler
     }
 
     @Override
-    public Object invoke(Method method, Object object, Object[] args) throws InvocationTargetException, IllegalAccessException
-    {
-        synchronized (GLOBAL_SYNCHRONIZATION_OBJECT)
-        {
+    public Object invoke(Method method, Object object, Object[] args) throws InvocationTargetException, IllegalAccessException {
+        synchronized (GLOBAL_SYNCHRONIZATION_OBJECT) {
             var invocationContex = new InvocationContext(method, object, args);
             invoke(invocationContex);
             return invocationContex.getReturnValue();

@@ -3,7 +3,7 @@ package io.jexxa.infrastructure.drivingadapter.messaging;
 
 import io.jexxa.adapterapi.invocation.InvocationHandler;
 import io.jexxa.adapterapi.invocation.InvocationManager;
-import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
 import io.jexxa.utils.properties.Secret;

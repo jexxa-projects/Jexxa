@@ -1,6 +1,6 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
-import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.utils.function.ThrowingConsumer;
 
 import javax.management.InstanceAlreadyExistsException;

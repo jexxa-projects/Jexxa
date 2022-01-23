@@ -6,8 +6,8 @@ import java.util.Objects;
 
 public class InvocationContext {
     private final Method method;
-    private Object object;
-    private Object[] args;
+    private final Object object;
+    private final Object[] args;
 
     private Object returnValue;
 
@@ -21,7 +21,7 @@ public class InvocationContext {
     /**
      * This method performs a method invocation on given method.
      *
-     * @throws InvocationException forwards exception from Java's reflective API because it cannot be handled here in a meaningful way
+     * @throws InvocationTargetException forwards exception from Java's reflective API because it cannot be handled here in a meaningful way
      */
     public void invoke() throws InvocationTargetException, IllegalAccessException {
         returnValue = method.invoke(object, args);

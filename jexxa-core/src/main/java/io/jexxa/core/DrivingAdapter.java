@@ -2,7 +2,7 @@ package io.jexxa.core;
 
 import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
-import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 
 import java.lang.annotation.Annotation;
 import java.util.Objects;
