@@ -6,10 +6,9 @@ import java.lang.reflect.InvocationTargetException;
 
 public interface Interceptor {
 
-    default void before( InvocationContext invocationContext )  {}
+    void before( InvocationContext invocationContext );
 
-    default void after( InvocationContext invocationContext ) {}
+    void after( InvocationContext invocationContext );
 
-    default void surround( InvocationContext invocationContext ) throws InvocationTargetException, IllegalAccessException {}
-
+    void around(InvocationContext invocationContext ) throws InvocationTargetException, IllegalAccessException;
 }

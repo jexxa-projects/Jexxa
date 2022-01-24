@@ -1,5 +1,6 @@
 package io.jexxa.adapterapi.invocation;
 
+import io.jexxa.adapterapi.interceptor.DefaultInterceptor;
 import io.jexxa.adapterapi.interceptor.Interceptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,7 @@ class RootInterceptorTest {
     }
 
 
-    public static class DoubleInterceptor implements Interceptor
+    public static class DoubleInterceptor extends DefaultInterceptor
     {
         @Override
         public void before(InvocationContext invocationContext)

@@ -1,7 +1,10 @@
 package io.jexxa.adapterapi.invocation;
 
+import io.jexxa.adapterapi.interceptor.Interceptor;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Iterator;
 import java.util.Objects;
 
 public class InvocationContext {
@@ -10,12 +13,14 @@ public class InvocationContext {
     private final Object[] args;
 
     private Object returnValue;
+    private final Iterator<Interceptor> startingIterator;
 
-    public InvocationContext(Method method, Object object, Object[] args)
+    public InvocationContext(Method method, Object object, Object[] args, Iterator<Interceptor> startingIterator)
     {
         this.method = Objects.requireNonNull( method );
         this.object = Objects.requireNonNull( object );
         this.args = Objects.requireNonNull( args );
+        this.startingIterator = startingIterator;
     }
 
     /**
@@ -46,5 +51,15 @@ public class InvocationContext {
     public <T> T getReturnValue(Class<T> clazz)
     {
         return clazz.cast(returnValue);
+    }
+
+    public void proceed() throws InvocationTargetException, IllegalAccessException
+    {
+        if (startingIterator.hasNext())
+        {
+            startingIterator.next().around(this);
+        } else {
+            invoke();
+        }
     }
 }
