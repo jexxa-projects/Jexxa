@@ -33,17 +33,18 @@ public class RootInterceptor implements Interceptor, InvocationHandler {
         invocationContext.proceed();
     }
 
-    public void register(Interceptor interceptor) {
+    public RootInterceptor register(Interceptor interceptor) {
         beforeList.add(interceptor);
         afterList.add(interceptor);
         aroundList.add(interceptor);
+        return this;
     }
 
 
 
     @Override
     public Object invoke(Method method, Object object, Object[] args) throws InvocationTargetException, IllegalAccessException {
-        var invocationContext = new InvocationContext(method, object, args, aroundList.iterator());
+        var invocationContext = new InvocationContext(method, object, args, aroundList);
 
         synchronized (GLOBAL_SYNCHRONIZATION_OBJECT)
         {

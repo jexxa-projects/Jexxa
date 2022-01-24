@@ -5,6 +5,7 @@ import io.jexxa.adapterapi.interceptor.Interceptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 public class InvocationContext {
@@ -15,12 +16,13 @@ public class InvocationContext {
     private Object returnValue;
     private final Iterator<Interceptor> startingIterator;
 
-    public InvocationContext(Method method, Object object, Object[] args, Iterator<Interceptor> startingIterator)
+    public InvocationContext(Method method, Object object, Object[] args, List<Interceptor> aroundInterceptor)
     {
         this.method = Objects.requireNonNull( method );
         this.object = Objects.requireNonNull( object );
         this.args = Objects.requireNonNull( args );
-        this.startingIterator = startingIterator;
+        Objects.requireNonNull(aroundInterceptor);
+        this.startingIterator = aroundInterceptor.iterator();
     }
 
     /**
