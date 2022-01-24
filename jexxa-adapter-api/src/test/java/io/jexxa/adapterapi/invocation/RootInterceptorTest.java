@@ -105,7 +105,7 @@ class RootInterceptorTest {
         public void before(InvocationContext invocationContext)
         {
             try {
-                invocationContext.getMethod().invoke(invocationContext.getTarget(), invocationContext.getArgs());
+                invocationContext.invoke();
             } catch (InvocationTargetException | IllegalAccessException e)
             {
                 e.printStackTrace();
@@ -120,7 +120,7 @@ class RootInterceptorTest {
         public void after(InvocationContext invocationContext)
         {
             try {
-                invocationContext.getMethod().invoke(invocationContext.getTarget(), invocationContext.getArgs());
+                invocationContext.invoke();
             } catch (InvocationTargetException | IllegalAccessException e)
             {
                 e.printStackTrace();
@@ -134,7 +134,7 @@ class RootInterceptorTest {
         @Override
         public void around(InvocationContext invocationContext) throws InvocationTargetException, IllegalAccessException {
             try {
-                invocationContext.getMethod().invoke(invocationContext.getTarget(), invocationContext.getArgs());
+                invocationContext.invoke();
             } catch (InvocationTargetException | IllegalAccessException e)
             {
                 e.printStackTrace();
