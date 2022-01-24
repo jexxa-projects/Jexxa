@@ -1,7 +1,7 @@
 package io.jexxa.adapterapi.invocation;
 
 class TestObject {
-    int counter;
+    private int counter;
 
     public void increment() {
         ++counter;

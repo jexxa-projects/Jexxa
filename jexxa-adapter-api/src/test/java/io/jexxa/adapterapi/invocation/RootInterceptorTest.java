@@ -13,36 +13,34 @@ class RootInterceptorTest {
 
     private TestObject objectUnderTest;
     private InvocationHandler invocationHandler;
-    InvocationContext incrementInvocationContext;
 
 
     @BeforeEach
-    void initTest() throws NoSuchMethodException
+    void initTest()
     {
         objectUnderTest = new TestObject();
         invocationHandler = getInvocationHandler(objectUnderTest);
-        incrementInvocationContext = new InvocationContext( objectUnderTest.getClass().getMethod("increment"), objectUnderTest, new Object[0] );
     }
 
 
     @Test
-    void invokeTest() throws InvocationTargetException, IllegalAccessException {
+    void invokeTest() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         //Act
-        invocationHandler.invoke(incrementInvocationContext);
+        invocationHandler.invoke(objectUnderTest.getClass().getMethod("increment"), objectUnderTest, new Object[0]);
 
         //Assert
         assertEquals(1, objectUnderTest.getCounter());
     }
 
     @Test
-    void invokeWithDoubleInterceptor() throws InvocationTargetException, IllegalAccessException {
+    void invokeWithDoubleInterceptor() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         //Arrange
         InvocationManager
                 .getRootInterceptor(objectUnderTest)
                 .register(new DoubleInterceptor());
 
         //Act
-        invocationHandler.invoke(incrementInvocationContext);
+        invocationHandler.invoke(objectUnderTest.getClass().getMethod("increment"), objectUnderTest, new Object[0]);
 
         //Assert
         assertEquals(2, objectUnderTest.getCounter());

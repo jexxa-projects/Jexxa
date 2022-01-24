@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 
 public interface InvocationHandler
 {
-    void invoke(InvocationContext invocationContext) throws InvocationTargetException, IllegalAccessException;
     /**
      * This method performs a synchronized method invocation on given method.
      *

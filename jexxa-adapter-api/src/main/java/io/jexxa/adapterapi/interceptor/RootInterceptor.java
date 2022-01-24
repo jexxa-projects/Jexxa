@@ -37,21 +37,19 @@ public class RootInterceptor implements Interceptor, InvocationHandler {
     }
 
 
+
     @Override
-    public void invoke(InvocationContext invocationContext) throws InvocationTargetException, IllegalAccessException {
-        synchronized (GLOBAL_SYNCHRONIZATION_OBJECT) {
+    public Object invoke(Method method, Object object, Object[] args) throws InvocationTargetException, IllegalAccessException {
+        var invocationContext = new InvocationContext(method, object, args);
+
+        synchronized (GLOBAL_SYNCHRONIZATION_OBJECT)
+        {
             before(invocationContext);
             surround(invocationContext);
             after(invocationContext);
         }
-    }
 
-    @Override
-    public Object invoke(Method method, Object object, Object[] args) throws InvocationTargetException, IllegalAccessException {
-        synchronized (GLOBAL_SYNCHRONIZATION_OBJECT) {
-            var invocationContex = new InvocationContext(method, object, args);
-            invoke(invocationContex);
-            return invocationContex.getReturnValue();
-        }
+        return invocationContext.getReturnValue();
+
     }
 }
