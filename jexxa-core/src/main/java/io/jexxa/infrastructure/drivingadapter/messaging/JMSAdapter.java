@@ -1,9 +1,8 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
 
-import io.jexxa.adapterapi.invocation.InvocationHandler;
-import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
 import io.jexxa.utils.properties.Secret;
@@ -13,14 +12,11 @@ import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Session;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -124,7 +120,9 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             {
                 consumer = session.createConsumer(destination, jmsConfiguration.selector());
             }
-            consumer.setMessageListener( new SynchronizedMessageListener(messageListener)) ;
+
+            var invocationHandler = InvocationManager.getInvocationHandler(messageListener);
+            consumer.setMessageListener( message -> invocationHandler.invoke(messageListener::onMessage, message)) ;
 
             consumerList.add(consumer);
             registeredListener.add(object);
@@ -215,37 +213,6 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     {
         Validate.isTrue(properties.containsKey(JNDI_PROVIDER_URL_KEY), "Property + " + JNDI_PROVIDER_URL_KEY + " is missing ");
         Validate.isTrue(properties.containsKey(JNDI_FACTORY_KEY), "Property + " + JNDI_FACTORY_KEY + " is missing ");
-    }
-
-    static class SynchronizedMessageListener implements MessageListener
-    {
-        private final Method onMessage;
-        private final InvocationHandler invocationHandler;
-        private final MessageListener messageListener;
-
-        SynchronizedMessageListener(MessageListener jmsListener)
-        {
-            this.messageListener = Objects.requireNonNull(jmsListener);
-            this.invocationHandler = InvocationManager.getInvocationHandler(jmsListener);
-            try {
-                this.onMessage = jmsListener.getClass().getMethod("onMessage", Message.class);
-            } catch (NoSuchMethodException | SecurityException e)
-            {
-                throw new IllegalArgumentException(e);
-            }
-        }
-
-
-        @Override
-        public void onMessage(Message message)
-        {
-            try {
-                invocationHandler.invoke(onMessage, messageListener, new Object[]{message});
-            } catch ( InvocationTargetException | IllegalAccessException e)
-            {
-                JexxaLogger.getLogger(JMSAdapter.class).error(e.getMessage());
-            }
-        }
     }
 
     /**

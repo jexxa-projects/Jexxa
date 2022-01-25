@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RootInterceptorTest {
 
-    private TestObject objectUnderTest;
+    private CountingObject objectUnderTest;
     private InvocationHandler invocationHandler;
     private Method invocationMethod;
 
@@ -20,7 +20,7 @@ class RootInterceptorTest {
     @BeforeEach
     void initTest() throws NoSuchMethodException
     {
-        objectUnderTest = new TestObject();
+        objectUnderTest = new CountingObject();
         invocationHandler = getInvocationHandler(objectUnderTest);
         invocationMethod = objectUnderTest.getClass().getMethod("increment");
     }
@@ -42,7 +42,7 @@ class RootInterceptorTest {
         //Arrange
         InvocationManager
                 .getRootInterceptor(objectUnderTest)
-                .register(new DoubleInterceptorBefore());
+                .registerBefore(new DoubleInterceptorBefore());
 
         //Act
         invocationHandler.invoke(invocationMethod, objectUnderTest, new Object[0]);
@@ -58,7 +58,7 @@ class RootInterceptorTest {
         //Arrange
         InvocationManager
                 .getRootInterceptor(objectUnderTest)
-                .register(new DoubleInterceptorAfter());
+                .registerAfter(new DoubleInterceptorAfter());
 
         //Act
         invocationHandler.invoke(invocationMethod, objectUnderTest, new Object[0]);
@@ -73,7 +73,7 @@ class RootInterceptorTest {
         //Arrange
         InvocationManager
                 .getRootInterceptor(objectUnderTest)
-                .register(new DoubleInterceptorAround());
+                .registerAround(new DoubleInterceptorAround());
 
         //Act
         invocationHandler.invoke(objectUnderTest.getClass().getMethod("increment"), objectUnderTest, new Object[0]);
@@ -88,9 +88,9 @@ class RootInterceptorTest {
         //Arrange
         InvocationManager
                 .getRootInterceptor(objectUnderTest)
-                .register(new DoubleInterceptorBefore())
-                .register(new DoubleInterceptorAround())
-                .register(new DoubleInterceptorAfter());
+                .registerBefore(new DoubleInterceptorBefore())
+                .registerAround(new DoubleInterceptorAround())
+                .registerAfter(new DoubleInterceptorAfter());
 
         //Act
         invocationHandler.invoke(invocationMethod , objectUnderTest, new Object[0]);

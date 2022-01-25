@@ -4,11 +4,7 @@ import io.jexxa.adapterapi.invocation.InvocationContext;
 
 import java.lang.reflect.InvocationTargetException;
 
-public interface Interceptor {
-
-    void before( InvocationContext invocationContext );
-
-    void after( InvocationContext invocationContext );
+public interface AroundInterceptor  {
 
     void around(InvocationContext invocationContext ) throws InvocationTargetException, IllegalAccessException;
 }

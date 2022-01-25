@@ -4,7 +4,7 @@ import io.jexxa.adapterapi.invocation.InvocationContext;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class DefaultInterceptor implements Interceptor
+public class DefaultInterceptor implements AroundInterceptor, BeforeInterceptor, AfterInterceptor
 {
 
     @Override

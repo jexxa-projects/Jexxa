@@ -1,28 +1,20 @@
 package io.jexxa.adapterapi.invocation;
 
-import io.jexxa.adapterapi.interceptor.Interceptor;
+import io.jexxa.adapterapi.interceptor.AroundInterceptor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 
-public class InvocationContext {
-    private final Method method;
-    private final Object object;
-    private final Object[] args;
+public abstract class InvocationContext
+{
+    private final Iterator<AroundInterceptor> currentInterceptor;
 
-    private Object returnValue;
-    private final Iterator<Interceptor> startingIterator;
-
-    public InvocationContext(Method method, Object object, Object[] args, List<Interceptor> aroundInterceptor)
+    protected InvocationContext(Collection<AroundInterceptor> interceptors)
     {
-        this.method = Objects.requireNonNull( method );
-        this.object = Objects.requireNonNull( object );
-        this.args = Objects.requireNonNull( args );
-        Objects.requireNonNull(aroundInterceptor);
-        this.startingIterator = aroundInterceptor.iterator();
+        this.currentInterceptor = Objects.requireNonNull(interceptors).iterator();
     }
 
     /**
@@ -30,36 +22,32 @@ public class InvocationContext {
      *
      * @throws InvocationTargetException forwards exception from Java's reflective API because it cannot be handled here in a meaningful way
      */
-    public void invoke() throws InvocationTargetException, IllegalAccessException {
-        returnValue = method.invoke(object, args);
+    public abstract void invoke() throws InvocationTargetException, IllegalAccessException ;
+
+    public abstract Method getMethod();
+
+    public abstract Object getTarget();
+
+    public <T> T getTarget(Class<T> clazz)
+    {
+        return clazz.cast(getTarget());
     }
 
-    public Method getMethod() {
-        return method;
-    }
 
-    public Object getTarget() {
-        return object;
-    }
+    public abstract Object[] getArgs();
 
-    public Object[] getArgs() {
-        return args;
-    }
-
-    public Object getReturnValue() {
-        return returnValue;
-    }
+    public abstract Object getReturnValue();
 
     public <T> T getReturnValue(Class<T> clazz)
     {
-        return clazz.cast(returnValue);
+        return clazz.cast(getReturnValue());
     }
 
     public void proceed() throws InvocationTargetException, IllegalAccessException
     {
-        if (startingIterator.hasNext())
+        if (currentInterceptor.hasNext())
         {
-            startingIterator.next().around(this);
+            currentInterceptor.next().around(this);
         } else {
             invoke();
         }
