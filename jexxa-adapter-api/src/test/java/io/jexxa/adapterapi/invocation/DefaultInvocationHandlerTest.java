@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 import static io.jexxa.adapterapi.invocation.InvocationManager.getInvocationHandler;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class RootInterceptorTest {
+class DefaultInvocationHandlerTest {
 
     private CountingObject objectUnderTest;
     private InvocationHandler invocationHandler;

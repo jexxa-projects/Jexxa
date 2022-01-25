@@ -1,11 +1,9 @@
 package io.jexxa.adapterapi.invocation;
 
-import io.jexxa.adapterapi.interceptor.RootInterceptor;
-
 import java.util.HashMap;
 
 public class InvocationManager {
-    private static final HashMap<Object, RootInterceptor> invocationHandlerMap = new HashMap<>();
+    private static final HashMap<Object, DefaultInvocationHandler> invocationHandlerMap = new HashMap<>();
 
 
     public static InvocationHandler getInvocationHandler(Object object)
@@ -18,14 +16,14 @@ public class InvocationManager {
         return invocationHandlerMap.get(object);
     }
 
-    public static RootInterceptor getRootInterceptor(Object object)
+    public static DefaultInvocationHandler getRootInterceptor(Object object)
     {
-        return (RootInterceptor) getInvocationHandler(object);
+        return (DefaultInvocationHandler) getInvocationHandler(object);
     }
 
-    private static RootInterceptor createDefaultInvocationHandler()
+    private static DefaultInvocationHandler createDefaultInvocationHandler()
     {
-        return new RootInterceptor();
+        return new DefaultInvocationHandler();
     }
 
     private InvocationManager()

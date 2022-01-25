@@ -1,7 +1,8 @@
-package io.jexxa.adapterapi.interceptor;
+package io.jexxa.adapterapi.invocation;
 
-import io.jexxa.adapterapi.invocation.InvocationContext;
-import io.jexxa.adapterapi.invocation.InvocationHandler;
+import io.jexxa.adapterapi.interceptor.AfterInterceptor;
+import io.jexxa.adapterapi.interceptor.AroundInterceptor;
+import io.jexxa.adapterapi.interceptor.BeforeInterceptor;
 import io.jexxa.adapterapi.invocation.function.SerializableConsumer;
 import io.jexxa.adapterapi.invocation.function.SerializableFunction;
 import io.jexxa.adapterapi.invocation.function.SerializableRunnable;
@@ -17,7 +18,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RootInterceptor implements AroundInterceptor, BeforeInterceptor, AfterInterceptor, InvocationHandler {
+public class DefaultInvocationHandler implements AroundInterceptor, BeforeInterceptor, AfterInterceptor, InvocationHandler {
     private final List<BeforeInterceptor> beforeList = new ArrayList<>();
     private final List<AfterInterceptor> afterList = new ArrayList<>();
     private final List<AroundInterceptor> aroundList = new ArrayList<>();
@@ -42,17 +43,17 @@ public class RootInterceptor implements AroundInterceptor, BeforeInterceptor, Af
         invocationContext.proceed();
     }
 
-    public RootInterceptor registerAround(AroundInterceptor interceptor) {
+    public DefaultInvocationHandler registerAround(AroundInterceptor interceptor) {
         aroundList.add(interceptor);
         return this;
     }
 
-    public RootInterceptor registerBefore(BeforeInterceptor interceptor) {
+    public DefaultInvocationHandler registerBefore(BeforeInterceptor interceptor) {
         beforeList.add(interceptor);
         return this;
     }
 
-    public RootInterceptor registerAfter(AfterInterceptor interceptor) {
+    public DefaultInvocationHandler registerAfter(AfterInterceptor interceptor) {
         afterList.add(interceptor);
         return this;
     }
