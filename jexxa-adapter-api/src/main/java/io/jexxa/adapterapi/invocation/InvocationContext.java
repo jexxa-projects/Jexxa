@@ -48,13 +48,20 @@ public abstract class InvocationContext
         return clazz.cast(getReturnValue());
     }
 
-    public void proceed() throws InvocationTargetException, IllegalAccessException
-    {
-        if (currentInterceptor.hasNext())
+    public void proceed()  {
+        try {
+            if (currentInterceptor.hasNext())
+            {
+                currentInterceptor.next().around(this);
+            } else {
+                    invoke();
+            }
+        } catch ( InvocationTargetException e)
         {
-            currentInterceptor.next().around(this);
-        } else {
-            invoke();
+            throw new InvocationTargetRuntimeException( e.getTargetException() );
+        } catch ( IllegalAccessException e )
+        {
+            throw new InvocationTargetRuntimeException( e );
         }
     }
 }

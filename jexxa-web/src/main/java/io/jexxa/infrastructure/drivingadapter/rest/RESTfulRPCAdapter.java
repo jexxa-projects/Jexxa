@@ -8,6 +8,7 @@ import io.javalin.core.JavalinConfig;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JsonMapper;
+import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
 import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
@@ -200,26 +201,29 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private void registerExceptionHandler()
     {
         //Exception Handler for thrown Exception from methods
-        javalin.exception(InvocationTargetException.class, (e, ctx) -> {
-            var targetException = e.getTargetException();
-            if ( targetException != null )
-            {
-                targetException.getStackTrace(); // Ensures that stack trace is filled in
+        javalin.exception(InvocationTargetException.class, (e, ctx) ->  handleTargetException(e.getTargetException(), ctx));
+        javalin.exception(InvocationTargetRuntimeException.class, (e, ctx) ->  handleTargetException(e.getTargetException(), ctx));
+    }
 
-                JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("{} occurred when processing {} request {}",
-                        targetException.getClass().getSimpleName(), ctx.method(), ctx.path());
-                JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Content of Body: {}", ctx.body());
-                JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Exception message: {}", targetException.getMessage());
+    private void handleTargetException(Throwable targetException, Context ctx )
+    {
+        if ( targetException != null )
+        {
+            targetException.getStackTrace(); // Ensures that stack trace is filled in
 
-                var exceptionWrapper = new JsonObject();
-                exceptionWrapper.addProperty("ExceptionType", targetException.getClass().getName());
-                exceptionWrapper.addProperty("Exception", jsonConverter.toJson(targetException));
-                exceptionWrapper.addProperty("ApplicationType", jsonConverter.toJson("application/json"));
+            JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("{} occurred when processing {} request {}",
+                    targetException.getClass().getSimpleName(), ctx.method(), ctx.path());
+            JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Content of Body: {}", ctx.body());
+            JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Exception message: {}", targetException.getMessage());
 
-                ctx.result(exceptionWrapper.toString());
-            }
-            ctx.status(400);
-        });
+            var exceptionWrapper = new JsonObject();
+            exceptionWrapper.addProperty("ExceptionType", targetException.getClass().getName());
+            exceptionWrapper.addProperty("Exception", jsonConverter.toJson(targetException));
+            exceptionWrapper.addProperty("ApplicationType", jsonConverter.toJson("application/json"));
+
+            ctx.result(exceptionWrapper.toString());
+        }
+        ctx.status(400);
     }
 
     private void registerGETMethods(Object object)
