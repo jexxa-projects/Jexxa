@@ -14,9 +14,9 @@ public class FunctionInvocationContext<T, R> extends InvocationContext
     private final T argument;
     private R returnValue;
 
-    public FunctionInvocationContext(Function<T, R> function, T argument, Collection<AroundInterceptor> interceptors)
+    public FunctionInvocationContext(Object targetObject, Function<T, R> function, T argument, Collection<AroundInterceptor> interceptors)
     {
-        super(interceptors);
+        super(targetObject,interceptors);
         this.function = function;
         this.argument = argument;
     }

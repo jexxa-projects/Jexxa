@@ -1,11 +1,12 @@
 package io.jexxa.adapterapi.invocation;
 
-import java.io.Serializable;
+import io.jexxa.adapterapi.invocation.function.SerializableConsumer;
+import io.jexxa.adapterapi.invocation.function.SerializableFunction;
+import io.jexxa.adapterapi.invocation.function.SerializableRunnable;
+import io.jexxa.adapterapi.invocation.function.SerializableSupplier;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public interface InvocationHandler
 {
@@ -21,17 +22,12 @@ public interface InvocationHandler
      */
     Object invoke(Method method, Object object, Object[] args ) throws InvocationTargetException, IllegalAccessException;
 
-    void invoke(Object targetObject, JRunnable runnable) ;
+    void invoke(Object targetObject, SerializableRunnable runnable) ;
 
-    <T> void invoke(Consumer<T> consumer, T argument);
+    <T> void invoke(Object targetObject,SerializableConsumer<T> consumer, T argument);
 
-    <T> T invoke(Supplier<T> supplier);
+    <T> T invoke(Object targetObject,SerializableSupplier<T> supplier);
 
-    <T, R> R invoke(Function<T, R> function, T argument);
+    <T, R> R invoke(Object targetObject,SerializableFunction<T, R> function, T argument);
 
-    @FunctionalInterface
-    public static interface JRunnable extends Runnable, Serializable
-    {
-
-    }
 }

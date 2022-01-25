@@ -14,8 +14,8 @@ public class ConsumerInvocationContext<T> extends InvocationContext
     private final T argument;
 
 
-    public ConsumerInvocationContext(Consumer<T> consumer, T argument, Collection<AroundInterceptor> interceptors) {
-        super(interceptors);
+    public ConsumerInvocationContext(Object targetObject, Consumer<T> consumer, T argument, Collection<AroundInterceptor> interceptors) {
+        super(targetObject,interceptors);
         this.consumer = consumer;
         this.argument  = argument;
     }

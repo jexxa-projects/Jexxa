@@ -2,19 +2,20 @@ package io.jexxa.adapterapi.interceptor;
 
 import io.jexxa.adapterapi.invocation.InvocationContext;
 import io.jexxa.adapterapi.invocation.InvocationHandler;
+import io.jexxa.adapterapi.invocation.function.SerializableConsumer;
+import io.jexxa.adapterapi.invocation.function.SerializableFunction;
+import io.jexxa.adapterapi.invocation.function.SerializableRunnable;
 import io.jexxa.adapterapi.invocation.context.ConsumerInvocationContext;
 import io.jexxa.adapterapi.invocation.context.FunctionInvocationContext;
 import io.jexxa.adapterapi.invocation.context.MethodInvocationContext;
 import io.jexxa.adapterapi.invocation.context.RunnableInvocationContext;
 import io.jexxa.adapterapi.invocation.context.SupplierInvocationContext;
+import io.jexxa.adapterapi.invocation.function.SerializableSupplier;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class RootInterceptor implements AroundInterceptor, BeforeInterceptor, AfterInterceptor, InvocationHandler {
     private final List<BeforeInterceptor> beforeList = new ArrayList<>();
@@ -67,7 +68,7 @@ public class RootInterceptor implements AroundInterceptor, BeforeInterceptor, Af
     }
 
     @Override
-    public void invoke(Object targetObject, JRunnable runnable)
+    public void invoke(Object targetObject, SerializableRunnable runnable)
     {
         try {
             var invocationContext = new RunnableInvocationContext(targetObject, runnable, aroundList);
@@ -79,10 +80,10 @@ public class RootInterceptor implements AroundInterceptor, BeforeInterceptor, Af
     }
 
     @Override
-    public <T> void invoke(Consumer<T> consumer, T argument)
+    public <T> void invoke(Object targetObject,SerializableConsumer<T> consumer, T argument)
     {
         try {
-            var invocationContext = new ConsumerInvocationContext<>(consumer, argument, aroundList);
+            var invocationContext = new ConsumerInvocationContext<>(targetObject, consumer, argument, aroundList);
             invoke(invocationContext);
         } catch (InvocationTargetException | IllegalAccessException e)
         {
@@ -91,9 +92,9 @@ public class RootInterceptor implements AroundInterceptor, BeforeInterceptor, Af
     }
 
     @Override
-    public <T> T invoke(Supplier<T> supplier) {
+    public <T> T invoke(Object targetObject,SerializableSupplier<T> supplier) {
         try {
-            var invocationContext = new SupplierInvocationContext<>(supplier, aroundList);
+            var invocationContext = new SupplierInvocationContext<>(targetObject, supplier, aroundList);
             invoke(invocationContext);
             return invocationContext.getReturnValue();
         } catch (InvocationTargetException | IllegalAccessException e)
@@ -103,9 +104,9 @@ public class RootInterceptor implements AroundInterceptor, BeforeInterceptor, Af
     }
 
     @Override
-    public <T, R> R invoke(Function<T, R> function, T argument) {
+    public <T, R> R invoke(Object targetObject,SerializableFunction<T, R> function, T argument) {
         try {
-            var invocationContext = new FunctionInvocationContext<>(function, argument, aroundList);
+            var invocationContext = new FunctionInvocationContext<>(targetObject, function, argument, aroundList);
             invoke(invocationContext);
             return invocationContext.getReturnValue();
         } catch (InvocationTargetException | IllegalAccessException e)

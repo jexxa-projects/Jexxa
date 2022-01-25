@@ -6,6 +6,8 @@ import io.jexxa.utils.JexxaLogger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class JexxaMainInterceptorTest
 {
     private JexxaMain objectUnderTest;
@@ -17,20 +19,27 @@ class JexxaMainInterceptorTest
     }
 
     @Test
-    void testLoggingInterceptor() {
+    void testLoggingInterceptor()
+    {
         //Arrange
-        objectUnderTest
-                .intercept( IncrementApplicationService.class )
-                .before( invocationContext -> JexxaLogger.getLogger(IncrementApplicationService.class)
-                        .info( "Call method " + invocationContext.getMethod().getName( ))
-                );
-
         var targetObject = objectUnderTest.getInstanceOfPort(IncrementApplicationService.class);
         var invocationHandler = InvocationManager.getInvocationHandler(targetObject);
+        var result = new String[3];
+
+        objectUnderTest
+                .intercept( targetObject )
+                .beforeAnd( invocationContext -> result[0] = "Before " + invocationContext.getMethod().getName( ))
+                .aroundAnd( invocationContext -> result[1] = "Around " + invocationContext.getMethod().getName( ))
+                .after( invocationContext -> result[2] = "After " +  invocationContext.getMethod().getName( ));
+
 
         //Act - DrivingAdapter View
         invocationHandler.invoke(targetObject, targetObject::increment);
-        //invocationHandler.invoke(IncrementApplicationService.class.getMethod("increment"), targetObject, new Object[0]);
+
+        //Assert
+        assertEquals("Before increment", result[0]);
+        assertEquals("Around increment", result[1]);
+        assertEquals("After increment", result[2]);
     }
 
 }

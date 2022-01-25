@@ -13,9 +13,9 @@ public class SupplierInvocationContext<T> extends InvocationContext
     private final Supplier<T> supplier;
     T returnValue;
 
-    public SupplierInvocationContext(Supplier<T> supplier, Collection<AroundInterceptor> interceptors)
+    public SupplierInvocationContext(Object targetObject, Supplier<T> supplier, Collection<AroundInterceptor> interceptors)
     {
-        super(interceptors);
+        super(targetObject,interceptors);
         this.supplier = supplier;
     }
 

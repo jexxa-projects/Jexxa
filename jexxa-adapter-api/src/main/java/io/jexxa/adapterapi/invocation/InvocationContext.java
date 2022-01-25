@@ -11,10 +11,12 @@ import java.util.Objects;
 public abstract class InvocationContext
 {
     private final Iterator<AroundInterceptor> currentInterceptor;
+    private final Object targetObject;
 
-    protected InvocationContext(Collection<AroundInterceptor> interceptors)
+    protected InvocationContext(Object targetObject, Collection<AroundInterceptor> interceptors)
     {
         this.currentInterceptor = Objects.requireNonNull(interceptors).iterator();
+        this.targetObject = targetObject;
     }
 
     /**
@@ -26,7 +28,10 @@ public abstract class InvocationContext
 
     public abstract Method getMethod();
 
-    public abstract Object getTarget();
+    public Object getTarget()
+    {
+        return targetObject;
+    }
 
     public <T> T getTarget(Class<T> clazz)
     {

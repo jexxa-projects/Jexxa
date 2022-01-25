@@ -122,7 +122,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             }
 
             var invocationHandler = InvocationManager.getInvocationHandler(messageListener);
-            consumer.setMessageListener( message -> invocationHandler.invoke(messageListener::onMessage, message)) ;
+            consumer.setMessageListener( message -> invocationHandler.invoke(messageListener, messageListener::onMessage, message)) ;
 
             consumerList.add(consumer);
             registeredListener.add(object);

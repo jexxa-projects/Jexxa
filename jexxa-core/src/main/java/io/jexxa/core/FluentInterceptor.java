@@ -1,10 +1,8 @@
 package io.jexxa.core;
 
-import io.jexxa.adapterapi.interceptor.BeforeInterceptor;
 import io.jexxa.adapterapi.invocation.InvocationContext;
 import io.jexxa.adapterapi.invocation.InvocationManager;
 
-import javax.naming.spi.NamingManager;
 import java.util.function.Consumer;
 
 public class FluentInterceptor<T>
@@ -20,25 +18,46 @@ public class FluentInterceptor<T>
 
     JexxaMain before(Consumer<InvocationContext> consumer)
     {
-        InvocationManager.getRootInterceptor(targetObject).registerBefore( new BeforeConsumerInterceptor(consumer) );
+        InvocationManager
+                .getRootInterceptor(targetObject)
+                .registerBefore(consumer::accept);
+
         return jexxaMain;
     }
 
-
-    private static class BeforeConsumerInterceptor implements BeforeInterceptor
+    FluentInterceptor<T> beforeAnd(Consumer<InvocationContext> consumer)
     {
-        Consumer<InvocationContext> consumer;
-
-        public BeforeConsumerInterceptor(Consumer<InvocationContext> consumer)
-        {
-            this.consumer = consumer;
-        }
-
-        @Override
-        public void before(InvocationContext invocationContext)
-        {
-            consumer.accept(invocationContext);
-        }
+        before(consumer);
+        return this;
     }
 
+    JexxaMain after(Consumer<InvocationContext> consumer)
+    {
+        InvocationManager
+                .getRootInterceptor(targetObject)
+                .registerAfter(consumer::accept);
+
+        return jexxaMain;
+    }
+
+    FluentInterceptor<T> afterAnd(Consumer<InvocationContext> consumer)
+    {
+        after(consumer);
+        return this;
+    }
+
+    JexxaMain around(Consumer<InvocationContext> consumer)
+    {
+        InvocationManager
+                .getRootInterceptor(targetObject)
+                .registerAround(consumer::accept);
+
+        return jexxaMain;
+    }
+
+    FluentInterceptor<T> aroundAnd(Consumer<InvocationContext> consumer)
+    {
+        around(consumer);
+        return this;
+    }
 }

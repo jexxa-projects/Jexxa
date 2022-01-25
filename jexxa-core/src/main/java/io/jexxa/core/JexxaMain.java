@@ -161,6 +161,12 @@ public final class JexxaMain
     }
 
     @CheckReturnValue
+    public FluentInterceptor<Object> intercept(Object object)
+    {
+        return new FluentInterceptor<>(object, this);
+    }
+
+    @CheckReturnValue
     public <T extends IDrivingAdapter> DrivingAdapter<T>  conditionalBind(BooleanSupplier conditional, Class<T> clazz)
     {
         return new DrivingAdapter<>(conditional, clazz, this);

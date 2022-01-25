@@ -17,7 +17,7 @@ public class MethodInvocationContext extends InvocationContext {
 
     public MethodInvocationContext(Method method, Object object, Object[] args, List<AroundInterceptor> interceptors)
     {
-        super(interceptors);
+        super(object,interceptors);
         this.method = Objects.requireNonNull( method );
         this.object = Objects.requireNonNull( object );
         this.args = Objects.requireNonNull( args );
@@ -34,10 +34,6 @@ public class MethodInvocationContext extends InvocationContext {
 
     public Method getMethod() {
         return method;
-    }
-
-    public Object getTarget() {
-        return object;
     }
 
     public Object[] getArgs() {

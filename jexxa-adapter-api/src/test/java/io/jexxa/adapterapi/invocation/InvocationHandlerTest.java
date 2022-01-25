@@ -34,7 +34,7 @@ class InvocationHandlerTest {
         int element = 100;
 
         //Act
-        invocationHandler.invoke(  objectUnderTest::setCounter, element );
+        invocationHandler.invoke(objectUnderTest,  objectUnderTest::setCounter, element );
 
         //Assert
         assertEquals(element, objectUnderTest.getCounter());
@@ -45,10 +45,10 @@ class InvocationHandlerTest {
     {
         //Arrange
         int element = 100;
-        invocationHandler.invoke(  objectUnderTest::setCounter, element );
+        invocationHandler.invoke( objectUnderTest, objectUnderTest::setCounter, element );
 
         //Act
-        var result = invocationHandler.invoke(  objectUnderTest::getCounter );
+        var result = invocationHandler.invoke( objectUnderTest, objectUnderTest::getCounter );
 
         //Assert
         assertEquals(element, result);
@@ -61,7 +61,7 @@ class InvocationHandlerTest {
         int element = 100;
 
         //Act
-        var result = invocationHandler.invoke(  objectUnderTest::setGetCounter, element );
+        var result = invocationHandler.invoke( objectUnderTest, objectUnderTest::setGetCounter, element );
 
         //Assert
         assertEquals(element, result);
