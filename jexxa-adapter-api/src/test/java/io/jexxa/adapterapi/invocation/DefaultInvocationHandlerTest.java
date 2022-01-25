@@ -1,11 +1,11 @@
 package io.jexxa.adapterapi.invocation;
 
-import io.jexxa.adapterapi.interceptor.DefaultInterceptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static io.jexxa.adapterapi.invocation.InvocationManager.getInvocationHandler;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,14 +40,17 @@ class DefaultInvocationHandlerTest {
     void invokeWithDoubleInterceptorBefore() throws InvocationTargetException, IllegalAccessException
     {
         //Arrange
+        AtomicInteger interceptingBeforeResult = new AtomicInteger(0);
+
         InvocationManager
                 .getRootInterceptor(objectUnderTest)
-                .registerBefore(new DoubleInterceptorBefore());
+                .registerBefore(invocationContext -> { interceptingBeforeResult.set(objectUnderTest.getCounter()); invocationContext.invoke();});
 
         //Act
         invocationHandler.invoke(invocationMethod, objectUnderTest, new Object[0]);
 
         //Assert
+        assertEquals(0, interceptingBeforeResult.get());
         assertEquals(2, objectUnderTest.getCounter());
     }
 
@@ -56,14 +59,16 @@ class DefaultInvocationHandlerTest {
     void invokeWithDoubleInterceptorAfter() throws InvocationTargetException, IllegalAccessException
     {
         //Arrange
+        AtomicInteger interceptingAfterResult = new AtomicInteger(0);
         InvocationManager
                 .getRootInterceptor(objectUnderTest)
-                .registerAfter(new DoubleInterceptorAfter());
+                .registerAfter(invocationContext -> { interceptingAfterResult.set(objectUnderTest.getCounter()); invocationContext.invoke();});
 
         //Act
         invocationHandler.invoke(invocationMethod, objectUnderTest, new Object[0]);
 
         //Assert
+        assertEquals(1, interceptingAfterResult.get());
         assertEquals(2, objectUnderTest.getCounter());
     }
 
@@ -71,77 +76,46 @@ class DefaultInvocationHandlerTest {
     void invokeWithDoubleInterceptorAround() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException
     {
         //Arrange
+        AtomicInteger interceptingAroundBeforeResult = new AtomicInteger(0);
+        AtomicInteger interceptingAroundAfterResult = new AtomicInteger(0);
+
         InvocationManager
                 .getRootInterceptor(objectUnderTest)
-                .registerAround(new DoubleInterceptorAround());
+                .registerAround(invocationContext -> {
+                    interceptingAroundBeforeResult.set(objectUnderTest.getCounter());
+                    invocationContext.proceed();
+                    interceptingAroundAfterResult.set(objectUnderTest.getCounter());}
+                );
 
         //Act
         invocationHandler.invoke(objectUnderTest.getClass().getMethod("increment"), objectUnderTest, new Object[0]);
 
         //Assert
-        assertEquals(2, objectUnderTest.getCounter());
+        assertEquals(0, interceptingAroundBeforeResult.get());
+        assertEquals(1, interceptingAroundAfterResult.get());
+        assertEquals(1, objectUnderTest.getCounter());
     }
 
     @Test
     void invokeWithAllDoubleInterceptors() throws InvocationTargetException, IllegalAccessException
     {
+        final Integer[] interceptingResults = new Integer[3];
+
         //Arrange
         InvocationManager
                 .getRootInterceptor(objectUnderTest)
-                .registerBefore(new DoubleInterceptorBefore())
-                .registerAround(new DoubleInterceptorAround())
-                .registerAfter(new DoubleInterceptorAfter());
+                .registerBefore(invocationContext -> { invocationContext.invoke(); interceptingResults[0]  = objectUnderTest.getCounter(); })
+                .registerAround(invocationContext -> { invocationContext.invoke(); interceptingResults[1]  = objectUnderTest.getCounter(); invocationContext.proceed();})
+                .registerAfter(invocationContext -> {  interceptingResults[2]  = objectUnderTest.getCounter(); invocationContext.invoke();});
 
         //Act
         invocationHandler.invoke(invocationMethod , objectUnderTest, new Object[0]);
 
         //Assert
+        assertEquals(1, interceptingResults[0]);
+        assertEquals(2, interceptingResults[1]);
+        assertEquals(3, interceptingResults[2]);
         assertEquals(4, objectUnderTest.getCounter());
-    }
-
-    public static class DoubleInterceptorBefore extends DefaultInterceptor
-    {
-        @Override
-        public void before(InvocationContext invocationContext)
-        {
-            try {
-                invocationContext.invoke();
-            } catch (InvocationTargetException | IllegalAccessException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-    public static class DoubleInterceptorAfter extends DefaultInterceptor
-    {
-        @Override
-        public void after(InvocationContext invocationContext)
-        {
-            try {
-                invocationContext.invoke();
-            } catch (InvocationTargetException | IllegalAccessException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-    public static class DoubleInterceptorAround extends DefaultInterceptor
-    {
-        @Override
-        public void around(InvocationContext invocationContext) throws InvocationTargetException, IllegalAccessException {
-            try {
-                invocationContext.invoke();
-            } catch (InvocationTargetException | IllegalAccessException e)
-            {
-                e.printStackTrace();
-            }
-
-            invocationContext.proceed();
-        }
     }
 
 }

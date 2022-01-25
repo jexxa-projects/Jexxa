@@ -22,9 +22,9 @@ public abstract class InvocationContext
     /**
      * This method performs a method invocation on given method.
      *
-     * @throws InvocationTargetException forwards exception from Java's reflective API because it cannot be handled here in a meaningful way
+     * @throws InvocationTargetRuntimeException forwards exception from Java's reflective API because it cannot be handled here in a meaningful way
      */
-    public abstract void invoke() throws InvocationTargetException, IllegalAccessException ;
+    public abstract void invoke();
 
     public abstract Method getMethod();
 

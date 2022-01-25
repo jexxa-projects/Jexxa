@@ -4,17 +4,14 @@ import io.jexxa.adapterapi.interceptor.AroundInterceptor;
 import io.jexxa.adapterapi.invocation.InvocationContext;
 import io.jexxa.adapterapi.invocation.function.SerializableRunnable;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.Objects;
-
-import static io.jexxa.adapterapi.invocation.context.LambdaUtils.getSerializedLambda;
 
 public class RunnableInvocationContext extends InvocationContext
 {
     private final SerializableRunnable runnable;
     private final Object targetObject;
+    private Method method;
 
     public RunnableInvocationContext(Object targetObject, SerializableRunnable runnable, Collection<AroundInterceptor> interceptors)
     {
@@ -24,18 +21,19 @@ public class RunnableInvocationContext extends InvocationContext
     }
 
     @Override
-    public void invoke() throws InvocationTargetException, IllegalAccessException {
+    public void invoke()
+    {
         runnable.run();
     }
 
     @Override
-    public Method getMethod() {
-        try {
-            return getTarget().getClass().getMethod(Objects.requireNonNull(getSerializedLambda(runnable)).getImplMethodName());
-        } catch (NoSuchMethodException | SecurityException e)
+    public Method getMethod()
+    {
+        if (method == null)
         {
-            throw new IllegalStateException(e);
+           method = LambdaUtils.getImplMethod(getTarget(), runnable);
         }
+        return method;
     }
 
     @Override

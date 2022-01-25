@@ -2,19 +2,23 @@ package io.jexxa.adapterapi.invocation.context;
 
 import io.jexxa.adapterapi.interceptor.AroundInterceptor;
 import io.jexxa.adapterapi.invocation.InvocationContext;
+import io.jexxa.adapterapi.invocation.function.SerializableFunction;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.function.Function;
 
 public class FunctionInvocationContext<T, R> extends InvocationContext
 {
-    private final Function<T, R> function;
+    private final SerializableFunction<T, R> function;
     private final T argument;
     private R returnValue;
+    Method method;
 
-    public FunctionInvocationContext(Object targetObject, Function<T, R> function, T argument, Collection<AroundInterceptor> interceptors)
+    public FunctionInvocationContext(Object targetObject,
+                                     SerializableFunction<T, R> function,
+                                     T argument,
+                                     Collection<AroundInterceptor> interceptors)
     {
         super(targetObject,interceptors);
         this.function = function;
@@ -22,19 +26,18 @@ public class FunctionInvocationContext<T, R> extends InvocationContext
     }
 
     @Override
-    public void invoke() throws InvocationTargetException, IllegalAccessException
+    public void invoke()
     {
         returnValue = function.apply(argument);
     }
 
     @Override
     public Method getMethod() {
-        try {
-            return function.getClass().getMethod("apply");
-        } catch (NoSuchMethodException | SecurityException e)
+        if (method == null)
         {
-            throw new IllegalStateException(e);
+            method = LambdaUtils.getImplMethod(getTarget(), function);
         }
+        return method;
     }
 
     @Override

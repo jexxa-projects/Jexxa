@@ -2,37 +2,42 @@ package io.jexxa.adapterapi.invocation.context;
 
 import io.jexxa.adapterapi.interceptor.AroundInterceptor;
 import io.jexxa.adapterapi.invocation.InvocationContext;
+import io.jexxa.adapterapi.invocation.function.SerializableConsumer;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.function.Consumer;
 
 public class ConsumerInvocationContext<T> extends InvocationContext
 {
-    private final Consumer<T> consumer;
+    private final SerializableConsumer<T> consumer;
     private final T argument;
+    Method method;
 
 
-    public ConsumerInvocationContext(Object targetObject, Consumer<T> consumer, T argument, Collection<AroundInterceptor> interceptors) {
+    public ConsumerInvocationContext(Object targetObject,
+                                     SerializableConsumer<T> consumer,
+                                     T argument,
+                                     Collection<AroundInterceptor> interceptors)
+    {
         super(targetObject,interceptors);
         this.consumer = consumer;
         this.argument  = argument;
     }
 
     @Override
-    public void invoke() throws InvocationTargetException, IllegalAccessException {
+    public void invoke()
+    {
         consumer.accept(argument);
     }
 
     @Override
     public Method getMethod() {
-        try {
-            return consumer.getClass().getMethod("accept", Object.class);
-        } catch (NoSuchMethodException | SecurityException e)
+        if (method == null)
         {
-            throw new IllegalStateException(e);
+            method = LambdaUtils.getImplMethod(getTarget(), consumer);
         }
+        return method;
     }
 
     @Override

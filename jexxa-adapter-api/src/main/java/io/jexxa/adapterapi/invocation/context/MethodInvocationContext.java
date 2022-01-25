@@ -2,6 +2,7 @@ package io.jexxa.adapterapi.invocation.context;
 
 import io.jexxa.adapterapi.interceptor.AroundInterceptor;
 import io.jexxa.adapterapi.invocation.InvocationContext;
+import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -23,13 +24,18 @@ public class MethodInvocationContext extends InvocationContext {
         this.args = Objects.requireNonNull( args );
     }
 
-    /**
-     * This method performs a method invocation on given method.
-     *
-     * @throws InvocationTargetException forwards exception from Java's reflective API because it cannot be handled here in a meaningful way
-     */
-    public void invoke() throws InvocationTargetException, IllegalAccessException {
-        returnValue = method.invoke(object, args);
+    @Override
+    public void invoke()
+    {
+        try {
+            returnValue = method.invoke(object, args);
+        } catch (InvocationTargetException e)
+        {
+            throw new InvocationTargetRuntimeException(e.getTargetException());
+        } catch (IllegalAccessException e)
+        {
+            throw new InvocationTargetRuntimeException(e);
+        }
     }
 
     public Method getMethod() {

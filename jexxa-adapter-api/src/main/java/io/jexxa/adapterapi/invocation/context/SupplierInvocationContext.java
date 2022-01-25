@@ -2,37 +2,39 @@ package io.jexxa.adapterapi.invocation.context;
 
 import io.jexxa.adapterapi.interceptor.AroundInterceptor;
 import io.jexxa.adapterapi.invocation.InvocationContext;
+import io.jexxa.adapterapi.invocation.function.SerializableSupplier;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.function.Supplier;
 
 public class SupplierInvocationContext<T> extends InvocationContext
 {
-    private final Supplier<T> supplier;
+    private final SerializableSupplier<T> supplier;
     T returnValue;
+    Method method;
 
-    public SupplierInvocationContext(Object targetObject, Supplier<T> supplier, Collection<AroundInterceptor> interceptors)
+    public SupplierInvocationContext(Object targetObject,
+                                     SerializableSupplier<T> supplier,
+                                     Collection<AroundInterceptor> interceptors)
     {
         super(targetObject,interceptors);
         this.supplier = supplier;
     }
 
     @Override
-    public void invoke() throws InvocationTargetException, IllegalAccessException
+    public void invoke()
     {
         returnValue = supplier.get();
     }
 
     @Override
     public Method getMethod() {
-        try {
-            return supplier.getClass().getMethod("get");
-        } catch (NoSuchMethodException | SecurityException e)
+        if (method == null)
         {
-            throw new IllegalStateException(e);
+            method = LambdaUtils.getImplMethod(getTarget(), supplier);
         }
+        return method;
     }
 
     @Override
