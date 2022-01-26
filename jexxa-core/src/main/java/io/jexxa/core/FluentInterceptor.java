@@ -3,59 +3,63 @@ package io.jexxa.core;
 import io.jexxa.adapterapi.invocation.InvocationContext;
 import io.jexxa.adapterapi.invocation.InvocationManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Consumer;
 
-public class FluentInterceptor<T>
+public class FluentInterceptor
 {
-    private final T targetObject;
+    private final Collection<Object> targetObjects = new ArrayList<>();
     private final JexxaMain jexxaMain;
 
-    FluentInterceptor(T targetObject, JexxaMain jexxaMain)
+    FluentInterceptor(JexxaMain jexxaMain, Object... targetObjects )
     {
-        this.targetObject = targetObject;
+        this.targetObjects.addAll(Arrays.asList(targetObjects));
+
         this.jexxaMain = jexxaMain;
     }
 
-    JexxaMain before(Consumer<InvocationContext> consumer)
+    public JexxaMain before(Consumer<InvocationContext> consumer)
     {
-        InvocationManager
-                .getRootInterceptor(targetObject)
-                .registerBefore(consumer::accept);
+        targetObjects.stream()
+                .map(InvocationManager::getRootInterceptor)
+                .forEach( interceptor -> interceptor.registerBefore(consumer::accept));
 
         return jexxaMain;
     }
 
-    FluentInterceptor<T> beforeAnd(Consumer<InvocationContext> consumer)
+    public FluentInterceptor beforeAnd(Consumer<InvocationContext> consumer)
     {
         before(consumer);
         return this;
     }
 
-    JexxaMain after(Consumer<InvocationContext> consumer)
+    public JexxaMain after(Consumer<InvocationContext> consumer)
     {
-        InvocationManager
-                .getRootInterceptor(targetObject)
-                .registerAfter(consumer::accept);
+        targetObjects.stream()
+                .map(InvocationManager::getRootInterceptor)
+                .forEach( interceptor -> interceptor.registerAfter(consumer::accept));
 
         return jexxaMain;
     }
 
-    FluentInterceptor<T> afterAnd(Consumer<InvocationContext> consumer)
+    public FluentInterceptor afterAnd(Consumer<InvocationContext> consumer)
     {
         after(consumer);
         return this;
     }
 
-    JexxaMain around(Consumer<InvocationContext> consumer)
+    public JexxaMain around(Consumer<InvocationContext> consumer)
     {
-        InvocationManager
-                .getRootInterceptor(targetObject)
-                .registerAround(consumer::accept);
+        targetObjects.stream()
+                .map(InvocationManager::getRootInterceptor)
+                .forEach( interceptor -> interceptor.registerAround(consumer::accept));
 
         return jexxaMain;
     }
 
-    FluentInterceptor<T> aroundAnd(Consumer<InvocationContext> consumer)
+    public FluentInterceptor aroundAnd(Consumer<InvocationContext> consumer)
     {
         around(consumer);
         return this;

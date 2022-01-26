@@ -1,17 +1,22 @@
 package io.jexxa.core;
 
+import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
-import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
-import io.jexxa.utils.properties.JexxaCoreProperties;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.function.ThrowingConsumer;
+import io.jexxa.utils.properties.JexxaCoreProperties;
 import org.slf4j.Logger;
 
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
@@ -155,16 +160,28 @@ public final class JexxaMain
     }
 
     @CheckReturnValue
-    public <T> FluentInterceptor<T> intercept(Class<T> clazz)
+    public <T> FluentInterceptor intercept(Class<T> clazz)
     {
-        return new FluentInterceptor<>(getInstanceOfInboundPort(clazz), this);
+        return new FluentInterceptor(this, getInstanceOfInboundPort(clazz));
     }
 
     @CheckReturnValue
-    public FluentInterceptor<Object> intercept(Object object)
+    public <T> FluentInterceptor intercept(T object)
     {
-        return new FluentInterceptor<>(object, this);
+        return new FluentInterceptor(this, object);
     }
+
+    public FluentInterceptor interceptAnnotation(Class<? extends Annotation> portAnnotation)
+    {
+        var targetObjects = portFactory
+                .getAnnotatedPorts(portAnnotation)
+                .stream()
+                .map(this::getInstanceOfPort)
+                .toArray();
+
+        return new FluentInterceptor(this, targetObjects);
+    }
+
 
     @CheckReturnValue
     public <T extends IDrivingAdapter> DrivingAdapter<T>  conditionalBind(BooleanSupplier conditional, Class<T> clazz)
