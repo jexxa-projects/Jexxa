@@ -4,7 +4,6 @@ import io.jexxa.adapterapi.interceptor.AroundInterceptor;
 import io.jexxa.adapterapi.invocation.InvocationContext;
 import io.jexxa.adapterapi.invocation.function.SerializableSupplier;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
@@ -32,14 +31,9 @@ public class SupplierInvocationContext<T> extends InvocationContext
     public Method getMethod() {
         if (method == null)
         {
-            method = LambdaUtils.getImplMethod(getTarget(), supplier);
+            method = LambdaUtils.getImplMethod(getTarget(), supplier, getArgTypes());
         }
         return method;
-    }
-
-    @Override
-    public Object getTarget() {
-        return supplier;
     }
 
     @Override

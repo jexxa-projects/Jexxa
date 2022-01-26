@@ -4,7 +4,6 @@ import io.jexxa.adapterapi.interceptor.AroundInterceptor;
 import io.jexxa.adapterapi.invocation.InvocationContext;
 import io.jexxa.adapterapi.invocation.function.SerializableConsumer;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
@@ -32,17 +31,13 @@ public class ConsumerInvocationContext<T> extends InvocationContext
     }
 
     @Override
-    public Method getMethod() {
+    public Method getMethod()
+    {
         if (method == null)
         {
-            method = LambdaUtils.getImplMethod(getTarget(), consumer);
+            method = LambdaUtils.getImplMethod(getTarget(), consumer, getArgTypes());
         }
         return method;
-    }
-
-    @Override
-    public Object getTarget() {
-        return consumer;
     }
 
     @Override

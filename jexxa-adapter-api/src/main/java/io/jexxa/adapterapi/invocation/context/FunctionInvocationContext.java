@@ -35,14 +35,9 @@ public class FunctionInvocationContext<T, R> extends InvocationContext
     public Method getMethod() {
         if (method == null)
         {
-            method = LambdaUtils.getImplMethod(getTarget(), function);
+            method = LambdaUtils.getImplMethod(getTarget(), function, getArgTypes());
         }
         return method;
-    }
-
-    @Override
-    public Object getTarget() {
-        return function;
     }
 
     @Override

@@ -31,7 +31,7 @@ public class RunnableInvocationContext extends InvocationContext
     {
         if (method == null)
         {
-           method = LambdaUtils.getImplMethod(getTarget(), runnable);
+           method = LambdaUtils.getImplMethod(getTarget(), runnable, getArgTypes());
         }
         return method;
     }

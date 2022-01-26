@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public abstract class InvocationContext
 {
@@ -46,6 +47,11 @@ public abstract class InvocationContext
     public <T> T getReturnValue(Class<T> clazz)
     {
         return clazz.cast(getReturnValue());
+    }
+
+    public Class<?>[] getArgTypes()
+    {
+        return Stream.of(getArgs()).map(Object::getClass).toArray(Class<?>[]::new);
     }
 
     public void proceed()  {
