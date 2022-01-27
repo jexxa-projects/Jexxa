@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     - `JDBCKeyValueRepository` and `JDBCObjectStore` use now column name `REGISTRY_KEY` and `REGISTRY_VALUE` instead `KEY` and `VALUE`. This avoids conflicts with reserved SQL statements. Existing database are automatically updated.
     - `Repository` related interfaces and classes were moved from `...persistence` into sub-package `...persistence.repository` -> You have to update your imports in your application
 
+- Jexxa-Core: Removed all components declared as deprecated
+
+### Added
+- Jexxa-Core: Added possibility to load Properties file defined by `JEXXA_CONFIG_IMPORT`
+
+- Jexxa-Core/Jexxa-Web: Added files that provide all properties used by Jexxa: 
+  - [JexxaCoreProperties](./jexxa-core/src/main/java/io/jexxa/utils/properties/JexxaCoreProperties.java)
+  - [JexxaJDBCProperties](./jexxa-core/src/main/java/io/jexxa/utils/properties/JexxaJDBCProperties.java)
+  - [JexxaWebProperties](./jexxa-web/src/main/java/io/jexxa/infrastructure/drivingadapter/rest/JexxaWebProperties.java)
+
+- Jexxa-Adapter-API: Added possibility to set interceptor between `DrivingAdapters` and `InboundPorts`
 
 ## \[3.3.2] - 2022-01-03
 ### Changed

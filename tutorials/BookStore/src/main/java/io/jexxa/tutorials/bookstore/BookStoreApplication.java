@@ -39,7 +39,7 @@ public final class BookStoreApplication
         JexxaLogger.getLogger(BookStoreApplication.class)
                 .info( "{}", jexxaMain.getBoundedContext().getContextVersion() );
         jexxaMain
-                //Define which outbound ports should be managed by Jexxa
+                //Define the default packages for inbound and outbound ports
                 .addDDDPackages(BookStoreApplication.class)
 
                 //Get the latest books when starting the application

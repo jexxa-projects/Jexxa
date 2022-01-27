@@ -32,11 +32,8 @@ public final class BookStoreJApplication
 
         var jexxaMain = new JexxaMain(BookStoreJApplication.class.getSimpleName());
 
-        //print some application information
-        JexxaLogger.getLogger(BookStoreJApplication.class)
-                .info( "{}", jexxaMain.getBoundedContext().getContextVersion() );
-
         jexxaMain
+                //Define the default packages for inbound and outbound ports
                 .addDDDPackages(BookStoreJApplication.class)
 
                 //Get the latest books when starting the application

@@ -60,7 +60,7 @@ First we map the functionality of the application to DDD patterns
           
 ### Package structure
 
-In our tutorials we use following package structure: 
+In our tutorials we use following package structure. Please note that this package structure is just a recommendation but Jexxa offers some convenience methods if you use it. That's why we recommend to start with this structure: 
 
 *   applicationservice
 
@@ -169,9 +169,8 @@ public final class BookStoreApplication
         var jexxaMain = new JexxaMain(BookStoreApplication.class.getSimpleName());
     
         jexxaMain
-                //Define which outbound ports should be managed by Jexxa
-                .addToApplicationCore(OUTBOUND_PORTS)
-                .addToInfrastructure(DRIVEN_ADAPTER)
+                //Define the default packages for inbound and outbound ports
+                .addDDDPackages(BookStoreApplication.class)
     
                 //Get the latest books when starting the application
                 .bootstrap(ReferenceLibrary.class).with(ReferenceLibrary::addLatestBooks)

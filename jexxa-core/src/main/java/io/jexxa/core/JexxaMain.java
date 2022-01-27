@@ -123,6 +123,26 @@ public final class JexxaMain
         return this;
     }
 
+    /**
+     * This method adds default package structure as recommended by Jexxa. In case you use your own package structure
+     * see {@link #addToInfrastructure(String)} and {@link #addToApplicationCore(String)}.
+     * The default structure added to {@link #addToApplicationCore(String)} is:
+     *
+     * <ul>
+     *     <li>&lt;Root-Package&gt;.applicationservice</li>
+     *     <li>&lt;Root-Package&gt;.domainservice</li>
+     *     <li>&lt;Root-Package&gt;.domainprocessservice</li>
+     * </ul>
+     * The default structure which is added to {@link #addToInfrastructure(String) is:
+     *
+     * <ul>
+     *     <li>&lt;Root-Package&gt;.infrastructure.drivenadapter</li>
+     *     <li>&lt;Root-Package&gt;infrastructure.drivingadapter</li>
+     * </ul>
+     *
+     * @param mainApplication which is located at the root package. From this package name the remaining packages are added
+     * @return
+     */
     public JexxaMain addDDDPackages(Class<?> mainApplication)
     {
         addToInfrastructure( mainApplication.getPackageName() + DRIVEN_ADAPTER_PACKAGE);
