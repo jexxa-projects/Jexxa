@@ -141,7 +141,7 @@ public final class JexxaMain
      * </ul>
      *
      * @param mainApplication which is located at the root package. From this package name the remaining packages are added
-     * @return
+     * @return JexxaMain object to call additional methods
      */
     public JexxaMain addDDDPackages(Class<?> mainApplication)
     {
