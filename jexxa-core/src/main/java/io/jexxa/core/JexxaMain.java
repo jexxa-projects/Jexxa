@@ -133,7 +133,7 @@ public final class JexxaMain
      *     <li>&lt;Root-Package&gt;.domainservice</li>
      *     <li>&lt;Root-Package&gt;.domainprocessservice</li>
      * </ul>
-     * The default structure which is added to {@link #addToInfrastructure(String) is:
+     * The default structure which is added to {@link #addToInfrastructure(String)} is:
      *
      * <ul>
      *     <li>&lt;Root-Package&gt;.infrastructure.drivenadapter</li>
