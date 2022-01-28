@@ -8,9 +8,9 @@ import io.javalin.core.JavalinConfig;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JsonMapper;
-import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
-import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapterapi.invocation.InvocationManager;
+import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
 import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONConverter;
@@ -210,10 +210,13 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         if ( targetException != null )
         {
             targetException.getStackTrace(); // Ensures that stack trace is filled in
+            var ctxMethod = ctx.method();
+            var ctxBody = ctx.body();
+            var ctxPath = ctx.path();
 
             JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("{} occurred when processing {} request {}",
-                    targetException.getClass().getSimpleName(), ctx.method(), ctx.path());
-            JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Content of Body: {}", ctx.body());
+                    targetException.getClass().getSimpleName(), ctxMethod, ctxPath);
+            JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Content of Body: {}", ctxBody);
             JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Exception message: {}", targetException.getMessage());
 
             var exceptionWrapper = new JsonObject();
