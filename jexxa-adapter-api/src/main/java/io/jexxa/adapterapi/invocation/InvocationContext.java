@@ -2,7 +2,6 @@ package io.jexxa.adapterapi.invocation;
 
 import io.jexxa.adapterapi.interceptor.AroundInterceptor;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Iterator;
