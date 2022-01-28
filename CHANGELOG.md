@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Jexxa-Core: Removed all components declared as deprecated
 
+- Updated dependencies
+
 ### Added
 - Jexxa-Core: Added possibility to load Properties file defined by `JEXXA_CONFIG_IMPORT`
 

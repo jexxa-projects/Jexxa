@@ -17,7 +17,7 @@ public interface IDrivingAdapter
 {
     /**
      * Register an object that should accessed by this driving adapter  
-     * @param port: port to be registered with driving adapter.
+     * @param port port to be registered with driving adapter.
      */
     void register(Object port);
 
