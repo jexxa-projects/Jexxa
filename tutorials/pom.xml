@@ -14,20 +14,20 @@
   <name>Tutorials</name>
 
   <properties>
-      <jexxa-core-stable.version>3.3.2</jexxa-core-stable.version>
+      <jexxa-core-stable.version>4.0.0</jexxa-core-stable.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>io.jexxa</groupId>
       <artifactId>jexxa-web</artifactId>
-      <version>${project.version}</version>
+      <version>${jexxa-core-stable.version}</version>
     </dependency>
 
     <dependency>
       <groupId>io.jexxa.jexxatest</groupId>
       <artifactId>jexxa-test</artifactId>
-      <version>${project.version}</version>
+      <version>${jexxa-core-stable.version}</version>
       <scope>test</scope>
     </dependency>
 
