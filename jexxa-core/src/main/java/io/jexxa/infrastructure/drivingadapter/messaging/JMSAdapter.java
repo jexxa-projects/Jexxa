@@ -286,7 +286,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
                         JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).warn("Restarted Listener {}", element.getClass().getSimpleName())
                 );
             }
-            catch (JMSException | java.lang.IllegalStateException e)
+            catch (JMSException | IllegalStateException e)
             {
                 JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error("Failed to restart JMS Listener");
                 JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error(e.getMessage());

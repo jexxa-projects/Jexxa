@@ -1,7 +1,6 @@
 package io.jexxa.core.factory;
 
 
-import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
 import io.jexxa.application.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
 import io.jexxa.application.infrastructure.drivingadapter.InvalidPortAdapter;

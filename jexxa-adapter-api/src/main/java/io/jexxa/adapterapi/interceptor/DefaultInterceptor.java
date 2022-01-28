@@ -2,8 +2,7 @@ package io.jexxa.adapterapi.interceptor;
 
 import io.jexxa.adapterapi.invocation.InvocationContext;
 
-import java.lang.reflect.InvocationTargetException;
-
+@SuppressWarnings("unused")
 public class DefaultInterceptor implements AroundInterceptor, BeforeInterceptor, AfterInterceptor
 {
 

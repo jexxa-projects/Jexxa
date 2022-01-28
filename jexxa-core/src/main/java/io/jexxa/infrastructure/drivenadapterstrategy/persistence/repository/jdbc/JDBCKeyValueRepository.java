@@ -4,9 +4,8 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JD
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.DatabaseManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.IDatabase;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
-import io.jexxa.utils.properties.JexxaJDBCProperties;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.json.JSONManager;
+import io.jexxa.utils.properties.JexxaJDBCProperties;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -207,11 +206,11 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
     protected JDBCObject primaryKeyToJSONB(Object value)
     {
-        return new JDBCObject(JSONManager.getJSONConverter().toJson(value), database.matchingPrimaryKey(JSONB));
+        return new JDBCObject(getJSONConverter().toJson(value), database.matchingPrimaryKey(JSONB));
     }
 
     protected JDBCObject valueToJSONB(Object value)
     {
-        return new JDBCObject(JSONManager.getJSONConverter().toJson(value), database.matchingValue(JSONB));
+        return new JDBCObject(getJSONConverter().toJson(value), database.matchingValue(JSONB));
     }
 }
