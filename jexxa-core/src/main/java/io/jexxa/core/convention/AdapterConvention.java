@@ -1,11 +1,11 @@
 package io.jexxa.core.convention;
 
-import static java.util.stream.Collectors.toList;
-
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+
+import static java.util.stream.Collectors.toList;
 
 public final class AdapterConvention
 {

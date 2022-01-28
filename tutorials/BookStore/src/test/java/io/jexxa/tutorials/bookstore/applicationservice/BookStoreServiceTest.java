@@ -1,11 +1,6 @@
 package io.jexxa.tutorials.bookstore.applicationservice;
 
 
-import static io.jexxa.tutorials.bookstore.domain.domainevent.BookSoldOut.bookSoldOut;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import io.jexxa.core.JexxaMain;
 import io.jexxa.jexxatest.JexxaTest;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
@@ -19,12 +14,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static io.jexxa.tutorials.bookstore.domain.domainevent.BookSoldOut.bookSoldOut;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class BookStoreServiceTest
 {
-    private static final String DRIVEN_ADAPTER = BookStoreApplication.class.getPackageName() + ".infrastructure.drivenadapter";
-    private static final String DOMAIN_SERVICE = BookStoreApplication.class.getPackageName() + ".domainservice";
-    private static final String APPLICATION_SERVICE = BookStoreApplication.class.getPackageName() + ".applicationservice";
-
     private static final ISBN13 ISBN_13 = new ISBN13( "978-3-86490-387-8" );
     private static JexxaMain jexxaMain;
     private BookStoreService objectUnderTest;
@@ -40,9 +36,7 @@ class BookStoreServiceTest
         // If you have larger tests this speeds up Jexxa's dependency injection
         // Note: For unit-tests you just need to bind any driving adapter
         jexxaMain = new JexxaMain(BookStoreServiceTest.class.getSimpleName());
-        jexxaMain.addToInfrastructure(DRIVEN_ADAPTER)
-                .addToApplicationCore(APPLICATION_SERVICE)
-                .addToApplicationCore(DOMAIN_SERVICE);
+        jexxaMain.addDDDPackages(BookStoreApplication.class);
     }
 
     @BeforeEach

@@ -1,9 +1,9 @@
 package io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording;
 
-import java.util.Properties;
-
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
+
+import java.util.Properties;
 
 /**
  * Stores a message that is sent via JMS messaging API

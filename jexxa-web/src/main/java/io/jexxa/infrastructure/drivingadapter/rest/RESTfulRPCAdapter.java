@@ -1,15 +1,5 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -18,7 +8,9 @@ import io.javalin.core.JavalinConfig;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.json.JsonMapper;
-import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapterapi.invocation.InvocationManager;
+import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
 import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONConverter;
@@ -29,18 +21,22 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
+
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
+
 
 public class RESTfulRPCAdapter implements IDrivingAdapter
 {
-    public static final String HOST_PROPERTY = "io.jexxa.rest.host";
-    public static final String HTTP_PORT_PROPERTY = "io.jexxa.rest.port";
-    public static final String HTTPS_PORT_PROPERTY = "io.jexxa.rest.https_port";
-    public static final String KEYSTORE = "io.jexxa.rest.keystore";
-    public static final String KEYSTORE_PASSWORD = "io.jexxa.rest.keystore_password";
-    public static final String KEYSTORE_PASSWORD_FILE = "io.jexxa.rest.file.keystore_password";
-    public static final String OPEN_API_PATH = "io.jexxa.rest.open_api_path";
-    public static final String STATIC_FILES_ROOT = "io.jexxa.rest.static_files_root";
-    public static final String STATIC_FILES_EXTERNAL = "io.jexxa.rest.static_files_external";
 
 
     private final JSONConverter jsonConverter = JSONManager.getJSONConverter();
@@ -57,13 +53,13 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     {
         this.properties = properties;
 
-        validateIsTrue(isHTTPEnabled() || isHTTPSEnabled(), "Neither HTTP (" + HTTP_PORT_PROPERTY + ") nor HTTPS (" + HTTPS_PORT_PROPERTY + ") is enabled!");
+        validateIsTrue(isHTTPEnabled() || isHTTPSEnabled(), "Neither HTTP (" + JexxaWebProperties.JEXXA_REST_PORT + ") nor HTTPS (" + JexxaWebProperties.JEXXA_REST_HTTPS_PORT + ") is enabled!");
 
         if ( isHTTPSEnabled() )
         {
-            validateIsTrue( properties.containsKey( KEYSTORE ), "You need to define a location for keystore ("+ KEYSTORE+ ")");
-            validateIsTrue( properties.containsKey( KEYSTORE_PASSWORD ) || properties.containsKey( KEYSTORE_PASSWORD_FILE )
-                    , "You need to define a location for keystore-password ("+ KEYSTORE_PASSWORD+ "or" + KEYSTORE_PASSWORD_FILE+ ")");
+            validateIsTrue( properties.containsKey( JexxaWebProperties.JEXXA_REST_KEYSTORE), "You need to define a location for keystore ("+ JexxaWebProperties.JEXXA_REST_KEYSTORE + ")");
+            validateIsTrue( properties.containsKey( JexxaWebProperties.JEXXA_REST_KEYSTORE_PASSWORD) || properties.containsKey( JexxaWebProperties.JEXXA_REST_FILE_KEYSTORE_PASSWORD)
+                    , "You need to define a location for keystore-password ("+ JexxaWebProperties.JEXXA_REST_KEYSTORE_PASSWORD + "or" + JexxaWebProperties.JEXXA_REST_FILE_KEYSTORE_PASSWORD + ")");
         }
 
         setupJavalin();
@@ -108,7 +104,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
             }
         } catch (RuntimeException e)
         {
-            if (e.getMessage().contains("Port already in use.")) // Javalin states its default port of the server. Therefore, we correct the error message here"
+            if (e.getMessage().contains("Port already in use.")) // Javalin states its default port of the server. Therefore, we correct the error message here."
             {
                 throw new IllegalStateException(
                         RESTfulRPCAdapter.class.getSimpleName()
@@ -154,39 +150,39 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     boolean isHTTPEnabled()
     {
-        return properties.containsKey(HTTP_PORT_PROPERTY);
+        return properties.containsKey(JexxaWebProperties.JEXXA_REST_PORT);
     }
 
     boolean isHTTPSEnabled()
     {
-        return properties.containsKey(HTTPS_PORT_PROPERTY);
+        return properties.containsKey(JexxaWebProperties.JEXXA_REST_HTTPS_PORT);
     }
 
     String getHostname()
     {
-        return properties.getProperty(HOST_PROPERTY, "0.0.0.0");
+        return properties.getProperty(JexxaWebProperties.JEXXA_REST_HOST, "0.0.0.0");
     }
 
     String getKeystore()
     {
-        return properties.getProperty(KEYSTORE, "");
+        return properties.getProperty(JexxaWebProperties.JEXXA_REST_KEYSTORE, "");
     }
 
     String getKeystorePassword()
     {
-        return new Secret(properties, KEYSTORE_PASSWORD, KEYSTORE_PASSWORD_FILE)
+        return new Secret(properties, JexxaWebProperties.JEXXA_REST_KEYSTORE_PASSWORD, JexxaWebProperties.JEXXA_REST_FILE_KEYSTORE_PASSWORD)
                 .getSecret();
     }
 
 
     private int getHTTPPortFromProperties()
     {
-        return Integer.parseInt(properties.getProperty(HTTP_PORT_PROPERTY, "0"));
+        return Integer.parseInt(properties.getProperty(JexxaWebProperties.JEXXA_REST_PORT, "0"));
     }
 
     private int getHTTPSPortFromProperties()
     {
-        return Integer.parseInt(properties.getProperty(HTTPS_PORT_PROPERTY, "0"));
+        return Integer.parseInt(properties.getProperty(JexxaWebProperties.JEXXA_REST_HTTPS_PORT, "0"));
     }
 
     /**
@@ -205,26 +201,32 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private void registerExceptionHandler()
     {
         //Exception Handler for thrown Exception from methods
-        javalin.exception(InvocationTargetException.class, (e, ctx) -> {
-            var targetException = e.getTargetException();
-            if ( targetException != null )
-            {
-                targetException.getStackTrace(); // Ensures that stack trace is filled in
+        javalin.exception(InvocationTargetException.class, (e, ctx) ->  handleTargetException(e.getTargetException(), ctx));
+        javalin.exception(InvocationTargetRuntimeException.class, (e, ctx) ->  handleTargetException(e.getTargetException(), ctx));
+    }
 
-                JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("{} occurred when processing {} request {}",
-                        targetException.getClass().getSimpleName(), ctx.method(), ctx.path());
-                JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Content of Body: {}", ctx.body());
-                JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Exception message: {}", targetException.getMessage());
+    private void handleTargetException(Throwable targetException, Context ctx )
+    {
+        if ( targetException != null )
+        {
+            targetException.getStackTrace(); // Ensures that stack trace is filled in
+            var ctxMethod = ctx.method();
+            var ctxBody = ctx.body();
+            var ctxPath = ctx.path();
 
-                var exceptionWrapper = new JsonObject();
-                exceptionWrapper.addProperty("ExceptionType", targetException.getClass().getName());
-                exceptionWrapper.addProperty("Exception", jsonConverter.toJson(targetException));
-                exceptionWrapper.addProperty("ApplicationType", jsonConverter.toJson("application/json"));
+            JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("{} occurred when processing {} request {}",
+                    targetException.getClass().getSimpleName(), ctxMethod, ctxPath);
+            JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Content of Body: {}", ctxBody);
+            JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Exception message: {}", targetException.getMessage());
 
-                ctx.result(exceptionWrapper.toString());
-            }
-            ctx.status(400);
-        });
+            var exceptionWrapper = new JsonObject();
+            exceptionWrapper.addProperty("ExceptionType", targetException.getClass().getName());
+            exceptionWrapper.addProperty("Exception", jsonConverter.toJson(targetException));
+            exceptionWrapper.addProperty("ApplicationType", jsonConverter.toJson("application/json"));
+
+            ctx.result(exceptionWrapper.toString());
+        }
+        ctx.status(400);
     }
 
     private void registerGETMethods(Object object)
@@ -260,11 +262,11 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private void invokeMethod(Object object, RESTfulRPCConvention.RESTfulRPCMethod method, Context httpContext ) throws InvocationTargetException, IllegalAccessException
     {
         Object[] methodParameters = deserializeParameters(httpContext.body(), method.getMethod());
+        var invocationHandler = InvocationManager.getInvocationHandler(object);
+
 
         var result = Optional.ofNullable(
-                IDrivingAdapter
-                        .acquireLock()
-                        .invoke(method.getMethod(), object, methodParameters)
+                invocationHandler.invoke(method.getMethod(), object, methodParameters)
         );
 
         //At the moment we do not handle any credentials
@@ -332,14 +334,14 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         javalinConfig.jsonMapper(new JexxaJSONMapper());
         Location location = Location.CLASSPATH;
 
-        if ( properties.getProperty(STATIC_FILES_EXTERNAL, "false").equalsIgnoreCase("true") )
+        if ( properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_EXTERNAL, "false").equalsIgnoreCase("true") )
         {
             location = Location.EXTERNAL;
         }
 
-        if ( properties.containsKey(STATIC_FILES_ROOT) )
+        if ( properties.containsKey(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT) )
         {
-            javalinConfig.addStaticFiles(properties.getProperty(STATIC_FILES_ROOT), location );
+            javalinConfig.addStaticFiles(properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT), location );
         }
 
         this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig );
@@ -372,8 +374,28 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private SslContextFactory getSslContextFactory()
     {
+        URL keystoreURL = RESTfulRPCAdapter.class.getResource("/" + getKeystore());
+
+        if ( keystoreURL == null )
+        {
+            File file = new File(getKeystore());
+            if(file.exists() && !file.isDirectory())
+            {
+                try
+                {
+                    keystoreURL =file.toURI().toURL();
+                } catch (MalformedURLException e)
+                {
+                    throw new IllegalArgumentException(e);
+                }
+            } else
+            {
+                throw new IllegalArgumentException("File Keystore " + getKeystore() + " is not available! Please check the setting " + JexxaWebProperties.JEXXA_REST_KEYSTORE);
+            }
+        }
+
         var sslContextFactory = new SslContextFactory.Server();
-        sslContextFactory.setKeyStorePath(Objects.requireNonNull(RESTfulRPCAdapter.class.getResource("/" + getKeystore())).toExternalForm());
+        sslContextFactory.setKeyStorePath(keystoreURL.toExternalForm());
         sslContextFactory.setKeyStorePassword(getKeystorePassword());
         return sslContextFactory;
     }

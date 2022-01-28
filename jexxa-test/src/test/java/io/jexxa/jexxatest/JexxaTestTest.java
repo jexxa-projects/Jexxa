@@ -1,28 +1,18 @@
 package io.jexxa.jexxatest;
 
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Properties;
-
 import io.jexxa.application.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.application.domainservice.IInvalidConstructor;
-import io.jexxa.application.domainservice.IJexxaAggregateRepository;
-import io.jexxa.application.domainservice.IJexxaPublisher;
-import io.jexxa.application.domainservice.INotImplementedService;
-import io.jexxa.application.domainservice.InitializeJexxaAggregates;
-import io.jexxa.application.domainservice.PublishDomainInformation;
+import io.jexxa.application.domainservice.*;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.core.factory.InvalidAdapterException;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Properties;
+
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 class JexxaTestTest

@@ -11,7 +11,7 @@
 :sectanchors:
 :numbered:
 
-//Hinweis: Die counter:local-table-number und counter:local-figure-number werden verwendet, damit im Fliesstext als Referenz die Nummer der Tabelle bzw. Abbildung angezeigt wird, also z.B. "wie in Abbildung 5 zu sehen ist"
+//Hinweis: Die counter:local-table-number und counter:local-figure-number werden verwendet, damit im Fliesstext als Referenz die Nummer der Tabelle bzw. Abbildung angezeigt wird, also z.B. "wie in Abbildung 5 zu sehen ist."
 
 == Vision
 Jexxa is a lightweight framework to implement business applications based on a https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/[ports and adapters] architecture. It allows for easily connecting technology stacks, called adapters, to interfaces of a technology-agnostic application core which are called ports. For this purpose Jexxa offers:

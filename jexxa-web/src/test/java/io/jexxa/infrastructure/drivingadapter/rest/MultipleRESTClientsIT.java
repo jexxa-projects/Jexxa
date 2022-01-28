@@ -1,16 +1,5 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
-import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.IncrementApplicationService;
 import io.jexxa.core.JexxaMain;
@@ -20,6 +9,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag(TestConstants.INTEGRATION_TEST)
 class MultipleRESTClientsIT
@@ -77,7 +75,7 @@ class MultipleRESTClientsIT
             //Act
             var restPath = "http://localhost:7500/IncrementApplicationService/";
             var response = Unirest.post(restPath + METHOD_GET_SIMPLE_VALUE)
-                    .header(CONTENT_TYPE, APPLICATION_TYPE)
+                    .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                     .asJson();
             if (!response.isSuccess())
             {

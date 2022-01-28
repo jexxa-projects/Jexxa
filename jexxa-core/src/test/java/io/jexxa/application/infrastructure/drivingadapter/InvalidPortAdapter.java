@@ -1,8 +1,8 @@
 package io.jexxa.application.infrastructure.drivingadapter;
 
-import java.util.Objects;
-
 import io.jexxa.application.applicationservice.SimpleApplicationService;
+
+import java.util.Objects;
 
 public class InvalidPortAdapter
 {

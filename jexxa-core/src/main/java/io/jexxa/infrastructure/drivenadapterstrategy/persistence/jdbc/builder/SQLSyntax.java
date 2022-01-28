@@ -12,6 +12,8 @@ public class SQLSyntax
     static final String IF_EXISTS = "IF EXISTS ";
 
     static final String CREATE_TABLE = "CREATE TABLE ";
+    static final String ALTER_TABLE = "ALTER TABLE ";
+    static final String ALTER_COLUMN = "ALTER COLUMN ";
     static final String IF_NOT_EXISTS = "IF NOT EXISTS ";
 
     static final String SET = "SET ";
@@ -19,6 +21,7 @@ public class SQLSyntax
     static final String WHERE = "WHERE ";
     static final String AND = "AND ";
     static final String OR = "OR ";
+    static final String TYPE = "TYPE ";
 
     static final String ORDER_BY = "ORDER BY ";
     static final String LIMIT = "LIMIT ";

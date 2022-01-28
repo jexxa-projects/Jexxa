@@ -1,11 +1,11 @@
 package io.jexxa.application.applicationservice;
 
-import java.util.Objects;
-
 import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.domainservice.IDefaultConstructorService;
 import io.jexxa.application.domainservice.IFactoryMethodService;
 import io.jexxa.application.domainservice.IPropertiesConstructorService;
+
+import java.util.Objects;
 
 @ApplicationService
 public class ApplicationServiceWithDrivenAdapters

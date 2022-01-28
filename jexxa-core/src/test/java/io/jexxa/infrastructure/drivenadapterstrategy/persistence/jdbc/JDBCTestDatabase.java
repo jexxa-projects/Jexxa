@@ -1,19 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.DOUBLE_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.FLOAT_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.INTEGER_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.KEY;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.NUMERIC_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.STRING_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.TIMESTAMP_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.DOUBLE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.FLOAT;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.INTEGER;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.NUMERIC;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.TEXT;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.TIMESTAMP;
+import io.jexxa.utils.properties.JexxaJDBCProperties;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -21,6 +8,10 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Properties;
 import java.util.stream.Stream;
+
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.*;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.*;
 
 public class JDBCTestDatabase
 {
@@ -38,7 +29,7 @@ public class JDBCTestDatabase
 
     enum JDBCTestSchema
     {
-        KEY,
+        REPOSITORY_KEY,
         INTEGER_TYPE,
         NUMERIC_TYPE,
         FLOAT_TYPE,
@@ -52,19 +43,19 @@ public class JDBCTestDatabase
     @SuppressWarnings("unused")
     public static Stream<Properties> repositoryConfigJDBC() {
         var postgresProperties = new Properties();
-        postgresProperties.put(JDBCConnection.JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JDBCConnection.JDBC_PASSWORD, ADMIN);
-        postgresProperties.put(JDBCConnection.JDBC_USERNAME, ADMIN);
-        postgresProperties.put(JDBCConnection.JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
-        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JDBCConnection.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_DRIVER, "org.postgresql.Driver");
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_PASSWORD, ADMIN);
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_USERNAME, ADMIN);
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE, "true");
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
 
         var h2Properties = new Properties();
-        h2Properties.put(JDBCConnection.JDBC_DRIVER, "org.h2.Driver");
-        h2Properties.put(JDBCConnection.JDBC_PASSWORD, ADMIN);
-        h2Properties.put(JDBCConnection.JDBC_USERNAME, ADMIN);
-        h2Properties.put(JDBCConnection.JDBC_URL, "jdbc:h2:mem:jexxa;DB_CLOSE_DELAY=-1");
-        h2Properties.put(JDBCConnection.JDBC_AUTOCREATE_TABLE, "true");
+        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_DRIVER, "org.h2.Driver");
+        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_PASSWORD, ADMIN);
+        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_USERNAME, ADMIN);
+        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_URL, "jdbc:h2:mem:jexxa;DB_CLOSE_DELAY=-1");
+        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE, "true");
 
         return Stream.of(postgresProperties, h2Properties);
     }
@@ -90,7 +81,7 @@ public class JDBCTestDatabase
     {
         var createTableCommand = jdbcConnection.createTableCommand(JDBCTestSchema.class)
                 .createTableIfNotExists(JDBCTestDatabase.class)
-                .addColumn(KEY, INTEGER)
+                .addColumn(REPOSITORY_KEY, INTEGER)
                 .addConstraint(PRIMARY_KEY)
                 .addColumn(INTEGER_TYPE, INTEGER)
                 .addColumn(NUMERIC_TYPE, NUMERIC)
@@ -114,18 +105,18 @@ public class JDBCTestDatabase
     {
         var insertNullValues = jdbcConnection.createCommand(JDBCTestSchema.class)
                 .insertInto(JDBCTestDatabase.class)
-                .values(PRIMARY_KEY_WITH_NULL_VALUES, null, null, null, null, null, null )
+                .values(new Object[]{PRIMARY_KEY_WITH_NULL_VALUES, null, null, null, null, null, null} )
                 .create();
 
         var insertNonNullValues = jdbcConnection.createCommand(JDBCTestSchema.class)
                 .insertInto(JDBCTestDatabase.class)
-                .values(PRIMARY_KEY_WITH_NONNULL_VALUES, TEST_INT_VALUE, TEST_NUMERIC_VALUE, TEST_FLOAT_VALUE, TEST_DOUBLE_VALUE, TEST_STRING, TEST_TIMESTAMP)
+                .values(new Object[]{PRIMARY_KEY_WITH_NONNULL_VALUES, TEST_INT_VALUE, TEST_NUMERIC_VALUE, TEST_FLOAT_VALUE, TEST_DOUBLE_VALUE, TEST_STRING, TEST_TIMESTAMP})
                 .create();
 
         var insertNonNullValuesDuplicate = jdbcConnection.createCommand(JDBCTestSchema.class)
                 .insertInto(JDBCTestDatabase.class)
-                .values(PRIMARY_KEY_WITH_NONNULL_VALUES_DUPLICATE, TEST_INT_VALUE, TEST_NUMERIC_VALUE, TEST_FLOAT_VALUE, TEST_DOUBLE_VALUE, TEST_STRING,
-                        TEST_TIMESTAMP)
+                .values(new Object[]{PRIMARY_KEY_WITH_NONNULL_VALUES_DUPLICATE, TEST_INT_VALUE, TEST_NUMERIC_VALUE, TEST_FLOAT_VALUE, TEST_DOUBLE_VALUE, TEST_STRING,
+                        TEST_TIMESTAMP})
                 .create();
 
         insertNullValues.asUpdate();

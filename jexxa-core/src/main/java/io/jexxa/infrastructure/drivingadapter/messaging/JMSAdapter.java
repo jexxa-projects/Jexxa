@@ -1,7 +1,8 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
 
-import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
 import io.jexxa.utils.properties.Secret;
@@ -11,7 +12,6 @@ import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Session;
@@ -120,7 +120,10 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             {
                 consumer = session.createConsumer(destination, jmsConfiguration.selector());
             }
-            consumer.setMessageListener(new SynchronizedMessageListener(messageListener));
+
+            var invocationHandler = InvocationManager.getInvocationHandler(messageListener);
+            consumer.setMessageListener( message -> invocationHandler.invoke(messageListener, messageListener::onMessage, message)) ;
+
             consumerList.add(consumer);
             registeredListener.add(object);
         }
@@ -210,27 +213,6 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     {
         Validate.isTrue(properties.containsKey(JNDI_PROVIDER_URL_KEY), "Property + " + JNDI_PROVIDER_URL_KEY + " is missing ");
         Validate.isTrue(properties.containsKey(JNDI_FACTORY_KEY), "Property + " + JNDI_FACTORY_KEY + " is missing ");
-    }
-
-    static class SynchronizedMessageListener implements MessageListener
-    {
-        private final MessageListener jmsListener;
-
-        SynchronizedMessageListener(MessageListener jmsListener)
-        {
-            Objects.requireNonNull(jmsListener);
-            this.jmsListener = jmsListener;
-        }
-
-
-        @Override
-        public void onMessage(Message message)
-        {
-            synchronized (IDrivingAdapter.acquireLock().getSynchronizationObject())
-            {
-                jmsListener.onMessage(message);
-            }
-        }
     }
 
     /**

@@ -1,15 +1,10 @@
 package io.jexxa.core.factory;
 
+import io.jexxa.utils.factory.ClassFactory;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
-
-import io.jexxa.utils.factory.ClassFactory;
+import java.util.*;
 
 /**
  * This class is responsible for creating instances of ports or a wrapper for a port including all required parameter.
@@ -59,7 +54,7 @@ public class PortFactory
     }
 
     /**
-     * Check if an inbound port including all required driven adapter can be created
+     * Check if an inbound port including all required driven-adapter can be created
      *
      * @param inboundPort type of the port to check if it is in general available
      * @return true in case a constructor fulfilling conventions is available, otherwise false

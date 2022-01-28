@@ -1,12 +1,11 @@
 package io.jexxa.infrastructure.utils.messaging;
 
-import java.util.ArrayList;
-import java.util.List;
+import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
-
-import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QueueListener implements MessageListener
 {

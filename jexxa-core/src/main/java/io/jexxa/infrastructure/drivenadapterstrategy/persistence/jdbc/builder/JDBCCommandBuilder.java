@@ -1,22 +1,12 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.AND;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.ARGUMENT_PLACEHOLDER;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.BLANK;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.COMMA;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.DELETE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.FROM;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.INSERT_INTO;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.OR;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SET;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SQLOperation.EQUAL;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.UPDATE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.WHERE;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCCommand;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 
 import java.util.function.Supplier;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCCommand;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.*;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.SQLOperation.EQUAL;
 
 @SuppressWarnings("unused")
 public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
@@ -68,7 +58,7 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         return this;
     }
 
-    public JDBCCommandBuilder<T> values(Object... args)
+    public JDBCCommandBuilder<T> values(Object[] args)
     {
         getStatementBuilder().append("values ( ");
         getStatementBuilder().append( ARGUMENT_PLACEHOLDER ); // Handle first entry (without COMMA)
@@ -79,6 +69,23 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
             getStatementBuilder().append( COMMA );
             getStatementBuilder().append( ARGUMENT_PLACEHOLDER );
             addArgument(args[i]);
+        }
+        getStatementBuilder().append(")");
+
+        return this;
+    }
+
+    public JDBCCommandBuilder<T> values(JDBCObject[] args)
+    {
+        getStatementBuilder().append("values ( ");
+        getStatementBuilder().append( args[0].getBindParameter()); // Handle first entry (without COMMA)
+        addArgument(args[0].getJdbcValue());
+
+        for(var i = 1;  i < args.length; ++i ) // Handle remaining entries(with leading COMMA)
+        {
+            getStatementBuilder().append( COMMA );
+            getStatementBuilder().append( args[i].getBindParameter() );
+            addArgument(args[i].getJdbcValue());
         }
         getStatementBuilder().append(")");
 
@@ -152,30 +159,30 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         return new JDBCCondition<>(this);
     }
 
-    public JDBCCommandBuilder<T> set(T element, Object value)
+    public JDBCCommandBuilder<T> set(T element, JDBCObject value)
     {
         getStatementBuilder()
                 .append(SET)
                 .append(element.name())
                 .append(EQUAL)
-                .append(ARGUMENT_PLACEHOLDER);
+                .append(value.getBindParameter());
 
-        addArgument(value);
+        addArgument(value.getJdbcValue());
         return this;
     }
 
-    public JDBCCommandBuilder<T> set(String[] element, Object[] value)
+    public JDBCCommandBuilder<T> set(String[] element, JDBCObject[] value)
     {
         getStatementBuilder()
                 .append(SET);
 
         for (var i = 0; i < element.length; ++i)
         {
-            addArgument(value[i]);
+            addArgument(value[i].getJdbcValue());
             getStatementBuilder()
                     .append( element[i] )
                     .append(EQUAL)
-                    .append(ARGUMENT_PLACEHOLDER);
+                    .append(value[i].getBindParameter());
             if ( i < element.length - 1)
             {
                 getStatementBuilder().append(COMMA);
@@ -183,6 +190,7 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         }
         return this;
     }
+
 
     public JDBCCommand create()
     {

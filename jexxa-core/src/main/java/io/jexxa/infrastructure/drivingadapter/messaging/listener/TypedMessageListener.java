@@ -1,13 +1,10 @@
 package io.jexxa.infrastructure.drivingadapter.messaging.listener;
 
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import io.jexxa.utils.JexxaLogger;
 
 import java.util.Objects;
 
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
-
-import io.jexxa.utils.JexxaLogger;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
 @SuppressWarnings("unused")
 public abstract class TypedMessageListener<T> extends JSONMessageListener
@@ -22,18 +19,16 @@ public abstract class TypedMessageListener<T> extends JSONMessageListener
     public abstract void onMessage(T message);
 
     @Override
-    public final void onMessage(TextMessage message)
+    public final void onMessage(String message)
     {
-        String currentText = null;
         try
         {
-            currentText = message.getText();
-            onMessage( fromJson(currentText, clazz ));
+            onMessage( fromJson(message, clazz ));
         }
-        catch (RuntimeException | JMSException exception)
+        catch (RuntimeException exception)
         {
             JexxaLogger.getLogger(getClass()).error(exception.getMessage());
-            JexxaLogger.getLogger(getClass()).error("Message : {}", currentText);
+            JexxaLogger.getLogger(getClass()).error("Message : {}", message);
         }
     }
 

@@ -1,21 +1,10 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTimeout;
-
-import java.io.IOException;
-import java.time.Duration;
-import java.util.Properties;
-import java.util.concurrent.TimeUnit;
-
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.aggregate.JexxaEntity;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.utils.messaging.ITMessageSender;
 import io.jexxa.infrastructure.utils.messaging.QueueListener;
 import io.jexxa.infrastructure.utils.messaging.TopicListener;
@@ -24,6 +13,18 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+
+import java.io.IOException;
+import java.time.Duration;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static io.jexxa.core.JexxaMain.JEXXA_APPLICATION_PROPERTIES;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
@@ -38,7 +39,7 @@ class JMSAdapterIT
     {
         //Arrange
         properties = new Properties();
-        properties.load(getClass().getResourceAsStream(JexxaMain.JEXXA_APPLICATION_PROPERTIES));
+        properties.load(getClass().getResourceAsStream(JEXXA_APPLICATION_PROPERTIES));
     }
 
     @Test

@@ -1,18 +1,9 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
 
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
-import static java.util.stream.Collectors.toList;
-import static javax.management.MBeanOperationInfo.UNKNOWN;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
+import com.google.gson.JsonObject;
+import io.jexxa.adapterapi.invocation.InvocationManager;
+import io.jexxa.utils.JexxaLogger;
 
 import javax.management.Attribute;
 import javax.management.AttributeList;
@@ -22,15 +13,22 @@ import javax.management.MBeanOperationInfo;
 import javax.management.MBeanParameterInfo;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
 
-import com.google.gson.JsonObject;
-import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.jexxa.utils.JexxaLogger;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
+import static java.util.stream.Collectors.toList;
+import static javax.management.MBeanOperationInfo.UNKNOWN;
 
 public class MBeanConvention implements DynamicMBean
 {
-    public static final String JEXXA_CONTEXT_NAME = "io.jexxa.context.name";
-
     private final Object object;
     private final String contextName;
 
@@ -75,9 +73,8 @@ public class MBeanConvention implements DynamicMBean
                 orElseThrow(UnsupportedOperationException::new);
 
             Object[] parameter = deserializeObjects(method.getParameterTypes(), params);
-            Object result = IDrivingAdapter
-                    .acquireLock()
-                    .invoke(method, object, parameter);
+            var invocationHandler = InvocationManager.getInvocationHandler(object);
+            var result = invocationHandler.invoke(method, object, parameter);
 
             return serializeComplexReturnValue(result);
         }

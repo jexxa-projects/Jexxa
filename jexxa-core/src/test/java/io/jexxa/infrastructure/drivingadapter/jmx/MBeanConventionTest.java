@@ -1,20 +1,5 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.Properties;
-import java.util.stream.Collectors;
-
-import javax.management.Attribute;
-import javax.management.AttributeList;
-
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
@@ -22,6 +7,17 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+
+import javax.management.Attribute;
+import javax.management.AttributeList;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Properties;
+import java.util.stream.Collectors;
+
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Execution(ExecutionMode.CONCURRENT)
 @Tag(TestConstants.UNIT_TEST)
@@ -48,12 +44,12 @@ class MBeanConventionTest
         //Arrange
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
         var objectUnderTest = new MBeanConvention(applicationService, properties);
 
         //Act
-        assertEquals(properties.get(MBeanConvention.JEXXA_CONTEXT_NAME) + ":type=ApplicationService,name=SimpleApplicationService",
+        assertEquals(properties.get(JEXXA_CONTEXT_NAME) + ":type=ApplicationService,name=SimpleApplicationService",
                 objectUnderTest.getDomainPath());
     }
 
@@ -64,7 +60,7 @@ class MBeanConventionTest
         String integerTemplate = "<int>";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
         var objectUnderTest = new MBeanConvention(applicationService, properties);
 
@@ -82,7 +78,7 @@ class MBeanConventionTest
         String stringTemplate = "<String>";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
         var objectUnderTest = new MBeanConvention(applicationService, properties);
 
@@ -100,7 +96,7 @@ class MBeanConventionTest
         String jexxaValueObjectTemplate = "{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"}";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
         var objectUnderTest = new MBeanConvention(applicationService, properties);
 
@@ -118,7 +114,7 @@ class MBeanConventionTest
         String jexxaValueObjectTemplate = "{\"firstValueObject\":{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"},\"secondValueObject\":{\"value\":\"<int>\",\"valueInPercent\":\"<double>\"}}";
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
         var objectUnderTest = new MBeanConvention(applicationService, properties);
 
@@ -135,7 +131,7 @@ class MBeanConventionTest
         //Arrange
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(JEXXA_CONTEXT_NAME, getClass().getSimpleName());
         var action = "setSimpleValue";
         var newValue = 5;
 
@@ -155,7 +151,7 @@ class MBeanConventionTest
         //Arrange
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(JEXXA_CONTEXT_NAME, getClass().getSimpleName());
         var action = "setSimpleValueObject";
         var newValue = new JexxaValueObject(5);
 
@@ -175,7 +171,7 @@ class MBeanConventionTest
         //Arrange
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(JEXXA_CONTEXT_NAME, getClass().getSimpleName());
 
         var objectUnderTest = new MBeanConvention(applicationService, properties);
 
@@ -198,7 +194,7 @@ class MBeanConventionTest
         //Arrange
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
-        properties.put(MBeanConvention.JEXXA_CONTEXT_NAME, getClass().getSimpleName());
+        properties.put(JEXXA_CONTEXT_NAME, getClass().getSimpleName());
         var staticMethods = Arrays.stream(applicationService.getClass().getMethods())
                 .filter( method -> Modifier.isStatic(method.getModifiers()))
                 .collect(Collectors.toUnmodifiableList());

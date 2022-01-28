@@ -1,5 +1,15 @@
 package io.jexxa.core;
 
+import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
+import io.jexxa.core.convention.PortConvention;
+import io.jexxa.core.factory.AdapterFactory;
+import io.jexxa.core.factory.PortFactory;
+import io.jexxa.utils.JexxaLogger;
+import io.jexxa.utils.annotations.CheckReturnValue;
+import io.jexxa.utils.function.ThrowingConsumer;
+import io.jexxa.utils.properties.JexxaCoreProperties;
+import org.slf4j.Logger;
+
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.List;
@@ -9,15 +19,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
-
-import io.jexxa.core.convention.PortConvention;
-import io.jexxa.core.factory.AdapterFactory;
-import io.jexxa.core.factory.PortFactory;
-import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
-import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.annotations.CheckReturnValue;
-import io.jexxa.utils.function.ThrowingConsumer;
-import org.slf4j.Logger;
 
 /**
  * JexxaMain is the main entry point for your application to use Jexxa. Within each application only a single instance
@@ -30,8 +31,14 @@ import org.slf4j.Logger;
  */
 public final class JexxaMain
 {
+    private static final String DRIVEN_ADAPTER_PACKAGE = ".infrastructure.drivenadapter";
+    private static final String DRIVING_ADAPTER_PACKAGE = ".infrastructure.drivenadapter";
+    private static final String DOMAIN_SERVICE = ".domainservice";
+    private static final String DOMAIN_PROCESS_SERVICE = ".domainprocessservice";
+    private static final String APPLICATION_SERVICE = ".applicationservice";
+
+
     public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
-    private static final String JEXXA_CONTEXT_NAME =  "io.jexxa.context.name";
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JexxaMain.class);
 
@@ -55,6 +62,15 @@ public final class JexxaMain
     {
         this(contextName, System.getProperties());
     }
+    public JexxaMain(Class<?> context)
+    {
+        this(context.getSimpleName(), System.getProperties());
+    }
+    public JexxaMain(Class<?> context, Properties properties)
+    {
+        this(context.getSimpleName(), properties);
+    }
+
 
     /**
      * Creates the JexxaMain instance for your application with given context name.
@@ -73,7 +89,7 @@ public final class JexxaMain
 
         // Handle properties in following forder:
         // 0. Add default JEXXA_CONTEXT_MAIN
-        this.properties.put(JEXXA_CONTEXT_NAME, contextName);
+        this.properties.put(JexxaCoreProperties.JEXXA_CONTEXT_NAME, contextName);
 
         // 1. Load properties from application.properties because they have the lowest priority
         loadJexxaApplicationProperties(this.properties);
@@ -81,11 +97,16 @@ public final class JexxaMain
         this.properties.putAll( System.getProperties() );  //add/overwrite system properties
         // 3. Use given properties because they have the highest priority
         this.properties.putAll( applicationProperties );  //add/overwrite given properties
+        // 4. import properties that are defined by '"io.jexxa.config.import"'
+        if( this.properties.containsKey(JexxaCoreProperties.JEXXA_CONFIG_IMPORT) )
+        {
+            importProperties(this.properties.getProperty(JexxaCoreProperties.JEXXA_CONFIG_IMPORT));
+        }
 
         this.addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
 
         //Create BoundedContext
-        this.boundedContext = new BoundedContext(this.properties.getProperty(JEXXA_CONTEXT_NAME), this);
+        this.boundedContext = new BoundedContext(this.properties.getProperty(JexxaCoreProperties.JEXXA_CONTEXT_NAME), this);
 
         setExceptionHandler();
     }
@@ -99,6 +120,37 @@ public final class JexxaMain
     public JexxaMain addToInfrastructure(String packageName)
     {
         drivenAdapterFactory.acceptPackage(packageName);
+        return this;
+    }
+
+    /**
+     * This method adds default package structure as recommended by Jexxa. In case you use your own package structure
+     * see {@link #addToInfrastructure(String)} and {@link #addToApplicationCore(String)}.
+     * The default structure added to {@link #addToApplicationCore(String)} is:
+     *
+     * <ul>
+     *     <li>&lt;Root-Package&gt;.applicationservice</li>
+     *     <li>&lt;Root-Package&gt;.domainservice</li>
+     *     <li>&lt;Root-Package&gt;.domainprocessservice</li>
+     * </ul>
+     * The default structure which is added to {@link #addToInfrastructure(String)} is:
+     *
+     * <ul>
+     *     <li>&lt;Root-Package&gt;.infrastructure.drivenadapter</li>
+     *     <li>&lt;Root-Package&gt;infrastructure.drivingadapter</li>
+     * </ul>
+     *
+     * @param mainApplication which is located at the root package. From this package name the remaining packages are added
+     * @return JexxaMain object to call additional methods
+     */
+    public JexxaMain addDDDPackages(Class<?> mainApplication)
+    {
+        addToInfrastructure( mainApplication.getPackageName() + DRIVEN_ADAPTER_PACKAGE);
+        addToInfrastructure( mainApplication.getPackageName() + DRIVING_ADAPTER_PACKAGE);
+        addToApplicationCore( mainApplication.getPackageName() + DOMAIN_SERVICE);
+        addToApplicationCore( mainApplication.getPackageName() + DOMAIN_PROCESS_SERVICE);
+        addToApplicationCore( mainApplication.getPackageName() + APPLICATION_SERVICE);
+
         return this;
     }
 
@@ -126,6 +178,30 @@ public final class JexxaMain
     {
         return new DrivingAdapter<>(clazz, this);
     }
+
+    @CheckReturnValue
+    public <T> FluentInterceptor intercept(Class<T> clazz)
+    {
+        return new FluentInterceptor(this, getInstanceOfInboundPort(clazz));
+    }
+
+    @CheckReturnValue
+    public <T> FluentInterceptor intercept(T object)
+    {
+        return new FluentInterceptor(this, object);
+    }
+
+    public FluentInterceptor interceptAnnotation(Class<? extends Annotation> portAnnotation)
+    {
+        var targetObjects = portFactory
+                .getAnnotatedPorts(portAnnotation)
+                .stream()
+                .map(this::getInstanceOfPort)
+                .toArray();
+
+        return new FluentInterceptor(this, targetObjects);
+    }
+
 
     @CheckReturnValue
     public <T extends IDrivingAdapter> DrivingAdapter<T>  conditionalBind(BooleanSupplier conditional, Class<T> clazz)
@@ -207,6 +283,15 @@ public final class JexxaMain
         return getBoundedContext().waitForShutdown();
     }
 
+    public void importProperties(String resource)
+    {
+        Optional.ofNullable(JexxaMain.class.getResourceAsStream(resource))
+                .ifPresentOrElse(
+                        ThrowingConsumer.exceptionLogger(properties::load),
+                        () -> {throw new IllegalArgumentException("Properties file " + resource + " not available. Please check the filename!");}
+                );
+
+    }
 
     @CheckReturnValue
     public BoundedContext getBoundedContext()

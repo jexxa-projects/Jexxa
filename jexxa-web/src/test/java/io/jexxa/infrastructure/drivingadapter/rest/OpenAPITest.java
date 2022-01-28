@@ -1,18 +1,5 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.HTTP_PORT_PROPERTY;
-import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter.OPEN_API_PATH;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.jexxa.TestConstants;
@@ -25,6 +12,17 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
+
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
+import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_PORT;
+import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
@@ -43,9 +41,9 @@ class OpenAPITest
         var defaultHost = "localhost";
         var defaultPort = 7500;
 
-        properties.put(RESTfulRPCAdapter.HOST_PROPERTY, defaultHost);
-        properties.put(HTTP_PORT_PROPERTY, Integer.toString(defaultPort));
-        properties.put(OPEN_API_PATH, "swagger-docs");
+        properties.put(JexxaWebProperties.JEXXA_REST_HOST, defaultHost);
+        properties.put(JEXXA_REST_PORT, Integer.toString(defaultPort));
+        properties.put(JEXXA_REST_OPEN_API_PATH, "swagger-docs");
 
         objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
         objectUnderTest.register(simpleApplicationService);

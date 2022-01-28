@@ -1,9 +1,9 @@
 package io.jexxa.utils.function;
 
+import io.jexxa.utils.JexxaLogger;
+
 import java.util.Collection;
 import java.util.function.Consumer;
-
-import io.jexxa.utils.JexxaLogger;
 
 /**
  * This utility class allows running methods which throw a checked exception inside a java stream

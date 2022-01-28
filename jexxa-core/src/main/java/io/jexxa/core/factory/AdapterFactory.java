@@ -1,7 +1,7 @@
 package io.jexxa.core.factory;
 
 
-import static java.util.stream.Collectors.toList;
+import io.jexxa.utils.factory.ClassFactory;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import io.jexxa.utils.factory.ClassFactory;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Creates all kind of adapters (driving and driven) which fulfill one of the following conventions:

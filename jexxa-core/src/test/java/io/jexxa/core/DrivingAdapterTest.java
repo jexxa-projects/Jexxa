@@ -1,7 +1,5 @@
 package io.jexxa.core;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.InvalidConstructorApplicationService;
 import io.jexxa.application.infrastructure.drivingadapter.InvalidAdapter;
@@ -10,6 +8,8 @@ import io.jexxa.core.convention.PortConventionViolation;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Tag(TestConstants.UNIT_TEST)
 class DrivingAdapterTest

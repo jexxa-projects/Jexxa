@@ -1,6 +1,11 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.jdbc;
 
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
+import io.jexxa.utils.json.JSONConverter;
 
 import java.util.List;
 import java.util.Objects;
@@ -8,12 +13,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLOrder;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
-import io.jexxa.utils.json.JSONConverter;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
 class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
 {
@@ -44,7 +44,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(metaData)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.ASC_NULLS_LAST)
                 .limit(amount)
@@ -57,7 +57,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(metaData)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.ASC_NULLS_LAST)
                 .create();
@@ -69,7 +69,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(metaData)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.DESC_NULLS_LAST)
                 .limit(amount)
@@ -82,7 +82,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(metaData)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .orderBy(nameOfRow, SQLOrder.DESC_NULLS_LAST)
                 .create();
@@ -94,7 +94,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(metaData)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isNull()
@@ -107,7 +107,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
     {
         var jdbcQuery = jdbcConnection.get()
                 .createQuery(metaData)
-                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.VALUE )
+                .select( JDBCKeyValueRepository.KeyValueSchema.class, JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE)
                 .from(aggregateClazz)
                 .where(nameOfRow)
                 .isNotNull()

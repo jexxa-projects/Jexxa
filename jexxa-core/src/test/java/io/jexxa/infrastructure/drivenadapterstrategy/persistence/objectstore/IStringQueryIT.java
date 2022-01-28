@@ -1,17 +1,5 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.JexxaObject.createCharSequence;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreTestDatabase.REPOSITORY_CONFIG;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numberTag;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.stringTag;
-import static java.util.Comparator.comparing;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.List;
-import java.util.Properties;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
@@ -19,6 +7,18 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.met
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.List;
+import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.JexxaObject.createCharSequence;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreTestDatabase.REPOSITORY_CONFIG;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numericTag;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.stringTag;
+import static java.util.Comparator.comparing;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class IStringQueryIT
 {
@@ -28,18 +28,18 @@ class IStringQueryIT
     private IObjectStore<JexxaObject, JexxaValueObject, JexxaObjectSchema> objectStore;
 
     /**
-     * Defines the meta data that we use:
+     * Defines the metadata that we use:
      * Conventions for databases:
      * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
      * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
      */
     private enum JexxaObjectSchema implements MetadataSchema
     {
-        INT_VALUE(numberTag(JexxaObject::getInternalValue)),
+        INT_VALUE(numericTag(JexxaObject::getInternalValue)),
 
-        VALUE_OBJECT(numberTag(JexxaObject::getKey, JexxaValueObject::getValue)),
+        VALUE_OBJECT(numericTag(JexxaObject::getKey, JexxaValueObject::getValue)),
 
-        OPTIONAL_VALUE_OBJECT(numberTag(JexxaObject::getOptionalValue, JexxaValueObject::getValue)),
+        OPTIONAL_VALUE_OBJECT(numericTag(JexxaObject::getOptionalValue, JexxaValueObject::getValue)),
 
         STRING_OBJECT(stringTag(JexxaObject::getString)),
 
@@ -75,7 +75,7 @@ class IStringQueryIT
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
 
         testData.stream().limit(50).forEach(element -> element.setOptionalString(createCharSequence( element.getKey().getValue()))); // Set optional string in first 50 elements to A, B, ..., AA, AB, ...
-        testData.stream().limit(50).forEach( element -> element.setOptionalValue( element.getKey() )); // Set optional values in first 50 elements to 0, .. 49
+        testData.stream().limit(50).forEach( element -> element.setOptionalValue( element.getKey() )); // Set optional values in first 50 elements to 0, .. , 49
     }
 
 

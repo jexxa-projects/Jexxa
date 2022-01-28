@@ -1,14 +1,14 @@
 package io.jexxa.tutorials.bookstorej16.domain.aggregate;
 
-import static io.jexxa.tutorials.bookstorej16.domain.domainevent.BookSoldOut.bookSoldOut;
-
-import java.util.Optional;
-
 import io.jexxa.addend.applicationcore.Aggregate;
 import io.jexxa.addend.applicationcore.AggregateID;
 import io.jexxa.tutorials.bookstorej16.domain.businessexception.BookNotInStockException;
 import io.jexxa.tutorials.bookstorej16.domain.domainevent.BookSoldOut;
 import io.jexxa.tutorials.bookstorej16.domain.valueobject.ISBN13;
+
+import java.util.Optional;
+
+import static io.jexxa.tutorials.bookstorej16.domain.domainevent.BookSoldOut.bookSoldOut;
 
 @Aggregate
 public final class Book

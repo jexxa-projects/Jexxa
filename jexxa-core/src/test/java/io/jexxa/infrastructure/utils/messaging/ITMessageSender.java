@@ -1,20 +1,13 @@
 package io.jexxa.infrastructure.utils.messaging;
 
-import java.util.Optional;
-import java.util.Properties;
-
-import javax.jms.Connection;
-import javax.jms.DeliveryMode;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.MessageProducer;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
+
+import javax.jms.*;
+import java.util.Optional;
+import java.util.Properties;
 
 public class ITMessageSender implements AutoCloseable
 {

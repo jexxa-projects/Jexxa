@@ -1,8 +1,8 @@
 package io.jexxa.application.domain.valueobject;
 
-import java.util.Objects;
-
 import io.jexxa.application.annotation.ValueObject;
+
+import java.util.Objects;
 
 /**
  * This ValueObject include following special cases:

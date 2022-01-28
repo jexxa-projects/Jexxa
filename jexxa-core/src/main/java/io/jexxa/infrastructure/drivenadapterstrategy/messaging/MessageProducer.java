@@ -1,13 +1,13 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import io.jexxa.utils.annotations.CheckReturnValue;
 
 import java.util.Objects;
 import java.util.Properties;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import io.jexxa.utils.annotations.CheckReturnValue;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
 @CheckReturnValue
 public class MessageProducer

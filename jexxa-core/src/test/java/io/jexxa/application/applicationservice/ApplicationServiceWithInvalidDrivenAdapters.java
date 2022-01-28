@@ -1,8 +1,8 @@
 package io.jexxa.application.applicationservice;
 
-import java.util.Objects;
-
 import io.jexxa.application.domainservice.IInvalidService;
+
+import java.util.Objects;
 
 public class ApplicationServiceWithInvalidDrivenAdapters
 {

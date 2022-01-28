@@ -1,21 +1,21 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.KEY;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.STRING_TYPE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBC_REPOSITORY_CONFIG;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.PRIMARY_KEY_WITH_NONNULL_VALUES;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.setupDatabase;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Properties;
-
 import io.jexxa.TestConstants;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCObject;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.Properties;
+
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.REPOSITORY_KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.STRING_TYPE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
@@ -28,13 +28,13 @@ class JDBCCommandIT
         //arrange
         var jdbcConnection = setupDatabase(properties);
 
-        var deleteAllRowsQuery = jdbcConnection.createCommand(JDBCTestDatabase.JDBCTestSchema.class)
+        var deleteAllRowsQuery = jdbcConnection.createCommand(JDBCTestSchema.class)
                 .deleteFrom(JDBCTestDatabase.class)
-                .where(KEY).isNotEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
-                .or(KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .where(REPOSITORY_KEY).isNotEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .or(REPOSITORY_KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
 
-        var validateNoEntriesQuery = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
+        var validateNoEntriesQuery = jdbcConnection.createQuery(JDBCTestSchema.class)
                 .selectAll()
                 .from(JDBCTestDatabase.class)
                 .create();
@@ -54,14 +54,14 @@ class JDBCCommandIT
         var jdbcConnection = setupDatabase(properties);
 
 
-        var updateQuery = jdbcConnection.createCommand(JDBCTestDatabase.JDBCTestSchema.class) //Simulate an equal statement
+        var updateQuery = jdbcConnection.createCommand(JDBCTestSchema.class) //Simulate an equal statement
                 .update(JDBCTestDatabase.class)
-                .set(STRING_TYPE, updatedString)
-                .where(KEY).isGreaterOrEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
-                .and(KEY).isLessOrEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .set(STRING_TYPE, new JDBCObject( updatedString, SQLDataType.TEXT ))
+                .where(REPOSITORY_KEY).isGreaterOrEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
+                .and(REPOSITORY_KEY).isLessOrEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
 
-        var validateUpdate = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
+        var validateUpdate = jdbcConnection.createQuery(JDBCTestSchema.class)
                 .selectAll()
                 .from(JDBCTestDatabase.class)
                 .where(STRING_TYPE).isEqual(updatedString)

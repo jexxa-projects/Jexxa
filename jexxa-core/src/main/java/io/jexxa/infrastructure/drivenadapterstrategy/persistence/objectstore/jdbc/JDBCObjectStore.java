@@ -1,27 +1,25 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.jdbc;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.NUMERIC;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.TEXT;
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.Set;
-import java.util.function.Function;
-
 import com.google.gson.Gson;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCObject;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.DatabaseManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database.IDatabase;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
+import io.jexxa.utils.properties.JexxaJDBCProperties;
 import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
+
+import java.util.*;
+import java.util.function.Function;
+
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.*;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
 
 @SuppressWarnings("unused")
@@ -36,6 +34,9 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
     private final Class<M> metaData;
     private final Set<M> jdbcSchema;
 
+    private final IDatabase database;
+
+
     public JDBCObjectStore(
             Class<T> aggregateClazz,
             Function<T, K> keyFunction,
@@ -48,8 +49,9 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         this.aggregateClazz = aggregateClazz;
         this.metaData = metaData;
         this.jdbcSchema = EnumSet.allOf(metaData);
+        this.database = DatabaseManager.getDatabase(properties);
 
-        autocreateTableObjectStore(properties);
+        manageObjectStore(properties);
     }
 
 
@@ -58,20 +60,25 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
     {
         Objects.requireNonNull(aggregate);
 
-        var valueSet = new ArrayList<>();
+        var valueSet = new ArrayList<JDBCObject>();
         List<String> keySet = new ArrayList<>();
 
-        valueSet.add(getJSONConverter().toJson(aggregate));
-        jdbcSchema.forEach(element -> valueSet.add(element.getTag().getFromAggregate(aggregate)) );
+        valueSet.add(valueToJSONB(aggregate));
 
-        keySet.add(KeyValueSchema.VALUE.name());
+        jdbcSchema.forEach(element -> valueSet.add( new JDBCObject(
+                element.getTag().getFromAggregate(aggregate),
+                typeToSQL(element.getTag().getTagType())) ));
+
+        keySet.add(KeyValueSchema.REPOSITORY_VALUE.name());
         jdbcSchema.forEach(element -> keySet.add(element.name()));
+
+        var jdbcKey = primaryKeyToJSONB(keyFunction.apply(aggregate));
 
         var command = getConnection()
                 .createCommand(KeyValueSchema.class)
                 .update(aggregateClazz)
-                .set(keySet.toArray(new String[0]), valueSet.toArray() )
-                .where(KeyValueSchema.KEY).isEqual(getJSONConverter().toJson( keyFunction.apply(aggregate) ))
+                .set(keySet.toArray(new String[0]), valueSet.toArray(new JDBCObject[0]))
+                .where(KeyValueSchema.REPOSITORY_KEY).isEqual(jdbcKey)
                 .create();
 
         command.asUpdate();
@@ -86,21 +93,22 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         var jsonConverter = getJSONConverter();
 
         List<String> keySet = new ArrayList<>();
-        keySet.add(KeyValueSchema.KEY.name());
-        keySet.add(KeyValueSchema.VALUE.name());
+        keySet.add(KeyValueSchema.REPOSITORY_KEY.name());
+        keySet.add(KeyValueSchema.REPOSITORY_VALUE.name());
         jdbcSchema.forEach(element -> keySet.add(element.name()));
 
-
-        var objectList = new ArrayList<>();
-        objectList.add (jsonConverter.toJson(keyFunction.apply(aggregate)));
-        objectList.add (jsonConverter.toJson(aggregate));
-        jdbcSchema.forEach(metaTag -> objectList.add(metaTag.getTag().getFromAggregate(aggregate)));
+        var objectList = new ArrayList<JDBCObject>();
+        objectList.add (primaryKeyToJSONB(keyFunction.apply(aggregate)));
+        objectList.add (valueToJSONB(aggregate));
+        jdbcSchema.forEach(metaTag -> objectList.add(
+                new JDBCObject( metaTag.getTag().getFromAggregate(aggregate), typeToSQL(metaTag.getTag().getTagType())))
+        );
 
         var command = getConnection()
                 .createCommand(KeyValueSchema.class)
                 .insertInto(aggregateClazz)
                 .columns(keySet.toArray(new String[0]))
-                .values(objectList.toArray())
+                .values(objectList.toArray(new JDBCObject[0]))
                 .create();
 
         command.asUpdate();
@@ -138,39 +146,49 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         return new JDBCStringQuery<>(this::getConnection, metaTag, aggregateClazz, metaData, queryType );
     }
 
-    private void autocreateTableObjectStore(Properties properties)
+    private void manageObjectStore(Properties properties)
     {
         Objects.requireNonNull(properties);
-        if (properties.containsKey(JDBCConnection.JDBC_AUTOCREATE_TABLE))
+        if (properties.containsKey(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE))
         {
-            try{
+            autoCreateDatabase();
+            renameKeyValueColumns();
+            alterKeyValueRows();
+        }
+    }
 
-                var command = getConnection().createTableCommand(metaData)
-                        .createTableIfNotExists(aggregateClazz)
-                        .addColumn(KeyValueSchema.KEY, getMaxVarChar(properties.getProperty(JDBCConnection.JDBC_URL)), KeyValueSchema.class)
-                        .addConstraint(PRIMARY_KEY)
-                        .addColumn(KeyValueSchema.VALUE, TEXT, KeyValueSchema.class);
+    private void autoCreateDatabase()
+    {
+        try{
 
-                jdbcSchema.forEach(element ->
-                {
-                    if ( Number.class.isAssignableFrom(element.getTag().getTagType()) )
-                    {
-                        command.addColumn(element, NUMERIC);
-                    } else if (String.class.isAssignableFrom(element.getTag().getTagType())){
-                        command.addColumn(element, TEXT);
-                    } else {
-                        throw new IllegalArgumentException("Unsupported Value type " + element.getTag().getTagType().getName() +
-                                ". Supported Value types are subtypes of Number and String. ");
-                    }
-                });
+            var command = getConnection().createTableCommand(metaData)
+                    .createTableIfNotExists(aggregateClazz)
+                    .addColumn(KeyValueSchema.REPOSITORY_KEY, database.matchingPrimaryKey(JSONB), KeyValueSchema.class)
+                    .addConstraint(PRIMARY_KEY)
+                    .addColumn(KeyValueSchema.REPOSITORY_VALUE, database.matchingValue(JSONB), KeyValueSchema.class);
 
-                command.create().asIgnore();
+            jdbcSchema.forEach(element -> command.addColumn(element, typeToSQL(element.getTag().getTagType())) );
 
-            }
-            catch (RuntimeException e)
-            {
-                LOGGER.warn("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
-            }
+            command.create().asIgnore();
+
+        }
+        catch (RuntimeException e)
+        {
+            LOGGER.debug("Could not create table {} => Assume that table already exists", aggregateClazz.getSimpleName());
+        }
+    }
+
+    private static SQLDataType typeToSQL(Class<?> clazz)
+    {
+        if ( Number.class.isAssignableFrom(clazz) )
+        {
+            return NUMERIC;
+        }
+
+        else if (String.class.isAssignableFrom(clazz)){
+            return TEXT;
+        } else {
+            throw new IllegalArgumentException("Unsupported Value type " + clazz.getName() + ". Supported Value types are subtypes of Number and String. ");
         }
     }
 }

@@ -1,12 +1,12 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc;
 
+import io.jexxa.utils.annotations.CheckReturnValue;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
-
-import io.jexxa.utils.annotations.CheckReturnValue;
 
 class JDBCPreparedStatement
 {
@@ -46,22 +46,6 @@ class JDBCPreparedStatement
         {
             throw new IllegalArgumentException("Invalid Query " + sqlStatement + " " + e.getMessage(), e);
         }
-    }
-
-    /**
-     * This method creates a new PreparedStatement including sql statement and all arguments.
-     *
-     * Important note: The caller of this method is responsible to close the PreparedStatement, e.g. by calling it
-     * in a try-with-resources statement.
-     *
-     * @deprecated This method is deprecated because it easy to misuse. Please use createPreparedStatement instead.
-     *
-     * @return PreparedStatement that can be directly executed
-     */
-    @Deprecated(forRemoval = true)
-    public PreparedStatement getStatement()
-    {
-        return createPreparedStatement();
     }
 
     protected String getSQLStatement()

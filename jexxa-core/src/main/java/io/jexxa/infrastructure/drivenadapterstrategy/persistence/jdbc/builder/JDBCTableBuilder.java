@@ -1,16 +1,11 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.BLANK;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.COMMA;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.CREATE_TABLE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.DROP_TABLE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.IF_EXISTS;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.IF_NOT_EXISTS;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCCommand;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 
 import java.util.function.Supplier;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCCommand;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLSyntax.*;
 
 @SuppressWarnings("unused")
 public class JDBCTableBuilder<T extends Enum<T>> extends JDBCBuilder<T>
@@ -41,6 +36,16 @@ public class JDBCTableBuilder<T extends Enum<T>> extends JDBCBuilder<T>
 
         return create();
     }
+
+    public JDBCColumnBuilder<T> alterTable(Class<?> clazz)
+    {
+        getStatementBuilder()
+                .append(ALTER_TABLE)
+                .append(clazz.getSimpleName())
+                .append(BLANK);
+        return new JDBCColumnBuilder<>(this);
+    }
+
 
     public JDBCColumnBuilder<T> createTableIfNotExists(T element)
     {
@@ -107,17 +112,48 @@ public class JDBCTableBuilder<T extends Enum<T>> extends JDBCBuilder<T>
     {
         private final JDBCTableBuilder<T> commandBuilder;
         private boolean firstColumn = true;
+        private boolean openBraces = false;
 
         JDBCColumnBuilder( JDBCTableBuilder<T> commandBuilder )
         {
             this.commandBuilder = commandBuilder;
+        }
 
-            this.commandBuilder.getStatementBuilder().append(" ( ");
+        public JDBCTableBuilder<T> alterColumn(T element, SQLDataType newDataType )
+        {
+            return alterColumn(element, newDataType, "");
+        }
+
+        public JDBCTableBuilder<T> alterColumn(String element, SQLDataType newDataType )
+        {
+            return alterColumn(element, newDataType, "");
+        }
+
+        public JDBCTableBuilder<T> alterColumn(T element, SQLDataType newDataType, String usingStatement )
+        {
+            return alterColumn(element.name(), newDataType, usingStatement);
+        }
+
+        public JDBCTableBuilder<T> alterColumn(String element, SQLDataType newDataType, String usingStatement )
+        {
+            addCommaSeparatorIfRequired();
+
+            commandBuilder
+                    .getStatementBuilder()
+                    .append(ALTER_COLUMN)
+                    .append(element)
+                    .append(BLANK)
+                    .append(TYPE)
+                    .append(newDataType.toString())
+                    .append(usingStatement);
+
+            return commandBuilder;
         }
 
         public JDBCColumnBuilder<T> addColumn(T element, SQLDataType dataType)
         {
             addCommaSeparatorIfRequired();
+            openBracesIfRequired();
 
             commandBuilder
                     .getStatementBuilder()
@@ -131,6 +167,7 @@ public class JDBCTableBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         public <S extends Enum<S>> JDBCColumnBuilder<T> addColumn(S element, SQLDataType dataType, Class<S> schemaClass)
         {
             addCommaSeparatorIfRequired();
+            openBracesIfRequired();
 
             commandBuilder
                     .getStatementBuilder()
@@ -154,8 +191,7 @@ public class JDBCTableBuilder<T extends Enum<T>> extends JDBCBuilder<T>
 
         public JDBCCommand create()
         {
-            commandBuilder.getStatementBuilder()
-                    .append(") ");
+            closeBracesIfRequired();
             return commandBuilder.create();
         }
 
@@ -166,6 +202,24 @@ public class JDBCTableBuilder<T extends Enum<T>> extends JDBCBuilder<T>
                 commandBuilder.getStatementBuilder().append(COMMA);
             } else {
                 firstColumn = false;
+            }
+        }
+
+        private void openBracesIfRequired()
+        {
+            if (!openBraces)
+            {
+                commandBuilder.getStatementBuilder().append("( ");
+                openBraces = true;
+            }
+        }
+
+        private void closeBracesIfRequired()
+        {
+            if (openBraces)
+            {
+                commandBuilder.getStatementBuilder().append(" )");
+                openBraces = false;
             }
         }
     }

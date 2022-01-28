@@ -1,13 +1,13 @@
 package io.jexxa.tutorials.bookstorej16.infrastructure.drivenadapter.messaging;
 
-import java.util.Objects;
-import java.util.Properties;
-
 import io.jexxa.addend.applicationcore.DomainEvent;
 import io.jexxa.addend.infrastructure.DrivenAdapter;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.tutorials.bookstorej16.domainservice.IDomainEventPublisher;
+
+import java.util.Objects;
+import java.util.Properties;
 
 @SuppressWarnings("unused")
 @DrivenAdapter

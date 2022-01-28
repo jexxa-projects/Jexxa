@@ -1,12 +1,5 @@
 package io.jexxa.tutorials.contractmanagement.infrastructure.drivenadapter;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.instantTag;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numberTag;
-
-import java.time.Instant;
-import java.util.List;
-import java.util.Properties;
-
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
@@ -14,6 +7,13 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.met
 import io.jexxa.tutorials.contractmanagement.domain.domainevent.ContractSigned;
 import io.jexxa.tutorials.contractmanagement.domain.valueobject.ContractNumber;
 import io.jexxa.tutorials.contractmanagement.domainservice.IDomainEventStore;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.Properties;
+
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.instantTag;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numericTag;
 
 @SuppressWarnings("unused")
 public class DomainEventStore implements IDomainEventStore
@@ -27,7 +27,7 @@ public class DomainEventStore implements IDomainEventStore
      */
     public enum DomainEventSchema implements MetadataSchema
     {
-        CONTRACT_NUMBER(numberTag((domainEvent -> domainEvent.getContractNumber().getValue())) ),
+        CONTRACT_NUMBER(numericTag((domainEvent -> domainEvent.getContractNumber().getValue())) ),
 
         SIGNATURE_DATE(instantTag(ContractSigned::getSignatureDate));
 

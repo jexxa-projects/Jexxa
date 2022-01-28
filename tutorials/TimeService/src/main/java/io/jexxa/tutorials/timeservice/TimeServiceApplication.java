@@ -11,19 +11,10 @@ import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import io.jexxa.tutorials.timeservice.applicationservice.TimeService;
 import io.jexxa.tutorials.timeservice.infrastructure.drivingadapter.messaging.PublishTimeListener;
 import io.jexxa.utils.JexxaLogger;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 
 public final class TimeServiceApplication
 {
-    //Declare the packages that should be used by Jexxa
-    private static final String DRIVEN_ADAPTER  = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivenadapter";
-    private static final String DRIVING_ADAPTER = TimeServiceApplication.class.getPackageName() + ".infrastructure.drivingadapter";
-    private static final String OUTBOUND_PORTS  = TimeServiceApplication.class.getPackageName() + ".domainservice";
-
     public static void main(String[] args)
     {
         // Define the default strategy for messaging which is either a simple logger called `MessageLogger.class` or `JMSSender.class` for JMS messages
@@ -34,10 +25,7 @@ public final class TimeServiceApplication
 
         jexxaMain
                 //Define which outbound ports should be managed by Jexxa
-                .addToApplicationCore(OUTBOUND_PORTS)
-                .addToInfrastructure(DRIVEN_ADAPTER)
-                //Note: Since we provide our own special driving adapters, we have to add it to the infrastructure
-                .addToInfrastructure(DRIVING_ADAPTER)
+                .addDDDPackages(TimeServiceApplication.class)
 
                 // Bind RESTfulRPCAdapter and JMXAdapter to TimeService class so that we can invoke its method
                 .bind(RESTfulRPCAdapter.class).to(TimeService.class)

@@ -1,8 +1,8 @@
 package io.jexxa.tutorials.bookstore.domain.domainevent;
 
-import java.util.Objects;
-
 import io.jexxa.tutorials.bookstore.domain.valueobject.ISBN13;
+
+import java.util.Objects;
 
 public final class BookSoldOut
 {

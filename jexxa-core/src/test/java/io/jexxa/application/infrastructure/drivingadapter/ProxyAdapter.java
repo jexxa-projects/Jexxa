@@ -1,10 +1,10 @@
 package io.jexxa.application.infrastructure.drivingadapter;
 
+import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import io.jexxa.infrastructure.drivingadapter.IDrivingAdapter;
 
 public class ProxyAdapter implements IDrivingAdapter
 {

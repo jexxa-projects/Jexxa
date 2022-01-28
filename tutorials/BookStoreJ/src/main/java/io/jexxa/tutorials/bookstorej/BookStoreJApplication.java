@@ -7,28 +7,18 @@ import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.IRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCKeyValueRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.drivingadapter.jmx.JMXAdapter;
 import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 import io.jexxa.tutorials.bookstorej.domainservice.ReferenceLibrary;
 import io.jexxa.utils.JexxaLogger;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 
 public final class BookStoreJApplication
 {
-    //Declare the packages that should be used by Jexxa
-    private static final String DRIVEN_ADAPTER  = BookStoreJApplication.class.getPackageName() + ".infrastructure.drivenadapter";
-    private static final String OUTBOUND_PORTS  = BookStoreJApplication.class.getPackageName() + ".domainservice";
-    //Add also package name with inbound ports so that they are scanned by Jexxa
-    private static final String INBOUND_PORTS   = BookStoreJApplication.class.getPackageName() + ".applicationservice";
-
     public static void main(String[] args)
     {
         // Define the default strategies.
@@ -42,16 +32,9 @@ public final class BookStoreJApplication
 
         var jexxaMain = new JexxaMain(BookStoreJApplication.class.getSimpleName());
 
-        //print some application information
-        JexxaLogger.getLogger(BookStoreJApplication.class)
-                .info( "{}", jexxaMain.getBoundedContext().getContextVersion() );
-
         jexxaMain
-                // In order to find ports by annotation we must add packages that are searched by Jexxa.
-                // Therefore, we must also add inbound ports to application core
-                .addToApplicationCore(INBOUND_PORTS)
-                .addToApplicationCore(OUTBOUND_PORTS)
-                .addToInfrastructure(DRIVEN_ADAPTER)
+                //Define the default packages for inbound and outbound ports
+                .addDDDPackages(BookStoreJApplication.class)
 
                 //Get the latest books when starting the application
                 .bootstrap(ReferenceLibrary.class).with(ReferenceLibrary::addLatestBooks)

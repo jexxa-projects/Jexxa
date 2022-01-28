@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[4.0.0] - 2022-01-28
+### Changed - Important Information!
+- Jexxa-Core: Major changes to the persistence layer, which prevent downgrading applications to older Jexxa versions
+    - `JDBCKeyValueRepository` and `JDBCObjectStore` use now `JSONB` format if a Postgres DB is used. Existing database are automatically converted to `JSONB`
+    - `JDBCKeyValueRepository` and `JDBCObjectStore` use now column name `REGISTRY_KEY` and `REGISTRY_VALUE` instead `KEY` and `VALUE`. This avoids conflicts with reserved SQL statements. Existing database are automatically updated.
+    - `Repository` related interfaces and classes were moved from `...persistence` into sub-package `...persistence.repository` -> You have to update your imports in your application
+
+- Jexxa-Core: Removed all components declared as deprecated
+
+- Updated dependencies
+
+### Added
+- Jexxa-Core: Added possibility to load Properties file defined by `JEXXA_CONFIG_IMPORT`
+
+- Jexxa-Core/Jexxa-Web: Added files that provide all properties used by Jexxa: 
+  - [JexxaCoreProperties](./jexxa-core/src/main/java/io/jexxa/utils/properties/JexxaCoreProperties.java)
+  - [JexxaJDBCProperties](./jexxa-core/src/main/java/io/jexxa/utils/properties/JexxaJDBCProperties.java)
+  - [JexxaWebProperties](./jexxa-web/src/main/java/io/jexxa/infrastructure/drivingadapter/rest/JexxaWebProperties.java)
+
+- Jexxa-Adapter-API: Added possibility to set interceptor between `DrivingAdapters` and `InboundPorts`
+
 ## \[3.3.2] - 2022-01-03
 ### Changed
 - Updated dependencies

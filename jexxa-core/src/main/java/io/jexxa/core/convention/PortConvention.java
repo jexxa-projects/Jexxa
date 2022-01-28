@@ -1,8 +1,8 @@
 package io.jexxa.core.convention;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.Arrays;
+
+import static java.util.stream.Collectors.toList;
 
 public final class PortConvention
 {

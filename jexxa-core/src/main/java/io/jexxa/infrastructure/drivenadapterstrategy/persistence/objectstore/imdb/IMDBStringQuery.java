@@ -1,13 +1,13 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb;
 
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.StringTag;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.StringTag;
 
 class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
 {

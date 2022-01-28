@@ -1,12 +1,12 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
-
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.factory.ClassFactory;
+
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
 
 public final class MessageSenderManager
 {

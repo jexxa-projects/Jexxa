@@ -4,11 +4,33 @@
   <parent>
     <artifactId>jexxa</artifactId>
     <groupId>io.jexxa</groupId>
-    <version>3.3.3-SNAPSHOT</version>
+    <version>4.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>jexxa-adapter-api</artifactId>
   <version>1.0.2-SNAPSHOT</version>
 
   <name>Jexxa-Adapter-API</name>
+
+  <!-- dependencies for tests -->
+  <dependencies>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-launcher</artifactId>
+      <version>${junit.platform.launcher.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit.jupiter.engine.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>${junit.jupiter.params.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>

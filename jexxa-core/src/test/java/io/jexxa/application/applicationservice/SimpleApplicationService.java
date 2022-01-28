@@ -1,12 +1,12 @@
 package io.jexxa.application.applicationservice;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.domain.valueobject.SpecialCasesValueObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("unused")
 @ApplicationService

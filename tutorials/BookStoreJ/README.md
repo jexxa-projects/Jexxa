@@ -71,11 +71,16 @@ When applying the tactical patterns of DDD and map the ubiquitous language into 
 
 Even though today's IDE's can automatically generate these methods they can bloat your source code and much worse hide the domain specific aspects. In addition, you must not forget to recreate these methods if you change the attributes of the class. 
 
+#### Java version with Record support
+In case you use a Java version with `Record` support, we strongly recommend using Java-Records. 
+Please refer to tutorial [BookSotreJ16](../BookStoreJ16/README.md). 
+
+#### Java version without `Record` support
 To resolve these issues I recommend `AspectJ` for realizing cross-cutting concerns so that they are not visible in the source code of your application core. Since we already annotated all our classes with our pattern language, we can reuse these annotations. 
 
 Important note: This decision is a trade-off between using a technology stack within the application core to make the ubiquitous language more explicit. Regardless of the outcome, you should discuss this point with your developers and software architects and document the decision.  
 
-In case you would like to use AspectJ together with pattern language of DDD we recommend project [AddendJ](https://addendj.jexxa.io/).     
+In case you would like to use AspectJ together with pattern language of DDD we recommend project [AddendJ](https://addendj.jexxa.io/).    
 
 In the following you see the implementation of class `ISBN13` without an implementation of equals and hashcode. These methods are woven into the source code during compile time.    
  
@@ -109,18 +114,11 @@ public class ISBN13
 ## Implement the Application
 
 If your application core is annotated with your pattern language, you can use it together wih Jexxa. This requires to change the initial `BookStore` application as follows:
-1.  You have to add package names providing your annotated classes to Jexxa by using method `addToApplicationCore`. This is required because Jexxa scans only the specified package names.    
-2.  You have to bind driving adapters using method `bindToAnnotation`. In this case alle inbound ports annotated with given annotation are bind to the driving adapter.    
+1.  You have to bind driving adapters using method `bindToAnnotation`. In this case alle inbound ports annotated with given annotation are bind to the driving adapter.    
 
 ```java 
 public final class BookStoreJApplication
 {
-    //Declare the packages that should be used by Jexxa
-    private static final String DRIVEN_ADAPTER  = BookStoreJApplication.class.getPackageName() + ".infrastructure.drivenadapter";
-    private static final String OUTBOUND_PORTS  = BookStoreJApplication.class.getPackageName() + ".domainservice";
-    //Add also package name with inbound ports so that they are scanned by Jexxa
-    private static final String INBOUND_PORTS   = BookStoreJApplication.class.getPackageName() + ".applicationservice";
-
     public static void main(String[] args)
     {
         // Define the default strategy which is either an IMDB database or a JDBC based repository
@@ -133,10 +131,8 @@ public final class BookStoreJApplication
 
         jexxaMain
                 // In order to find ports by annotation we must add packages that are searched by Jexxa.
-                // Therefore, we must also add inbound ports to application core 
-                .addToApplicationCore(INBOUND_PORTS)
-                .addToApplicationCore(OUTBOUND_PORTS)
-                .addToInfrastructure(DRIVEN_ADAPTER)
+                // Since we use the default package structure we can use following method
+                .addDDDPackages(BookStoreJApplication.class)
 
                 //Get the latest books when starting the application
                 .bootstrap(ReferenceLibrary.class).with(ReferenceLibrary::addLatestBooks)

@@ -1,17 +1,17 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb;
 
-import java.util.EnumSet;
-import java.util.Properties;
-import java.util.Set;
-import java.util.function.Function;
-
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.imdb.IMDBRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.IStringQuery;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.NumericTag;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.StringTag;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
+
+import java.util.EnumSet;
+import java.util.Properties;
+import java.util.Set;
+import java.util.function.Function;
 
 @SuppressWarnings("rawtypes")
 public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataSchema>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>

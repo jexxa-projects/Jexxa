@@ -1,25 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
-import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender.JNDI_PASSWORD_FILE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender.JNDI_PASSWORD_KEY;
-import static io.jexxa.infrastructure.utils.messaging.QueueListener.QUEUE_DESTINATION;
-import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTINATION;
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertTimeout;
-
-import java.time.Duration;
-import java.util.Properties;
-import java.util.concurrent.TimeUnit;
-
-import javax.jms.BytesMessage;
-import javax.jms.Connection;
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
-
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
@@ -33,6 +14,24 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+
+import javax.jms.BytesMessage;
+import javax.jms.Connection;
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
+import java.time.Duration;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender.JNDI_PASSWORD_FILE;
+import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender.JNDI_PASSWORD_KEY;
+import static io.jexxa.infrastructure.utils.messaging.QueueListener.QUEUE_DESTINATION;
+import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTINATION;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)

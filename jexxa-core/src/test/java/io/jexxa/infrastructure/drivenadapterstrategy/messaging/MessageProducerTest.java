@@ -1,14 +1,12 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import org.junit.jupiter.api.Test;
 
 import java.util.Properties;
 
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import org.junit.jupiter.api.Test;
+import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MessageProducerTest
 {

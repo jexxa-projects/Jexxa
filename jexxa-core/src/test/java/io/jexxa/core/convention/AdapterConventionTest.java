@@ -1,11 +1,5 @@
 package io.jexxa.core.convention;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
-
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.infrastructure.drivenadapter.factory.DefaultConstructorAdapter;
 import io.jexxa.application.infrastructure.drivenadapter.factory.FactoryMethodAdapter;
@@ -13,6 +7,10 @@ import io.jexxa.application.infrastructure.drivenadapter.factory.PropertiesConst
 import io.jexxa.application.infrastructure.drivingadapter.InvalidAdapter;
 import io.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class AdapterConventionTest
 {

@@ -1,18 +1,18 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection.JDBC_DRIVER;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb.IMDBObjectStore;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.jdbc.JDBCObjectStore;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
+import io.jexxa.utils.annotations.CheckReturnValue;
+import io.jexxa.utils.factory.ClassFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb.IMDBObjectStore;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.jdbc.JDBCObjectStore;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
-import io.jexxa.utils.annotations.CheckReturnValue;
-import io.jexxa.utils.factory.ClassFactory;
+import static io.jexxa.utils.properties.JexxaJDBCProperties.JEXXA_JDBC_DRIVER;
 
 
 @SuppressWarnings("unused")
@@ -106,7 +106,7 @@ public final class ObjectStoreManager
         }
 
         // 3. If a JDBC driver is stated in Properties => Use JDBCKeyValueRepository
-        if (properties.containsKey(JDBC_DRIVER))
+        if (properties.containsKey(JEXXA_JDBC_DRIVER))
         {
             return JDBCObjectStore.class;
         }

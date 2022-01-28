@@ -1,10 +1,10 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging;
 
-import java.util.Properties;
-
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
+
+import java.util.Properties;
 
 public class MessageLogger extends MessageSender
 {
