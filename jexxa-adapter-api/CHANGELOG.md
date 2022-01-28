@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[2.0.0] - 2022-mm-dd
+## \[2.0.0] - 2022-01-28
 ### Changed
 -   Replaced `SynchronizationFacade` by `InvocationManager` which enables method invocation by an `InvocationHandler` 
 

@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[4.0.0] - yyyy-mm-dd
+## \[4.0.0] - 2022-01-28
 ### Changed - Important Information!
 - Jexxa-Core: Major changes to the persistence layer, which prevent downgrading applications to older Jexxa versions
     - `JDBCKeyValueRepository` and `JDBCObjectStore` use now `JSONB` format if a Postgres DB is used. Existing database are automatically converted to `JSONB`
