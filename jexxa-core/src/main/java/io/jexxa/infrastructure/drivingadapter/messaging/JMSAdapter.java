@@ -77,7 +77,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
         catch (JMSException e)
         {
-            throw new java.lang.IllegalStateException("Driving Adapter could not start receiving messages", e);
+            throw new IllegalStateException("Driving Adapter could not start receiving messages", e);
         }
 
     }
@@ -129,7 +129,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
         catch (JMSException e)
         {
-            throw new java.lang.IllegalStateException(
+            throw new IllegalStateException(
                     "Registration of of Driving Adapter " + object.getClass().getName() + " failed. Please check the JMSConfiguration.\n"  +
                             " Error message from JMS subsystem: " + e.getMessage()
                     , e
@@ -165,11 +165,11 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
         catch (NamingException e)
         {
-            throw new java.lang.IllegalStateException("No ConnectionFactory available via : " + properties.get(JNDI_PROVIDER_URL_KEY), e);
+            throw new IllegalStateException("No ConnectionFactory available via : " + properties.get(JNDI_PROVIDER_URL_KEY), e);
         }
         catch (JMSException e)
         {
-            throw new java.lang.IllegalStateException("Can not connect to " + properties.get(JNDI_PROVIDER_URL_KEY), e);
+            throw new IllegalStateException("Can not connect to " + properties.get(JNDI_PROVIDER_URL_KEY), e);
         }
     }
 

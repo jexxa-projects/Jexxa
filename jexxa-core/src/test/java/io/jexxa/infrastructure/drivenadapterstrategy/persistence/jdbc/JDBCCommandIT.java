@@ -28,13 +28,13 @@ class JDBCCommandIT
         //arrange
         var jdbcConnection = setupDatabase(properties);
 
-        var deleteAllRowsQuery = jdbcConnection.createCommand(JDBCTestDatabase.JDBCTestSchema.class)
+        var deleteAllRowsQuery = jdbcConnection.createCommand(JDBCTestSchema.class)
                 .deleteFrom(JDBCTestDatabase.class)
                 .where(REPOSITORY_KEY).isNotEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .or(REPOSITORY_KEY).isEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
 
-        var validateNoEntriesQuery = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
+        var validateNoEntriesQuery = jdbcConnection.createQuery(JDBCTestSchema.class)
                 .selectAll()
                 .from(JDBCTestDatabase.class)
                 .create();
@@ -54,14 +54,14 @@ class JDBCCommandIT
         var jdbcConnection = setupDatabase(properties);
 
 
-        var updateQuery = jdbcConnection.createCommand(JDBCTestDatabase.JDBCTestSchema.class) //Simulate an equal statement
+        var updateQuery = jdbcConnection.createCommand(JDBCTestSchema.class) //Simulate an equal statement
                 .update(JDBCTestDatabase.class)
                 .set(STRING_TYPE, new JDBCObject( updatedString, SQLDataType.TEXT ))
                 .where(REPOSITORY_KEY).isGreaterOrEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .and(REPOSITORY_KEY).isLessOrEqual(PRIMARY_KEY_WITH_NONNULL_VALUES)
                 .create();
 
-        var validateUpdate = jdbcConnection.createQuery(JDBCTestDatabase.JDBCTestSchema.class)
+        var validateUpdate = jdbcConnection.createQuery(JDBCTestSchema.class)
                 .selectAll()
                 .from(JDBCTestDatabase.class)
                 .where(STRING_TYPE).isEqual(updatedString)
