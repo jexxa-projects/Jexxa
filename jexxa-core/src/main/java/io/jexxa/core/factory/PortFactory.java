@@ -54,7 +54,7 @@ public class PortFactory
     }
 
     /**
-     * Check if an inbound port including all required driven adapter can be created
+     * Check if an inbound port including all required driven-adapter can be created
      *
      * @param inboundPort type of the port to check if it is in general available
      * @return true in case a constructor fulfilling conventions is available, otherwise false

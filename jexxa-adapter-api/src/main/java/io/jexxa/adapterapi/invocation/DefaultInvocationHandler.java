@@ -3,14 +3,14 @@ package io.jexxa.adapterapi.invocation;
 import io.jexxa.adapterapi.interceptor.AfterInterceptor;
 import io.jexxa.adapterapi.interceptor.AroundInterceptor;
 import io.jexxa.adapterapi.interceptor.BeforeInterceptor;
-import io.jexxa.adapterapi.invocation.function.SerializableConsumer;
-import io.jexxa.adapterapi.invocation.function.SerializableFunction;
-import io.jexxa.adapterapi.invocation.function.SerializableRunnable;
 import io.jexxa.adapterapi.invocation.context.ConsumerInvocationContext;
 import io.jexxa.adapterapi.invocation.context.FunctionInvocationContext;
 import io.jexxa.adapterapi.invocation.context.MethodInvocationContext;
 import io.jexxa.adapterapi.invocation.context.RunnableInvocationContext;
 import io.jexxa.adapterapi.invocation.context.SupplierInvocationContext;
+import io.jexxa.adapterapi.invocation.function.SerializableConsumer;
+import io.jexxa.adapterapi.invocation.function.SerializableFunction;
+import io.jexxa.adapterapi.invocation.function.SerializableRunnable;
 import io.jexxa.adapterapi.invocation.function.SerializableSupplier;
 
 import java.lang.reflect.InvocationTargetException;
@@ -38,7 +38,7 @@ public class DefaultInvocationHandler implements AroundInterceptor, BeforeInterc
     }
 
     @Override
-    public void around(InvocationContext invocationContext) throws InvocationTargetException, IllegalAccessException
+    public void around(InvocationContext invocationContext)
     {
         invocationContext.proceed();
     }
@@ -71,52 +71,32 @@ public class DefaultInvocationHandler implements AroundInterceptor, BeforeInterc
     @Override
     public void invoke(Object targetObject, SerializableRunnable runnable)
     {
-        try {
-            var invocationContext = new RunnableInvocationContext(targetObject, runnable, aroundList);
-            invoke(invocationContext);
-        } catch (InvocationTargetException | IllegalAccessException e)
-        {
-            throw new IllegalStateException(e);
-        }
+        var invocationContext = new RunnableInvocationContext(targetObject, runnable, aroundList);
+        invoke(invocationContext);
     }
 
     @Override
     public <T> void invoke(Object targetObject,SerializableConsumer<T> consumer, T argument)
     {
-        try {
-            var invocationContext = new ConsumerInvocationContext<>(targetObject, consumer, argument, aroundList);
-            invoke(invocationContext);
-        } catch (InvocationTargetException | IllegalAccessException e)
-        {
-            throw new IllegalStateException(e);
-        }
+        var invocationContext = new ConsumerInvocationContext<>(targetObject, consumer, argument, aroundList);
+        invoke(invocationContext);
     }
 
     @Override
     public <T> T invoke(Object targetObject,SerializableSupplier<T> supplier) {
-        try {
-            var invocationContext = new SupplierInvocationContext<>(targetObject, supplier, aroundList);
-            invoke(invocationContext);
-            return invocationContext.getReturnValue();
-        } catch (InvocationTargetException | IllegalAccessException e)
-        {
-            throw new IllegalStateException(e);
-        }
+        var invocationContext = new SupplierInvocationContext<>(targetObject, supplier, aroundList);
+        invoke(invocationContext);
+        return invocationContext.getReturnValue();
     }
 
     @Override
     public <T, R> R invoke(Object targetObject,SerializableFunction<T, R> function, T argument) {
-        try {
-            var invocationContext = new FunctionInvocationContext<>(targetObject, function, argument, aroundList);
-            invoke(invocationContext);
-            return invocationContext.getReturnValue();
-        } catch (InvocationTargetException | IllegalAccessException e)
-        {
-            throw new IllegalStateException(e);
-        }
+        var invocationContext = new FunctionInvocationContext<>(targetObject, function, argument, aroundList);
+        invoke(invocationContext);
+        return invocationContext.getReturnValue();
     }
 
-    protected void invoke(InvocationContext invocationContext) throws InvocationTargetException, IllegalAccessException {
+    protected void invoke(InvocationContext invocationContext)  {
         synchronized (GLOBAL_SYNCHRONIZATION_OBJECT)
         {
             before(invocationContext);

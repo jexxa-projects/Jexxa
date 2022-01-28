@@ -117,7 +117,7 @@
 
               <!--- Enable for JMX support.
                Notes:  - jmxremote.rmi.port and jmxremote.port must be identical in order to access application in docker container
-               - exposed port in section <ports> must be identical to jmxremote.port. Otherwise port forwarding will not work with jmx
+               - exposed port in section <ports> must be identical to jmxremote.port. Otherwise, port forwarding will not work with jmx
                -->
               <jvmFlag>
                 -Dcom.sun.management.jmxremote.local.only=false

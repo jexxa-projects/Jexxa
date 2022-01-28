@@ -72,7 +72,7 @@ public class JDBCConnection implements AutoCloseable
         }
     }
 
-    @SuppressWarnings("java:S2139") // Here we log and and rethrow an exception in order to document that we tried to handle a connection failure without success and must give up
+    @SuppressWarnings("java:S2139") // Here we log and rethrow an exception in order to document that we tried to handle a connection failure without success and must give up
     public final JDBCConnection validateConnection()
     {
         try

@@ -32,7 +32,7 @@ public class ContractRepository  implements IContractRepository
          * This MetaTag represents the contract number. Since contract number is a  numeric value we use a numberTag. As most
          * predefined {@link MetaTag} class, we just provide an accessor function to get the value from the managed object.
          */
-        CONTRACT_NUMBER(numberTag(element -> element.getContractNumber().getValue())),
+        CONTRACT_NUMBER(numericTag(element -> element.getContractNumber().getValue())),
 
         /**
          * This MetaTag represents a boolean if the contract is signed or not.  Here, we use booleanTag together with the

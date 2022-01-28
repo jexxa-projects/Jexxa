@@ -54,20 +54,14 @@ public abstract class InvocationContext
         return Stream.of(getArgs()).map(Object::getClass).toArray(Class<?>[]::new);
     }
 
-    public void proceed()  {
-        try {
-            if (currentInterceptor.hasNext())
-            {
-                currentInterceptor.next().around(this);
-            } else {
-                    invoke();
-            }
-        } catch ( InvocationTargetException e)
+    public void proceed()
+    {
+        if (currentInterceptor.hasNext())
         {
-            throw new InvocationTargetRuntimeException( e.getTargetException() );
-        } catch ( IllegalAccessException e )
-        {
-            throw new InvocationTargetRuntimeException( e );
+            currentInterceptor.next().around(this);
+        } else {
+                invoke();
         }
+
     }
 }

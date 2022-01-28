@@ -6,5 +6,5 @@ import java.lang.reflect.InvocationTargetException;
 
 public interface AroundInterceptor  {
 
-    void around(InvocationContext invocationContext ) throws InvocationTargetException, IllegalAccessException;
+    void around(InvocationContext invocationContext );
 }

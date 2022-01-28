@@ -14,7 +14,7 @@ public class DefaultInterceptor implements AroundInterceptor, BeforeInterceptor,
     public void after(InvocationContext invocationContext) { /* default implementation */ }
 
     @Override
-    public void around(InvocationContext invocationContext) throws InvocationTargetException, IllegalAccessException
+    public void around(InvocationContext invocationContext)
     {
         invocationContext.proceed();
     }

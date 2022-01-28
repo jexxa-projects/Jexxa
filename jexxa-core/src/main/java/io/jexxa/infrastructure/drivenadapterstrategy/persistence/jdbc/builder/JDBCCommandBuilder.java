@@ -171,41 +171,6 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         return this;
     }
 
-    @Deprecated(forRemoval = true)
-    public JDBCCommandBuilder<T> set(T element, Object value)
-    {
-        getStatementBuilder()
-                .append(SET)
-                .append(element.name())
-                .append(EQUAL)
-                .append(ARGUMENT_PLACEHOLDER);
-
-        addArgument(value);
-        return this;
-    }
-
-    @Deprecated(forRemoval = true)
-    public JDBCCommandBuilder<T> set(String[] element, Object[] value)
-    {
-        getStatementBuilder()
-                .append(SET);
-
-        for (var i = 0; i < element.length; ++i)
-        {
-            addArgument(value[i]);
-            getStatementBuilder()
-                    .append( element[i] )
-                    .append(EQUAL)
-                    .append(ARGUMENT_PLACEHOLDER);
-            if ( i < element.length - 1)
-            {
-                getStatementBuilder().append(COMMA);
-            }
-        }
-        return this;
-    }
-
-
     public JDBCCommandBuilder<T> set(String[] element, JDBCObject[] value)
     {
         getStatementBuilder()

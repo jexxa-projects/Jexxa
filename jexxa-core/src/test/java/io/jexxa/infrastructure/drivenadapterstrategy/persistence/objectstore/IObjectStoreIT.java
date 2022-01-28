@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreTestDatabase.REPOSITORY_CONFIG;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numberTag;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numericTag;
 import static java.util.Comparator.comparing;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,16 +43,16 @@ class IObjectStoreIT
     }
 
     /**
-     * Defines the meta data that we use:
+     * Defines the metadata that we use:
      * Conventions for databases:
      * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
      * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
      */
     private enum JexxaObjectSchema implements MetadataSchema
     {
-        INT_VALUE(numberTag(JexxaObject::getInternalValue)),
+        INT_VALUE(numericTag(JexxaObject::getInternalValue)),
 
-        VALUE_OBJECT(numberTag(JexxaObject::getKey, JexxaValueObject::getValue));
+        VALUE_OBJECT(numericTag(JexxaObject::getKey, JexxaValueObject::getValue));
 
         /**
          *  Defines the constructor of the enum. Following code is equal for all object stores.

@@ -29,7 +29,7 @@ public abstract class JDBCRepository  implements AutoCloseable
      * @throws IllegalStateException if JDBCConnection can not be reset
      * @return JDBCConnection that is in a valid state.
      */
-    @SuppressWarnings("java:S2139")  // To explicitly show log messages in backend. Otherwise they are forwarded to the client and not visible in backend
+    @SuppressWarnings("java:S2139")  // To explicitly show log messages in backend. Otherwise, they are forwarded to the client and not visible in backend
     public final JDBCConnection getConnection()
     {
         return jdbcConnection.validateConnection();

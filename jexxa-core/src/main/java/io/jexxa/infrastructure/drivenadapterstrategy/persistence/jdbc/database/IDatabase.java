@@ -24,7 +24,7 @@ public interface IDatabase
      */
     SQLDataType matchingValue(SQLDataType requestedDataType);
 
-    /** Alter the type of a column 
+    /** Alter the type of column
      * 
      * @param jdbcConnection connection to execute the command 
      * @param tableName type of the class that is affected 

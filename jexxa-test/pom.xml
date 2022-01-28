@@ -46,7 +46,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- We us the objects defined in jexxa-core tests -->
+        <!-- We use the objects defined in jexxa-core tests -->
         <dependency>
             <groupId>io.jexxa</groupId>
             <artifactId>jexxa-core</artifactId>

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Properties;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.instantTag;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numberTag;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numericTag;
 
 @SuppressWarnings("unused")
 public class DomainEventStore implements IDomainEventStore
@@ -27,7 +27,7 @@ public class DomainEventStore implements IDomainEventStore
      */
     public enum DomainEventSchema implements MetadataSchema
     {
-        CONTRACT_NUMBER(numberTag((domainEvent -> domainEvent.getContractNumber().getValue())) ),
+        CONTRACT_NUMBER(numericTag((domainEvent -> domainEvent.getContractNumber().getValue())) ),
 
         SIGNATURE_DATE(instantTag(ContractSigned::getSignatureDate));
 

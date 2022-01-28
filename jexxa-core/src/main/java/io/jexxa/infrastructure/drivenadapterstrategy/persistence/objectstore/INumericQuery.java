@@ -100,7 +100,7 @@ public interface INumericQuery<T, S >
      *
      * @param startValue defines the start value of the range
      * @param endValue defines the end value of the range
-     * @return an ordered list of elements that are in a open range.
+     * @return an ordered list of elements that are in an open range.
      */
     List<T> getRange(S startValue, S endValue);
 
@@ -108,7 +108,7 @@ public interface INumericQuery<T, S >
      * Sorts the entries by S in ascending order and returns the defined amount of elements
      * @param amount specifies the number of recent added aggregates that should be returned.
      * @return list of elements limited by the given amount.
-     *         If less then requested aggregates are managed, all aggregates are returned.
+     *         If less than requested aggregates are managed, all aggregates are returned.
      *         If amount is &lt; 0 then an empty list ist returned
      */
     List<T> getAscending(int amount);
@@ -123,7 +123,7 @@ public interface INumericQuery<T, S >
      * Sorts the entries by S in descending order and returns the defined amount of elements
      * @param amount specifies the number of recent added aggregates that should be returned.
      * @return list of elements limited by the given amount.
-     *         If less then requested aggregates are managed, all aggregates are returned.
+     *         If less than requested aggregates are managed, all aggregates are returned.
      *         If amount is &lt; 0 then an empty list ist returned
      */
     List<T> getDescending(int amount);
