@@ -32,7 +32,7 @@ import java.util.function.Consumer;
 public final class JexxaMain
 {
     private static final String DRIVEN_ADAPTER_PACKAGE = ".infrastructure.drivenadapter";
-    private static final String DRIVING_ADAPTER_PACKAGE = ".infrastructure.drivenadapter";
+    private static final String DRIVING_ADAPTER_PACKAGE = ".infrastructure.drivingadapter";
     private static final String DOMAIN_SERVICE = ".domainservice";
     private static final String DOMAIN_PROCESS_SERVICE = ".domainprocessservice";
     private static final String APPLICATION_SERVICE = ".applicationservice";
