@@ -195,6 +195,7 @@ public final class JexxaMain
         return new FluentInterceptor(this, object);
     }
 
+    @CheckReturnValue
     public FluentInterceptor interceptAnnotation(Class<? extends Annotation> portAnnotation)
     {
         var targetObjects = portFactory
@@ -206,6 +207,12 @@ public final class JexxaMain
         return new FluentInterceptor(this, targetObjects);
     }
 
+    @CheckReturnValue
+    public JexxaMain registerHealthCheck(HealthCheck healthCheck)
+    {
+        boundedContext.registerHealthCheck(healthCheck);
+        return this;
+    }
 
     @CheckReturnValue
     public <T extends IDrivingAdapter> DrivingAdapter<T>  conditionalBind(BooleanSupplier conditional, Class<T> clazz)

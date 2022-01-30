@@ -1,17 +1,20 @@
 package io.jexxa.core;
 
-import io.jexxa.utils.properties.JexxaCoreProperties;
 import io.jexxa.utils.JexxaLogger;
+import io.jexxa.utils.properties.JexxaCoreProperties;
 
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class BoundedContext
 {
-
     private boolean isRunning = false;
     private boolean isWaiting = false;
 
@@ -19,6 +22,7 @@ public class BoundedContext
     private final Clock clock = Clock.systemUTC();
     private final Instant startTime;
     private final JexxaMain jexxaMain;
+    private final List<HealthCheck> healthChecks = new ArrayList<>();
 
     BoundedContext(final String contextName, JexxaMain jexxaMain)
     {
@@ -58,6 +62,29 @@ public class BoundedContext
     public boolean isRunning()
     {
         return isRunning;
+    }
+
+    public boolean isHealthy()
+    {
+        var isHealthy = healthChecks.stream()
+                .map(HealthCheck::healthy)
+                .filter( element -> !element)
+                .findFirst();
+
+        return isHealthy.orElse(true);
+    }
+
+    public List<HealthCheck.Diagnostics> getDiagnostics()
+    {
+        return healthChecks
+                .stream()
+                .map(HealthCheck::getDiagnostics)
+                .collect(Collectors.toList());
+    }
+
+    void registerHealthCheck( HealthCheck healthCheck)
+    {
+        healthChecks.add(healthCheck);
     }
 
     synchronized JexxaMain waitForShutdown()

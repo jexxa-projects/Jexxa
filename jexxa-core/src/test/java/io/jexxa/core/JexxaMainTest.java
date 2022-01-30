@@ -246,4 +246,18 @@ class JexxaMainTest
         assertFalse(objectUnderTest.getBoundedContext().isRunning());
     }
 
+    @Test
+    void testAddDDDPackages() {
+        //Act
+        objectUnderTest.addDDDPackages(JexxaMainTest.class);
+
+        //Assert
+        assertTrue(objectUnderTest.getApplicationCore().contains( JexxaMainTest.class.getPackageName() + ".applicationservice"));
+        assertTrue(objectUnderTest.getApplicationCore().contains( JexxaMainTest.class.getPackageName() + ".domainservice"));
+        assertTrue(objectUnderTest.getApplicationCore().contains( JexxaMainTest.class.getPackageName() + ".domainprocessservice"));
+
+        assertTrue(objectUnderTest.getInfrastructure().contains( JexxaMainTest.class.getPackageName() + ".infrastructure.drivenadapter"));
+        assertTrue(objectUnderTest.getInfrastructure().contains( JexxaMainTest.class.getPackageName() + ".infrastructure.drivingadapter"));
+    }
+
 }
