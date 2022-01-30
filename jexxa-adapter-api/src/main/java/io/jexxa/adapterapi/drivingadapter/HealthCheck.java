@@ -1,4 +1,4 @@
-package io.jexxa.core;
+package io.jexxa.adapterapi.drivingadapter;
 
 public interface HealthCheck
 {

@@ -1,5 +1,6 @@
 package io.jexxa.core;
 
+import io.jexxa.adapterapi.drivingadapter.HealthCheck;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.properties.JexxaCoreProperties;
 
@@ -7,7 +8,6 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

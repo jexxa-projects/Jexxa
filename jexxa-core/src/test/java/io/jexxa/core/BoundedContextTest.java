@@ -2,6 +2,7 @@ package io.jexxa.core;
 
 
 import io.jexxa.TestConstants;
+import io.jexxa.adapterapi.drivingadapter.HealthCheck;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
