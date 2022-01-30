@@ -60,12 +60,12 @@ class MultipleJMSReceiverIT
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
+        incrementApplicationService = jexxaMain.getInstanceOfPort(IncrementApplicationService.class);
 
         for ( int i = 0; i < MAX_THREADS; ++i)
         {
-            jexxaMain.bind(JMSAdapter.class).to(ApplicationServiceListener.class);
+            jexxaMain.bind(JMSAdapter.class).to(new ApplicationServiceListener(incrementApplicationService));
         }
-        incrementApplicationService = jexxaMain.getInstanceOfPort(IncrementApplicationService.class);
         List<Integer> expectedResult = IntStream.rangeClosed(1, MAX_COUNTER)
                 .boxed()
                 .collect(toList());

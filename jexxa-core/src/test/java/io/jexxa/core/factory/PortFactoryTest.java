@@ -128,8 +128,8 @@ class PortFactoryTest
                 acceptPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act
-        var first = objectUnderTest.getPortAdapterOf(SimpleApplicationServiceAdapter.class, new Properties());
-        var second = objectUnderTest.getPortAdapterOf(SimpleApplicationServiceAdapter.class, new Properties());
+        var first = objectUnderTest.newPortAdapterOf(SimpleApplicationServiceAdapter.class, new Properties());
+        var second = objectUnderTest.newPortAdapterOf(SimpleApplicationServiceAdapter.class, new Properties());
 
         //Assert that first and second adapter are equal
         assertNotNull(first);
@@ -148,7 +148,7 @@ class PortFactoryTest
 
         //Act / Assert
         var exception = assertThrows(PortFactory.InvalidPortConfigurationException.class,
-                () -> objectUnderTest.getPortAdapterOf(InvalidPortAdapter.class, new Properties()) );
+                () -> objectUnderTest.newPortAdapterOf(InvalidPortAdapter.class, new Properties()) );
 
         assertNotNull(exception.getMessage());
     }

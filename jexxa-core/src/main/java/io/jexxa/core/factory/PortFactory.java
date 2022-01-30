@@ -27,6 +27,8 @@ public class PortFactory
     private final ObjectPool objectPool = new ObjectPool();
     private final DependencyScanner dependencyScanner= new DependencyScanner();
     private final AdapterFactory adapterFactory;
+    private final ObjectPool portAdapterPool = new ObjectPool();
+
 
     private CreationPolicy drivenAdapterPolicy = CreationPolicy.REUSE;
 
@@ -109,18 +111,26 @@ public class PortFactory
      * @param <T> type of the port-adapter
      * @return the created port-adapter including its port
      */
-    public <T> T getPortAdapterOf(Class<T> portAdapter, Properties properties)
+    public <T> T newPortAdapterOf(Class<T> portAdapter, Properties properties)
     {
         var portInstance = getInstanceOf(getPort(portAdapter), properties);
 
         try {
-            return ClassFactory.newInstanceOf(portAdapter, new Object[]{portInstance})
+            var newPortAdapter = ClassFactory.newInstanceOf(portAdapter, new Object[]{portInstance})
                 .orElseThrow(() -> new MissingAdapterException(portInstance.getClass(), adapterFactory));
+            portAdapterPool.add(newPortAdapter);
+            return newPortAdapter;
         }
             catch (ReflectiveOperationException e)
         {
             throw new InvalidPortConfigurationException(portAdapter, e);
         }
+    }
+    public <T> T getPortAdapterOf(Class<T> portAdapter, Properties properties)
+    {
+        var existingInstance = portAdapterPool.getInstance(portAdapter);
+
+        return existingInstance.orElseGet(() -> newPortAdapterOf(portAdapter, properties));
     }
 
     /**

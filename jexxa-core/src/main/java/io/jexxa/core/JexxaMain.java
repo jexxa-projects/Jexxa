@@ -1,6 +1,7 @@
 package io.jexxa.core;
 
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
+import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
@@ -182,6 +183,9 @@ public final class JexxaMain
     @CheckReturnValue
     public <T> FluentInterceptor intercept(Class<T> clazz)
     {
+        if (AdapterConvention.isPortAdapter(clazz, getInfrastructure())) {
+            return new FluentInterceptor(this, portFactory.getPortAdapterOf(clazz, getProperties()));
+        }
         return new FluentInterceptor(this, getInstanceOfInboundPort(clazz));
     }
 
