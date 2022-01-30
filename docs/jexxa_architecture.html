@@ -1336,10 +1336,12 @@ In case you need a strict control how objects are exposed for example to differe
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Port Adapter</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Is always created new and not reused.</p>
+<p>Since Jexxa version 4.0.0 is managed as singleton and reused when it is bind to different ports.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Allows fine-grained control of how a driving adapter should expose the included port. For example, you can define that specific ports are only available via a management IP address.</p>
+<p>The initial assumption of fine-grained control of how a driving adapter should be exposed was not required until now.
+In addition, it should be treated with explicit different types. On the other hand singleton management simplifies the usage
+of interceptors. Since treating Port Adapter is singleton reduces overall complexity, this behaviour was introduced with version &gt;= 4.0.0</p>
 </div></div></td>
 </tr>
 </tbody>
@@ -1360,7 +1362,7 @@ In case you need a strict control how objects are exposed for example to differe
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-11-13 07:33:35 +0100
+Last updated 2022-01-30 08:29:07 +0100
 </div>
 </div>
 </body>

@@ -487,8 +487,10 @@ The singleton scope supports designing stateless outbound ports which is in gene
 
 
 | Port Adapter
-a| Is always created new and not reused.
-a| Allows fine-grained control of how a driving adapter should expose the included port. For example, you can define that specific ports are only available via a management IP address.
+a| Since Jexxa version 4.0.0 is managed as singleton and reused when it is bind to different ports.
+a| The initial assumption of fine-grained control of how a driving adapter should be exposed was not required until now.
+In addition, it should be treated with explicit different types. On the other hand singleton management simplifies the usage
+of interceptors. Since treating Port Adapter is singleton reduces overall complexity, this behaviour was introduced with version >= 4.0.0
 |===
 
 === Transactions
