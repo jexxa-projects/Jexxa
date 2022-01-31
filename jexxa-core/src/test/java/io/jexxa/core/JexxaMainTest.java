@@ -249,9 +249,11 @@ class JexxaMainTest
     @Test
     void testAddDDDPackages() {
         //Act
-        objectUnderTest.addDDDPackages(JexxaMainTest.class);
+        var result = objectUnderTest.addDDDPackages(JexxaMainTest.class);
 
         //Assert
+        assertEquals(objectUnderTest, result);
+
         assertTrue(objectUnderTest.getApplicationCore().contains( JexxaMainTest.class.getPackageName() + ".applicationservice"));
         assertTrue(objectUnderTest.getApplicationCore().contains( JexxaMainTest.class.getPackageName() + ".domainservice"));
         assertTrue(objectUnderTest.getApplicationCore().contains( JexxaMainTest.class.getPackageName() + ".domainprocessservice"));
