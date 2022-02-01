@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Tag(TestConstants.UNIT_TEST)
 class BoundedContextTest
 {
-    private final JexxaMain jexxaMain = new JexxaMain("BoundedContextTest");
+    private final JexxaMain jexxaMain = new JexxaMain(BoundedContextTest.class);
     private BoundedContext objectUnderTest;
 
 
@@ -51,7 +51,7 @@ class BoundedContextTest
     void testIsHealthy()
     {
         //Arrange
-        objectUnderTest.registerHealthCheck(new SimpleHealthCheck(true));
+        objectUnderTest.registerHealthCheck(new SimpleHealthCheck(BoundedContextTest.class, true));
 
         //Assert
         assertTrue(objectUnderTest.isHealthy());
@@ -63,8 +63,8 @@ class BoundedContextTest
     void testIsUnhealthy()
     {
         //Arrange
-        objectUnderTest.registerHealthCheck(new SimpleHealthCheck(true));
-        objectUnderTest.registerHealthCheck(new SimpleHealthCheck(false));
+        objectUnderTest.registerHealthCheck(new SimpleHealthCheck(BoundedContextTest.class, true));
+        objectUnderTest.registerHealthCheck(new SimpleHealthCheck(BoundedContextTest.class, false));
 
         //Assert
         assertFalse(objectUnderTest.isHealthy());
@@ -83,10 +83,12 @@ class BoundedContextTest
     public static class SimpleHealthCheck implements HealthCheck
     {
         private final boolean isHealthy;
+        private final Class<?> target;
 
-        public SimpleHealthCheck( boolean isHealthy )
+        public SimpleHealthCheck( Class<?> target, boolean isHealthy )
         {
             this.isHealthy = isHealthy;
+            this.target = target;
         }
 
         @Override
@@ -98,7 +100,7 @@ class BoundedContextTest
         @Override
         public Diagnostics getDiagnostics()
         {
-            return new Diagnostics(SimpleHealthCheck.class.getSimpleName(), isHealthy, "");
+            return new Diagnostics(SimpleHealthCheck.class, target, isHealthy, "");
         }
     }
 }

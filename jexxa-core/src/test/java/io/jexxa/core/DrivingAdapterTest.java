@@ -19,7 +19,7 @@ class DrivingAdapterTest
     void throwOnInvalidPortConvention()
     {
         //Arrange
-        JexxaMain jexxaMain = new JexxaMain(DrivingAdapterTest.class.getSimpleName());
+        JexxaMain jexxaMain = new JexxaMain(DrivingAdapterTest.class);
         var drivingAdapter = jexxaMain.bind(JMXAdapter.class);
 
         //Act / Assert

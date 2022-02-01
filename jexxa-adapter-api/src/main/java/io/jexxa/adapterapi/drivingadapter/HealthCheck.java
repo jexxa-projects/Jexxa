@@ -9,17 +9,24 @@ public interface HealthCheck
     class Diagnostics
     {
         private final boolean isHealthy;
-        private final String healthCheckName;
         private final String statusMessage;
+        private final Class<?> healthCheck;
+        private final Class<?> observedObject;
 
-        public Diagnostics(String healthCheckName, boolean isHealty, String statusMessage) {
-            this.healthCheckName = healthCheckName;
-            this.isHealthy = isHealty;
+        public Diagnostics(Class<?> healthCheck, Class<?> observedObject, boolean isHealthy, String statusMessage)
+        {
+            this.healthCheck = healthCheck;
+            this.isHealthy = isHealthy;
             this.statusMessage = statusMessage;
+            this.observedObject = observedObject;
         }
 
-        public String getName() {
-            return healthCheckName;
+        public Class<?> getHealthCheck() {
+            return healthCheck;
+        }
+
+        public Class<?> getObservedObject() {
+            return observedObject;
         }
 
         public boolean isHealthy() {
