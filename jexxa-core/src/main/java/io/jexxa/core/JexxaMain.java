@@ -209,6 +209,17 @@ public final class JexxaMain
     }
 
     @CheckReturnValue
+    public FluentMonitor monitor(Class<?> targetObject)
+    {
+        if (AdapterConvention.isPortAdapter(targetObject, getInfrastructure()))
+        {
+            return new FluentMonitor(this, portFactory.getPortAdapterOf(targetObject, properties));
+        }
+
+        return new FluentMonitor(this, portFactory.getInstanceOf(targetObject, properties));
+    }
+
+    @CheckReturnValue
     public JexxaMain registerHealthCheck(HealthCheck healthCheck)
     {
         boundedContext.registerHealthCheck(healthCheck);

@@ -51,7 +51,7 @@ class BoundedContextTest
     void testIsHealthy()
     {
         //Arrange
-        objectUnderTest.registerHealthCheck(new SimpleHealthCheck(BoundedContextTest.class, true));
+        objectUnderTest.registerHealthCheck(new SimpleHealthCheck(true));
 
         //Assert
         assertTrue(objectUnderTest.isHealthy());
@@ -63,8 +63,8 @@ class BoundedContextTest
     void testIsUnhealthy()
     {
         //Arrange
-        objectUnderTest.registerHealthCheck(new SimpleHealthCheck(BoundedContextTest.class, true));
-        objectUnderTest.registerHealthCheck(new SimpleHealthCheck(BoundedContextTest.class, false));
+        objectUnderTest.registerHealthCheck(new SimpleHealthCheck(true));
+        objectUnderTest.registerHealthCheck(new SimpleHealthCheck(false));
 
         //Assert
         assertFalse(objectUnderTest.isHealthy());
@@ -80,15 +80,13 @@ class BoundedContextTest
                 .stop();
     }
 
-    public static class SimpleHealthCheck implements HealthCheck
+    public static class SimpleHealthCheck extends HealthCheck
     {
         private final boolean isHealthy;
-        private final Class<?> target;
 
-        public SimpleHealthCheck( Class<?> target, boolean isHealthy )
+        public SimpleHealthCheck( boolean isHealthy )
         {
             this.isHealthy = isHealthy;
-            this.target = target;
         }
 
         @Override
@@ -98,9 +96,8 @@ class BoundedContextTest
         }
 
         @Override
-        public Diagnostics getDiagnostics()
-        {
-            return new Diagnostics(SimpleHealthCheck.class, target, isHealthy, "");
+        public String getStatusMessage() {
+            return "";
         }
     }
 }

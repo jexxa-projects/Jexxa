@@ -1,40 +1,32 @@
 package io.jexxa.adapterapi.drivingadapter;
 
-public interface HealthCheck
+import java.time.Instant;
+
+public abstract class HealthCheck
 {
-    boolean healthy();
+    private Object observedObject;
 
-    Diagnostics getDiagnostics();
+    public abstract boolean healthy();
 
-    class Diagnostics
+    public abstract String getStatusMessage();
+
+    public Diagnostics getDiagnostics()
     {
-        private final boolean isHealthy;
-        private final String statusMessage;
-        private final Class<?> healthCheck;
-        private final Class<?> observedObject;
-
-        public Diagnostics(Class<?> healthCheck, Class<?> observedObject, boolean isHealthy, String statusMessage)
+        if ( observedObject != null )
         {
-            this.healthCheck = healthCheck;
-            this.isHealthy = isHealthy;
-            this.statusMessage = statusMessage;
-            this.observedObject = observedObject;
+            return new Diagnostics(getClass().getSimpleName(), observedObject.getClass().getSimpleName(), healthy(), getStatusMessage(), Instant.now());
         }
 
-        public Class<?> getHealthCheck() {
-            return healthCheck;
-        }
+        return new Diagnostics(getClass().getSimpleName(), "Unknown", healthy(), getStatusMessage(), Instant.now());
+    }
 
-        public Class<?> getObservedObject() {
-            return observedObject;
-        }
+    public void setObservedObject(Object observedObject)
+    {
+        this.observedObject = observedObject;
+    }
 
-        public boolean isHealthy() {
-            return isHealthy;
-        }
-
-        public String getStatusMessage() {
-            return statusMessage;
-        }
+    protected Object getObservedObject()
+    {
+        return observedObject;
     }
 }

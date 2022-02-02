@@ -1,5 +1,6 @@
 package io.jexxa.core;
 
+import io.jexxa.adapterapi.drivingadapter.Diagnostics;
 import io.jexxa.adapterapi.drivingadapter.HealthCheck;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.properties.JexxaCoreProperties;
@@ -64,6 +65,11 @@ public class BoundedContext
         return isRunning;
     }
 
+    /**
+     * Returns true if all HealthChecks returns true. If at least one HealthCheck return false, this method returns false as well
+     *
+     * @return True if all HealthChecks return true, otherwise false.
+     */
     public boolean isHealthy()
     {
         var isHealthy = healthChecks.stream()
@@ -74,7 +80,7 @@ public class BoundedContext
         return isHealthy.orElse(true);
     }
 
-    public List<HealthCheck.Diagnostics> getDiagnostics()
+    public List<Diagnostics> getDiagnostics()
     {
         return healthChecks
                 .stream()
