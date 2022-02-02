@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - Monitor classes to observe driving adapter
   - Extended BoundedContext to query health status based on HealthChecks  
   
+### Changed 
+- Updated dependencies
+
 ### Fixed
 - Corrected implementation of addDDDPackages so that package for driven adapter is included
 - Corrected handling of Port-Adapter as singleton instances 
