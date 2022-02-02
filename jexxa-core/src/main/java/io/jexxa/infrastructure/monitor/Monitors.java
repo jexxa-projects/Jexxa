@@ -4,9 +4,9 @@ import java.time.Duration;
 
 public class Monitors
 {
-    public static TimeoutMonitor timeoutMonitor( Duration maxTimeout )
+    public static TimerMonitor timerMonitor(Duration maxTimeout )
     {
-        return new TimeoutMonitor(maxTimeout);
+        return new TimerMonitor(maxTimeout);
     }
 
     private Monitors()

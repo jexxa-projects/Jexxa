@@ -8,12 +8,12 @@ import io.jexxa.adapterapi.invocation.InvocationContext;
 import java.time.Duration;
 import java.time.Instant;
 
-public class TimeoutMonitor extends HealthCheck implements BeforeInterceptor
+public class TimerMonitor extends HealthCheck implements BeforeInterceptor
 {
     private Instant lastUpdate = Instant.now();
     private final Duration messageTimeout;
 
-    public TimeoutMonitor(Duration messageTimeout)
+    public TimerMonitor(Duration messageTimeout)
     {
         this.messageTimeout = messageTimeout;
     }
@@ -24,8 +24,9 @@ public class TimeoutMonitor extends HealthCheck implements BeforeInterceptor
     }
 
     @Override
-    public boolean healthy() {
-        return Duration.between(lastUpdate, Instant.now()).abs().toSeconds() <= messageTimeout.toSeconds();
+    public boolean healthy()
+    {
+        return Duration.between(lastUpdate, Instant.now()).toMillis() <= messageTimeout.toMillis();
     }
 
     @Override
@@ -33,7 +34,11 @@ public class TimeoutMonitor extends HealthCheck implements BeforeInterceptor
     {
         if (!healthy())
         {
-            return "Did not receive a message for object " + getObservedObject().getClass().getSimpleName() + " within period of " + Duration.between(lastUpdate, Instant.now()).toSeconds() + " seconds";
+            return "Did not receive a message for object "
+                    + getObservedObject().getClass().getSimpleName()
+                    + " within period of "
+                    + Duration.between(lastUpdate, Instant.now()).toSeconds()
+                    + " seconds.";
         }
 
         return "All fine...";
