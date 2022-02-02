@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[4.1.0] - 2022-02-02
+### Added 
+- Jexxa-Core: 
+  - Monitor classes to observe driving adapter
+  - Extended BoundedContext to query health status based on HealthChecks  
+  
+### Fixed
+- Corrected implementation of addDDDPackages so that package for driven adapter is included
+- Corrected handling of Port-Adapter as singleton instances 
+
 ## \[4.0.0] - 2022-01-28
 ### Changed - Important Information!
 - Jexxa-Core: Major changes to the persistence layer, which prevent downgrading applications to older Jexxa versions
