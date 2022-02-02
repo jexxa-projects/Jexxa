@@ -1,6 +1,8 @@
 package io.jexxa.core;
 
+import io.jexxa.adapterapi.drivingadapter.HealthCheck;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
+import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
@@ -32,7 +34,7 @@ import java.util.function.Consumer;
 public final class JexxaMain
 {
     private static final String DRIVEN_ADAPTER_PACKAGE = ".infrastructure.drivenadapter";
-    private static final String DRIVING_ADAPTER_PACKAGE = ".infrastructure.drivenadapter";
+    private static final String DRIVING_ADAPTER_PACKAGE = ".infrastructure.drivingadapter";
     private static final String DOMAIN_SERVICE = ".domainservice";
     private static final String DOMAIN_PROCESS_SERVICE = ".domainprocessservice";
     private static final String APPLICATION_SERVICE = ".applicationservice";
@@ -182,6 +184,9 @@ public final class JexxaMain
     @CheckReturnValue
     public <T> FluentInterceptor intercept(Class<T> clazz)
     {
+        if (AdapterConvention.isPortAdapter(clazz, getInfrastructure())) {
+            return new FluentInterceptor(this, portFactory.getPortAdapterOf(clazz, getProperties()));
+        }
         return new FluentInterceptor(this, getInstanceOfInboundPort(clazz));
     }
 
@@ -191,6 +196,7 @@ public final class JexxaMain
         return new FluentInterceptor(this, object);
     }
 
+    @CheckReturnValue
     public FluentInterceptor interceptAnnotation(Class<? extends Annotation> portAnnotation)
     {
         var targetObjects = portFactory
@@ -202,6 +208,23 @@ public final class JexxaMain
         return new FluentInterceptor(this, targetObjects);
     }
 
+    @CheckReturnValue
+    public FluentMonitor monitor(Class<?> targetObject)
+    {
+        if (AdapterConvention.isPortAdapter(targetObject, getInfrastructure()))
+        {
+            return new FluentMonitor(this, portFactory.getPortAdapterOf(targetObject, properties));
+        }
+
+        return new FluentMonitor(this, portFactory.getInstanceOf(targetObject, properties));
+    }
+
+    @CheckReturnValue
+    public JexxaMain registerHealthCheck(HealthCheck healthCheck)
+    {
+        boundedContext.registerHealthCheck(healthCheck);
+        return this;
+    }
 
     @CheckReturnValue
     public <T extends IDrivingAdapter> DrivingAdapter<T>  conditionalBind(BooleanSupplier conditional, Class<T> clazz)

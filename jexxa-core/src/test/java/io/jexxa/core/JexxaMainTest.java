@@ -23,8 +23,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-import static io.jexxa.TestConstants.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static io.jexxa.TestConstants.JEXXA_DRIVING_ADAPTER;
+import static io.jexxa.TestConstants.UNIT_TEST;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -32,13 +39,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class JexxaMainTest
 {
     private JexxaMain objectUnderTest;
-    private static final String CONTEXT_NAME = "HelloJexxa";
 
     @BeforeEach
     void initTests()
     {
         RepositoryManager.setDefaultStrategy(IMDBRepository.class);
-        objectUnderTest = new JexxaMain(CONTEXT_NAME);
+        objectUnderTest = new JexxaMain(JexxaMainTest.class);
         objectUnderTest
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .addToInfrastructure(JEXXA_DRIVING_ADAPTER)
@@ -151,7 +157,7 @@ class JexxaMainTest
     void invalidBindToPortAdapter()
     {
         //Arrange - All done in initTests
-        objectUnderTest = new JexxaMain(CONTEXT_NAME);
+        objectUnderTest = new JexxaMain(JexxaMainTest.class);
         objectUnderTest
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
@@ -163,11 +169,11 @@ class JexxaMainTest
     }
 
     @Test
-    void bindToMultiplePortAdapter()
+    void bindToMultiplePortAdapterOfSameType()
     {
         //Arrange
-        var expectedDrivingAdapterInstanceCount = 1;
-        var expectedProxyAdapterInstanceCount = 2;
+        var expectedDrivingAdapterInstanceCount = 1; // Since DrivingAdapter are treated as singletons we expect 1 instance
+        var expectedProxyAdapterInstanceCount = 1;   // Since PortAdapter are treated as singletons we expect 1 instance
         ProxyAdapter.resetInstanceCount();
         ProxyPortAdapter.resetInstanceCount();
 
@@ -201,7 +207,7 @@ class JexxaMainTest
     {
         //Arrange
         RepositoryManager.setDefaultStrategy(IMDBRepository.class);
-        objectUnderTest = new JexxaMain(CONTEXT_NAME);
+        objectUnderTest = new JexxaMain(JexxaMainTest.class);
         objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .addToApplicationCore(JEXXA_APPLICATION_SERVICE)
 
@@ -244,6 +250,22 @@ class JexxaMainTest
 
         //Assert
         assertFalse(objectUnderTest.getBoundedContext().isRunning());
+    }
+
+    @Test
+    void testAddDDDPackages() {
+        //Act
+        var result = objectUnderTest.addDDDPackages(JexxaMainTest.class);
+
+        //Assert
+        assertEquals(objectUnderTest, result);
+
+        assertTrue(objectUnderTest.getApplicationCore().contains( JexxaMainTest.class.getPackageName() + ".applicationservice"));
+        assertTrue(objectUnderTest.getApplicationCore().contains( JexxaMainTest.class.getPackageName() + ".domainservice"));
+        assertTrue(objectUnderTest.getApplicationCore().contains( JexxaMainTest.class.getPackageName() + ".domainprocessservice"));
+
+        assertTrue(objectUnderTest.getInfrastructure().contains( JexxaMainTest.class.getPackageName() + ".infrastructure.drivenadapter"));
+        assertTrue(objectUnderTest.getInfrastructure().contains( JexxaMainTest.class.getPackageName() + ".infrastructure.drivingadapter"));
     }
 
 }
