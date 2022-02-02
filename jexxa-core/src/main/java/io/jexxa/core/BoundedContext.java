@@ -118,7 +118,7 @@ public class BoundedContext
         isRunning = true;
     }
 
-    protected void stop()
+    protected synchronized void stop()
     {
         isRunning = false;
         internalShutdown();
