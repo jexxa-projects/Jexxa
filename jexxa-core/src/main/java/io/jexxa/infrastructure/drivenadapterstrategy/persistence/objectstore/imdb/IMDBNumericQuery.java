@@ -181,12 +181,12 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
         Objects.requireNonNull(aggregate);
         Objects.requireNonNull(value);
 
-        if(numericTag.getFromAggregate(aggregate) == null)
+        var aggregateValue = numericTag.getFromAggregate(aggregate);
+
+        if(aggregateValue == null)
         {
             return 1;
         }
-
-        var aggregateValue = numericTag.getFromAggregate(aggregate);
 
         return typeSpecificCompareTo(aggregateValue, numericTag.getFromValue(value));
     }
