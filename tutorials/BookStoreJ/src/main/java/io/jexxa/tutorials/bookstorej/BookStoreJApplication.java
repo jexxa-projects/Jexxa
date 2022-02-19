@@ -34,7 +34,7 @@ public final class BookStoreJApplication
 
         jexxaMain
                 //Define the default packages for inbound and outbound ports
-                .addDDDPackages(BookStoreJApplication.class)
+                //.addDDDPackages(BookStoreJApplication.class)
 
                 //Get the latest books when starting the application
                 .bootstrap(ReferenceLibrary.class).with(ReferenceLibrary::addLatestBooks)
