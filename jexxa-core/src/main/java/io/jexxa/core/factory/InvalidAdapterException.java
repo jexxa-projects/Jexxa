@@ -17,17 +17,18 @@ public class InvalidAdapterException extends RuntimeException
     public <T> InvalidAdapterException(Class<T> adapter, Throwable exception)
     {
         super(exception);
-        if (exception.getCause() == null )
-        {
-            errorMessage = CANNOT_CREATE_ADAPTER + adapter.getName() + "\n" +
-                    CHECK_CONVENTIONS;
+
+        Throwable rootCause = exception;
+
+        while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
+            rootCause = rootCause.getCause();
         }
-        else
-        {
-            errorMessage = CANNOT_CREATE_ADAPTER + adapter.getName() + "\n" +
-                    CHECK_CONVENTIONS + "\n"  +
-                    "Error message from adapter : " + exception.getCause().getMessage();
-        }
+
+        errorMessage = CANNOT_CREATE_ADAPTER + adapter.getSimpleName() + " because a(n) " + exception.getClass().getSimpleName() + " occurred. "
+                + "\n* Adapter message  : " + rootCause.getMessage()
+                + "\n* Root cause       : " + rootCause.getClass().getSimpleName()
+                + "\n* 1. Trace element : " + rootCause.getStackTrace()[0]
+                + "\n* Recommendation   : " + CHECK_CONVENTIONS;
     }
 
     @Override

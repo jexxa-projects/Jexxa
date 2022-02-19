@@ -491,7 +491,7 @@ public final class JexxaMain
             var detailedMessage = "Not available";
             if (e.getCause() != null && e.getCause().getMessage() != null)
             {
-                detailedMessage = e.getCause().getMessage();
+                detailedMessage = e.getClass().getSimpleName() + " : " + e.getCause().getMessage();
             }
 
             stringBuilder.append("\n* Jexxa-Message: ").append(jexxaMessage);

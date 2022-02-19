@@ -21,13 +21,13 @@
     <dependency>
       <groupId>io.jexxa</groupId>
       <artifactId>jexxa-web</artifactId>
-      <version>${jexxa-core-stable.version}</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>io.jexxa.jexxatest</groupId>
       <artifactId>jexxa-test</artifactId>
-      <version>${jexxa-core-stable.version}</version>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
 
