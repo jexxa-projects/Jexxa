@@ -81,20 +81,20 @@
 
     <!-- version of test dependencies -->
     <activemq.client.version>5.16.4</activemq.client.version>
-    <postgres.version>42.3.2</postgres.version>
+    <postgres.version>42.3.3</postgres.version>
     <unirest.java.version>3.13.6</unirest.java.version>
     <junit.platform.launcher.version>1.8.2</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.8.2</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.8.2</junit.jupiter.params.version>
-    <slf4j.simple.version>1.7.35</slf4j.simple.version>
+    <slf4j.simple.version>1.7.36</slf4j.simple.version>
     <slf4j.api.version>1.7.35</slf4j.api.version>
     <awaitility.version>4.1.1</awaitility.version>
 
     <!-- version of tutorials dependencies -->
     <addendj.version>1.0.1</addendj.version>
-    <aspectj.version>1.9.8.RC3</aspectj.version>
-    <aspectjtools.version>1.9.8.RC3</aspectjtools.version>
-    <aspectjrt.version>1.9.8.RC3</aspectjrt.version>
+    <aspectj.version>1.9.8</aspectj.version>
+    <aspectjtools.version>1.9.8</aspectjtools.version>
+    <aspectjrt.version>1.9.8</aspectjrt.version>
     <commons.cli.version>1.5.0</commons.cli.version>
 
     <!-- version of maven dependencies for tutorials -->
