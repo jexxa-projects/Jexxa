@@ -231,10 +231,7 @@ public class PortFactory
                 rootCause = rootCause.getCause();
             }
 
-            errorMessage = "Cannot create port " + port.getSimpleName() + " because a(n) " + exception.getClass().getSimpleName() + " occurred. "
-                    + "\n* Adapter message  : " + rootCause.getMessage()
-                    + "\n* Root cause       : " + rootCause.getClass().getSimpleName()
-                    + "\n* 1. Trace element : " + rootCause.getStackTrace()[0];
+            errorMessage = "Cannot create port " + port.getSimpleName() + " because a(n) " + rootCause.getClass().getSimpleName() + " occurred.";
         }
 
         @Override
