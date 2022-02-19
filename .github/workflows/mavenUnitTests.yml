@@ -4,7 +4,9 @@
 
 name: Java CI Unit-Tests only
 
-on: [push]
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   build:
