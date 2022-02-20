@@ -11,7 +11,7 @@ public class InvalidAdapterException extends RuntimeException
 
     public <T> InvalidAdapterException(Class<T> adapter)
     {
-        this.errorMessage = CANNOT_CREATE_ADAPTER + adapter.getName() + "\n" + CHECK_CONVENTIONS;
+        this.errorMessage = CANNOT_CREATE_ADAPTER + adapter.getSimpleName() + " -> " + CHECK_CONVENTIONS;
     }
 
     public <T> InvalidAdapterException(Class<T> adapter, Throwable exception)
