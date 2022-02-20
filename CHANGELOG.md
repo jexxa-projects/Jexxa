@@ -4,13 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[4.1.1] - 2022-mm-dd
+## \[4.1.1] - 2022-02-20
 ### Changed
 - Moved tutorials into new repository [JexxaTutorials](https://github.com/repplix/JexxaTutorials)
 
 ### Fixed
 - Updated dependencies
-- Corrected/improved output messages that can occur during starting Jexxa
+- Corrected/improved error messages during starting Jexxa
 
 ## \[4.1.0] - 2022-02-02
 ### Added 
