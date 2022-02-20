@@ -41,6 +41,8 @@ public class TimerMonitor extends HealthCheck implements BeforeInterceptor
                     + " seconds.";
         }
 
-        return "All fine...";
+        return "Received last message before "
+                + Duration.between(lastUpdate, Instant.now()).toSeconds()
+                +" seconds. All fine...";
     }
 }
