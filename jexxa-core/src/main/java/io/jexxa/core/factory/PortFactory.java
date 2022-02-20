@@ -224,14 +224,14 @@ public class PortFactory
         public <T> InvalidPortConfigurationException(Class<T> port, Exception exception)
         {
             super(exception);
-            if (exception.getCause() == null )
-            {
-                errorMessage = "Cannot create adapter " + port.getName() + "\n";
+
+            Throwable rootCause = exception;
+
+            while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
+                rootCause = rootCause.getCause();
             }
-            else
-            {
-                errorMessage = "Cannot create port " + port.getName() + "\n" + "Error message from adapter : " + exception.getCause().getMessage();
-            }
+
+            errorMessage = "Cannot create port " + port.getSimpleName() + " because a(n) " + rootCause.getClass().getSimpleName() + " occurred.";
         }
 
         @Override

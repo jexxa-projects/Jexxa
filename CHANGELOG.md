@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[4.1.1] - 2022-02-20
+### Changed
+- Moved tutorials into new repository [JexxaTutorials](https://github.com/repplix/JexxaTutorials)
+
+### Fixed
+- Updated dependencies
+- Corrected/improved error messages during starting Jexxa
+
 ## \[4.1.0] - 2022-02-02
 ### Added 
 - Jexxa-Core: 
@@ -129,7 +137,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -   Fixed fast fail approach in JexxaMain::bindToAnnotation. Now, this method directly fails if any inbound port cannot be created.
 
 ### Added
--   New Tutorial [BookstoreJ16](https://github.com/repplix/Jexxa/blob/master/tutorials/BookStoreJ16/README.md) which shows how to use Java records with Jexxa
+-   New Tutorial [BookstoreJ16](https://github.com/repplix/JexxaTutorials/tree/main/BookStoreJ16/README.md) which shows how to use Java records with Jexxa
 
 ## \[3.0.1] - 2021-04-18
 ### Fixed
@@ -140,7 +148,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[3.0.0] - 2021-04-03
 ### Changed
--   Introduced new package Jexxa-Web which includes all web specific plugins such as `RESTfulRPCAdapter`. See [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html#_jexxa_modules) for more information. If your application uses this adapter, you have now to add dependency `jexxa-web`. See tutorial [HelloJexxa](https://github.com/repplix/Jexxa/blob/master/tutorials/HelloJexxa/README.md) for an example.  
+-   Introduced new package Jexxa-Web which includes all web specific plugins such as `RESTfulRPCAdapter`. See [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html#_jexxa_modules) for more information. If your application uses this adapter, you have now to add dependency `jexxa-web`. See tutorial [HelloJexxa](https://github.com/repplix/JexxaTutorials/tree/main/HelloJexxa/README.md) for an example.  
 -   Removed all methods and constants that were declared deprecated in 2.x
 
 ### Fixed
@@ -155,7 +163,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[2.8.0] - 2021-02-03
 ### Added
 -   `RESTfulRPCAdapter`:
-    -   Added support for providing static web pages. See tutorial [HelloJexxa](https://github.com/repplix/Jexxa/blob/master/tutorials/HelloJexxa/README.md)
+    -   Added support for providing static web pages. See tutorial [HelloJexxa](https://github.com/repplix/JexxaTutorials/tree/main/HelloJexxa/README.md)
     -   Write occurred exceptions to Logger  
     
 -   JDBC Driven Adapter Strategy:
@@ -191,7 +199,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     -   Added abstract base class `JDBCRepository` for implementing specific repository
     -   Added wrapper classes `JDBCQuery` and `JDBCCommand` for reading and executing commands using Java streams.
 
--   New Tutorial [TimeService - Flow Of Control](https://github.com/repplix/Jexxa/blob/master/tutorials/TimeService/README-FlowOfControl.md)
+-   New Tutorial [TimeService - Flow Of Control](https://github.com/repplix/JexxaTutorials/tree/main/TimeService/README-FlowOfControl.md)
 
 ### Changed
 -   Updated dependencies
@@ -206,7 +214,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     -   Corrected schema creation of data types including Java8 date/time types
 
 ### Added 
--   New Tutorial [TimeService - Flow Of Control](https://github.com/repplix/Jexxa/blob/master/tutorials/TimeService/README-FlowOfControl.md)
+-   New Tutorial [TimeService - Flow Of Control](https://github.com/repplix/JexxaTutorials/tree/main/TimeService/README-FlowOfControl.md)
 
 ### Changed
 -   Updated dependencies on minor level
@@ -223,7 +231,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 -   JMSAdapter:
     -   Added default implementations for JMS listener which perform JSON deserialization
-    -   Please refer to the tutorials [TimeService](https://github.com/repplix/Jexxa/tree/master/tutorials/TimeService) how to use them.  
+    -   Please refer to the tutorials [TimeService](https://github.com/repplix/JexxaTutorials/tree/main/TimeService) how to use them.  
     
 -   DrivenAdapterStrategies:
     -   Set methods getInstance() of all Manager singletons to deprecate
@@ -280,7 +288,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[2.5.0] - 2020-10-21
 ### Added
 -   `RESTfulRPCAdapter`: Added OpenAPI support (see [jexxa-application.properties](https://github.com/repplix/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information).  
--   `JexxaMain`: Improved fluent API in `JexxaMain` with `conditionalBind()` which performs a binding only if a condition statement evaluates to true. See tutorial [`TimeService`](https://github.com/repplix/Jexxa/tree/master/tutorials/TimeService) for example.
+-   `JexxaMain`: Improved fluent API in `JexxaMain` with `conditionalBind()` which performs a binding only if a condition statement evaluates to true. See tutorial [`TimeService`](https://github.com/repplix/JexxaTutorials/tree/main/TimeService) for example.
 -   Added a [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html).   
   
 ### Fixed
@@ -311,7 +319,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[2.4.0] - 2020-09-27
 ### Added
 -   New driven adapter strategy `MessageLogger` which writes messages to a logger
--   New module `jexxa-test` which simplifies writing unit tests. `jexxa-test` automatically provides stubs for application specific driven adapters as soon as they use Jexxa's drivenadapter strategies. See tutorial [`BookStore`](https://github.com/repplix/Jexxa/tree/master/tutorials/BookStore) for example.  
+-   New module `jexxa-test` which simplifies writing unit tests. `jexxa-test` automatically provides stubs for application specific driven adapters as soon as they use Jexxa's drivenadapter strategies. See tutorial [`BookStore`](https://github.com/repplix/JexxaTutorials/blob/main/BookStore) for example.  
 
 ### Changed
 -   Updated dependencies  

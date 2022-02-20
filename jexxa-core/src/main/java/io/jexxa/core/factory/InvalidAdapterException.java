@@ -3,7 +3,7 @@ package io.jexxa.core.factory;
 public class InvalidAdapterException extends RuntimeException
 {
     private static final String CANNOT_CREATE_ADAPTER = "Cannot create adapter ";
-    private static final String CHECK_CONVENTIONS = "Please check if it fulfills the conventions of an adapter";
+    private static final String CHECK_CONVENTIONS = "If messages from adapter do not help -> Please check if it fulfills the conventions of an adapter. ";
 
     private static final long serialVersionUID = 1L;
 
@@ -11,23 +11,21 @@ public class InvalidAdapterException extends RuntimeException
 
     public <T> InvalidAdapterException(Class<T> adapter)
     {
-        this.errorMessage = CANNOT_CREATE_ADAPTER + adapter.getName() + "\n" + CHECK_CONVENTIONS;
+        this.errorMessage = CANNOT_CREATE_ADAPTER + adapter.getSimpleName() + " -> " + CHECK_CONVENTIONS;
     }
 
     public <T> InvalidAdapterException(Class<T> adapter, Throwable exception)
     {
         super(exception);
-        if (exception.getCause() == null )
+
+        Throwable rootCause = exception;
+
+        while (rootCause.getCause() != null && rootCause.getCause() != rootCause)
         {
-            errorMessage = CANNOT_CREATE_ADAPTER + adapter.getName() + "\n" +
-                    CHECK_CONVENTIONS;
+            rootCause = rootCause.getCause();
         }
-        else
-        {
-            errorMessage = CANNOT_CREATE_ADAPTER + adapter.getName() + "\n" +
-                    CHECK_CONVENTIONS + "\n"  +
-                    "Error message from adapter : " + exception.getCause().getMessage();
-        }
+
+        errorMessage = CANNOT_CREATE_ADAPTER + adapter.getSimpleName() + " because a(n) " + rootCause.getClass().getSimpleName() + " occurred.";
     }
 
     @Override

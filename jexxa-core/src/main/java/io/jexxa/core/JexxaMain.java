@@ -488,14 +488,31 @@ public final class JexxaMain
         {
             var stringBuilder = new StringBuilder();
             var jexxaMessage = e.getMessage();
-            var detailedMessage = "Not available";
-            if (e.getCause() != null && e.getCause().getMessage() != null)
+
+            Throwable rootCause = e;
+            Throwable rootCauseWithMessage = null ;
+
+            while (rootCause.getCause() != null && rootCause.getCause() != rootCause)
             {
-                detailedMessage = e.getCause().getMessage();
+                if ( rootCause.getMessage() != null && !rootCause.getMessage().isEmpty())
+                {
+                    rootCauseWithMessage = rootCause;
+                }
+
+                rootCause = rootCause.getCause();
             }
 
-            stringBuilder.append("\n* Jexxa-Message: ").append(jexxaMessage);
-            stringBuilder.append("\n* Detailed-Message: ").append(detailedMessage);
+            var detailedMessage = ""; // Create a potential reason in from of "lastMessage -> lastException" or just "lastMessage"
+            if (rootCauseWithMessage != null && rootCauseWithMessage != rootCause)
+            {
+                detailedMessage = rootCauseWithMessage.getClass().getSimpleName() + ": " + rootCauseWithMessage.getMessage() + " -> Exception: " + rootCause.getClass().getSimpleName();
+            } else {
+                detailedMessage = rootCause.getMessage();
+            }
+
+            stringBuilder.append("\n* Jexxa-Message    : ").append(jexxaMessage);
+            stringBuilder.append("\n* Detailed-Message : ").append(detailedMessage);
+            stringBuilder.append("\n* 1st trace element: ").append( rootCause.getStackTrace()[0] );
 
             return stringBuilder.toString();
         }
