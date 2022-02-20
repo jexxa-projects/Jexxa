@@ -90,13 +90,6 @@
     <slf4j.api.version>1.7.36</slf4j.api.version>
     <awaitility.version>4.1.1</awaitility.version>
 
-    <!-- version of tutorials dependencies -->
-    <addendj.version>1.0.1</addendj.version>
-    <aspectj.version>1.9.8</aspectj.version>
-    <aspectjtools.version>1.9.8</aspectjtools.version>
-    <aspectjrt.version>1.9.8</aspectjrt.version>
-    <commons.cli.version>1.5.0</commons.cli.version>
-
     <!-- version of maven dependencies for tutorials -->
     <aspectj.maven.plugin.version>1.12.6</aspectj.maven.plugin.version>
     <maven.jib.plugin>3.2.0</maven.jib.plugin>
@@ -557,7 +550,6 @@
     <module>jexxa-core</module>
     <module>jexxa-web</module>
     <module>jexxa-test</module>
-    <module>tutorials</module>
   </modules>
 
 </project>
