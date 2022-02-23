@@ -12,6 +12,13 @@
   <version>4.1.2-SNAPSHOT</version>
 
   <name>Jexxa-Core</name>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
   <properties>
     <jexxa.adapter.api.version>2.1.1-SNAPSHOT</jexxa.adapter.api.version>

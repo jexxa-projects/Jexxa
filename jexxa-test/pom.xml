@@ -10,6 +10,13 @@
     <groupId>io.jexxa.jexxatest</groupId>
     <artifactId>jexxa-test</artifactId>
     <name>Jexxa-Test</name>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
 
     <dependencies>
