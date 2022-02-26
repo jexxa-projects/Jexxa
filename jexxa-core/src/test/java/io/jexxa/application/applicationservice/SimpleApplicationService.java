@@ -24,6 +24,10 @@ public class SimpleApplicationService
         {
             super(information);
         }
+        public SimpleApplicationException(String information, Throwable cause)
+        {
+            super(information, cause);
+        }
     }
 
     public SimpleApplicationService()

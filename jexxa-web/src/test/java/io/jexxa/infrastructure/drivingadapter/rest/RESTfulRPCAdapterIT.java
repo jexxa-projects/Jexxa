@@ -7,6 +7,7 @@ import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.domain.valueobject.SpecialCasesValueObject;
+import io.jexxa.utils.json.JSONManager;
 import kong.unirest.GenericType;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
@@ -20,7 +21,10 @@ import java.util.List;
 import java.util.Properties;
 
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SuppressWarnings("SameParameterValue")
 @Execution(ExecutionMode.SAME_THREAD)
@@ -284,6 +288,8 @@ class RESTfulRPCAdapterIT
 
         var jsonString = error.get("Exception").getAsString();
 
+        System.out.println(jsonString);
+
         assertThrows(SimpleApplicationService.SimpleApplicationException.class, () -> {
             throw getJSONConverter().fromJson(jsonString, SimpleApplicationService.SimpleApplicationException.class);
         });
@@ -311,7 +317,7 @@ class RESTfulRPCAdapterIT
     void testGETCommandWithNullPointerException()
     {
         //Arrange -> Nothing to do
-        var gson = new Gson();
+        var gson = JSONManager.getJSONConverter();
 
         //Act
         var response = Unirest.get(REST_PATH + "throwNullPointerException")
@@ -329,8 +335,6 @@ class RESTfulRPCAdapterIT
         assertNotNull(exception);
 
         assertEquals(NullPointerException.class.getName(), exceptionType);
-        assertNotNull(nullPointerException.getStackTrace());
-        assertTrue(nullPointerException.getStackTrace().length > 0);
     }
 
     @Test
