@@ -8,7 +8,8 @@ import io.jexxa.utils.json.JSONConverter;
 import java.io.Reader;
 import java.lang.reflect.Type;
 
-import static io.jexxa.utils.json.gson.GsonDateTimeAdapter.registerDateTimeAdapter;
+import static io.jexxa.utils.json.gson.DateTimeAdapter.registerDateTimeAdapter;
+import static io.jexxa.utils.json.gson.ExceptionAdapterFactory.registerExceptionAdapter;
 
 public class GsonConverter implements JSONConverter
 {
@@ -68,6 +69,7 @@ public class GsonConverter implements JSONConverter
     {
         var gsonBuilder = new GsonBuilder();
         registerDateTimeAdapter(gsonBuilder);
+        registerExceptionAdapter(gsonBuilder);
         return gsonBuilder;
     }
 }

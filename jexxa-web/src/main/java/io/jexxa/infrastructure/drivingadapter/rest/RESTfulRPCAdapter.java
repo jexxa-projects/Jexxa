@@ -203,6 +203,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         //Exception Handler for thrown Exception from methods
         javalin.exception(InvocationTargetException.class, (e, ctx) ->  handleTargetException(e.getTargetException(), ctx));
         javalin.exception(InvocationTargetRuntimeException.class, (e, ctx) ->  handleTargetException(e.getTargetException(), ctx));
+        javalin.exception(IllegalArgumentException.class, this::handleTargetException);
     }
 
     private void handleTargetException(Throwable targetException, Context ctx )
@@ -221,12 +222,21 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
             var exceptionWrapper = new JsonObject();
             exceptionWrapper.addProperty("ExceptionType", targetException.getClass().getName());
-            exceptionWrapper.addProperty("Exception", jsonConverter.toJson(targetException));
+            exceptionWrapper.addProperty("Exception", toJson(targetException));
             exceptionWrapper.addProperty("ApplicationType", jsonConverter.toJson("application/json"));
 
             ctx.result(exceptionWrapper.toString());
         }
         ctx.status(400);
+    }
+
+    private String toJson(Throwable e)
+    {
+        try {
+            return jsonConverter.toJson(e);
+        } catch (RuntimeException re){
+            return jsonConverter.toJson(new IllegalArgumentException(e.getMessage()));
+        }
     }
 
     private void registerGETMethods(Object object)
@@ -278,29 +288,29 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     private Object[] deserializeParameters(String jsonString, Method method)
     {
-        if (jsonString == null ||
-                jsonString.isEmpty() ||
-                method.getParameterCount() == 0)
-        {
-            return new Object[]{};
-        }
-
-        var jsonElement = JsonParser.parseString(jsonString);
-
-        // In case we have more than one attribute, we assume a JSonArray
-        if ( method.getParameterCount() > 1)
-        {
-            if ( !jsonElement.isJsonArray() )
-            {
-                throw new IllegalArgumentException("Multiple method attributes musst be passed inside a JSonArray");
+        try {
+            if (jsonString == null ||
+                    jsonString.isEmpty() ||
+                    method.getParameterCount() == 0) {
+                return new Object[]{};
             }
-            return readArray(jsonElement.getAsJsonArray(), method);
-        }
-        else
+
+            var jsonElement = JsonParser.parseString(jsonString);
+
+            // In case we have more than one attribute, we assume a JSonArray
+            if (method.getParameterCount() > 1) {
+                if (!jsonElement.isJsonArray()) {
+                    throw new IllegalArgumentException("Multiple method attributes musst be passed inside a JSonArray");
+                }
+                return readArray(jsonElement.getAsJsonArray(), method);
+            } else {
+                var result = new Object[1];
+                result[0] = jsonConverter.fromJson(jsonString, method.getParameterTypes()[0]);
+                return result;
+            }
+        } catch (RuntimeException e)
         {
-            var result = new Object[1];
-            result[0] = jsonConverter.fromJson(jsonString, method.getParameterTypes()[0]);
-            return result;
+            throw new IllegalArgumentException("Could not deserialize attributes for method " + method.getName() );
         }
     }
 

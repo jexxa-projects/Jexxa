@@ -17,7 +17,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-class GsonDateTimeAdapter {
+class DateTimeAdapter {
     private static final String YEAR = "year";
     private static final String MONTH = "month";
     private static final String DAY = "day";
@@ -215,7 +215,7 @@ class GsonDateTimeAdapter {
         return  JSON_MESSAGE + json;
     }
 
-    private GsonDateTimeAdapter()
+    private DateTimeAdapter()
     {
         //private constructor
     }
