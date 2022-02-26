@@ -65,8 +65,7 @@ A simple ``Hello World`` example can be found [here](https://github.com/repplix/
 package io.jexxa.tutorials;
 
 import io.jexxa.core.JexxaMain;
-import JMXAdapter;
-import RESTfulRPCAdapter;
+import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
 
 public final class HelloJexxa
 {
@@ -78,24 +77,18 @@ public final class HelloJexxa
     public static void main(String[] args)
     {
         //Create your jexxaMain for this application
-        var jexxaMain = new JexxaMain("HelloJexxa");
+        var jexxaMain = new JexxaMain(HelloJexxa.class);
+
 
         jexxaMain
-                // Bind a JMX adapter to our BoundedContext object.
-                // It allows to access the public methods of the object via `jconsole`
-                .bind(JMXAdapter.class).to(jexxaMain.getBoundedContext())
-
-                // Bind a REST adapter to class HelloJexxa and expose its methods
+                // Bind a REST adapter to class HelloJexxa to expose its method `greetings`
+                // - Open following URL in browser to get greetings: http://localhost:7500/HelloJexxa/greetings
                 .bind(RESTfulRPCAdapter.class).to(HelloJexxa.class)
 
                 //Start Jexxa and all bindings
-                // - Open following URL in browser to get greetings: http://localhost:7500/HelloJexxa/greetings
-                // - You can also use curl: `curl -X GET http://localhost:7500/HelloJexxa/greetings`
                 .start()
 
-                //Wait until shutdown is called by one of the following options:
-                // - Press CTRL-C
-                // - Use `jconsole` to connect to this application and invoke method shutdown
+                //Wait until CTRL-C is pressed or sigterm is send
                 .waitForShutdown()
 
                 //Finally invoke stop() for proper cleanup
