@@ -80,8 +80,8 @@ public final class HelloJexxa
         var jexxaMain = new JexxaMain(HelloJexxa.class);
 
         jexxaMain
-                // Bind a REST adapter to class HelloJexxa to expose its method `greetings`
-                // - Open following URL in browser to get greetings: http://localhost:7500/HelloJexxa/greetings
+                // Bind a REST adapter to class HelloJexxa to expose its methods
+                // - To get greetings open: http://localhost:7500/HelloJexxa/greetings
                 .bind(RESTfulRPCAdapter.class).to(HelloJexxa.class)
 
                 //Start Jexxa and all bindings
