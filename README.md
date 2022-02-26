@@ -79,7 +79,6 @@ public final class HelloJexxa
         //Create your jexxaMain for this application
         var jexxaMain = new JexxaMain(HelloJexxa.class);
 
-
         jexxaMain
                 // Bind a REST adapter to class HelloJexxa to expose its method `greetings`
                 // - Open following URL in browser to get greetings: http://localhost:7500/HelloJexxa/greetings
