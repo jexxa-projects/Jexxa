@@ -44,12 +44,14 @@ public class GsonConverter implements JSONConverter
     }
 
     @SuppressWarnings("unused")
-    public static void registerTypeAdapter(Type type, Object typeAdapter) {
+    public static void registerTypeAdapter(Type type, Object typeAdapter)
+    {
         GSON_BUILDER.registerTypeAdapter(type, typeAdapter);
         gson = null; // reset internal gsonConverter so that it is recreated with new registered typeAdapter
     }
 
-    public static void registerTypeAdapterFactory(TypeAdapterFactory typeAdapterFactory) {
+    public static void registerTypeAdapterFactory(TypeAdapterFactory typeAdapterFactory)
+    {
         GSON_BUILDER.registerTypeAdapterFactory(typeAdapterFactory);
         gson = null; // reset internal gsonConverter so that it is recreated with new registered typeAdapter
     }
