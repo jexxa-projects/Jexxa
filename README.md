@@ -14,7 +14,6 @@ Goal of this framework is to support the development of _durable_ business appli
 *   **Aligned team development**: The framework is tailored to the needs of teams developing durable business applications. See [Jexxa's General Design Decisions](https://repplix.github.io/Jexxa/jexxa_architecture.html#_general_design_decisions) for more information. 
 *   **Visible flow of control**: Simplified navigation through your business application. Checkout [this tutorial](https://github.com/repplix/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md) for more information.      
 *   **Technology agnostic**: IoC concepts such as dependency injection do not require any framework specific @Annotations. See [here](https://repplix.github.io/Jexxa/jexxa_architecture.html#_ioc_without_annotations) for more information.  
-*   **Well-defined API**: Allows for the integration of arbitrary (old and new) technology stacks. 
 
 In addition, Jexxa offers following production-proven features:    
 
@@ -27,9 +26,10 @@ In addition, Jexxa offers following production-proven features:
 *   Supported Java environments: Java 11 (or higher)
 
 *   Documentation: 
-    *   [Tutorials](https://github.com/repplix/JexxaTutorials)
-    *   [Reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html)    
-    *   [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa_architecture.html)
+    * [Tutorials](https://github.com/repplix/JexxaTutorials)
+    * [Reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html)    
+    * [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa_architecture.html)
+    * [Build Jexxa](docs/BUILD.md) 
 
 ## Built With
 
@@ -128,44 +128,6 @@ resources/jexxa-application.properties
 ```                                   
 
 Available properties are described [here](https://github.com/repplix/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties)
-
-## Build Jexxa from scratch
-
-In case you would like to compile Jexxa by yourself without integration tests call: 
-
-```maven
-mvn clean install -DskipITs
-```  
-
-### Dependencies for integration tests 
-
-For running integration tests we recommend using local docker containers to provide following infrastructure:
-
-*   An ActiveMQ instance with default settings: See [here](https://hub.docker.com/r/rmohr/activemq/).   
-*   A PostgresDB database with default settings. Default user/password should be admin/admin: See [here](https://hub.docker.com/_/postgres).   
-
-You can also use the docker stack provided [here](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/test/resources/DeveloperStack.yaml) 
-  
-Check the status of the running containers:
-
-```docker
-docker ps  -f status=running --format "{{.Names}}" 
-```    
-
-Output should look as follows
-
-```docker
-...
-Postgres
-activemq
-...
-```
-  
-To build Jexxa with integration tests call: 
-
-```maven
-mvn clean install 
-```  
 
 ## Contributing
 
