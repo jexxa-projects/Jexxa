@@ -5,7 +5,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRep
 
 /**
  * An {@link IObjectStore} extends an {@link IRepository} by adding additional metadata to managed objects.
- * This meta data can be used to query for available objects.
+ * This metadata can be used to query for available objects.
  *
  * In contrast to an {@link IRepository} this interface allows for using sophisticated
  * optimization techniques from the underlying technology stack to perform the query

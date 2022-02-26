@@ -283,7 +283,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
--   Added [tutorial](tutorials/BookStoreJ/README-OPENAPI.md) explaining how to enable and use OpenAPI support.          
+-   Added [tutorial](https://github.com/repplix/JexxaTutorials/blob/main/BookStoreJ/README-OPENAPI.md) explaining how to enable and use OpenAPI support.          
     
 ## \[2.5.0] - 2020-10-21
 ### Added

@@ -20,7 +20,7 @@ Most frameworks use annotations here, but the developer must be aware of them.
 * Jexxa uses explicit binding for driving adapters so that the main method represents the single starting point for 
  the flow of control.
 
-* See tutorial [TimeService - Flow of Control](../../tutorials/TimeService/README-FlowOfControl.md) for further information. 
+* See tutorial [TimeService - Flow of Control](https://github.com/repplix/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md) for further information. 
 
 ## Consequences
 
