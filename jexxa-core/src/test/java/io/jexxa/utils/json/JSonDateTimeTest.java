@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class JSonMetaTagTest
+class JSonDateTimeTest
 {
 
     private final JSONConverter objectUnderTest = JSONManager.getJSONConverter();
