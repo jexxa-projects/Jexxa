@@ -21,13 +21,13 @@ Jexxa is a lightweight framework to implement business applications based on a h
 * A lightweight core which manages the lifecycle of both ports and adapters.
 * A Super simple API to integrate arbitrary technology stacks as adapters.
 
-Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus, especially on  following paradigms:
+Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus, especially on following principles:
 
 * _Dependency Inversion_: Get an idea how to strictly separate between technology stacks and domain logic on a code basis which is essential for durable business applications.
 
-* _Simplicity_: Be aware of what technology stacks you really need to realize the customers' use cases. Usually they are much less than expected. Keep different technology stacks loosely coupled to facilitate their exchange. Finally, prefer a convention over configuration approach to standardize the integration of technology stacks and to reduce the complexity of their configuration.
-
 * _Inversion of Control_(IoC): Find the required degree of IoC for your software projects. Control aspects that are technically required but not important for your business application should be hidden by a framework. The remaining required aspects should be explicitly represented.
+
+* _Simplicity_: Be aware of what technology stacks you really need to realize the customers' use cases. Usually they are much less than expected. Keep different technology stacks loosely coupled to facilitate their exchange. Finally, prefer a convention over configuration approach to standardize the integration of technology stacks and to reduce the complexity of their configuration.
 
 Even if you use real powerful frameworks for good reason within your application I hope that you find Jexxa helpful in some way.
 
