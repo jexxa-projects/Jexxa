@@ -333,6 +333,7 @@ class RESTfulRPCAdapterIT
         assertNotNull(error);
         assertNotNull(exceptionType);
         assertNotNull(exception);
+        assertNotNull(nullPointerException);
 
         assertEquals(NullPointerException.class.getName(), exceptionType);
     }
