@@ -23,4 +23,18 @@ class JSonExceptionTest {
         assertEquals(checkedException.getMessage(), deserializeResult.getMessage());
     }
 
+    @Test
+    void testUncheckedException()
+    {
+        //Arrange
+        var checkedException = new RuntimeException("Test with unchecked exception");
+
+        //Act
+        var serializedResult = objectUnderTest.toJson(checkedException);
+        var deserializeResult = objectUnderTest.fromJson(serializedResult, RuntimeException.class);
+
+        //Assert
+        assertEquals(checkedException.getMessage(), deserializeResult.getMessage());
+    }
+
 }
