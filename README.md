@@ -59,7 +59,7 @@ compile "io.jexxa:jexxa-web:4.1.1"
  
 ### Start programming 
 
-A simple ``Hello World`` example can be found [here](https://github.com/repplix/Jexxa/tree/master/tutorials/HelloJexxa):  
+A simple ``Hello World`` example can be found [here](https://github.com/repplix/JexxaTutorials/tree/main/HelloJexxa):  
 
 ```java     
 package io.jexxa.tutorials;
