@@ -26,7 +26,7 @@ In addition, Jexxa offers following production-proven features:
 *   Supported Java environments: Java 11 (or higher)
 
 *   Documentation: 
-    *   [Jexxa-Tutorials](https://github.com/repplix/JexxaTutorials) that show typical use cases
+    *   [Jexxa-Tutorials](https://github.com/repplix/JexxaTutorials) show typical use cases
     *   [Jexxa-Template](https://github.com/repplix/JexxaTemplate) for your first Jexxa application
     *   [Reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html) when you develop with Jexxa
     *   [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa_architecture.html) to get a deep insight into Jexxa
