@@ -27,10 +27,10 @@ In addition, Jexxa offers following production-proven features:
 
 *   Documentation: 
     *   [Jexxa-Tutorials](https://github.com/repplix/JexxaTutorials): How to use Jexxa
-    *   [Jexxa-Template: Write your first Jexxa application](https://github.com/repplix/JexxaTemplate)
-    *   [Reference guide: Realize a project with Jexxa ](https://repplix.github.io/Jexxa/jexxa_reference.html)    
-    *   [Architecture of Jexxa: Get a deep insight into Jexxa](https://repplix.github.io/Jexxa/jexxa_architecture.html)
-    *   [Build Jexxa: You want to contribute](docs/BUILD.md) 
+    *   [Jexxa-Template](https://github.com/repplix/JexxaTemplate): Write your first Jexxa application
+    *   [Reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html): Realize a project with Jexxa
+    *   [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa_architecture.html): Get a deep insight into Jexxa
+    *   [Build Jexxa](docs/BUILD.md): You want to contribute 
 
 ## Built With
 
