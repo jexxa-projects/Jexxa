@@ -26,7 +26,8 @@ In addition, Jexxa offers following production-proven features:
 *   Supported Java environments: Java 11 (or higher)
 
 *   Documentation: 
-    *   [Tutorials](https://github.com/repplix/JexxaTutorials)
+    *   [Jexxa-Template](https://github.com/repplix/JexxaTemplate)
+    *   [Jexxa-Tutorials](https://github.com/repplix/JexxaTutorials)
     *   [Reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html)    
     *   [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa_architecture.html)
     *   [Build Jexxa](docs/BUILD.md) 
@@ -47,14 +48,14 @@ Maven:
 <dependency>
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa-web</artifactId>
-  <version>4.1.1</version>
+  <version>4.1.2</version>
 </dependency> 
 ```
 
 Gradle:
 
 ```groovy
-compile "io.jexxa:jexxa-web:4.1.1"
+compile "io.jexxa:jexxa-web:4.1.2"
 ``` 
  
 ### Start programming 
