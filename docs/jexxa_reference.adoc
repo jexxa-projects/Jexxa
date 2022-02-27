@@ -91,7 +91,9 @@ Jexxa allows you to externalize your configuration. This allows you to run the s
 
 3. **Testing**: When using `JexxaTest`, the properties `jexxa-test.properties` is loaded (if available) and extends or adjusts the default configuration provided in `jexxa-application.properties`.
 
-4. **Secrets**: One of the most crucial aspects with productive systems is the handling of secrets such as usernames, passwords, or private keys. Jexxa addresses this problem with two approaches. First, you can provide all secrets unencrypted as properties which is only recommended for testing purpose. For example, you can use `io.jexxa.jdbc.password` to define the password for your JDBC connection. Secondly, you can provide these properties with a file. In this case, you have to use `io.jexxa.jdbc.file.password`. This approach enables a seamless integration of security mechanisms from virtualization environments such as docker and is recommended for all productive systems.
+4. **Secrets**: One of the most crucial aspects with productive systems is the handling of secrets such as usernames, passwords, or private keys. Jexxa addresses this problem with two approaches.
+    * First, you can provide all secrets unencrypted as properties which is only recommended for developing on your local machine. For example, you can use `io.jexxa.jdbc.password` to define the password for your JDBC connection.
+    * Secondly, you can provide these properties with a file. In this case, you have to use `io.jexxa.jdbc.file.password`. This approach enables a seamless integration of security mechanisms from virtualization environments such as docker-swarm and is recommended for all productive systems.
 
 == Conventions
 
