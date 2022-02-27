@@ -660,7 +660,17 @@ The <code>BoundedContext</code> objects provides methods to stop you running app
 <p><strong>Testing</strong>: When using <code>JexxaTest</code>, the properties <code>jexxa-test.properties</code> is loaded (if available) and extends or adjusts the default configuration provided in <code>jexxa-application.properties</code>.</p>
 </li>
 <li>
-<p><strong>Secrets</strong>: One of the most crucial aspects with productive systems is the handling of secrets such as usernames, passwords, or private keys. Jexxa addresses this problem with two approaches. First, you can provide all secrets unencrypted as properties which is only recommended for testing purpose. For example, you can use <code>io.jexxa.jdbc.password</code> to define the password for your JDBC connection. Secondly, you can provide these properties with a file. In this case, you have to use <code>io.jexxa.jdbc.file.password</code>. This approach enables a seamless integration of security mechanisms from virtualization environments such as docker and is recommended for all productive systems.</p>
+<p><strong>Secrets</strong>: One of the most crucial aspects with productive systems is the handling of secrets such as usernames, passwords, or private keys. Jexxa addresses this problem with two approaches.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>First, you can provide all secrets unencrypted as properties which is only recommended for developing on your local machine. For example, you can use <code>io.jexxa.jdbc.password</code> to define the password for your JDBC connection.</p>
+</li>
+<li>
+<p>Secondly, you can provide these properties with a file. In this case, you have to use <code>io.jexxa.jdbc.file.password</code>. This approach enables a seamless integration of security mechanisms from virtualization environments such as docker-swarm and is recommended for all productive systems.</p>
+</li>
+</ul>
+</div>
 </li>
 </ol>
 </div>
@@ -1189,7 +1199,7 @@ Please check the tutorial <a href="https://github.com/repplix/Jexxa/tree/master/
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-02-26 13:09:27 +0100
+Last updated 2022-02-27 11:17:05 +0100
 </div>
 </div>
 </body>
