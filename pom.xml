@@ -88,7 +88,7 @@
     <junit.jupiter.params.version>5.8.2</junit.jupiter.params.version>
     <slf4j.simple.version>1.7.36</slf4j.simple.version>
     <slf4j.api.version>1.7.36</slf4j.api.version>
-    <awaitility.version>4.1.1</awaitility.version>
+    <awaitility.version>4.2.0</awaitility.version>
 
     <!-- version of maven dependencies for tutorials -->
     <aspectj.maven.plugin.version>1.12.6</aspectj.maven.plugin.version>
