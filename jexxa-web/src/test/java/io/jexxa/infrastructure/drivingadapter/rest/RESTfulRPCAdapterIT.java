@@ -317,7 +317,7 @@ class RESTfulRPCAdapterIT
     void testGETCommandWithNullPointerException()
     {
         //Arrange -> Nothing to do
-        var gson = JSONManager.getJSONConverter();
+        var gson = getJSONConverter();
 
         //Act
         var response = Unirest.get(REST_PATH + "throwNullPointerException")
