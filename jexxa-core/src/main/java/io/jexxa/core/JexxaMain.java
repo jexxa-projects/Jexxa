@@ -492,7 +492,7 @@ public final class JexxaMain
             Throwable rootCause = e;
             Throwable rootCauseWithMessage = null ;
 
-            while (rootCause.getCause() != null && rootCause.getCause() != rootCause)
+            while (rootCause.getCause() != null && !rootCause.getCause().equals(rootCause))
             {
                 if ( rootCause.getMessage() != null && !rootCause.getMessage().isEmpty())
                 {
@@ -503,7 +503,7 @@ public final class JexxaMain
             }
 
             var detailedMessage = ""; // Create a potential reason in from of "lastMessage -> lastException" or just "lastMessage"
-            if (rootCauseWithMessage != null && rootCauseWithMessage != rootCause)
+            if (rootCauseWithMessage != null && !rootCauseWithMessage.equals(rootCause))
             {
                 detailedMessage = rootCauseWithMessage.getClass().getSimpleName() + ": " + rootCauseWithMessage.getMessage() + " -> Exception: " + rootCause.getClass().getSimpleName();
             } else {

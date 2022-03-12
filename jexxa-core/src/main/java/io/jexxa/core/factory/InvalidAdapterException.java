@@ -20,7 +20,7 @@ public class InvalidAdapterException extends RuntimeException
 
         Throwable rootCause = exception;
 
-        while (rootCause.getCause() != null && rootCause.getCause() != rootCause)
+        while (rootCause.getCause() != null && !rootCause.getCause().equals(rootCause))
         {
             rootCause = rootCause.getCause();
         }
