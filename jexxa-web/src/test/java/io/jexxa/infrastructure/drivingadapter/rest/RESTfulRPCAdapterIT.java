@@ -7,7 +7,6 @@ import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.domain.valueobject.SpecialCasesValueObject;
-import io.jexxa.utils.json.JSONManager;
 import kong.unirest.GenericType;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
