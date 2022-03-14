@@ -4,7 +4,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.jexxa.utils.JexxaLogger;
 
-import javax.jms.*;
+import javax.jms.BytesMessage;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.TextMessage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

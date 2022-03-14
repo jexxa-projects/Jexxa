@@ -5,7 +5,13 @@ import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
 
-import javax.jms.*;
+import javax.jms.Connection;
+import javax.jms.DeliveryMode;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import java.util.Optional;
 import java.util.Properties;
 
