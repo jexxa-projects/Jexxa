@@ -287,8 +287,6 @@ class RESTfulRPCAdapterIT
 
         var jsonString = error.get("Exception").getAsString();
 
-        System.out.println(jsonString);
-
         assertThrows(SimpleApplicationService.SimpleApplicationException.class, () -> {
             throw getJSONConverter().fromJson(jsonString, SimpleApplicationService.SimpleApplicationException.class);
         });

@@ -44,7 +44,10 @@ class DefaultInvocationHandlerTest {
 
         InvocationManager
                 .getRootInterceptor(objectUnderTest)
-                .registerBefore(invocationContext -> { interceptingBeforeResult.set(objectUnderTest.getCounter()); invocationContext.invoke();});
+                .registerBefore(invocationContext -> {
+                    interceptingBeforeResult.set(objectUnderTest.getCounter());
+                    invocationContext.invoke();}
+                );
 
         //Act
         invocationHandler.invoke(invocationMethod, objectUnderTest, new Object[0]);
@@ -62,7 +65,10 @@ class DefaultInvocationHandlerTest {
         AtomicInteger interceptingAfterResult = new AtomicInteger(0);
         InvocationManager
                 .getRootInterceptor(objectUnderTest)
-                .registerAfter(invocationContext -> { interceptingAfterResult.set(objectUnderTest.getCounter()); invocationContext.invoke();});
+                .registerAfter(invocationContext -> {
+                    interceptingAfterResult.set(objectUnderTest.getCounter());
+                    invocationContext.invoke();}
+                );
 
         //Act
         invocationHandler.invoke(invocationMethod, objectUnderTest, new Object[0]);
@@ -104,9 +110,18 @@ class DefaultInvocationHandlerTest {
         //Arrange
         InvocationManager
                 .getRootInterceptor(objectUnderTest)
-                .registerBefore(invocationContext -> { invocationContext.invoke(); interceptingResults[0]  = objectUnderTest.getCounter(); })
-                .registerAround(invocationContext -> { invocationContext.invoke(); interceptingResults[1]  = objectUnderTest.getCounter(); invocationContext.proceed();})
-                .registerAfter(invocationContext -> {  interceptingResults[2]  = objectUnderTest.getCounter(); invocationContext.invoke();});
+                .registerBefore(invocationContext -> {
+                    invocationContext.invoke();
+                    interceptingResults[0]  = objectUnderTest.getCounter(); }
+                )
+                .registerAround(invocationContext -> {
+                    invocationContext.invoke(); interceptingResults[1]  = objectUnderTest.getCounter();
+                    invocationContext.proceed();}
+                )
+                .registerAfter(invocationContext -> {
+                    interceptingResults[2]  = objectUnderTest.getCounter();
+                    invocationContext.invoke();}
+                );
 
         //Act
         invocationHandler.invoke(invocationMethod , objectUnderTest, new Object[0]);

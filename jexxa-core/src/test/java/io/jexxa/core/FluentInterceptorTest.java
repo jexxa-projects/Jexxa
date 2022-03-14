@@ -35,7 +35,10 @@ class FluentInterceptorTest
         objectUnderTest
                 .intercept( targetObject )
                 .beforeAnd( invocationContext -> result[0] = "Before " + invocationContext.getMethod().getName( ))
-                .aroundAnd( invocationContext -> { result[1] = "Around " + invocationContext.getMethod().getName(); invocationContext.proceed(); } )
+                .aroundAnd( invocationContext -> {
+                    result[1] = "Around " + invocationContext.getMethod().getName();
+                    invocationContext.proceed();}
+                )
                 .after( invocationContext -> result[2] = "After " +  invocationContext.getMethod().getName( ));
 
 
@@ -62,7 +65,10 @@ class FluentInterceptorTest
         objectUnderTest
                 .intercept( IncrementApplicationService.class )
                 .beforeAnd( invocationContext -> result[0] = "Before " + invocationContext.getMethod().getName( ))
-                .aroundAnd( invocationContext -> { result[1] = "Around " + invocationContext.getMethod().getName(); invocationContext.proceed(); } )
+                .aroundAnd( invocationContext -> {
+                    result[1] = "Around " + invocationContext.getMethod().getName();
+                    invocationContext.proceed();}
+                )
                 .after( invocationContext -> result[2] = "After " +  invocationContext.getMethod().getName( ));
 
 
@@ -95,7 +101,10 @@ class FluentInterceptorTest
         objectUnderTest
                 .interceptAnnotation( ApplicationService.class )
                 .beforeAnd( invocationContext -> result[0] = "Before " + invocationContext.getMethod().getName( ))
-                .aroundAnd( invocationContext -> { result[1] = "Around " + invocationContext.getMethod().getName(); invocationContext.proceed(); } )
+                .aroundAnd( invocationContext -> {
+                    result[1] = "Around " + invocationContext.getMethod().getName();
+                    invocationContext.proceed(); }
+                )
                 .after( invocationContext -> result[2] = "After " +  invocationContext.getMethod().getName( ));
 
 
