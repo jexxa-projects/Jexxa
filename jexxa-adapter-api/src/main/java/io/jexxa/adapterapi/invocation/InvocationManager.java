@@ -3,17 +3,17 @@ package io.jexxa.adapterapi.invocation;
 import java.util.HashMap;
 
 public class InvocationManager {
-    private static final HashMap<Object, DefaultInvocationHandler> invocationHandlerMap = new HashMap<>();
+    private static final HashMap<Object, DefaultInvocationHandler> INVOCATION_HANDLER_MAP = new HashMap<>();
 
 
     public static InvocationHandler getInvocationHandler(Object object)
     {
-        if ( ! invocationHandlerMap.containsKey(object) )
+        if ( ! INVOCATION_HANDLER_MAP.containsKey(object) )
         {
-            invocationHandlerMap.put(object, createDefaultInvocationHandler());
+            INVOCATION_HANDLER_MAP.put(object, createDefaultInvocationHandler());
         }
 
-        return invocationHandlerMap.get(object);
+        return INVOCATION_HANDLER_MAP.get(object);
     }
 
     public static DefaultInvocationHandler getRootInterceptor(Object object)
