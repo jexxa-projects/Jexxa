@@ -2,7 +2,12 @@ package io.jexxa.jexxatest;
 
 import io.jexxa.application.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.application.domainservice.*;
+import io.jexxa.application.domainservice.IInvalidConstructor;
+import io.jexxa.application.domainservice.IJexxaAggregateRepository;
+import io.jexxa.application.domainservice.IJexxaPublisher;
+import io.jexxa.application.domainservice.INotImplementedService;
+import io.jexxa.application.domainservice.InitializeJexxaAggregates;
+import io.jexxa.application.domainservice.PublishDomainInformation;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.core.factory.InvalidAdapterException;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
