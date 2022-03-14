@@ -25,7 +25,6 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.bui
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.JSONB;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.NUMERIC;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.TEXT;
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
 
 @SuppressWarnings("unused")
@@ -94,8 +93,6 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
     public void add(T aggregate)
     {
         Objects.requireNonNull(aggregate);
-
-        var jsonConverter = getJSONConverter();
 
         List<String> keySet = new ArrayList<>();
         keySet.add(KeyValueSchema.REPOSITORY_KEY.name());
