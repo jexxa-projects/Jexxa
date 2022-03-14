@@ -115,7 +115,8 @@ class DefaultInvocationHandlerTest {
                     interceptingResults[0]  = objectUnderTest.getCounter(); }
                 )
                 .registerAround(invocationContext -> {
-                    invocationContext.invoke(); interceptingResults[1]  = objectUnderTest.getCounter();
+                    invocationContext.invoke();
+                    interceptingResults[1]  = objectUnderTest.getCounter();
                     invocationContext.proceed();}
                 )
                 .registerAfter(invocationContext -> {
