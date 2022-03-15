@@ -50,7 +50,7 @@
     <maven.enforcer.plugin>3.0.0</maven.enforcer.plugin>
     <maven.javadoc.plugin>3.3.2</maven.javadoc.plugin>
     <maven.templating.plugin>1.0.0</maven.templating.plugin>
-    <maven.versions.plugin>2.9.0</maven.versions.plugin>
+    <maven.versions.plugin>2.10.0</maven.versions.plugin>
 
     <!--information for filtered sources  -->
     <build.timestamp>${maven.build.timestamp}</build.timestamp>
