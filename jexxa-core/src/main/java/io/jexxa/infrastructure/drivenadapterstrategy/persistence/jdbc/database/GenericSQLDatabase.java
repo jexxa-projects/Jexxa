@@ -8,6 +8,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc
 import io.jexxa.utils.properties.JexxaJDBCProperties;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -23,17 +24,17 @@ public class GenericSQLDatabase implements IDatabase
     private SQLDataType getMaxVarChar() {
         var jdbcDriver = properties.getProperty(JexxaJDBCProperties.JEXXA_JDBC_URL);
 
-        if ( jdbcDriver.toLowerCase().contains("oracle") )
+        if ( jdbcDriver.toLowerCase(Locale.ENGLISH).contains("oracle") )
         {
             return maxVarChar(4000);
         }
 
-        if ( jdbcDriver.toLowerCase().contains("h2") )
+        if ( jdbcDriver.toLowerCase(Locale.ENGLISH).contains("h2") )
         {
             return SQLDataType.VARCHAR;
         }
 
-        if ( jdbcDriver.toLowerCase().contains("mysql") )
+        if ( jdbcDriver.toLowerCase(Locale.ENGLISH).contains("mysql") )
         {
             return maxVarChar(65535);
         }
@@ -78,11 +79,11 @@ public class GenericSQLDatabase implements IDatabase
     public void renameColumn(JDBCConnection jdbcConnection, String tableName, String oldColumnName, String newColumnName)
     {
         var renameColumnCommand =  "ALTER TABLE "
-                + tableName.toLowerCase()
+                + tableName.toLowerCase(Locale.ENGLISH)
                 + " RENAME COLUMN "
-                + oldColumnName.toLowerCase()
+                + oldColumnName.toLowerCase(Locale.ENGLISH)
                 + " TO "
-                +  newColumnName.toLowerCase();
+                +  newColumnName.toLowerCase(Locale.ENGLISH);
 
         var renameCommand = new JDBCCommand(
                 ()->jdbcConnection,
@@ -99,7 +100,7 @@ public class GenericSQLDatabase implements IDatabase
         var columnExist = "SELECT column_name FROM information_schema.columns WHERE table_name= ?  and column_name= ? ";
         var query = new JDBCQuery(() -> jdbcConnection,
                 columnExist,
-                List.of(tableName.toLowerCase(), columnName.toLowerCase())
+                List.of(tableName.toLowerCase(Locale.ENGLISH), columnName.toLowerCase(Locale.ENGLISH))
         );
 
         return query

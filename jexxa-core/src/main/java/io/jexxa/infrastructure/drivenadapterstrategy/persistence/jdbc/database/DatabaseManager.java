@@ -2,6 +2,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.database;
 
 import io.jexxa.utils.properties.JexxaJDBCProperties;
 
+import java.util.Locale;
 import java.util.Properties;
 
 public class DatabaseManager
@@ -10,7 +11,7 @@ public class DatabaseManager
     {
         var jdbcDriver = properties.getProperty(JexxaJDBCProperties.JEXXA_JDBC_URL);
 
-        if ( jdbcDriver.toLowerCase().contains("postgres") )
+        if ( jdbcDriver.toLowerCase(Locale.ENGLISH).contains("postgres") )
         {
             return new PostgresDatabase(properties);
         }
