@@ -81,11 +81,11 @@ public class MBeanConvention implements DynamicMBean
         catch (Exception e)
         {
             String errorMessage;
-            if ( e.getCause() != null)
+            if ( e.getCause() == null)
             {
-                errorMessage = e.getCause().getMessage();
-            } else {
                 errorMessage = e.getMessage();
+            } else {
+                errorMessage = e.getCause().getMessage();
             }
 
             JexxaLogger.getLogger(JMXAdapter.class).error("{} occurred when processing method `{}`", e.getClass().getSimpleName(), actionName);

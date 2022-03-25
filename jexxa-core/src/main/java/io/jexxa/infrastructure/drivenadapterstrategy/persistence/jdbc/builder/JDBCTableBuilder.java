@@ -197,11 +197,11 @@ public class JDBCTableBuilder<T extends Enum<T>> extends JDBCBuilder<T>
 
         private void addCommaSeparatorIfRequired()
         {
-            if (!firstColumn)
+            if (firstColumn)
             {
-                commandBuilder.getStatementBuilder().append(COMMA);
-            } else {
                 firstColumn = false;
+            } else {
+                commandBuilder.getStatementBuilder().append(COMMA);
             }
         }
 
