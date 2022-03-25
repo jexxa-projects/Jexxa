@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 import static io.jexxa.utils.json.gson.DateTimeAdapter.registerDateTimeAdapter;
 import static io.jexxa.utils.json.gson.ExceptionAdapterFactory.registerExceptionAdapter;
 
+@SuppressWarnings("unused")
 public class GsonConverter implements JSONConverter
 {
     private static Gson gson;
@@ -57,7 +58,7 @@ public class GsonConverter implements JSONConverter
         gson = null; // reset internal gsonConverter so that it is recreated with new registered typeAdapter
     }
 
-    public static Gson getGson()
+    public static synchronized Gson getGson()
     {
         if ( gson == null) {
             gson = GSON_BUILDER.create();
