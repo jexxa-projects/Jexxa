@@ -190,7 +190,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         database.alterColumnType(getConnection(), aggregateClazz, REPOSITORY_VALUE.name(), database.matchingValue(JSONB));
     }
 
-    protected void renameKeyValueColumns()
+    protected final void renameKeyValueColumns()
     {
         if (database.columnExist(getConnection(), aggregateClazz.getSimpleName(), "key"))
         {
