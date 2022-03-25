@@ -310,7 +310,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
             }
         } catch (RuntimeException e)
         {
-            throw new IllegalArgumentException("Could not deserialize attributes for method " + method.getName() );
+            throw new IllegalArgumentException("Could not deserialize attributes for method " + method.getName(), e );
         }
     }
 
