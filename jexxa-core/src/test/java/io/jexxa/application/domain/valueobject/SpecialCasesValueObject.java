@@ -12,7 +12,7 @@ import java.util.Objects;
  * </ul>
  */
 @ValueObject
-public class SpecialCasesValueObject
+public final class SpecialCasesValueObject
 {
 
     public static final SpecialCasesValueObject SPECIAL_CASES_VALUE_OBJECT = new SpecialCasesValueObject(1);

@@ -1,6 +1,6 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
-public class JexxaWebProperties
+public final class JexxaWebProperties
 {
     public static final String JEXXA_REST_HOST = "io.jexxa.rest.host";
     public static final String JEXXA_REST_PORT = "io.jexxa.rest.port";

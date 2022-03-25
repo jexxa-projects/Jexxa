@@ -2,7 +2,7 @@ package io.jexxa.adapterapi.invocation;
 
 import java.util.HashMap;
 
-public class InvocationManager {
+public final class InvocationManager {
     private static final HashMap<Object, DefaultInvocationHandler> INVOCATION_HANDLER_MAP = new HashMap<>();
 
 

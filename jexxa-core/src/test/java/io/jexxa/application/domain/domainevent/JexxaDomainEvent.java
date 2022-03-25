@@ -6,7 +6,7 @@ import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import java.util.Objects;
 
 @DomainEvent
-public class JexxaDomainEvent
+public final class JexxaDomainEvent
 {
     private final JexxaValueObject jexxaValueObject;
 

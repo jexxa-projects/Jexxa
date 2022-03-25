@@ -6,7 +6,7 @@ import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import java.util.Objects;
 
 @Aggregate
-public class JexxaAggregate
+public final class JexxaAggregate
 {
     private final JexxaEntity jexxaEntity;
     private final JexxaValueObject jexxaValueObject;

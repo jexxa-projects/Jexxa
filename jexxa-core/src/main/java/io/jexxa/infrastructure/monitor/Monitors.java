@@ -2,7 +2,7 @@ package io.jexxa.infrastructure.monitor;
 
 import java.time.Duration;
 
-public class Monitors
+public final class Monitors
 {
     public static TimerMonitor timerMonitor(Duration maxTimeout )
     {

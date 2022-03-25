@@ -10,7 +10,7 @@ import static java.lang.Math.floor;
 import static java.lang.Math.log;
 
 @Aggregate
-public class JexxaObject
+public final class JexxaObject
 {
     private final JexxaEntity jexxaEntity;
     private final JexxaValueObject jexxaValueObject;

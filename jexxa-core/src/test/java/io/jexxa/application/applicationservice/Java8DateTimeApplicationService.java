@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @SuppressWarnings("unused")
 @ApplicationService
-public class Java8DateTimeApplicationService
+public final class Java8DateTimeApplicationService
 {
     private Java8DateTimeWrapper java8DateTimeWrapper= new Java8DateTimeWrapper( LocalTime.now()
             , LocalDate.now()

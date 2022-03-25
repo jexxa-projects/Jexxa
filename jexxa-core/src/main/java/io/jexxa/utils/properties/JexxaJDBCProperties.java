@@ -1,6 +1,6 @@
 package io.jexxa.utils.properties;
 
-public class JexxaJDBCProperties
+public final class JexxaJDBCProperties
 {
     public static final String JEXXA_JDBC_FILE_USERNAME = "io.jexxa.jdbc.file.username";
     public static final String JEXXA_JDBC_FILE_PASSWORD = "io.jexxa.jdbc.file.password";

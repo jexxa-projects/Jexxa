@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-class LambdaUtils {
+final class LambdaUtils {
 
 
     private static final Map<Class<?>, Class<?>> WRAPPER_TYPE_MAP;

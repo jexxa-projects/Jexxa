@@ -3,7 +3,7 @@ package io.jexxa.utils.json;
 import io.jexxa.utils.json.gson.GsonConverter;
 
 @SuppressWarnings("unused")
-public class JSONManager
+public final class JSONManager
 {
     private static JSONConverter jsonConverter = new GsonConverter();
 

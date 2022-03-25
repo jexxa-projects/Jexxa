@@ -1,6 +1,6 @@
 package io.jexxa.core;
 
-class JexxaVersion
+final class JexxaVersion
 {
     public static final String VERSION = "${project.version}";
     public static final String REPOSITORY = "${project.scm.developerConnection}";

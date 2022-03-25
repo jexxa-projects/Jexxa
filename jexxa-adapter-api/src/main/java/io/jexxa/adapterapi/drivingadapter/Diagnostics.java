@@ -2,6 +2,7 @@ package io.jexxa.adapterapi.drivingadapter;
 
 import java.time.Instant;
 
+@SuppressWarnings("unused")
 public class Diagnostics
 {
     private final boolean isHealthy;
