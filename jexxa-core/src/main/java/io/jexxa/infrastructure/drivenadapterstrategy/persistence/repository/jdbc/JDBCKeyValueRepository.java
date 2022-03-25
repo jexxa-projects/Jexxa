@@ -183,7 +183,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         }
     }
 
-    protected void alterKeyValueRows()
+    protected final void alterKeyValueRows()
     {
         database.alterColumnType(getConnection(), aggregateClazz, REPOSITORY_KEY.name(), database.matchingPrimaryKey(JSONB));
 
