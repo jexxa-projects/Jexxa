@@ -41,7 +41,7 @@ public class JDBCConnection implements AutoCloseable
         this.properties = properties;
     }
 
-    public void autocreateDatabase(final Properties properties)
+    public final void autocreateDatabase(final Properties properties)
     {
         if (properties.containsKey(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_DATABASE))
         {
