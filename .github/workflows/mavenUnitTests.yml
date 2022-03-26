@@ -1,4 +1,4 @@
-# This workflow will build a Java project with Maven
+# This workflow will build a Java project with Maven to ensure that no Unit-Test requires an infrastructure in some way
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
 
@@ -25,10 +25,5 @@ jobs:
         java-version: ${{ matrix.java }}
 
     - name: Maven build
-      env:
-        GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}
-        GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}
-        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-      run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml -DskipITs -B clean install --file pom.xml
+      run: mvn -DskipITs -B clean install
 
