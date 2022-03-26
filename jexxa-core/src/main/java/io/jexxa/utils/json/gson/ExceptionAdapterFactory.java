@@ -10,11 +10,13 @@ import com.google.gson.stream.JsonWriter;
 import io.jexxa.utils.JexxaLogger;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 
 public class ExceptionAdapterFactory implements TypeAdapterFactory
 {
+    private static final String EXCEPTION_CONVENTION_WARNING = "Exception {} does not provide a recommended constructor such as {}(String message, Throwable cause)";
+
 
     static void registerExceptionAdapter(GsonBuilder gsonBuilder)
     {
@@ -77,35 +79,51 @@ public class ExceptionAdapterFactory implements TypeAdapterFactory
         }
 
         private T createException(String message, String cause) throws IOException {
+               return tryCreateException(message,cause)
+                       .or(() -> tryCreateException(message))
+                       .or(this::tryCreateException)
+                       .orElseThrow(() -> new IOException("Invalid Exception: The expected exception "+ rawType.getSimpleName() + " does not provide a suitable constructor such as " + rawType.getSimpleName() + "(String message, Throwable cause)"));
+        }
+
+        private Optional<T> tryCreateException(String message, String cause)
+        {
             try {
-                String exceptionConventionWarning = "Exception {} does not provide a recommended constructor such as {}(String message, Throwable cause)";
-
-                try {
-                    Constructor<T> constructor = rawType.getConstructor(String.class, Throwable.class);
-                    return constructor.newInstance(message, new Throwable(cause));
-                } catch (NoSuchMethodException e) {
-                    JexxaLogger.getLogger(ExceptionTypeAdapter.class).warn(exceptionConventionWarning, rawType.getSimpleName(), rawType.getSimpleName());
-                }
-
-                try {
-                    Constructor<T> constructor = rawType.getConstructor(String.class);
-                    return constructor.newInstance(message);
-                } catch (NoSuchMethodException e) {
-                    JexxaLogger.getLogger(ExceptionTypeAdapter.class).warn(exceptionConventionWarning, rawType.getSimpleName(), rawType.getSimpleName());
-                }
-
-                try {
-                    Constructor<T> constructor = rawType.getConstructor();
-                    return constructor.newInstance();
-                } catch (NoSuchMethodException e) {
-                    JexxaLogger.getLogger(ExceptionTypeAdapter.class).warn(exceptionConventionWarning,  rawType.getSimpleName(), rawType.getSimpleName());
-                }
-
-                throw new IOException("Invalid Exception: The expected exception "+ rawType.getSimpleName() + " does not provide a suitable constructor such as " + rawType.getSimpleName() + "(String message, Throwable cause)");
+                return Optional.of(
+                        rawType
+                                .getConstructor(String.class, Throwable.class)
+                                .newInstance(message, new Throwable(cause))
+                );
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                JexxaLogger.getLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
+                return Optional.empty();
             }
+        }
 
-            catch ( InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                throw new IOException("Invalid Exception: The exception " + rawType.getSimpleName() + " does not provide a suitable constructor such as " + rawType.getSimpleName() + "(String message, Throwable cause)");
+        private Optional<T> tryCreateException(String message)
+        {
+            try {
+                return Optional.of(
+                        rawType
+                                .getConstructor(String.class)
+                                .newInstance(message)
+                );
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                JexxaLogger.getLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
+                return Optional.empty();
+            }
+        }
+
+        private Optional<T> tryCreateException()
+        {
+            try {
+                return Optional.of(
+                        rawType
+                                .getConstructor()
+                                .newInstance()
+                );
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                JexxaLogger.getLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
+                return Optional.empty();
             }
         }
     }
