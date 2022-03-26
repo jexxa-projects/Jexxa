@@ -5,7 +5,7 @@ import io.jexxa.utils.properties.JexxaJDBCProperties;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-public class ObjectStoreTestDatabase
+public final class ObjectStoreTestDatabase
 {
     public static final String REPOSITORY_CONFIG = "io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreTestDatabase#repositoryConfig";
     static final String ADMIN = "admin";
@@ -30,4 +30,8 @@ public class ObjectStoreTestDatabase
         return Stream.of(new Properties(), postgresProperties, h2Properties);
     }
 
+    private ObjectStoreTestDatabase()
+    {
+        //private constructor
+    }
 }
