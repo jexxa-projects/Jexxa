@@ -2,7 +2,7 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
 
-name: Java CI
+name: Java 11 LTS CI
 
 on:
   push:
@@ -48,28 +48,9 @@ jobs:
         java-version: ${{ matrix.java }}
 
     - name: Maven build
-      env:
-        GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}
-        GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}
-        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-      run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml -B package --file pom.xml
-
-    - name: Publish to GitHub Packages Apache Maven
-      env:
-        GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}
-        GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}
-        GITHUB_TOKEN: ${{ github.token }}
-        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-      run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml deploy
+      run: mvn -B clean install
 
     - name: sonarqube update
       env:
-        GITHUB_USERNAME2: ${{ secrets.GITHUB_USERNAME2 }}
-        GITHUB_TOKEN2: ${{ secrets.GITHUB_TOKEN2 }}
-        GITHUB_TOKEN: ${{ github.token }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-      run: mvn -s $GITHUB_WORKSPACE/.github/workflows/settings.xml sonar:sonar
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: mvn -Dsonar.login=${{ secrets.SONAR_TOKEN }} sonar:sonar
