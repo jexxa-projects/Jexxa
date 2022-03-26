@@ -98,28 +98,10 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         try
         {
             var messageListener = (MessageListener) (object);
-
             var jmsConfiguration = getConfiguration(object);
 
-            Destination destination;
-            if (jmsConfiguration.messagingType() == JMSConfiguration.MessagingType.TOPIC)
-            {
-                destination = session.createTopic(jmsConfiguration.destination());
-            }
-            else
-            {
-                destination = session.createQueue(jmsConfiguration.destination());
-            }
-
-            MessageConsumer consumer;
-            if (jmsConfiguration.selector().isEmpty())
-            {
-                consumer = session.createConsumer(destination);
-            }
-            else
-            {
-                consumer = session.createConsumer(destination, jmsConfiguration.selector());
-            }
+            Destination destination = createDestination(session,jmsConfiguration);
+            MessageConsumer consumer = createMessageConsumer(session, destination, jmsConfiguration);
 
             var invocationHandler = InvocationManager.getInvocationHandler(messageListener);
             consumer.setMessageListener( message -> invocationHandler.invoke(messageListener, messageListener::onMessage, message)) ;
@@ -135,7 +117,28 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
                     , e
             );
         }
+    }
 
+    private Destination createDestination(Session session, JMSConfiguration jmsConfiguration) throws JMSException {
+        if (jmsConfiguration.messagingType() == JMSConfiguration.MessagingType.TOPIC)
+        {
+            return session.createTopic(jmsConfiguration.destination());
+        }
+        else
+        {
+            return session.createQueue(jmsConfiguration.destination());
+        }
+    }
+
+    private MessageConsumer createMessageConsumer(Session session, Destination destination, JMSConfiguration jmsConfiguration) throws JMSException {
+        if (jmsConfiguration.selector().isEmpty())
+        {
+            return session.createConsumer(destination);
+        }
+        else
+        {
+            return session.createConsumer(destination, jmsConfiguration.selector());
+        }
     }
 
 
