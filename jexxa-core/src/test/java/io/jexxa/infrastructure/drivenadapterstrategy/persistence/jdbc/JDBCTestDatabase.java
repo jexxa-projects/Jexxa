@@ -13,7 +13,7 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDB
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.*;
 
-public class JDBCTestDatabase
+public final class JDBCTestDatabase
 {
     static final String ADMIN = "admin";
     static final int PRIMARY_KEY_WITH_NULL_VALUES = 1;
@@ -122,5 +122,10 @@ public class JDBCTestDatabase
         insertNullValues.asUpdate();
         insertNonNullValues.asUpdate();
         insertNonNullValuesDuplicate.asUpdate();
+    }
+
+    private JDBCTestDatabase()
+    {
+        //private constructor
     }
 }
