@@ -51,4 +51,6 @@ jobs:
       run: mvn -B clean install
 
     - name: sonarqube update
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: mvn -Dsonar.login=${{ secrets.SONAR_TOKEN }} sonar:sonar
