@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 @SuppressWarnings("unsused")
-public class JexxaAggregateRepository implements IJexxaAggregateRepository
+public final class JexxaAggregateRepository implements IJexxaAggregateRepository
 {
 
     private final IRepository<JexxaAggregate, JexxaValueObject> repository;
