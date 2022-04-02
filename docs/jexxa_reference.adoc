@@ -74,7 +74,7 @@ of any errors, this method will fail.
 
 === BoundedContext
 
-As described in https://repplix.github.io/Jexxa/jexxa_architecture.html[architecture of Jexxa], this framework has a strong focus on Domain Driven design. Therefore, each application provides a so called `BoundedContext` object which provides status information about the running application.
+As described in https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html[architecture of Jexxa], this framework has a strong focus on Domain Driven design. Therefore, each application provides a so called `BoundedContext` object which provides status information about the running application.
 
 So this object provides important information for your ops-team. Therefore, it is recommended to expose this class by any
 driving adapter.
@@ -108,7 +108,7 @@ Jexxa allows you to externalize your configuration. This allows you to run the s
 
 == Conventions
 
-Jexxa defines some conventions for realizing implicit constructor injection which are described https://repplix.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di[here]. In addition, driving adapter can define their own conventions to automatically expose ports via a specific technology stack. Within Jexxa, these driving adapter are called `generic driving adapter`. In the rest of this Section you find a description of conventions used by these generic driving adapter.
+Jexxa defines some conventions for realizing implicit constructor injection which are described https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di[here]. In addition, driving adapter can define their own conventions to automatically expose ports via a specific technology stack. Within Jexxa, these driving adapter are called `generic driving adapter`. In the rest of this Section you find a description of conventions used by these generic driving adapter.
 
 === RESTfulRPCAdapter
 

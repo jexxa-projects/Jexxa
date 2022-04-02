@@ -75,7 +75,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Reference guide: Updated description of application configuration  
-    See [here](https://repplix.github.io/Jexxa/jexxa_reference.html#_application_configuration) for more information.
+    See [here](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_application_configuration) for more information.
 
 - Updated dependencies
 
@@ -180,7 +180,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     -   Using SQL Builder also prevents any SQL injection issues
 
 ### Fixed
--   Corrected handling of Java8 Date API so that a date is handled as a string conform to ISO 8601. See [here](https://repplix.github.io/Jexxa/jexxa_reference.html#_json_representation_of_date) for more information. Affected adapter are: 
+-   Corrected handling of Java8 Date API so that a date is handled as a string conform to ISO 8601. See [here](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_json_representation_of_date) for more information. Affected adapter are: 
     -   `JDBCKeyValueRepository`   
     -   `JMSSender`
     -   `JSONMessageListener`:
@@ -266,7 +266,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     -   [Issue #7](https://github.com/jexxa-projects/Jexxa/issues/7) Stack trace is now included when serializing an Exception  
 
 ### Changed
--   Updated [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa_architecture.html):
+-   Updated [Architecture of Jexxa](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html):
     -   Added Section about General Design Decision. 
 
 -   Updated dependencies on minor level 
@@ -298,7 +298,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 -   `RESTfulRPCAdapter`: Added OpenAPI support (see [jexxa-application.properties](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information).  
 -   `JexxaMain`: Improved fluent API in `JexxaMain` with `conditionalBind()` which performs a binding only if a condition statement evaluates to true. See tutorial [`TimeService`](https://github.com/jexxa-projects/JexxaTutorials/tree/main/TimeService) for example.
--   Added a [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html).   
+-   Added a [reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html).   
   
 ### Fixed
 -   `IMDBRepository`: When reset all IMDBRepositories, the internal reference to specific map is also reset. This allows reusing references to IRepository instances.  
@@ -407,7 +407,7 @@ times in case of reconnect.
 ### Added
 -   Added global exception handler in JexxaMain for getting better results of startup errors 
 
--   Improved the documentation of Jexxa (see [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa.html)) 
+-   Improved the documentation of Jexxa (see [Architecture of Jexxa](https://jexxa-projects.github.io/Jexxa/jexxa.html)) 
 
 ### Changed
 -   Split Jexxa into Jexxa-Core and Jexxa-Adapter-API projects in order to avoid direct dependencies to new driving adapter 
