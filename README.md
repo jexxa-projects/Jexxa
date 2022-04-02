@@ -1,10 +1,10 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.jexxa/jexxa)](https://maven-badges.herokuapp.com/maven-central/io.jexxa/jexxa/) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/repplix/Jexxa.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/repplix/Jexxa/context:java)
+[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/jexxa-projects/Jexxa.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/repplix/Jexxa/context:java)
 [![CI Badge](https://api.codiga.io/project/32124/score/svg)](https://app.codiga.io/public/project/32124/Jexxa/dashboard)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b6c1680824ef4ac5914c40073242dc86)](https://www.codacy.com/gh/repplix/Jexxa/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=repplix/Jexxa&amp;utm_campaign=Badge_Grade)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=io.jexxa%3Ajexxa&metric=alert_status)](https://sonarcloud.io/dashboard?id=io.jexxa%3Ajexxa)
- ![Java CI](https://github.com/repplix/Jexxa/workflows/Java%20CI/badge.svg)
+ ![Java CI](https://github.com/jexxa-projects/Jexxa/workflows/Java%20CI/badge.svg)
 
 # Jexxa - A Ports and Adapters Framework for Java
 
@@ -12,9 +12,9 @@ Jexxa is a lightweight framework to implement durable business applications base
 
 Goal of this framework is to support the development of _durable_ business applications in conjunction with Domain Driven Design as good as possible. Therefore, Jexxa stresses the following aspects in particular:
 
-*   **Aligned team development**: The framework is tailored to the _needs and development of teams_ developing business applications. See [Jexxa's General Design Decisions](https://repplix.github.io/Jexxa/jexxa_architecture.html#_general_design_decisions) for more information. 
-*   **Visible flow of control**: Simplified navigation through your business application. Checkout [this tutorial](https://github.com/repplix/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md) for more information.      
-*   **Technology agnostic**: IoC concepts such as dependency injection do not require any framework specific @Annotations. See [here](https://repplix.github.io/Jexxa/jexxa_architecture.html#_ioc_without_annotations) for more information.  
+*   **Aligned team development**: The framework is tailored to the _needs and development of teams_ developing business applications. See [Jexxa's General Design Decisions](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_general_design_decisions) for more information. 
+*   **Visible flow of control**: Simplified navigation through your business application. Checkout [this tutorial](https://github.com/jexxa-projects/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md) for more information.      
+*   **Technology agnostic**: IoC concepts such as dependency injection do not require any framework specific @Annotations. See [here](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_ioc_without_annotations) for more information.  
 
 In addition, Jexxa offers following production-proven features:    
 
@@ -27,10 +27,10 @@ In addition, Jexxa offers following production-proven features:
 *   Supported Java environments: Java 11 (or higher)
 
 *   Documentation: 
-    *   [Jexxa-Tutorials](https://github.com/repplix/JexxaTutorials) show typical use cases
-    *   [Jexxa-Template](https://github.com/repplix/JexxaTemplate) for your first Jexxa application
-    *   [Reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html) when you develop with Jexxa
-    *   [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa_architecture.html) to get a deep insight into Jexxa
+    *   [Jexxa-Tutorials](https://github.com/jexxa-projects/JexxaTutorials) show typical use cases
+    *   [Jexxa-Template](https://github.com/jexxa-projects/JexxaTemplate) for your first Jexxa application
+    *   [Reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html) when you develop with Jexxa
+    *   [Architecture of Jexxa](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html) to get a deep insight into Jexxa
     *   [Build Jexxa](docs/BUILD.md) in case you want to contribute 
 
 ## Built With
@@ -61,7 +61,7 @@ compile "io.jexxa:jexxa-web:4.1.3"
  
 ### Start programming 
 
-A simple ``Hello World`` example can be found [here](https://github.com/repplix/JexxaTutorials/tree/main/HelloJexxa):  
+A simple ``Hello World`` example can be found [here](https://github.com/jexxa-projects/JexxaTutorials/tree/main/HelloJexxa):  
 
 ```java     
 package io.jexxa.tutorials;
@@ -100,7 +100,7 @@ public final class HelloJexxa
 
 ### Adding a logger
 Whenever possible, Jexxa is developed against standard APIs. This allows a business application to use the preferred 
-technology stacks. For further information please refer to [reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html#_jexxa_modules).
+technology stacks. For further information please refer to [reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_jexxa_modules).
 
 Therefore, Jexxa does not include a logger, which means that you have to add your own logger to your application. If you
 do not add a logger, you will get a warning message to your console. In case your application has no special 
@@ -123,13 +123,13 @@ compile "org.slf4j:slf4j-simple:1.7.36"
 ### Configure your Jexxa application  
 
 By default, a JexxaMain instance looks for the following properties file. For more information please refer to the 
-[reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html#_application_configuration). 
+[reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_application_configuration). 
 
 ```maven
 resources/jexxa-application.properties
 ```                                   
 
-Available properties are described [here](https://github.com/repplix/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties)
+Available properties are described [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties)
 
 ## Contributing
 

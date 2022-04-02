@@ -13,7 +13,7 @@ For running integration tests we recommend using local docker containers to prov
 *   An ActiveMQ instance with default settings: See [here](https://hub.docker.com/r/rmohr/activemq/).
 *   A PostgresDB database with default settings. Default user/password should be admin/admin: See [here](https://hub.docker.com/_/postgres).
 
-You can also use the docker stack provided [here](https://github.com/repplix/Jexxa/blob/master/jexxa-core/src/test/resources/DeveloperStack.yaml)
+You can also use the docker stack provided [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-core/src/test/resources/DeveloperStack.yaml)
 
 Check the status of the running containers:
 
