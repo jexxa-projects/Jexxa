@@ -98,7 +98,7 @@ IMPORTANT: Jexxa uses explicit binding for driving adapters so that the main met
 One of the key aspects for durable software systems is the ability to use arbitrary technology stacks which do not exist at the point in time the
 application was developed.
 
-IMPORTANT: Jexxa provides a super simple https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-adapter-api/src/main/java/io/jexxa/infrastructure/drivingadapter/IDrivingAdapter.java[API] that allows for the integration of arbitrary technology stacks as driving adapters.
+IMPORTANT: Jexxa provides a super simple https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-adapter-api/src/main/java/io/jexxa/adapterapi/drivingadapter/IDrivingAdapter.java[API] that allows for the integration of arbitrary technology stacks as driving adapters.
 
 Together with the ability of an explicit binding on an object level, this supports following use cases:
 
@@ -128,7 +128,7 @@ IMPORTANT: Jexxa provides `driven adapter strategies` so that the implementation
 between the API of outbound ports to corresponding API of the strategy.
 
 This approach seems to be so obvious, so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern
-especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial https://jexxa.io/tree/master/tutorials/BookStore[BookStore] to see the source code):
+especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md[BookStore] to see the source code):
 
 * Regarding your business domain, your junior developers will learn at least the name of the most important business objects, because `Aggregates` include the business logic of this domain.
 * From a software engineering point of view your junior developer gets familiar with the strategy design pattern.
