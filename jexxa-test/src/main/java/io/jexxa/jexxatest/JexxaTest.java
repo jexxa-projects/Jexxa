@@ -23,7 +23,7 @@ import java.util.Properties;
  * <li> Configuring an IMDB database for repositories </li>
  * <li> Configuring a message recorder for sending messages </li>
  * </ul>
- * An example how to use this class can be found in tutorial <a href="https://github.com/repplix/Jexxa/tree/master/tutorials/BookStore">Bookstore</a>
+ * An example how to use this class can be found in tutorial <a href="https://github.com/jexxa-projects/Jexxa/tree/master/tutorials/BookStore">Bookstore</a>
  *
  */
 public class JexxaTest

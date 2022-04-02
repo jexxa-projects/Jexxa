@@ -98,7 +98,7 @@ IMPORTANT: Jexxa uses explicit binding for driving adapters so that the main met
 One of the key aspects for durable software systems is the ability to use arbitrary technology stacks which do not exist at the point in time the
 application was developed.
 
-IMPORTANT: Jexxa provides a super simple https://github.com/repplix/Jexxa/blob/master/jexxa-adapter-api/src/main/java/io/jexxa/infrastructure/drivingadapter/IDrivingAdapter.java[API] that allows for the integration of arbitrary technology stacks as driving adapters.
+IMPORTANT: Jexxa provides a super simple https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-adapter-api/src/main/java/io/jexxa/infrastructure/drivingadapter/IDrivingAdapter.java[API] that allows for the integration of arbitrary technology stacks as driving adapters.
 
 Together with the ability of an explicit binding on an object level, this supports following use cases:
 

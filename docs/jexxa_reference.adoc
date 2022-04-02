@@ -57,7 +57,7 @@ frameworks, Jexxa requires some code to explicitly configure your application fo
 * Explicitly bind technology stacks (called adapters) to parts of the application core (called ports) so that the entry points of your application core are visible.
 * Fine-grained control of your technology stacks so that they can be exchanged independently without updating the entire framework.
 
-The steps for configuring your application are always similar as you can see in all https://github.com/repplix/Jexxa/blob/master/tutorials/README.md[tutorials]:
+The steps for configuring your application are always similar as you can see in all https://github.com/jexxa-projects/Jexxa/blob/master/tutorials/README.md[tutorials]:
 
 
 1. Define packages that include your application core and infrastructure. If you follow the package convention in the tutorials, you can use
@@ -115,7 +115,7 @@ Jexxa defines some conventions for realizing implicit constructor injection whic
 The `RESTfulRPCAdapter` is a simple RPC mechanism utilizing REST. Based on the https://martinfowler.com/articles/richardsonMaturityModel.html[REST maturity model] from Richardson it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST on a higher maturity level.
 
 [NOTE]
-When you start using this adapter, I recommend enabling OpenAPI support at least during development as described https://github.com/repplix/Jexxa/blob/master/tutorials/BookStoreJ/README-OPENAPI.md[here]. It simplifies understanding the REST API.
+When you start using this adapter, I recommend enabling OpenAPI support at least during development as described https://github.com/jexxa-projects/Jexxa/blob/master/tutorials/BookStoreJ/README-OPENAPI.md[here]. It simplifies understanding the REST API.
 
 This adapter uses following conventions:
 
@@ -215,7 +215,7 @@ Java8 introduces a new API for date and time for good reason. Even if there is a
 
 IMPORTANT: `RESTfulRPCAdapter` supports only Java8 Date API and represents a date as JSON-string in https://en.wikipedia.org/wiki/ISO_8601[ISO 8601] string format.
 
-NOTE: If ou need some example how `RESTfulRPCAdapter` maps Java's Date and Time API to JSON please see https://github.com/repplix/Jexxa/blob/master/jexxa-web/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java[here].
+NOTE: If ou need some example how `RESTfulRPCAdapter` maps Java's Date and Time API to JSON please see https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java[here].
 
 
 [cols="1,3"]
@@ -314,4 +314,4 @@ a| An optional parameter which defines a message selector to filter messages.
 
 |===
 
-TIP: Please check the tutorial https://github.com/repplix/Jexxa/tree/master/tutorials/TimeService[`TimeService`] for an example.
+TIP: Please check the tutorial https://github.com/jexxa-projects/Jexxa/tree/master/tutorials/TimeService[`TimeService`] for an example.

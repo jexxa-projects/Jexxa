@@ -12,9 +12,9 @@ Jexxa is a lightweight framework to implement durable business applications base
 
 Goal of this framework is to support the development of _durable_ business applications in conjunction with Domain Driven Design as good as possible. Therefore, Jexxa stresses the following aspects in particular:
 
-*   **Aligned team development**: The framework is tailored to the _needs and development of teams_ developing business applications. See [Jexxa's General Design Decisions](https://repplix.github.io/Jexxa/jexxa_architecture.html#_general_design_decisions) for more information. 
-*   **Visible flow of control**: Simplified navigation through your business application. Checkout [this tutorial](https://github.com/repplix/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md) for more information.      
-*   **Technology agnostic**: IoC concepts such as dependency injection do not require any framework specific @Annotations. See [here](https://repplix.github.io/Jexxa/jexxa_architecture.html#_ioc_without_annotations) for more information.  
+*   **Aligned team development**: The framework is tailored to the _needs and development of teams_ developing business applications. See [Jexxa's General Design Decisions](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_general_design_decisions) for more information. 
+*   **Visible flow of control**: Simplified navigation through your business application. Checkout [this tutorial](https://github.com/jexxa-projects/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md) for more information.      
+*   **Technology agnostic**: IoC concepts such as dependency injection do not require any framework specific @Annotations. See [here](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_ioc_without_annotations) for more information.  
 
 In addition, Jexxa offers following production-proven features:    
 
@@ -27,8 +27,8 @@ In addition, Jexxa offers following production-proven features:
 *   Supported Java environments: Java 11 (or higher)
 
 *   Documentation: 
-    *   [Jexxa-Tutorials](https://github.com/repplix/JexxaTutorials) show typical use cases
-    *   [Jexxa-Template](https://github.com/repplix/JexxaTemplate) for your first Jexxa application
+    *   [Jexxa-Tutorials](https://github.com/jexxa-projects/JexxaTutorials) show typical use cases
+    *   [Jexxa-Template](https://github.com/jexxa-projects/JexxaTemplate) for your first Jexxa application
     *   [Reference guide](https://repplix.github.io/Jexxa/jexxa_reference.html) when you develop with Jexxa
     *   [Architecture of Jexxa](https://repplix.github.io/Jexxa/jexxa_architecture.html) to get a deep insight into Jexxa
     *   [Build Jexxa](docs/BUILD.md) in case you want to contribute 
@@ -61,7 +61,7 @@ compile "io.jexxa:jexxa-web:4.1.3"
  
 ### Start programming 
 
-A simple ``Hello World`` example can be found [here](https://github.com/repplix/JexxaTutorials/tree/main/HelloJexxa):  
+A simple ``Hello World`` example can be found [here](https://github.com/jexxa-projects/JexxaTutorials/tree/main/HelloJexxa):  
 
 ```java     
 package io.jexxa.tutorials;
@@ -129,7 +129,7 @@ By default, a JexxaMain instance looks for the following properties file. For mo
 resources/jexxa-application.properties
 ```                                   
 
-Available properties are described [here](https://github.com/repplix/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties)
+Available properties are described [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties)
 
 ## Contributing
 
