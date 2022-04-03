@@ -137,6 +137,11 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
+## Related Projects
+
+*   [Addend - Annotations for Domain Driven Design](https://github.com/jexxa-projects/Addend)
+*   [AddendJ - Crosscutting Concerns for Domain Driven Design](https://github.com/jexxa-projects/Addendj)
+
 ## Copyright and license
 
 Code and documentation copyright 2020–2022 Michael Repplinger. Code released under the [Apache 2.0 License](LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
