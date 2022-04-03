@@ -33,6 +33,9 @@ In addition, Jexxa offers following production-proven features:
     *   [Architecture of Jexxa](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html) to get a deep insight into Jexxa
     *   [Build Jexxa](docs/BUILD.md) in case you want to contribute 
 
+*   Related Projects
+    *   [Addend - Annotations for Domain Driven Design](https://github.com/jexxa-projects/Addend)
+    *   [AddendJ - Crosscutting Concerns for Domain Driven Design](https://github.com/jexxa-projects/Addendj)
 ## Built With
 
 Apart from some other great open source libraries, Jexxa mainly utilises the following libraries and frameworks:
@@ -136,11 +139,6 @@ Available properties are described [here](https://github.com/jexxa-projects/Jexx
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
-
-## Related Projects
-
-*   [Addend - Annotations for Domain Driven Design](https://github.com/jexxa-projects/Addend)
-*   [AddendJ - Crosscutting Concerns for Domain Driven Design](https://github.com/jexxa-projects/Addendj)
 
 ## Copyright and license
 
