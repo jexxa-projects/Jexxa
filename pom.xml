@@ -45,7 +45,7 @@
     <maven.site.plugin>3.11.0</maven.site.plugin>
     <maven.surefire.plugin>3.0.0-M5</maven.surefire.plugin>
     <maven.release.plugin>3.0.0-M5</maven.release.plugin>
-    <maven.jacoco.plugin>0.8.7</maven.jacoco.plugin>
+    <maven.jacoco.plugin>0.8.8</maven.jacoco.plugin>
     <maven.reports.plugin>3.2.2</maven.reports.plugin>
     <maven.enforcer.plugin>3.0.0</maven.enforcer.plugin>
     <maven.javadoc.plugin>3.3.2</maven.javadoc.plugin>
