@@ -5,7 +5,7 @@ on:
     types:
       - completed
     workflows:
-      - 'Java Support CI'
+      - 'Java Support Matrix'
 
 jobs:
   merge-me:
