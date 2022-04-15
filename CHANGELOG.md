@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[4.1.4] - 2022-04-15
+### Added
+- Official support for JDK 18 
+
+### Fixed
+- Updated dependencies
+
 ## \[4.1.3] - 2022-03-19
 ### Fixed
 - Updated dependencies
