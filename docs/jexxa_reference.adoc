@@ -193,7 +193,7 @@ In case you (de)serialize an exception, Jexxa (de)serialize following informatio
 [cols="1,3"]
 [reftext="Table {counter:local-table-number}"]
 .Describes the JSON representation of an `Exception`.
-[[JSON_Representation_DATE]]
+[[JSON_Representation_EXCEPTIOn]]
 |===
 a|JSON value
 a|Description
