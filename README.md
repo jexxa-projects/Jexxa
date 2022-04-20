@@ -20,7 +20,7 @@ In addition, Jexxa offers following production-proven features:
 
 *   Integrated most common driving adapters: RMI over REST, JMX, and JMS. 
 *   Integrated strategies for most common driven adapters: JDBC, in memory DB (IMDB), and JMS. 
-*   Integrated stubs for technology stacks to write unit-tests without mock frameworks.  
+*   Integrated stubs to write unit-tests without mock frameworks.  
 
 ## General information
 
