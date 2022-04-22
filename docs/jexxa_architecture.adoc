@@ -87,10 +87,9 @@ pattern or a Fluent API. Design aspects that should be hidden in the business ap
 ===  Visible flow of control
 
 Most today's frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency
-and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and adapters architecture. This is especially
-This might be obvious to incoming synchronous calls (RMI), but can be hard to see for incoming asynchronous messaging.
+and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and adapters architecture. This might be obvious to incoming synchronous calls (RMI), but can be hard to see for incoming asynchronous messaging.
 
-IMPORTANT: Jexxa uses constructor injection together with explicit binding for the driving adapter to make the flow of control visible. The main method represents the unique starting point of the flow of control.
+IMPORTANT: Jexxa uses explicit binding for the driving adapter together with implicit constructor injection to make the flow of control visible. So the main method represents the unique starting point for the flow of control of your application.
 
 === Simple Interface for Driving Adapters
 
