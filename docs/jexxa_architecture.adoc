@@ -91,6 +91,8 @@ and rebuild the application. Unfortunately, you hide the flow of control which m
 
 IMPORTANT: Jexxa uses explicit binding for the driving adapter together with implicit constructor injection to make the flow of control visible. So the main method represents the unique starting point for the flow of control of your application.
 
+Please refer to following https://github.com/jexxa-projects/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md[tutorial] for more information.
+
 === Simple Interface for Driving Adapters
 
 One of the key aspects for durable software systems is the ability to use arbitrary technology stacks which do not exist at the point in time the
