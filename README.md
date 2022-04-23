@@ -132,7 +132,7 @@ By default, a JexxaMain instance looks for the following properties file. For mo
 resources/jexxa-application.properties
 ```                                   
 
-Available properties are described [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties)
+Available properties are described [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties).
 
 ## Contributing
 
