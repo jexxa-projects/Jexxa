@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[2.1.5] - 2022-04-26
+### Changed
+- Minor and patch numbers of jexxa-adapter-api are now kept in sync with other jexxa-core. This should avoid confusions about compatible version numbers
+
 ## \[2.1.0] - 2022-02-02
 ### Added
 -   HealthCheck for monitoring driving adapter    
