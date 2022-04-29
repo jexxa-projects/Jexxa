@@ -80,7 +80,7 @@
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
 
     <!-- version of test dependencies -->
-    <activemq.client.version>5.17.0</activemq.client.version>
+    <activemq.client.version>5.17.1</activemq.client.version>
     <postgres.version>42.3.4</postgres.version>
     <unirest.java.version>3.13.8</unirest.java.version>
     <junit.platform.launcher.version>1.8.2</junit.platform.launcher.version>
