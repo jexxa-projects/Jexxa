@@ -14,7 +14,7 @@ Goal of this framework is to support the development of _durable_ business appli
 
 *   **Aligned team development**: The framework is tailored to the _needs and development of teams_ developing business applications. See [Jexxa's General Design Decisions](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_general_design_decisions) for more information. 
 *   **Visible flow of control**: Simplified navigation through your business application. Checkout [this tutorial](https://github.com/jexxa-projects/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md) for more information.      
-*   **Technology agnostic**: IoC concepts such as dependency injection do not require any framework specific @Annotations. See [here](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_ioc_without_annotations) for more information.  
+*   **Technology-agnostic**: IoC concepts such as dependency injection do not require any framework specific @Annotations. See [here](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_ioc_without_annotations) for more information.  
 
 In addition, Jexxa offers following production-proven features:    
 

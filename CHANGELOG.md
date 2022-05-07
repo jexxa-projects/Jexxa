@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Updated dependencies
-- 
+
 ## \[4.1.4] - 2022-04-15
 ### Added
 - Official support for JDK 18 
