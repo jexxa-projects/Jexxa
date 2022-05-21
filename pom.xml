@@ -42,7 +42,7 @@
     <maven.install.plugin>3.0.0-M1</maven.install.plugin>
     <maven.jar.plugin>3.2.2</maven.jar.plugin>
     <maven.resources.plugin>3.2.0</maven.resources.plugin>
-    <maven.site.plugin>3.12.0</maven.site.plugin>
+    <maven.site.plugin>4.0.0-M1</maven.site.plugin>
     <maven.surefire.plugin>3.0.0-M6</maven.surefire.plugin>
     <maven.release.plugin>3.0.0-M5</maven.release.plugin>
     <maven.jacoco.plugin>0.8.8</maven.jacoco.plugin>
@@ -83,9 +83,9 @@
     <activemq.client.version>5.17.1</activemq.client.version>
     <postgres.version>42.3.5</postgres.version>
     <unirest.java.version>3.13.8</unirest.java.version>
-    <junit.platform.launcher.version>1.8.2</junit.platform.launcher.version>
-    <junit.jupiter.engine.version>5.8.2</junit.jupiter.engine.version>
-    <junit.jupiter.params.version>5.8.2</junit.jupiter.params.version>
+    <junit.platform.launcher.version>1.9.0-M1</junit.platform.launcher.version>
+    <junit.jupiter.engine.version>5.9.0-M1</junit.jupiter.engine.version>
+    <junit.jupiter.params.version>5.9.0-M1</junit.jupiter.params.version>
     <slf4j.simple.version>1.7.36</slf4j.simple.version>
     <slf4j.api.version>1.7.36</slf4j.api.version>
     <awaitility.version>4.2.0</awaitility.version>
