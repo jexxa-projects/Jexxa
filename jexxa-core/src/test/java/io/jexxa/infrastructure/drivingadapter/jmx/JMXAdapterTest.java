@@ -15,7 +15,9 @@ import java.util.Properties;
 import java.util.Set;
 
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Execution(ExecutionMode.CONCURRENT)
 @Tag(TestConstants.UNIT_TEST)

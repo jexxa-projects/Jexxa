@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * <br>
  * {@code URI: http://<hostname>:<port>/<java simple class name>/<method name>}
  *  <br>
- * Example URI: http://localhost:7500/MyApplicationService/myMethod
+ * Example URI: http://localhost:7500/MyApplicationService/myMethod</a>
  *  <br>
  *  This implies following conventions:
  *  <ul>

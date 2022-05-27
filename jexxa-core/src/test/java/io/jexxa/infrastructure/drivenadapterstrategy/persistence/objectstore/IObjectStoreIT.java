@@ -14,7 +14,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreTestDatabase.REPOSITORY_CONFIG;
@@ -37,7 +36,7 @@ class IObjectStoreIT
     {
         testData = IntStream.range(0, TEST_DATA_SIZE)
                 .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element)))
-                .collect(Collectors.toList());
+                .toList();
 
         testData.forEach(element -> element.setInternalValue(element.getKey().getValue()));
     }
@@ -170,10 +169,12 @@ class IObjectStoreIT
     {
         if (!properties.isEmpty())
         {
-            var jdbcConnection = new JDBCConnection(properties);
-            jdbcConnection.createTableCommand(JexxaObjectSchema.class)
-                    .dropTableIfExists(JexxaObject.class)
-                    .asIgnore();
+            try(JDBCConnection jdbcConnection = new JDBCConnection(properties))
+            {
+                jdbcConnection.createTableCommand(JexxaObjectSchema.class)
+                        .dropTableIfExists(JexxaObject.class)
+                        .asIgnore();
+            }
         }
 
         objectUnderTest = ObjectStoreManager.getObjectStore(

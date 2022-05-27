@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
 {
@@ -35,7 +34,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
                 .stream()
                 .filter( element -> stringTag.getFromAggregate(element) != null)
                 .filter( element -> stringTag.getFromAggregate(element).startsWith(stringTag.getFromValue(value)))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -46,7 +45,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
                 .stream()
                 .filter( element -> stringTag.getFromAggregate(element) != null)
                 .filter( element -> stringTag.getFromAggregate(element).endsWith(stringTag.getFromValue(value)))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -57,7 +56,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
                 .stream()
                 .filter( element -> stringTag.getFromAggregate(element) != null)
                 .filter( element -> stringTag.getFromAggregate(element).contains(stringTag.getFromValue(value)))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -68,7 +67,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
                 .stream()
                 .filter( element -> stringTag.getFromAggregate(element) != null)
                 .filter( element -> stringTag.getFromAggregate(element).equals(stringTag.getFromValue(value)))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -79,7 +78,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
                 .stream()
                 .filter( element -> stringTag.getFromAggregate(element) != null)
                 .filter( element -> !stringTag.getFromAggregate(element).contains(stringTag.getFromValue(value)))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -89,7 +88,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
                 .values()
                 .stream()
                 .filter( element -> stringTag.getFromAggregate(element) == null)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -99,7 +98,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
                 .values()
                 .stream()
                 .filter( element -> stringTag.getFromAggregate(element) != null)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -110,7 +109,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
                 .stream()
                 .sorted(Comparator.comparing(stringTag::getFromAggregate))
                 .limit(amount)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -120,7 +119,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
                 .values()
                 .stream()
                 .sorted(this::compareToAggregate)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -131,7 +130,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
                 .stream()
                 .sorted((element1, element2) -> compareToAggregate(element2, element1))
                 .limit(amount)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -141,7 +140,7 @@ class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
                 .values()
                 .stream()
                 .sorted((element1, element2) -> compareToAggregate(element2, element1))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     protected int typeSpecificCompareTo(String value1, String value2)

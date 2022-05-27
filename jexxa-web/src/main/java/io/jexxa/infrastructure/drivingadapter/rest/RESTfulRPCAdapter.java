@@ -269,7 +269,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
 
 
-    private void invokeMethod(Object object, RESTfulRPCConvention.RESTfulRPCMethod method, Context httpContext ) throws InvocationTargetException, IllegalAccessException
+    private void invokeMethod(Object object, RESTfulRPCConvention.RESTfulRPCMethod method, Context httpContext )
     {
         Object[] methodParameters = deserializeParameters(httpContext.body(), method.getMethod());
         var invocationHandler = InvocationManager.getInvocationHandler(object);

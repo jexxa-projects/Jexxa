@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
@@ -122,7 +121,7 @@ class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
         return query.asString()
                 .flatMap(Optional::stream)
                 .map( element -> jsonConverter.fromJson(element, aggregateClazz))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     protected JDBCConnection getConnection()

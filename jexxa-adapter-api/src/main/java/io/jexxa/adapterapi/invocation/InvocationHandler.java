@@ -5,7 +5,6 @@ import io.jexxa.adapterapi.invocation.function.SerializableFunction;
 import io.jexxa.adapterapi.invocation.function.SerializableRunnable;
 import io.jexxa.adapterapi.invocation.function.SerializableSupplier;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public interface InvocationHandler
@@ -17,10 +16,8 @@ public interface InvocationHandler
      * @param object concrete instance of the object on which the method should be called
      * @param args attributes
      * @return result of the method
-     * @throws InvocationTargetException forwards exception from Java's reflective API because it cannot be handled here in a meaningful way
-     * @throws IllegalAccessException forwards exception from Java's reflective API because it cannot be handled here in a meaningful way
      */
-    Object invoke(Method method, Object object, Object[] args ) throws InvocationTargetException, IllegalAccessException;
+    Object invoke(Method method, Object object, Object[] args );
 
     /**
      * This method performs a method invocation on given runnable.

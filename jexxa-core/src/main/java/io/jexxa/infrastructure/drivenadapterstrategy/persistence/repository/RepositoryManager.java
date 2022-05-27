@@ -3,9 +3,9 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
-import io.jexxa.utils.properties.JexxaJDBCProperties;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.factory.ClassFactory;
+import io.jexxa.utils.properties.JexxaJDBCProperties;
 
 import java.util.HashMap;
 import java.util.Map;
