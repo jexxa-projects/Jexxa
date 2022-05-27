@@ -13,14 +13,14 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
-public class ExceptionAdapterFactory implements TypeAdapterFactory
+final class ExceptionFactory implements TypeAdapterFactory
 {
     private static final String EXCEPTION_CONVENTION_WARNING = "Exception {} does not provide a recommended constructor such as {}(String message, Throwable cause)";
 
 
     static void registerExceptionAdapter(GsonBuilder gsonBuilder)
     {
-        gsonBuilder.registerTypeAdapterFactory(new ExceptionAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new ExceptionFactory());
     }
 
 
