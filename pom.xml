@@ -5,7 +5,7 @@
 
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa</artifactId>
-  <version>4.1.8-SNAPSHOT</version>
+  <version>5.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <!-- Project Information -->
@@ -58,13 +58,13 @@
 
     <!-- target/compiler configuration  -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.release>11</maven.compiler.release>
+    <maven.compiler.release>17</maven.compiler.release>
 
     <!-- sonar configuration  -->
     <sonar.organization>repplix</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.login>${sonar-login}</sonar.login>
-    <sonar.java.source>1.11</sonar.java.source>
+    <sonar.java.source>1.17</sonar.java.source>
     <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco-ut/jacoco.xml,target/site/jacoco-it/jacoco.xml </sonar.coverage.jacoco.xmlReportPaths>
     <sonar.java.libraries>target</sonar.java.libraries>
     <argLine>-Xmx2048m -Xms1024m</argLine>

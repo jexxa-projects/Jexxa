@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[5.0.0] - 2022-MM-YY
+### Changed
+- From now only Java versions >=17 are supported
+
+### Added
+- Jexxa-Core:
+  - Gson (de)serializer for java records  
+
 ## \[4.1.7] - 2022-05-12
 ### Fixed
 - Updated dependencies
