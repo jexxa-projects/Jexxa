@@ -278,7 +278,7 @@ public final class JexxaMain
     @SuppressWarnings("java:S2629")
     void printStartupInfo()
     {
-        LOGGER.info( getBoundedContext().getJexxaVersion().toString());
+        LOGGER.info( getBoundedContext().jexxaVersion().toString());
 
         LOGGER.info("Start BoundedContext '{}' with {} Driving Adapter ", getBoundedContext().contextName(), compositeDrivingAdapter.size());
     }

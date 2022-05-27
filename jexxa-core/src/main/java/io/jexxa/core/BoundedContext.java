@@ -11,7 +11,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class BoundedContext
@@ -42,12 +41,12 @@ public class BoundedContext
         return contextName;
     }
 
-    public VersionInfo getJexxaVersion()
+    public VersionInfo jexxaVersion()
     {
         return JexxaVersion.getJexxaVersion();
     }
 
-    public VersionInfo getContextVersion()
+    public VersionInfo contextVersion()
     {
         var properties = jexxaMain.getProperties();
 
@@ -80,12 +79,12 @@ public class BoundedContext
         return isHealthy.orElse(true);
     }
 
-    public List<Diagnostics> getDiagnostics()
+    public List<Diagnostics> diagnostics()
     {
         return healthChecks
                 .stream()
                 .map(HealthCheck::getDiagnostics)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     void registerHealthCheck( HealthCheck healthCheck)

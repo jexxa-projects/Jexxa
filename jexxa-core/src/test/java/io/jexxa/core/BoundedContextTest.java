@@ -55,8 +55,8 @@ class BoundedContextTest
 
         //Assert
         assertTrue(objectUnderTest.isHealthy());
-        assertEquals(1, objectUnderTest.getDiagnostics().size());
-        assertTrue(objectUnderTest.getDiagnostics().get(0).isHealthy());
+        assertEquals(1, objectUnderTest.diagnostics().size());
+        assertTrue(objectUnderTest.diagnostics().get(0).isHealthy());
     }
 
     @Test
@@ -68,9 +68,9 @@ class BoundedContextTest
 
         //Assert
         assertFalse(objectUnderTest.isHealthy());
-        assertEquals(2, objectUnderTest.getDiagnostics().size());
-        assertTrue(objectUnderTest.getDiagnostics().get(0).isHealthy());
-        assertFalse(objectUnderTest.getDiagnostics().get(1).isHealthy());
+        assertEquals(2, objectUnderTest.diagnostics().size());
+        assertTrue(objectUnderTest.diagnostics().get(0).isHealthy());
+        assertFalse(objectUnderTest.diagnostics().get(1).isHealthy());
     }
 
     void waitForShutDown()
