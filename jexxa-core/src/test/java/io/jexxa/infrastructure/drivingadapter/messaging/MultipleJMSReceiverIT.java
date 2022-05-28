@@ -55,7 +55,7 @@ class MultipleJMSReceiverIT
     void synchronizeMultipleClients()
     {
         //Arrange
-        JexxaMain jexxaMain = new JexxaMain("MultiThreading");
+        JexxaMain jexxaMain = new JexxaMain(MultipleJMSReceiverIT.class);
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)

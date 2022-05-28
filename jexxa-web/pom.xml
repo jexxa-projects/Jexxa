@@ -53,8 +53,6 @@
           <groupId>org.json</groupId>
           <artifactId>json</artifactId>
         </exclusion>
-      </exclusions>
-      <exclusions>
         <exclusion>
           <groupId>com.google.guava</groupId>
           <artifactId>guava</artifactId>
