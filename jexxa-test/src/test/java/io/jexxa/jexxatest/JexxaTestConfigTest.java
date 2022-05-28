@@ -34,7 +34,7 @@ class JexxaTestConfigTest
     void setUp()
     {
         //Arrange
-        var jexxaMain = new JexxaMain(JexxaTestTest.class.getSimpleName(), new Properties());
+        var jexxaMain = new JexxaMain(JexxaTestTest.class, new Properties());
         jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
                 .addToInfrastructure("io.jexxa.application.infrastructure");
 

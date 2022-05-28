@@ -33,7 +33,7 @@ class MultipleRESTClientsIT
     @BeforeEach
     void setUp()
     {
-        jexxaMain = new JexxaMain(MultipleRESTClientsIT.class.getSimpleName());
+        jexxaMain = new JexxaMain(MultipleRESTClientsIT.class);
         jexxaMain.addToApplicationCore(TestConstants.JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(TestConstants.JEXXA_DRIVEN_ADAPTER)
                 .bind(RESTfulRPCAdapter.class).to(IncrementApplicationService.class)
