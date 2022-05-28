@@ -40,6 +40,20 @@
       <groupId>io.javalin</groupId>
       <artifactId>javalin-openapi</artifactId>
       <version>${javalin.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-io</groupId>
+          <artifactId>commons-io</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.json</groupId>
+          <artifactId>json</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -55,6 +69,12 @@
       <groupId>com.kjetland</groupId>
       <artifactId>mbknor-jackson-jsonschema_2.13</artifactId>
       <version>${jackson.jsonschema.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.jetbrains.kotlin</groupId>
+          <artifactId>kotlin-scripting-jvm</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -104,6 +124,13 @@
       <artifactId>unirest-java</artifactId>
       <version>${unirest.java.version}</version>
       <scope>test</scope>
+
+      <exclusions>
+        <exclusion>
+          <groupId>commons-codec</groupId>
+          <artifactId>commons-codec</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
   </dependencies>
