@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Jexxa-Core:
   - Gson (de)serializer for java records  
 
-## \[4.1.7] - 2022-05-12
+## \[4.1.7] - 2022-06-21
 ### Fixed
 - Updated dependencies
 
