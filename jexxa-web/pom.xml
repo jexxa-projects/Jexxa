@@ -53,6 +53,18 @@
           <groupId>org.json</groupId>
           <artifactId>json</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.webjars.npm</groupId>
+          <artifactId>jsonpointer</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.webjars.npm</groupId>
+          <artifactId>ansi-regex</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.webjars.npm</groupId>
+          <artifactId>y18n</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
