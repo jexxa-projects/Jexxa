@@ -54,6 +54,32 @@
           <artifactId>json</artifactId>
         </exclusion>
       </exclusions>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-io</groupId>
+          <artifactId>commons-io</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.json</groupId>
+          <artifactId>json</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.webjars.npm</groupId>
+          <artifactId>jsonpointer</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.webjars.npm</groupId>
+          <artifactId>ansi-regex</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.webjars.npm</groupId>
+          <artifactId>y18n</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
