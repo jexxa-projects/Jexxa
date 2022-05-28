@@ -59,11 +59,22 @@ public final class JexxaMain
      * Note: When a driving or driven adapter is created, it gets the properties read from properties file.
      *
      * @param contextName Name of the BoundedContext. Typically, you should use the name of your application.
+     * @deprecated replace with constructor accepting concrete type name
      */
+    @Deprecated(forRemoval = true)
     public JexxaMain(String contextName)
     {
         this(contextName, System.getProperties());
     }
+
+    /**
+     * Creates the JexxaMain instance for your application with given context name.
+     * In addition, the properties file jexxa-application.properties is load if available in class path.
+     *
+     * Note: When a driving or driven adapter is created, it gets the properties read from properties file.
+     *
+     * @param context Name of the BoundedContext. Typically, you should use the name of your application.
+     */
     public JexxaMain(Class<?> context)
     {
         this(context.getSimpleName(), System.getProperties());
