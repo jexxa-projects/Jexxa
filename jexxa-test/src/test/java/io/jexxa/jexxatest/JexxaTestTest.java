@@ -85,10 +85,10 @@ class JexxaTestTest
 
         var recordedMessage = tempMessage.get();
         assertNotNull(recordedMessage);
-        assertEquals("JexxaTopic", recordedMessage.getDestinationName());
-        assertEquals(MessageProducer.DestinationType.TOPIC, recordedMessage.getDestinationType());
-        assertNull(recordedMessage.getMessageProperties());
-        assertEquals(getJSONConverter().toJson(testMessage), recordedMessage.getSerializedMessage());
+        assertEquals("JexxaTopic", recordedMessage.destinationName());
+        assertEquals(MessageProducer.DestinationType.TOPIC, recordedMessage.destinationType());
+        assertNull(recordedMessage.messageProperties());
+        assertEquals(getJSONConverter().toJson(testMessage), recordedMessage.serializedMessage());
     }
 
     @Test
