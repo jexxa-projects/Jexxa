@@ -4,11 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[4.1.8] - 2022-05-
+## \[4.1.8] - 2022-05-28
 ### Fixed
 - Updated dependencies
 - Excluded transitive dependencies with security issues
 
+### Changed
+- Declared methods as deprecated that will be no longer available in next major release  
 
 ## \[4.1.7] - 2022-05-21
 ### Fixed
