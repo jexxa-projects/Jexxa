@@ -86,7 +86,6 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         command.asIgnore();
     }
 
-    @SuppressWarnings("DuplicatedCode")
     @Override
     public void add(T aggregate)
     {
@@ -103,7 +102,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
         command.asUpdate();
     }
 
-    @SuppressWarnings({"DuplicatedCode", "unused"})
+    @SuppressWarnings({"unused"})
     @Override
     public void update(T aggregate)
     {

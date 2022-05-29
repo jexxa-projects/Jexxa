@@ -15,7 +15,7 @@ import java.util.function.Function;
 import static io.jexxa.utils.properties.JexxaJDBCProperties.JEXXA_JDBC_DRIVER;
 
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "DuplicatedCode"})
 public final class ObjectStoreManager
 {
     private static final ObjectStoreManager REPOSITORY_MANAGER = new ObjectStoreManager();

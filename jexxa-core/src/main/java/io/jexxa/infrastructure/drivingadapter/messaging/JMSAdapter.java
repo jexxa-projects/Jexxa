@@ -154,7 +154,6 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     }
 
 
-    @SuppressWarnings("DuplicatedCode")
     public static Connection createConnection(Properties properties)
     {
         var username = new Secret(properties, JNDI_USER_KEY, JNDI_USER_FILE);

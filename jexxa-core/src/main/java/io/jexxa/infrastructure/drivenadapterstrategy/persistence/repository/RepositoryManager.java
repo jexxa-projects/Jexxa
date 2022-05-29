@@ -77,6 +77,7 @@ public final class RepositoryManager
         //Package protected constructor
     }
 
+    @SuppressWarnings("DuplicatedCode")
     private <T> Class<?> getStrategy(Class<T> aggregateClazz, Properties properties)
     {
         // 1. Check if a dedicated strategy is registered for aggregateClazz

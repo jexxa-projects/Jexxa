@@ -207,6 +207,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
      *     1 if value of aggregate1 &gt; value of aggregate2 <br>
      *     1 if one of the given values is null <br>
      */
+    @SuppressWarnings("DuplicatedCode")
     private int compareToAggregate(T aggregate1, T aggregate2)
     {
         Objects.requireNonNull(aggregate1);
