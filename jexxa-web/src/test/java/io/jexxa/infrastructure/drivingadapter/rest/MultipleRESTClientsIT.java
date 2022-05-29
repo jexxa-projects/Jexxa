@@ -53,7 +53,7 @@ class MultipleRESTClientsIT
 
         var clientPool = Stream.generate(() -> new Thread(this::incrementService))
                 .limit(MAX_THREADS)
-                .collect(toList());
+                .toList();
 
         var exceptionList = new ArrayList<Throwable>();
 

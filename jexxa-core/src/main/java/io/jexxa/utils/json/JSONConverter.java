@@ -3,6 +3,7 @@ package io.jexxa.utils.json;
 import java.io.Reader;
 import java.lang.reflect.Type;
 
+@SuppressWarnings("unused")
 public interface JSONConverter
 {
     <T> T fromJson(String jsonString, Class<T> clazz);

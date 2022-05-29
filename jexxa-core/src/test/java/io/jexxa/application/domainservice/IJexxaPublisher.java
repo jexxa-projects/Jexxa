@@ -8,6 +8,4 @@ public interface IJexxaPublisher
     void sendToQueue(JexxaValueObject jexxaValueObject);
 
     void sendToTopic(JexxaValueObject jexxaValueObject);
-
-    void sendDomainEvent(JexxaDomainEvent jexxaDomainEvent);
 }

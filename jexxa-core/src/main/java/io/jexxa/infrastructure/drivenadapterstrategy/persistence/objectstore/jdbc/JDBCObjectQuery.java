@@ -14,6 +14,7 @@ import java.util.function.Supplier;
 
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 
+@SuppressWarnings("unused")
 class JDBCObjectQuery <T, S, M extends Enum<M> & MetadataSchema>
 {
     private final Supplier<JDBCConnection> jdbcConnection;

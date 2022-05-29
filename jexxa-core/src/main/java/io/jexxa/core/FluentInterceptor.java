@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Consumer;
 
+@SuppressWarnings("unused")
 public class FluentInterceptor
 {
     private final Collection<Object> targetObjects = new ArrayList<>();

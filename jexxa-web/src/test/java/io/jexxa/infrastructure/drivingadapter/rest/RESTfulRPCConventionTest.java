@@ -11,7 +11,6 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -86,10 +85,8 @@ class RESTfulRPCConventionTest
     {
         //Arrange
         var staticMethods = Arrays.stream(simpleApplicationService.getClass().getMethods())
-                .filter( method -> Modifier.isStatic(method.getModifiers()))
-                .collect(Collectors.toUnmodifiableList());
-
-
+                .filter(method -> Modifier.isStatic(method.getModifiers()))
+                .toList();
 
         //Act - get All methods
         var methods = new ArrayList<RESTfulRPCConvention.RESTfulRPCMethod>();

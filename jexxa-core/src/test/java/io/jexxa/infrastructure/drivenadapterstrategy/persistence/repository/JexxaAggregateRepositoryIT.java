@@ -15,11 +15,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBC_REPOSITORY_CONFIG;
-import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -33,9 +31,9 @@ class JexxaAggregateRepositoryIT
     @BeforeEach
     void initTests()
     {
-       aggregateList= IntStream.range(1,100)
-               .mapToObj( element -> JexxaAggregate.create(new JexxaValueObject(element)))
-               .collect(Collectors.toUnmodifiableList());
+       aggregateList= IntStream.range(1, 100)
+               .mapToObj(element -> JexxaAggregate.create(new JexxaValueObject(element)))
+               .toList();
     }
 
     @ParameterizedTest
@@ -67,8 +65,8 @@ class JexxaAggregateRepositoryIT
 
         //Act
         var resultList = aggregateList.stream()
-                .map( aggregate -> objectUnderTest.get(aggregate.getKey()))
-                .collect( toList() );
+                .map(aggregate -> objectUnderTest.get(aggregate.getKey()))
+                .toList();
 
         //Assert
         assertEquals(aggregateList.size(), resultList.size());
@@ -117,10 +115,11 @@ class JexxaAggregateRepositoryIT
 
     private void dropTable(Properties properties)
     {
-        JDBCConnection connection = new JDBCConnection(properties);
-        connection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
-                .dropTableIfExists(JexxaAggregate.class)
-                .asIgnore();
+        try (JDBCConnection connection = new JDBCConnection(properties) ) {
+            connection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
+                    .dropTableIfExists(JexxaAggregate.class)
+                    .asIgnore();
+        }
     }
 }
 
