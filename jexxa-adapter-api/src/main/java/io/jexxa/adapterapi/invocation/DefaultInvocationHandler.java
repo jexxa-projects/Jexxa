@@ -17,6 +17,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("UnusedReturnValue")
 public class DefaultInvocationHandler implements AroundInterceptor, BeforeInterceptor, AfterInterceptor, InvocationHandler {
     private final List<BeforeInterceptor> beforeList = new ArrayList<>();
     private final List<AfterInterceptor> afterList = new ArrayList<>();

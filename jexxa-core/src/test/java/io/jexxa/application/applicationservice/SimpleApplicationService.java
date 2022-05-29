@@ -9,7 +9,7 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "SameReturnValue"})
 @ApplicationService
 public class SimpleApplicationService
 {
