@@ -5,6 +5,7 @@ import io.jexxa.application.annotation.ApplicationService;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 import io.jexxa.application.domain.valueobject.SpecialCasesValueObject;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class SimpleApplicationService
 
     public static class SimpleApplicationException extends Exception
     {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         public SimpleApplicationException(String information)

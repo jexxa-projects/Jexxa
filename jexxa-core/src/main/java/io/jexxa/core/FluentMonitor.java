@@ -8,6 +8,7 @@ import io.jexxa.adapterapi.invocation.InvocationManager;
 
 import java.util.Objects;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class FluentMonitor
 {
     private final Object targetObject;

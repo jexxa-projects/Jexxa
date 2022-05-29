@@ -26,6 +26,7 @@ import java.util.Properties;
  * An example how to use this class can be found in tutorial <a href="https://github.com/jexxa-projects/Jexxa/tree/master/tutorials/BookStore">Bookstore</a>
  *
  */
+@SuppressWarnings("ClassCanBeRecord")
 public class JexxaTest
 {
     public static final String JEXXA_TEST_PROPERTIES = "/jexxa-test.properties";
