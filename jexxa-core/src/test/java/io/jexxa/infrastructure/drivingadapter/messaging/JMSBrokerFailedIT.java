@@ -23,7 +23,7 @@ class JMSBrokerFailedIT
     void testReconnect() throws JMSException
     {
         //Arrange
-        var jexxaMain = new JexxaMain(JMSBrokerFailedIT.class.getSimpleName());
+        var jexxaMain = new JexxaMain(JMSBrokerFailedIT.class);
         var messageListener = new TopicListener();
         var jmsAdapter = new JMSAdapter(jexxaMain.getProperties());
 

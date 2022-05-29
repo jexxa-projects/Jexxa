@@ -3,7 +3,6 @@ package io.jexxa.adapterapi.invocation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -27,7 +26,7 @@ class DefaultInvocationHandlerTest {
 
 
     @Test
-    void invokeTest() throws InvocationTargetException, IllegalAccessException
+    void invokeTest()
     {
         //Act
         invocationHandler.invoke(invocationMethod , objectUnderTest, new Object[0]);
@@ -37,7 +36,7 @@ class DefaultInvocationHandlerTest {
     }
 
     @Test
-    void invokeWithDoubleInterceptorBefore() throws InvocationTargetException, IllegalAccessException
+    void invokeWithDoubleInterceptorBefore()
     {
         //Arrange
         AtomicInteger interceptingBeforeResult = new AtomicInteger(0);
@@ -59,8 +58,7 @@ class DefaultInvocationHandlerTest {
 
 
     @Test
-    void invokeWithDoubleInterceptorAfter() throws InvocationTargetException, IllegalAccessException
-    {
+    void invokeWithDoubleInterceptorAfter() {
         //Arrange
         AtomicInteger interceptingAfterResult = new AtomicInteger(0);
         InvocationManager
@@ -79,7 +77,7 @@ class DefaultInvocationHandlerTest {
     }
 
     @Test
-    void invokeWithDoubleInterceptorAround() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException
+    void invokeWithDoubleInterceptorAround() throws NoSuchMethodException
     {
         //Arrange
         AtomicInteger interceptingAroundBeforeResult = new AtomicInteger(0);
@@ -103,8 +101,7 @@ class DefaultInvocationHandlerTest {
     }
 
     @Test
-    void invokeWithAllDoubleInterceptors() throws InvocationTargetException, IllegalAccessException
-    {
+    void invokeWithAllDoubleInterceptors() {
         final Integer[] interceptingResults = new Integer[3];
 
         //Arrange

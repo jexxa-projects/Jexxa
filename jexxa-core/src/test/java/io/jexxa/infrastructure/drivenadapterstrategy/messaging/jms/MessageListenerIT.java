@@ -44,7 +44,7 @@ class MessageListenerIT
     @BeforeEach
     void initTests()
     {
-        jexxaMain = new JexxaMain(MessageListenerIT.class.getSimpleName());
+        jexxaMain = new JexxaMain(MessageListenerIT.class);
         jsonMessageListener = new TextMessageListener();
         typedListener = new JexxaValueObjectListener();
         objectUnderTest = MessageSenderManager.getMessageSender(jexxaMain.getProperties());

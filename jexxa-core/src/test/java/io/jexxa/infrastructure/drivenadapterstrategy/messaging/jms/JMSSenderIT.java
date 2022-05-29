@@ -49,7 +49,7 @@ class JMSSenderIT
     @BeforeEach
     void initTests()
     {
-        jexxaMain = new JexxaMain(JMSSenderIT.class.getSimpleName());
+        jexxaMain = new JexxaMain(JMSSenderIT.class);
         topicListener = new TopicListener();
         queueListener = new QueueListener();
         objectUnderTest = MessageSenderManager.getMessageSender(jexxaMain.getProperties());

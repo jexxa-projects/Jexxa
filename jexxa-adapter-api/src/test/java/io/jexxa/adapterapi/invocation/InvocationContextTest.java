@@ -90,7 +90,7 @@ class InvocationContextTest {
         assertEquals(100, resultingContext[SET_GET_COUNTER_CONTEXT].getReturnValue(Integer.class));
     }
 
-    private void invokeTestMethods() throws InvocationTargetException, IllegalAccessException {
+    private void invokeTestMethods() {
         invocationHandler.invoke(invocationMethod, objectUnderTest, new Object[0]);
         invocationHandler.invoke(objectUnderTest, objectUnderTest::increment);
         invocationHandler.invoke(objectUnderTest, objectUnderTest::getCounter);
