@@ -40,6 +40,7 @@
       <groupId>io.javalin</groupId>
       <artifactId>javalin-openapi</artifactId>
       <version>${javalin.version}</version>
+      <!-- Exclude dependencies with security issues -->
       <exclusions>
         <exclusion>
           <groupId>com.google.guava</groupId>
@@ -48,6 +49,10 @@
         <exclusion>
           <groupId>commons-io</groupId>
           <artifactId>commons-io</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-codec</groupId>
+          <artifactId>commons-codec</artifactId>
         </exclusion>
         <exclusion>
           <groupId>org.json</groupId>
@@ -64,6 +69,18 @@
         <exclusion>
           <groupId>org.webjars.npm</groupId>
           <artifactId>y18n</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.mozilla</groupId>
+          <artifactId>rhino</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpclient</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.jetbrains.kotlin</groupId>
+          <artifactId>kotlin-stdlib</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
