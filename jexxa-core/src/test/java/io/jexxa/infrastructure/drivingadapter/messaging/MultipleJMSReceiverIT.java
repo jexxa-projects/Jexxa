@@ -75,11 +75,12 @@ class MultipleJMSReceiverIT
 
     private void incrementService(Properties properties)
     {
-        ITMessageSender myProducer = new ITMessageSender(properties, DESTINATION, JMSConfiguration.MessagingType.TOPIC);
-        while ( incrementApplicationService.getCounter() < MAX_COUNTER )
+        try (ITMessageSender myProducer = new ITMessageSender(properties, DESTINATION, JMSConfiguration.MessagingType.TOPIC))
         {
-            //Act
-            myProducer.send(MESSAGE);
+            while (incrementApplicationService.getCounter() < MAX_COUNTER) {
+                //Act
+                myProducer.send(MESSAGE);
+            }
         }
     }
 }
