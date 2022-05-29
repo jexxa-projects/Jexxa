@@ -245,12 +245,12 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
         getCommands.forEach(
                 method -> javalin.get(
-                        method.getResourcePath(),
+                        method.resourcePath(),
                         httpCtx -> invokeMethod(object, method, httpCtx)
                 )
         );
 
-        getCommands.forEach( method -> openAPIConvention.documentGET(method.getMethod(), method.getResourcePath()));
+        getCommands.forEach( method -> openAPIConvention.documentGET(method.method(), method.resourcePath()));
     }
 
     private void registerPOSTMethods(Object object)
@@ -259,24 +259,24 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
         postCommands.forEach(
                 method -> javalin.post(
-                        method.getResourcePath(),
+                        method.resourcePath(),
                         httpCtx -> invokeMethod(object, method, httpCtx)
                 )
         );
 
-        postCommands.forEach( method -> openAPIConvention.documentPOST(method.getMethod(), method.getResourcePath()));
+        postCommands.forEach( method -> openAPIConvention.documentPOST(method.method(), method.resourcePath()));
     }
 
 
 
     private void invokeMethod(Object object, RESTfulRPCConvention.RESTfulRPCMethod method, Context httpContext )
     {
-        Object[] methodParameters = deserializeParameters(httpContext.body(), method.getMethod());
+        Object[] methodParameters = deserializeParameters(httpContext.body(), method.method());
         var invocationHandler = InvocationManager.getInvocationHandler(object);
 
 
         var result = Optional.ofNullable(
-                invocationHandler.invoke(method.getMethod(), object, methodParameters)
+                invocationHandler.invoke(method.method(), object, methodParameters)
         );
 
         //At the moment we do not handle any credentials

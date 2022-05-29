@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
  * <br>
  * {@code URI: http://<hostname>:<port>/<java simple class name>/<method name>}
  *  <br>
- * Example URI: http://localhost:7500/MyApplicationService/myMethod</a>
+ * Example URI: <a href="http://localhost:7500/MyApplicationService/myMethod">http://localhost:7500/MyApplicationService/myMethod</a>
  *  <br>
  *  This implies following conventions:
  *  <ul>
@@ -47,49 +46,29 @@ class RESTfulRPCConvention
     }
 
 
-    static class RESTfulRPCMethod
-    {
-        enum HTTPCommand {GET, POST}
+    record RESTfulRPCMethod(RESTfulRPCConvention.RESTfulRPCMethod.HTTPCommand httpCommand,
+                            String resourcePath,
+                            Method method) {
+            enum HTTPCommand {GET, POST}
 
-        private final String resourcePath;
-        private final Method method;
-        private final HTTPCommand httpCommand;
-
-        RESTfulRPCMethod(HTTPCommand httpCommand, String resourcePath, Method method) {
-            this.httpCommand = httpCommand;
-            this.resourcePath = resourcePath;
-            this.method = method;
+        HTTPCommand getHTTPCommand() {
+                return httpCommand;
+            }
         }
-
-        String getResourcePath()
-        {
-            return resourcePath;
-        }
-
-        Method getMethod()
-        {
-            return method;
-        }
-
-        HTTPCommand getHTTPCommand()
-        {
-            return httpCommand;
-        }
-    }
 
     List<RESTfulRPCMethod> getGETCommands() {
 
         return getPublicMethods(object.getClass())
-               .stream()
-               .filter( element -> !Modifier.isStatic( element.getModifiers() )) //Convention for all exposed methods
-               .filter( element -> !(element.getReturnType().equals(void.class)) &&
-                                     element.getParameterCount() == 0) // Convention for GET method
-               .map( element ->
-                       new RESTfulRPCMethod(
-                               RESTfulRPCMethod.HTTPCommand.GET,
-                               generateURI(element),
-                               element))
-               .collect(Collectors.toUnmodifiableList());
+                .stream()
+                .filter(element -> !Modifier.isStatic(element.getModifiers())) //Convention for all exposed methods
+                .filter(element -> !(element.getReturnType().equals(void.class)) &&
+                        element.getParameterCount() == 0) // Convention for GET method
+                .map(element ->
+                        new RESTfulRPCMethod(
+                                RESTfulRPCMethod.HTTPCommand.GET,
+                                generateURI(element),
+                                element))
+                .toList();
     }
 
 
@@ -97,15 +76,15 @@ class RESTfulRPCConvention
 
         return getPublicMethods(object.getClass())
                 .stream()
-                .filter( element -> !Modifier.isStatic( element.getModifiers() )) //Convention for all exposed methods
-                .filter( element -> (element.getReturnType().equals(void.class) ||
-                                     element.getParameterCount() > 0)) // Convention for POST method
-                .map( element ->
+                .filter(element -> !Modifier.isStatic(element.getModifiers())) //Convention for all exposed methods
+                .filter(element -> (element.getReturnType().equals(void.class) ||
+                        element.getParameterCount() > 0)) // Convention for POST method
+                .map(element ->
                         new RESTfulRPCMethod(
                                 RESTfulRPCMethod.HTTPCommand.POST,
                                 generateURI(element),
                                 element))
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
     }
 
 

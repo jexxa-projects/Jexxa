@@ -32,21 +32,13 @@ class MultipleJMSReceiverIT
     private IncrementApplicationService incrementApplicationService;
 
 
-    public static class ApplicationServiceListener implements MessageListener
+    public record ApplicationServiceListener(IncrementApplicationService incrementApplicationService) implements MessageListener
     {
-        private final IncrementApplicationService incrementApplicationService;
-
-        public ApplicationServiceListener(IncrementApplicationService incrementApplicationService)
-        {
-            this.incrementApplicationService = incrementApplicationService;
-        }
-
         @Override
         @JMSConfiguration(destination = DESTINATION, messagingType = JMSConfiguration.MessagingType.TOPIC)
-        public void onMessage(Message message)
-        {
-            incrementApplicationService.increment();
-        }
+        public void onMessage(Message message) {
+                incrementApplicationService.increment();
+            }
     }
 
 

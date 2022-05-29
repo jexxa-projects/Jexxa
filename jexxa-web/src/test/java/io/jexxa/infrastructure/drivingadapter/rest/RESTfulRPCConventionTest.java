@@ -50,11 +50,11 @@ class RESTfulRPCConventionTest
                 element.getHTTPCommand()));
 
         //3. Check URIs
-        result.forEach(element -> assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.getMethod().getName(),
-                element.getResourcePath()));
+        result.forEach(element -> assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.method().getName(),
+                element.resourcePath()));
 
         //4. Check return types are NOT void
-        result.forEach(element -> assertNotEquals(void.class, element.getMethod().getReturnType()));
+        result.forEach(element -> assertNotEquals(void.class, element.method().getReturnType()));
     }
 
     @Test
@@ -72,12 +72,12 @@ class RESTfulRPCConventionTest
                 element.getHTTPCommand()));
 
         //3.Check URIs
-        result.forEach(element -> assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.getMethod().getName(),
-                element.getResourcePath()));
+        result.forEach(element -> assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.method().getName(),
+                element.resourcePath()));
 
         //4.Check return types are NOT void or Parameter > 0
-        result.forEach(element -> assertTrue( (void.class.equals(element.getMethod().getReturnType())
-                                            || element.getMethod().getParameterCount() > 0 )));
+        result.forEach(element -> assertTrue( (void.class.equals(element.method().getReturnType())
+                                            || element.method().getParameterCount() > 0 )));
 
     }
 
@@ -100,7 +100,7 @@ class RESTfulRPCConventionTest
         assertNotNull(methods);
         assertTrue ( staticMethods.stream().allMatch(
                 staticMethod -> methods.stream()
-                        .noneMatch( method -> method.getMethod().getName().equals(staticMethod.getName()))
+                        .noneMatch( method -> method.method().getName().equals(staticMethod.getName()))
                 )
         );
     }

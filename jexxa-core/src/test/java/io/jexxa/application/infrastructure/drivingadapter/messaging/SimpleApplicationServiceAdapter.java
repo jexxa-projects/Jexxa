@@ -2,17 +2,9 @@ package io.jexxa.application.infrastructure.drivingadapter.messaging;
 
 import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
 
-public class SimpleApplicationServiceAdapter
+public record SimpleApplicationServiceAdapter(ApplicationServiceWithDrivenAdapters applicationServiceWithDrivenAdapters)
 {
-    private final ApplicationServiceWithDrivenAdapters applicationServiceWithDrivenAdapters;
-
-    public SimpleApplicationServiceAdapter(ApplicationServiceWithDrivenAdapters applicationServiceWithDrivenAdapters)
-    {
-        this.applicationServiceWithDrivenAdapters = applicationServiceWithDrivenAdapters;
-    }
-
-    public ApplicationServiceWithDrivenAdapters getPort()
-    {
+    public ApplicationServiceWithDrivenAdapters getPort() {
         return applicationServiceWithDrivenAdapters;
     }
 }
