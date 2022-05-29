@@ -3,7 +3,6 @@ package io.jexxa.adapterapi.invocation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static io.jexxa.adapterapi.invocation.InvocationManager.getInvocationHandler;
@@ -48,7 +47,7 @@ class InvocationContextTest {
     }
 
     @Test
-    void testGetMethod() throws InvocationTargetException, IllegalAccessException {
+    void testGetMethod() {
         //Act
         invokeTestMethods();
 
@@ -60,7 +59,7 @@ class InvocationContextTest {
     }
 
     @Test
-    void testGetTarget() throws InvocationTargetException, IllegalAccessException {
+    void testGetTarget() {
         //Act
         invokeTestMethods();
 
@@ -79,7 +78,7 @@ class InvocationContextTest {
     }
 
     @Test
-    void getReturnValue() throws InvocationTargetException, IllegalAccessException {
+    void getReturnValue() {
         //Act
         invokeTestMethods();
 
