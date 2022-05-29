@@ -7,6 +7,7 @@ import io.javalin.Javalin;
 import io.javalin.core.JavalinConfig;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
+import io.javalin.jetty.JettyUtil;
 import io.javalin.plugin.json.JsonMapper;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
@@ -20,6 +21,8 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -69,6 +72,9 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
 
     public static RESTfulRPCAdapter createAdapter(Properties properties)
     {
+        JettyUtil.logDuringStartup = false;
+        JettyUtil.disableJettyLogger();
+
         if ( RPC_ADAPTER_MAP.containsKey(properties) )
         {
             JexxaLogger.getLogger(RESTfulRPCAdapter.class).warn("Tried to create an RESTfulRPCAdapter with same properties twice! Return already instantiated adapter.");
