@@ -89,14 +89,8 @@ public final class HelloJexxa
                 // - To get greetings open: http://localhost:7500/HelloJexxa/greetings
                 .bind(RESTfulRPCAdapter.class).to(HelloJexxa.class)
 
-                //Start Jexxa and all bindings
-                .start()
-
-                //Wait until CTRL-C is pressed or sigterm is send
-                .waitForShutdown()
-
-                //Finally invoke stop() for proper cleanup
-                .stop();
+                //Run Jexxa and all bindings
+                .run();
     }
 }
 ```    

@@ -37,7 +37,7 @@ class BoundedContextTest
     void shutdown()
     {
         //Arrange
-        var thread = new Thread(this::waitForShutDown);
+        var thread = new Thread(jexxaMain::run);
         thread.start();
 
         await().atMost(1, TimeUnit.SECONDS).until(() -> (objectUnderTest != null && objectUnderTest.isRunning()));
@@ -73,12 +73,6 @@ class BoundedContextTest
         assertFalse(objectUnderTest.diagnostics().get(1).isHealthy());
     }
 
-    void waitForShutDown()
-    {
-        jexxaMain.start()
-                .waitForShutdown()
-                .stop();
-    }
 
     public static class SimpleHealthCheck extends HealthCheck
     {

@@ -247,6 +247,17 @@ public final class JexxaMain
         return drivingAdapterFactory.getInstanceOf(adapter, getProperties());
     }
 
+    /**
+     * This convenience method invokes the three main control methods
+     *  start() -> waitForShutdown() -> stop
+     */
+    public void run()
+    {
+        start();
+        waitForShutdown();
+        stop();
+    }
+
     @SuppressWarnings("java:S2629")
     public JexxaMain start()
     {
@@ -293,6 +304,7 @@ public final class JexxaMain
         }
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public JexxaMain waitForShutdown()
     {
         return getBoundedContext().waitForShutdown();
