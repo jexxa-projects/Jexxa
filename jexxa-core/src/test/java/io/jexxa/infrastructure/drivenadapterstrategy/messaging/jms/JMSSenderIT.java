@@ -52,7 +52,7 @@ class JMSSenderIT
         jexxaMain = new JexxaMain(JMSSenderIT.class);
         topicListener = new TopicListener();
         queueListener = new QueueListener();
-        objectUnderTest = MessageSenderManager.getMessageSender(jexxaMain.getProperties());
+        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
@@ -194,7 +194,7 @@ class JMSSenderIT
         properties.remove(JNDI_PASSWORD_KEY);
         properties.put(JNDI_PASSWORD_FILE, "src/test/resources/secrets/jndiPassword");
 
-        objectUnderTest = MessageSenderManager.getMessageSender(properties);
+        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, properties);
 
         //Act
         objectUnderTest

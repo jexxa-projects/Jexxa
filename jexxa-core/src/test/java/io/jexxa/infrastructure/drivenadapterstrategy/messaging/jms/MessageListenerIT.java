@@ -47,7 +47,7 @@ class MessageListenerIT
         jexxaMain = new JexxaMain(MessageListenerIT.class);
         jsonMessageListener = new TextMessageListener();
         typedListener = new JexxaValueObjectListener();
-        objectUnderTest = MessageSenderManager.getMessageSender(jexxaMain.getProperties());
+        objectUnderTest = MessageSenderManager.getMessageSender(MessageListenerIT.class, jexxaMain.getProperties());
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)

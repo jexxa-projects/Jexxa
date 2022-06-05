@@ -1,18 +1,23 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.factory.ClassFactory;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Properties;
+
+import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender.JNDI_FACTORY_KEY;
 
 public final class MessageSenderManager
 {
     private static final MessageSenderManager MESSAGE_SENDER_MANAGER = new MessageSenderManager();
 
-    private static Class<? extends MessageSender> defaultStrategy = JMSSender.class;
+    private static final Map<Class<?> , Class<? extends MessageSender>> STRATEGY_MAP = new HashMap<>();
+    private static Class<? extends MessageSender> defaultStrategy = null;
 
     private MessageSenderManager()
     {
@@ -20,17 +25,63 @@ public final class MessageSenderManager
     }
 
     @CheckReturnValue
-    MessageSender getStrategy(Properties properties)
+    private <T> Class<? extends MessageSender> getStrategy(Class<T> aggregateClazz, Properties properties)
     {
-        try {
-            Optional<MessageSender> strategy = ClassFactory.newInstanceOf(defaultStrategy, new Object[]{properties});
+        // 1. Check if a dedicated strategy is registered for aggregateClazz
+        var result = STRATEGY_MAP
+                .entrySet()
+                .stream()
+                .filter( element -> element.getKey().equals(aggregateClazz))
+                .filter( element -> element.getValue() != null )
+                .findFirst();
 
-            if (strategy.isPresent())
+        if (result.isPresent())
+        {
+            return result.get().getValue();
+        }
+
+        // 2. If a default strategy is available, return this one
+        if (defaultStrategy != null)
+        {
+            return defaultStrategy;
+        }
+
+        // 3. If a JDBC driver is stated in Properties => Use JDBCKeyValueRepository
+        if (properties.containsKey(JNDI_FACTORY_KEY))
+        {
+            return JMSSender.class;
+        }
+
+        // 4. If everything fails, return a IMDBRepository
+        return MessageLogger.class;
+    }
+    @SuppressWarnings("unused")
+    public static <U extends MessageSender, T > void setStrategy(Class<U> strategyType, Class<T> aggregateType)
+    {
+        STRATEGY_MAP.put(aggregateType, strategyType);
+    }
+
+    public static void setDefaultStrategy(Class<? extends MessageSender>  defaultStrategy)
+    {
+        Objects.requireNonNull(defaultStrategy);
+
+        MessageSenderManager.defaultStrategy = defaultStrategy;
+    }
+
+
+    public static <T>  MessageSender getMessageSender(Class<T> sendingClass, Properties properties)
+    {
+        try
+        {
+            var strategy = MESSAGE_SENDER_MANAGER.getStrategy(sendingClass, properties);
+
+            var result = ClassFactory.newInstanceOf(strategy, new Object[]{properties});
+            if (result.isEmpty()) //Try default constructor
             {
-                return strategy.get();
+                result = ClassFactory.newInstanceOf(strategy);
             }
 
-            return ClassFactory.newInstanceOf(defaultStrategy).orElseThrow();
+            return result.orElseThrow();
         }
         catch (ReflectiveOperationException e)
         {
@@ -42,19 +93,4 @@ public final class MessageSenderManager
             throw new IllegalArgumentException("No suitable default IRepository available", e);
         }
     }
-
-    public static void setDefaultStrategy(Class<? extends MessageSender>  defaultStrategy)
-    {
-        Objects.requireNonNull(defaultStrategy);
-
-        MessageSenderManager.defaultStrategy = defaultStrategy;
-    }
-
-    public static Class<? extends MessageSender> getDefaultStrategy()
-    {
-        return defaultStrategy;
-    }
-
-
-    public static MessageSender getMessageSender(Properties properties) { return MESSAGE_SENDER_MANAGER.getStrategy(properties); }
 }
