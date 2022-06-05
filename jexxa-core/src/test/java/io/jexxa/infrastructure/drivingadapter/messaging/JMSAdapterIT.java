@@ -96,7 +96,7 @@ class JMSAdapterIT
         //Arrange
         var messageListener = new TopicListener();
 
-        JexxaMain jexxaMain = new JexxaMain("JMSAdapterTest", properties);
+        JexxaMain jexxaMain = new JexxaMain(JMSAdapterIT.class, properties);
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
@@ -122,7 +122,7 @@ class JMSAdapterIT
         var properties = new Properties();
         properties.load(getClass().getResourceAsStream("/jexxa-secrets.properties"));
 
-        JexxaMain jexxaMain = new JexxaMain("JMSAdapterTest", properties);
+        JexxaMain jexxaMain = new JexxaMain(JMSAdapterIT.class, properties);
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)

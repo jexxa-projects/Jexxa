@@ -62,14 +62,8 @@ public final class JexxaMain
      */
     public JexxaMain(Class<?> context)
     {
-        this(context.getSimpleName(), System.getProperties());
+        this(context, System.getProperties());
     }
-    public JexxaMain(Class<?> context, Properties properties)
-    {
-        this(context.getSimpleName(), properties);
-    }
-
-
     /**
      * Creates the JexxaMain instance for your application with given context name.
      *
@@ -77,17 +71,17 @@ public final class JexxaMain
      * properties are extended by the given properties object. So if you define the same properties in
      * jexxa-application.properties and the given properties object, the one from properties object is used.
      *
-     * @param contextName Name of the BoundedContext. Typically, you should use the name of your application.
+     * @param context Type of the BoundedContext. Typically, you should use the name of your application.
      * @param applicationProperties Properties that are defined by your application.
      */
-    public JexxaMain(String contextName, Properties applicationProperties)
+    public JexxaMain(Class<?> context, Properties applicationProperties)
     {
         Objects.requireNonNull(applicationProperties);
-        Objects.requireNonNull(contextName);
+        Objects.requireNonNull(context);
 
         // Handle properties in following forder:
         // 0. Add default JEXXA_CONTEXT_MAIN
-        this.properties.put(JexxaCoreProperties.JEXXA_CONTEXT_NAME, contextName);
+        this.properties.put(JexxaCoreProperties.JEXXA_CONTEXT_NAME, context.getSimpleName());
 
         // 1. Load properties from application.properties because they have the lowest priority
         loadJexxaApplicationProperties(this.properties);
@@ -102,6 +96,7 @@ public final class JexxaMain
         }
 
         this.addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
+        this.addDDDPackages(context);
 
         //Create BoundedContext
         this.boundedContext = new BoundedContext(this.properties.getProperty(JexxaCoreProperties.JEXXA_CONTEXT_NAME), this);
