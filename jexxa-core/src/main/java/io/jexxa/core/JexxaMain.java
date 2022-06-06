@@ -13,6 +13,10 @@ import io.jexxa.utils.function.ThrowingConsumer;
 import io.jexxa.utils.properties.JexxaCoreProperties;
 import org.slf4j.Logger;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -331,12 +335,24 @@ public final class JexxaMain
 
     public void importProperties(String resource)
     {
-        Optional.ofNullable(JexxaMain.class.getResourceAsStream(resource))
-                .ifPresentOrElse(
-                        ThrowingConsumer.exceptionLogger(properties::load),
-                        () -> {throw new IllegalArgumentException("Properties file " + resource + " not available. Please check the filename!");}
-                );
-
+        //1. try to import properties as Resource from inside the jar
+        try (InputStream resourceStream = JexxaMain.class.getResourceAsStream(resource))
+        {
+            if (resourceStream != null)
+            {
+                properties.load(resourceStream);
+            } else {
+                throw new FileNotFoundException(resource);
+            }
+        } catch ( IOException e) {
+            //2. try to import properties from outside the jar
+            try (FileInputStream file = new FileInputStream(resource) )
+            {
+                properties.load(file);
+            } catch ( IOException f) {
+                throw new IllegalArgumentException("Properties file " + resource + " not available. Please check the filename!");
+            }
+        }
     }
 
     @CheckReturnValue
