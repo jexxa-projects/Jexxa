@@ -23,7 +23,7 @@ public final class ObjectStoreManager
     private static final Map<Class<?> , Class<?>> STRATEGY_MAP = new HashMap<>();
     private static Class<?> defaultStrategy = null;
 
-    public static Class<?> getDefaultRepository(Properties properties)
+    public static Class<?> getDefaultObjectStore(Properties properties)
     {
         return REPOSITORY_MANAGER.getStrategy(null, properties);
     }
