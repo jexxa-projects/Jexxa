@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.core.JexxaMain.JEXXA_APPLICATION_PROPERTIES;
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

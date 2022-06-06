@@ -43,9 +43,6 @@ public final class JexxaMain
     private static final String DOMAIN_PROCESS_SERVICE = ".domainprocessservice";
     private static final String APPLICATION_SERVICE = ".applicationservice";
 
-
-    public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
-
     private static final Logger LOGGER = JexxaLogger.getLogger(JexxaMain.class);
 
     private final CompositeDrivingAdapter compositeDrivingAdapter = new CompositeDrivingAdapter();

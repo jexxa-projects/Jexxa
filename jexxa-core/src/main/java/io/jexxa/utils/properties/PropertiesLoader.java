@@ -14,9 +14,9 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-public class PropertiesLoader {
-    private static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
 
+public class PropertiesLoader {
     private final Class<?> context;
     Properties properties = new Properties();
     private final List<String> propertiesFiles = new ArrayList<>();
@@ -58,7 +58,7 @@ public class PropertiesLoader {
                         () -> JexxaLogger.getLogger(PropertiesLoader.class).warn("NO PROPERTIES FILE FOUND {}", JEXXA_APPLICATION_PROPERTIES)
                 );
 
-        propertiesFiles.add(PropertiesLoader.JEXXA_APPLICATION_PROPERTIES);
+        propertiesFiles.add(JEXXA_APPLICATION_PROPERTIES);
     }
 
 

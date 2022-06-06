@@ -8,6 +8,8 @@ public final class JexxaCoreProperties
     public static final String JEXXA_CONTEXT_REPOSITORY = "io.jexxa.context.repository";
     public static final String JEXXA_CONTEXT_BUILD_TIMESTAMP = "io.jexxa.context.build.timestamp";
 
+    public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
+
     private JexxaCoreProperties()
     {
         //Private constructor
