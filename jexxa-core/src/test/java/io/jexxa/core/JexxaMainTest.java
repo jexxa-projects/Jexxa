@@ -70,7 +70,7 @@ class JexxaMainTest
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
                 .bind(ProxyAdapter.class).to(SimpleApplicationService.class)
-
+                .disableBanner()
                 .start();
 
         //Assert
@@ -91,6 +91,7 @@ class JexxaMainTest
         //Act: Conditional bind (evaluating to false) a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
                 .conditionalBind(() -> false, ProxyAdapter.class).to(SimpleApplicationService.class)
+                .disableBanner()
                 .start();
 
         //Assert that no binding has been performed
@@ -109,6 +110,7 @@ class JexxaMainTest
         objectUnderTest
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .bind(ProxyAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
+                .disableBanner()
                 .start();
 
 
@@ -131,6 +133,7 @@ class JexxaMainTest
         //Act: Bind all DrivingAdapter to all ApplicationServices
         objectUnderTest
                 .bind(ProxyAdapter.class).toAnnotation(ApplicationService.class)
+                .disableBanner()
                 .start();
 
         //Assert
