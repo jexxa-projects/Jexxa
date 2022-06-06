@@ -4,6 +4,8 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb.IMDBObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.jdbc.JDBCObjectStore;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
+import io.jexxa.utils.JexxaBanner;
+import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.factory.ClassFactory;
 
@@ -85,7 +87,7 @@ public final class ObjectStoreManager
 
     private ObjectStoreManager()
     {
-        //Package protected constructor
+        JexxaBanner.addBanner(this::bannerInformation);
     }
 
     private <T> Class<?> getStrategy(Class<T> aggregateClazz, Properties properties)
@@ -119,4 +121,8 @@ public final class ObjectStoreManager
         return IMDBObjectStore.class;
     }
 
+    public void bannerInformation(Properties properties)
+    {
+        JexxaLogger.getLogger(JexxaBanner.class).info("Used ObjectStore Strategie     : {}",getDefaultObjectStore(properties).getSimpleName());
+    }
 }

@@ -3,6 +3,8 @@ package io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
+import io.jexxa.utils.JexxaBanner;
+import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.factory.ClassFactory;
 import io.jexxa.utils.properties.JexxaJDBCProperties;
@@ -79,7 +81,7 @@ public final class RepositoryManager
 
     private RepositoryManager()
     {
-        //Package protected constructor
+        JexxaBanner.addBanner(this::bannerInformation);
     }
 
     @SuppressWarnings("DuplicatedCode")
@@ -112,6 +114,11 @@ public final class RepositoryManager
 
         // 4. If everything fails, return a IMDBRepository
         return IMDBRepository.class;
+    }
+
+    public void bannerInformation(Properties properties)
+    {
+        JexxaLogger.getLogger(JexxaBanner.class).info("Used Repository Strategie      : {}",getDefaultRepository(properties).getSimpleName());
     }
 
 }

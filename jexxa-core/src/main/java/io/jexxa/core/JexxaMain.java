@@ -6,6 +6,7 @@ import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
+import io.jexxa.utils.JexxaBanner;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.function.ThrowingConsumer;
@@ -13,6 +14,7 @@ import io.jexxa.utils.properties.JexxaCoreProperties;
 import org.slf4j.Logger;
 
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +24,8 @@ import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static io.jexxa.utils.JexxaBanner.addBanner;
 
 /**
  * JexxaMain is the main entry point for your application to use Jexxa. Within each application only a single instance
@@ -52,6 +56,8 @@ public final class JexxaMain
     private final PortFactory portFactory               = new PortFactory(drivenAdapterFactory);
 
     private final BoundedContext boundedContext;
+
+    private boolean enableBanner = true;
 
     /**
      * Creates the JexxaMain instance for your application with given context name.
@@ -105,6 +111,7 @@ public final class JexxaMain
         this.boundedContext = new BoundedContext(this.properties.getProperty(JexxaCoreProperties.JEXXA_CONTEXT_NAME), this);
 
         setExceptionHandler();
+        addBanner(this::printStartupInfo);
     }
 
     /**
@@ -250,6 +257,12 @@ public final class JexxaMain
         return drivingAdapterFactory.getInstanceOf(adapter, getProperties());
     }
 
+    public JexxaMain disableBanner()
+    {
+        enableBanner = false;
+        return this;
+    }
+
     /**
      * This convenience method invokes the three main control methods
      *  start() -> waitForShutdown() -> stop
@@ -270,7 +283,10 @@ public final class JexxaMain
             return this;
         }
 
-        printStartupInfo();
+        if (enableBanner)
+        {
+            JexxaBanner.show(getProperties());
+        }
 
         compositeDrivingAdapter.start();
         boundedContext.start();
@@ -281,12 +297,12 @@ public final class JexxaMain
     }
 
     @SuppressWarnings("java:S2629")
-    void printStartupInfo()
+    void printStartupInfo(Properties properties)
     {
-        LOGGER.info( "Jexxa Version   : {}", getBoundedContext().jexxaVersion() );
-        LOGGER.info( "Context Version : {}", getBoundedContext().contextVersion() );
+        JexxaLogger.getLogger(JexxaBanner.class).info( "Jexxa Version                  : {}", getBoundedContext().jexxaVersion() );
+        JexxaLogger.getLogger(JexxaBanner.class).info( "Context Version                : {}", getBoundedContext().contextVersion() );
 
-        LOGGER.info("Start BoundedContext '{}' with {} Driving Adapter ", getBoundedContext().contextName(), compositeDrivingAdapter.size());
+        JexxaLogger.getLogger(JexxaBanner.class).info( "Used Driving Adapter           : {}", Arrays.toString(compositeDrivingAdapter.adapterNames().toArray()));
     }
 
     @SuppressWarnings("java:S2629")
@@ -473,6 +489,10 @@ public final class JexxaMain
         public int size()
         {
             return drivingAdapters.size();
+        }
+        public List<String> adapterNames()
+        {
+            return drivingAdapters.stream().map( element -> element.getClass().getSimpleName()).toList();
         }
     }
 

@@ -2,6 +2,8 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger;
+import io.jexxa.utils.JexxaBanner;
+import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.factory.ClassFactory;
 
@@ -11,6 +13,7 @@ import java.util.Objects;
 import java.util.Properties;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender.JNDI_FACTORY_KEY;
+import static io.jexxa.utils.JexxaBanner.addBanner;
 
 public final class MessageSenderManager
 {
@@ -21,7 +24,7 @@ public final class MessageSenderManager
 
     private MessageSenderManager()
     {
-        //Private constructor
+        addBanner(this::bannerInformation);
     }
 
     @CheckReturnValue
@@ -98,5 +101,10 @@ public final class MessageSenderManager
 
             throw new IllegalArgumentException("No suitable default IRepository available", e);
         }
+    }
+
+    public void bannerInformation(Properties properties)
+    {
+        JexxaLogger.getLogger(JexxaBanner.class).info("Used Message Sender Strategie  : {}",getDefaultMessageSender(properties).getSimpleName());
     }
 }
