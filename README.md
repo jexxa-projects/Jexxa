@@ -35,7 +35,6 @@ In addition, Jexxa offers following production-proven features:
 
 *   Related Projects
     *   [Addend - Annotations for Domain Driven Design](https://github.com/jexxa-projects/Addend)
-    *   [AddendJ - Crosscutting Concerns for Domain Driven Design](https://github.com/jexxa-projects/Addendj)
 ## Built With
 
 Apart from some other great open source libraries, Jexxa mainly utilises the following libraries and frameworks:
@@ -86,10 +85,10 @@ public final class HelloJexxa
 
         jexxaMain
                 // Bind a REST adapter to class HelloJexxa to expose its methods
-                // - To get greetings open: http://localhost:7500/HelloJexxa/greetings
+                // To get greetings open: http://localhost:7500/HelloJexxa/greetings
                 .bind(RESTfulRPCAdapter.class).to(HelloJexxa.class)
 
-                //Run Jexxa and all bindings
+                // Run Jexxa and all bindings until Ctrl-C is pressed
                 .run();
     }
 }
