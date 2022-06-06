@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -62,6 +63,8 @@ public final class JexxaMain
     private final BoundedContext boundedContext;
 
     private boolean enableBanner = true;
+
+    private final List<String> propertiesFiles = new ArrayList<>();
 
     /**
      * Creates the JexxaMain instance for your application with given context name.
@@ -307,6 +310,7 @@ public final class JexxaMain
         JexxaLogger.getLogger(JexxaBanner.class).info( "Context Version                : {}", getBoundedContext().contextVersion() );
 
         JexxaLogger.getLogger(JexxaBanner.class).info( "Used Driving Adapter           : {}", Arrays.toString(compositeDrivingAdapter.adapterNames().toArray()));
+        JexxaLogger.getLogger(JexxaBanner.class).info( "Used Properties Files          : {}", Arrays.toString(propertiesFiles.toArray()));
     }
 
     @SuppressWarnings("java:S2629")
@@ -353,6 +357,7 @@ public final class JexxaMain
                 throw new IllegalArgumentException("Properties file " + resource + " not available. Please check the filename!");
             }
         }
+        propertiesFiles.add(resource);
     }
 
     @CheckReturnValue
@@ -446,6 +451,7 @@ public final class JexxaMain
                         () -> LOGGER.warn("NO PROPERTIES FILE FOUND {}", JEXXA_APPLICATION_PROPERTIES)
                 );
 
+        propertiesFiles.add(JEXXA_APPLICATION_PROPERTIES);
     }
 
     private void setExceptionHandler()

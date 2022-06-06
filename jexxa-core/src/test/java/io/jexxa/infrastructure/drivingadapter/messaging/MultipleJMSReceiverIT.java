@@ -51,7 +51,8 @@ class MultipleJMSReceiverIT
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
+                .addToInfrastructure("io.jexxa.infrastructure.drivingadapter")
+                .disableBanner();
         incrementApplicationService = jexxaMain.getInstanceOfPort(IncrementApplicationService.class);
 
         for ( int i = 0; i < MAX_THREADS; ++i)
