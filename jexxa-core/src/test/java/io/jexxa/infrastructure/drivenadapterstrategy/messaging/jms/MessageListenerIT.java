@@ -53,6 +53,7 @@ class MessageListenerIT
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .bind(JMSAdapter.class).to(typedListener)
                 .bind(JMSAdapter.class).to(jsonMessageListener)
+                .disableBanner()
                 .start();
     }
 

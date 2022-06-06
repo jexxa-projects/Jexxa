@@ -55,6 +55,7 @@ class JMSSenderIT
         objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
+                .disableBanner()
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .bind(JMSAdapter.class).to(queueListener)
                 .bind(JMSAdapter.class).to(topicListener)
