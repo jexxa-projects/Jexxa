@@ -21,6 +21,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * JexxaMain is the main entry point for your application to use Jexxa. Within each application only a single instance
@@ -94,6 +95,8 @@ public final class JexxaMain
         {
             importProperties(this.properties.getProperty(JexxaCoreProperties.JEXXA_CONFIG_IMPORT));
         }
+
+        removeEmptyValues();
 
         this.addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
         this.addDDDPackages(context);
@@ -510,5 +513,16 @@ public final class JexxaMain
 
                 return stringBuilder.toString();
             }
+        }
+
+        private void removeEmptyValues()
+        {
+            var filteredMap = this.properties.entrySet()
+                    .stream()
+                    .filter( entry -> (entry.getValue() != null && !entry.getValue().toString().isEmpty()))
+                    .collect(Collectors.toMap( entry -> (String) entry.getKey(), entry -> (String) entry.getValue()));
+
+            this.properties.clear();
+            this.properties.putAll(filteredMap);
         }
 }
