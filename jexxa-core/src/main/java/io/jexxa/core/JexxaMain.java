@@ -11,24 +11,18 @@ import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.function.ThrowingConsumer;
 import io.jexxa.utils.properties.JexxaCoreProperties;
+import io.jexxa.utils.properties.PropertiesLoader;
 import org.slf4j.Logger;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static io.jexxa.utils.JexxaBanner.addBanner;
 
@@ -55,16 +49,16 @@ public final class JexxaMain
     private static final Logger LOGGER = JexxaLogger.getLogger(JexxaMain.class);
 
     private final CompositeDrivingAdapter compositeDrivingAdapter = new CompositeDrivingAdapter();
-    private final Properties properties                 = new Properties();
+    private final Properties properties;
     private final AdapterFactory drivingAdapterFactory  = new AdapterFactory();
     private final AdapterFactory drivenAdapterFactory   = new AdapterFactory();
     private final PortFactory portFactory               = new PortFactory(drivenAdapterFactory);
 
     private final BoundedContext boundedContext;
 
-    private boolean enableBanner = true;
+    private final PropertiesLoader propertiesLoader;
 
-    private final List<String> propertiesFiles = new ArrayList<>();
+    private boolean enableBanner = true;
 
     /**
      * Creates the JexxaMain instance for your application with given context name.
@@ -95,21 +89,9 @@ public final class JexxaMain
 
         // Handle properties in following forder:
         // 0. Add default JEXXA_CONTEXT_MAIN
+        this.propertiesLoader = new PropertiesLoader(context);
+        this.properties = propertiesLoader.createJexxaProperties(applicationProperties);
         this.properties.put(JexxaCoreProperties.JEXXA_CONTEXT_NAME, context.getSimpleName());
-
-        // 1. Load properties from application.properties because they have the lowest priority
-        loadJexxaApplicationProperties(this.properties);
-        // 2. Use System properties because they have mid-priority
-        this.properties.putAll( System.getProperties() );  //add/overwrite system properties
-        // 3. Use given properties because they have the highest priority
-        this.properties.putAll( applicationProperties );  //add/overwrite given properties
-        // 4. import properties that are defined by '"io.jexxa.config.import"'
-        if( this.properties.containsKey(JexxaCoreProperties.JEXXA_CONFIG_IMPORT) )
-        {
-            importProperties(this.properties.getProperty(JexxaCoreProperties.JEXXA_CONFIG_IMPORT));
-        }
-
-        removeEmptyValues();
 
         this.addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
         this.addDDDPackages(context);
@@ -310,7 +292,7 @@ public final class JexxaMain
         JexxaLogger.getLogger(JexxaBanner.class).info( "Context Version                : {}", getBoundedContext().contextVersion() );
 
         JexxaLogger.getLogger(JexxaBanner.class).info( "Used Driving Adapter           : {}", Arrays.toString(compositeDrivingAdapter.adapterNames().toArray()));
-        JexxaLogger.getLogger(JexxaBanner.class).info( "Used Properties Files          : {}", Arrays.toString(propertiesFiles.toArray()));
+        JexxaLogger.getLogger(JexxaBanner.class).info( "Used Properties Files          : {}", Arrays.toString(propertiesLoader.getPropertiesFiles().toArray()));
     }
 
     @SuppressWarnings("java:S2629")
@@ -337,28 +319,6 @@ public final class JexxaMain
         return getBoundedContext().waitForShutdown();
     }
 
-    public void importProperties(String resource)
-    {
-        //1. try to import properties as Resource from inside the jar
-        try (InputStream resourceStream = JexxaMain.class.getResourceAsStream(resource))
-        {
-            if (resourceStream != null)
-            {
-                properties.load(resourceStream);
-            } else {
-                throw new FileNotFoundException(resource);
-            }
-        } catch ( IOException e) {
-            //2. try to import properties from outside the jar
-            try (FileInputStream file = new FileInputStream(resource) )
-            {
-                properties.load(file);
-            } catch ( IOException f) {
-                throw new IllegalArgumentException("Properties file " + resource + " not available. Please check the filename!");
-            }
-        }
-        propertiesFiles.add(resource);
-    }
 
     @CheckReturnValue
     public BoundedContext getBoundedContext()
@@ -440,18 +400,6 @@ public final class JexxaMain
     private <T> T getInstanceOfOutboundPort(Class<T> port)
     {
         return drivenAdapterFactory.getInstanceOf(port, properties);
-    }
-
-
-    private void loadJexxaApplicationProperties(Properties properties)
-    {
-        Optional.ofNullable(JexxaMain.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES))
-                .ifPresentOrElse(
-                        ThrowingConsumer.exceptionLogger(properties::load),
-                        () -> LOGGER.warn("NO PROPERTIES FILE FOUND {}", JEXXA_APPLICATION_PROPERTIES)
-                );
-
-        propertiesFiles.add(JEXXA_APPLICATION_PROPERTIES);
     }
 
     private void setExceptionHandler()
@@ -557,14 +505,4 @@ public final class JexxaMain
             }
         }
 
-        private void removeEmptyValues()
-        {
-            var filteredMap = this.properties.entrySet()
-                    .stream()
-                    .filter( entry -> (entry.getValue() != null && !entry.getValue().toString().isEmpty()))
-                    .collect(Collectors.toMap( entry -> (String) entry.getKey(), entry -> (String) entry.getValue()));
-
-            this.properties.clear();
-            this.properties.putAll(filteredMap);
-        }
 }
