@@ -37,6 +37,11 @@ public final class RepositoryManager
     {
         RepositoryManager.defaultStrategy = defaultStrategy;
     }
+    public static Class<?> getDefaultRepository(Properties properties)
+    {
+        return REPOSITORY_MANAGER.getStrategy(null, properties);
+    }
+
 
     @SuppressWarnings("unchecked")
     @CheckReturnValue

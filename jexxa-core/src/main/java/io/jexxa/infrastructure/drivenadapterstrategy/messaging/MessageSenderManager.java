@@ -55,6 +55,12 @@ public final class MessageSenderManager
         // 4. If everything fails, return a IMDBRepository
         return MessageLogger.class;
     }
+
+    public static Class<?> getDefaultMessageSender(Properties properties)
+    {
+        return getMessageSender(null, properties).getClass();
+    }
+
     @SuppressWarnings("unused")
     public static <U extends MessageSender, T > void setStrategy(Class<U> strategyType, Class<T> aggregateType)
     {

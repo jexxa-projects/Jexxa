@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[5.0.0] - 2022-MM-YY
 ### Changed
 - From now only Java versions >=17 are supported
+- TODO: Streamlined main 
+- TODO: unified Strategy managers 
+- TODO: Properties handling 
 
 ### Added
 - Jexxa-Core:

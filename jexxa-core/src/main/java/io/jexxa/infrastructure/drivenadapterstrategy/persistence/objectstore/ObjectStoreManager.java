@@ -23,6 +23,10 @@ public final class ObjectStoreManager
     private static final Map<Class<?> , Class<?>> STRATEGY_MAP = new HashMap<>();
     private static Class<?> defaultStrategy = null;
 
+    public static Class<?> getDefaultRepository(Properties properties)
+    {
+        return REPOSITORY_MANAGER.getStrategy(null, properties);
+    }
 
     public static  <T,K,M  extends Enum<?> & MetadataSchema> IObjectStore<T,K, M> getObjectStore(
             Class<T> aggregateClazz,
