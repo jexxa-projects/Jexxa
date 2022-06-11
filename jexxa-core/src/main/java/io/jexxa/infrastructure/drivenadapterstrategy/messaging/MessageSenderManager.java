@@ -14,6 +14,8 @@ import java.util.Properties;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender.JNDI_FACTORY_KEY;
 import static io.jexxa.utils.JexxaBanner.addBanner;
+import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_SIMULATE;
+import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_STRATEGY;
 
 public final class MessageSenderManager
 {
@@ -49,13 +51,25 @@ public final class MessageSenderManager
             return defaultStrategy;
         }
 
-        // 3. If a JDBC driver is stated in Properties => Use JDBCKeyValueRepository
-        if (properties.containsKey(JNDI_FACTORY_KEY))
+        // 3. Check explicit configuration
+        if (properties.containsKey(JEXXA_JMS_STRATEGY))
+        {
+            try {
+                return (Class<? extends MessageSender>) Class.forName(properties.getProperty(JEXXA_JMS_STRATEGY));
+            } catch (ClassNotFoundException e)
+            {
+                JexxaLogger.getLogger(MessageSenderManager.class).warn("Unknown or invalid message sender {} -> Ignore setting", properties.getProperty(JEXXA_JMS_STRATEGY));
+                JexxaLogger.getLogger(MessageSenderManager.class).warn(String.valueOf(e));
+            }
+        }
+
+        // 4. If a JDBC driver is stated in Properties => Use JDBCKeyValueRepository
+        if (properties.containsKey(JNDI_FACTORY_KEY) && !properties.containsKey(JEXXA_JMS_SIMULATE))
         {
             return JMSSender.class;
         }
 
-        // 4. If everything fails, return a IMDBRepository
+        // 5. If everything fails, return a IMDBRepository
         return MessageLogger.class;
     }
 
@@ -105,6 +119,6 @@ public final class MessageSenderManager
 
     public void bannerInformation(Properties properties)
     {
-        JexxaLogger.getLogger(JexxaBanner.class).info("Used Message Sender Strategie  : {}",getDefaultMessageSender(properties).getSimpleName());
+        JexxaLogger.getLogger(JexxaBanner.class).info("Used Message Sender Strategie  : [{}]", getDefaultMessageSender(properties).getSimpleName());
     }
 }

@@ -27,6 +27,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_SIMULATE;
 
 public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 {
@@ -37,7 +38,6 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     public static final String JNDI_PASSWORD_FILE = "java.naming.file.password";
     public static final String JNDI_USER_FILE = "java.naming.file.user";
 
-
     public static final String DEFAULT_JNDI_PROVIDER_URL = "tcp://localhost:61616";
     public static final String DEFAULT_JNDI_FACTORY = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 
@@ -47,10 +47,12 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     private final List<Object> registeredListener = new ArrayList<>();
     private final JMSConnectionExceptionHandler jmsConnectionExceptionHandler;
 
+    private final boolean simulateJMS;
     private final Properties properties;
 
     public JMSAdapter(final Properties properties)
     {
+        simulateJMS = properties.containsKey(JEXXA_JMS_SIMULATE);
         Objects.requireNonNull(properties);
         validateProperties(properties);
 
@@ -72,8 +74,10 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     {
         try
         {
-            jmsConnectionExceptionHandler.setListener(registeredListener);
-            connection.start();
+            if (!simulateJMS) {
+                jmsConnectionExceptionHandler.setListener(registeredListener);
+                connection.start();
+            }
         }
         catch (JMSException e)
         {
@@ -95,29 +99,29 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     @Override
     public void register(Object object)
     {
-        try
-        {
-            var messageListener = (MessageListener) (object);
-            var jmsConfiguration = getConfiguration(object);
+        if (!simulateJMS) {
+            try {
+                var messageListener = (MessageListener) (object);
+                var jmsConfiguration = getConfiguration(object);
 
-            Destination destination = createDestination(session,jmsConfiguration);
-            MessageConsumer consumer = createMessageConsumer(session, destination, jmsConfiguration);
+                Destination destination = createDestination(session, jmsConfiguration);
+                MessageConsumer consumer = createMessageConsumer(session, destination, jmsConfiguration);
 
-            var invocationHandler = InvocationManager.getInvocationHandler(messageListener);
-            consumer.setMessageListener( message -> invocationHandler.invoke(messageListener, messageListener::onMessage, message)) ;
+                var invocationHandler = InvocationManager.getInvocationHandler(messageListener);
+                consumer.setMessageListener(message -> invocationHandler.invoke(messageListener, messageListener::onMessage, message));
 
-            consumerList.add(consumer);
-            registeredListener.add(object);
-        }
-        catch (JMSException e)
-        {
-            throw new IllegalStateException(
-                    "Registration of of Driving Adapter " + object.getClass().getName() + " failed. Please check the JMSConfiguration.\n"  +
-                            " Error message from JMS subsystem: " + e.getMessage()
-                    , e
-            );
+                consumerList.add(consumer);
+                registeredListener.add(object);
+            } catch (JMSException e) {
+                throw new IllegalStateException(
+                        "Registration of of Driving Adapter " + object.getClass().getName() + " failed. Please check the JMSConfiguration.\n" +
+                                " Error message from JMS subsystem: " + e.getMessage()
+                        , e
+                );
+            }
         }
     }
+
 
     private Destination createDestination(Session session, JMSConfiguration jmsConfiguration) throws JMSException {
         if (jmsConfiguration.messagingType() == JMSConfiguration.MessagingType.TOPIC)
@@ -199,22 +203,28 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
     private void initConnection() throws JMSException
     {
-        connection = createConnection(properties);
-        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        if (!simulateJMS) {
+            connection = createConnection(properties);
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-        // NOTE: The exception handler is created after the session is successfully created
-        connection.setExceptionListener(exception -> {
-            JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage());
-            jmsConnectionExceptionHandler.stopFailover();
-            jmsConnectionExceptionHandler.startFailover();
-        });
+            // NOTE: The exception handler is created after the session is successfully created
+            connection.setExceptionListener(exception -> {
+                JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage());
+                jmsConnectionExceptionHandler.stopFailover();
+                jmsConnectionExceptionHandler.startFailover();
+            });
+        } else {
+            JexxaLogger.getLogger(JMSAdapter.class).warn("JMSAdapter is running in simulation mode -> No messages will be received");
+        }
 
     }
 
     private void validateProperties(Properties properties)
     {
-        Validate.isTrue(properties.containsKey(JNDI_PROVIDER_URL_KEY), "Property + " + JNDI_PROVIDER_URL_KEY + " is missing ");
-        Validate.isTrue(properties.containsKey(JNDI_FACTORY_KEY), "Property + " + JNDI_FACTORY_KEY + " is missing ");
+        if (!simulateJMS) {
+            Validate.isTrue(properties.containsKey(JNDI_PROVIDER_URL_KEY), "Property + " + JNDI_PROVIDER_URL_KEY + " is missing ");
+            Validate.isTrue(properties.containsKey(JNDI_FACTORY_KEY), "Property + " + JNDI_FACTORY_KEY + " is missing ");
+        }
     }
 
     /**
