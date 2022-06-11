@@ -101,6 +101,7 @@ class JMSAdapterIT
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .bind(JMSAdapter.class).to(messageListener)
+                .disableBanner()
                 .start();
 
         ITMessageSender myProducer = new ITMessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
@@ -127,6 +128,7 @@ class JMSAdapterIT
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .bind(JMSAdapter.class).to(messageListener)
+                .disableBanner()
                 .start();
 
         ITMessageSender myProducer = new ITMessageSender(jexxaMain.getProperties(), TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);

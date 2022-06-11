@@ -30,7 +30,9 @@ class BoundedContextTest
     @BeforeEach
     void init()
     {
-        objectUnderTest = jexxaMain.getBoundedContext();
+        objectUnderTest = jexxaMain
+                .disableBanner()
+                .getBoundedContext();
     }
 
     @Test
