@@ -99,26 +99,28 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     @Override
     public void register(Object object)
     {
-        if (!simulateJMS) {
-            try {
-                var messageListener = (MessageListener) (object);
-                var jmsConfiguration = getConfiguration(object);
+        if (simulateJMS) {
+            return;
+        }
 
-                Destination destination = createDestination(session, jmsConfiguration);
-                MessageConsumer consumer = createMessageConsumer(session, destination, jmsConfiguration);
+        try {
+            var messageListener = (MessageListener) (object);
+            var jmsConfiguration = getConfiguration(object);
 
-                var invocationHandler = InvocationManager.getInvocationHandler(messageListener);
-                consumer.setMessageListener(message -> invocationHandler.invoke(messageListener, messageListener::onMessage, message));
+            Destination destination = createDestination(session, jmsConfiguration);
+            MessageConsumer consumer = createMessageConsumer(session, destination, jmsConfiguration);
 
-                consumerList.add(consumer);
-                registeredListener.add(object);
-            } catch (JMSException e) {
-                throw new IllegalStateException(
-                        "Registration of of Driving Adapter " + object.getClass().getName() + " failed. Please check the JMSConfiguration.\n" +
-                                " Error message from JMS subsystem: " + e.getMessage()
-                        , e
-                );
-            }
+            var invocationHandler = InvocationManager.getInvocationHandler(messageListener);
+            consumer.setMessageListener(message -> invocationHandler.invoke(messageListener, messageListener::onMessage, message));
+
+            consumerList.add(consumer);
+            registeredListener.add(object);
+        } catch (JMSException e) {
+            throw new IllegalStateException(
+                    "Registration of of Driving Adapter " + object.getClass().getName() + " failed. Please check the JMSConfiguration.\n" +
+                            " Error message from JMS subsystem: " + e.getMessage()
+                    , e
+            );
         }
     }
 
@@ -203,28 +205,32 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
     private void initConnection() throws JMSException
     {
-        if (!simulateJMS) {
-            connection = createConnection(properties);
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
-            // NOTE: The exception handler is created after the session is successfully created
-            connection.setExceptionListener(exception -> {
-                JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage());
-                jmsConnectionExceptionHandler.stopFailover();
-                jmsConnectionExceptionHandler.startFailover();
-            });
-        } else {
+        if (simulateJMS)
+        {
             JexxaLogger.getLogger(JMSAdapter.class).warn("JMSAdapter is running in simulation mode -> No messages will be received");
+            return;
         }
 
+        connection = createConnection(properties);
+        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+        // NOTE: The exception handler is created after the session is successfully created
+        connection.setExceptionListener(exception -> {
+            JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage());
+            jmsConnectionExceptionHandler.stopFailover();
+            jmsConnectionExceptionHandler.startFailover();
+        });
     }
 
     private void validateProperties(Properties properties)
     {
-        if (!simulateJMS) {
-            Validate.isTrue(properties.containsKey(JNDI_PROVIDER_URL_KEY), "Property + " + JNDI_PROVIDER_URL_KEY + " is missing ");
-            Validate.isTrue(properties.containsKey(JNDI_FACTORY_KEY), "Property + " + JNDI_FACTORY_KEY + " is missing ");
+        if (simulateJMS)
+        {
+            return;
         }
+
+        Validate.isTrue(properties.containsKey(JNDI_PROVIDER_URL_KEY), "Property + " + JNDI_PROVIDER_URL_KEY + " is missing ");
+        Validate.isTrue(properties.containsKey(JNDI_FACTORY_KEY), "Property + " + JNDI_FACTORY_KEY + " is missing ");
     }
 
     /**
