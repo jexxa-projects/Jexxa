@@ -6,22 +6,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[5.0.0] - 2022-MM-YY
 ### Changed - Important Information!
+- With this major release Jexxa supports only Java versions >=17.
+- See [JexxaTemplate](https://github.com/jexxa-projects/JexxaTemplate) or [JexxaTutorials](https://github.com/jexxa-projects/JexxaTutorials) for examples.
+
 - Jexxa-Core:
-  - With this major release Jexxa supports only Java versions >=17. 
   - Removed all deprecated methods: Constructor `JexxaMain(String contextName, Properties applicationProperties)` was removed. Instead use  `JexxaMain(Class<?> context, Properties applicationProperties)`
   - Changed getter-API Default for exported classes such as `BoundedContext` so that they do not use prefix `get` as introduced with naming conventions of Java records.
-  - Streamlined main: `addDDDPackages` is invoked by default 
 
-- JMSAdapter:
-    - Unified Strategy managers: This means that you have to query the used interface
+- JexxaMain: 
+  - Streamlined main: Method `addDDDPackages` is invoked by default for the given context. 
+
+- Messaging Strategy:
+    - According to a Repository, you can now define the used messaging strategy for each interface. Therefore, you have to pass the implemented interface to the MessageSenderManager when querying the strategy. 
 
 ### Added
-- Jexxa-Core:
+- Jexxa-Core: 
     - Jexxa includes full support for Java `record` (de-)serialization by default. So no explicit serializer needs to be defined within the infrastructure of your application.
-    - JexxaMain: Added convenience method `run()` that invokes `start()`, `waitUntilShutdown()`, and `stop()`
-    - JexxaMain: Added method `logUnhealthyDiagnostics` to log unhealthy diagnostics for registered Monitors
-  
-### fixed
+    
+- JexxaMain:
+  - Added convenience method `run()` that invokes `start()`, `waitUntilShutdown()`, and `stop()`
+  - Added method `logUnhealthyDiagnostics` to log unhealthy diagnostics for registered Monitors
+
+### Fixed
 - Updated dependencies
 
 ## \[4.1.8] - 2022-05-21
