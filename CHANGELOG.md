@@ -5,30 +5,25 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[5.0.0] - 2022-MM-YY
-### Changed
-- [Jexxa-Core] With this major release Jexxa supports only Java versions >=17. 
+### Changed - Important Information!
+- Jexxa-Core:
+  - With this major release Jexxa supports only Java versions >=17. 
+  - Removed all deprecated methods: Constructor `JexxaMain(String contextName, Properties applicationProperties)` was removed. Instead use  `JexxaMain(Class<?> context, Properties applicationProperties)`
+  - Changed getter-API Default for exported classes such as `BoundedContext` so that they do not use prefix `get` as introduced with naming conventions of Java records.
+  - Streamlined main: `addDDDPackages` is invoked by default 
 
-- [Jexxa-Core] Jexxa includes full support for Java `record` (de-)serialization by default. So no explicit serializer needs to be defined within the infrastructure of your application.
-
-- [Jexxa-Core] Unified Strategy managers: This means that you have to query the used interface 
-   
-- [Jexxa-Core] Removed all deprecated methods
-  - Jexxa-Main constructor JexxaMain(String contextName, Properties applicationProperties) -> removed 
-
-- [Jexxa-Core] Changed getter-API Default for exported classes such as BoundedContext  
-  "Java 14 introduced records feature. Record creates getter with the same name as field, so one would write print(person.name()) for example. But old Java bean convention dictates that one should name this method as getName(). Using both styles in the same code base does not look very nice. Migrating everything to records is not possible, as they are too limited to replace all use-cases."
-  - `BoundedContext`
-
-- [Jexxa-Core] Streamlined main
-  - `addDDDPackages` is invoked by default 
-  - Added convenience method `run` that invokes `start()`, `waitUntilShutdown()`, and `stop()` 
-  - See Tutorials 
-- TODO: Properties handling 
+- JMSAdapter:
+    - Unified Strategy managers: This means that you have to query the used interface
 
 ### Added
 - Jexxa-Core:
-    - Gson (de)serializer for java records
+    - Jexxa includes full support for Java `record` (de-)serialization by default. So no explicit serializer needs to be defined within the infrastructure of your application.
+    - JexxaMain: Added convenience method `run()` that invokes `start()`, `waitUntilShutdown()`, and `stop()`
+    - JexxaMain: Added method `logUnhealthyDiagnostics` to log unhealthy diagnostics for registered Monitors
   
+### fixed
+- Updated dependencies
+
 ## \[4.1.8] - 2022-05-21
 ### Fixed
 - Updated dependencies
