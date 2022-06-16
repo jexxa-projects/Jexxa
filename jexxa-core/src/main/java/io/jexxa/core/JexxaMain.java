@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
@@ -50,6 +53,7 @@ public final class JexxaMain
     private final AdapterFactory drivingAdapterFactory  = new AdapterFactory();
     private final AdapterFactory drivenAdapterFactory   = new AdapterFactory();
     private final PortFactory portFactory               = new PortFactory(drivenAdapterFactory);
+    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     private final BoundedContext boundedContext;
 
@@ -213,6 +217,25 @@ public final class JexxaMain
         return this;
     }
 
+    public JexxaMain logUnhealthyDiagnostics(int period, TimeUnit timeUnit)
+    {
+        executorService.scheduleAtFixedRate(this::logUnhealthyDiagnostics,0, period,timeUnit);
+
+        return this;
+    }
+
+    private void logUnhealthyDiagnostics()
+    {
+        if (getBoundedContext().isRunning() && !getBoundedContext().isHealthy())
+        {
+            getBoundedContext()
+                    .diagnostics()
+                    .stream()
+                    .filter(element -> !element.isHealthy())
+                    .forEach(element -> JexxaLogger.getLogger(JexxaMain.class).error(element.statusMessage()));
+        }
+    }
+
     @CheckReturnValue
     public <T extends IDrivingAdapter> DrivingAdapter<T>  conditionalBind(BooleanSupplier conditional, Class<T> clazz)
     {
@@ -308,6 +331,7 @@ public final class JexxaMain
             compositeDrivingAdapter.stop();
             LOGGER.info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
         }
+        executorService.shutdown();
     }
 
     @SuppressWarnings("UnusedReturnValue")
@@ -501,5 +525,6 @@ public final class JexxaMain
                 return stringBuilder.toString();
             }
         }
+
 
 }
