@@ -6,9 +6,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[5.0.0] - 2022-MM-YY
 ### Changed
-- From now only Java versions >=17 are supported
-- TODO: Streamlined main 
-- TODO: unified Strategy managers 
+- [Jexxa-Core] With this major release Jexxa supports only Java versions >=17. 
+
+- [Jexxa-Core] Jexxa includes full support for Java `record` (de-)serialization by default. So no explicit serializer needs to be defined within the infrastructure of your application.
+
+- [Jexxa-Core] Unified Strategy managers: This means that you have to query the used interface 
+   
+- [Jexxa-Core] Removed all deprecated methods
+  - Jexxa-Main constructor JexxaMain(String contextName, Properties applicationProperties) -> removed 
+
+- [Jexxa-Core] Changed getter-API Default for exported classes such as BoundedContext  
+  "Java 14 introduced records feature. Record creates getter with the same name as field, so one would write print(person.name()) for example. But old Java bean convention dictates that one should name this method as getName(). Using both styles in the same code base does not look very nice. Migrating everything to records is not possible, as they are too limited to replace all use-cases."
+  - `BoundedContext`
+
+- [Jexxa-Core] Streamlined main
+  - `addDDDPackages` is invoked by default 
+  - Added convenience method `run` that invokes `start()`, `waitUntilShutdown()`, and `stop()` 
+  - See Tutorials 
 - TODO: Properties handling 
 
 ### Added

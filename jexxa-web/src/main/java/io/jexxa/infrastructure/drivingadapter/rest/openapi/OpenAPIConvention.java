@@ -285,7 +285,9 @@ public class OpenAPIConvention
             //Handle primitive values
             return createPrimitive(clazz);
         } catch (Exception | NoSuchMethodError e ) {
-            JexxaLogger.getLogger(OpenAPIConvention.class).warn( "[OpenAPI] Could not create an example Object {}" , clazz.getName() );
+            if (!clazz.isRecord()) { // Records include some isolation fields that can not be created and are not meaningful for a template. Therefore, we show this message only given type is not a record
+                JexxaLogger.getLogger(OpenAPIConvention.class).warn("[OpenAPI] Could not create an example Object {}", clazz.getName());
+            }
         }
         return null;
     }

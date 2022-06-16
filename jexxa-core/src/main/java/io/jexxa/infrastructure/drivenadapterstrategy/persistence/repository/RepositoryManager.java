@@ -85,7 +85,7 @@ public final class RepositoryManager
 
     private RepositoryManager()
     {
-        JexxaBanner.addBanner(this::bannerInformation);
+        JexxaBanner.addConfigBanner(this::bannerInformation);
     }
 
     @SuppressWarnings("DuplicatedCode")

@@ -8,18 +8,29 @@ import java.util.function.Consumer;
 public final class JexxaBanner
 {
     private static final JexxaBanner JEXXA_BANNER  = new JexxaBanner();
-    private final List<Consumer<Properties>> banner= new ArrayList<>();
+    private final List<Consumer<Properties>> configBanner = new ArrayList<>();
+    private final List<Consumer<Properties>> accessBanner = new ArrayList<>();
 
 
 
-    public static void addBanner(Consumer<Properties> consumer)
+    public static void addConfigBanner(Consumer<Properties> consumer)
     {
-        JEXXA_BANNER.banner.add(consumer);
+        JEXXA_BANNER.configBanner.add(consumer);
+    }
+
+    public static void addAccessBanner(Consumer<Properties> consumer)
+    {
+        JEXXA_BANNER.accessBanner.add(consumer);
     }
 
     public static void show(Properties properties)
     {
-        JEXXA_BANNER.banner.forEach( element -> element.accept(properties));
+        JexxaLogger.getLogger(JexxaBanner.class).info("Config Information: ");
+        JEXXA_BANNER.configBanner.forEach(element -> element.accept(properties));
+
+        JexxaLogger.getLogger(JexxaBanner.class).info("");
+        JexxaLogger.getLogger(JexxaBanner.class).info("Access Information: ");
+        JEXXA_BANNER.accessBanner.forEach(element -> element.accept(properties));
     }
 
     private JexxaBanner()

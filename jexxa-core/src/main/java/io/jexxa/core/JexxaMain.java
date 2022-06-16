@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
-import static io.jexxa.utils.JexxaBanner.addBanner;
+import static io.jexxa.utils.JexxaBanner.addConfigBanner;
 
 /**
  * JexxaMain is the main entry point for your application to use Jexxa. Within each application only a single instance
@@ -97,7 +97,7 @@ public final class JexxaMain
         this.boundedContext = new BoundedContext(this.properties.getProperty(JexxaCoreProperties.JEXXA_CONTEXT_NAME), this);
 
         setExceptionHandler();
-        addBanner(this::printStartupInfo);
+        addConfigBanner(this::printStartupInfo);
     }
 
     /**

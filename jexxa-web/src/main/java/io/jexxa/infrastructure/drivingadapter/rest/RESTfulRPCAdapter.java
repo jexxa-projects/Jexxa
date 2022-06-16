@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.javalin.Javalin;
 import io.javalin.core.JavalinConfig;
+import io.javalin.core.util.JavalinLogger;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.jetty.JettyUtil;
@@ -13,6 +14,7 @@ import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
 import io.jexxa.infrastructure.drivingadapter.rest.openapi.OpenAPIConvention;
+import io.jexxa.utils.JexxaBanner;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONConverter;
 import io.jexxa.utils.json.JSONManager;
@@ -66,10 +68,13 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         setupJavalin();
 
         registerExceptionHandler();
+
+        JexxaBanner.addAccessBanner(this::bannerInformation);
     }
 
     public static RESTfulRPCAdapter createAdapter(Properties properties)
     {
+        JavalinLogger.startupInfo = false;
         JettyUtil.logDuringStartup = false;
         JettyUtil.disableJettyLogger();
 
@@ -97,15 +102,6 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         try
         {
             javalin.start();
-
-            if (httpConnector != null ) {
-                openAPIConvention.getPath().ifPresent(path -> JexxaLogger.getLogger(this.getClass()).info("OpenAPI documentation available at: {}"
-                        , "http://" + httpConnector.getHost() + ":" + httpConnector.getPort() +  path ) );
-            }
-            if (sslConnector != null ) {
-                openAPIConvention.getPath().ifPresent(path -> JexxaLogger.getLogger(this.getClass()).info("OpenAPI documentation available at: {}"
-                        , "https://" + sslConnector.getHost() + ":" + sslConnector.getPort() + path ) );
-            }
         } catch (RuntimeException e)
         {
             if (e.getMessage().contains("Port already in use.")) // Javalin states its default port of the server. Therefore, we correct the error message here."
@@ -136,6 +132,10 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     {
         if (sslConnector != null)
         {
+            if (sslConnector.getPort() != 0 )
+            {
+                return sslConnector.getPort();
+            }
             return sslConnector.getLocalPort();
         }
 
@@ -146,6 +146,10 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     {
         if (httpConnector != null)
         {
+            if (httpConnector.getPort() != 0 )
+            {
+                return httpConnector.getPort();
+            }
             return httpConnector.getLocalPort();
         }
 
@@ -187,6 +191,29 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     private int getHTTPSPortFromProperties()
     {
         return Integer.parseInt(properties.getProperty(JexxaWebProperties.JEXXA_REST_HTTPS_PORT, "0"));
+    }
+
+
+    public void bannerInformation(Properties properties)
+    {
+        // Print Listening ports
+        if (isHTTPEnabled() ) {
+            JexxaLogger.getLogger(JexxaBanner.class).info("Listening on: {}", "http://" + getHostname() + ":" + getHTTPPort()  );
+        }
+
+        if (isHTTPSEnabled() ) {
+            JexxaLogger.getLogger(JexxaBanner.class).info("Listening on: {}", "https://" + getHostname() + ":" + getHTTPSPort() );
+        }
+
+        // Print OPENAPI links
+        if (isHTTPEnabled() ) {
+            openAPIConvention.getPath().ifPresent(path -> JexxaLogger.getLogger(JexxaBanner.class).info("OpenAPI available at: {}"
+                    , "http://" + getHostname() + ":" + getHTTPPort() +  path ) );
+        }
+        if (isHTTPSEnabled()) {
+            openAPIConvention.getPath().ifPresent(path -> JexxaLogger.getLogger(JexxaBanner.class).info("OpenAPI available at: {}"
+                    , "https://" + getHostname() + ":" + getHTTPSPort() + path ) );
+        }
     }
 
     /**
@@ -437,5 +464,4 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
         }
 
     }
-
 }

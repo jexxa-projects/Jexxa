@@ -89,7 +89,7 @@ public final class ObjectStoreManager
 
     private ObjectStoreManager()
     {
-        JexxaBanner.addBanner(this::bannerInformation);
+        JexxaBanner.addConfigBanner(this::bannerInformation);
     }
 
     private <T> Class<?> getStrategy(Class<T> aggregateClazz, Properties properties)
