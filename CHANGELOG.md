@@ -17,7 +17,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - Streamlined main: Method `addDDDPackages` is invoked by default for the given context. 
 
 - Messaging Strategy:
-    - According to a Repository, you can now define the used messaging strategy for each interface. Therefore, you have to pass the implemented interface to the MessageSenderManager when querying the strategy. 
+  - According to a Repository, you can now define the used messaging strategy for each interface. Therefore, you have to pass the implemented interface to the MessageSenderManager when querying the strategy.
+
+- Properties: 
+  - Driven-Adapter-Strategies can now be defined in the properties files. 
+  - In general, Jexxa applications have up to three different configurations (at max): 
+    - jexxa-application.properties: Is automatically load and should include your production settings
+    - jexxa-test.properties: Overwrites all production settings for local testing
+    - jexxa-local.properties: Overwrites all production settings so that the application can run without an infrastructure. This is only recommended for demo purpose or rapid prototyping. 
 
 ### Added
 - Jexxa-Core: 
