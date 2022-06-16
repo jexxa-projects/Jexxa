@@ -3,6 +3,7 @@ package io.jexxa.infrastructure.drivingadapter.messaging;
 
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
+import io.jexxa.utils.JexxaBanner;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
 import io.jexxa.utils.properties.Secret;
@@ -45,6 +46,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     private Session session;
     private final List<MessageConsumer> consumerList = new ArrayList<>();
     private final List<Object> registeredListener = new ArrayList<>();
+    private final List<JMSConfiguration> jmsConfigurationList = new ArrayList<>();
     private final JMSConnectionExceptionHandler jmsConnectionExceptionHandler;
 
     private final boolean simulateJMS;
@@ -58,6 +60,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
         this.jmsConnectionExceptionHandler = new JMSConnectionExceptionHandler(this, registeredListener);
         this.properties = properties;
+        JexxaBanner.addAccessBanner(this::bannerInformation);
 
         try
         {
@@ -115,6 +118,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
             consumerList.add(consumer);
             registeredListener.add(object);
+            jmsConfigurationList.add(jmsConfiguration);
         } catch (JMSException e) {
             throw new IllegalStateException(
                     "Registration of of Driving Adapter " + object.getClass().getName() + " failed. Please check the JMSConfiguration.\n" +
@@ -157,6 +161,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
         registeredListener.clear();
         consumerList.clear();
+        jmsConfigurationList.clear();
     }
 
 
@@ -310,6 +315,23 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
                 JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error(e.getMessage());
             }
         }
+    }
+    public void bannerInformation(Properties properties)
+    {
+        var topics = Arrays.toString(
+                jmsConfigurationList.stream()
+                .filter( element -> element.messagingType().equals(JMSConfiguration.MessagingType.TOPIC))
+                .map(JMSConfiguration::destination).toArray()
+        );
+
+        var queues = Arrays.toString( jmsConfigurationList.stream()
+                .filter( element -> element.messagingType().equals(JMSConfiguration.MessagingType.QUEUE))
+                .map(JMSConfiguration::destination).toArray()
+        );
+
+        JexxaLogger.getLogger(JexxaBanner.class).info("JMS Listening on  : {}", properties.getProperty(JNDI_PROVIDER_URL_KEY));
+        JexxaLogger.getLogger(JexxaBanner.class).info("   * JMS-Topics   : {}", topics);
+        JexxaLogger.getLogger(JexxaBanner.class).info("   * JMS-Queues   : {}", queues);
     }
 
 }
