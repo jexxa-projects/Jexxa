@@ -10,8 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - See [JexxaTemplate](https://github.com/jexxa-projects/JexxaTemplate) or [JexxaTutorials](https://github.com/jexxa-projects/JexxaTutorials) for examples.
 
 - Jexxa-Core:
-  - Removed all deprecated methods: Constructor `JexxaMain(String contextName, Properties applicationProperties)` was removed. Instead use  `JexxaMain(Class<?> context, Properties applicationProperties)`
-  - Changed getter-API Default for exported classes such as `BoundedContext` so that they do not use prefix `get` as introduced with naming conventions of Java records.
+  - Removed all deprecated methods: 
+    - Constructor `JexxaMain(String contextName, Properties applicationProperties)` was removed. Instead use  `JexxaMain(Class<?> context, Properties applicationProperties)`
+  - Changed getter-API for exposed classes such as `BoundedContext` so that they do not use prefix `get` as introduced with naming conventions of Java records.
 
 - JexxaMain: 
   - Streamlined main: Method `addDDDPackages` is invoked by default for the given context. 
