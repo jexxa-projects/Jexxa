@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[5.0.0] - 2022-MM-YY
+## \[5.0.0] - 2022-06-17
 ### Changed - Important Information!
 - With this major release Jexxa supports only Java versions >=17.
 - See [JexxaTemplate](https://github.com/jexxa-projects/JexxaTemplate) or [JexxaTutorials](https://github.com/jexxa-projects/JexxaTutorials) for examples.
