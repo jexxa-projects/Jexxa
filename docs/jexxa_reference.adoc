@@ -93,16 +93,24 @@ Jexxa allows you to externalize your configuration. This allows you to run the s
 
 1. Properties directly passed to `JexxaMain`
 2. Java System properties (`System.getProperties()`)
-3. Property file `jexxa-application.properties` inside the jar archive
+3. Imported properties using parameter `-Dio.jexxa.config.import` from inside or outside the jar archive
+4. Property file `jexxa-application.properties` inside the jar archive
 
 ==== Properties files
-1. **Default configuration**: By default, Jexxa loads `jexxa-application.properties` (if available) and provides included properties to all infrastructure components. This property file is loaded as soon as you create a `JexxaApplication`. So this file should include your base configuration which is equal to all environments.
+Jexxa uses a hierarchical approach so that an imported properties file overwrites values in `jexxa-application.properties`. This allows you to make differences between
+production and other environments more transparent.
 
-2. **Extensions**: Sometimes it is quite hard or even not meaningful to provide equal properties to different environments such as a developer- or test systems. In these cases you can add another properties file for the specific environment including only the differences or extensions. This hierarchical approach makes differences between environments more transparent.
+NOTE: All https://github.com/jexxa-projects/JexxaTutorials[Jexxa tutorials] provide the three properties files described below.
 
-3. **Testing**: When using `JexxaTest`, the properties `jexxa-test.properties` is loaded (if available) and extends or adjusts the default configuration provided in `jexxa-application.properties`.
+1. **Default configuration**: By default, Jexxa loads `jexxa-application.properties` (if available) and provides included properties to all infrastructure components. This property file is loaded as soon as you create a `JexxaApplication`. So this file should be used for your production environment.
 
-4. **Secrets**: One of the most crucial aspects with productive systems is the handling of secrets such as usernames, passwords, or private keys. Jexxa addresses this problem with two approaches.
+2. **Testing**: When using `JexxaTest`, the properties `jexxa-test.properties` is loaded (if available) and overwrites the default configuration provided in `jexxa-application.properties`. So this properties file should only include __differences__ to the production environment so that you can run your application on your local machine for testing purpose. Typically, these are URLs to infrastructure services, such as database, as well as the corresponding credentials.
+
+3. **Local**: Sometimes it is required to run your application without any infrastructure service. For example, this could be required for rapid prototyping.  In this case you can provide a properties file that defines explicit driven adapters or disables the driving adapter.
+
+==== Secrets
+One of the most crucial aspects with productive systems is the handling of secrets uch as usernames, passwords, or private keys. Jexxa addresses this problem with two approaches.
+
     * First, you can provide all secrets unencrypted as properties which is only recommended for developing on your local machine. For example, you can use `io.jexxa.jdbc.password` to define the password for your JDBC connection.
     * Secondly, you can provide these properties with a file. In this case, you have to use `io.jexxa.jdbc.file.password`. This approach enables a seamless integration of security mechanisms from virtualization environments such as docker-swarm and is recommended for all productive systems.
 

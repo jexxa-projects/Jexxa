@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     - jexxa-application.properties: Is automatically load and should include your production settings
     - jexxa-test.properties: Overwrites all production settings for local testing
     - jexxa-local.properties: Overwrites all production settings so that the application can run without an infrastructure. This is only recommended for demo purpose or rapid prototyping. 
+    - Please refer to [reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_application_configuration) for more information.
 
 ### Added
 - Jexxa-Core: 
