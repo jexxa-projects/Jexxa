@@ -4,13 +4,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[4.1.8] - 2022-05-28
+## \[5.0.0] - 2022-MM-YY
+### Changed - Important Information!
+- With this major release Jexxa supports only Java versions >=17.
+- See [JexxaTemplate](https://github.com/jexxa-projects/JexxaTemplate) or [JexxaTutorials](https://github.com/jexxa-projects/JexxaTutorials) for examples.
+
+- Jexxa-Core:
+  - Removed all deprecated methods: 
+    - Constructor `JexxaMain(String contextName, Properties applicationProperties)` was removed. Instead use  `JexxaMain(Class<?> context, Properties applicationProperties)`
+  - Changed getter-API for exposed classes such as `BoundedContext` so that they do not use prefix `get` as introduced with naming conventions of Java records.
+
+- JexxaMain: 
+  - Streamlined main: Method `addDDDPackages` is invoked by default for the given context. 
+
+- Messaging Strategy:
+  - According to a Repository, you can now define the used messaging strategy for each interface. Therefore, you have to pass the implemented interface to the MessageSenderManager when querying the strategy.
+
+- Properties: 
+  - Driven-Adapter-Strategies can now be defined in the properties files. 
+  - In general, Jexxa applications have up to three different configurations (at max): 
+    - jexxa-application.properties: Is automatically load and should include your production settings
+    - jexxa-test.properties: Overwrites all production settings for local testing
+    - jexxa-local.properties: Overwrites all production settings so that the application can run without an infrastructure. This is only recommended for demo purpose or rapid prototyping. 
+    - Please refer to [reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_application_configuration) for more information.
+
+### Added
+- Jexxa-Core: 
+    - Jexxa includes full support for Java `record` (de-)serialization by default. So no explicit serializer needs to be defined within the infrastructure of your application.
+    
+- JexxaMain:
+  - Added convenience method `run()` that invokes `start()`, `waitUntilShutdown()`, and `stop()`
+  - Added method `logUnhealthyDiagnostics` to log unhealthy diagnostics for registered Monitors
+
+### Fixed
+- Updated dependencies
+
+## \[4.1.8] - 2022-05-21
 ### Fixed
 - Updated dependencies
 - Excluded transitive dependencies with security issues
 
-### Changed
-- Declared methods as deprecated that will be no longer available in next major release  
 
 ## \[4.1.7] - 2022-05-21
 ### Fixed

@@ -12,6 +12,10 @@ public final class JexxaJDBCProperties
     public static final String JEXXA_JDBC_AUTOCREATE_DATABASE = "io.jexxa.jdbc.autocreate.database";
     public static final String JEXXA_JDBC_AUTOCREATE_TABLE = "io.jexxa.jdbc.autocreate.table";
 
+    public static final String JEXXA_REPOSITORY_STRATEGY = "io.jexxa.repository.strategy";
+
+    public static final String JEXXA_OBJECTSTORE_STRATEGY = "io.jexxa.objectstore.strategy";
+
     private JexxaJDBCProperties()
     {
         //private constructor

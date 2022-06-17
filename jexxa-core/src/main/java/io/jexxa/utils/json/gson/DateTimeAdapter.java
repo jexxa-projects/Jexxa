@@ -17,6 +17,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+@SuppressWarnings("DuplicatedCode")
 final class DateTimeAdapter {
     private static final String YEAR = "year";
     private static final String MONTH = "month";

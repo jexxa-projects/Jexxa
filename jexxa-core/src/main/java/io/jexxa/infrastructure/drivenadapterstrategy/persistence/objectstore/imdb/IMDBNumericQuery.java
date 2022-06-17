@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
 {
@@ -34,7 +33,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .stream()
                 .filter( element -> numericTag.getFromAggregate(element) != null)
                 .filter(element -> compareToValue(element, startValue) >= 0)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -45,7 +44,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .stream()
                 .filter( element -> numericTag.getFromAggregate(element) != null)
                 .filter(element -> compareToValue(element, value) > 0)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -57,7 +56,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .filter( element -> numericTag.getFromAggregate(element) != null)
                 .filter(element -> compareToValue(element, startValue) >= 0)
                 .filter(element -> compareToValue(element, endValue) <= 0)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -69,7 +68,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .filter( element -> numericTag.getFromAggregate(element) != null)
                 .filter(element -> compareToValue(element, startValue) >= 0)
                 .filter(element -> compareToValue(element, endValue) < 0)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -80,7 +79,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .stream()
                 .filter( element -> numericTag.getFromAggregate(element) != null)
                 .filter(element -> compareToValue(element, endValue) <= 0)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -91,7 +90,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .stream()
                 .filter( element -> numericTag.getFromAggregate(element) != null)
                 .filter(element -> compareToValue(element, endValue) < 0)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -102,7 +101,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .stream()
                 .sorted(this::compareToAggregate)
                 .limit(amount)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -112,7 +111,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .values()
                 .stream()
                 .sorted(this::compareToAggregate)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -123,7 +122,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .stream()
                 .sorted((element1, element2) -> compareToAggregate(element2, element1))
                 .limit(amount)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -133,7 +132,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .values()
                 .stream()
                 .sorted((element1, element2) -> compareToAggregate(element2, element1))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -143,7 +142,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .values()
                 .stream()
                 .filter(element-> compareToValue(element, value) == 0)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -153,7 +152,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .values()
                 .stream()
                 .filter(element-> compareToValue(element, value) != 0)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -163,7 +162,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .values()
                 .stream()
                 .filter( element -> numericTag.getFromAggregate(element) == null)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -173,7 +172,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
                 .values()
                 .stream()
                 .filter( element -> numericTag.getFromAggregate(element) != null)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private int compareToValue(T aggregate, S value)
@@ -208,6 +207,7 @@ class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
      *     1 if value of aggregate1 &gt; value of aggregate2 <br>
      *     1 if one of the given values is null <br>
      */
+    @SuppressWarnings("DuplicatedCode")
     private int compareToAggregate(T aggregate1, T aggregate2)
     {
         Objects.requireNonNull(aggregate1);

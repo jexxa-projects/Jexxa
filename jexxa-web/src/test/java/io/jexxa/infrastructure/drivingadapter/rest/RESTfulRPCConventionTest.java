@@ -11,9 +11,13 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Execution(ExecutionMode.CONCURRENT)
 @Tag(TestConstants.UNIT_TEST)
@@ -45,11 +49,11 @@ class RESTfulRPCConventionTest
                 element.getHTTPCommand()));
 
         //3. Check URIs
-        result.forEach(element -> assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.getMethod().getName(),
-                element.getResourcePath()));
+        result.forEach(element -> assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.method().getName(),
+                element.resourcePath()));
 
         //4. Check return types are NOT void
-        result.forEach(element -> assertNotEquals(void.class, element.getMethod().getReturnType()));
+        result.forEach(element -> assertNotEquals(void.class, element.method().getReturnType()));
     }
 
     @Test
@@ -67,12 +71,12 @@ class RESTfulRPCConventionTest
                 element.getHTTPCommand()));
 
         //3.Check URIs
-        result.forEach(element -> assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.getMethod().getName(),
-                element.getResourcePath()));
+        result.forEach(element -> assertEquals("/" + SimpleApplicationService.class.getSimpleName() + "/"+element.method().getName(),
+                element.resourcePath()));
 
         //4.Check return types are NOT void or Parameter > 0
-        result.forEach(element -> assertTrue( (void.class.equals(element.getMethod().getReturnType())
-                                            || element.getMethod().getParameterCount() > 0 )));
+        result.forEach(element -> assertTrue( (void.class.equals(element.method().getReturnType())
+                                            || element.method().getParameterCount() > 0 )));
 
     }
 
@@ -81,10 +85,8 @@ class RESTfulRPCConventionTest
     {
         //Arrange
         var staticMethods = Arrays.stream(simpleApplicationService.getClass().getMethods())
-                .filter( method -> Modifier.isStatic(method.getModifiers()))
-                .collect(Collectors.toUnmodifiableList());
-
-
+                .filter(method -> Modifier.isStatic(method.getModifiers()))
+                .toList();
 
         //Act - get All methods
         var methods = new ArrayList<RESTfulRPCConvention.RESTfulRPCMethod>();
@@ -95,7 +97,7 @@ class RESTfulRPCConventionTest
         assertNotNull(methods);
         assertTrue ( staticMethods.stream().allMatch(
                 staticMethod -> methods.stream()
-                        .noneMatch( method -> method.getMethod().getName().equals(staticMethod.getName()))
+                        .noneMatch( method -> method.method().getName().equals(staticMethod.getName()))
                 )
         );
     }

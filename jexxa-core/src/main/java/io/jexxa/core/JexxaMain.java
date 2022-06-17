@@ -6,21 +6,28 @@ import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
+import io.jexxa.utils.JexxaBanner;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.function.ThrowingConsumer;
 import io.jexxa.utils.properties.JexxaCoreProperties;
+import io.jexxa.utils.properties.PropertiesLoader;
 import org.slf4j.Logger;
 
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
+
+import static io.jexxa.utils.JexxaBanner.addConfigBanner;
 
 /**
  * JexxaMain is the main entry point for your application to use Jexxa. Within each application only a single instance
@@ -39,33 +46,20 @@ public final class JexxaMain
     private static final String DOMAIN_PROCESS_SERVICE = ".domainprocessservice";
     private static final String APPLICATION_SERVICE = ".applicationservice";
 
-
-    public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
-
     private static final Logger LOGGER = JexxaLogger.getLogger(JexxaMain.class);
 
     private final CompositeDrivingAdapter compositeDrivingAdapter = new CompositeDrivingAdapter();
-    private final Properties properties                 = new Properties();
+    private final Properties properties;
     private final AdapterFactory drivingAdapterFactory  = new AdapterFactory();
     private final AdapterFactory drivenAdapterFactory   = new AdapterFactory();
     private final PortFactory portFactory               = new PortFactory(drivenAdapterFactory);
+    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     private final BoundedContext boundedContext;
 
-    /**
-     * Creates the JexxaMain instance for your application with given context name.
-     * In addition, the properties file jexxa-application.properties is load if available in class path.
-     *
-     * Note: When a driving or driven adapter is created, it gets the properties read from properties file.
-     *
-     * @param contextName Name of the BoundedContext. Typically, you should use the name of your application.
-     * @deprecated replace with constructor accepting concrete type name
-     */
-    @Deprecated(forRemoval = true)
-    public JexxaMain(String contextName)
-    {
-        this(contextName, System.getProperties());
-    }
+    private final PropertiesLoader propertiesLoader;
+
+    private boolean enableBanner = true;
 
     /**
      * Creates the JexxaMain instance for your application with given context name.
@@ -77,14 +71,8 @@ public final class JexxaMain
      */
     public JexxaMain(Class<?> context)
     {
-        this(context.getSimpleName(), System.getProperties());
+        this(context, System.getProperties());
     }
-    public JexxaMain(Class<?> context, Properties properties)
-    {
-        this(context.getSimpleName(), properties);
-    }
-
-
     /**
      * Creates the JexxaMain instance for your application with given context name.
      *
@@ -92,36 +80,28 @@ public final class JexxaMain
      * properties are extended by the given properties object. So if you define the same properties in
      * jexxa-application.properties and the given properties object, the one from properties object is used.
      *
-     * @param contextName Name of the BoundedContext. Typically, you should use the name of your application.
+     * @param context Type of the BoundedContext. Typically, you should use the name of your application.
      * @param applicationProperties Properties that are defined by your application.
      */
-    public JexxaMain(String contextName, Properties applicationProperties)
+    public JexxaMain(Class<?> context, Properties applicationProperties)
     {
         Objects.requireNonNull(applicationProperties);
-        Objects.requireNonNull(contextName);
+        Objects.requireNonNull(context);
 
         // Handle properties in following forder:
         // 0. Add default JEXXA_CONTEXT_MAIN
-        this.properties.put(JexxaCoreProperties.JEXXA_CONTEXT_NAME, contextName);
-
-        // 1. Load properties from application.properties because they have the lowest priority
-        loadJexxaApplicationProperties(this.properties);
-        // 2. Use System properties because they have mid-priority
-        this.properties.putAll( System.getProperties() );  //add/overwrite system properties
-        // 3. Use given properties because they have the highest priority
-        this.properties.putAll( applicationProperties );  //add/overwrite given properties
-        // 4. import properties that are defined by '"io.jexxa.config.import"'
-        if( this.properties.containsKey(JexxaCoreProperties.JEXXA_CONFIG_IMPORT) )
-        {
-            importProperties(this.properties.getProperty(JexxaCoreProperties.JEXXA_CONFIG_IMPORT));
-        }
+        this.propertiesLoader = new PropertiesLoader(context);
+        this.properties = propertiesLoader.createJexxaProperties(applicationProperties);
+        this.properties.put(JexxaCoreProperties.JEXXA_CONTEXT_NAME, context.getSimpleName());
 
         this.addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
+        this.addDDDPackages(context);
 
         //Create BoundedContext
         this.boundedContext = new BoundedContext(this.properties.getProperty(JexxaCoreProperties.JEXXA_CONTEXT_NAME), this);
 
         setExceptionHandler();
+        addConfigBanner(this::printStartupInfo);
     }
 
     /**
@@ -237,6 +217,25 @@ public final class JexxaMain
         return this;
     }
 
+    public JexxaMain logUnhealthyDiagnostics(int period, TimeUnit timeUnit)
+    {
+        executorService.scheduleAtFixedRate(this::logUnhealthyDiagnostics,0, period,timeUnit);
+
+        return this;
+    }
+
+    private void logUnhealthyDiagnostics()
+    {
+        if (getBoundedContext().isRunning() && !getBoundedContext().isHealthy())
+        {
+            getBoundedContext()
+                    .diagnostics()
+                    .stream()
+                    .filter(element -> !element.isHealthy())
+                    .forEach(element -> JexxaLogger.getLogger(JexxaMain.class).error(element.statusMessage()));
+        }
+    }
+
     @CheckReturnValue
     public <T extends IDrivingAdapter> DrivingAdapter<T>  conditionalBind(BooleanSupplier conditional, Class<T> clazz)
     {
@@ -267,6 +266,23 @@ public final class JexxaMain
         return drivingAdapterFactory.getInstanceOf(adapter, getProperties());
     }
 
+    public JexxaMain disableBanner()
+    {
+        enableBanner = false;
+        return this;
+    }
+
+    /**
+     * This convenience method invokes the three main control methods
+     *  start() -> waitForShutdown() -> stop
+     */
+    public void run()
+    {
+        start();
+        waitForShutdown();
+        stop();
+    }
+
     @SuppressWarnings("java:S2629")
     public JexxaMain start()
     {
@@ -276,7 +292,10 @@ public final class JexxaMain
             return this;
         }
 
-        printStartupInfo();
+        if (enableBanner)
+        {
+            JexxaBanner.show(getProperties());
+        }
 
         compositeDrivingAdapter.start();
         boundedContext.start();
@@ -287,11 +306,13 @@ public final class JexxaMain
     }
 
     @SuppressWarnings("java:S2629")
-    void printStartupInfo()
+    void printStartupInfo(Properties properties)
     {
-        LOGGER.info( getBoundedContext().getJexxaVersion().toString());
+        JexxaLogger.getLogger(JexxaBanner.class).info( "Jexxa Version                  : {}", getBoundedContext().jexxaVersion() );
+        JexxaLogger.getLogger(JexxaBanner.class).info( "Context Version                : {}", getBoundedContext().contextVersion() );
 
-        LOGGER.info("Start BoundedContext '{}' with {} Driving Adapter ", getBoundedContext().contextName(), compositeDrivingAdapter.size());
+        JexxaLogger.getLogger(JexxaBanner.class).info( "Used Driving Adapter           : {}", Arrays.toString(compositeDrivingAdapter.adapterNames().toArray()));
+        JexxaLogger.getLogger(JexxaBanner.class).info( "Used Properties Files          : {}", Arrays.toString(propertiesLoader.getPropertiesFiles().toArray()));
     }
 
     @SuppressWarnings("java:S2629")
@@ -310,22 +331,15 @@ public final class JexxaMain
             compositeDrivingAdapter.stop();
             LOGGER.info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
         }
+        executorService.shutdown();
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public JexxaMain waitForShutdown()
     {
         return getBoundedContext().waitForShutdown();
     }
 
-    public void importProperties(String resource)
-    {
-        Optional.ofNullable(JexxaMain.class.getResourceAsStream(resource))
-                .ifPresentOrElse(
-                        ThrowingConsumer.exceptionLogger(properties::load),
-                        () -> {throw new IllegalArgumentException("Properties file " + resource + " not available. Please check the filename!");}
-                );
-
-    }
 
     @CheckReturnValue
     public BoundedContext getBoundedContext()
@@ -409,17 +423,6 @@ public final class JexxaMain
         return drivenAdapterFactory.getInstanceOf(port, properties);
     }
 
-
-    private void loadJexxaApplicationProperties(Properties properties)
-    {
-        Optional.ofNullable(JexxaMain.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES))
-                .ifPresentOrElse(
-                        ThrowingConsumer.exceptionLogger(properties::load),
-                        () -> LOGGER.warn("NO PROPERTIES FILE FOUND {}", JEXXA_APPLICATION_PROPERTIES)
-                );
-
-    }
-
     private void setExceptionHandler()
     {
         if (Thread.getDefaultUncaughtExceptionHandler() == null)
@@ -478,54 +481,50 @@ public final class JexxaMain
         {
             return drivingAdapters.size();
         }
+        public List<String> adapterNames()
+        {
+            return drivingAdapters.stream().map( element -> element.getClass().getSimpleName()).toList();
+        }
     }
 
 
-    static class JexxaExceptionHandler implements Thread.UncaughtExceptionHandler {
-        private final JexxaMain jexxaMain;
-
-        JexxaExceptionHandler(JexxaMain jexxaMain)
-        {
-            this.jexxaMain = jexxaMain;
-        }
+    record JexxaExceptionHandler(JexxaMain jexxaMain) implements Thread.UncaughtExceptionHandler {
 
         public void uncaughtException(Thread t, Throwable e) {
-            LOGGER.error("Could not startup Jexxa! {}", getOutputMessage(e));
+                LOGGER.error("Could not startup Jexxa! {}", getOutputMessage(e));
 
-            jexxaMain.stop();
-        }
+                jexxaMain.stop();
+            }
 
-        String getOutputMessage( Throwable e)
-        {
-            var stringBuilder = new StringBuilder();
-            var jexxaMessage = e.getMessage();
+            String getOutputMessage(Throwable e) {
+                var stringBuilder = new StringBuilder();
+                var jexxaMessage = e.getMessage();
 
-            Throwable rootCause = e;
-            Throwable rootCauseWithMessage = null ;
+                Throwable rootCause = e;
+                Throwable rootCauseWithMessage = null;
 
-            while (rootCause.getCause() != null && !rootCause.getCause().equals(rootCause))
-            {
-                if ( rootCause.getMessage() != null && !rootCause.getMessage().isEmpty())
-                {
-                    rootCauseWithMessage = rootCause;
+                while (rootCause.getCause() != null && !rootCause.getCause().equals(rootCause)) {
+                    if (rootCause.getMessage() != null && !rootCause.getMessage().isEmpty()) {
+                        rootCauseWithMessage = rootCause;
+                    }
+
+                    rootCause = rootCause.getCause();
                 }
 
-                rootCause = rootCause.getCause();
+                var detailedMessage = ""; // Create a potential reason in from of "lastMessage -> lastException" or just "lastMessage"
+                if (rootCauseWithMessage != null && !rootCauseWithMessage.equals(rootCause)) {
+                    detailedMessage = rootCauseWithMessage.getClass().getSimpleName() + ": " + rootCauseWithMessage.getMessage() + " -> Exception: " + rootCause.getClass().getSimpleName();
+                } else {
+                    detailedMessage = rootCause.getMessage();
+                }
+
+                stringBuilder.append("\n* Jexxa-Message    : ").append(jexxaMessage);
+                stringBuilder.append("\n* Detailed-Message : ").append(detailedMessage);
+                stringBuilder.append("\n* 1st trace element: ").append(rootCause.getStackTrace()[0]);
+
+                return stringBuilder.toString();
             }
-
-            var detailedMessage = ""; // Create a potential reason in from of "lastMessage -> lastException" or just "lastMessage"
-            if (rootCauseWithMessage != null && !rootCauseWithMessage.equals(rootCause))
-            {
-                detailedMessage = rootCauseWithMessage.getClass().getSimpleName() + ": " + rootCauseWithMessage.getMessage() + " -> Exception: " + rootCause.getClass().getSimpleName();
-            } else {
-                detailedMessage = rootCause.getMessage();
-            }
-
-            stringBuilder.append("\n* Jexxa-Message    : ").append(jexxaMessage);
-            stringBuilder.append("\n* Detailed-Message : ").append(detailedMessage);
-            stringBuilder.append("\n* 1st trace element: ").append( rootCause.getStackTrace()[0] );
-
-            return stringBuilder.toString();
         }
-    }
+
+
 }

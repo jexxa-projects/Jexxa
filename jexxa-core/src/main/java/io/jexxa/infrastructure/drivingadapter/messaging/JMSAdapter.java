@@ -3,6 +3,7 @@ package io.jexxa.infrastructure.drivingadapter.messaging;
 
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
+import io.jexxa.utils.JexxaBanner;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
 import io.jexxa.utils.properties.Secret;
@@ -27,6 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_SIMULATE;
 
 public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 {
@@ -37,7 +39,6 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     public static final String JNDI_PASSWORD_FILE = "java.naming.file.password";
     public static final String JNDI_USER_FILE = "java.naming.file.user";
 
-
     public static final String DEFAULT_JNDI_PROVIDER_URL = "tcp://localhost:61616";
     public static final String DEFAULT_JNDI_FACTORY = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 
@@ -45,17 +46,21 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     private Session session;
     private final List<MessageConsumer> consumerList = new ArrayList<>();
     private final List<Object> registeredListener = new ArrayList<>();
+    private final List<JMSConfiguration> jmsConfigurationList = new ArrayList<>();
     private final JMSConnectionExceptionHandler jmsConnectionExceptionHandler;
 
+    private final boolean simulateJMS;
     private final Properties properties;
 
     public JMSAdapter(final Properties properties)
     {
+        simulateJMS = properties.containsKey(JEXXA_JMS_SIMULATE);
         Objects.requireNonNull(properties);
         validateProperties(properties);
 
         this.jmsConnectionExceptionHandler = new JMSConnectionExceptionHandler(this, registeredListener);
         this.properties = properties;
+        JexxaBanner.addAccessBanner(this::bannerInformation);
 
         try
         {
@@ -72,8 +77,10 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     {
         try
         {
-            jmsConnectionExceptionHandler.setListener(registeredListener);
-            connection.start();
+            if (!simulateJMS) {
+                jmsConnectionExceptionHandler.setListener(registeredListener);
+                connection.start();
+            }
         }
         catch (JMSException e)
         {
@@ -95,29 +102,32 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     @Override
     public void register(Object object)
     {
-        try
-        {
+        if (simulateJMS) {
+            return;
+        }
+
+        try {
             var messageListener = (MessageListener) (object);
             var jmsConfiguration = getConfiguration(object);
 
-            Destination destination = createDestination(session,jmsConfiguration);
+            Destination destination = createDestination(session, jmsConfiguration);
             MessageConsumer consumer = createMessageConsumer(session, destination, jmsConfiguration);
 
             var invocationHandler = InvocationManager.getInvocationHandler(messageListener);
-            consumer.setMessageListener( message -> invocationHandler.invoke(messageListener, messageListener::onMessage, message)) ;
+            consumer.setMessageListener(message -> invocationHandler.invoke(messageListener, messageListener::onMessage, message));
 
             consumerList.add(consumer);
             registeredListener.add(object);
-        }
-        catch (JMSException e)
-        {
+            jmsConfigurationList.add(jmsConfiguration);
+        } catch (JMSException e) {
             throw new IllegalStateException(
-                    "Registration of of Driving Adapter " + object.getClass().getName() + " failed. Please check the JMSConfiguration.\n"  +
+                    "Registration of of Driving Adapter " + object.getClass().getName() + " failed. Please check the JMSConfiguration.\n" +
                             " Error message from JMS subsystem: " + e.getMessage()
                     , e
             );
         }
     }
+
 
     private Destination createDestination(Session session, JMSConfiguration jmsConfiguration) throws JMSException {
         if (jmsConfiguration.messagingType() == JMSConfiguration.MessagingType.TOPIC)
@@ -151,10 +161,10 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
         registeredListener.clear();
         consumerList.clear();
+        jmsConfigurationList.clear();
     }
 
 
-    @SuppressWarnings("DuplicatedCode")
     public static Connection createConnection(Properties properties)
     {
         var username = new Secret(properties, JNDI_USER_KEY, JNDI_USER_FILE);
@@ -200,6 +210,12 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
     private void initConnection() throws JMSException
     {
+        if (simulateJMS)
+        {
+            JexxaLogger.getLogger(JMSAdapter.class).warn("JMSAdapter is running in simulation mode -> No messages will be received");
+            return;
+        }
+
         connection = createConnection(properties);
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
@@ -209,11 +225,15 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             jmsConnectionExceptionHandler.stopFailover();
             jmsConnectionExceptionHandler.startFailover();
         });
-
     }
 
     private void validateProperties(Properties properties)
     {
+        if (simulateJMS)
+        {
+            return;
+        }
+
         Validate.isTrue(properties.containsKey(JNDI_PROVIDER_URL_KEY), "Property + " + JNDI_PROVIDER_URL_KEY + " is missing ");
         Validate.isTrue(properties.containsKey(JNDI_FACTORY_KEY), "Property + " + JNDI_FACTORY_KEY + " is missing ");
     }
@@ -295,6 +315,23 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
                 JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error(e.getMessage());
             }
         }
+    }
+    public void bannerInformation(Properties properties)
+    {
+        var topics = Arrays.toString(
+                jmsConfigurationList.stream()
+                .filter( element -> element.messagingType().equals(JMSConfiguration.MessagingType.TOPIC))
+                .map(JMSConfiguration::destination).toArray()
+        );
+
+        var queues = Arrays.toString( jmsConfigurationList.stream()
+                .filter( element -> element.messagingType().equals(JMSConfiguration.MessagingType.QUEUE))
+                .map(JMSConfiguration::destination).toArray()
+        );
+
+        JexxaLogger.getLogger(JexxaBanner.class).info("JMS Listening on  : {}", properties.getProperty(JNDI_PROVIDER_URL_KEY));
+        JexxaLogger.getLogger(JexxaBanner.class).info("   * JMS-Topics   : {}", topics);
+        JexxaLogger.getLogger(JexxaBanner.class).info("   * JMS-Queues   : {}", queues);
     }
 
 }

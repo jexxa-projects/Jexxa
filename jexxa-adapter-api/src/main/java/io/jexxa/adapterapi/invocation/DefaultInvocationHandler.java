@@ -13,11 +13,11 @@ import io.jexxa.adapterapi.invocation.function.SerializableFunction;
 import io.jexxa.adapterapi.invocation.function.SerializableRunnable;
 import io.jexxa.adapterapi.invocation.function.SerializableSupplier;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("UnusedReturnValue")
 public class DefaultInvocationHandler implements AroundInterceptor, BeforeInterceptor, AfterInterceptor, InvocationHandler {
     private final List<BeforeInterceptor> beforeList = new ArrayList<>();
     private final List<AfterInterceptor> afterList = new ArrayList<>();
@@ -60,7 +60,8 @@ public class DefaultInvocationHandler implements AroundInterceptor, BeforeInterc
 
 
     @Override
-    public Object invoke(Method method, Object object, Object[] args) throws InvocationTargetException, IllegalAccessException {
+    public Object invoke(Method method, Object object, Object[] args)
+    {
         var invocationContext = new MethodInvocationContext(method, object, args, aroundList);
 
         invoke(invocationContext);

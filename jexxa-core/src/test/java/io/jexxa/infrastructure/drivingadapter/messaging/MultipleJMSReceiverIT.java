@@ -32,21 +32,13 @@ class MultipleJMSReceiverIT
     private IncrementApplicationService incrementApplicationService;
 
 
-    public static class ApplicationServiceListener implements MessageListener
+    public record ApplicationServiceListener(IncrementApplicationService incrementApplicationService) implements MessageListener
     {
-        private final IncrementApplicationService incrementApplicationService;
-
-        public ApplicationServiceListener(IncrementApplicationService incrementApplicationService)
-        {
-            this.incrementApplicationService = incrementApplicationService;
-        }
-
         @Override
         @JMSConfiguration(destination = DESTINATION, messagingType = JMSConfiguration.MessagingType.TOPIC)
-        public void onMessage(Message message)
-        {
-            incrementApplicationService.increment();
-        }
+        public void onMessage(Message message) {
+                incrementApplicationService.increment();
+            }
     }
 
 
@@ -55,11 +47,12 @@ class MultipleJMSReceiverIT
     void synchronizeMultipleClients()
     {
         //Arrange
-        JexxaMain jexxaMain = new JexxaMain("MultiThreading");
+        JexxaMain jexxaMain = new JexxaMain(MultipleJMSReceiverIT.class);
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
+                .addToInfrastructure("io.jexxa.infrastructure.drivingadapter")
+                .disableBanner();
         incrementApplicationService = jexxaMain.getInstanceOfPort(IncrementApplicationService.class);
 
         for ( int i = 0; i < MAX_THREADS; ++i)
@@ -83,11 +76,12 @@ class MultipleJMSReceiverIT
 
     private void incrementService(Properties properties)
     {
-        ITMessageSender myProducer = new ITMessageSender(properties, DESTINATION, JMSConfiguration.MessagingType.TOPIC);
-        while ( incrementApplicationService.getCounter() < MAX_COUNTER )
+        try (ITMessageSender myProducer = new ITMessageSender(properties, DESTINATION, JMSConfiguration.MessagingType.TOPIC))
         {
-            //Act
-            myProducer.send(MESSAGE);
+            while (incrementApplicationService.getCounter() < MAX_COUNTER) {
+                //Act
+                myProducer.send(MESSAGE);
+            }
         }
     }
 }

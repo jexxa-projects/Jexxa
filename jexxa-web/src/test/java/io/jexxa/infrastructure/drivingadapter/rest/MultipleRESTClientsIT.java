@@ -36,6 +36,7 @@ class MultipleRESTClientsIT
         jexxaMain = new JexxaMain(MultipleRESTClientsIT.class);
         jexxaMain.addToApplicationCore(TestConstants.JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(TestConstants.JEXXA_DRIVEN_ADAPTER)
+                .disableBanner()
                 .bind(RESTfulRPCAdapter.class).to(IncrementApplicationService.class)
                 .start();
 
@@ -53,7 +54,7 @@ class MultipleRESTClientsIT
 
         var clientPool = Stream.generate(() -> new Thread(this::incrementService))
                 .limit(MAX_THREADS)
-                .collect(toList());
+                .toList();
 
         var exceptionList = new ArrayList<Throwable>();
 

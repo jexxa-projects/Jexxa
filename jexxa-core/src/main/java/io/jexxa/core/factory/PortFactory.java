@@ -2,6 +2,7 @@ package io.jexxa.core.factory;
 
 import io.jexxa.utils.factory.ClassFactory;
 
+import java.io.Serial;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -222,6 +223,7 @@ public class PortFactory
 
     static class InvalidPortConfigurationException extends RuntimeException
     {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         private final String errorMessage;

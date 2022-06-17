@@ -15,8 +15,11 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.core.JexxaMain.JEXXA_APPLICATION_PROPERTIES;
-import static org.junit.jupiter.api.Assertions.*;
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
@@ -33,10 +36,12 @@ class JDBCKeyValueRepositoryIT
         var properties = new Properties();
         properties.load(getClass().getResourceAsStream(JEXXA_APPLICATION_PROPERTIES));
 
-        JDBCConnection connection = new JDBCConnection(properties);
-        connection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
-                .dropTableIfExists(JexxaEntity.class)
-                .asIgnore();
+        try (JDBCConnection connection = new JDBCConnection(properties) )
+        {
+            connection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
+                    .dropTableIfExists(JexxaEntity.class)
+                    .asIgnore();
+        }
 
         objectUnderTest = new JDBCKeyValueRepository<>(
                 JexxaEntity.class,

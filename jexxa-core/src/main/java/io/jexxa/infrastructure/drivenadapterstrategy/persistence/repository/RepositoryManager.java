@@ -1,16 +1,22 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository;
 
 
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
-import io.jexxa.utils.properties.JexxaJDBCProperties;
+import io.jexxa.utils.JexxaBanner;
+import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.factory.ClassFactory;
+import io.jexxa.utils.properties.JexxaJDBCProperties;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
+
+import static io.jexxa.utils.properties.JexxaJDBCProperties.JEXXA_REPOSITORY_STRATEGY;
+import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_STRATEGY;
 
 
 public final class RepositoryManager
@@ -37,6 +43,11 @@ public final class RepositoryManager
     {
         RepositoryManager.defaultStrategy = defaultStrategy;
     }
+    public static Class<?> getDefaultRepository(Properties properties)
+    {
+        return REPOSITORY_MANAGER.getStrategy(null, properties);
+    }
+
 
     @SuppressWarnings("unchecked")
     @CheckReturnValue
@@ -74,9 +85,10 @@ public final class RepositoryManager
 
     private RepositoryManager()
     {
-        //Package protected constructor
+        JexxaBanner.addConfigBanner(this::bannerInformation);
     }
 
+    @SuppressWarnings("DuplicatedCode")
     private <T> Class<?> getStrategy(Class<T> aggregateClazz, Properties properties)
     {
         // 1. Check if a dedicated strategy is registered for aggregateClazz
@@ -98,14 +110,27 @@ public final class RepositoryManager
             return defaultStrategy;
         }
 
-        // 3. If a JDBC driver is stated in Properties => Use JDBCKeyValueRepository
+        // 3. Check explicit configuration
+        if (properties.containsKey(JEXXA_REPOSITORY_STRATEGY)) {
+            try {
+                return Class.forName(properties.getProperty(JEXXA_REPOSITORY_STRATEGY));
+            } catch (ClassNotFoundException e) {
+                JexxaLogger.getLogger(ObjectStoreManager.class).warn("Unknown or invalid repository {} -> Ignore setting", properties.getProperty(JEXXA_JMS_STRATEGY));
+            }
+        }
+        // 4. If a JDBC driver is stated in Properties => Use JDBCKeyValueRepository
         if (properties.containsKey(JexxaJDBCProperties.JEXXA_JDBC_DRIVER))
         {
             return JDBCKeyValueRepository.class;
         }
 
-        // 4. If everything fails, return a IMDBRepository
+        // 5. If everything fails, return a IMDBRepository
         return IMDBRepository.class;
+    }
+
+    public void bannerInformation(Properties properties)
+    {
+        JexxaLogger.getLogger(JexxaBanner.class).info("Used Repository Strategie      : [{}]",getDefaultRepository(properties).getSimpleName());
     }
 
 }

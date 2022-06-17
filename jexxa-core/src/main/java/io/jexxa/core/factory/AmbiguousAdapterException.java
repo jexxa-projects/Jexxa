@@ -1,9 +1,11 @@
 package io.jexxa.core.factory;
 
+import java.io.Serial;
 import java.util.List;
 
 public class AmbiguousAdapterException extends RuntimeException
 {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final String internalMessage;

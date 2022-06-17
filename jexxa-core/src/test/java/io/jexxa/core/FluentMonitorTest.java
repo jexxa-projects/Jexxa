@@ -29,7 +29,6 @@ class FluentMonitorTest {
         jexxaMain.monitor(ProxyPortAdapter.class).incomingCalls(timerMonitor(maxTimeout));
 
         var firstResult = boundedContext.isHealthy();
-        assertTrue(firstResult); // After start status should be healthy
 
         await()
                 .atMost(3, TimeUnit.SECONDS)

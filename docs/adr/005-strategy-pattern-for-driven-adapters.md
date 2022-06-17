@@ -10,7 +10,7 @@ Accepted
 
 Jexxa is considered as a lightweight framework that ensures that junior developers get the time to learn the craftsmanship of software development, methods of software architecture and the domain language step by step from the intermediate and senior developers.
 
-Because your senior and intermediate developers focus on the application core, your junior developers must focus on the technology stack. Therefore, the binding of the application core to an technology stack should be as simple as possible.
+Because your senior and intermediate developers focus on the application core, your junior developers must focus on the technology stack. Therefore, the binding of the application core to a technology stack should be as simple as possible.
 
 ## Decision
 

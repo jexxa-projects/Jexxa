@@ -31,7 +31,7 @@ class DrivingAdapterTest
     void throwOnInvalidAdapterConvention()
     {
         //Arrange
-        JexxaMain jexxaMain = new JexxaMain(DrivingAdapterTest.class.getSimpleName());
+        JexxaMain jexxaMain = new JexxaMain(DrivingAdapterTest.class);
 
         //Act / Assert
         assertThrows(AdapterConventionViolation.class, () -> jexxaMain.bind(InvalidAdapter.class));

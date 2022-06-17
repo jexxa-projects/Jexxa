@@ -9,8 +9,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import static java.util.stream.Collectors.toList;
-
 /**
  * Creates all kind of adapters (driving and driven) which fulfill one of the following conventions:
  * <ol>
@@ -113,7 +111,7 @@ public class AdapterFactory
     {
         return adapterList.stream()
                 .filter(adapter -> getImplementationOf(adapter).isEmpty())
-                .collect(toList());
+                .toList();
     }
 
     boolean isAvailable(List<Class <?> > adapterList)

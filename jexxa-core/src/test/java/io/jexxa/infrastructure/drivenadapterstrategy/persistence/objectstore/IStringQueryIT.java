@@ -10,7 +10,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.JexxaObject.createCharSequence;
@@ -68,7 +67,7 @@ class IStringQueryIT
     {
         testData = IntStream.range(0, TEST_DATA_SIZE)
                 .mapToObj(element -> JexxaObject.create(new JexxaValueObject(element)))
-                .collect(Collectors.toList());
+                .toList();
 
         // set internal int value to an ascending number
         // the internal string is set to  A, B, ..., AA, AB, ...
@@ -144,12 +143,12 @@ class IStringQueryIT
         var expectedAscendingOrder = objectStore.get()
                 .stream()
                 .sorted(comparing(JexxaObject::getString))
-                .collect(Collectors.toList());
+                .toList();
 
         var expectedAscendingOrderLimit = expectedAscendingOrder
                 .stream()
                 .limit(10)
-                .collect(Collectors.toList());
+                .toList();
 
         //Act
         var ascendingResult = objectUnderTest.getAscending();
@@ -173,12 +172,12 @@ class IStringQueryIT
         var expectedDescendingOrder = objectStore.get()
                 .stream()
                 .sorted(comparing(JexxaObject::getString).reversed())
-                .collect(Collectors.toList());
+                .toList();
 
         var expectedDescendingOrderLimit = expectedDescendingOrder
                 .stream()
                 .limit(10)
-                .collect(Collectors.toList());
+                .toList();
 
         //Act
         var descendingResult = objectUnderTest.getDescending();
@@ -193,10 +192,12 @@ class IStringQueryIT
     {
         if (!properties.isEmpty())
         {
-            var jdbcConnection = new JDBCConnection(properties);
-            jdbcConnection.createTableCommand(JexxaObjectSchema.class)
-                    .dropTableIfExists(JexxaObject.class)
-                    .asIgnore();
+            try(JDBCConnection jdbcConnection = new JDBCConnection(properties))
+            {
+                jdbcConnection.createTableCommand(JexxaObjectSchema.class)
+                        .dropTableIfExists(JexxaObject.class)
+                        .asIgnore();
+            }
         }
 
         objectStore = ObjectStoreManager.getObjectStore(

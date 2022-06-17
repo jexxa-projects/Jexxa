@@ -17,7 +17,12 @@ import org.junit.jupiter.api.Test;
 import java.util.Properties;
 
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class JexxaTestTest
@@ -30,7 +35,7 @@ class JexxaTestTest
     void setUp()
     {
         //Arrange
-        jexxaMain = new JexxaMain(JexxaTestTest.class.getSimpleName(), new Properties());
+        jexxaMain = new JexxaMain(JexxaTestTest.class, new Properties());
         jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
                 .addToInfrastructure("io.jexxa.application.infrastructure");
 
@@ -80,10 +85,10 @@ class JexxaTestTest
 
         var recordedMessage = tempMessage.get();
         assertNotNull(recordedMessage);
-        assertEquals("JexxaTopic", recordedMessage.getDestinationName());
-        assertEquals(MessageProducer.DestinationType.TOPIC, recordedMessage.getDestinationType());
-        assertNull(recordedMessage.getMessageProperties());
-        assertEquals(getJSONConverter().toJson(testMessage), recordedMessage.getSerializedMessage());
+        assertEquals("JexxaTopic", recordedMessage.destinationName());
+        assertEquals(MessageProducer.DestinationType.TOPIC, recordedMessage.destinationType());
+        assertNull(recordedMessage.messageProperties());
+        assertEquals(getJSONConverter().toJson(testMessage), recordedMessage.serializedMessage());
     }
 
     @Test

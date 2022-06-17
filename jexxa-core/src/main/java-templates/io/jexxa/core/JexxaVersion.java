@@ -17,8 +17,8 @@ final class JexxaVersion
         return VersionInfo.of()
                 .version(VERSION)
                 .repository(REPOSITORY)
-                .buildTimestamp(PROJECT_NAME)
-                .projectName(BUILD_TIMESTAMP)
+                .buildTimestamp(BUILD_TIMESTAMP)
+                .projectName(PROJECT_NAME)
                 .create();
     }
 }

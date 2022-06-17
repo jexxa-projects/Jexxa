@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 
 import java.util.Properties;
 
+@SuppressWarnings("unused")
 public class MessageLogger extends MessageSender
 {
     private static final Logger MESSAGE_LOGGER = JexxaLogger.getLogger(MessageLogger.class);

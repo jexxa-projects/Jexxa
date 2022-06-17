@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import static java.util.stream.Collectors.toList;
-
 public final class AdapterConvention
 {
     public static <T> void validate(Class<T> clazz)
@@ -21,7 +19,7 @@ public final class AdapterConvention
             return;
         }
 
-        throw new AdapterConventionViolation("No suitable constructor available for adapter : " + clazz.getName());
+        throw new AdapterConventionViolation(clazz);
     }
 
 
@@ -71,7 +69,7 @@ public final class AdapterConvention
                 .stream(clazz.getMethods())
                 .filter(method -> Modifier.isStatic(method.getModifiers()))
                 .filter(method -> method.getReturnType().isAssignableFrom(clazz))
-                .collect(toList());
+                .toList();
 
         return factoryMethods.stream().anyMatch(method -> method.getParameterCount() == 0); //Factory method with no arguments available
     }
@@ -82,7 +80,7 @@ public final class AdapterConvention
                 .stream(clazz.getMethods())
                 .filter(method -> Modifier.isStatic(method.getModifiers()))
                 .filter(method -> method.getReturnType().isAssignableFrom(clazz))
-                .collect(toList());
+                .toList();
 
         return factoryMethods.stream().anyMatch(method -> (
                 method.getParameterCount() == 1 &&

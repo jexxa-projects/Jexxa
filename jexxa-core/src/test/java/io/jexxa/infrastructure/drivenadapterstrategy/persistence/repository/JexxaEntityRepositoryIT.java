@@ -16,11 +16,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,7 +36,7 @@ class JexxaEntityRepositoryIT
     {
         aggregateList = IntStream.range(1, 100)
                 .mapToObj(element -> JexxaEntity.create(new JexxaValueObject(element)))
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
     }
 
     @ParameterizedTest
@@ -86,7 +84,7 @@ class JexxaEntityRepositoryIT
         //Act
         var resultList = aggregateList.stream()
                 .map(aggregate -> objectUnderTest.get(aggregate.getKey()))
-                .collect(toList());
+                .toList();
 
         //Assert
         assertEquals(aggregateList.size(), resultList.size());
@@ -159,10 +157,11 @@ class JexxaEntityRepositoryIT
     private void dropTable(Properties properties)
     {
         if (!properties.isEmpty()) {
-            JDBCConnection connection = new JDBCConnection(properties);
-            connection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
-                    .dropTableIfExists(JexxaEntity.class)
-                    .asIgnore();
+            try ( JDBCConnection connection = new JDBCConnection(properties) ) {
+                connection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
+                        .dropTableIfExists(JexxaEntity.class)
+                        .asIgnore();
+            }
         }
     }
 

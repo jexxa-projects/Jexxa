@@ -69,7 +69,7 @@ class JexxaTestConfigTest
     void validateMessageSenderConfig(Properties properties)
     {
         //Arrange
-        var messageSender = MessageSenderManager.getMessageSender(properties);
+        var messageSender = MessageSenderManager.getMessageSender(JexxaTestConfigTest.class, properties);
 
         //Act / Assert : Since we initialized JexxaTest, we should always get an MessageRecordingStrategy, independent of the Properties
         assertDoesNotThrow(() -> (MessageRecordingStrategy) messageSender );

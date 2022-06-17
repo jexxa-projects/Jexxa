@@ -44,15 +44,16 @@ class MessageListenerIT
     @BeforeEach
     void initTests()
     {
-        jexxaMain = new JexxaMain(MessageListenerIT.class.getSimpleName());
+        jexxaMain = new JexxaMain(MessageListenerIT.class);
         jsonMessageListener = new TextMessageListener();
         typedListener = new JexxaValueObjectListener();
-        objectUnderTest = MessageSenderManager.getMessageSender(jexxaMain.getProperties());
+        objectUnderTest = MessageSenderManager.getMessageSender(MessageListenerIT.class, jexxaMain.getProperties());
 
         jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
                 .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .bind(JMSAdapter.class).to(typedListener)
                 .bind(JMSAdapter.class).to(jsonMessageListener)
+                .disableBanner()
                 .start();
     }
 

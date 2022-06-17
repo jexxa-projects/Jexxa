@@ -11,6 +11,7 @@
 :sectanchors:
 :numbered:
 
+// suppress inspection "GrazieInspection"
 //Hinweis: Die counter:local-table-number und counter:local-figure-number werden verwendet, damit im Fliesstext als Referenz die Nummer der Tabelle bzw. Abbildung angezeigt wird, also z.B. "wie in Abbildung 5 zu sehen ist."
 
 == Vision

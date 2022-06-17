@@ -13,11 +13,14 @@ import javax.management.AttributeList;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
-import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
-import static org.junit.jupiter.api.Assertions.*;
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Execution(ExecutionMode.CONCURRENT)
 @Tag(TestConstants.UNIT_TEST)
@@ -196,8 +199,7 @@ class MBeanConventionTest
         var properties = new Properties();
         properties.put(JEXXA_CONTEXT_NAME, getClass().getSimpleName());
         var staticMethods = Arrays.stream(applicationService.getClass().getMethods())
-                .filter( method -> Modifier.isStatic(method.getModifiers()))
-                .collect(Collectors.toUnmodifiableList());
+                .filter(method -> Modifier.isStatic(method.getModifiers())).toList();
 
         //Act
         var objectUnderTest = new MBeanConvention(applicationService, properties);

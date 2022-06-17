@@ -11,6 +11,7 @@ import java.util.Objects;
  *     <li> private field with null</li>
  * </ul>
  */
+@SuppressWarnings("SameParameterValue")
 @ValueObject
 public final class SpecialCasesValueObject
 {

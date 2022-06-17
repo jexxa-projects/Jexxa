@@ -5,11 +5,11 @@
   <parent>
     <artifactId>jexxa</artifactId>
     <groupId>io.jexxa</groupId>
-    <version>4.1.9-SNAPSHOT</version>
+    <version>5.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>jexxa-core</artifactId>
-  <version>4.1.9-SNAPSHOT</version>
+  <version>5.0.0-SNAPSHOT</version>
 
   <name>Jexxa-Core</name>
   <licenses>
@@ -21,7 +21,7 @@
   </licenses>
 
   <properties>
-    <jexxa.adapter.api.version>2.1.9-SNAPSHOT</jexxa.adapter.api.version>
+    <jexxa.adapter.api.version>3.0.0-SNAPSHOT</jexxa.adapter.api.version>
     <sonar.projectKey>repplix_Jexxa</sonar.projectKey>
   </properties>
 
@@ -153,7 +153,15 @@
         </execution>
       </executions>
     </plugin>
-  </plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>17</source>
+          <target>17</target>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 
 </project>

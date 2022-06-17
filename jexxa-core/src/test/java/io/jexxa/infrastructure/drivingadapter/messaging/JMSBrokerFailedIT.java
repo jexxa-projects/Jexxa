@@ -23,30 +23,31 @@ class JMSBrokerFailedIT
     void testReconnect() throws JMSException
     {
         //Arrange
-        var jexxaMain = new JexxaMain(JMSBrokerFailedIT.class.getSimpleName());
+        var jexxaMain = new JexxaMain(JMSBrokerFailedIT.class);
         var messageListener = new TopicListener();
-        var jmsAdapter = new JMSAdapter(jexxaMain.getProperties());
+        try (
+            var jmsAdapter = new JMSAdapter(jexxaMain.getProperties());
+            var myProducer = new ITMessageSender(jexxaMain.getProperties(), TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC)
+        ) {
 
-        var myProducer = new ITMessageSender(jexxaMain.getProperties(), TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+            jmsAdapter.register(messageListener);
+            jmsAdapter.start();
 
-        jmsAdapter.register(messageListener);
-        jmsAdapter.start();
+            //Act
+            simulateConnectionException(jmsAdapter.getConnection());
 
-        //Act
-        simulateConnectionException(jmsAdapter.getConnection());
+            var service = Executors.newSingleThreadScheduledExecutor();
+            service.scheduleAtFixedRate(() -> myProducer.send(MESSAGE), 100, 100, TimeUnit.MILLISECONDS); // Send messages in a 100 ms interval
 
-        var service = Executors.newSingleThreadScheduledExecutor();
-        service.scheduleAtFixedRate(() -> myProducer.send(MESSAGE),100, 100, TimeUnit.MILLISECONDS ); // Send messages in a 100 ms interval
+            //Assert
+            await().atMost(Duration.ofSeconds(2, 0)).until(() -> !messageListener.getMessages().isEmpty());
 
-        //Assert
-        await().atMost(Duration.ofSeconds(2,0)).until(() -> !messageListener.getMessages().isEmpty());
+            //Assert that still only a single consumer is registered
+            assertEquals(1, jmsAdapter.getConsumerList().size());
 
-        //Assert that still only a single consumer is registered
-        assertEquals(1, jmsAdapter.getConsumerList().size());
-
-        service.shutdown();
-        jmsAdapter.stop();
-
+            service.shutdown();
+            jmsAdapter.stop();
+        }
         assertFalse(messageListener.getMessages().isEmpty());
     }
 

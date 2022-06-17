@@ -18,6 +18,7 @@ import io.javalin.plugin.openapi.annotations.HttpMethod;
 import io.javalin.plugin.openapi.dsl.DocumentedContent;
 import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
 import io.javalin.plugin.openapi.dsl.OpenApiDocumentation;
+import io.javalin.plugin.openapi.utils.OpenApiVersionUtil;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONManager;
 import io.swagger.v3.oas.models.info.Info;
@@ -66,12 +67,15 @@ public class OpenAPIConvention
     {
         this.properties = properties;
         this.javalinConfig = javalinConfig;
+
         initOpenAPI();
     }
     private void initOpenAPI()
     {
         if (properties.containsKey(JEXXA_REST_OPEN_API_PATH))
         {
+            OpenApiVersionUtil.INSTANCE.setLogWarnings(false);
+
             var applicationInfo = new Info()
                     .version(properties.getProperty(JEXXA_CONTEXT_VERSION, "1.0"))
                     .description("Auto generated OpenAPI for " + properties.getProperty(JEXXA_CONTEXT_NAME, "Unknown Context"))
@@ -281,7 +285,9 @@ public class OpenAPIConvention
             //Handle primitive values
             return createPrimitive(clazz);
         } catch (Exception | NoSuchMethodError e ) {
-            JexxaLogger.getLogger(OpenAPIConvention.class).warn( "[OpenAPI] Could not create an example Object {}" , clazz.getName() );
+            if (!clazz.isRecord()) { // Records include some isolation fields that can not be created and are not meaningful for a template. Therefore, we show this message only given type is not a record
+                JexxaLogger.getLogger(OpenAPIConvention.class).warn("[OpenAPI] Could not create an example Object {}", clazz.getName());
+            }
         }
         return null;
     }
