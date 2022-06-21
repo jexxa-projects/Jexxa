@@ -60,16 +60,12 @@ frameworks, Jexxa requires some code to explicitly configure your application fo
 The steps for configuring your application are always similar as you can see in all https://github.com/jexxa-projects/JexxaTutorials[tutorials]:
 
 
-1. Define packages that include your application core and infrastructure. If you follow the package convention in the tutorials, you can use
-method `JexxaMain.addDDDPackages(<MainClass>.class)`. Alternatively, you have to use the method `JexxaMain.addToApplicationCore()` or `JexxaMain.addToInfrastructure()` to add packages of your application core or infrastructure respectively.
+1. Define packages that include your application core and infrastructure. If you follow the package convention in the tutorials, you do not need to add any packages. Alternatively, you have to use the method `JexxaMain.addToApplicationCore()` or `JexxaMain.addToInfrastructure()` to add packages of your application core or infrastructure respectively.
 
 2. Bind technology stacks to application core with `JexxaMain.bind(<DrivingAdapter>.class).to(<port>.class)`.
 
-3. Startup your application using `JexxaMain.start()`. Please note that this method implements a *fail-fast* approach. If this method
-is successfully executed, your application is up and running. In more detail, a connection to all involved technology stacks such as a database or messaging system is established, all required objects are successfully instantiated in order to execute your business logic. In case
-of any errors, this method will fail.
-
-4. The two commands `waitForShutdown()` and `stop()` are just for convenience purpose and allow you to manage the main thread and point in time for cleanup Jexxa resources of your application. In case your application needs the main thread for any other purpose just don't call `waitForShutdown()`
+3. Startup your application using `JexxaMain.run()`. Please note that this method implements a *fail-fast* approach. If this method
+is successfully executed, your application is up and running. In more detail, a connection to all involved technology stacks such as a database or messaging system is established, all required objects are successfully instantiated in order to execute your business logic. In case of any errors, this method will fail.
 
 
 === BoundedContext
@@ -79,12 +75,12 @@ As described in https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html[a
 So this object provides important information for your ops-team. Therefore, it is recommended to expose this class by any
 driving adapter.
 
-1. `BoundedContext.isRunning()`: This method returns `true` only if `JexxaMain.start()` was successfully executed. So you can use this method in your ops-environment such as docker or kubernetes to check if the application or a new version of it can be correctly started.
+1. `BoundedContext.isRunning()`: This method returns `true` only if `JexxaMain.run()` was successfully executed. So you can use this method in your ops-environment such as docker or kubernetes to check if the application or a new version of it can be correctly started.
 
 2. `BoundedContext.isHealthy()`: Jexxa provides monitoring components which report about the healthy status of the application. A simple example
    could be a `TimerMonitor` that informs about that no requests have been received for a longer period of time.
 
-3. `BoundedContext.getDiagnostics()`: This method provides human-readable information from the established monitors.
+3. `BoundedContext.diagnostics()`: This method provides human-readable information from the established monitors.
 
 
 === Application Configuration
@@ -109,7 +105,7 @@ NOTE: All https://github.com/jexxa-projects/JexxaTutorials[Jexxa tutorials] prov
 3. **Local**: Sometimes it is required to run your application without any infrastructure service. For example, this could be required for rapid prototyping.  In this case you can provide a properties file that defines explicit driven adapters or disables the driving adapter.
 
 ==== Secrets
-One of the most crucial aspects with productive systems is the handling of secrets uch as usernames, passwords, or private keys. Jexxa addresses this problem with two approaches.
+One of the most crucial aspects with productive systems is the handling of secrets such as usernames, passwords, or private keys. Jexxa addresses this problem with two approaches.
 
     * First, you can provide all secrets unencrypted as properties which is only recommended for developing on your local machine. For example, you can use `io.jexxa.jdbc.password` to define the password for your JDBC connection.
     * Secondly, you can provide these properties with a file. In this case, you have to use `io.jexxa.jdbc.file.password`. This approach enables a seamless integration of security mechanisms from virtualization environments such as docker-swarm and is recommended for all productive systems.
