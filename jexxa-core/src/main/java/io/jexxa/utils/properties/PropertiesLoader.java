@@ -18,7 +18,7 @@ import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_APPLICATION_PR
 
 public class PropertiesLoader {
     private final Class<?> context;
-    Properties properties = new Properties();
+    final Properties properties = new Properties();
     private final List<String> propertiesFiles = new ArrayList<>();
 
     public PropertiesLoader(Class<?> context) {

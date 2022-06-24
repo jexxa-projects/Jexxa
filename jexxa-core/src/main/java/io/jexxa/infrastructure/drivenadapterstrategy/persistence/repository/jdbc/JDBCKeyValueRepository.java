@@ -13,7 +13,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder.SQLDataType.JSONB;
@@ -150,7 +149,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
                 .asString()
                 .flatMap(Optional::stream)
                 .map( element -> getJSONConverter().fromJson(element, aggregateClazz))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private void manageDBTable(Properties properties)

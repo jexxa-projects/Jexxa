@@ -129,7 +129,9 @@ class IObjectStoreIT
 
         //Act
         var result = objectUnderTest.get();
-        result.sort(comparing(element -> element.getKey().getValue()));
+        result = result.stream()
+                .sorted( comparing(element -> element.getKey().getValue()))
+                .toList();
 
         //Assert
         assertEquals(testData, result);
