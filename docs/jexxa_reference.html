@@ -712,11 +712,11 @@ All <a href="https://github.com/jexxa-projects/JexxaTutorials">Jexxa tutorials</
 <div class="paragraph">
 <p>The <code>RESTfulRPCAdapter</code> is a simple RPC mechanism utilizing REST. Based on the <a href="https://martinfowler.com/articles/richardsonMaturityModel.html">REST maturity model</a> from Richardson it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST on a higher maturity level.</p>
 </div>
-<div class="admonitionblock note">
+<div class="admonitionblock tip">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title=":information_source:"></i>
+<i class="fa icon-tip" title=":bulb:"></i>
 </td>
 <td class="content">
 When you start using this adapter, I recommend enabling OpenAPI support at least during development as described <a href="https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStoreJ/README-OPENAPI.md">here</a>. It simplifies understanding the REST API.
@@ -973,7 +973,7 @@ Jexxa does not serialize any other information such as stack trace due to securi
 <p>JSON does not specify a specific date representation. JavaScript uses <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a> string format to encode dates as a string, which is a common way to exchange date information between different systems.</p>
 </div>
 <div class="paragraph">
-<p>Java8 introduces a new API for date and time for good reason. Even if there is a reason to use the old API you should not use it as part of your API of the application. These two aspects leads to following design decision:</p>
+<p>Java8 introduces a new API for date and time for good reason. Even if there is a reason to use the old API you should not use it as part of your exposed API of the application. These two aspects leads to following design decision:</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -983,18 +983,6 @@ Jexxa does not serialize any other information such as stack trace due to securi
 </td>
 <td class="content">
 <code>RESTfulRPCAdapter</code> supports only Java8 Date API and represents a date as JSON-string in <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a> string format.
-</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title=":information_source:"></i>
-</td>
-<td class="content">
-If ou need some example how <code>RESTfulRPCAdapter</code> maps Java&#8217;s Date and Time API to JSON please see <a href="https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java">here</a>.
 </td>
 </tr>
 </table>
@@ -1049,6 +1037,18 @@ If ou need some example how <code>RESTfulRPCAdapter</code> maps Java&#8217;s Dat
 </tr>
 </tbody>
 </table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title=":bulb:"></i>
+</td>
+<td class="content">
+If ou need some example how <code>RESTfulRPCAdapter</code> maps Java&#8217;s Date and Time API to JSON please see <a href="https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java">here</a>.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1222,7 +1222,7 @@ Please check the tutorial <a href="https://github.com/jexxa-projects/JexxaTutori
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-06-21 22:27:55 +0200
+Last updated 2022-06-25 06:14:37 +0200
 </div>
 </div>
 </body>
