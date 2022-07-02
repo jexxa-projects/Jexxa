@@ -16,6 +16,7 @@ public class MessageLogger extends MessageSender
     {
         MESSAGE_LOGGER.info("Begin> Send message");
         MESSAGE_LOGGER.info("Message           : {}", message);
+        MESSAGE_LOGGER.info("Properties        : {}", messageProperties);
         MESSAGE_LOGGER.info("Destination       : {}", destination);
         MESSAGE_LOGGER.info("Destination-Type  : QUEUE");
         MESSAGE_LOGGER.info("End> Send message");
@@ -26,6 +27,7 @@ public class MessageLogger extends MessageSender
     {
         MESSAGE_LOGGER.info("Begin> Send message");
         MESSAGE_LOGGER.info("Message           : {}", message);
+        MESSAGE_LOGGER.info("Properties        : {}", messageProperties);
         MESSAGE_LOGGER.info("Destination       : {}", destination);
         MESSAGE_LOGGER.info("Destination-Type  : TOPIC");
         MESSAGE_LOGGER.info("End> Send message");
