@@ -24,7 +24,7 @@ In addition, Jexxa offers following production-proven features:
 
 ## General information
 
-*   Supported Java environments: Java 17 (or higher)
+*   Supported Java environments: ![Java](https://img.shields.io/badge/JDK-Java17+-blue.svg)
 
 *   Documentation: 
     *   [Jexxa-Tutorials](https://github.com/jexxa-projects/JexxaTutorials) show typical use cases
