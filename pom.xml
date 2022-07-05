@@ -85,7 +85,7 @@
     <unirest.java.version>3.13.10</unirest.java.version>
     <junit.platform.launcher.version>1.9.0-M1</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.9.0-RC1</junit.jupiter.engine.version>
-    <junit.jupiter.params.version>5.9.0-M1</junit.jupiter.params.version>
+    <junit.jupiter.params.version>5.9.0-RC1</junit.jupiter.params.version>
     <slf4j.simple.version>1.7.36</slf4j.simple.version>
     <slf4j.api.version>1.7.36</slf4j.api.version>
     <awaitility.version>4.2.0</awaitility.version>
