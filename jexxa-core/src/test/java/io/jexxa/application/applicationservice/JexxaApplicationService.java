@@ -2,6 +2,7 @@ package io.jexxa.application.applicationservice;
 
 import io.jexxa.application.domainservice.IJexxaEntityRepository;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class JexxaApplicationService
 {
     private final IJexxaEntityRepository jexxaAggregateRepository;

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-@SuppressWarnings("unsused")
+@SuppressWarnings({"unsused", "ClassCanBeRecord"})
 public final class JexxaAggregateRepository implements IJexxaAggregateRepository
 {
 

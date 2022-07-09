@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
+@SuppressWarnings("ClassCanBeRecord")
 public final class JexxaEntityRepository implements IJexxaEntityRepository
 {
     private final IRepository<JexxaEntity, JexxaValueObject> repositoryConnection;

@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.builder;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class JDBCObject {
     private final Object jdbcValue;
     private final SQLDataType sqlDataType;

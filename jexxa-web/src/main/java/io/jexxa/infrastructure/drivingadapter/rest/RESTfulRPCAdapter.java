@@ -194,6 +194,7 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
     }
 
 
+    @SuppressWarnings("HttpUrlsUsage") //http is used for showing access possibilities
     public void bannerInformation(Properties properties)
     {
         // Print Listening ports
