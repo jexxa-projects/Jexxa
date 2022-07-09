@@ -36,7 +36,7 @@
             <groupId>io.jexxa</groupId>
             <artifactId>jexxa-core</artifactId>
             <version>${project.version}</version>
-            <scope>import</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

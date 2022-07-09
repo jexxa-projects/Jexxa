@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Execution(ExecutionMode.CONCURRENT)
 class JDBCPropertiesTest
 {
+    @SuppressWarnings("resource") //Intended by  test
     @Test
     void invalidProperties()
     {
