@@ -292,10 +292,15 @@
               <placement>t</placement>
               <head>Plantuml:</head>
             </tag>
+            <tag>
+              <name>Optional</name>
+              <placement>t</placement>
+              <head>Plantuml-Optional:</head>
+            </tag>
           </tags>
-          <additionalOptions>-Xdoclint:all -Xdoclint:-missing</additionalOptions>
+          <additionalOptions>-Xdoclint:none -Xdoclint:-missing</additionalOptions>
           <additionalJOptions>
-            <additionalJOption>-Xdoclint:all</additionalJOption>
+            <additionalJOption>-Xdoclint:none</additionalJOption>
             <additionalJOption>-Xdoclint:-missing</additionalJOption>
           </additionalJOptions>
         </configuration>
