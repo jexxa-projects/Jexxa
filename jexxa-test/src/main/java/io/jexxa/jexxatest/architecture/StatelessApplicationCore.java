@@ -32,8 +32,15 @@ public class StatelessApplicationCore {
                 .importPackages(project.getPackage().getName());
     }
 
+    public void validate()
+    {
+        validateApplicationCoreDoesNotHaveStatefulFields();
+        validateFinalFields();
+        validateOnlyRepositoriesAcceptAggregates();
+        validateOnlyRepositoriesReturnAggregates();
+    }
     
-    void testOnlyRepositoriesReturnAggregates() {
+    void validateOnlyRepositoriesReturnAggregates() {
         // Arrange -
 
         // Act
@@ -41,6 +48,7 @@ public class StatelessApplicationCore {
                 .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_PROCESS_SERVICE, DOMAIN_SERVICE))
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Repository.class)
                 .should().haveRawReturnType(resideInAnyPackage(AGGREGATE))
+                .allowEmptyShould(true)
                 .because("Aggregates contain the business logic and can only be returned by a Repository!");
 
 
@@ -49,7 +57,7 @@ public class StatelessApplicationCore {
     }
 
     
-    void testOnlyRepositoriesAcceptAggregates() {
+    void validateOnlyRepositoriesAcceptAggregates() {
         // Arrange -
 
         // Act
@@ -57,6 +65,7 @@ public class StatelessApplicationCore {
                 .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_PROCESS_SERVICE, DOMAIN_SERVICE))
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Repository.class)
                 .should().haveRawParameterTypes(thatAreAggregates())
+                .allowEmptyShould(true)
                 .because("Aggregates contain the business logic and can only be returned by a Repository!");
 
 
@@ -66,7 +75,7 @@ public class StatelessApplicationCore {
 
 
     
-    void testFinalFields() {
+    void validateFinalFields() {
         // Arrange -
 
         // Act
@@ -82,7 +91,7 @@ public class StatelessApplicationCore {
     }
 
     
-    void testApplicationCoreDoesNotHaveStatefulFields() {
+    void validateApplicationCoreDoesNotHaveStatefulFields() {
         // Arrange -
 
         // Act

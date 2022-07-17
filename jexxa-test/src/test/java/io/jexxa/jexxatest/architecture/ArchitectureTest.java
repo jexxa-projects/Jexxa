@@ -19,4 +19,11 @@ class ArchitectureTest {
         objectUnderTest.validate();
     }
 
+    @Test
+    void validateAggregates()
+    {
+        var objectUnderTest = new StatelessApplicationCore(ValidApplication.class);
+        objectUnderTest.validate();
+    }
+
 }
