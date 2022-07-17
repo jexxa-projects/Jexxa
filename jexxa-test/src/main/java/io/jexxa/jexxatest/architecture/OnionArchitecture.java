@@ -3,7 +3,6 @@ package io.jexxa.jexxatest.architecture;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
-import com.tngtech.archunit.core.importer.ImportOption;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
@@ -25,16 +24,16 @@ import static io.jexxa.jexxatest.architecture.PackageName.VALUE_OBJECT;
  *
  * package ApplicationCore  #DDDDDD {
  *   [ApplicationService]
- *   [DomainProcessService] <<Optional>>
+ *   [DomainWorkflow] <<Optional>>
  *   [DomainService]
  *   [Domain]
  * }
  *
- * [ApplicationService] -down-> [DomainProcessService]
+ * [ApplicationService] -down-> [DomainWorkflow]
  * [ApplicationService] -down-> [DomainService]
  * [ApplicationService] -down-> [Domain]
- * [DomainProcessService] -down-> [DomainService]
- * [DomainProcessService] -down-> [Domain]
+ * [DomainWorkflow] -down-> [DomainService]
+ * [DomainWorkflow] -down-> [Domain]
  * [DomainService] -r-> [Domain]
  *
  * @enduml
@@ -49,7 +48,6 @@ public class OnionArchitecture {
     {
         this.project = project;
         importedClasses = new ClassFileImporter()
-                .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
                 .importPackages(project.getPackage().getName());
     }
 
@@ -130,6 +128,7 @@ public class OnionArchitecture {
                         DOMAIN_SERVICE,
                         DOMAIN_PROCESS_SERVICE,
                         INFRASTRUCTURE)
+                .allowEmptyShould(true)
                 .because("An Aggregate must not depend on any Service or the infrastructure");
 
         //Assert
@@ -150,6 +149,7 @@ public class OnionArchitecture {
                         AGGREGATE,
                         DOMAIN_EVENT,
                         BUSINESS_EXCEPTION)
+                .allowEmptyShould(true)
                 .because("A ValueObject must not depend on any other classes of the application except of ValueObjects");
 
 
@@ -170,7 +170,9 @@ public class OnionArchitecture {
                         AGGREGATE,
                         DOMAIN_SERVICE,
                         DOMAIN_PROCESS_SERVICE,
-                        INFRASTRUCTURE);
+                        INFRASTRUCTURE)
+                .allowEmptyShould(true)
+                .because("A DomainEvent must not depend on any other classes of the application except of ValueObjects");
 
         //Assert
         invalidAccess.check(importedClasses);

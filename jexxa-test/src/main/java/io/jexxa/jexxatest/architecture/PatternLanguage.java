@@ -2,7 +2,6 @@ package io.jexxa.jexxatest.architecture;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
-import com.tngtech.archunit.core.importer.ImportOption;
 import io.jexxa.addend.applicationcore.Aggregate;
 import io.jexxa.addend.applicationcore.ApplicationService;
 import io.jexxa.addend.applicationcore.BusinessException;
@@ -14,7 +13,6 @@ import io.jexxa.addend.applicationcore.InfrastructureService;
 import io.jexxa.addend.applicationcore.Repository;
 import io.jexxa.addend.applicationcore.ValueObject;
 import io.jexxa.addend.applicationcore.ValueObjectFactory;
-
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static io.jexxa.jexxatest.architecture.PackageName.AGGREGATE;
@@ -33,7 +31,6 @@ public class PatternLanguage {
     public PatternLanguage(Class<?> project)
     {
         importedClasses = new ClassFileImporter()
-                .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
                 .importPackages(project.getPackage().getName());
     }
 
