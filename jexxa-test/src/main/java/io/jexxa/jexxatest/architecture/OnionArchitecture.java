@@ -20,7 +20,6 @@ import static io.jexxa.jexxatest.architecture.PackageName.VALUE_OBJECT;
 /**
  * These tests validate the access direction af an onion architecture which is as follows:
  *
- * { @code
  * @startuml
  *
  * package ApplicationCore  #DDDDDD {
@@ -39,7 +38,6 @@ import static io.jexxa.jexxatest.architecture.PackageName.VALUE_OBJECT;
  *
  * @enduml
  * ....
- * }
  */
 public class OnionArchitecture {
     private final Class<?> project;
