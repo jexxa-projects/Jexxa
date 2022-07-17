@@ -2,7 +2,7 @@ package io.jexxa.core.factory;
 
 import io.jexxa.TestConstants;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
-import io.jexxa.application.annotation.ApplicationService;
+import io.jexxa.application.annotation.ValidApplicationService;
 import io.jexxa.application.annotation.UnavailableDuringRuntime;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import org.junit.jupiter.api.Tag;
@@ -31,7 +31,7 @@ class DependencyScannerTest
         //Act
         var applicationServiceList = objectUnderTest.
                 acceptPackage(JEXXA_APPLICATION_SERVICE).
-                getClassesWithAnnotation(ApplicationService.class);
+                getClassesWithAnnotation(ValidApplicationService.class);
 
         //Assert
         assertFalse(applicationServiceList.isEmpty());
@@ -51,7 +51,7 @@ class DependencyScannerTest
         //Act
         var applicationServiceList = objectUnderTest.
                 acceptPackage(invalidPackageName).
-                getClassesWithAnnotation(ApplicationService.class);
+                getClassesWithAnnotation(ValidApplicationService.class);
 
         //Assert
         assertTrue(applicationServiceList.isEmpty());

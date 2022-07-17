@@ -1,7 +1,7 @@
 package io.jexxa.core;
 
 
-import io.jexxa.application.annotation.ApplicationService;
+import io.jexxa.application.annotation.ValidApplicationService;
 import io.jexxa.application.annotation.InvalidApplicationService;
 import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
 import io.jexxa.application.applicationservice.InvalidConstructorApplicationService;
@@ -132,7 +132,7 @@ class JexxaMainTest
 
         //Act: Bind all DrivingAdapter to all ApplicationServices
         objectUnderTest
-                .bind(ProxyAdapter.class).toAnnotation(ApplicationService.class)
+                .bind(ProxyAdapter.class).toAnnotation(ValidApplicationService.class)
                 .disableBanner()
                 .start();
 

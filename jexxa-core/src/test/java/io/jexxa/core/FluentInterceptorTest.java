@@ -1,7 +1,7 @@
 package io.jexxa.core;
 
 import io.jexxa.adapterapi.invocation.InvocationManager;
-import io.jexxa.application.annotation.ApplicationService;
+import io.jexxa.application.annotation.ValidApplicationService;
 import io.jexxa.application.applicationservice.IncrementApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
@@ -99,7 +99,7 @@ class FluentInterceptorTest
         var result = new String[3];
 
         objectUnderTest
-                .interceptAnnotation( ApplicationService.class )
+                .interceptAnnotation( ValidApplicationService.class )
                 .beforeAnd( invocationContext -> result[0] = "Before " + invocationContext.getMethod().getName( ))
                 .aroundAnd( invocationContext -> {
                     result[1] = "Around " + invocationContext.getMethod().getName();
