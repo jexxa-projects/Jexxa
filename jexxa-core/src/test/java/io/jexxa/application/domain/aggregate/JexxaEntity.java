@@ -1,12 +1,9 @@
 package io.jexxa.application.domain.aggregate;
 
-import io.jexxa.application.annotation.Aggregate;
-import io.jexxa.application.annotation.AggregateID;
 import io.jexxa.application.domain.valueobject.JexxaValueObject;
 
 import java.util.Objects;
 
-@Aggregate
 public final class JexxaEntity
 {
     private final JexxaValueObject jexxaValueObject;
@@ -29,7 +26,6 @@ public final class JexxaEntity
     }
 
 
-    @AggregateID
     public JexxaValueObject getKey()
     {
         return jexxaValueObject;

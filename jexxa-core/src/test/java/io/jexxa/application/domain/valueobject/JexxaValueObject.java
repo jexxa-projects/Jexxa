@@ -1,9 +1,6 @@
 package io.jexxa.application.domain.valueobject;
 
 
-import io.jexxa.application.annotation.ValueObject;
-
-@ValueObject
 public class JexxaValueObject
 {
     private final int value;

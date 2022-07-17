@@ -175,6 +175,7 @@
           <artifactId>versions-maven-plugin</artifactId>
           <version>${maven.versions.plugin}</version>
           <configuration>
+            <!--suppress UnresolvedMavenProperty -->
             <rulesUri>file:///${session.executionRootDirectory}/mavenVersionRules.xml</rulesUri>
           </configuration>
         </plugin>
@@ -280,6 +281,16 @@
               <name>inv</name>
               <placement>t</placement>
               <head>Invariants:</head>
+            </tag>
+            <tag>
+              <name>startuml</name>
+              <placement>t</placement>
+              <head>Plantuml:</head>
+            </tag>
+            <tag>
+              <name>enduml</name>
+              <placement>t</placement>
+              <head>Plantuml:</head>
             </tag>
           </tags>
           <additionalOptions>-Xdoclint:all -Xdoclint:-missing</additionalOptions>

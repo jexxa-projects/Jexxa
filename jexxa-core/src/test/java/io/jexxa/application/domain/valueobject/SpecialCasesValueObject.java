@@ -1,7 +1,5 @@
 package io.jexxa.application.domain.valueobject;
 
-import io.jexxa.application.annotation.ValueObject;
-
 import java.util.Objects;
 
 /**
@@ -12,7 +10,6 @@ import java.util.Objects;
  * </ul>
  */
 @SuppressWarnings("SameParameterValue")
-@ValueObject
 public final class SpecialCasesValueObject
 {
 
