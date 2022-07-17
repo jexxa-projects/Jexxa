@@ -3,6 +3,7 @@ package io.jexxa.jexxatest.architecture;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.core.importer.ImportOption;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
@@ -10,8 +11,8 @@ import static io.jexxa.jexxatest.architecture.PackageName.AGGREGATE;
 import static io.jexxa.jexxatest.architecture.PackageName.APPLICATIONSERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.BUSINESS_EXCEPTION;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_EVENT;
-import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_PROCESS_SERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_SERVICE;
+import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_WORKFLOW;
 import static io.jexxa.jexxatest.architecture.PackageName.DRIVEN_ADAPTER;
 import static io.jexxa.jexxatest.architecture.PackageName.DRIVING_ADAPTER;
 import static io.jexxa.jexxatest.architecture.PackageName.INFRASTRUCTURE;
@@ -46,8 +47,14 @@ public class OnionArchitecture {
 
     public OnionArchitecture(Class<?> project)
     {
+        this(project, ImportOption.Predefined.DO_NOT_INCLUDE_TESTS);
+    }
+
+    OnionArchitecture(Class<?> project, ImportOption importOption)
+    {
         this.project = project;
         importedClasses = new ClassFileImporter()
+                .withImportOption(importOption)
                 .importPackages(project.getPackage().getName());
     }
 
@@ -72,7 +79,7 @@ public class OnionArchitecture {
         var rule = classes().should()
                 .resideInAnyPackage(
                         APPLICATIONSERVICE,
-                        DOMAIN_PROCESS_SERVICE,
+                        DOMAIN_WORKFLOW,
                         DOMAIN_SERVICE,
                         AGGREGATE,
                         BUSINESS_EXCEPTION,
@@ -106,7 +113,7 @@ public class OnionArchitecture {
 
         // Act
         var invalidAccess = noClasses()
-                .that().resideInAPackage(DOMAIN_PROCESS_SERVICE)
+                .that().resideInAPackage(DOMAIN_WORKFLOW)
                 .should().dependOnClassesThat()
                 .resideInAnyPackage(APPLICATIONSERVICE, INFRASTRUCTURE)
                 .allowEmptyShould(true)
@@ -126,7 +133,7 @@ public class OnionArchitecture {
                 .should().dependOnClassesThat()
                 .resideInAnyPackage(APPLICATIONSERVICE,
                         DOMAIN_SERVICE,
-                        DOMAIN_PROCESS_SERVICE,
+                        DOMAIN_WORKFLOW,
                         INFRASTRUCTURE)
                 .allowEmptyShould(true)
                 .because("An Aggregate must not depend on any Service or the infrastructure");
@@ -144,7 +151,7 @@ public class OnionArchitecture {
                 .should().dependOnClassesThat()
                 .resideInAnyPackage(APPLICATIONSERVICE,
                         DOMAIN_SERVICE,
-                        DOMAIN_PROCESS_SERVICE,
+                        DOMAIN_WORKFLOW,
                         INFRASTRUCTURE,
                         AGGREGATE,
                         DOMAIN_EVENT,
@@ -169,7 +176,7 @@ public class OnionArchitecture {
                         BUSINESS_EXCEPTION,
                         AGGREGATE,
                         DOMAIN_SERVICE,
-                        DOMAIN_PROCESS_SERVICE,
+                        DOMAIN_WORKFLOW,
                         INFRASTRUCTURE)
                 .allowEmptyShould(true)
                 .because("A DomainEvent must not depend on any other classes of the application except of ValueObjects");
@@ -201,7 +208,7 @@ public class OnionArchitecture {
                 .should().dependOnClassesThat()
                 .resideInAnyPackage(DRIVING_ADAPTER,
                         APPLICATIONSERVICE,
-                        DOMAIN_PROCESS_SERVICE
+                        DOMAIN_WORKFLOW
                         );
 
         //Assert

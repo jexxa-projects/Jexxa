@@ -4,6 +4,7 @@ import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.core.importer.ImportOption;
 import io.jexxa.addend.applicationcore.Aggregate;
 import io.jexxa.addend.applicationcore.Repository;
 
@@ -17,7 +18,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noMethods;
 import static io.jexxa.jexxatest.architecture.PackageName.AGGREGATE;
 import static io.jexxa.jexxatest.architecture.PackageName.APPLICATIONSERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.BUSINESS_EXCEPTION;
-import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_PROCESS_SERVICE;
+import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_WORKFLOW;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_SERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.VALUE_OBJECT;
 
@@ -28,9 +29,16 @@ public class StatelessApplicationCore {
 
     public StatelessApplicationCore(Class<?> project)
     {
+        this(project, ImportOption.Predefined.DO_NOT_INCLUDE_TESTS);
+    }
+
+    StatelessApplicationCore(Class<?> project, ImportOption importOption)
+    {
         importedClasses = new ClassFileImporter()
+                .withImportOption(importOption)
                 .importPackages(project.getPackage().getName());
     }
+
 
     public void validate()
     {
@@ -45,7 +53,7 @@ public class StatelessApplicationCore {
 
         // Act
         var invalidReturnType = noMethods().that()
-                .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_PROCESS_SERVICE, DOMAIN_SERVICE))
+                .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, DOMAIN_SERVICE))
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Repository.class)
                 .should().haveRawReturnType(resideInAnyPackage(AGGREGATE))
                 .allowEmptyShould(true)
@@ -62,7 +70,7 @@ public class StatelessApplicationCore {
 
         // Act
         var invalidReturnType = noMethods().that()
-                .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_PROCESS_SERVICE, DOMAIN_SERVICE))
+                .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, DOMAIN_SERVICE))
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Repository.class)
                 .should().haveRawParameterTypes(thatAreAggregates())
                 .allowEmptyShould(true)
@@ -80,9 +88,10 @@ public class StatelessApplicationCore {
 
         // Act
         var finalFields = fields().that().areDeclaredInClassesThat()
-                .resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_PROCESS_SERVICE, BUSINESS_EXCEPTION, DOMAIN_SERVICE, VALUE_OBJECT)
+                .resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, BUSINESS_EXCEPTION, DOMAIN_SERVICE, VALUE_OBJECT)
                 .and().areDeclaredInClassesThat().areNotNestedClasses()
                 .should().beFinal()
+                .allowEmptyShould(true)
                 .because("The application core must be stateless except of Aggregates!");
 
 
@@ -96,8 +105,9 @@ public class StatelessApplicationCore {
 
         // Act
         var invalidReturnType = noFields().that().areDeclaredInClassesThat()
-                .resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_PROCESS_SERVICE, BUSINESS_EXCEPTION, DOMAIN_SERVICE, VALUE_OBJECT)
+                .resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, BUSINESS_EXCEPTION, DOMAIN_SERVICE, VALUE_OBJECT)
                 .should().haveRawType(resideInAPackage(AGGREGATE))
+                .allowEmptyShould(true)
                 .because("An ApplicationService or DomainProcessService must not keep a reference to an aggregate!");
 
 

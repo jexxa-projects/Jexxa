@@ -8,7 +8,7 @@ package io.jexxa.jexxatest.architecture;
 class PackageName
 {
     public static final String APPLICATIONSERVICE = "..applicationservice";
-    public static final String DOMAIN_PROCESS_SERVICE = "..domainworkflow";
+    public static final String DOMAIN_WORKFLOW = "..domainworkflow";
     public static final String DOMAIN_SERVICE = "..domainservice";
     public static final String AGGREGATE = "..domain.aggregate";
     public static final String BUSINESS_EXCEPTION = "..domain.businessexception";

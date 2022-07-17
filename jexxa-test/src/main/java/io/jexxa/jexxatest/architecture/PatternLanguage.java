@@ -2,6 +2,7 @@ package io.jexxa.jexxatest.architecture;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.core.importer.ImportOption;
 import io.jexxa.addend.applicationcore.Aggregate;
 import io.jexxa.addend.applicationcore.ApplicationService;
 import io.jexxa.addend.applicationcore.BusinessException;
@@ -19,7 +20,7 @@ import static io.jexxa.jexxatest.architecture.PackageName.AGGREGATE;
 import static io.jexxa.jexxatest.architecture.PackageName.APPLICATIONSERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.BUSINESS_EXCEPTION;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_EVENT;
-import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_PROCESS_SERVICE;
+import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_WORKFLOW;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_SERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.VALUE_OBJECT;
 
@@ -30,7 +31,12 @@ public class PatternLanguage {
 
     public PatternLanguage(Class<?> project)
     {
+        this(project,ImportOption.Predefined.DO_NOT_INCLUDE_TESTS);
+    }
+    PatternLanguage(Class<?> project, ImportOption importOption)
+    {
         importedClasses = new ClassFileImporter()
+                .withImportOption(importOption)
                 .importPackages(project.getPackage().getName());
     }
 
@@ -83,7 +89,7 @@ public class PatternLanguage {
 
         //Act
         var annotationRule = classes()
-                .that().resideInAnyPackage(DOMAIN_PROCESS_SERVICE)
+                .that().resideInAnyPackage(DOMAIN_WORKFLOW)
                 .should().beAnnotatedWith(DomainProcessStep.class)
                 .orShould().beAnnotatedWith(DomainWorkflow.class)
                 .allowEmptyShould(true);
