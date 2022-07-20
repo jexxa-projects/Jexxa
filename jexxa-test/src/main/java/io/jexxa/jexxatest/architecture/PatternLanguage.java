@@ -29,11 +29,12 @@ public class PatternLanguage {
     private final JavaClasses importedClasses;
 
 
+    @SuppressWarnings("unused")
     public PatternLanguage(Class<?> project)
     {
         this(project,ImportOption.Predefined.DO_NOT_INCLUDE_TESTS);
     }
-    PatternLanguage(Class<?> project, ImportOption importOption)
+    protected PatternLanguage(Class<?> project, ImportOption importOption)
     {
         importedClasses = new ClassFileImporter()
                 .withImportOption(importOption)
@@ -56,7 +57,7 @@ public class PatternLanguage {
         validateDomainEventMustBeRecord();
     }
 
-    void validateAnnotationApplicationService()
+    protected void validateAnnotationApplicationService()
     {
         // Arrange
 
@@ -70,7 +71,7 @@ public class PatternLanguage {
         annotationRule.check(importedClasses);
     }
 
-    void validateAnnotationDomainService() {
+    protected void validateAnnotationDomainService() {
         // Arrange
 
         //Act
@@ -84,7 +85,7 @@ public class PatternLanguage {
         annotationRule.check(importedClasses);
     }
 
-    void validateAnnotationDomainProcessService() {
+    protected void validateAnnotationDomainProcessService() {
         // Arrange
 
         //Act
@@ -98,7 +99,7 @@ public class PatternLanguage {
         annotationRule.check(importedClasses);
     }
 
-    void validateAnnotationDomainEvent() {
+    protected void validateAnnotationDomainEvent() {
         // Arrange
 
         //Act
@@ -111,7 +112,7 @@ public class PatternLanguage {
         annotationRule.check(importedClasses);
     }
 
-    void validateAnnotationValueObject() {
+    protected void validateAnnotationValueObject() {
         // Arrange
 
         //Act
@@ -126,7 +127,7 @@ public class PatternLanguage {
         annotationRule.check(importedClasses);
     }
 
-    void validateAnnotationBusinessException() {
+    protected void validateAnnotationBusinessException() {
         // Arrange
 
         //Act
@@ -139,7 +140,7 @@ public class PatternLanguage {
         annotationRule.check(importedClasses);
     }
 
-    void validateAnnotationAggregate() {
+    protected void validateAnnotationAggregate() {
         // Arrange
 
         //Act
@@ -155,7 +156,7 @@ public class PatternLanguage {
         annotationRule.check(importedClasses);
     }
 
-    void validateRepositoryMustBeInterfaces() {
+    protected void validateRepositoryMustBeInterfaces() {
         // Arrange
 
         //Act
@@ -168,7 +169,7 @@ public class PatternLanguage {
         interfaceRule.check(importedClasses);
     }
 
-    void validateInfrastructureServiceMustBeInterfaces() {
+    protected void validateInfrastructureServiceMustBeInterfaces() {
         // Arrange
 
         //Act
@@ -181,7 +182,7 @@ public class PatternLanguage {
         interfaceRule.check(importedClasses);
     }
 
-    void validateValueObjectMustBeRecords() {
+    protected void validateValueObjectMustBeRecords() {
         // Arrange
 
         //Act
@@ -196,7 +197,7 @@ public class PatternLanguage {
         recordRule.check(importedClasses);
     }
 
-    void validateDomainEventMustBeRecord() {
+    protected void validateDomainEventMustBeRecord() {
         // Arrange
 
         //Act

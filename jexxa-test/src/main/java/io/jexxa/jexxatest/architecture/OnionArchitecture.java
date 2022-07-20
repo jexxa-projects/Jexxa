@@ -45,12 +45,13 @@ public class OnionArchitecture {
     private final JavaClasses importedClasses;
 
 
+    @SuppressWarnings("unused")
     public OnionArchitecture(Class<?> project)
     {
         this(project, ImportOption.Predefined.DO_NOT_INCLUDE_TESTS);
     }
 
-    OnionArchitecture(Class<?> project, ImportOption importOption)
+    protected OnionArchitecture(Class<?> project, ImportOption importOption)
     {
         this.project = project;
         importedClasses = new ClassFileImporter()
@@ -72,7 +73,7 @@ public class OnionArchitecture {
         validateDrivenAdapterDependencies();
     }
 
-    void validatePackageStructure() {
+    protected void validatePackageStructure() {
         // Arrange -
 
         // Act
@@ -92,7 +93,7 @@ public class OnionArchitecture {
         rule.check(importedClasses);
     }
 
-    void validateApplicationServiceDependencies() {
+    protected void validateApplicationServiceDependencies() {
         // Arrange -
 
         // Act
@@ -108,7 +109,7 @@ public class OnionArchitecture {
     }
 
 
-    void validateDomainProcessServiceDependencies() {
+    protected void validateDomainProcessServiceDependencies() {
         // Arrange -
 
         // Act
@@ -124,7 +125,7 @@ public class OnionArchitecture {
         invalidAccess.check(importedClasses);
     }
 
-    void validateAggregateDependencies() {
+    protected void validateAggregateDependencies() {
         // Arrange -
 
         // Act
@@ -142,7 +143,7 @@ public class OnionArchitecture {
         invalidAccess.check(importedClasses);
     }
 
-    void validateValueObjectDependencies() {
+    protected void validateValueObjectDependencies() {
         // Arrange -
 
         // Act
@@ -164,7 +165,7 @@ public class OnionArchitecture {
         invalidAccess.check(importedClasses);
     }
 
-    void validateDomainEventDependencies() {
+    protected void validateDomainEventDependencies() {
         // Arrange -
 
         // Act
@@ -185,7 +186,7 @@ public class OnionArchitecture {
         invalidAccess.check(importedClasses);
     }
 
-    void  validateDrivingAdapterDependencies() {
+    protected void  validateDrivingAdapterDependencies() {
         // Arrange -
 
         // Act
@@ -199,7 +200,7 @@ public class OnionArchitecture {
         invalidAccess.check(importedClasses);
     }
 
-    void validateDrivenAdapterDependencies() {
+    protected void validateDrivenAdapterDependencies() {
         // Arrange -
 
         // Act

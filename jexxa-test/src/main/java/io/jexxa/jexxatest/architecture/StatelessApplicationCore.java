@@ -27,12 +27,13 @@ public class StatelessApplicationCore {
     private final JavaClasses importedClasses;
 
 
+    @SuppressWarnings("unused")
     public StatelessApplicationCore(Class<?> project)
     {
         this(project, ImportOption.Predefined.DO_NOT_INCLUDE_TESTS);
     }
 
-    StatelessApplicationCore(Class<?> project, ImportOption importOption)
+    protected StatelessApplicationCore(Class<?> project, ImportOption importOption)
     {
         importedClasses = new ClassFileImporter()
                 .withImportOption(importOption)
@@ -47,8 +48,8 @@ public class StatelessApplicationCore {
         validateOnlyRepositoriesAcceptAggregates();
         validateOnlyRepositoriesReturnAggregates();
     }
-    
-    void validateOnlyRepositoriesReturnAggregates() {
+
+    protected void validateOnlyRepositoriesReturnAggregates() {
         // Arrange -
 
         // Act
@@ -64,8 +65,8 @@ public class StatelessApplicationCore {
         invalidReturnType.check(importedClasses);
     }
 
-    
-    void validateOnlyRepositoriesAcceptAggregates() {
+
+    protected void validateOnlyRepositoriesAcceptAggregates() {
         // Arrange -
 
         // Act
@@ -82,8 +83,8 @@ public class StatelessApplicationCore {
     }
 
 
-    
-    void validateFinalFields() {
+
+    protected void validateFinalFields() {
         // Arrange -
 
         // Act
@@ -99,8 +100,8 @@ public class StatelessApplicationCore {
         finalFields.check(importedClasses);
     }
 
-    
-    void validateApplicationCoreDoesNotHaveStatefulFields() {
+
+    protected void validateApplicationCoreDoesNotHaveStatefulFields() {
         // Arrange -
 
         // Act
