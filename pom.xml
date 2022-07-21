@@ -358,14 +358,6 @@
         </configuration>
       </plugin>
     </plugins>
-
-
-    <testResources>
-      <testResource>
-        <directory>${project.basedir}/src/test/resources</directory>
-        <filtering>false</filtering>
-      </testResource>
-    </testResources>
   </build>
 
   <reporting>
