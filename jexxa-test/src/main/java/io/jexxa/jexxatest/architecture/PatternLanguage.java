@@ -1,7 +1,5 @@
 package io.jexxa.jexxatest.architecture;
 
-import com.tngtech.archunit.core.domain.JavaClasses;
-import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import io.jexxa.addend.applicationcore.Aggregate;
 import io.jexxa.addend.applicationcore.ApplicationService;
@@ -14,20 +12,21 @@ import io.jexxa.addend.applicationcore.InfrastructureService;
 import io.jexxa.addend.applicationcore.Repository;
 import io.jexxa.addend.applicationcore.ValueObject;
 import io.jexxa.addend.applicationcore.ValueObjectFactory;
+import io.jexxa.addend.infrastructure.DrivenAdapter;
+import io.jexxa.addend.infrastructure.DrivingAdapter;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static io.jexxa.jexxatest.architecture.PackageName.AGGREGATE;
 import static io.jexxa.jexxatest.architecture.PackageName.APPLICATIONSERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.BUSINESS_EXCEPTION;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_EVENT;
-import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_WORKFLOW;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_SERVICE;
+import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_WORKFLOW;
+import static io.jexxa.jexxatest.architecture.PackageName.DRIVEN_ADAPTER;
+import static io.jexxa.jexxatest.architecture.PackageName.DRIVING_ADAPTER;
 import static io.jexxa.jexxatest.architecture.PackageName.VALUE_OBJECT;
 
-public class PatternLanguage {
-
-    private final JavaClasses importedClasses;
-
+public class PatternLanguage extends ArchitectureRule {
 
     @SuppressWarnings("unused")
     public PatternLanguage(Class<?> project)
@@ -36,9 +35,7 @@ public class PatternLanguage {
     }
     protected PatternLanguage(Class<?> project, ImportOption importOption)
     {
-        importedClasses = new ClassFileImporter()
-                .withImportOption(importOption)
-                .importPackages(project.getPackage().getName());
+        super(project,importOption);
     }
 
     public void validate()
@@ -50,12 +47,15 @@ public class PatternLanguage {
         validateAnnotationValueObject();
         validateAnnotationBusinessException();
         validateAnnotationAggregate();
+        validateAnnotationDrivenAdapter();
+        validateAnnotationDrivingAdapter();
 
         validateRepositoryMustBeInterfaces();
         validateInfrastructureServiceMustBeInterfaces();
         validateValueObjectMustBeRecords();
         validateDomainEventMustBeRecord();
     }
+
 
     protected void validateAnnotationApplicationService()
     {
@@ -68,7 +68,7 @@ public class PatternLanguage {
                 .allowEmptyShould(true);
 
         //Assert
-        annotationRule.check(importedClasses);
+        annotationRule.check(importedClasses());
     }
 
     protected void validateAnnotationDomainService() {
@@ -82,7 +82,7 @@ public class PatternLanguage {
                 .allowEmptyShould(true);
 
         //Assert
-        annotationRule.check(importedClasses);
+        annotationRule.check(importedClasses());
     }
 
     protected void validateAnnotationDomainProcessService() {
@@ -96,7 +96,7 @@ public class PatternLanguage {
                 .allowEmptyShould(true);
 
         //Assert
-        annotationRule.check(importedClasses);
+        annotationRule.check(importedClasses());
     }
 
     protected void validateAnnotationDomainEvent() {
@@ -109,7 +109,7 @@ public class PatternLanguage {
                 .allowEmptyShould(true);
 
         //Assert
-        annotationRule.check(importedClasses);
+        annotationRule.check(importedClasses());
     }
 
     protected void validateAnnotationValueObject() {
@@ -124,7 +124,7 @@ public class PatternLanguage {
                 .allowEmptyShould(true);
 
         //Assert
-        annotationRule.check(importedClasses);
+        annotationRule.check(importedClasses());
     }
 
     protected void validateAnnotationBusinessException() {
@@ -137,8 +137,41 @@ public class PatternLanguage {
                 .allowEmptyShould(true);
 
         //Assert
-        annotationRule.check(importedClasses);
+        annotationRule.check(importedClasses());
     }
+
+    protected void validateAnnotationDrivenAdapter() {
+        // Arrange
+
+        //Act
+        var annotationRule = classes()
+                .that().resideInAnyPackage(DRIVEN_ADAPTER)
+                .and().areNotAnonymousClasses()
+                .and().areNotNestedClasses()
+                .and().areNotEnums()
+                .should().beAnnotatedWith(DrivenAdapter.class)
+                .allowEmptyShould(true);
+
+        //Assert
+        annotationRule.check(importedClasses());
+    }
+
+    protected void validateAnnotationDrivingAdapter() {
+        // Arrange
+
+        //Act
+        var annotationRule = classes()
+                .that().resideInAnyPackage(DRIVING_ADAPTER)
+                .and().areNotAnonymousClasses()
+                .and().areNotNestedClasses()
+                .and().areNotEnums()
+                .should().beAnnotatedWith(DrivingAdapter.class)
+                .allowEmptyShould(true);
+
+        //Assert
+        annotationRule.check(importedClasses());
+    }
+
 
     protected void validateAnnotationAggregate() {
         // Arrange
@@ -153,7 +186,7 @@ public class PatternLanguage {
                 .allowEmptyShould(true);
 
         //Assert
-        annotationRule.check(importedClasses);
+        annotationRule.check(importedClasses());
     }
 
     protected void validateRepositoryMustBeInterfaces() {
@@ -166,7 +199,7 @@ public class PatternLanguage {
                 .allowEmptyShould(true);
 
         //Assert
-        interfaceRule.check(importedClasses);
+        interfaceRule.check(importedClasses());
     }
 
     protected void validateInfrastructureServiceMustBeInterfaces() {
@@ -179,7 +212,7 @@ public class PatternLanguage {
                 .allowEmptyShould(true);
 
         //Assert
-        interfaceRule.check(importedClasses);
+        interfaceRule.check(importedClasses());
     }
 
     protected void validateValueObjectMustBeRecords() {
@@ -194,7 +227,7 @@ public class PatternLanguage {
                 .allowEmptyShould(true);
 
         //Assert
-        recordRule.check(importedClasses);
+        recordRule.check(importedClasses());
     }
 
     protected void validateDomainEventMustBeRecord() {
@@ -207,8 +240,9 @@ public class PatternLanguage {
                 .allowEmptyShould(true);
 
         //Assert
-        recordRule.check(importedClasses);
+        recordRule.check(importedClasses());
     }
+
 
 }
 

@@ -1,8 +1,6 @@
 package io.jexxa.jexxatest.architecture;
 
 
-import com.tngtech.archunit.core.domain.JavaClasses;
-import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
@@ -40,10 +38,7 @@ import static io.jexxa.jexxatest.architecture.PackageName.VALUE_OBJECT;
  * @enduml
  * ....
  */
-public class OnionArchitecture {
-    private final Class<?> project;
-    private final JavaClasses importedClasses;
-
+public class OnionArchitecture extends ArchitectureRule {
 
     @SuppressWarnings("unused")
     public OnionArchitecture(Class<?> project)
@@ -53,10 +48,7 @@ public class OnionArchitecture {
 
     protected OnionArchitecture(Class<?> project, ImportOption importOption)
     {
-        this.project = project;
-        importedClasses = new ClassFileImporter()
-                .withImportOption(importOption)
-                .importPackages(project.getPackage().getName());
+        super(project, importOption);
     }
 
     public void validate()
@@ -87,10 +79,10 @@ public class OnionArchitecture {
                         DOMAIN_EVENT,
                         VALUE_OBJECT,
                         INFRASTRUCTURE)
-                .orShould().haveFullyQualifiedName(project.getName());
+                .orShould().haveFullyQualifiedName(project().getName());
 
         //Assert
-        rule.check(importedClasses);
+        rule.check(importedClasses());
     }
 
     protected void validateApplicationServiceDependencies() {
@@ -105,7 +97,7 @@ public class OnionArchitecture {
                 .because("An ApplicationService must not depend on other ApplicationServices or the infrastructure");
 
         //Assert
-        invalidAccess.check(importedClasses);
+        invalidAccess.check(importedClasses());
     }
 
 
@@ -122,7 +114,7 @@ public class OnionArchitecture {
 
 
         //Assert
-        invalidAccess.check(importedClasses);
+        invalidAccess.check(importedClasses());
     }
 
     protected void validateAggregateDependencies() {
@@ -140,7 +132,7 @@ public class OnionArchitecture {
                 .because("An Aggregate must not depend on any Service or the infrastructure");
 
         //Assert
-        invalidAccess.check(importedClasses);
+        invalidAccess.check(importedClasses());
     }
 
     protected void validateValueObjectDependencies() {
@@ -162,7 +154,7 @@ public class OnionArchitecture {
 
 
         //Assert
-        invalidAccess.check(importedClasses);
+        invalidAccess.check(importedClasses());
     }
 
     protected void validateDomainEventDependencies() {
@@ -183,7 +175,7 @@ public class OnionArchitecture {
                 .because("A DomainEvent must not depend on any other classes of the application except of ValueObjects");
 
         //Assert
-        invalidAccess.check(importedClasses);
+        invalidAccess.check(importedClasses());
     }
 
     protected void  validateDrivingAdapterDependencies() {
@@ -197,7 +189,7 @@ public class OnionArchitecture {
                 .allowEmptyShould(true);
 
         //Assert
-        invalidAccess.check(importedClasses);
+        invalidAccess.check(importedClasses());
     }
 
     protected void validateDrivenAdapterDependencies() {
@@ -213,7 +205,7 @@ public class OnionArchitecture {
                         );
 
         //Assert
-        invalidAccess.check(importedClasses);
+        invalidAccess.check(importedClasses());
     }
 
 }

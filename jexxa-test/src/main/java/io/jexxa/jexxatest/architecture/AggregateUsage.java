@@ -2,8 +2,6 @@ package io.jexxa.jexxatest.architecture;
 
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
-import com.tngtech.archunit.core.domain.JavaClasses;
-import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import io.jexxa.addend.applicationcore.Aggregate;
 import io.jexxa.addend.applicationcore.Repository;
@@ -22,29 +20,24 @@ import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_WORKFLOW;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_SERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.VALUE_OBJECT;
 
-public class StatelessApplicationCore {
-
-    private final JavaClasses importedClasses;
-
+public class AggregateUsage extends ArchitectureRule {
 
     @SuppressWarnings("unused")
-    public StatelessApplicationCore(Class<?> project)
+    public AggregateUsage(Class<?> project)
     {
         this(project, ImportOption.Predefined.DO_NOT_INCLUDE_TESTS);
     }
 
-    protected StatelessApplicationCore(Class<?> project, ImportOption importOption)
+    protected AggregateUsage(Class<?> project, ImportOption importOption)
     {
-        importedClasses = new ClassFileImporter()
-                .withImportOption(importOption)
-                .importPackages(project.getPackage().getName());
+       super(project,importOption);
     }
 
 
     public void validate()
     {
-        validateApplicationCoreDoesNotHaveStatefulFields();
-        validateFinalFields();
+        validateOnlyAggregatesHaveAggregatesAsFields();
+        validateOnlyAggregatesAndNestedClassesHaveNonFinalFields();
         validateOnlyRepositoriesAcceptAggregates();
         validateOnlyRepositoriesReturnAggregates();
     }
@@ -62,7 +55,7 @@ public class StatelessApplicationCore {
 
 
         //Assert
-        invalidReturnType.check(importedClasses);
+        invalidReturnType.check(importedClasses());
     }
 
 
@@ -79,29 +72,29 @@ public class StatelessApplicationCore {
 
 
         //Assert
-        invalidReturnType.check(importedClasses);
+        invalidReturnType.check(importedClasses());
     }
 
 
 
-    protected void validateFinalFields() {
+    protected void validateOnlyAggregatesAndNestedClassesHaveNonFinalFields() {
         // Arrange -
 
         // Act
         var finalFields = fields().that().areDeclaredInClassesThat()
-                .resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, BUSINESS_EXCEPTION, DOMAIN_SERVICE, VALUE_OBJECT)
-                .and().areDeclaredInClassesThat().areNotNestedClasses()
-                .should().beFinal()
+                .resideInAnyPackage(AGGREGATE)
+                .or().areDeclaredInClassesThat().areNestedClasses()
+                .should().notBeFinal()
                 .allowEmptyShould(true)
-                .because("The application core must be stateless except of Aggregates!");
+                .because("Only Aggregates or nested classes are allowed to use non-final fields!");
 
 
         //Assert
-        finalFields.check(importedClasses);
+        finalFields.check(importedClasses());
     }
 
 
-    protected void validateApplicationCoreDoesNotHaveStatefulFields() {
+    protected void validateOnlyAggregatesHaveAggregatesAsFields() {
         // Arrange -
 
         // Act
@@ -113,7 +106,7 @@ public class StatelessApplicationCore {
 
 
         //Assert
-        invalidReturnType.check(importedClasses);
+        invalidReturnType.check(importedClasses());
     }
 
     private static DescribedPredicate<List<JavaClass>> thatAreAggregates() {
