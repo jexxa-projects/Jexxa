@@ -59,63 +59,44 @@ public class PatternLanguage extends ArchitectureRule {
 
     protected void validateAnnotationApplicationService()
     {
-        // Arrange
-
-        //Act
         var annotationRule = classes()
                 .that().resideInAnyPackage(APPLICATIONSERVICE)
                 .should().beAnnotatedWith(ApplicationService.class)
                 .allowEmptyShould(true);
 
-        //Assert
         annotationRule.check(importedClasses());
     }
 
     protected void validateAnnotationDomainService() {
-        // Arrange
-
-        //Act
         var annotationRule = classes().that().resideInAnyPackage(DOMAIN_SERVICE)
                 .should().beAnnotatedWith(Repository.class)
                 .orShould().beAnnotatedWith(InfrastructureService.class)
                 .orShould().beAnnotatedWith(DomainService.class)
                 .allowEmptyShould(true);
 
-        //Assert
         annotationRule.check(importedClasses());
     }
 
     protected void validateAnnotationDomainProcessService() {
-        // Arrange
-
-        //Act
         var annotationRule = classes()
                 .that().resideInAnyPackage(DOMAIN_WORKFLOW)
                 .should().beAnnotatedWith(DomainProcessStep.class)
                 .orShould().beAnnotatedWith(DomainWorkflow.class)
                 .allowEmptyShould(true);
 
-        //Assert
         annotationRule.check(importedClasses());
     }
 
     protected void validateAnnotationDomainEvent() {
-        // Arrange
-
-        //Act
         var annotationRule = classes()
                 .that().resideInAnyPackage(DOMAIN_EVENT)
                 .should().beAnnotatedWith(DomainEvent.class)
                 .allowEmptyShould(true);
 
-        //Assert
         annotationRule.check(importedClasses());
     }
 
     protected void validateAnnotationValueObject() {
-        // Arrange
-
-        //Act
         var annotationRule = classes()
                 .that().resideInAnyPackage(VALUE_OBJECT)
                 .should().beAnnotatedWith(ValueObject.class)
@@ -123,27 +104,19 @@ public class PatternLanguage extends ArchitectureRule {
                 .orShould().beEnums()
                 .allowEmptyShould(true);
 
-        //Assert
         annotationRule.check(importedClasses());
     }
 
     protected void validateAnnotationBusinessException() {
-        // Arrange
-
-        //Act
         var annotationRule = classes()
                 .that().resideInAnyPackage(BUSINESS_EXCEPTION)
                 .should().beAnnotatedWith(BusinessException.class)
                 .allowEmptyShould(true);
 
-        //Assert
         annotationRule.check(importedClasses());
     }
 
     protected void validateAnnotationDrivenAdapter() {
-        // Arrange
-
-        //Act
         var annotationRule = classes()
                 .that().resideInAnyPackage(DRIVEN_ADAPTER)
                 .and().areNotAnonymousClasses()
@@ -152,14 +125,10 @@ public class PatternLanguage extends ArchitectureRule {
                 .should().beAnnotatedWith(DrivenAdapter.class)
                 .allowEmptyShould(true);
 
-        //Assert
         annotationRule.check(importedClasses());
     }
 
     protected void validateAnnotationDrivingAdapter() {
-        // Arrange
-
-        //Act
         var annotationRule = classes()
                 .that().resideInAnyPackage(DRIVING_ADAPTER)
                 .and().areNotAnonymousClasses()
@@ -168,15 +137,11 @@ public class PatternLanguage extends ArchitectureRule {
                 .should().beAnnotatedWith(DrivingAdapter.class)
                 .allowEmptyShould(true);
 
-        //Assert
         annotationRule.check(importedClasses());
     }
 
 
     protected void validateAnnotationAggregate() {
-        // Arrange
-
-        //Act
         var annotationRule = classes()
                 .that().resideInAnyPackage(AGGREGATE)
                 .and().areNotAnonymousClasses()
@@ -185,40 +150,28 @@ public class PatternLanguage extends ArchitectureRule {
                 .orShould().beAnnotatedWith(FunctionalInterface.class)
                 .allowEmptyShould(true);
 
-        //Assert
         annotationRule.check(importedClasses());
     }
 
     protected void validateRepositoryMustBeInterfaces() {
-        // Arrange
-
-        //Act
         var interfaceRule = classes()
                 .that().areAnnotatedWith(Repository.class)
                 .should().beInterfaces()
                 .allowEmptyShould(true);
 
-        //Assert
         interfaceRule.check(importedClasses());
     }
 
     protected void validateInfrastructureServiceMustBeInterfaces() {
-        // Arrange
-
-        //Act
         var interfaceRule = classes()
                 .that().areAnnotatedWith(InfrastructureService.class)
                 .should().beInterfaces()
                 .allowEmptyShould(true);
 
-        //Assert
         interfaceRule.check(importedClasses());
     }
 
     protected void validateValueObjectMustBeRecords() {
-        // Arrange
-
-        //Act
         var recordRule = classes()
                 .that().resideInAnyPackage(VALUE_OBJECT)
                 .and().areNotAnnotatedWith(ValueObjectFactory.class)
@@ -226,20 +179,15 @@ public class PatternLanguage extends ArchitectureRule {
                 .orShould().beEnums()
                 .allowEmptyShould(true);
 
-        //Assert
         recordRule.check(importedClasses());
     }
 
     protected void validateDomainEventMustBeRecord() {
-        // Arrange
-
-        //Act
         var recordRule = classes()
                 .that().resideInAnyPackage(DOMAIN_EVENT)
                 .should().beRecords()
                 .allowEmptyShould(true);
 
-        //Assert
         recordRule.check(importedClasses());
     }
 

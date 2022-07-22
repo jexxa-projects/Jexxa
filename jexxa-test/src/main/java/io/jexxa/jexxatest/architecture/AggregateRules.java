@@ -43,9 +43,6 @@ public class AggregateRules extends ArchitectureRule {
     }
 
     protected void validateOnlyRepositoriesReturnAggregates() {
-        // Arrange -
-
-        // Act
         var invalidReturnType = noMethods().that()
                 .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, DOMAIN_SERVICE))
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Repository.class)
@@ -53,16 +50,10 @@ public class AggregateRules extends ArchitectureRule {
                 .allowEmptyShould(true)
                 .because("Aggregates contain the business logic and can only be returned by a Repository!");
 
-
-        //Assert
         invalidReturnType.check(importedClasses());
     }
 
-
     protected void validateOnlyRepositoriesAcceptAggregates() {
-        // Arrange -
-
-        // Act
         var invalidReturnType = noMethods().that()
                 .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, DOMAIN_SERVICE))
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Repository.class)
@@ -70,17 +61,12 @@ public class AggregateRules extends ArchitectureRule {
                 .allowEmptyShould(true)
                 .because("Aggregates contain the business logic and can only be returned by a Repository!");
 
-
-        //Assert
         invalidReturnType.check(importedClasses());
     }
 
 
 
     protected void validateOnlyAggregatesAndNestedClassesHaveNonFinalFields() {
-        // Arrange -
-
-        // Act
         var finalFields = fields().that().areDeclaredInClassesThat()
                 .resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, BUSINESS_EXCEPTION, DOMAIN_SERVICE, VALUE_OBJECT)
                 .and().areDeclaredInClassesThat().areNotNestedClasses()
@@ -88,23 +74,17 @@ public class AggregateRules extends ArchitectureRule {
                 .allowEmptyShould(true)
                 .because("Only Aggregates or nested classes are allowed to use non-final fields!");
 
-        //Assert
         finalFields.check(importedClasses());
     }
 
 
     protected void validateOnlyAggregatesHaveAggregatesAsFields() {
-        // Arrange -
-
-        // Act
         var invalidReturnType = noFields().that().areDeclaredInClassesThat()
                 .resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, BUSINESS_EXCEPTION, DOMAIN_SERVICE, VALUE_OBJECT)
                 .should().haveRawType(resideInAPackage(AGGREGATE))
                 .allowEmptyShould(true)
                 .because("An ApplicationService or DomainProcessService must not keep a reference to an aggregate!");
 
-
-        //Assert
         invalidReturnType.check(importedClasses());
     }
 

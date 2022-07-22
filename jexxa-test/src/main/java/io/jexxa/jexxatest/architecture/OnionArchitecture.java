@@ -2,6 +2,8 @@ package io.jexxa.jexxatest.architecture;
 
 
 import com.tngtech.archunit.core.importer.ImportOption;
+import io.jexxa.addend.applicationcore.DomainService;
+import io.jexxa.addend.applicationcore.Repository;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
@@ -40,6 +42,8 @@ import static io.jexxa.jexxatest.architecture.PackageName.VALUE_OBJECT;
  */
 public class OnionArchitecture extends ArchitectureRule {
 
+    private boolean allowInfrastructureServiceInAggregate = true;
+
     @SuppressWarnings("unused")
     public OnionArchitecture(Class<?> project)
     {
@@ -49,6 +53,7 @@ public class OnionArchitecture extends ArchitectureRule {
     protected OnionArchitecture(Class<?> project, ImportOption importOption)
     {
         super(project, importOption);
+
     }
 
     public void validate()
@@ -63,12 +68,15 @@ public class OnionArchitecture extends ArchitectureRule {
 
         validateDrivingAdapterDependencies();
         validateDrivenAdapterDependencies();
+
+    }
+
+    public void allowInfrastructureServiceInAggregate(boolean value)
+    {
+        this.allowInfrastructureServiceInAggregate = value;
     }
 
     protected void validatePackageStructure() {
-        // Arrange -
-
-        // Act
         var rule = classes().should()
                 .resideInAnyPackage(
                         APPLICATIONSERVICE,
@@ -81,14 +89,10 @@ public class OnionArchitecture extends ArchitectureRule {
                         INFRASTRUCTURE)
                 .orShould().haveFullyQualifiedName(project().getName());
 
-        //Assert
         rule.check(importedClasses());
     }
 
     protected void validateApplicationServiceDependencies() {
-        // Arrange -
-
-        // Act
         var invalidAccess = noClasses()
                 .that().resideInAPackage(APPLICATIONSERVICE)
                 .should().dependOnClassesThat()
@@ -96,15 +100,11 @@ public class OnionArchitecture extends ArchitectureRule {
                 .allowEmptyShould(true)
                 .because("An ApplicationService must not depend on other ApplicationServices or the infrastructure");
 
-        //Assert
         invalidAccess.check(importedClasses());
     }
 
 
     protected void validateDomainProcessServiceDependencies() {
-        // Arrange -
-
-        // Act
         var invalidAccess = noClasses()
                 .that().resideInAPackage(DOMAIN_WORKFLOW)
                 .should().dependOnClassesThat()
@@ -112,15 +112,19 @@ public class OnionArchitecture extends ArchitectureRule {
                 .allowEmptyShould(true)
                 .because("A DomainProcessService must not depend on an ApplicationServices or the infrastructure");
 
-
-        //Assert
         invalidAccess.check(importedClasses());
     }
 
     protected void validateAggregateDependencies() {
-        // Arrange -
+        if (allowInfrastructureServiceInAggregate)
+        {
+            validateAggregateDependenciesWithInfrastructureService();
+        } else {
+            validateAggregateDependenciesWihtoutInfrastructureService();
+        }
+    }
 
-        // Act
+    protected void validateAggregateDependenciesWihtoutInfrastructureService() {
         var invalidAccess = noClasses()
                 .that().resideInAPackage(AGGREGATE)
                 .should().dependOnClassesThat()
@@ -131,14 +135,25 @@ public class OnionArchitecture extends ArchitectureRule {
                 .allowEmptyShould(true)
                 .because("An Aggregate must not depend on any Service or the infrastructure");
 
-        //Assert
+        invalidAccess.check(importedClasses());
+    }
+
+    protected void validateAggregateDependenciesWithInfrastructureService() {
+        var invalidAccess = noClasses()
+                .that().resideInAPackage(AGGREGATE)
+                .should().dependOnClassesThat()
+                .resideInAnyPackage(APPLICATIONSERVICE,
+                        DOMAIN_WORKFLOW,
+                        INFRASTRUCTURE)
+                .orShould().dependOnClassesThat().areAnnotatedWith(Repository.class)
+                .orShould().dependOnClassesThat().areAnnotatedWith(DomainService.class)
+                .allowEmptyShould(true)
+                .because("An Aggregate must not depend on any Service or the infrastructure");
+
         invalidAccess.check(importedClasses());
     }
 
     protected void validateValueObjectDependencies() {
-        // Arrange -
-
-        // Act
         var invalidAccess = noClasses()
                 .that().resideInAPackage(VALUE_OBJECT)
                 .should().dependOnClassesThat()
@@ -152,15 +167,10 @@ public class OnionArchitecture extends ArchitectureRule {
                 .allowEmptyShould(true)
                 .because("A ValueObject must not depend on any other classes of the application except of ValueObjects");
 
-
-        //Assert
         invalidAccess.check(importedClasses());
     }
 
     protected void validateDomainEventDependencies() {
-        // Arrange -
-
-        // Act
         var invalidAccess = noClasses()
                 .that().resideInAPackage(DOMAIN_EVENT)
                 .should().dependOnClassesThat()
@@ -174,37 +184,28 @@ public class OnionArchitecture extends ArchitectureRule {
                 .allowEmptyShould(true)
                 .because("A DomainEvent must not depend on any other classes of the application except of ValueObjects");
 
-        //Assert
         invalidAccess.check(importedClasses());
     }
 
     protected void  validateDrivingAdapterDependencies() {
-        // Arrange -
-
-        // Act
         var invalidAccess = noClasses()
                 .that().resideInAPackage(DRIVING_ADAPTER)
                 .should().dependOnClassesThat()
                 .resideInAnyPackage(DRIVEN_ADAPTER)
                 .allowEmptyShould(true);
 
-        //Assert
         invalidAccess.check(importedClasses());
     }
 
     protected void validateDrivenAdapterDependencies() {
-        // Arrange -
-
-        // Act
         var invalidAccess = noClasses()
                 .that().resideInAPackage(DRIVEN_ADAPTER)
                 .should().dependOnClassesThat()
                 .resideInAnyPackage(DRIVING_ADAPTER,
                         APPLICATIONSERVICE,
                         DOMAIN_WORKFLOW
-                        );
+                );
 
-        //Assert
         invalidAccess.check(importedClasses());
     }
 
