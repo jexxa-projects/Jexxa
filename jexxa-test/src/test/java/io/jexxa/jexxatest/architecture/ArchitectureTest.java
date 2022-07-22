@@ -1,8 +1,11 @@
 package io.jexxa.jexxatest.architecture;
 
 import com.tngtech.archunit.core.importer.ImportOption;
+import io.jexxa.jexxatest.architecture.invalidapplication.InvalidApplication;
 import io.jexxa.jexxatest.architecture.validapplication.ValidApplication;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ArchitectureTest {
 
@@ -27,4 +30,24 @@ class ArchitectureTest {
         objectUnderTest.validate();
     }
 
+    @Test
+    void validateInvalidOnionArchitecture()
+    {
+        var objectUnderTest = new OnionArchitecture(InvalidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS);
+        assertThrows(AssertionError.class, () -> objectUnderTest.validate());
+    }
+
+    @Test
+    void validateInvalidPatternLanguage()
+    {
+        var objectUnderTest = new PatternLanguage(InvalidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS);
+        assertThrows(AssertionError.class, () -> objectUnderTest.validate());
+    }
+
+    @Test
+    void validateInvalidAggregates()
+    {
+        var objectUnderTest = new AggregateRules(InvalidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS);
+        assertThrows(AssertionError.class, () -> objectUnderTest.validate());
+    }
 }

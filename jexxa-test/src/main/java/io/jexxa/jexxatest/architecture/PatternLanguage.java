@@ -243,6 +243,5 @@ public class PatternLanguage extends ArchitectureRule {
         recordRule.check(importedClasses());
     }
 
-
 }
 
