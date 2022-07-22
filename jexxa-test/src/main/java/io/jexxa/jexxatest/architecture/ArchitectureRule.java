@@ -6,7 +6,7 @@ import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 
-public class ArchitectureRule
+public abstract class ArchitectureRule
 {
     private final Class<?> project;
     private JavaClasses importedClasses;
@@ -20,10 +20,13 @@ public class ArchitectureRule
                 .importPackages(project.getPackage().getName());
     }
 
-    public void ignoreClass(Class<?> clazz)
+    public ArchitectureRule ignoreClass(Class<?> clazz)
     {
         importedClasses = importedClasses.that(isNot(clazz));
+        return this;
     }
+
+    public abstract void validate();
 
     protected JavaClasses importedClasses()
     {

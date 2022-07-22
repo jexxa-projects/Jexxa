@@ -20,15 +20,15 @@ import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_WORKFLOW;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_SERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.VALUE_OBJECT;
 
-public class AggregateUsage extends ArchitectureRule {
+public class AggregateRules extends ArchitectureRule {
 
     @SuppressWarnings("unused")
-    public AggregateUsage(Class<?> project)
+    public AggregateRules(Class<?> project)
     {
         this(project, ImportOption.Predefined.DO_NOT_INCLUDE_TESTS);
     }
 
-    protected AggregateUsage(Class<?> project, ImportOption importOption)
+    protected AggregateRules(Class<?> project, ImportOption importOption)
     {
        super(project,importOption);
     }
@@ -82,12 +82,11 @@ public class AggregateUsage extends ArchitectureRule {
 
         // Act
         var finalFields = fields().that().areDeclaredInClassesThat()
-                .resideInAnyPackage(AGGREGATE)
-                .or().areDeclaredInClassesThat().areNestedClasses()
-                .should().notBeFinal()
+                .resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, BUSINESS_EXCEPTION, DOMAIN_SERVICE, VALUE_OBJECT)
+                .and().areDeclaredInClassesThat().areNotNestedClasses()
+                .should().beFinal()
                 .allowEmptyShould(true)
                 .because("Only Aggregates or nested classes are allowed to use non-final fields!");
-
 
         //Assert
         finalFields.check(importedClasses());

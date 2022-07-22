@@ -23,7 +23,7 @@ class ArchitectureTest {
     @Test
     void validateAggregates()
     {
-        var objectUnderTest = new AggregateUsage(ValidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS);
+        var objectUnderTest = new AggregateRules(ValidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS);
         objectUnderTest.validate();
     }
 
