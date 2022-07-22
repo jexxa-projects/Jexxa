@@ -34,20 +34,20 @@ class ArchitectureTest {
     void validateInvalidOnionArchitecture()
     {
         var objectUnderTest = new OnionArchitecture(InvalidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS);
-        assertThrows(AssertionError.class, () -> objectUnderTest.validate());
+        assertThrows(AssertionError.class, objectUnderTest::validate);
     }
 
     @Test
     void validateInvalidPatternLanguage()
     {
         var objectUnderTest = new PatternLanguage(InvalidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS);
-        assertThrows(AssertionError.class, () -> objectUnderTest.validate());
+        assertThrows(AssertionError.class, objectUnderTest::validate);
     }
 
     @Test
     void validateInvalidAggregates()
     {
         var objectUnderTest = new AggregateRules(InvalidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS);
-        assertThrows(AssertionError.class, () -> objectUnderTest.validate());
+        assertThrows(AssertionError.class, objectUnderTest::validate);
     }
 }
