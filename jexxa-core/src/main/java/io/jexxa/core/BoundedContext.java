@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@SuppressWarnings("unused")
-public class BoundedContext
+public final class BoundedContext
 {
     private boolean isRunning = false;
     private boolean isWaiting = false;
@@ -112,12 +111,12 @@ public class BoundedContext
         return jexxaMain;
     }
 
-    protected synchronized void start()
+    synchronized void start()
     {
         isRunning = true;
     }
 
-    protected synchronized void stop()
+    synchronized void stop()
     {
         isRunning = false;
         internalShutdown();
