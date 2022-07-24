@@ -173,6 +173,19 @@ public final class JexxaMain
     }
 
     @CheckReturnValue
+    public <T> DrivenAdapter<T>  attach(Class<T> clazz)
+    {
+        return new DrivenAdapter<>(clazz, this);
+    }
+
+
+    <T> void attachTo(Class<T> drivenAdapter, Consumer<T> consumer)
+    {
+        var outboundPort = getInstanceOfOutboundPort(drivenAdapter);
+        consumer.accept(outboundPort);
+    }
+
+    @CheckReturnValue
     public <T> FluentInterceptor intercept(Class<T> clazz)
     {
         if (AdapterConvention.isPortAdapter(clazz, getInfrastructure())) {
