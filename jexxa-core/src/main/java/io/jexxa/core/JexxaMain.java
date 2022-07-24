@@ -44,6 +44,7 @@ public final class JexxaMain
     private static final String DRIVING_ADAPTER_PACKAGE = ".infrastructure.drivingadapter";
     private static final String DOMAIN_SERVICE = ".domainservice";
     private static final String DOMAIN_PROCESS_SERVICE = ".domainprocessservice";
+    private static final String DOMAIN_WORKFLOW = ".domainworkflow";
     private static final String APPLICATION_SERVICE = ".applicationservice";
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JexxaMain.class);
@@ -142,6 +143,7 @@ public final class JexxaMain
         addToInfrastructure( mainApplication.getPackageName() + DRIVING_ADAPTER_PACKAGE);
         addToApplicationCore( mainApplication.getPackageName() + DOMAIN_SERVICE);
         addToApplicationCore( mainApplication.getPackageName() + DOMAIN_PROCESS_SERVICE);
+        addToApplicationCore( mainApplication.getPackageName() + DOMAIN_WORKFLOW);
         addToApplicationCore( mainApplication.getPackageName() + APPLICATION_SERVICE);
 
         return this;
@@ -173,6 +175,7 @@ public final class JexxaMain
     }
 
     @CheckReturnValue
+    @SuppressWarnings("unused")
     public <T> DrivenAdapter<T>  attach(Class<T> clazz)
     {
         return new DrivenAdapter<>(clazz, this);
@@ -230,6 +233,8 @@ public final class JexxaMain
         return this;
     }
 
+    @CheckReturnValue
+    @SuppressWarnings("unused")
     public JexxaMain logUnhealthyDiagnostics(int period, TimeUnit timeUnit)
     {
         executorService.scheduleAtFixedRate(this::logUnhealthyDiagnostics,0, period,timeUnit);
