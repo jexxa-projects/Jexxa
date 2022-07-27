@@ -32,10 +32,10 @@ import static io.jexxa.utils.JexxaBanner.addConfigBanner;
 /**
  * JexxaMain is the main entry point for your application to use Jexxa. Within each application only a single instance
  * of this class must exist.
- *
+ * <p>
  * In order to control your application (start / shutdown) from within your application and also from outside
  * JexxaMain provides a so called {@link BoundedContext}.
- *
+ * <p>
  * To see how to use this class please refer to the tutorials.
  */
 public final class JexxaMain
@@ -65,7 +65,7 @@ public final class JexxaMain
     /**
      * Creates the JexxaMain instance for your application with given context name.
      * In addition, the properties file jexxa-application.properties is load if available in class path.
-     *
+     * <p>
      * Note: When a driving or driven adapter is created, it gets the properties read from properties file.
      *
      * @param context Name of the BoundedContext. Typically, you should use the name of your application.
@@ -76,7 +76,7 @@ public final class JexxaMain
     }
     /**
      * Creates the JexxaMain instance for your application with given context name.
-     *
+     * <p>
      * Note: The file jexxa-application.properties is loaded if available in class path. Then the
      * properties are extended by the given properties object. So if you define the same properties in
      * jexxa-application.properties and the given properties object, the one from properties object is used.

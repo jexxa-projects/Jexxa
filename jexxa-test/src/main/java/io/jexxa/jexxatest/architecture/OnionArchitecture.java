@@ -29,7 +29,7 @@ import static io.jexxa.jexxatest.architecture.PackageName.VALUE_OBJECT;
  *   [DomainService]
  *   [Domain]
  * }
- *
+ * <p>
  * [ApplicationService] -down-> [DomainWorkflow]
  * [ApplicationService] -down-> [DomainService]
  * [ApplicationService] -down-> [Domain]

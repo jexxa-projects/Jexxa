@@ -23,7 +23,7 @@ class JDBCPreparedStatement
 
     /**
      * This method creates a new PreparedStatement including sql statement and all arguments.
-     *
+     * <p>
      * Important note: The caller of this method is responsible to close the PreparedStatement, e.g. by calling it
      * in a try-with-resources statement.
      *

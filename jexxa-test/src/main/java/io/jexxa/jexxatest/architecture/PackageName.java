@@ -2,7 +2,7 @@ package io.jexxa.jexxatest.architecture;
 
 /**
  * This class defines the package names to validate the onion architecture.
- *
+ * <p>
  * In case you use another package structure for your application, please adjust these packages accordingly.
  */
 class PackageName
