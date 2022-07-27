@@ -2,16 +2,16 @@ package io.jexxa.adapterapi.drivingadapter;
 
 /**
  * Generic interface that must be implemented by a DrivingAdapter
- *
+ * <p>
  * A driving adapter has internally provide following states:
  * CREATED: In this state is a newly created driving adapter. Following methods are allowed:
  * - {@link #register(Object)} which performs no state change
  * - {@link #start()} which performs a state change into state STARTED
- *
+ * <p>
  * STARTED:
  * - Within this state incoming calls can be forwarded to registered ports
  * - {@link #stop()} to change into state STOPPED
- *
+ * <p>
  * STOPPED:
  * - In this state a driving adapter can no longer be used
  */

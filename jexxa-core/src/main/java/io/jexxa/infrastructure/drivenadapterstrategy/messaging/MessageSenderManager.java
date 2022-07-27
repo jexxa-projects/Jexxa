@@ -30,6 +30,7 @@ public final class MessageSenderManager
     }
 
     @CheckReturnValue
+    @SuppressWarnings("unchecked")
     private <T> Class<? extends MessageSender> getStrategy(Class<T> aggregateClazz, Properties properties)
     {
         // 1. Check if a dedicated strategy is registered for aggregateClazz
