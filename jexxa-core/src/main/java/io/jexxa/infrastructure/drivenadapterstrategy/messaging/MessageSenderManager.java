@@ -30,6 +30,7 @@ public final class MessageSenderManager
     }
 
     @CheckReturnValue
+    @SuppressWarnings("unchecked") // When registering a MessageSender we check its type so that we can perform an unchecked cast
     private <T> Class<? extends MessageSender> getStrategy(Class<T> aggregateClazz, Properties properties)
     {
         // 1. Check if a dedicated strategy is registered for aggregateClazz
@@ -63,13 +64,13 @@ public final class MessageSenderManager
             }
         }
 
-        // 4. If a JDBC driver is stated in Properties => Use JDBCKeyValueRepository
+        // 4. If a JNDI Factory is defined and simulation mode is deactivated => Use JMSSender
         if (properties.containsKey(JNDI_FACTORY_KEY) && !properties.containsKey(JEXXA_JMS_SIMULATE))
         {
             return JMSSender.class;
         }
 
-        // 5. If everything fails, return a IMDBRepository
+        // 5. In all other cases (including simulation mode) return a MessageLogger
         return MessageLogger.class;
     }
 
