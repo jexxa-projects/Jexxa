@@ -1,4 +1,4 @@
-package io.jexxa.jexxatest.architecture.validapplication.domain.valueobject;
+package io.jexxa.jexxatest.architecture.validapplication.domain.valid;
 
 
 import io.jexxa.addend.applicationcore.ValueObject;

@@ -46,7 +46,7 @@ public class AggregateRules extends ArchitectureRule {
         var invalidReturnType = noMethods().that()
                 .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, DOMAIN_SERVICE))
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Repository.class)
-                .should().haveRawReturnType(resideInAnyPackage(AGGREGATE))
+                .should().haveRawReturnType(thatIsAnnotatedWithAggregate())
                 .allowEmptyShould(true)
                 .because("Aggregates contain the business logic and can only be returned by a Repository!");
 
@@ -68,8 +68,8 @@ public class AggregateRules extends ArchitectureRule {
 
     protected void validateOnlyAggregatesAndNestedClassesHaveNonFinalFields() {
         var finalFields = fields().that().areDeclaredInClassesThat()
-                .resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, BUSINESS_EXCEPTION, DOMAIN_SERVICE, VALUE_OBJECT)
-                .and().areDeclaredInClassesThat().areNotNestedClasses()
+                .areNotAnnotatedWith(Aggregate.class)
+                .or().areDeclaredInClassesThat().areNotNestedClasses()
                 .should().beFinal()
                 .allowEmptyShould(true)
                 .because("Only Aggregates or nested classes are allowed to use non-final fields!");
@@ -93,6 +93,15 @@ public class AggregateRules extends ArchitectureRule {
             @Override
             public boolean apply(List<JavaClass> input) {
                 return input.stream().anyMatch(element -> element.isAnnotatedWith(Aggregate.class));
+            }
+        };
+    }
+
+    private static DescribedPredicate<JavaClass> thatIsAnnotatedWithAggregate() {
+        return new DescribedPredicate<>("one parameter of type is an Aggregate") {
+            @Override
+            public boolean apply(JavaClass input) {
+                return input.isAnnotatedWith(Aggregate.class);
             }
         };
     }

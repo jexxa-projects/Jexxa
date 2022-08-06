@@ -12,7 +12,10 @@ class ArchitectureTest {
     @Test
     void validateOnionArchitecture()
     {
-        var objectUnderTest = new OnionArchitecture(ValidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS);
+        var objectUnderTest = new PortsAndAdaptersRules(ValidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS)
+                .addDrivenAdapterPackage("jms")
+                .addDrivingAdapterPackage("rest");
+
         objectUnderTest.validate();
     }
 
@@ -33,7 +36,8 @@ class ArchitectureTest {
     @Test
     void validateInvalidOnionArchitecture()
     {
-        var objectUnderTest = new OnionArchitecture(InvalidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS);
+        var objectUnderTest = new PortsAndAdaptersRules(InvalidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS)
+                .addDrivingAdapterPackage("rest");
         assertThrows(AssertionError.class, objectUnderTest::validate);
     }
 

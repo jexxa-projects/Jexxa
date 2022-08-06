@@ -1,8 +1,8 @@
 package io.jexxa.jexxatest.architecture.invalidapplication.applicationservice;
 
-import io.jexxa.jexxatest.architecture.invalidapplication.domain.aggregate.InvalidAggregate;
-import io.jexxa.jexxatest.architecture.invalidapplication.domain.valueobject.InvalidValueObject;
-import io.jexxa.jexxatest.architecture.invalidapplication.domainservice.InvalidRepository;
+import io.jexxa.jexxatest.architecture.invalidapplication.domain.invalid.InvalidAggregate;
+import io.jexxa.jexxatest.architecture.invalidapplication.domain.invalid.InvalidRepository;
+import io.jexxa.jexxatest.architecture.invalidapplication.domain.invalid.InvalidValueObject;
 @SuppressWarnings("unused")
 
 public class InvalidApplicationService
