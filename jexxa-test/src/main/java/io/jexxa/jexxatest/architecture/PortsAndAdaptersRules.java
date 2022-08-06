@@ -19,7 +19,6 @@ import static com.tngtech.archunit.library.Architectures.onionArchitecture;
  *   [DomainService]
  *   [Domain]
  * }
- *
  * [ApplicationService] -down-> [DomainService]
  * [ApplicationService] -down-> [Domain]
  * [DomainService] -r-> [Domain]
