@@ -3,10 +3,11 @@ package io.jexxa.jexxatest.architecture;
 
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.library.Architectures;
+import io.jexxa.addend.applicationcore.Aggregate;
+import io.jexxa.addend.applicationcore.Repository;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.library.Architectures.onionArchitecture;
-import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN;
 
 /**
  * These tests validate the access direction af an onion architecture which is as follows:
@@ -61,7 +62,12 @@ public class PortsAndAdaptersRules extends ArchitectureRule {
     public void validate()
     {
         onionArchitecture.check(importedClasses());
-        var drivingAdapter = noClasses().that().resideInAnyPackage(project().getPackageName() + ".infrastructure.drivingadapter..").should().dependOnClassesThat().resideInAnyPackage(DOMAIN).allowEmptyShould(true);
+
+        //Don't access a repository or aggregate directly from a driving adapter
+        var drivingAdapter = noClasses().that()
+                .resideInAnyPackage(project().getPackageName() + ".infrastructure.drivingadapter..").should()
+                .dependOnClassesThat().areAnnotatedWith(Aggregate.class).orShould()
+                .dependOnClassesThat().areAnnotatedWith(Repository.class);
         drivingAdapter.check(importedClasses());
 
     }

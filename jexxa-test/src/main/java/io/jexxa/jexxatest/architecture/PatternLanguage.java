@@ -2,6 +2,7 @@ package io.jexxa.jexxatest.architecture;
 
 import com.tngtech.archunit.core.importer.ImportOption;
 import io.jexxa.addend.applicationcore.Aggregate;
+import io.jexxa.addend.applicationcore.AggregateFactory;
 import io.jexxa.addend.applicationcore.ApplicationService;
 import io.jexxa.addend.applicationcore.BusinessException;
 import io.jexxa.addend.applicationcore.DomainEvent;
@@ -9,6 +10,7 @@ import io.jexxa.addend.applicationcore.DomainService;
 import io.jexxa.addend.applicationcore.InfrastructureService;
 import io.jexxa.addend.applicationcore.Repository;
 import io.jexxa.addend.applicationcore.ValueObject;
+import io.jexxa.addend.applicationcore.ValueObjectFactory;
 import io.jexxa.addend.infrastructure.DrivenAdapter;
 import io.jexxa.addend.infrastructure.DrivingAdapter;
 
@@ -71,11 +73,14 @@ public class PatternLanguage extends ArchitectureRule {
     {
         var annotationRule = classes()
                 .that().resideInAnyPackage(DOMAIN)
+                .and().areNotAnonymousClasses()
                 .should().beAnnotatedWith(Aggregate.class)
                 .orShould().beAnnotatedWith(DomainEvent.class)
                 .orShould().beAnnotatedWith(ValueObject.class)
                 .orShould().beAnnotatedWith(BusinessException.class)
                 .orShould().beAnnotatedWith(Repository.class)
+                .orShould().beAnnotatedWith(ValueObjectFactory.class)
+                .orShould().beAnnotatedWith(AggregateFactory.class)
                 .allowEmptyShould(true);
 
         annotationRule.check(importedClasses());

@@ -2,7 +2,7 @@ package io.jexxa.jexxatest.architecture;
 
 @SuppressWarnings("unused")
 public class ArchitectureRules {
-    public static PortsAndAdaptersRules onionArchitecture(Class<?> project)
+    public static PortsAndAdaptersRules portsAndAdapters(Class<?> project)
     {
         return new PortsAndAdaptersRules(project);
     }

@@ -66,8 +66,8 @@ public class AggregateRules extends ArchitectureRule {
 
     protected void validateOnlyAggregatesAndNestedClassesAreMutable() {
         var finalFields = fields().that().areDeclaredInClassesThat()
-                .areNotAnnotatedWith(Aggregate.class)
-                .or().areDeclaredInClassesThat().areNotNestedClasses()
+                .areNotAnnotatedWith(Aggregate.class).and()
+                .areDeclaredInClassesThat().areNotNestedClasses()
                 .should().beFinal()
                 .allowEmptyShould(true)
                 .because("Only Aggregates or nested classes are allowed to use non-final fields!");
@@ -79,6 +79,7 @@ public class AggregateRules extends ArchitectureRule {
     protected void validateOnlyAggregatesHaveAggregatesAsFields() {
         var invalidReturnType = noFields().that().areDeclaredInClassesThat()
                 .resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_SERVICE, DOMAIN)
+                .and().areDeclaredInClassesThat().areNotAnnotatedWith(Aggregate.class)
                 .should().haveRawType(thatIsAnnotatedWithAggregate())
                 .allowEmptyShould(true)
                 .because("Only aggregates can keep a reference to an aggregate!");
