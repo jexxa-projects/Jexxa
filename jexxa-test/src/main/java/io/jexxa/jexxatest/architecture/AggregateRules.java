@@ -8,17 +8,13 @@ import io.jexxa.addend.applicationcore.Repository;
 
 import java.util.List;
 
-import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAnyPackage;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noFields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noMethods;
-import static io.jexxa.jexxatest.architecture.PackageName.AGGREGATE;
 import static io.jexxa.jexxatest.architecture.PackageName.APPLICATIONSERVICE;
-import static io.jexxa.jexxatest.architecture.PackageName.BUSINESS_EXCEPTION;
-import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_WORKFLOW;
+import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_SERVICE;
-import static io.jexxa.jexxatest.architecture.PackageName.VALUE_OBJECT;
 
 public class AggregateRules extends ArchitectureRule {
 
@@ -37,36 +33,38 @@ public class AggregateRules extends ArchitectureRule {
     public void validate()
     {
         validateOnlyAggregatesHaveAggregatesAsFields();
-        validateOnlyAggregatesAndNestedClassesHaveNonFinalFields();
+        validateOnlyAggregatesAndNestedClassesAreMutable();
         validateOnlyRepositoriesAcceptAggregates();
-        validateOnlyRepositoriesReturnAggregates();
+        validateReturnAggregates();
     }
 
-    protected void validateOnlyRepositoriesReturnAggregates() {
+    protected void validateReturnAggregates()
+    {
         var invalidReturnType = noMethods().that()
-                .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, DOMAIN_SERVICE))
+                .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_SERVICE, DOMAIN))
+                .and().areDeclaredInClassesThat().areNotAnnotatedWith(Aggregate.class)
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Repository.class)
                 .should().haveRawReturnType(thatIsAnnotatedWithAggregate())
                 .allowEmptyShould(true)
-                .because("Aggregates contain the business logic and can only be returned by a Repository!");
+                .because("Aggregates contain the business logic and can only be returned by an aggregate or a repository!");
 
         invalidReturnType.check(importedClasses());
     }
 
     protected void validateOnlyRepositoriesAcceptAggregates() {
         var invalidReturnType = noMethods().that()
-                .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, DOMAIN_SERVICE))
+                .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN, DOMAIN_SERVICE))
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Repository.class)
                 .should().haveRawParameterTypes(thatAreAggregates())
                 .allowEmptyShould(true)
-                .because("Aggregates contain the business logic and can only be returned by a Repository!");
+                .because("Aggregates contain the business logic and can only be accepted by a Repository!");
 
         invalidReturnType.check(importedClasses());
     }
 
 
 
-    protected void validateOnlyAggregatesAndNestedClassesHaveNonFinalFields() {
+    protected void validateOnlyAggregatesAndNestedClassesAreMutable() {
         var finalFields = fields().that().areDeclaredInClassesThat()
                 .areNotAnnotatedWith(Aggregate.class)
                 .or().areDeclaredInClassesThat().areNotNestedClasses()
@@ -80,10 +78,10 @@ public class AggregateRules extends ArchitectureRule {
 
     protected void validateOnlyAggregatesHaveAggregatesAsFields() {
         var invalidReturnType = noFields().that().areDeclaredInClassesThat()
-                .resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_WORKFLOW, BUSINESS_EXCEPTION, DOMAIN_SERVICE, VALUE_OBJECT)
-                .should().haveRawType(resideInAPackage(AGGREGATE))
+                .resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_SERVICE, DOMAIN)
+                .should().haveRawType(thatIsAnnotatedWithAggregate())
                 .allowEmptyShould(true)
-                .because("An ApplicationService or DomainProcessService must not keep a reference to an aggregate!");
+                .because("Only aggregates can keep a reference to an aggregate!");
 
         invalidReturnType.check(importedClasses());
     }

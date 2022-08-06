@@ -5,26 +5,19 @@ import io.jexxa.addend.applicationcore.Aggregate;
 import io.jexxa.addend.applicationcore.ApplicationService;
 import io.jexxa.addend.applicationcore.BusinessException;
 import io.jexxa.addend.applicationcore.DomainEvent;
-import io.jexxa.addend.applicationcore.DomainProcessStep;
 import io.jexxa.addend.applicationcore.DomainService;
-import io.jexxa.addend.applicationcore.DomainWorkflow;
 import io.jexxa.addend.applicationcore.InfrastructureService;
 import io.jexxa.addend.applicationcore.Repository;
 import io.jexxa.addend.applicationcore.ValueObject;
-import io.jexxa.addend.applicationcore.ValueObjectFactory;
 import io.jexxa.addend.infrastructure.DrivenAdapter;
 import io.jexxa.addend.infrastructure.DrivingAdapter;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static io.jexxa.jexxatest.architecture.PackageName.AGGREGATE;
 import static io.jexxa.jexxatest.architecture.PackageName.APPLICATIONSERVICE;
-import static io.jexxa.jexxatest.architecture.PackageName.BUSINESS_EXCEPTION;
-import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_EVENT;
+import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_SERVICE;
-import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_WORKFLOW;
 import static io.jexxa.jexxatest.architecture.PackageName.DRIVEN_ADAPTER;
 import static io.jexxa.jexxatest.architecture.PackageName.DRIVING_ADAPTER;
-import static io.jexxa.jexxatest.architecture.PackageName.VALUE_OBJECT;
 
 public class PatternLanguage extends ArchitectureRule {
 
@@ -40,15 +33,12 @@ public class PatternLanguage extends ArchitectureRule {
 
     public void validate()
     {
-        validateAnnotationApplicationService();
-        validateAnnotationDomainService();
-        validateAnnotationDomainProcessService();
-        validateAnnotationDomainEvent();
-        validateAnnotationValueObject();
-        validateAnnotationBusinessException();
-        validateAnnotationAggregate();
-        validateAnnotationDrivenAdapter();
-        validateAnnotationDrivingAdapter();
+        validateApplicationService();
+        validateDomainService();
+        validateDomain();
+
+        validateDrivenAdapter();
+        validateDrivingAdapter();
 
         validateRepositoryMustBeInterfaces();
         validateInfrastructureServiceMustBeInterfaces();
@@ -57,7 +47,7 @@ public class PatternLanguage extends ArchitectureRule {
     }
 
 
-    protected void validateAnnotationApplicationService()
+    protected void validateApplicationService()
     {
         var annotationRule = classes()
                 .that().resideInAnyPackage(APPLICATIONSERVICE)
@@ -67,56 +57,32 @@ public class PatternLanguage extends ArchitectureRule {
         annotationRule.check(importedClasses());
     }
 
-    protected void validateAnnotationDomainService() {
+    protected void validateDomainService()
+    {
         var annotationRule = classes().that().resideInAnyPackage(DOMAIN_SERVICE)
-                .should().beAnnotatedWith(Repository.class)
-                .orShould().beAnnotatedWith(InfrastructureService.class)
+                .should().beAnnotatedWith(InfrastructureService.class)
                 .orShould().beAnnotatedWith(DomainService.class)
                 .allowEmptyShould(true);
 
         annotationRule.check(importedClasses());
     }
 
-    protected void validateAnnotationDomainProcessService() {
+    protected void validateDomain()
+    {
         var annotationRule = classes()
-                .that().resideInAnyPackage(DOMAIN_WORKFLOW)
-                .should().beAnnotatedWith(DomainProcessStep.class)
-                .orShould().beAnnotatedWith(DomainWorkflow.class)
+                .that().resideInAnyPackage(DOMAIN)
+                .should().beAnnotatedWith(Aggregate.class)
+                .orShould().beAnnotatedWith(DomainEvent.class)
+                .orShould().beAnnotatedWith(ValueObject.class)
+                .orShould().beAnnotatedWith(BusinessException.class)
+                .orShould().beAnnotatedWith(Repository.class)
                 .allowEmptyShould(true);
 
         annotationRule.check(importedClasses());
     }
 
-    protected void validateAnnotationDomainEvent() {
-        var annotationRule = classes()
-                .that().resideInAnyPackage(DOMAIN_EVENT)
-                .should().beAnnotatedWith(DomainEvent.class)
-                .allowEmptyShould(true);
-
-        annotationRule.check(importedClasses());
-    }
-
-    protected void validateAnnotationValueObject() {
-        var annotationRule = classes()
-                .that().resideInAnyPackage(VALUE_OBJECT)
-                .should().beAnnotatedWith(ValueObject.class)
-                .orShould().beAnnotatedWith(ValueObjectFactory.class)
-                .orShould().beEnums()
-                .allowEmptyShould(true);
-
-        annotationRule.check(importedClasses());
-    }
-
-    protected void validateAnnotationBusinessException() {
-        var annotationRule = classes()
-                .that().resideInAnyPackage(BUSINESS_EXCEPTION)
-                .should().beAnnotatedWith(BusinessException.class)
-                .allowEmptyShould(true);
-
-        annotationRule.check(importedClasses());
-    }
-
-    protected void validateAnnotationDrivenAdapter() {
+    protected void validateDrivenAdapter()
+    {
         var annotationRule = classes()
                 .that().resideInAnyPackage(DRIVEN_ADAPTER)
                 .and().areNotAnonymousClasses()
@@ -128,7 +94,8 @@ public class PatternLanguage extends ArchitectureRule {
         annotationRule.check(importedClasses());
     }
 
-    protected void validateAnnotationDrivingAdapter() {
+    protected void validateDrivingAdapter()
+    {
         var annotationRule = classes()
                 .that().resideInAnyPackage(DRIVING_ADAPTER)
                 .and().areNotAnonymousClasses()
@@ -140,20 +107,8 @@ public class PatternLanguage extends ArchitectureRule {
         annotationRule.check(importedClasses());
     }
 
-
-    protected void validateAnnotationAggregate() {
-        var annotationRule = classes()
-                .that().resideInAnyPackage(AGGREGATE)
-                .and().areNotAnonymousClasses()
-                .and().areNotInnerClasses()
-                .should().beAnnotatedWith(Aggregate.class)
-                .orShould().beAnnotatedWith(FunctionalInterface.class)
-                .allowEmptyShould(true);
-
-        annotationRule.check(importedClasses());
-    }
-
-    protected void validateRepositoryMustBeInterfaces() {
+    protected void validateRepositoryMustBeInterfaces()
+    {
         var interfaceRule = classes()
                 .that().areAnnotatedWith(Repository.class)
                 .should().beInterfaces()
@@ -162,7 +117,8 @@ public class PatternLanguage extends ArchitectureRule {
         interfaceRule.check(importedClasses());
     }
 
-    protected void validateInfrastructureServiceMustBeInterfaces() {
+    protected void validateInfrastructureServiceMustBeInterfaces()
+    {
         var interfaceRule = classes()
                 .that().areAnnotatedWith(InfrastructureService.class)
                 .should().beInterfaces()
@@ -171,10 +127,10 @@ public class PatternLanguage extends ArchitectureRule {
         interfaceRule.check(importedClasses());
     }
 
-    protected void validateValueObjectMustBeRecords() {
+    protected void validateValueObjectMustBeRecords()
+    {
         var recordRule = classes()
-                .that().resideInAnyPackage(VALUE_OBJECT)
-                .and().areNotAnnotatedWith(ValueObjectFactory.class)
+                .that().areAnnotatedWith(ValueObject.class)
                 .should().beRecords()
                 .orShould().beEnums()
                 .allowEmptyShould(true);
@@ -182,9 +138,10 @@ public class PatternLanguage extends ArchitectureRule {
         recordRule.check(importedClasses());
     }
 
-    protected void validateDomainEventMustBeRecord() {
+    protected void validateDomainEventMustBeRecord()
+    {
         var recordRule = classes()
-                .that().resideInAnyPackage(DOMAIN_EVENT)
+                .that().areAnnotatedWith(DomainEvent.class)
                 .should().beRecords()
                 .allowEmptyShould(true);
 

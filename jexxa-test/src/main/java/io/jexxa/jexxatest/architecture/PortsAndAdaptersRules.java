@@ -18,10 +18,9 @@ import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN;
  *   [DomainService]
  *   [Domain]
  * }
- * <p>
+ *
  * [ApplicationService] -down-> [DomainService]
  * [ApplicationService] -down-> [Domain]
- * [DomainWorkflow] -down-> [DomainService]
  * [DomainService] -r-> [Domain]
  *
  * @enduml
