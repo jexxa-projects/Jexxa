@@ -14,14 +14,25 @@ import static com.tngtech.archunit.library.Architectures.onionArchitecture;
  *
  * @startuml
  *
+ * package "DrivingAdapter " #DDDDDD {
+ *    [DrivingAdapter] #Implementation
+ *  }
  * package ApplicationCore  #DDDDDD {
- *   [ApplicationService]
- *   [DomainService]
- *   [Domain]
+ *   [ApplicationService] #lightgreen
+ *   [DomainService]      #lightgreen
+ *   [Domain]             #lightgreen
  * }
- * [ApplicationService] -down-> [DomainService]
- * [ApplicationService] -down-> [Domain]
- * [DomainService] -r-> [Domain]
+ * package "DrivenAdapter "  #DDDDDD {
+ *     [DrivenAdapter] #Implementation
+ *  }
+ * [DrivingAdapter] -r--> [ApplicationService] : uses
+ * [DrivingAdapter] -r--> [DomainService] : uses
+ * [ApplicationService] -down-> [DomainService] : uses
+ * [ApplicationService] -down-> [Domain] : uses
+ * [DomainService] -r-> [Domain] : uses
+ *
+ * [DrivenAdapter] .u..> [Domain]
+ * [DrivenAdapter] .u..> [DomainService] : implements
  *
  * @enduml
  * ....
