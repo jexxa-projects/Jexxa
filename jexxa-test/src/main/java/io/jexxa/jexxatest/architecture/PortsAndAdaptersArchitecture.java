@@ -30,40 +30,39 @@ import static com.tngtech.archunit.library.Architectures.onionArchitecture;
  * [ApplicationService] -down-> [DomainService] : uses
  * [ApplicationService] -down-> [Domain] : uses
  * [DomainService] -r-> [Domain] : uses
- *
  * [DrivenAdapter] .u..> [Domain]
  * [DrivenAdapter] .u..> [DomainService] : implements
  *
  * @enduml
  * ....
  */
-public class PortsAndAdaptersRules extends ArchitectureRule {
+public class PortsAndAdaptersArchitecture extends ArchitectureRule {
 
     private final Architectures.OnionArchitecture onionArchitecture;
     @SuppressWarnings("unused")
-    public PortsAndAdaptersRules(Class<?> project)
+    public PortsAndAdaptersArchitecture(Class<?> project)
     {
         this(project, ImportOption.Predefined.DO_NOT_INCLUDE_TESTS);
     }
 
-    protected PortsAndAdaptersRules(Class<?> project, ImportOption importOption)
+    protected PortsAndAdaptersArchitecture(Class<?> project, ImportOption importOption)
     {
         super(project, importOption);
         this.onionArchitecture = onionArchitecture()
                 .domainModels(project().getPackage().getName() + ".domain..")
                 .domainServices(project().getPackage().getName() +".domainservice..")
-                .applicationServices(project().getPackage().getName() + ".applicationservice..")
-                .adapter("main", project.getPackage().getName());
-        onionArchitecture.allowEmptyShould(true);
+                .applicationServices(project().getPackage().getName() + ".applicationservice..");
+
+        this.onionArchitecture.allowEmptyShould(true);
     }
 
-    public PortsAndAdaptersRules addDrivenAdapterPackage(String drivenAdapterPackage)
+    public PortsAndAdaptersArchitecture addDrivenAdapterPackage(String drivenAdapterPackage)
     {
         onionArchitecture.adapter(drivenAdapterPackage, project().getPackageName() + "." + "infrastructure.drivenadapter." + drivenAdapterPackage + "..");
         return this;
     }
 
-    public PortsAndAdaptersRules addDrivingAdapterPackage(String drivingAdapterPackage)
+    public PortsAndAdaptersArchitecture addDrivingAdapterPackage(String drivingAdapterPackage)
     {
         onionArchitecture.adapter(drivingAdapterPackage, project().getPackageName() + ".infrastructure.drivingadapter." + drivingAdapterPackage + "..");
         return this;
@@ -79,7 +78,6 @@ public class PortsAndAdaptersRules extends ArchitectureRule {
                 .dependOnClassesThat().areAnnotatedWith(Aggregate.class).orShould()
                 .dependOnClassesThat().areAnnotatedWith(Repository.class);
         drivingAdapter.check(importedClasses());
-
     }
 
 
