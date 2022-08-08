@@ -21,10 +21,10 @@ import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_SERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.DRIVEN_ADAPTER;
 import static io.jexxa.jexxatest.architecture.PackageName.DRIVING_ADAPTER;
 
-public class PatternLanguage extends ArchitectureRule {
+public class PatternLanguage extends ProjectContent {
 
     @SuppressWarnings("unused")
-    public PatternLanguage(Class<?> project)
+    PatternLanguage(Class<?> project)
     {
         this(project,ImportOption.Predefined.DO_NOT_INCLUDE_TESTS);
     }

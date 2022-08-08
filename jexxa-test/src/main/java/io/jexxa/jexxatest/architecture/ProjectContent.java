@@ -7,12 +7,12 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 
 @SuppressWarnings("unused")
-public abstract class ArchitectureRule
+public abstract class ProjectContent
 {
     private final Class<?> project;
     private JavaClasses importedClasses;
 
-    protected ArchitectureRule(Class<?> project, ImportOption importOption)
+    protected ProjectContent(Class<?> project, ImportOption importOption)
     {
         this.project = project;
         importedClasses = new ClassFileImporter()
@@ -24,7 +24,7 @@ public abstract class ArchitectureRule
                         project.getPackageName()+ ".infrastructure.." );
     }
 
-    public ArchitectureRule ignoreClass(Class<?> clazz)
+    public ProjectContent ignoreClass(Class<?> clazz)
     {
         importedClasses = importedClasses.that(isNot(clazz));
         return this;

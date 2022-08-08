@@ -36,16 +36,16 @@ import static com.tngtech.archunit.library.Architectures.onionArchitecture;
  * @enduml
  * ....
  */
-public class PortsAndAdaptersArchitecture extends ArchitectureRule {
+public class PortsAndAdapters extends ProjectContent {
 
     private final Architectures.OnionArchitecture onionArchitecture;
     @SuppressWarnings("unused")
-    public PortsAndAdaptersArchitecture(Class<?> project)
+    PortsAndAdapters(Class<?> project)
     {
         this(project, ImportOption.Predefined.DO_NOT_INCLUDE_TESTS);
     }
 
-    protected PortsAndAdaptersArchitecture(Class<?> project, ImportOption importOption)
+    protected PortsAndAdapters(Class<?> project, ImportOption importOption)
     {
         super(project, importOption);
         this.onionArchitecture = onionArchitecture()
@@ -56,13 +56,13 @@ public class PortsAndAdaptersArchitecture extends ArchitectureRule {
         this.onionArchitecture.allowEmptyShould(true);
     }
 
-    public PortsAndAdaptersArchitecture addDrivenAdapterPackage(String drivenAdapterPackage)
+    public PortsAndAdapters addDrivenAdapterPackage(String drivenAdapterPackage)
     {
         onionArchitecture.adapter(drivenAdapterPackage, project().getPackageName() + "." + "infrastructure.drivenadapter." + drivenAdapterPackage + "..");
         return this;
     }
 
-    public PortsAndAdaptersArchitecture addDrivingAdapterPackage(String drivingAdapterPackage)
+    public PortsAndAdapters addDrivingAdapterPackage(String drivingAdapterPackage)
     {
         onionArchitecture.adapter(drivingAdapterPackage, project().getPackageName() + ".infrastructure.drivingadapter." + drivingAdapterPackage + "..");
         return this;
@@ -70,13 +70,23 @@ public class PortsAndAdaptersArchitecture extends ArchitectureRule {
 
     public void validate()
     {
-        onionArchitecture.check(importedClasses());
+        validatePortsAndAdapters();
+        validateDrivingAdapterAccess();
+    }
 
+    private void validatePortsAndAdapters()
+    {
+        onionArchitecture.check(importedClasses());
+    }
+
+    private void validateDrivingAdapterAccess()
+    {
         //Don't access a repository or aggregate directly from a driving adapter
         var drivingAdapter = noClasses().that()
                 .resideInAnyPackage(project().getPackageName() + ".infrastructure.drivingadapter..").should()
                 .dependOnClassesThat().areAnnotatedWith(Aggregate.class).orShould()
-                .dependOnClassesThat().areAnnotatedWith(Repository.class);
+                .dependOnClassesThat().areAnnotatedWith(Repository.class)
+                .allowEmptyShould(true);
         drivingAdapter.check(importedClasses());
     }
 

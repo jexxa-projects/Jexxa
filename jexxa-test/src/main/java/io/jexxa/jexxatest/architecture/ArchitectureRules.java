@@ -2,9 +2,9 @@ package io.jexxa.jexxatest.architecture;
 
 @SuppressWarnings("unused")
 public class ArchitectureRules {
-    public static PortsAndAdaptersArchitecture portsAndAdapters(Class<?> project)
+    public static PortsAndAdapters portsAndAdapters(Class<?> project)
     {
-        return new PortsAndAdaptersArchitecture(project);
+        return new PortsAndAdapters(project);
     }
 
     public static PatternLanguage patternLanguage(Class<?> project)

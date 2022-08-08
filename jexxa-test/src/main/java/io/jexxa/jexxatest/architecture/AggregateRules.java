@@ -16,10 +16,10 @@ import static io.jexxa.jexxatest.architecture.PackageName.APPLICATIONSERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_SERVICE;
 
-public class AggregateRules extends ArchitectureRule {
+public class AggregateRules extends ProjectContent {
 
     @SuppressWarnings("unused")
-    public AggregateRules(Class<?> project)
+    AggregateRules(Class<?> project)
     {
         this(project, ImportOption.Predefined.DO_NOT_INCLUDE_TESTS);
     }
