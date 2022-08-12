@@ -8,6 +8,7 @@ import io.jexxa.addend.applicationcore.BusinessException;
 import io.jexxa.addend.applicationcore.DomainEvent;
 import io.jexxa.addend.applicationcore.DomainService;
 import io.jexxa.addend.applicationcore.InfrastructureService;
+import io.jexxa.addend.applicationcore.Observer;
 import io.jexxa.addend.applicationcore.Repository;
 import io.jexxa.addend.applicationcore.ValueObject;
 import io.jexxa.addend.applicationcore.ValueObjectFactory;
@@ -81,6 +82,7 @@ public class PatternLanguage extends ProjectContent {
                 .orShould().beAnnotatedWith(Repository.class)
                 .orShould().beAnnotatedWith(ValueObjectFactory.class)
                 .orShould().beAnnotatedWith(AggregateFactory.class)
+                .orShould().beAnnotatedWith(Observer.class)
                 .allowEmptyShould(true);
 
         annotationRule.check(importedClasses());

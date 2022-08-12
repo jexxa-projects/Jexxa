@@ -41,6 +41,7 @@ public class AggregateRules extends ProjectContent {
     protected void validateReturnAggregates()
     {
         var invalidReturnType = noMethods().that()
+                .arePublic().and()
                 .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_SERVICE, DOMAIN))
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Aggregate.class)
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Repository.class)
@@ -53,6 +54,7 @@ public class AggregateRules extends ProjectContent {
 
     protected void validateOnlyRepositoriesAcceptAggregates() {
         var invalidReturnType = noMethods().that()
+                .arePublic().and()
                 .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN, DOMAIN_SERVICE))
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Repository.class)
                 .should().haveRawParameterTypes(thatAreAggregates())
