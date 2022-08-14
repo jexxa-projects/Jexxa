@@ -104,7 +104,17 @@ final class RecordFactory implements TypeAdapterFactory
                     constructor.setAccessible(true);
                     return constructor.newInstance(args);
                 }
-                catch (NoSuchMethodException | InstantiationException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+
+                catch (InvocationTargetException e)
+                {
+                    if (e.getTargetException() instanceof RuntimeException)
+                    {
+                        throw (RuntimeException)(e.getTargetException());
+                    } else {
+                        throw new IllegalArgumentException(e.getTargetException());
+                    }
+                }
+                catch (NoSuchMethodException | InstantiationException | SecurityException | IllegalAccessException e)
                 {
                     throw new IllegalArgumentException(e);
                 }
