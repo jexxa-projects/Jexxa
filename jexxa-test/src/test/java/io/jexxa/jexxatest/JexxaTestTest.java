@@ -2,13 +2,12 @@ package io.jexxa.jexxatest;
 
 import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
-import io.jexxa.application.domain.model.JexxaValueObject;
-import io.jexxa.application.domainservice.InvalidConstructor;
 import io.jexxa.application.domain.model.JexxaAggregateRepository;
-import io.jexxa.application.domainservice.IJexxaPublisher;
+import io.jexxa.application.domain.model.JexxaValueObject;
+import io.jexxa.application.domainservice.ValidDomainSender;
+import io.jexxa.application.domainservice.BootstrapJexxaAggregates;
+import io.jexxa.application.domainservice.InvalidConstructorParameterService;
 import io.jexxa.application.domainservice.NotImplementedService;
-import io.jexxa.application.domainservice.InitializeJexxaAggregates;
-import io.jexxa.application.domainservice.PublishDomainInformation;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.core.factory.InvalidAdapterException;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
@@ -53,7 +52,7 @@ class JexxaTestTest
         var jexxaRepository = jexxaTest.getRepository(JexxaAggregateRepository.class);
 
         //Act
-        jexxaTest.getInstanceOfPort(InitializeJexxaAggregates.class).initDomainData();
+        jexxaTest.getInstanceOfPort(BootstrapJexxaAggregates.class).initDomainData();
 
         //Assert
         assertFalse(jexxaRepository.get().isEmpty());
@@ -65,9 +64,9 @@ class JexxaTestTest
     {
         //Arrange
         var testMessage = new JexxaValueObject(1);
-        var messageRecorder= jexxaTest.getMessageRecorder(IJexxaPublisher.class);
+        var messageRecorder= jexxaTest.getMessageRecorder(ValidDomainSender.class);
 
-        var objectUnderTest = jexxaTest.getInstanceOfPort(PublishDomainInformation.class);
+        var objectUnderTest = jexxaTest.getInstanceOfPort(ValidDomainSender.class);
 
         //Act
         objectUnderTest.sendToTopic(testMessage);
@@ -94,9 +93,9 @@ class JexxaTestTest
     {
         //Arrange
         var testMessage = new JexxaValueObject(1);
-        var messageRecorder = jexxaTest.getMessageRecorder(IJexxaPublisher.class);
+        var messageRecorder = jexxaTest.getMessageRecorder(ValidDomainSender.class);
 
-        var objectUnderTest = jexxaTest.getInstanceOfPort(PublishDomainInformation.class);
+        var objectUnderTest = jexxaTest.getInstanceOfPort(ValidDomainSender.class);
 
         //Act
         objectUnderTest.sendToQueue(testMessage);
@@ -117,7 +116,7 @@ class JexxaTestTest
         assertThrows( IllegalArgumentException.class, () -> jexxaTest.getRepository(NotImplementedService.class) );
 
         //Act/Assert
-        assertThrows( InvalidAdapterException.class, () -> jexxaTest.getRepository(InvalidConstructor.class) );
+        assertThrows( InvalidAdapterException.class, () -> jexxaTest.getRepository(InvalidConstructorParameterService.class) );
     }
 
     @Test

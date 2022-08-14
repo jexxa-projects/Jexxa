@@ -1,4 +1,4 @@
-package io.jexxa.application.infrastructure.drivingadapter;
+package io.jexxa.application.infrastructure.drivingadapter.generic;
 
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 
@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ProxyAdapter implements IDrivingAdapter
+public class ProxyDrivingAdapter implements IDrivingAdapter
 {
     private static final AtomicInteger INSTANCE_COUNT = new AtomicInteger();
 
     private final List<Object> portList = new ArrayList<>();
 
-    public ProxyAdapter()
+    public ProxyDrivingAdapter()
     {
         incrementInstanceCount();
     }

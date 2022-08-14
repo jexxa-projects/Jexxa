@@ -1,5 +1,6 @@
 package io.jexxa.jexxatest;
 
+import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
@@ -34,9 +35,7 @@ class JexxaTestConfigTest
     void setUp()
     {
         //Arrange
-        var jexxaMain = new JexxaMain(JexxaTestTest.class, new Properties());
-        jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
-                .addToInfrastructure("io.jexxa.application.infrastructure");
+        var jexxaMain = new JexxaMain(JexxaTestApplication.class);
 
         new JexxaTest(jexxaMain); //Configure JexxaMain for Unit testing
     }

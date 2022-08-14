@@ -2,14 +2,14 @@ package io.jexxa.core.factory;
 
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domainservice.DefaultConstructorService;
-import io.jexxa.application.domainservice.FactoryMethodService;
+import io.jexxa.application.domainservice.ValidDefaultConstructorService;
+import io.jexxa.application.domainservice.ValidFactoryMethodService;
 import io.jexxa.application.domainservice.NotImplementedService;
 import io.jexxa.application.domainservice.NotUniqueService;
-import io.jexxa.application.domainservice.PropertiesConstructorService;
-import io.jexxa.application.domainservice.InvalidAdapterProperties;
-import io.jexxa.application.infrastructure.drivenadapter.factory.DefaultConstructorServiceImpl;
-import io.jexxa.application.infrastructure.drivenadapter.factory.PropertiesConstructorServiceImpl;
+import io.jexxa.application.domainservice.ValidPropertiesConstructorService;
+import io.jexxa.application.domainservice.InvalidPropertiesService;
+import io.jexxa.application.infrastructure.drivenadapter.factory.ValidDefaultConstructorServiceImpl;
+import io.jexxa.application.infrastructure.drivenadapter.factory.ValidPropertiesConstructorServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ class AdapterFactoryTest
     @Test
     void createDrivenAdapter() {
         //Act
-        var result = objectUnderTest.newInstanceOf(DefaultConstructorService.class);
+        var result = objectUnderTest.newInstanceOf(ValidDefaultConstructorService.class);
 
         //Assert
         assertNotNull(result);
@@ -54,8 +54,8 @@ class AdapterFactoryTest
     @Test
     void createDrivenAdapterImpl() {
         //Act
-        var firstResult = objectUnderTest.newInstanceOf(DefaultConstructorServiceImpl.class);
-        var secondResult = objectUnderTest.newInstanceOf(PropertiesConstructorServiceImpl.class, new Properties());
+        var firstResult = objectUnderTest.newInstanceOf(ValidDefaultConstructorServiceImpl.class);
+        var secondResult = objectUnderTest.newInstanceOf(ValidPropertiesConstructorServiceImpl.class, new Properties());
 
         //Assert
         assertNotNull(firstResult);
@@ -66,13 +66,13 @@ class AdapterFactoryTest
     @Test
     void validateSingletonScopeOfDrivenAdapter() {
         //Act
-        var first = objectUnderTest.getInstanceOf(DefaultConstructorService.class, new Properties());
-        var second = objectUnderTest.getInstanceOf(DefaultConstructorService.class, new Properties());
+        var first = objectUnderTest.getInstanceOf(ValidDefaultConstructorService.class, new Properties());
+        var second = objectUnderTest.getInstanceOf(ValidDefaultConstructorService.class, new Properties());
 
 
         //Act
-        var firstProperties = objectUnderTest.getInstanceOf(PropertiesConstructorService.class, new Properties());
-        var secondProperties = objectUnderTest.getInstanceOf(PropertiesConstructorService.class, new Properties());
+        var firstProperties = objectUnderTest.getInstanceOf(ValidPropertiesConstructorService.class, new Properties());
+        var secondProperties = objectUnderTest.getInstanceOf(ValidPropertiesConstructorService.class, new Properties());
 
         //Assert
         assertNotNull(first);
@@ -87,7 +87,7 @@ class AdapterFactoryTest
     @Test
     void createDrivenAdapterWithPropertiesConstructor() {
         //Act
-        var result = objectUnderTest.newInstanceOf(PropertiesConstructorService.class, new Properties());
+        var result = objectUnderTest.newInstanceOf(ValidPropertiesConstructorService.class, new Properties());
 
         //Assert
         assertNotNull(result);
@@ -97,7 +97,7 @@ class AdapterFactoryTest
     @Test
     void createDrivenAdapterWithFactoryMethod() {
         //Act
-        var result = objectUnderTest.newInstanceOf(FactoryMethodService.class);
+        var result = objectUnderTest.newInstanceOf(ValidFactoryMethodService.class);
 
         //Assert
         assertNotNull(result);
@@ -106,7 +106,7 @@ class AdapterFactoryTest
     @Test
     void createDrivenAdapterWithPropertiesFactoryMethod() {
         //Act
-        var result = objectUnderTest.newInstanceOf(FactoryMethodService.class, new Properties());
+        var result = objectUnderTest.newInstanceOf(ValidFactoryMethodService.class, new Properties());
 
         //Assert
         assertNotNull(result);
@@ -116,9 +116,9 @@ class AdapterFactoryTest
     @Test
     void drivenAdapterAvailable() {
         var adapterList = new ArrayList<Class<?>>();
-        adapterList.add(DefaultConstructorService.class);
-        adapterList.add(FactoryMethodService.class);
-        adapterList.add(PropertiesConstructorService.class);
+        adapterList.add(ValidDefaultConstructorService.class);
+        adapterList.add(ValidFactoryMethodService.class);
+        adapterList.add(ValidPropertiesConstructorService.class);
 
         //Act
         boolean result = objectUnderTest.isAvailable(adapterList);
@@ -164,7 +164,7 @@ class AdapterFactoryTest
 
         //Act/Assert
         assertThrows(InvalidAdapterException.class, () ->
-                objectUnderTest.newInstanceOf(InvalidAdapterProperties.class, properties)
+                objectUnderTest.newInstanceOf(InvalidPropertiesService.class, properties)
         );
     }
 }

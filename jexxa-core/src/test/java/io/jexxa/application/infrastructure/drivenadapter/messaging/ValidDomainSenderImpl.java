@@ -1,23 +1,23 @@
 package io.jexxa.application.infrastructure.drivenadapter.messaging;
 
 import io.jexxa.application.domain.model.JexxaValueObject;
-import io.jexxa.application.domainservice.IJexxaPublisher;
+import io.jexxa.application.domainservice.ValidDomainSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 
 import java.util.Properties;
 
 @SuppressWarnings("unused")
-public class JexxaMessageSenderImpl implements IJexxaPublisher
+public class ValidDomainSenderImpl implements ValidDomainSender
 {
     public static final String JEXXA_TOPIC = "JexxaTopic";
     public static final String JEXXA_QUEUE = "JexxaQueue";
 
     private final MessageSender messageSender;
 
-    public JexxaMessageSenderImpl(Properties properties)
+    public ValidDomainSenderImpl(Properties properties)
     {
-        this.messageSender = MessageSenderManager.getMessageSender(JexxaMessageSenderImpl.class, properties);
+        this.messageSender = MessageSenderManager.getMessageSender(ValidDomainSenderImpl.class, properties);
     }
 
     @Override

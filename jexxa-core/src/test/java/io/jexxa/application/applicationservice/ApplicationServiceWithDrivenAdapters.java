@@ -1,9 +1,9 @@
 package io.jexxa.application.applicationservice;
 
 import io.jexxa.application.annotation.ValidApplicationService;
-import io.jexxa.application.domainservice.DefaultConstructorService;
-import io.jexxa.application.domainservice.FactoryMethodService;
-import io.jexxa.application.domainservice.PropertiesConstructorService;
+import io.jexxa.application.domainservice.ValidDefaultConstructorService;
+import io.jexxa.application.domainservice.ValidFactoryMethodService;
+import io.jexxa.application.domainservice.ValidPropertiesConstructorService;
 
 import java.util.Objects;
 
@@ -11,13 +11,13 @@ import java.util.Objects;
 public class ApplicationServiceWithDrivenAdapters
 {
     public ApplicationServiceWithDrivenAdapters(
-            DefaultConstructorService defaultConstructorService,
-            FactoryMethodService factoryMethodService,
-            PropertiesConstructorService propertiesConstructorService
+            ValidDefaultConstructorService validDefaultConstructorService,
+            ValidFactoryMethodService validFactoryMethodService,
+            ValidPropertiesConstructorService validPropertiesConstructorService
     )
     {
-        Objects.requireNonNull(defaultConstructorService);
-        Objects.requireNonNull(factoryMethodService);
-        Objects.requireNonNull(propertiesConstructorService);
+        Objects.requireNonNull(validDefaultConstructorService);
+        Objects.requireNonNull(validFactoryMethodService);
+        Objects.requireNonNull(validPropertiesConstructorService);
     }
 }

@@ -1,10 +1,14 @@
-package io.jexxa.application.infrastructure.drivingadapter;
+package io.jexxa.application.infrastructure.drivingadapter.generic;
 
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 
-public final class InvalidAdapter implements IDrivingAdapter
+/**
+ * This DrivingAdapter is invalid because it only provides a private constructor.
+ * So Jexxa cannot create an instance of this class because it does not fulfill its convention.
+ */
+public final class InvalidDrivingAdapter implements IDrivingAdapter
 {
-    private InvalidAdapter()
+    private InvalidDrivingAdapter()
     {
         //Create an invalid adapter for testing fail-fast approach
     }

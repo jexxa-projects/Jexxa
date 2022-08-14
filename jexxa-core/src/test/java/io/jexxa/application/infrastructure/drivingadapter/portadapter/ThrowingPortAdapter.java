@@ -1,4 +1,4 @@
-package io.jexxa.application.infrastructure.drivingadapter;
+package io.jexxa.application.infrastructure.drivingadapter.portadapter;
 
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 

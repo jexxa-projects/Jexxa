@@ -1,12 +1,12 @@
 package io.jexxa.application.domainservice;
 
-import io.jexxa.application.domain.model.JexxaAggregate;
-import io.jexxa.application.domain.model.JexxaAggregateRepository;
+import io.jexxa.application.domain.model.JexxaEntity;
+import io.jexxa.application.domain.model.JexxaEntityRepository;
 import io.jexxa.application.domain.model.JexxaValueObject;
 
 import java.util.stream.IntStream;
 
-public record InitializeJexxaAggregates(JexxaAggregateRepository jexxaAggregateRepository) {
+public record BootstrapJexxaEntities(JexxaEntityRepository jexxaEntityRepository) {
 
     public void initDomainData() {
         IntStream.rangeClosed(1, 100)
@@ -15,8 +15,8 @@ public record InitializeJexxaAggregates(JexxaAggregateRepository jexxaAggregateR
     }
 
     private void addIfNotAvailable(JexxaValueObject aggregateID) {
-        if (jexxaAggregateRepository.find(aggregateID).isEmpty()) {
-            jexxaAggregateRepository.add(JexxaAggregate.create(aggregateID));
+        if (jexxaEntityRepository.find(aggregateID).isEmpty()) {
+            jexxaEntityRepository.add(JexxaEntity.create(aggregateID));
         }
     }
 }
