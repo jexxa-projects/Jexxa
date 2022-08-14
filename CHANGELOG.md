@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - Added rules to validate architecture of your application. 
   - See [JexxaTemplate](https://github.com/jexxa-projects/JexxaTemplate) for more information
 
+### Fixed
+- Jexxa-Core: If deserialization of record fails, the exception from the canonical constructor is forwarded (if available). 
+
 ## \[5.0.2] - 2022-08-05
 ### Fixed
 - Updated dependencies
