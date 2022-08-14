@@ -168,24 +168,21 @@ public final class JexxaMain
         return new BootstrapService<>(bootstrapService, this);
     }
 
+    public JexxaMain bootstrapAnnotation(Class<? extends Annotation> annotation)
+    {
+        var inboundPorts = portFactory.getAnnotatedPorts(annotation);
+        inboundPorts.forEach(PortConvention::validate);
+
+        inboundPorts
+                .forEach(element -> portFactory.getInstanceOf(element, properties));
+
+        return this;
+    }
+
     @CheckReturnValue
     public <T extends IDrivingAdapter> DrivingAdapter<T>  bind(Class<T> clazz)
     {
         return new DrivingAdapter<>(clazz, this);
-    }
-
-    @CheckReturnValue
-    @SuppressWarnings("unused")
-    public <T> DrivenAdapter<T>  attach(Class<T> clazz)
-    {
-        return new DrivenAdapter<>(clazz, this);
-    }
-
-
-    <T> void attachTo(Class<T> drivenAdapter, Consumer<T> consumer)
-    {
-        var outboundPort = getInstanceOfOutboundPort(drivenAdapter);
-        consumer.accept(outboundPort);
     }
 
     @CheckReturnValue
