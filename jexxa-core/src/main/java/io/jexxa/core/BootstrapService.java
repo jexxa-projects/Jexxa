@@ -5,6 +5,7 @@ import io.jexxa.utils.annotations.CheckReturnValue;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+@SuppressWarnings("unused")
 public class BootstrapService<T>
 {
     private final Class<T> bootstrapServiceClass;
@@ -21,5 +22,10 @@ public class BootstrapService<T>
     {
         jexxaMain.addBootstrapService(bootstrapServiceClass, initFunction);
         return jexxaMain;
+    }
+
+    public static <T> Consumer<T> noInitFunction()
+    {
+        return element -> {};
     }
 }
