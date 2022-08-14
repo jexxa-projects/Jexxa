@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[5.1.0] - 2022-MM-DD
 ### Added
-- Added rules to validate architecture of your application. See [JexxaTemplate](https://github.com/jexxa-projects/JexxaTemplate) for more information  
+- Jexxa-Test: 
+  - Added static method getJexxaTest which also instantiates JexxaMain. This ensures that all driven adapter are correctly configured before any method on JexxaMain is called  
+  - Added rules to validate architecture of your application. 
+  - See [JexxaTemplate](https://github.com/jexxa-projects/JexxaTemplate) for more information
 
 ## \[5.0.2] - 2022-08-05
 ### Fixed

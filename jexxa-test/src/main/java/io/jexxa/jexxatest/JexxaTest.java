@@ -33,8 +33,6 @@ public class JexxaTest
 
     private static JexxaMain jexxaMain;
 
-
-
     /**
      * @deprecated Use method {@link #getJexxaTest} instead
      */
