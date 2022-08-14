@@ -1,6 +1,6 @@
 package io.jexxa.application.domainservice;
 
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.domain.model.JexxaValueObject;
 
 public record PublishDomainInformation(IJexxaPublisher jexxaPublisher) {
 

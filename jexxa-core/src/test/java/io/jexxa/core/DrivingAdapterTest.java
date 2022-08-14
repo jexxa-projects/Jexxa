@@ -1,6 +1,7 @@
 package io.jexxa.core;
 
 import io.jexxa.TestConstants;
+import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.applicationservice.InvalidConstructorApplicationService;
 import io.jexxa.application.infrastructure.drivingadapter.InvalidAdapter;
 import io.jexxa.core.convention.AdapterConventionViolation;
@@ -19,7 +20,7 @@ class DrivingAdapterTest
     void throwOnInvalidPortConvention()
     {
         //Arrange
-        JexxaMain jexxaMain = new JexxaMain(DrivingAdapterTest.class);
+        JexxaMain jexxaMain = new JexxaMain(JexxaTestApplication.class);
         var drivingAdapter = jexxaMain.bind(JMXAdapter.class);
 
         //Act / Assert

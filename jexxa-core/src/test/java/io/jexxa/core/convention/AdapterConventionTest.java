@@ -1,9 +1,9 @@
 package io.jexxa.core.convention;
 
 import io.jexxa.application.applicationservice.SimpleApplicationService;
-import io.jexxa.application.infrastructure.drivenadapter.factory.DefaultConstructorAdapter;
-import io.jexxa.application.infrastructure.drivenadapter.factory.FactoryMethodAdapter;
-import io.jexxa.application.infrastructure.drivenadapter.factory.PropertiesConstructorAdapter;
+import io.jexxa.application.infrastructure.drivenadapter.factory.DefaultConstructorServiceImpl;
+import io.jexxa.application.infrastructure.drivenadapter.factory.FactoryMethodServiceImpl;
+import io.jexxa.application.infrastructure.drivenadapter.factory.PropertiesConstructorServiceImpl;
 import io.jexxa.application.infrastructure.drivingadapter.InvalidAdapter;
 import io.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
 import org.junit.jupiter.api.Test;
@@ -22,11 +22,11 @@ class AdapterConventionTest
         //Arrange - Nothing
 
         //Assert all Adapter conventions
-        AdapterConvention.validate(DefaultConstructorAdapter.class);
+        AdapterConvention.validate(DefaultConstructorServiceImpl.class);
 
-        AdapterConvention.validate(FactoryMethodAdapter.class);
+        AdapterConvention.validate(FactoryMethodServiceImpl.class);
 
-        AdapterConvention.validate(PropertiesConstructorAdapter.class);
+        AdapterConvention.validate(PropertiesConstructorServiceImpl.class);
 
         assertThrows(AdapterConventionViolation.class, () -> AdapterConvention.validate(InvalidAdapter.class));
     }

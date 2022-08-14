@@ -3,7 +3,7 @@ package io.jexxa.infrastructure.drivingadapter.jmx;
 import io.jexxa.TestConstants;
 import io.jexxa.application.annotation.ValidApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.domain.model.JexxaValueObject;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;

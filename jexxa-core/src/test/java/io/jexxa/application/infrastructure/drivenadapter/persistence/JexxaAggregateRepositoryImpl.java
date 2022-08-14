@@ -1,8 +1,8 @@
 package io.jexxa.application.infrastructure.drivenadapter.persistence;
 
-import io.jexxa.application.domain.aggregate.JexxaAggregate;
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.application.domainservice.IJexxaAggregateRepository;
+import io.jexxa.application.domain.model.JexxaAggregate;
+import io.jexxa.application.domain.model.JexxaValueObject;
+import io.jexxa.application.domain.model.JexxaAggregateRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
 
@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-@SuppressWarnings({"unsused", "ClassCanBeRecord"})
-public final class JexxaAggregateRepository implements IJexxaAggregateRepository
+@SuppressWarnings({"unsused"})
+public final class JexxaAggregateRepositoryImpl implements JexxaAggregateRepository
 {
 
     private final IRepository<JexxaAggregate, JexxaValueObject> repository;
 
-    private JexxaAggregateRepository(IRepository<JexxaAggregate, JexxaValueObject> repository)
+    private JexxaAggregateRepositoryImpl(IRepository<JexxaAggregate, JexxaValueObject> repository)
     {
         this.repository = repository;
     }
@@ -63,9 +63,9 @@ public final class JexxaAggregateRepository implements IJexxaAggregateRepository
         repository.removeAll();
     }
 
-    public static IJexxaAggregateRepository create(Properties properties)
+    public static JexxaAggregateRepository create(Properties properties)
     {
-        return new JexxaAggregateRepository((RepositoryManager.getRepository(
+        return new JexxaAggregateRepositoryImpl((RepositoryManager.getRepository(
                 JexxaAggregate.class,
                 JexxaAggregate::getKey,
                 properties)

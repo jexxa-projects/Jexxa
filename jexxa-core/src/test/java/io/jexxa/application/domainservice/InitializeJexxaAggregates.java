@@ -1,11 +1,12 @@
 package io.jexxa.application.domainservice;
 
-import io.jexxa.application.domain.aggregate.JexxaAggregate;
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.domain.model.JexxaAggregate;
+import io.jexxa.application.domain.model.JexxaAggregateRepository;
+import io.jexxa.application.domain.model.JexxaValueObject;
 
 import java.util.stream.IntStream;
 
-public record InitializeJexxaAggregates(IJexxaAggregateRepository jexxaAggregateRepository) {
+public record InitializeJexxaAggregates(JexxaAggregateRepository jexxaAggregateRepository) {
 
     public void initDomainData() {
         IntStream.rangeClosed(1, 100)

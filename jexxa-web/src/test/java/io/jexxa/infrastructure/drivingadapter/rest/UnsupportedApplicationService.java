@@ -1,6 +1,6 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.domain.model.JexxaValueObject;
 
 /*
 * This service is not available via RESTfulRPC because method setSimpleValueObject is available twice 

@@ -1,12 +1,12 @@
 package io.jexxa.application.infrastructure.drivenadapter.factory;
 
 
-import io.jexxa.application.domainservice.IInvalidService;
+import io.jexxa.application.domainservice.InvalidService;
 
 @SuppressWarnings("unused")
-public class InvalidAdapter implements IInvalidService
+public class InvalidServiceImpl implements InvalidService
 {
-    InvalidAdapter()
+    InvalidServiceImpl()
     {
         //Invalid Adapter because constructor is package private
     }

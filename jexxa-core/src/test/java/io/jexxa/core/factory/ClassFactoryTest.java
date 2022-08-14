@@ -11,7 +11,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.ArrayList;
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.core.factory.PackageConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.utils.function.ThrowingConsumer.exceptionCollector;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

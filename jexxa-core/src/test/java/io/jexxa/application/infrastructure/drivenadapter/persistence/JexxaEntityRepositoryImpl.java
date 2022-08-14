@@ -1,8 +1,8 @@
 package io.jexxa.application.infrastructure.drivenadapter.persistence;
 
-import io.jexxa.application.domain.aggregate.JexxaEntity;
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.application.domainservice.IJexxaEntityRepository;
+import io.jexxa.application.domain.model.JexxaEntity;
+import io.jexxa.application.domain.model.JexxaValueObject;
+import io.jexxa.application.domain.model.JexxaEntityRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
 
@@ -10,12 +10,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-@SuppressWarnings("ClassCanBeRecord")
-public final class JexxaEntityRepository implements IJexxaEntityRepository
+public final class JexxaEntityRepositoryImpl implements JexxaEntityRepository
 {
     private final IRepository<JexxaEntity, JexxaValueObject> repositoryConnection;
 
-    private JexxaEntityRepository(IRepository<JexxaEntity, JexxaValueObject> repositoryConnection)
+    private JexxaEntityRepositoryImpl(IRepository<JexxaEntity, JexxaValueObject> repositoryConnection)
     {
         this.repositoryConnection = repositoryConnection;
     }
@@ -62,9 +61,9 @@ public final class JexxaEntityRepository implements IJexxaEntityRepository
         repositoryConnection.removeAll();
     }
 
-    public static IJexxaEntityRepository create(Properties properties)
+    public static JexxaEntityRepository create(Properties properties)
     {
-        return new JexxaEntityRepository(RepositoryManager.getRepository(
+        return new JexxaEntityRepositoryImpl(RepositoryManager.getRepository(
                 JexxaEntity.class,
                 JexxaEntity::getKey,
                 properties)

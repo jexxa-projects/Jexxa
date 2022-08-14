@@ -1,6 +1,4 @@
-package io.jexxa.application.domain.domainevent;
-
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
+package io.jexxa.application.domain.model;
 
 public record JexxaDomainEvent(JexxaValueObject jexxaValueObject) {
 

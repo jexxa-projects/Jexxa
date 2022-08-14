@@ -1,5 +1,5 @@
 package io.jexxa.application.domainservice;
 
-public interface IInvalidConstructor
+public interface DefaultConstructorService
 {
 }

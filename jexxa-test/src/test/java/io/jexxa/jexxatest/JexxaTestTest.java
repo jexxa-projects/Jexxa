@@ -1,11 +1,12 @@
 package io.jexxa.jexxatest;
 
+import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.application.domainservice.IInvalidConstructor;
-import io.jexxa.application.domainservice.IJexxaAggregateRepository;
+import io.jexxa.application.domain.model.JexxaValueObject;
+import io.jexxa.application.domainservice.InvalidConstructor;
+import io.jexxa.application.domain.model.JexxaAggregateRepository;
 import io.jexxa.application.domainservice.IJexxaPublisher;
-import io.jexxa.application.domainservice.INotImplementedService;
+import io.jexxa.application.domainservice.NotImplementedService;
 import io.jexxa.application.domainservice.InitializeJexxaAggregates;
 import io.jexxa.application.domainservice.PublishDomainInformation;
 import io.jexxa.core.JexxaMain;
@@ -35,10 +36,7 @@ class JexxaTestTest
     void setUp()
     {
         //Arrange
-        jexxaMain = new JexxaMain(JexxaTestTest.class, new Properties());
-        jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
-                .addToInfrastructure("io.jexxa.application.infrastructure");
-
+        jexxaMain = new JexxaMain(JexxaTestApplication.class, new Properties());
         jexxaTest = new JexxaTest(jexxaMain);
     }
 
@@ -52,7 +50,7 @@ class JexxaTestTest
     void validateRepository()
     {
         //Arrange
-        var jexxaRepository = jexxaTest.getRepository(IJexxaAggregateRepository.class);
+        var jexxaRepository = jexxaTest.getRepository(JexxaAggregateRepository.class);
 
         //Act
         jexxaTest.getInstanceOfPort(InitializeJexxaAggregates.class).initDomainData();
@@ -116,10 +114,10 @@ class JexxaTestTest
     void repositoryNotAvailable()
     {
         //Act/Assert
-        assertThrows( IllegalArgumentException.class, () -> jexxaTest.getRepository(INotImplementedService.class) );
+        assertThrows( IllegalArgumentException.class, () -> jexxaTest.getRepository(NotImplementedService.class) );
 
         //Act/Assert
-        assertThrows( InvalidAdapterException.class, () -> jexxaTest.getRepository(IInvalidConstructor.class) );
+        assertThrows( InvalidAdapterException.class, () -> jexxaTest.getRepository(InvalidConstructor.class) );
     }
 
     @Test

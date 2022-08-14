@@ -1,8 +1,9 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domain.domainevent.JexxaDomainEvent;
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.JexxaTestApplication;
+import io.jexxa.application.domain.model.JexxaDomainEvent;
+import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
@@ -19,8 +20,6 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static io.jexxa.infrastructure.utils.messaging.QueueListener.QUEUE_DESTINATION;
 import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTINATION;
 import static org.awaitility.Awaitility.await;
@@ -44,14 +43,12 @@ class MessageListenerIT
     @BeforeEach
     void initTests()
     {
-        jexxaMain = new JexxaMain(MessageListenerIT.class);
+        jexxaMain = new JexxaMain(JexxaTestApplication.class);
         jsonMessageListener = new TextMessageListener();
         typedListener = new JexxaValueObjectListener();
         objectUnderTest = MessageSenderManager.getMessageSender(MessageListenerIT.class, jexxaMain.getProperties());
 
-        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .bind(JMSAdapter.class).to(typedListener)
+        jexxaMain.bind(JMSAdapter.class).to(typedListener)
                 .bind(JMSAdapter.class).to(jsonMessageListener)
                 .disableBanner()
                 .start();

@@ -1,4 +1,4 @@
-package io.jexxa.application.domain.valueobject;
+package io.jexxa.application.domain.model;
 
 
 public class JexxaValueObject

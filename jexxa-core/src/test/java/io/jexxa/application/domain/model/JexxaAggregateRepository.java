@@ -1,12 +1,9 @@
-package io.jexxa.application.domainservice;
-
-import io.jexxa.application.domain.aggregate.JexxaAggregate;
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
+package io.jexxa.application.domain.model;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface IJexxaAggregateRepository
+public interface JexxaAggregateRepository
 {
     void add(JexxaAggregate jexxaEntity);
     JexxaAggregate get(JexxaValueObject aggregateID);

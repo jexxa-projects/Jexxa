@@ -2,7 +2,8 @@ package io.jexxa.infrastructure.drivingadapter.messaging;
 
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domain.aggregate.JexxaEntity;
+import io.jexxa.application.JexxaTestApplication;
+import io.jexxa.application.domain.model.JexxaEntity;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.utils.messaging.ITMessageSender;
@@ -19,8 +20,6 @@ import java.time.Duration;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -96,11 +95,9 @@ class JMSAdapterIT
         //Arrange
         var messageListener = new TopicListener();
 
-        JexxaMain jexxaMain = new JexxaMain(JMSAdapterIT.class, properties);
+        JexxaMain jexxaMain = new JexxaMain(JexxaTestApplication.class, properties);
 
-        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .bind(JMSAdapter.class).to(messageListener)
+        jexxaMain.bind(JMSAdapter.class).to(messageListener)
                 .disableBanner()
                 .start();
 
@@ -123,11 +120,9 @@ class JMSAdapterIT
         var properties = new Properties();
         properties.load(getClass().getResourceAsStream("/jexxa-secrets.properties"));
 
-        JexxaMain jexxaMain = new JexxaMain(JMSAdapterIT.class, properties);
+        JexxaMain jexxaMain = new JexxaMain(JexxaTestApplication.class, properties);
 
-        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .bind(JMSAdapter.class).to(messageListener)
+        jexxaMain.bind(JMSAdapter.class).to(messageListener)
                 .disableBanner()
                 .start();
 

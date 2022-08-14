@@ -1,13 +1,14 @@
 package io.jexxa.core;
 
 
-import io.jexxa.application.annotation.ValidApplicationService;
+import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.annotation.InvalidApplicationService;
+import io.jexxa.application.annotation.ValidApplicationService;
 import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
 import io.jexxa.application.applicationservice.InvalidConstructorApplicationService;
 import io.jexxa.application.applicationservice.JexxaApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
-import io.jexxa.application.domainservice.IJexxaEntityRepository;
+import io.jexxa.application.domain.model.JexxaEntityRepository;
 import io.jexxa.application.domainservice.InitializeJexxaEntities;
 import io.jexxa.application.infrastructure.drivingadapter.ProxyAdapter;
 import io.jexxa.application.infrastructure.drivingadapter.ProxyPortAdapter;
@@ -23,9 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
-import static io.jexxa.TestConstants.JEXXA_DRIVING_ADAPTER;
 import static io.jexxa.TestConstants.UNIT_TEST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -44,11 +42,7 @@ class JexxaMainTest
     void initTests()
     {
         RepositoryManager.setDefaultStrategy(IMDBRepository.class);
-        objectUnderTest = new JexxaMain(JexxaMainTest.class);
-        objectUnderTest
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToInfrastructure(JEXXA_DRIVING_ADAPTER)
-                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
+        objectUnderTest = new JexxaMain(JexxaTestApplication.class);
     }
 
     @AfterEach
@@ -108,7 +102,6 @@ class JexxaMainTest
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
                 .bind(ProxyAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
                 .disableBanner()
                 .start();
@@ -161,9 +154,6 @@ class JexxaMainTest
     {
         //Arrange - All done in initTests
         objectUnderTest = new JexxaMain(JexxaMainTest.class);
-        objectUnderTest
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
 
         var drivingAdapter = objectUnderTest.bind(ProxyAdapter.class);
 
@@ -210,12 +200,9 @@ class JexxaMainTest
     {
         //Arrange
         RepositoryManager.setDefaultStrategy(IMDBRepository.class);
-        objectUnderTest = new JexxaMain(JexxaMainTest.class);
-        objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToApplicationCore(JEXXA_APPLICATION_SERVICE)
 
         //Act
-                .bootstrap(InitializeJexxaEntities.class).with(InitializeJexxaEntities::initDomainData);
+        objectUnderTest.bootstrap(InitializeJexxaEntities.class).with(InitializeJexxaEntities::initDomainData);
 
         var jexxaApplicationService = objectUnderTest.getInstanceOfPort(JexxaApplicationService.class);
 
@@ -239,7 +226,7 @@ class JexxaMainTest
         //Arrange --
 
         //Act/Assert
-        assertNotNull( objectUnderTest.getInstanceOfPort(IJexxaEntityRepository.class));
+        assertNotNull( objectUnderTest.getInstanceOfPort(JexxaEntityRepository.class));
     }
 
     @Test

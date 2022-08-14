@@ -12,10 +12,10 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.Properties;
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DOMAIN_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static io.jexxa.TestConstants.UNIT_TEST;
+import static io.jexxa.core.factory.PackageConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.core.factory.PackageConstants.JEXXA_DOMAIN_SERVICE;
+import static io.jexxa.core.factory.PackageConstants.JEXXA_DRIVEN_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;

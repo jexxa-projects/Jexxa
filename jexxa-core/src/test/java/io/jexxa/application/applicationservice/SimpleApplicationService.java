@@ -2,8 +2,8 @@ package io.jexxa.application.applicationservice;
 
 
 import io.jexxa.application.annotation.ValidApplicationService;
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.application.domain.valueobject.SpecialCasesValueObject;
+import io.jexxa.application.domain.model.JexxaValueObject;
+import io.jexxa.application.domain.model.SpecialCasesValueObject;
 
 import java.io.Serial;
 import java.util.ArrayList;
