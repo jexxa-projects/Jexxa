@@ -8,8 +8,8 @@ import io.jexxa.adapterapi.invocation.InvocationManager;
 
 import java.util.Objects;
 
-@SuppressWarnings({"ClassCanBeRecord", "unused"})
-public class FluentMonitor
+@SuppressWarnings({"unused"})
+public final class FluentMonitor
 {
     private final Object targetObject;
     private final JexxaMain jexxaMain;
@@ -20,6 +20,7 @@ public class FluentMonitor
         this.jexxaMain = Objects.requireNonNull( jexxaMain );
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public <U extends HealthCheck & BeforeInterceptor> JexxaMain incomingCalls(U monitor)
     {
         monitor.setObservedObject(targetObject);

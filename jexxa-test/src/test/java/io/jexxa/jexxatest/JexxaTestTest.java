@@ -1,21 +1,19 @@
 package io.jexxa.jexxatest;
 
+import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.application.domainservice.IInvalidConstructor;
-import io.jexxa.application.domainservice.IJexxaAggregateRepository;
-import io.jexxa.application.domainservice.IJexxaPublisher;
-import io.jexxa.application.domainservice.INotImplementedService;
-import io.jexxa.application.domainservice.InitializeJexxaAggregates;
-import io.jexxa.application.domainservice.PublishDomainInformation;
-import io.jexxa.core.JexxaMain;
+import io.jexxa.application.domain.model.JexxaAggregateRepository;
+import io.jexxa.application.domain.model.JexxaValueObject;
+import io.jexxa.application.domainservice.BootstrapJexxaAggregates;
+import io.jexxa.application.domainservice.InvalidConstructorParameterService;
+import io.jexxa.application.domainservice.NotImplementedService;
+import io.jexxa.application.domainservice.ValidDomainSender;
 import io.jexxa.core.factory.InvalidAdapterException;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Properties;
-
+import static io.jexxa.jexxatest.JexxaTest.getJexxaTest;
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -28,18 +26,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class JexxaTestTest
 {
     private JexxaTest jexxaTest;
-    private JexxaMain jexxaMain;
-
 
     @BeforeEach
     void setUp()
     {
         //Arrange
-        jexxaMain = new JexxaMain(JexxaTestTest.class, new Properties());
-        jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
-                .addToInfrastructure("io.jexxa.application.infrastructure");
-
-        jexxaTest = new JexxaTest(jexxaMain);
+        jexxaTest = getJexxaTest(JexxaTestApplication.class);
     }
 
     @Test
@@ -52,10 +44,10 @@ class JexxaTestTest
     void validateRepository()
     {
         //Arrange
-        var jexxaRepository = jexxaTest.getRepository(IJexxaAggregateRepository.class);
+        var jexxaRepository = jexxaTest.getRepository(JexxaAggregateRepository.class);
 
         //Act
-        jexxaTest.getInstanceOfPort(InitializeJexxaAggregates.class).initDomainData();
+        jexxaTest.getInstanceOfPort(BootstrapJexxaAggregates.class).initDomainData();
 
         //Assert
         assertFalse(jexxaRepository.get().isEmpty());
@@ -67,9 +59,9 @@ class JexxaTestTest
     {
         //Arrange
         var testMessage = new JexxaValueObject(1);
-        var messageRecorder= jexxaTest.getMessageRecorder(IJexxaPublisher.class);
+        var messageRecorder= jexxaTest.getMessageRecorder(ValidDomainSender.class);
 
-        var objectUnderTest = jexxaTest.getInstanceOfPort(PublishDomainInformation.class);
+        var objectUnderTest = jexxaTest.getInstanceOfPort(ValidDomainSender.class);
 
         //Act
         objectUnderTest.sendToTopic(testMessage);
@@ -96,9 +88,9 @@ class JexxaTestTest
     {
         //Arrange
         var testMessage = new JexxaValueObject(1);
-        var messageRecorder = jexxaTest.getMessageRecorder(IJexxaPublisher.class);
+        var messageRecorder = jexxaTest.getMessageRecorder(ValidDomainSender.class);
 
-        var objectUnderTest = jexxaTest.getInstanceOfPort(PublishDomainInformation.class);
+        var objectUnderTest = jexxaTest.getInstanceOfPort(ValidDomainSender.class);
 
         //Act
         objectUnderTest.sendToQueue(testMessage);
@@ -116,17 +108,17 @@ class JexxaTestTest
     void repositoryNotAvailable()
     {
         //Act/Assert
-        assertThrows( IllegalArgumentException.class, () -> jexxaTest.getRepository(INotImplementedService.class) );
+        assertThrows( IllegalArgumentException.class, () -> jexxaTest.getRepository(NotImplementedService.class) );
 
         //Act/Assert
-        assertThrows( InvalidAdapterException.class, () -> jexxaTest.getRepository(IInvalidConstructor.class) );
+        assertThrows( InvalidAdapterException.class, () -> jexxaTest.getRepository(InvalidConstructorParameterService.class) );
     }
 
     @Test
     void jexxaTestProperties()
     {
         //Act/Assert
-        assertTrue( jexxaMain.getProperties().containsKey("io.jexxa.test.project") );
+        assertTrue( jexxaTest.getProperties().containsKey("io.jexxa.test.project") );
     }
 
 

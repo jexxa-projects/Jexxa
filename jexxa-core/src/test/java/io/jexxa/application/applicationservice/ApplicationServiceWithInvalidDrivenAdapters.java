@@ -1,13 +1,13 @@
 package io.jexxa.application.applicationservice;
 
-import io.jexxa.application.domainservice.IInvalidService;
+import io.jexxa.application.domainservice.InvalidConstructorService;
 
 import java.util.Objects;
 
 public class ApplicationServiceWithInvalidDrivenAdapters
 {
-    public ApplicationServiceWithInvalidDrivenAdapters(IInvalidService invalidService)
+    public ApplicationServiceWithInvalidDrivenAdapters(InvalidConstructorService invalidConstructorService)
     {
-        Objects.requireNonNull(invalidService);
+        Objects.requireNonNull(invalidConstructorService);
     }
 }

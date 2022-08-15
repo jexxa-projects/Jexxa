@@ -1,11 +1,11 @@
 package io.jexxa.core.convention;
 
 import io.jexxa.application.applicationservice.SimpleApplicationService;
-import io.jexxa.application.infrastructure.drivenadapter.factory.DefaultConstructorAdapter;
-import io.jexxa.application.infrastructure.drivenadapter.factory.FactoryMethodAdapter;
-import io.jexxa.application.infrastructure.drivenadapter.factory.PropertiesConstructorAdapter;
-import io.jexxa.application.infrastructure.drivingadapter.InvalidAdapter;
-import io.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
+import io.jexxa.application.infrastructure.drivenadapter.factory.ValidDefaultConstructorServiceImpl;
+import io.jexxa.application.infrastructure.drivenadapter.factory.ValidFactoryMethodServiceImpl;
+import io.jexxa.application.infrastructure.drivenadapter.factory.ValidPropertiesConstructorServiceImpl;
+import io.jexxa.application.infrastructure.drivingadapter.generic.InvalidDrivingAdapter;
+import io.jexxa.application.infrastructure.drivingadapter.portadapter.PortAdapter;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -22,13 +22,13 @@ class AdapterConventionTest
         //Arrange - Nothing
 
         //Assert all Adapter conventions
-        AdapterConvention.validate(DefaultConstructorAdapter.class);
+        AdapterConvention.validate(ValidDefaultConstructorServiceImpl.class);
 
-        AdapterConvention.validate(FactoryMethodAdapter.class);
+        AdapterConvention.validate(ValidFactoryMethodServiceImpl.class);
 
-        AdapterConvention.validate(PropertiesConstructorAdapter.class);
+        AdapterConvention.validate(ValidPropertiesConstructorServiceImpl.class);
 
-        assertThrows(AdapterConventionViolation.class, () -> AdapterConvention.validate(InvalidAdapter.class));
+        assertThrows(AdapterConventionViolation.class, () -> AdapterConvention.validate(InvalidDrivingAdapter.class));
     }
 
     @Test
@@ -38,7 +38,7 @@ class AdapterConventionTest
         var infrastructure = List.of("io.jexxa.application.infrastructure.drivingadapter");
 
         //Assert all port adapter conventions
-        assertTrue(AdapterConvention.isPortAdapter(SimpleApplicationServiceAdapter.class, infrastructure));
+        assertTrue(AdapterConvention.isPortAdapter(PortAdapter.class, infrastructure));
         assertFalse(AdapterConvention.isPortAdapter(SimpleApplicationService.class, infrastructure));
     }
 

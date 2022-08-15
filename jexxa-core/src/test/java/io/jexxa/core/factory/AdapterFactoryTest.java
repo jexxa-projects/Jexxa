@@ -2,14 +2,14 @@ package io.jexxa.core.factory;
 
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domainservice.IDefaultConstructorService;
-import io.jexxa.application.domainservice.IFactoryMethodService;
-import io.jexxa.application.domainservice.IInvalidAdapterProperties;
-import io.jexxa.application.domainservice.INotImplementedService;
-import io.jexxa.application.domainservice.INotUniqueService;
-import io.jexxa.application.domainservice.IPropertiesConstructorService;
-import io.jexxa.application.infrastructure.drivenadapter.factory.DefaultConstructorAdapter;
-import io.jexxa.application.infrastructure.drivenadapter.factory.PropertiesConstructorAdapter;
+import io.jexxa.application.domainservice.ValidDefaultConstructorService;
+import io.jexxa.application.domainservice.ValidFactoryMethodService;
+import io.jexxa.application.domainservice.NotImplementedService;
+import io.jexxa.application.domainservice.NotUniqueService;
+import io.jexxa.application.domainservice.ValidPropertiesConstructorService;
+import io.jexxa.application.domainservice.InvalidPropertiesService;
+import io.jexxa.application.infrastructure.drivenadapter.factory.ValidDefaultConstructorServiceImpl;
+import io.jexxa.application.infrastructure.drivenadapter.factory.ValidPropertiesConstructorServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
+import static io.jexxa.core.factory.PackageConstants.JEXXA_DRIVEN_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -45,7 +45,7 @@ class AdapterFactoryTest
     @Test
     void createDrivenAdapter() {
         //Act
-        var result = objectUnderTest.newInstanceOf(IDefaultConstructorService.class);
+        var result = objectUnderTest.newInstanceOf(ValidDefaultConstructorService.class);
 
         //Assert
         assertNotNull(result);
@@ -54,8 +54,8 @@ class AdapterFactoryTest
     @Test
     void createDrivenAdapterImpl() {
         //Act
-        var firstResult = objectUnderTest.newInstanceOf(DefaultConstructorAdapter.class);
-        var secondResult = objectUnderTest.newInstanceOf(PropertiesConstructorAdapter.class, new Properties());
+        var firstResult = objectUnderTest.newInstanceOf(ValidDefaultConstructorServiceImpl.class);
+        var secondResult = objectUnderTest.newInstanceOf(ValidPropertiesConstructorServiceImpl.class, new Properties());
 
         //Assert
         assertNotNull(firstResult);
@@ -66,13 +66,13 @@ class AdapterFactoryTest
     @Test
     void validateSingletonScopeOfDrivenAdapter() {
         //Act
-        var first = objectUnderTest.getInstanceOf(IDefaultConstructorService.class, new Properties());
-        var second = objectUnderTest.getInstanceOf(IDefaultConstructorService.class, new Properties());
+        var first = objectUnderTest.getInstanceOf(ValidDefaultConstructorService.class, new Properties());
+        var second = objectUnderTest.getInstanceOf(ValidDefaultConstructorService.class, new Properties());
 
 
         //Act
-        var firstProperties = objectUnderTest.getInstanceOf(IPropertiesConstructorService.class, new Properties());
-        var secondProperties = objectUnderTest.getInstanceOf(IPropertiesConstructorService.class, new Properties());
+        var firstProperties = objectUnderTest.getInstanceOf(ValidPropertiesConstructorService.class, new Properties());
+        var secondProperties = objectUnderTest.getInstanceOf(ValidPropertiesConstructorService.class, new Properties());
 
         //Assert
         assertNotNull(first);
@@ -87,7 +87,7 @@ class AdapterFactoryTest
     @Test
     void createDrivenAdapterWithPropertiesConstructor() {
         //Act
-        var result = objectUnderTest.newInstanceOf(IPropertiesConstructorService.class, new Properties());
+        var result = objectUnderTest.newInstanceOf(ValidPropertiesConstructorService.class, new Properties());
 
         //Assert
         assertNotNull(result);
@@ -97,7 +97,7 @@ class AdapterFactoryTest
     @Test
     void createDrivenAdapterWithFactoryMethod() {
         //Act
-        var result = objectUnderTest.newInstanceOf(IFactoryMethodService.class);
+        var result = objectUnderTest.newInstanceOf(ValidFactoryMethodService.class);
 
         //Assert
         assertNotNull(result);
@@ -106,7 +106,7 @@ class AdapterFactoryTest
     @Test
     void createDrivenAdapterWithPropertiesFactoryMethod() {
         //Act
-        var result = objectUnderTest.newInstanceOf(IFactoryMethodService.class, new Properties());
+        var result = objectUnderTest.newInstanceOf(ValidFactoryMethodService.class, new Properties());
 
         //Assert
         assertNotNull(result);
@@ -116,9 +116,9 @@ class AdapterFactoryTest
     @Test
     void drivenAdapterAvailable() {
         var adapterList = new ArrayList<Class<?>>();
-        adapterList.add(IDefaultConstructorService.class);
-        adapterList.add(IFactoryMethodService.class);
-        adapterList.add(IPropertiesConstructorService.class);
+        adapterList.add(ValidDefaultConstructorService.class);
+        adapterList.add(ValidFactoryMethodService.class);
+        adapterList.add(ValidPropertiesConstructorService.class);
 
         //Act
         boolean result = objectUnderTest.isAvailable(adapterList);
@@ -130,7 +130,7 @@ class AdapterFactoryTest
     @Test
     void drivenAdapterUnavailable() {
         var adapterList = new ArrayList<Class<?>>();
-        adapterList.add(INotImplementedService.class);
+        adapterList.add(NotImplementedService.class);
 
         //Act
         boolean result = objectUnderTest.isAvailable(adapterList);
@@ -143,7 +143,7 @@ class AdapterFactoryTest
     void createNoUniqueImplementation() {
         //Act/Assert
         var exception = assertThrows(AmbiguousAdapterException.class, () ->
-                objectUnderTest.newInstanceOf(INotUniqueService.class)
+                objectUnderTest.newInstanceOf(NotUniqueService.class)
         );
         assertNotNull(exception.getMessage());
     }
@@ -152,7 +152,7 @@ class AdapterFactoryTest
     void createNoImplementationAvailable() {
         //Act/Assert
         assertThrows(IllegalArgumentException.class, () ->
-                objectUnderTest.newInstanceOf(INotImplementedService.class)
+                objectUnderTest.newInstanceOf(NotImplementedService.class)
         );
     }
 
@@ -164,7 +164,7 @@ class AdapterFactoryTest
 
         //Act/Assert
         assertThrows(InvalidAdapterException.class, () ->
-                objectUnderTest.newInstanceOf(IInvalidAdapterProperties.class, properties)
+                objectUnderTest.newInstanceOf(InvalidPropertiesService.class, properties)
         );
     }
 }

@@ -1,7 +1,7 @@
 package io.jexxa.core.convention;
 
 import io.jexxa.application.applicationservice.InvalidConstructorApplicationService;
-import io.jexxa.application.domainservice.IJexxaEntityRepository;
+import io.jexxa.application.domain.model.JexxaEntityRepository;
 import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
@@ -31,7 +31,7 @@ class PortConventionTest
         }
 
         @SuppressWarnings("unused")
-        public InvalidApplicationServiceMultipleConstructor(IJexxaEntityRepository jexxaAggregateRepository)
+        public InvalidApplicationServiceMultipleConstructor(JexxaEntityRepository jexxaAggregateRepository)
         {
             Objects.requireNonNull(jexxaAggregateRepository);
         }

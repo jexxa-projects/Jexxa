@@ -1,7 +1,7 @@
 package io.jexxa.application.applicationservice;
 
 
-import io.jexxa.application.annotation.ApplicationService;
+import io.jexxa.application.annotation.ValidApplicationService;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @SuppressWarnings("unused")
-@ApplicationService
+@ValidApplicationService
 public final class Java8DateTimeApplicationService
 {
     private Java8DateTimeWrapper java8DateTimeWrapper= new Java8DateTimeWrapper( LocalTime.now()

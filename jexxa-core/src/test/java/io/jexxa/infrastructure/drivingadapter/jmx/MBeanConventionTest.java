@@ -1,8 +1,9 @@
 package io.jexxa.infrastructure.drivingadapter.jmx;
 
 import io.jexxa.TestConstants;
+import io.jexxa.application.annotation.ValidApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.domain.model.JexxaValueObject;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -45,6 +46,8 @@ class MBeanConventionTest
     void getDomainPath()
     {
         //Arrange
+        var annotationName = ValidApplicationService.class.getSimpleName();
+        var className = SimpleApplicationService.class.getSimpleName();
         var applicationService = new SimpleApplicationService();
         var properties = new Properties();
         properties.put(JEXXA_CONTEXT_NAME, getClass().getSimpleName());
@@ -52,7 +55,7 @@ class MBeanConventionTest
         var objectUnderTest = new MBeanConvention(applicationService, properties);
 
         //Act
-        assertEquals(properties.get(JEXXA_CONTEXT_NAME) + ":type=ApplicationService,name=SimpleApplicationService",
+        assertEquals(properties.get(JEXXA_CONTEXT_NAME) + ":type=" + annotationName + ",name=" + className,
                 objectUnderTest.getDomainPath());
     }
 

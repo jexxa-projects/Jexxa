@@ -1,15 +1,13 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
-import io.jexxa.application.annotation.Aggregate;
-import io.jexxa.application.domain.aggregate.JexxaEntity;
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.domain.model.JexxaEntity;
+import io.jexxa.application.domain.model.JexxaValueObject;
 
 import java.util.Objects;
 
 import static java.lang.Math.floor;
 import static java.lang.Math.log;
 
-@Aggregate
 public final class JexxaObject
 {
     private final JexxaEntity jexxaEntity;

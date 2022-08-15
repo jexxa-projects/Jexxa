@@ -5,7 +5,7 @@ import java.util.Optional;
 
 /**
  * Interface for all strategies for the implementation of a repository in the terms of DDD
- *
+ * <p>
  * A violation of preconditions is handled by an IllegalArgumentException.
  *
  * @param <T> Type of the aggregate

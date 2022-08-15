@@ -1,6 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.domain.model.JexxaValueObject;
 import org.junit.jupiter.api.Test;
 
 import java.util.Properties;

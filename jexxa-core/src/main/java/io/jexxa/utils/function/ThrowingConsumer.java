@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 
 /**
  * This utility class allows running methods which throw a checked exception inside a java stream
- *
+ * <p>
  * Example:
  * <pre>
  * {@code}

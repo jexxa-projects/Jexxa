@@ -1,6 +1,6 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository;
 
-import io.jexxa.application.domain.aggregate.JexxaEntity;
+import io.jexxa.application.domain.model.JexxaEntity;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 import org.junit.jupiter.api.AfterEach;

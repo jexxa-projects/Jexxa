@@ -3,6 +3,7 @@ package io.jexxa.core;
 
 import io.jexxa.TestConstants;
 import io.jexxa.adapterapi.drivingadapter.HealthCheck;
+import io.jexxa.application.JexxaTestApplication;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Tag(TestConstants.UNIT_TEST)
 class BoundedContextTest
 {
-    private final JexxaMain jexxaMain = new JexxaMain(BoundedContextTest.class);
+    private final JexxaMain jexxaMain = new JexxaMain(JexxaTestApplication.class);
     private BoundedContext objectUnderTest;
 
 

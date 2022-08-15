@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * Interface to search numeric based meta tags
- *
+ * <p>
  * A note on NULL values:
  * <ol>
  * <li>Null values are supported </li>

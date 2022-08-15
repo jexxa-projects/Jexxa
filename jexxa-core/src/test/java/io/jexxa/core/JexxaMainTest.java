@@ -1,18 +1,19 @@
 package io.jexxa.core;
 
 
-import io.jexxa.application.annotation.ApplicationService;
+import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.annotation.InvalidApplicationService;
+import io.jexxa.application.annotation.ValidApplicationService;
 import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
 import io.jexxa.application.applicationservice.InvalidConstructorApplicationService;
 import io.jexxa.application.applicationservice.JexxaApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
-import io.jexxa.application.domainservice.IJexxaEntityRepository;
-import io.jexxa.application.domainservice.InitializeJexxaEntities;
-import io.jexxa.application.infrastructure.drivingadapter.ProxyAdapter;
-import io.jexxa.application.infrastructure.drivingadapter.ProxyPortAdapter;
-import io.jexxa.application.infrastructure.drivingadapter.ThrowingPortAdapter;
-import io.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
+import io.jexxa.application.domain.model.JexxaEntityRepository;
+import io.jexxa.application.domainservice.BootstrapJexxaEntities;
+import io.jexxa.application.infrastructure.drivingadapter.generic.ProxyDrivingAdapter;
+import io.jexxa.application.infrastructure.drivingadapter.portadapter.ProxyPortAdapter;
+import io.jexxa.application.infrastructure.drivingadapter.portadapter.ThrowingPortAdapter;
+import io.jexxa.application.infrastructure.drivingadapter.portadapter.PortAdapter;
 import io.jexxa.core.convention.PortConventionViolation;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
@@ -23,9 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
-import static io.jexxa.TestConstants.JEXXA_DRIVING_ADAPTER;
 import static io.jexxa.TestConstants.UNIT_TEST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -44,11 +42,7 @@ class JexxaMainTest
     void initTests()
     {
         RepositoryManager.setDefaultStrategy(IMDBRepository.class);
-        objectUnderTest = new JexxaMain(JexxaMainTest.class);
-        objectUnderTest
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToInfrastructure(JEXXA_DRIVING_ADAPTER)
-                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
+        objectUnderTest = new JexxaMain(JexxaTestApplication.class);
     }
 
     @AfterEach
@@ -69,12 +63,12 @@ class JexxaMainTest
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
-                .bind(ProxyAdapter.class).to(SimpleApplicationService.class)
+                .bind(ProxyDrivingAdapter.class).to(SimpleApplicationService.class)
                 .disableBanner()
                 .start();
 
         //Assert
-        var result = objectUnderTest.getDrivingAdapter(ProxyAdapter.class)
+        var result = objectUnderTest.getDrivingAdapter(ProxyDrivingAdapter.class)
                 .getPortList()
                 .stream()
                 .filter( element -> SimpleApplicationService.class.equals(element.getClass()) )
@@ -90,12 +84,12 @@ class JexxaMainTest
 
         //Act: Conditional bind (evaluating to false) a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
-                .conditionalBind(() -> false, ProxyAdapter.class).to(SimpleApplicationService.class)
+                .conditionalBind(() -> false, ProxyDrivingAdapter.class).to(SimpleApplicationService.class)
                 .disableBanner()
                 .start();
 
         //Assert that no binding has been performed
-        var result = objectUnderTest.getDrivingAdapter(ProxyAdapter.class);
+        var result = objectUnderTest.getDrivingAdapter(ProxyDrivingAdapter.class);
 
         assertTrue(result.getPortList().isEmpty());
     }
@@ -108,14 +102,13 @@ class JexxaMainTest
 
         //Act: Bind a concrete type of DrivingAdapter to a concrete type of port
         objectUnderTest
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .bind(ProxyAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
+                .bind(ProxyDrivingAdapter.class).to(ApplicationServiceWithDrivenAdapters.class)
                 .disableBanner()
                 .start();
 
 
         //Assert
-        var result = objectUnderTest.getDrivingAdapter(ProxyAdapter.class)
+        var result = objectUnderTest.getDrivingAdapter(ProxyDrivingAdapter.class)
                 .getPortList()
                 .stream()
                 .filter( element -> ApplicationServiceWithDrivenAdapters.class.equals(element.getClass()) )
@@ -132,12 +125,12 @@ class JexxaMainTest
 
         //Act: Bind all DrivingAdapter to all ApplicationServices
         objectUnderTest
-                .bind(ProxyAdapter.class).toAnnotation(ApplicationService.class)
+                .bind(ProxyDrivingAdapter.class).toAnnotation(ValidApplicationService.class)
                 .disableBanner()
                 .start();
 
         //Assert
-        var result = objectUnderTest.getDrivingAdapter(ProxyAdapter.class)
+        var result = objectUnderTest.getDrivingAdapter(ProxyDrivingAdapter.class)
                 .getPortList()
                 .stream()
                 .filter( element -> SimpleApplicationService.class.equals(element.getClass()) )
@@ -150,7 +143,7 @@ class JexxaMainTest
     void bindToAnnotatedInvalidPorts()
     {
         //Arrange --
-        var drivingAdapter = objectUnderTest.bind(ProxyAdapter.class);
+        var drivingAdapter = objectUnderTest.bind(ProxyDrivingAdapter.class);
 
         //Act / Assert
         assertThrows(RuntimeException.class, () -> drivingAdapter.toAnnotation(InvalidApplicationService.class));
@@ -161,14 +154,11 @@ class JexxaMainTest
     {
         //Arrange - All done in initTests
         objectUnderTest = new JexxaMain(JexxaMainTest.class);
-        objectUnderTest
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
 
-        var drivingAdapter = objectUnderTest.bind(ProxyAdapter.class);
+        var drivingAdapter = objectUnderTest.bind(ProxyDrivingAdapter.class);
 
         //Act /Assert
-        assertThrows(PortConventionViolation.class, () -> drivingAdapter.to(SimpleApplicationServiceAdapter.class));
+        assertThrows(PortConventionViolation.class, () -> drivingAdapter.to(PortAdapter.class));
     }
 
     @Test
@@ -177,16 +167,16 @@ class JexxaMainTest
         //Arrange
         var expectedDrivingAdapterInstanceCount = 1; // Since DrivingAdapter are treated as singletons we expect 1 instance
         var expectedProxyAdapterInstanceCount = 1;   // Since PortAdapter are treated as singletons we expect 1 instance
-        ProxyAdapter.resetInstanceCount();
+        ProxyDrivingAdapter.resetInstanceCount();
         ProxyPortAdapter.resetInstanceCount();
 
         //Act
         objectUnderTest
-                .bind(ProxyAdapter.class).to(ProxyPortAdapter.class)
-                .bind(ProxyAdapter.class).to(ProxyPortAdapter.class);
+                .bind(ProxyDrivingAdapter.class).to(ProxyPortAdapter.class)
+                .bind(ProxyDrivingAdapter.class).to(ProxyPortAdapter.class);
 
         //Assert
-        assertEquals(expectedDrivingAdapterInstanceCount, ProxyAdapter.getInstanceCount());
+        assertEquals(expectedDrivingAdapterInstanceCount, ProxyDrivingAdapter.getInstanceCount());
         assertEquals(expectedProxyAdapterInstanceCount, ProxyPortAdapter.getInstanceCount());
     }
 
@@ -194,10 +184,10 @@ class JexxaMainTest
     void bindToThrowingAdapter()
     {
         //Arrange
-        ProxyAdapter.resetInstanceCount();
+        ProxyDrivingAdapter.resetInstanceCount();
 
         //Act
-        var result = objectUnderTest.bind(ProxyAdapter.class);
+        var result = objectUnderTest.bind(ProxyDrivingAdapter.class);
 
         //Assert
         assertThrows( RuntimeException.class, () -> result.to(ThrowingPortAdapter.class));
@@ -210,12 +200,9 @@ class JexxaMainTest
     {
         //Arrange
         RepositoryManager.setDefaultStrategy(IMDBRepository.class);
-        objectUnderTest = new JexxaMain(JexxaMainTest.class);
-        objectUnderTest.addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToApplicationCore(JEXXA_APPLICATION_SERVICE)
 
         //Act
-                .bootstrap(InitializeJexxaEntities.class).with(InitializeJexxaEntities::initDomainData);
+        objectUnderTest.bootstrap(BootstrapJexxaEntities.class).with(BootstrapJexxaEntities::initDomainData);
 
         var jexxaApplicationService = objectUnderTest.getInstanceOfPort(JexxaApplicationService.class);
 
@@ -239,7 +226,7 @@ class JexxaMainTest
         //Arrange --
 
         //Act/Assert
-        assertNotNull( objectUnderTest.getInstanceOfPort(IJexxaEntityRepository.class));
+        assertNotNull( objectUnderTest.getInstanceOfPort(JexxaEntityRepository.class));
     }
 
     @Test

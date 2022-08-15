@@ -1,7 +1,7 @@
 package io.jexxa.jexxatest;
 
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
-import io.jexxa.core.JexxaMain;
+import io.jexxa.application.JexxaTestApplication;
+import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.JexxaObject;
@@ -13,7 +13,6 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.Repo
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
 import io.jexxa.utils.properties.JexxaJDBCProperties;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -21,6 +20,7 @@ import java.util.Properties;
 import java.util.stream.Stream;
 
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numericTag;
+import static io.jexxa.jexxatest.JexxaTest.getJexxaTest;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class JexxaTestConfigTest
@@ -30,16 +30,6 @@ class JexxaTestConfigTest
 
     private static final String ADMIN = "admin";
 
-    @BeforeEach
-    void setUp()
-    {
-        //Arrange
-        var jexxaMain = new JexxaMain(JexxaTestTest.class, new Properties());
-        jexxaMain.addToApplicationCore("io.jexxa.application.domainservice")
-                .addToInfrastructure("io.jexxa.application.infrastructure");
-
-        new JexxaTest(jexxaMain); //Configure JexxaMain for Unit testing
-    }
 
 
     @ParameterizedTest
@@ -47,6 +37,7 @@ class JexxaTestConfigTest
     void validateRepositoryConfig(Properties properties)
     {
         //Arrange
+        getJexxaTest(JexxaTestApplication.class);
         var repository = RepositoryManager.getRepository(JexxaObject.class, JexxaObject::getKey, properties);
 
         //Act / Assert : Since we initialized JexxaTest, we should always get an IMDBRepository, independent of the Properties
@@ -58,6 +49,7 @@ class JexxaTestConfigTest
     void validateObjectStoreConfig(Properties properties)
     {
         //Arrange
+        getJexxaTest(JexxaTestApplication.class);
         var objectStore = ObjectStoreManager.getObjectStore(JexxaObject.class, JexxaObject::getKey, JexxaObjectSchema.class, properties);
 
         //Act / Assert : Since we initialized JexxaTest, we should always get an IMDBObjectStore, independent of the Properties
@@ -69,6 +61,7 @@ class JexxaTestConfigTest
     void validateMessageSenderConfig(Properties properties)
     {
         //Arrange
+        getJexxaTest(JexxaTestApplication.class);
         var messageSender = MessageSenderManager.getMessageSender(JexxaTestConfigTest.class, properties);
 
         //Act / Assert : Since we initialized JexxaTest, we should always get an MessageRecordingStrategy, independent of the Properties

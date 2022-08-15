@@ -25,7 +25,7 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     private final Class<T> aggregateClazz;
 
     @SuppressWarnings("java:S1172")
-    public IMDBRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties properties)
+    public IMDBRepository(Class<T> aggregateClazz, Function<T,K> keyFunction, Properties ignoredProperties)
     {
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
         this.keyFunction = Objects.requireNonNull(keyFunction);
@@ -107,7 +107,7 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
 
     /**
      * This method resets all IMDBRepositories instance within an application and removes all stored objects!
-     *
+     * <p>
      * So this method should only be used when writing tests to ensure a clean data setup!
      */
     public static synchronized void clear()

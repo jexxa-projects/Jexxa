@@ -1,9 +1,11 @@
 package io.jexxa.core;
 
+import io.jexxa.utils.annotations.CheckReturnValue;
+
 import java.util.Objects;
 import java.util.function.Consumer;
 
-@SuppressWarnings("UnusedReturnValue")
+@SuppressWarnings("unused")
 public class BootstrapService<T>
 {
     private final Class<T> bootstrapServiceClass;
@@ -15,9 +17,15 @@ public class BootstrapService<T>
         this.jexxaMain = Objects.requireNonNull(jexxaMain);
     }
 
+    @CheckReturnValue
     public JexxaMain with(Consumer<T> initFunction)
     {
         jexxaMain.addBootstrapService(bootstrapServiceClass, initFunction);
         return jexxaMain;
+    }
+
+    public static <T> Consumer<T> noInitFunction()
+    {
+        return element -> {};
     }
 }

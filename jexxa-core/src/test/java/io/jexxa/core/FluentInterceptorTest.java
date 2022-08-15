@@ -1,7 +1,8 @@
 package io.jexxa.core;
 
 import io.jexxa.adapterapi.invocation.InvocationManager;
-import io.jexxa.application.annotation.ApplicationService;
+import io.jexxa.application.JexxaTestApplication;
+import io.jexxa.application.annotation.ValidApplicationService;
 import io.jexxa.application.applicationservice.IncrementApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
@@ -9,9 +10,6 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
-import static io.jexxa.TestConstants.JEXXA_DRIVING_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FluentInterceptorTest
@@ -21,7 +19,7 @@ class FluentInterceptorTest
     @BeforeEach
     void initTest()
     {
-        objectUnderTest = new JexxaMain( FluentInterceptorTest.class );
+        objectUnderTest = new JexxaMain( JexxaTestApplication.class );
     }
 
     @Test
@@ -88,18 +86,14 @@ class FluentInterceptorTest
     {
         //Arrange
         RepositoryManager.setDefaultStrategy(IMDBRepository.class);
-        objectUnderTest = new JexxaMain(FluentInterceptorTest.class);
-        objectUnderTest
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToInfrastructure(JEXXA_DRIVING_ADAPTER)
-                .addToApplicationCore(JEXXA_APPLICATION_SERVICE);
+        objectUnderTest = new JexxaMain(JexxaTestApplication.class);
 
         var targetObject = objectUnderTest.getInstanceOfPort(SimpleApplicationService.class);
         var invocationHandler = InvocationManager.getInvocationHandler(targetObject);
         var result = new String[3];
 
         objectUnderTest
-                .interceptAnnotation( ApplicationService.class )
+                .interceptAnnotation( ValidApplicationService.class )
                 .beforeAnd( invocationContext -> result[0] = "Before " + invocationContext.getMethod().getName( ))
                 .aroundAnd( invocationContext -> {
                     result[1] = "Around " + invocationContext.getMethod().getName();

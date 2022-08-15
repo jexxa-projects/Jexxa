@@ -1,13 +1,12 @@
 package io.jexxa.application.applicationservice;
 
-import io.jexxa.application.domainservice.IJexxaEntityRepository;
+import io.jexxa.application.domain.model.JexxaEntityRepository;
 
-@SuppressWarnings("ClassCanBeRecord")
 public class JexxaApplicationService
 {
-    private final IJexxaEntityRepository jexxaAggregateRepository;
+    private final JexxaEntityRepository jexxaAggregateRepository;
 
-    public JexxaApplicationService(IJexxaEntityRepository jexxaAggregateRepository)
+    public JexxaApplicationService(JexxaEntityRepository jexxaAggregateRepository)
     {
         this.jexxaAggregateRepository = jexxaAggregateRepository;
     }

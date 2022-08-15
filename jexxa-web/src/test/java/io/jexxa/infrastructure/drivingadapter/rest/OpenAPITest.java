@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
-import io.jexxa.application.domain.valueobject.SpecialCasesValueObject;
+import io.jexxa.application.domain.model.SpecialCasesValueObject;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

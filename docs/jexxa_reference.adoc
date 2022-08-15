@@ -37,7 +37,7 @@ In addition, it provides following driving- and driven-adapter strategies writte
 NOTE: In order to use these adapters, you need to bind a concrete implementation of the used API, such as an ActiveMQ client, or a concrete database driver.
 
 a| Jexxa-Web
-a| Provides driving adapters to access your application via HTTP. The used web-framework is http://javalin.io[javalin] which internally uses jetty.
+a| Provides driving adapters to access your application via HTTP. The used web-framework is https://javalin.io[javalin] which internally uses jetty.
 
 * Driving-Adapter: `RESTfulRPCAdapter`
 

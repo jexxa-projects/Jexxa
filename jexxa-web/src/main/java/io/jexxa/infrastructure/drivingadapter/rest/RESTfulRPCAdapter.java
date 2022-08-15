@@ -340,9 +340,19 @@ public class RESTfulRPCAdapter implements IDrivingAdapter
                 result[0] = jsonConverter.fromJson(jsonString, method.getParameterTypes()[0]);
                 return result;
             }
-        } catch (RuntimeException e)
+        }
+        catch (IllegalArgumentException e)
         {
-            throw new IllegalArgumentException("Could not deserialize attributes for method " + method.getName(), e );
+            throw e;
+        }
+        catch (RuntimeException e)
+        {
+            if (e.getCause() != null && e.getCause().getMessage() != null)
+            {
+                throw new IllegalArgumentException("Could not deserialize attributes for method " + method.getName() + " Reason: " + e.getCause().getMessage(), e );
+            } else {
+                throw new IllegalArgumentException("Could not deserialize attributes for method " + method.getName() + " Reason: " + e.getMessage(), e );
+            }
         }
     }
 

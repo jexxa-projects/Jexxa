@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 /**
  * This class provides a strategy to a specific element of an aggregate as a numeric MetaTag.
- *
+ * <p>
  * Note: The specific value must be convertible to a number
  *
  * @param <T> Defines the type of the aggregate

@@ -1,7 +1,7 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;

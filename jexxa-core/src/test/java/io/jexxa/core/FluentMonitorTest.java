@@ -1,7 +1,8 @@
 package io.jexxa.core;
 
-import io.jexxa.application.infrastructure.drivingadapter.ProxyAdapter;
-import io.jexxa.application.infrastructure.drivingadapter.ProxyPortAdapter;
+import io.jexxa.application.JexxaTestApplication;
+import io.jexxa.application.infrastructure.drivingadapter.generic.ProxyDrivingAdapter;
+import io.jexxa.application.infrastructure.drivingadapter.portadapter.ProxyPortAdapter;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -18,12 +19,11 @@ class FluentMonitorTest {
     void incomingCalls()
     {
         //Arrange
-        var jexxaMain = new JexxaMain(FluentMonitorTest.class);
+        var jexxaMain = new JexxaMain(JexxaTestApplication.class);
         var maxTimeout = Duration.ofSeconds(2);
         var boundedContext = jexxaMain.getBoundedContext();
 
-        jexxaMain.addToInfrastructure("io.jexxa.application.infrastructure.drivingadapter")
-                .bind(ProxyAdapter.class).to(ProxyPortAdapter.class);
+        jexxaMain.bind(ProxyDrivingAdapter.class).to(ProxyPortAdapter.class);
 
         //Act
         jexxaMain.monitor(ProxyPortAdapter.class).incomingCalls(timerMonitor(maxTimeout));

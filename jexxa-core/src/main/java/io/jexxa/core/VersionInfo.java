@@ -1,5 +1,6 @@
 package io.jexxa.core;
 
+@SuppressWarnings("unused")
 public record VersionInfo(String version, String repository, String projectName, String buildTimestamp)
 {
     public static VersionInfoBuilder of() {

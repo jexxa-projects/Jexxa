@@ -2,7 +2,8 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domain.valueobject.JexxaValueObject;
+import io.jexxa.application.JexxaTestApplication;
+import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
@@ -23,8 +24,6 @@ import java.time.Duration;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender.JNDI_PASSWORD_FILE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender.JNDI_PASSWORD_KEY;
 import static io.jexxa.infrastructure.utils.messaging.QueueListener.QUEUE_DESTINATION;
@@ -49,14 +48,12 @@ class JMSSenderIT
     @BeforeEach
     void initTests()
     {
-        jexxaMain = new JexxaMain(JMSSenderIT.class);
+        jexxaMain = new JexxaMain(JexxaTestApplication.class);
         topicListener = new TopicListener();
         queueListener = new QueueListener();
         objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
-        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
-                .disableBanner()
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
+        jexxaMain.disableBanner()
                 .bind(JMSAdapter.class).to(queueListener)
                 .bind(JMSAdapter.class).to(topicListener)
                 .start();

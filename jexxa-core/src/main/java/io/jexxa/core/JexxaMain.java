@@ -32,10 +32,10 @@ import static io.jexxa.utils.JexxaBanner.addConfigBanner;
 /**
  * JexxaMain is the main entry point for your application to use Jexxa. Within each application only a single instance
  * of this class must exist.
- *
+ * <p>
  * In order to control your application (start / shutdown) from within your application and also from outside
  * JexxaMain provides a so called {@link BoundedContext}.
- *
+ * <p>
  * To see how to use this class please refer to the tutorials.
  */
 public final class JexxaMain
@@ -44,6 +44,7 @@ public final class JexxaMain
     private static final String DRIVING_ADAPTER_PACKAGE = ".infrastructure.drivingadapter";
     private static final String DOMAIN_SERVICE = ".domainservice";
     private static final String DOMAIN_PROCESS_SERVICE = ".domainprocessservice";
+    private static final String DOMAIN_WORKFLOW = ".domainworkflow";
     private static final String APPLICATION_SERVICE = ".applicationservice";
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JexxaMain.class);
@@ -64,7 +65,7 @@ public final class JexxaMain
     /**
      * Creates the JexxaMain instance for your application with given context name.
      * In addition, the properties file jexxa-application.properties is load if available in class path.
-     *
+     * <p>
      * Note: When a driving or driven adapter is created, it gets the properties read from properties file.
      *
      * @param context Name of the BoundedContext. Typically, you should use the name of your application.
@@ -75,7 +76,7 @@ public final class JexxaMain
     }
     /**
      * Creates the JexxaMain instance for your application with given context name.
-     *
+     * <p>
      * Note: The file jexxa-application.properties is loaded if available in class path. Then the
      * properties are extended by the given properties object. So if you define the same properties in
      * jexxa-application.properties and the given properties object, the one from properties object is used.
@@ -142,6 +143,7 @@ public final class JexxaMain
         addToInfrastructure( mainApplication.getPackageName() + DRIVING_ADAPTER_PACKAGE);
         addToApplicationCore( mainApplication.getPackageName() + DOMAIN_SERVICE);
         addToApplicationCore( mainApplication.getPackageName() + DOMAIN_PROCESS_SERVICE);
+        addToApplicationCore( mainApplication.getPackageName() + DOMAIN_WORKFLOW);
         addToApplicationCore( mainApplication.getPackageName() + APPLICATION_SERVICE);
 
         return this;
@@ -164,6 +166,17 @@ public final class JexxaMain
     public <T> BootstrapService<T> bootstrap(Class<T> bootstrapService)
     {
         return new BootstrapService<>(bootstrapService, this);
+    }
+
+    public JexxaMain bootstrapAnnotation(Class<? extends Annotation> annotation)
+    {
+        var inboundPorts = portFactory.getAnnotatedPorts(annotation);
+        inboundPorts.forEach(PortConvention::validate);
+
+        inboundPorts
+                .forEach(element -> portFactory.getInstanceOf(element, properties));
+
+        return this;
     }
 
     @CheckReturnValue
@@ -217,6 +230,8 @@ public final class JexxaMain
         return this;
     }
 
+    @CheckReturnValue
+    @SuppressWarnings("unused")
     public JexxaMain logUnhealthyDiagnostics(int period, TimeUnit timeUnit)
     {
         executorService.scheduleAtFixedRate(this::logUnhealthyDiagnostics,0, period,timeUnit);

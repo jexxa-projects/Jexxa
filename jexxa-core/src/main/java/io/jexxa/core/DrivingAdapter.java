@@ -8,7 +8,7 @@ import java.lang.annotation.Annotation;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
-public class  DrivingAdapter<T extends IDrivingAdapter>
+public final class  DrivingAdapter<T extends IDrivingAdapter>
 {
     private final JexxaMain jexxaMain;
     private final Class<T> drivingAdapterClass;

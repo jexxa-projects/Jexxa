@@ -1,6 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.messaging;
 
 import io.jexxa.TestConstants;
+import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.applicationservice.IncrementApplicationService;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.utils.messaging.ITMessageSender;
@@ -14,8 +15,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.IntStream;
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
@@ -47,12 +46,10 @@ class MultipleJMSReceiverIT
     void synchronizeMultipleClients()
     {
         //Arrange
-        JexxaMain jexxaMain = new JexxaMain(MultipleJMSReceiverIT.class);
+        JexxaMain jexxaMain = new JexxaMain(JexxaTestApplication.class);
 
-        jexxaMain.addToApplicationCore(JEXXA_APPLICATION_SERVICE)
-                .addToInfrastructure(JEXXA_DRIVEN_ADAPTER)
-                .addToInfrastructure("io.jexxa.infrastructure.drivingadapter")
-                .disableBanner();
+        jexxaMain.disableBanner();
+
         incrementApplicationService = jexxaMain.getInstanceOfPort(IncrementApplicationService.class);
 
         for ( int i = 0; i < MAX_THREADS; ++i)

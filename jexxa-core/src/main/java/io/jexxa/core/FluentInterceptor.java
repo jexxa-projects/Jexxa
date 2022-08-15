@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
-public class FluentInterceptor
+public final class FluentInterceptor
 {
     private final Collection<Object> targetObjects = new ArrayList<>();
     private final JexxaMain jexxaMain;
@@ -21,6 +21,7 @@ public class FluentInterceptor
         this.jexxaMain = jexxaMain;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public JexxaMain before(Consumer<InvocationContext> consumer)
     {
         targetObjects.stream()
@@ -36,6 +37,7 @@ public class FluentInterceptor
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public JexxaMain after(Consumer<InvocationContext> consumer)
     {
         targetObjects.stream()
@@ -45,12 +47,14 @@ public class FluentInterceptor
         return jexxaMain;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public FluentInterceptor afterAnd(Consumer<InvocationContext> consumer)
     {
         after(consumer);
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public JexxaMain around(Consumer<InvocationContext> consumer)
     {
         targetObjects.stream()
@@ -60,6 +64,7 @@ public class FluentInterceptor
         return jexxaMain;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public FluentInterceptor aroundAnd(Consumer<InvocationContext> consumer)
     {
         around(consumer);

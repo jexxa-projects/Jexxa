@@ -1,6 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
 import io.jexxa.TestConstants;
+import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.applicationservice.IncrementApplicationService;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.utils.function.ThrowingConsumer;
@@ -33,10 +34,8 @@ class MultipleRESTClientsIT
     @BeforeEach
     void setUp()
     {
-        jexxaMain = new JexxaMain(MultipleRESTClientsIT.class);
-        jexxaMain.addToApplicationCore(TestConstants.JEXXA_APPLICATION_SERVICE)
-                .addToInfrastructure(TestConstants.JEXXA_DRIVEN_ADAPTER)
-                .disableBanner()
+        jexxaMain = new JexxaMain(JexxaTestApplication.class);
+        jexxaMain.disableBanner()
                 .bind(RESTfulRPCAdapter.class).to(IncrementApplicationService.class)
                 .start();
 

@@ -3,8 +3,8 @@ package io.jexxa.core.factory;
 
 import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
 import io.jexxa.application.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
-import io.jexxa.application.infrastructure.drivingadapter.InvalidPortAdapter;
-import io.jexxa.application.infrastructure.drivingadapter.messaging.SimpleApplicationServiceAdapter;
+import io.jexxa.application.infrastructure.drivingadapter.portadapter.PortAdapter;
+import io.jexxa.application.infrastructure.drivingadapter.portadapter.ThrowingPortAdapter;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -12,10 +12,10 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.Properties;
 
-import static io.jexxa.TestConstants.JEXXA_APPLICATION_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DOMAIN_SERVICE;
-import static io.jexxa.TestConstants.JEXXA_DRIVEN_ADAPTER;
 import static io.jexxa.TestConstants.UNIT_TEST;
+import static io.jexxa.core.factory.PackageConstants.JEXXA_APPLICATION_SERVICE;
+import static io.jexxa.core.factory.PackageConstants.JEXXA_DOMAIN_SERVICE;
+import static io.jexxa.core.factory.PackageConstants.JEXXA_DRIVEN_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -128,8 +128,8 @@ class PortFactoryTest
                 acceptPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act
-        var first = objectUnderTest.newPortAdapterOf(SimpleApplicationServiceAdapter.class, new Properties());
-        var second = objectUnderTest.newPortAdapterOf(SimpleApplicationServiceAdapter.class, new Properties());
+        var first = objectUnderTest.newPortAdapterOf(PortAdapter.class, new Properties());
+        var second = objectUnderTest.newPortAdapterOf(PortAdapter.class, new Properties());
 
         //Assert that first and second adapter are equal
         assertNotNull(first);
@@ -148,7 +148,7 @@ class PortFactoryTest
 
         //Act / Assert
         var exception = assertThrows(PortFactory.InvalidPortConfigurationException.class,
-                () -> objectUnderTest.newPortAdapterOf(InvalidPortAdapter.class, new Properties()) );
+                () -> objectUnderTest.newPortAdapterOf(ThrowingPortAdapter.class, new Properties()) );
 
         assertNotNull(exception.getMessage());
     }
