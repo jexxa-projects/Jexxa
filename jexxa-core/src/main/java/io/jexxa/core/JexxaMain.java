@@ -38,6 +38,7 @@ import static io.jexxa.utils.JexxaBanner.addConfigBanner;
  * <p>
  * To see how to use this class please refer to the tutorials.
  */
+@SuppressWarnings("unused")
 public final class JexxaMain
 {
     private static final String DRIVEN_ADAPTER_PACKAGE = ".infrastructure.drivenadapter";

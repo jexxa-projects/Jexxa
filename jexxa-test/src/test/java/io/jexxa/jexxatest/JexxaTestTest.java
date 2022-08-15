@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 class JexxaTestTest
 {
     private JexxaTest jexxaTest;

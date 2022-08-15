@@ -195,6 +195,7 @@ class JexxaMainTest
     }
 
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void bootstrapService()
     {
