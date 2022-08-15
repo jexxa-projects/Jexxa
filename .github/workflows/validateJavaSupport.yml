@@ -27,6 +27,9 @@ jobs:
         ports:
           # Opens tcp port 6379 on the host and service container
           - 61616:61616
+        env:
+          AMQ_USER: admin
+          AMQ_PASSWORD: admin
       postgres:
         # Docker Hub image
         image: postgres
