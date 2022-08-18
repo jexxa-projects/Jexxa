@@ -46,9 +46,9 @@
     <maven.surefire.plugin>3.0.0-M7</maven.surefire.plugin>
     <maven.release.plugin>3.0.0-M6</maven.release.plugin>
     <maven.jacoco.plugin>0.8.8</maven.jacoco.plugin>
-    <maven.reports.plugin>3.4.0</maven.reports.plugin>
+    <maven.reports.plugin>3.4.1</maven.reports.plugin>
     <maven.enforcer.plugin>3.1.0</maven.enforcer.plugin>
-    <maven.javadoc.plugin>3.4.0</maven.javadoc.plugin>
+    <maven.javadoc.plugin>3.4.1</maven.javadoc.plugin>
     <maven.templating.plugin>1.0.0</maven.templating.plugin>
     <maven.versions.plugin>2.11.0</maven.versions.plugin>
 
