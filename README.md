@@ -22,8 +22,6 @@ In addition, Jexxa offers following production-proven features:
 *   Integrated strategies for most common driven adapters: JDBC, in memory DB (IMDB), and JMS. 
 *   Integrated stubs to write unit-tests without mock frameworks.  
 
-***
-
 ## General information
 
 *   Supported Java environments: ![Java](https://img.shields.io/badge/JDK-Java17+-blue.svg)
@@ -43,8 +41,6 @@ Apart from some other great open source libraries, Jexxa mainly utilises the fol
 
 *   [ClassGraph](https://github.com/classgraph/classgraph)
 *   [javalin](http://javalin.io/)
-
-***
 
 ## Quickstart
 
@@ -122,8 +118,6 @@ resources/jexxa-application.properties
 ```                                   
 
 Available properties are described [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties).
-
-***
 
 ## Contributing
 
