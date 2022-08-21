@@ -44,23 +44,6 @@ Apart from some other great open source libraries, Jexxa mainly utilises the fol
 
 ## Quickstart
 
-### Download
-
-Maven:
-```xml
-<dependency>
-  <groupId>io.jexxa</groupId>
-  <artifactId>jexxa-web</artifactId>
-  <version>5.1.0</version>
-</dependency> 
-```
-
-Gradle:
-
-```groovy
-compile "io.jexxa:jexxa-web:5.1.0"
-``` 
- 
 ### Start programming 
 
 Below, you see a simple ``Hello World`` example that is described in detail [here](https://github.com/jexxa-projects/JexxaTutorials/tree/main/HelloJexxa):  
@@ -86,25 +69,31 @@ public final class HelloJexxa
 }
 ```    
 
-### Adding a logger
-Whenever possible, Jexxa is developed against standard APIs. This allows a business application to use the preferred 
-technology stacks. For further information please refer to [reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_jexxa_modules).
-
-Therefore, Jexxa does not include a logger, which means that you have to add your own logger to your application. If you
-do not add a logger, you will get a warning message to your console. In case your application has no special 
-requirements you can add the following dependency to your project:
-
-Maven: 
+### Add Dependencies
+Whenever possible, Jexxa is developed against standard APIs. This allows a business application to use the preferred
+technology stacks. Therefore, you need to add `jexxa-web` and a logger as you can see below. If you do not add a 
+logger, you will get a warning message to your console. In case your application has no special requirements you can 
+add `slf4j-simple`:
+Maven:
 ```xml
-<dependency>
-  <groupId>org.slf4j</groupId>
-  <artifactId>slf4j-simple</artifactId>
-  <version>1.7.36</version>
-</dependency>
-```                                   
+<dependencies>
+    <dependency>
+      <groupId>io.jexxa</groupId>
+      <artifactId>jexxa-web</artifactId>
+      <version>5.1.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>1.7.36</version>
+    </dependency>
+</dependencies>
+```
 
 Gradle:
+
 ```groovy
+compile "io.jexxa:jexxa-web:5.1.0"
 compile "org.slf4j:slf4j-simple:1.7.36"
 ``` 
 
