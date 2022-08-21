@@ -22,6 +22,8 @@ In addition, Jexxa offers following production-proven features:
 *   Integrated strategies for most common driven adapters: JDBC, in memory DB (IMDB), and JMS. 
 *   Integrated stubs to write unit-tests without mock frameworks.  
 
+***
+
 ## General information
 
 *   Supported Java environments: ![Java](https://img.shields.io/badge/JDK-Java17+-blue.svg)
@@ -41,6 +43,8 @@ Apart from some other great open source libraries, Jexxa mainly utilises the fol
 
 *   [ClassGraph](https://github.com/classgraph/classgraph)
 *   [javalin](http://javalin.io/)
+
+***
 
 ## Quickstart
 
@@ -63,31 +67,23 @@ compile "io.jexxa:jexxa-web:5.1.0"
  
 ### Start programming 
 
-A simple ``Hello World`` example can be found [here](https://github.com/jexxa-projects/JexxaTutorials/tree/main/HelloJexxa):  
+Below, you see a simple ``Hello World`` example that is described in detail [here](https://github.com/jexxa-projects/JexxaTutorials/tree/main/HelloJexxa):  
 
 ```java     
-package io.jexxa.tutorials;
-
-import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCAdapter;
-
 public final class HelloJexxa
 {
-    public String greetings()
-    {
-        return "Hello Jexxa";
-    }
+    // Our business logic ;-)
+    public String greetings()                 { return "Hello Jexxa"; }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args)    {
         //Create your jexxaMain for this application
         var jexxaMain = new JexxaMain(HelloJexxa.class);
 
         jexxaMain
-                // Bind a REST adapter to class HelloJexxa to expose its methods
-                // To get greetings open: http://localhost:7500/HelloJexxa/greetings
-                .bind(RESTfulRPCAdapter.class).to(HelloJexxa.class)
-
+                // Bind a REST adapter to expose parts of the application
+                // Get greetings: http://localhost:7501/HelloJexxa/greetings
+                .bind(RESTfulRPCAdapter.class).to(HelloJexxa.class)  
+                  
                 // Run Jexxa and all bindings until Ctrl-C is pressed
                 .run();
     }
@@ -126,6 +122,8 @@ resources/jexxa-application.properties
 ```                                   
 
 Available properties are described [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties).
+
+***
 
 ## Contributing
 
