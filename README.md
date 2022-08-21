@@ -74,6 +74,7 @@ Whenever possible, Jexxa is developed against standard APIs. This allows a busin
 technology stacks. Therefore, you need to add `jexxa-web` and a logger as you can see below. If you do not add a 
 logger, you will get a warning message to your console. In case your application has no special requirements you can 
 add `slf4j-simple`:
+
 Maven:
 ```xml
 <dependencies>
