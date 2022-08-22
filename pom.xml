@@ -86,7 +86,7 @@
     <junit.platform.launcher.version>1.9.0</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.9.0</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.9.0</junit.jupiter.params.version>
-    <slf4j.simple.version>1.7.36</slf4j.simple.version>
+    <slf4j.simple.version>2.0.0</slf4j.simple.version>
     <slf4j.api.version>2.0.0</slf4j.api.version>
     <awaitility.version>4.2.0</awaitility.version>
     <archunit.version>0.23.1</archunit.version>
