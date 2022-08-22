@@ -71,9 +71,7 @@ public final class HelloJexxa
 
 ### Add Dependencies
 Whenever possible, Jexxa is developed against standard APIs. This allows a business application to use the preferred
-technology stacks. Therefore, our `HelloJexxa` application needs two dependencies: `jexxa-web` and a logger. 
-
-Note: If you do not add a logger, you will get a warning message to your console. In case your application has no special requirements you can add `slf4j-simple`:
+technology stacks. Therefore, our `HelloJexxa` application needs two dependencies: `jexxa-web` and a logger such as `slf4j-simple`:
 
 Maven:
 ```xml
