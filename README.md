@@ -98,7 +98,7 @@ compile "org.slf4j:slf4j-simple:2.0.0"
 
 ### Configure your Jexxa application  
 
-By default, a JexxaMain instance looks for the following properties file. For more information please refer to the 
+By default, a Jexxa application looks for the following properties file. For more information please refer to the 
 [reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_application_configuration). 
 
 ```maven
