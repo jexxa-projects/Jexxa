@@ -40,7 +40,7 @@ jobs:
         # setup default user for testing
         env:
           POSTGRES_PASSWORD: admin
-          POSTGRES_USER: admin
+          POSTGRES_USER: postgres
 
     steps:
       - uses: actions/checkout@v2

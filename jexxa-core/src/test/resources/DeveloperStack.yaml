@@ -2,26 +2,31 @@ version: "3.7"
 
 services:
   ActiveMQ:
-    container_name: ActiveMQ
-    image: rmohr/activemq
+    image: quay.io/artemiscloud/activemq-artemis-broker:latest
     restart: always
     ports:
       - "61616:61616"
       - "8161:8161"
+    environment:
+      AMQ_USER: admin
+      AMQ_PASSWORD: admin
 
   Postgres:
-    container_name: Postgres
     image: postgres:latest
     restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - 5432:5432
     environment:
       POSTGRES_PASSWORD: admin
-      POSTGRES_USER: admin
+      POSTGRES_USER: postgres
 
   SwaggerUI:
-    container_name: SwaggerUI
     image: swaggerapi/swagger-ui:latest
     restart: always
     ports:
       - '8080:8080'
+
+volumes:
+  postgres-data:

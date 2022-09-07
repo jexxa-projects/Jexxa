@@ -26,7 +26,8 @@ import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.bui
 
 public final class JDBCTestDatabase
 {
-    static final String ADMIN = "admin";
+    static final String USER_NAME = "postgres";
+    static final String USER_PASSWORD = "admin";
     static final int PRIMARY_KEY_WITH_NULL_VALUES = 1;
     static final int PRIMARY_KEY_WITH_NONNULL_VALUES = 2;
     static final int PRIMARY_KEY_WITH_NONNULL_VALUES_DUPLICATE = 3;
@@ -55,16 +56,16 @@ public final class JDBCTestDatabase
     public static Stream<Properties> repositoryConfigJDBC() {
         var postgresProperties = new Properties();
         postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_PASSWORD, ADMIN);
-        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_USERNAME, ADMIN);
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_PASSWORD, USER_PASSWORD);
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_USERNAME, USER_NAME);
         postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_URL, "jdbc:postgresql://localhost:5432/jexxa");
         postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE, "true");
         postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
 
         var h2Properties = new Properties();
         h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_DRIVER, "org.h2.Driver");
-        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_PASSWORD, ADMIN);
-        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_USERNAME, ADMIN);
+        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_PASSWORD, USER_PASSWORD);
+        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_USERNAME, USER_NAME);
         h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_URL, "jdbc:h2:mem:jexxa;DB_CLOSE_DELAY=-1");
         h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE, "true");
 

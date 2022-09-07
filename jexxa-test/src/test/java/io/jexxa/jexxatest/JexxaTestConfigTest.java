@@ -29,6 +29,7 @@ class JexxaTestConfigTest
     public static final String MESSAGE_SENDER_CONFIG = "messageSenderConfig";
 
     private static final String ADMIN = "admin";
+    private static final String POSTGRES_USER = "postgres";
 
 
 
@@ -106,7 +107,7 @@ class JexxaTestConfigTest
         var postgresProperties = new Properties();
         postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_DRIVER, "org.postgresql.Driver");
         postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_PASSWORD, ADMIN);
-        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_USERNAME, ADMIN);
+        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_USERNAME, POSTGRES_USER);
         postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_URL, "jdbc:postgresql://localhost:5432/objectstore");
         postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE, "true");
         postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
