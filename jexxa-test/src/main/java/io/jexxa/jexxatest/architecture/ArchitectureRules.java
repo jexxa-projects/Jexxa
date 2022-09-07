@@ -1,7 +1,7 @@
 package io.jexxa.jexxatest.architecture;
 
 @SuppressWarnings("unused")
-public class ArchitectureRules {
+public final class ArchitectureRules {
     public static PortsAndAdapters portsAndAdapters(Class<?> project)
     {
         return new PortsAndAdapters(project);

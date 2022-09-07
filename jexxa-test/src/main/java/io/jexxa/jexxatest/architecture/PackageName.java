@@ -5,7 +5,7 @@ package io.jexxa.jexxatest.architecture;
  * <p>
  * In case you use another package structure for your application, please adjust these packages accordingly.
  */
-class PackageName
+final class PackageName
 {
     public static final String APPLICATIONSERVICE = "..applicationservice..";
     public static final String DOMAIN_SERVICE = "..domainservice..";
