@@ -46,7 +46,6 @@ final class DateTimeAdapter {
     public static void registerDateTimeAdapter(GsonBuilder gsonBuilder)
     {
         registerLocalDateAdapter(gsonBuilder);
-        registerLocalDateAdapter(gsonBuilder);
         registerLocalDateTimeAdapter(gsonBuilder);
         registerZonedDateTimeAdapter(gsonBuilder);
 
