@@ -53,13 +53,12 @@ public class JexxaTest
         initForUnitTests();
     }
 
-    public static <T> JexxaTest getJexxaTest(Class<T> jexxaApplication)
+    public static synchronized <T> JexxaTest getJexxaTest(Class<T> jexxaApplication)
     {
-        if (jexxaMain == null)
-        {
-            jexxaMain = new JexxaMain(jexxaApplication);
-        }
-        return new JexxaTest();
+            if (jexxaMain == null) {
+                jexxaMain = new JexxaMain(jexxaApplication);
+            }
+            return new JexxaTest();
     }
 
 
