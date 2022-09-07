@@ -27,4 +27,3 @@ jobs:
 
     - name: Maven build
       run: mvn -DskipITs -B clean install
-
