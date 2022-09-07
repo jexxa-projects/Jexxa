@@ -38,7 +38,7 @@ import java.util.Properties;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
 
 
-public class RESTfulRPCAdapter implements IDrivingAdapter
+public final class RESTfulRPCAdapter implements IDrivingAdapter
 {
 
 
