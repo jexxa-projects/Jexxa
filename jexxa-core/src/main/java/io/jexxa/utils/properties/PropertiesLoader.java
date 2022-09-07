@@ -86,7 +86,7 @@ public class PropertiesLoader {
             try (FileInputStream file = new FileInputStream(resource)) {
                 properties.load(file);
             } catch (IOException f) {
-                throw new IllegalArgumentException("Properties file " + resource + " not available. Please check the filename!");
+                throw new IllegalArgumentException("Properties file " + resource + " not available. Please check the filename!", f);
             }
         }
         propertiesFiles.add(resource);
