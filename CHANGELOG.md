@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[5.1.2] - 2022-09-10
+### Fixed
+- JSon Deserialization of java-records including generic types like a list. 
+
 ## \[5.1.1] - 2022-09-07
 ### Fixed
 - Updated dependencies
