@@ -1,9 +1,11 @@
 package io.jexxa.utils.json.gson;
 
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -11,115 +13,146 @@ import com.google.gson.stream.JsonWriter;
 import io.jexxa.utils.json.JSONManager;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.RecordComponent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-final class RecordFactory implements TypeAdapterFactory
-{
+/**
+ * Gson support for Java record types.
+ * Taken from <a href="https://gist.github.com/knightzmc/cf26d9931d32c78c5d777cc719658639">Here</a>
+ */
+public class RecordFactory implements TypeAdapterFactory {
+
+    private static final Map<Class<?>, Object> PRIMITIVE_DEFAULTS = new HashMap<>();
+
+    static {
+        PRIMITIVE_DEFAULTS.put(byte.class, (byte) 0);
+        PRIMITIVE_DEFAULTS.put(int.class, 0);
+        PRIMITIVE_DEFAULTS.put(long.class, 0L);
+        PRIMITIVE_DEFAULTS.put(short.class, (short) 0);
+        PRIMITIVE_DEFAULTS.put(double.class, 0D);
+        PRIMITIVE_DEFAULTS.put(float.class, 0F);
+        PRIMITIVE_DEFAULTS.put(char.class, '\0');
+        PRIMITIVE_DEFAULTS.put(boolean.class, false);
+    }
+
+    private final Map<RecordComponent, List<String>> recordComponentNameCache = new ConcurrentHashMap<>();
+
     static void registerRecordFactory(GsonBuilder gsonBuilder)
     {
         gsonBuilder.registerTypeAdapterFactory(new RecordFactory());
         JSONManager.setJSONConverter(new GsonConverter());
     }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type)
-    {
-        Class<T> clazz = (Class<T>) type.getRawType();
-        if (!clazz.isRecord())
-        {
-            return null;
+    /**
+     * Get all names of a record component
+     * If annotated with {@link SerializedName} the list returned will be the primary name first, then any alternative names
+     * Otherwise, the component name will be returned.
+     */
+    private List<String> getRecordComponentNames(final RecordComponent recordComponent) {
+        List<String> inCache = recordComponentNameCache.get(recordComponent);
+        if (inCache != null) {
+            return inCache;
+        }
+        List<String> names = new ArrayList<>();
+        // The @SerializedName is compiled to be part of the componentName() method
+        // The use of a loop is also deliberate, getAnnotation seemed to return null if Gson's package was relocated
+        SerializedName annotation = null;
+        for (Annotation a : recordComponent.getAccessor().getAnnotations()) {
+            if (a.annotationType() == SerializedName.class) {
+                annotation = (SerializedName) a;
+                break;
+            }
         }
 
-        TypeAdapter<T> delegate = gson.getDelegateAdapter(this, type);
-        return new RecordTypeAdapter<>(delegate, clazz, gson);
+        if (annotation != null) {
+            names.add(annotation.value());
+            names.addAll(Arrays.asList(annotation.alternate()));
+        } else {
+            names.add(recordComponent.getName());
+        }
+        var namesList = List.copyOf(names);
+        recordComponentNameCache.put(recordComponent, namesList);
+        return namesList;
     }
 
-    public static class RecordTypeAdapter<T> extends TypeAdapter<T>
-    {
-        private final TypeAdapter<T> delegate;
-        private final Class<T> rawType;
-        private final Gson gson;
-
-        public RecordTypeAdapter(TypeAdapter<T> delegate, Class<T> rawType, Gson gson)
-        {
-            this.delegate = delegate;
-            this.rawType = rawType;
-            this.gson = gson;
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+        @SuppressWarnings("unchecked")
+        Class<T> clazz = (Class<T>) type.getRawType();
+        if (!clazz.isRecord()) {
+            return null;
         }
+        TypeAdapter<T> delegate = gson.getDelegateAdapter(this, type);
 
-        @Override
-        public void write(JsonWriter out, T value) throws IOException
-        {
-            delegate.write(out, value);
-        }
-
-        @Override
-        @SuppressWarnings("java:S3011")
-        public T read(JsonReader reader) throws IOException
-        {
-            if (reader.peek() == JsonToken.NULL)
-            {
-                reader.nextNull();
-                return null;
+        return new TypeAdapter<>() {
+            @Override
+            public void write(JsonWriter out, T value) throws IOException {
+                delegate.write(out, value);
             }
-            else
-            {
-                var recordComponents = rawType.getRecordComponents();
-                var typeMap = new HashMap<String, Class<?>>();
+
+            @Override
+            @SuppressWarnings("java:S3011")
+            public T read(JsonReader reader) throws IOException {
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.nextNull();
+                    return null;
+                }
+                var recordComponents = clazz.getRecordComponents();
+                var typeMap = new HashMap<String, TypeToken<?>>();
                 Arrays.stream(recordComponents)
-                        .forEach(element -> typeMap.put(element.getName(), element.getType()));
+                        .forEach(element -> typeMap.put(element.getName(), TypeToken.get(element.getGenericType())));
 
                 var argsMap = new HashMap<String, Object>();
                 reader.beginObject();
-                while (reader.hasNext())
-                {
+                while (reader.hasNext()) {
                     String name = reader.nextName();
-                    if (typeMap.get(name) == null)
-                    {
-                        reader.skipValue();
+                    var type = typeMap.get(name);
+                    if (type != null) {
+                        argsMap.put(name, gson.getAdapter(type).read(reader));
+                    } else {
+                        gson.getAdapter(Object.class).read(reader);
                     }
-                    else
-                    {
-                        argsMap.put(name, gson.getAdapter(typeMap.get(name)).read(reader));
-                    }
+
                 }
                 reader.endObject();
 
                 var argTypes = new Class<?>[recordComponents.length];
                 var args = new Object[recordComponents.length];
-
-                for (var i = 0; i < recordComponents.length; i++)
-                {
+                for (int i = 0; i < recordComponents.length; i++) {
                     argTypes[i] = recordComponents[i].getType();
-                    args[i] = argsMap.get(recordComponents[i].getName());
+                    List<String> names = getRecordComponentNames(recordComponents[i]);
+                    Object value = null;
+                    TypeToken<?> type = null;
+                    // Find the first matching type and value
+                    for (String name : names) {
+                        value = argsMap.get(name);
+                        type = typeMap.get(name);
+                        if (value != null && type != null) {
+                            break;
+                        }
+                    }
+
+                    if (value == null && (type != null && type.getRawType().isPrimitive())) {
+                        value = PRIMITIVE_DEFAULTS.get(type.getRawType());
+                    }
+                    args[i] = value;
                 }
                 Constructor<T> constructor;
-                try
-                {
-                    constructor = rawType.getDeclaredConstructor(argTypes);
+                try {
+                    constructor = clazz.getDeclaredConstructor(argTypes);
                     constructor.setAccessible(true);
                     return constructor.newInstance(args);
-                }
-
-                catch (InvocationTargetException e)
-                {
-                    if (e.getTargetException() instanceof RuntimeException)
-                    {
-                        throw (RuntimeException)(e.getTargetException());
-                    } else {
-                        throw new IllegalArgumentException(e.getTargetException());
-                    }
-                }
-                catch (NoSuchMethodException | InstantiationException | SecurityException | IllegalAccessException e)
-                {
+                } catch (NoSuchMethodException | InstantiationException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                     throw new IllegalArgumentException(e);
                 }
             }
-        }
+        };
     }
-
 }
