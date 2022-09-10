@@ -2,7 +2,9 @@ package io.jexxa.utils.json;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 import static java.util.Collections.singletonList;
@@ -28,6 +30,23 @@ class JSonRecordTest
         assertEquals(objectUnderTest, result);
     }
 
+    @Test
+    void testRecordWithMapOfRecords()
+    {
+        //Arrange
+        HashMap<String, SimpleRecord> map = new HashMap<>();
+        map.put("object1", new SimpleRecord("simpleRecord1"));
+        map.put("object2", new SimpleRecord("simpleRecord2"));
+
+        var objectUnderTest = new RecordWithMapOfRecord("stringParam", map);
+
+        //Act
+        var serializedObject = getJSONConverter().toJson(objectUnderTest);
+        var result = getJSONConverter().fromJson(serializedObject, RecordWithMapOfRecord.class);
+
+        //Assert
+        assertEquals(objectUnderTest, result);
+    }
 
     @Test
     void testRecordWithListOfInteger()
@@ -49,4 +68,7 @@ class JSonRecordTest
     private record SimpleRecord(String stringParam) { }
 
     private record RecordWithListOfInteger(String stringParam, List<Integer> integers) { }
+
+    private record RecordWithMapOfRecord(String stringParam, Map<String, SimpleRecord> simpleRecordMap) { }
+
 }
