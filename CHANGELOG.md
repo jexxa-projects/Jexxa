@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[5.2.1] - 2022-09-11
+* [Fix] JMSAdapter: Specified name for a shared connection was not passed to JMS broker, instead the message selector 
+  was passed. This fix ensures that all parameters of a shared connection are correctly handled 
+
 ## \[5.2.0] - 2022-09-11
 ### Added
 - Jexxa-Core: Possibility to define JMS >=2.0 parameter for listener  
