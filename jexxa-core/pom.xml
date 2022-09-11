@@ -21,7 +21,7 @@
   </licenses>
 
   <properties>
-    <jexxa.adapter.api.version>3.2.0-SNAPSHOT</jexxa.adapter.api.version>
+    <jexxa.adapter.api.version>3.2.0</jexxa.adapter.api.version>
     <sonar.projectKey>repplix_Jexxa</sonar.projectKey>
   </properties>
 
