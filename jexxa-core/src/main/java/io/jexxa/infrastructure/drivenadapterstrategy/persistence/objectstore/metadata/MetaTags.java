@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 
 @SuppressWarnings({"unused","java:S1452"})
-public class MetaTags
+public final class MetaTags
 {
     /**
      * Factory method to create a MetaTag wich compares value of an aggregate using defined converter function
