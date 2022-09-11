@@ -152,22 +152,37 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             selector = jmsConfiguration.selector();
         }
 
-        if ( jmsConfiguration.sharedSubscriptionName().isEmpty() )
+        if ( jmsConfiguration.sharedSubscriptionName().isEmpty()
+                && jmsConfiguration.durable().equals(JMSConfiguration.DurableType.NON_DURABLE))
         {
             return session.createConsumer(destination, selector);
-        } else { //Create a shared connection
-            if (jmsConfiguration.messagingType().equals(JMSConfiguration.MessagingType.QUEUE))
-            {
-                throw new IllegalArgumentException("Invalid JMSConfiguration: A shared jms connection is defined which requires a MessagingType QUEUE");
-            }
-
-            if (jmsConfiguration.durable().equals(JMSConfiguration.DurableType.NON_DURABLE))
-            {
-                return session.createSharedConsumer((Topic) destination, jmsConfiguration.sharedSubscriptionName(), selector);
-            }
-
-            return session.createSharedDurableConsumer((Topic) destination, jmsConfiguration.sharedSubscriptionName(), selector);
         }
+        //From here we must have a Topic
+        if (jmsConfiguration.messagingType().equals(JMSConfiguration.MessagingType.QUEUE))
+        {
+            throw new IllegalArgumentException("Invalid JMSConfiguration: A shared jms connection is defined which requires a MessagingType QUEUE");
+        }
+        //Not Shared and durable
+        if ( jmsConfiguration.sharedSubscriptionName().isEmpty()
+                && jmsConfiguration.durable().equals(JMSConfiguration.DurableType.DURABLE))
+        {
+            return session.createDurableConsumer((Topic)destination, selector);
+        }
+
+        // Shared and durable
+        if ( !jmsConfiguration.sharedSubscriptionName().isEmpty()
+                && jmsConfiguration.durable().equals(JMSConfiguration.DurableType.DURABLE))
+        {
+            return session.createSharedDurableConsumer((Topic)destination, selector);
+        }
+
+        // Shared and non-durable
+        if ( !jmsConfiguration.sharedSubscriptionName().isEmpty()
+                && jmsConfiguration.durable().equals(JMSConfiguration.DurableType.NON_DURABLE))
+        {
+            return session.createSharedConsumer((Topic)destination, selector);
+        }
+        throw new IllegalArgumentException("Invalid JMSConfiguration for " + jmsConfiguration.destination());
     }
 
     @Override
@@ -180,6 +195,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         registeredListener.clear();
         consumerList.clear();
         jmsConfigurationList.clear();
+        sessionList.clear();
     }
 
 
