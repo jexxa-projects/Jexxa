@@ -5,11 +5,11 @@
   <parent>
     <artifactId>jexxa</artifactId>
     <groupId>io.jexxa</groupId>
-    <version>5.2.1-SNAPSHOT</version>
+    <version>5.2.1</version>
   </parent>
 
   <artifactId>jexxa-core</artifactId>
-  <version>5.2.1-SNAPSHOT</version>
+  <version>5.2.1</version>
 
   <name>Jexxa-Core</name>
   <licenses>
@@ -21,7 +21,7 @@
   </licenses>
 
   <properties>
-    <jexxa.adapter.api.version>3.2.1-SNAPSHOT</jexxa.adapter.api.version>
+    <jexxa.adapter.api.version>3.2.1</jexxa.adapter.api.version>
     <sonar.projectKey>repplix_Jexxa</sonar.projectKey>
   </properties>
 
