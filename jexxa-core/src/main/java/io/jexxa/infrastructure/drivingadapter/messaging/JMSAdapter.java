@@ -166,21 +166,21 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         if ( jmsConfiguration.sharedSubscriptionName().isEmpty()
                 && jmsConfiguration.durable().equals(JMSConfiguration.DurableType.DURABLE))
         {
-            return session.createDurableConsumer((Topic)destination, selector);
+            return session.createDurableConsumer((Topic)destination, jmsConfiguration.sharedSubscriptionName(), selector, false);
         }
 
         // Shared and durable
         if ( !jmsConfiguration.sharedSubscriptionName().isEmpty()
                 && jmsConfiguration.durable().equals(JMSConfiguration.DurableType.DURABLE))
         {
-            return session.createSharedDurableConsumer((Topic)destination, selector);
+            return session.createSharedDurableConsumer((Topic)destination, jmsConfiguration.sharedSubscriptionName(), selector);
         }
 
         // Shared and non-durable
         if ( !jmsConfiguration.sharedSubscriptionName().isEmpty()
                 && jmsConfiguration.durable().equals(JMSConfiguration.DurableType.NON_DURABLE))
         {
-            return session.createSharedConsumer((Topic)destination, selector);
+            return session.createSharedConsumer((Topic)destination, jmsConfiguration.sharedSubscriptionName(), selector);
         }
         throw new IllegalArgumentException("Invalid JMSConfiguration for " + jmsConfiguration.destination());
     }
