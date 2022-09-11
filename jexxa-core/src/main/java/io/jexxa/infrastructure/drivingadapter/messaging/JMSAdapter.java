@@ -16,6 +16,7 @@ import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Session;
+import javax.jms.Topic;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.util.ArrayList;
@@ -38,12 +39,13 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     public static final String JNDI_FACTORY_KEY = "java.naming.factory.initial";
     public static final String JNDI_PASSWORD_FILE = "java.naming.file.password";
     public static final String JNDI_USER_FILE = "java.naming.file.user";
+    public static final String JNDI_CLIENT_ID = "java.naming.client.id";
 
     public static final String DEFAULT_JNDI_PROVIDER_URL = "tcp://localhost:61616";
     public static final String DEFAULT_JNDI_FACTORY = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 
     private Connection connection;
-    private Session session;
+    private final List<Session> sessionList = new ArrayList<>();
     private final List<MessageConsumer> consumerList = new ArrayList<>();
     private final List<Object> registeredListener = new ArrayList<>();
     private final List<JMSConfiguration> jmsConfigurationList = new ArrayList<>();
@@ -110,6 +112,9 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             var messageListener = (MessageListener) (object);
             var jmsConfiguration = getConfiguration(object);
 
+            var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            sessionList.add(session);
+
             Destination destination = createDestination(session, jmsConfiguration);
             MessageConsumer consumer = createMessageConsumer(session, destination, jmsConfiguration);
 
@@ -141,22 +146,35 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     }
 
     private MessageConsumer createMessageConsumer(Session session, Destination destination, JMSConfiguration jmsConfiguration) throws JMSException {
-        if (jmsConfiguration.selector().isEmpty())
+        String selector = null;
+        if (!jmsConfiguration.selector().isEmpty())
         {
-            return session.createConsumer(destination);
+            selector = jmsConfiguration.selector();
         }
-        else
+
+        if ( jmsConfiguration.sharedSubscriptionName().isEmpty() )
         {
-            return session.createConsumer(destination, jmsConfiguration.selector());
+            return session.createConsumer(destination, selector);
+        } else { //Create a shared connection
+            if (jmsConfiguration.messagingType().equals(JMSConfiguration.MessagingType.QUEUE))
+            {
+                throw new IllegalArgumentException("Invalid JMSConfiguration: A shared jms connection is defined which requires a MessagingType QUEUE");
+            }
+
+            if (jmsConfiguration.durable().equals(JMSConfiguration.DurableType.NON_DURABLE))
+            {
+                return session.createSharedConsumer((Topic) destination, jmsConfiguration.sharedSubscriptionName(), selector);
+            }
+
+            return session.createSharedDurableConsumer((Topic) destination, jmsConfiguration.sharedSubscriptionName(), selector);
         }
     }
-
 
     @Override
     public void close()
     {
         consumerList.forEach(consumer -> Optional.ofNullable(consumer).ifPresent(ThrowingConsumer.exceptionLogger(MessageConsumer::close)));
-        Optional.ofNullable(session).ifPresent(ThrowingConsumer.exceptionLogger(Session::close));
+        sessionList.forEach(ThrowingConsumer.exceptionLogger(Session::close));
         Optional.ofNullable(connection).ifPresent(ThrowingConsumer.exceptionLogger(Connection::close));
 
         registeredListener.clear();
@@ -217,7 +235,12 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
 
         connection = createConnection(properties);
-        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        if (properties.containsKey(JNDI_CLIENT_ID) &&
+                properties.getProperty(JNDI_CLIENT_ID) != null &&
+                !properties.getProperty(JNDI_CLIENT_ID).isEmpty() )
+        {
+            connection.setClientID(properties.getProperty(JNDI_CLIENT_ID));
+        }
 
         // NOTE: The exception handler is created after the session is successfully created
         connection.setExceptionListener(exception -> {
