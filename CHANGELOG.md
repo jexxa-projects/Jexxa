@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[5.2.0] - 2022-09-11
+### Added
+- Jexxa-Core: Possibility to define JMS >=2.0 parameter for listener  
+
 ## \[5.1.2] - 2022-09-10
 ### Fixed
 - JSon Deserialization of java-records including generic types like a list. 

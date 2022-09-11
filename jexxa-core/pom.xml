@@ -5,11 +5,11 @@
   <parent>
     <artifactId>jexxa</artifactId>
     <groupId>io.jexxa</groupId>
-    <version>5.1.3-SNAPSHOT</version>
+    <version>5.2.0</version>
   </parent>
 
   <artifactId>jexxa-core</artifactId>
-  <version>5.1.3-SNAPSHOT</version>
+  <version>5.2.0</version>
 
   <name>Jexxa-Core</name>
   <licenses>
