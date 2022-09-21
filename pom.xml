@@ -73,7 +73,7 @@
     <classgraph.version>4.8.149</classgraph.version>
     <javalin.version>4.6.4</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
-    <slf4j.api.version>2.0.1</slf4j.api.version>
+    <slf4j.api.version>2.0.2</slf4j.api.version>
     <gson.version>2.9.1</gson.version>
     <commons.lang3.version>3.12.0</commons.lang3.version>
     <jackson.core.version>2.13.4</jackson.core.version>
