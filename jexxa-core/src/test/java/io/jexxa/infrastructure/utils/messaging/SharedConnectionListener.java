@@ -7,14 +7,14 @@ import javax.jms.MessageListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TopicListener implements MessageListener
+public class SharedConnectionListener implements MessageListener
 {
     public static final String TOPIC_DESTINATION = "JEXXA_TOPIC";
 
     private final List<Message> messageList = new ArrayList<>();
 
     @Override
-    @JMSConfiguration(destination = TOPIC_DESTINATION, messagingType = JMSConfiguration.MessagingType.TOPIC)
+    @JMSConfiguration(destination = TOPIC_DESTINATION, messagingType = JMSConfiguration.MessagingType.TOPIC, sharedSubscriptionName = "SharedConnection", durable = JMSConfiguration.DurableType.NON_DURABLE)
     public void onMessage(Message message)
     {
         messageList.add(message);

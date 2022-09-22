@@ -8,6 +8,7 @@ import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 import io.jexxa.infrastructure.utils.messaging.ITMessageSender;
 import io.jexxa.infrastructure.utils.messaging.QueueListener;
+import io.jexxa.infrastructure.utils.messaging.SharedConnectionListener;
 import io.jexxa.infrastructure.utils.messaging.TopicListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -22,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
@@ -61,6 +63,59 @@ class JMSAdapterIT
             await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
 
             assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
+        }
+    }
+
+
+    @Test
+    void sharedConnectionListener()
+    {
+        //Arrange
+        var sharedConnectionListener1 = new SharedConnectionListener();
+        var sharedConnectionListener2 = new SharedConnectionListener();
+
+        try (  var objectUnderTest = new JMSAdapter(properties) )
+        {
+            objectUnderTest.register(sharedConnectionListener1);
+            objectUnderTest.register(sharedConnectionListener2);
+
+            ITMessageSender topicSender = new ITMessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+            //Act
+            objectUnderTest.start();
+            topicSender.send(MESSAGE);
+
+            await().atMost(1, TimeUnit.SECONDS).until(() -> !sharedConnectionListener1.getMessages().isEmpty() || !sharedConnectionListener2.getMessages().isEmpty());
+
+            //Assert
+            assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
+            //Since we have shared connection, we should only get one message
+            assertEquals(1, sharedConnectionListener1.getMessageCount() + sharedConnectionListener2.getMessageCount());
+        }
+    }
+
+    @Test
+    void unsharedConnectionListener()
+    {
+        //Arrange
+        var topicListener1 = new TopicListener();
+        var topicListener2 = new TopicListener();
+
+        try (  var objectUnderTest = new JMSAdapter(properties) )
+        {
+            objectUnderTest.register(topicListener1);
+            objectUnderTest.register(topicListener2);
+
+            ITMessageSender topicSender = new ITMessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+            //Act
+            objectUnderTest.start();
+            topicSender.send(MESSAGE);
+
+            await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener1.getMessages().isEmpty() && !topicListener2.getMessages().isEmpty());
+
+            //Assert
+            assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
+            //Since we have shared connection, we should only get one message
+            assertEquals(2, topicListener1.getMessageCount() + topicListener2.getMessageCount());
         }
     }
 
