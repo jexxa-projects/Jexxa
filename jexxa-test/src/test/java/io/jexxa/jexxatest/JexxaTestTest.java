@@ -37,7 +37,7 @@ class JexxaTestTest
     }
 
     @Test
-    void invalidPort()
+    void requestInvalidPort()
     {
         assertThrows(InvalidAdapterException.class, () -> jexxaTest.getInstanceOfPort(ApplicationServiceWithInvalidDrivenAdapters.class));
     }
@@ -64,7 +64,7 @@ class JexxaTestTest
 
 
     @Test
-    void validateMessageToTopic()
+    void recordMessageToTopic()
     {
         //Arrange
         var testMessage = new JexxaValueObject(1);
@@ -93,7 +93,7 @@ class JexxaTestTest
     }
 
     @Test
-    void validateMessageToQueue()
+    void recordMessageToQueue()
     {
         //Arrange
         var testMessage = new JexxaValueObject(1);
