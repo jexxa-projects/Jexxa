@@ -65,6 +65,10 @@ public class JexxaTest
     @CheckReturnValue
     public <T> T getRepository(Class<T> repository)
     {
+        if (!repository.isInterface())
+        {
+            throw new IllegalArgumentException("Given attribute of getRepository must be an interface");
+        }
         return jexxaMain.getInstanceOfPort(repository);
     }
 
