@@ -80,7 +80,7 @@
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
 
     <!-- version of test dependencies -->
-    <activemq.artemis.client.version>2.25.0</activemq.artemis.client.version>
+    <activemq.artemis.client.version>2.26.0</activemq.artemis.client.version>
     <postgres.version>42.5.0</postgres.version>
     <unirest.java.version>3.13.11</unirest.java.version>
     <junit.platform.launcher.version>1.9.1</junit.platform.launcher.version>
