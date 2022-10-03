@@ -16,11 +16,11 @@
     <parent>
     <artifactId>jexxa</artifactId>
     <groupId>io.jexxa</groupId>
-    <version>5.2.2-SNAPSHOT</version>
+    <version>5.2.2</version>
   </parent>
 
   <artifactId>jexxa-adapter-api</artifactId>
-  <version>3.2.2-SNAPSHOT</version>
+  <version>3.2.2</version>
 
   <name>Jexxa-Adapter-API</name>
 
