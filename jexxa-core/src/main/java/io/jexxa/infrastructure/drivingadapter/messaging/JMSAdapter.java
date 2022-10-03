@@ -62,7 +62,6 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
         this.jmsConnectionExceptionHandler = new JMSConnectionExceptionHandler(this, registeredListener);
         this.properties = properties;
-        JexxaBanner.addAccessBanner(this::bannerInformation);
 
         try
         {
@@ -72,6 +71,8 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         {
             throw new IllegalArgumentException(e);
         }
+
+        JexxaBanner.addAccessBanner(this::bannerInformation);
     }
 
 

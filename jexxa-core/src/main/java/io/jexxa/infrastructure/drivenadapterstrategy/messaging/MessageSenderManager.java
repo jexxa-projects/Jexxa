@@ -74,6 +74,7 @@ public final class MessageSenderManager
         return MessageLogger.class;
     }
 
+    @SuppressWarnings("unused")
     public static Class<?> getDefaultMessageSender(Properties properties)
     {
         return getMessageSender(null, properties).getClass();
@@ -120,6 +121,6 @@ public final class MessageSenderManager
 
     public void bannerInformation(Properties properties)
     {
-        JexxaLogger.getLogger(JexxaBanner.class).info("Used Message Sender Strategie  : [{}]", getDefaultMessageSender(properties).getSimpleName());
+        JexxaLogger.getLogger(JexxaBanner.class).info("Used Message Sender Strategie  : [{}]", MESSAGE_SENDER_MANAGER.getStrategy(null, properties).getSimpleName());
     }
 }

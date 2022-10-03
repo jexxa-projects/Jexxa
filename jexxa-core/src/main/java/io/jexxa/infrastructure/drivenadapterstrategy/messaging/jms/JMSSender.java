@@ -142,7 +142,7 @@ public class JMSSender extends MessageSender implements AutoCloseable
             var connectionFactory = (ConnectionFactory) initialContext.lookup("ConnectionFactory");
             var connection = connectionFactory.createConnection(username.getSecret(), password.getSecret());
 
-            //Register an exception listener that closes the connection as soon as the error occurs. This approach ensure that we recreate a connection
+            // Register an exception listener that closes the connection as soon as the error occurs. This approach ensure that we recreate a connection
             // as soon as next message must be sent, and we can handle a temporary error in between sending two messages. If the error still exist, the
             // application will get a RuntimeError
             connection.setExceptionListener( exception -> {
