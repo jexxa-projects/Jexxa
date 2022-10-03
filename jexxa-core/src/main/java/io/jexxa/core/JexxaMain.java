@@ -507,40 +507,48 @@ public final class JexxaMain
     record JexxaExceptionHandler(JexxaMain jexxaMain) implements Thread.UncaughtExceptionHandler {
 
         public void uncaughtException(Thread t, Throwable e) {
-                LOGGER.error("Could not startup Jexxa! {}", getOutputMessage(e));
-
-                jexxaMain.stop();
+            var errorMessage = getOutputMessage(e);
+            //Show startup banner if enabled and jexxa not started in order to
+            if ( jexxaMain.enableBanner &&
+                !jexxaMain.getBoundedContext().isRunning())
+            {
+                JexxaBanner.show(jexxaMain.getProperties());
             }
 
-            String getOutputMessage(Throwable e) {
-                var stringBuilder = new StringBuilder();
-                var jexxaMessage = e.getMessage();
+            LOGGER.error("Could not startup Jexxa! {}", errorMessage);
 
-                Throwable rootCause = e;
-                Throwable rootCauseWithMessage = null;
-
-                while (rootCause.getCause() != null && !rootCause.getCause().equals(rootCause)) {
-                    if (rootCause.getMessage() != null && !rootCause.getMessage().isEmpty()) {
-                        rootCauseWithMessage = rootCause;
-                    }
-
-                    rootCause = rootCause.getCause();
-                }
-
-                var detailedMessage = ""; // Create a potential reason in from of "lastMessage -> lastException" or just "lastMessage"
-                if (rootCauseWithMessage != null && !rootCauseWithMessage.equals(rootCause)) {
-                    detailedMessage = rootCauseWithMessage.getClass().getSimpleName() + ": " + rootCauseWithMessage.getMessage() + " -> Exception: " + rootCause.getClass().getSimpleName();
-                } else {
-                    detailedMessage = rootCause.getMessage();
-                }
-
-                stringBuilder.append("\n* Jexxa-Message    : ").append(jexxaMessage);
-                stringBuilder.append("\n* Detailed-Message : ").append(detailedMessage);
-                stringBuilder.append("\n* 1st trace element: ").append(rootCause.getStackTrace()[0]);
-
-                return stringBuilder.toString();
-            }
+            jexxaMain.stop();
         }
+
+        String getOutputMessage(Throwable e) {
+            var stringBuilder = new StringBuilder();
+            var jexxaMessage = e.getMessage();
+
+            Throwable rootCause = e;
+            Throwable rootCauseWithMessage = null;
+
+            while (rootCause.getCause() != null && !rootCause.getCause().equals(rootCause)) {
+                if (rootCause.getMessage() != null && !rootCause.getMessage().isEmpty()) {
+                    rootCauseWithMessage = rootCause;
+                }
+
+                rootCause = rootCause.getCause();
+            }
+
+            var detailedMessage = ""; // Create a potential reason in from of "lastMessage -> lastException" or just "lastMessage"
+            if (rootCauseWithMessage != null && !rootCauseWithMessage.equals(rootCause)) {
+                detailedMessage = rootCauseWithMessage.getClass().getSimpleName() + ": " + rootCauseWithMessage.getMessage() + " -> Exception: " + rootCause.getClass().getSimpleName();
+            } else {
+                detailedMessage = rootCause.getMessage();
+            }
+
+            stringBuilder.append("\n* Jexxa-Message    : ").append(jexxaMessage);
+            stringBuilder.append("\n* Detailed-Message : ").append(detailedMessage);
+            stringBuilder.append("\n* 1st trace element: ").append(rootCause.getStackTrace()[0]);
+
+            return stringBuilder.toString();
+        }
+    }
 
 
 }
