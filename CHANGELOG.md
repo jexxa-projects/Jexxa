@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[5.2.2] - 2022-10-03
+### Fixed
+- Improved log messages in case of an error during startup
+- Updated dependencies 
+
 ## \[5.2.1] - 2022-09-11
 * [Fix] JMSAdapter: Specified name for a shared connection was not passed to JMS broker, instead the message selector 
   was passed. This fix ensures that all parameters of a shared connection are correctly handled 
