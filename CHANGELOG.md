@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[5.2.3] - 2022-10-05
+### Fixed
+- Updated dependencies with security issues
+
 ## \[5.2.2] - 2022-10-03
 ### Fixed
 - Improved log messages in case of an error during startup
