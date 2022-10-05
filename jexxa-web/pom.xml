@@ -43,6 +43,10 @@
       <!-- Exclude dependencies with security issues -->
       <exclusions>
         <exclusion>
+          <groupId>org.yaml</groupId>
+          <artifactId>snakeyaml</artifactId>
+        </exclusion>
+        <exclusion>
           <groupId>com.google.guava</groupId>
           <artifactId>guava</artifactId>
         </exclusion>
@@ -99,6 +103,12 @@
       <version>${jackson.core.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>2.13.9</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>com.kjetland</groupId>
       <artifactId>mbknor-jackson-jsonschema_2.13</artifactId>
       <version>${jackson.jsonschema.version}</version>
@@ -106,6 +116,10 @@
         <exclusion>
           <groupId>org.jetbrains.kotlin</groupId>
           <artifactId>kotlin-scripting-jvm</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.scala-lang</groupId>
+          <artifactId>scala-library</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
