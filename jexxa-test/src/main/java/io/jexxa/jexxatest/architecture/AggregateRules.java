@@ -92,8 +92,8 @@ public class AggregateRules extends ProjectContent {
     private static DescribedPredicate<List<JavaClass>> thatAreAggregates() {
         return new DescribedPredicate<>("one parameter of type is an Aggregate") {
             @Override
-            public boolean apply(List<JavaClass> input) {
-                return input.stream().anyMatch(element -> element.isAnnotatedWith(Aggregate.class));
+            public boolean test(List<JavaClass> javaClasses) {
+                return javaClasses.stream().anyMatch(element -> element.isAnnotatedWith(Aggregate.class));
             }
         };
     }
@@ -101,8 +101,8 @@ public class AggregateRules extends ProjectContent {
     private static DescribedPredicate<JavaClass> thatIsAnnotatedWithAggregate() {
         return new DescribedPredicate<>("one parameter of type is an Aggregate") {
             @Override
-            public boolean apply(JavaClass input) {
-                return input.isAnnotatedWith(Aggregate.class);
+            public boolean test(JavaClass javaClass) {
+                return javaClass.isAnnotatedWith(Aggregate.class);
             }
         };
     }

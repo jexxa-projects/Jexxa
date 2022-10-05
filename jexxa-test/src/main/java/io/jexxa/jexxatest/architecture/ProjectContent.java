@@ -44,8 +44,8 @@ public abstract class ProjectContent
     private static DescribedPredicate<JavaClass> isNot(Class<?>clazz) {
         return new DescribedPredicate<>("Ignore class " + clazz.getSimpleName()) {
             @Override
-            public boolean apply(JavaClass input) {
-                return !input.isEquivalentTo(clazz);
+            public boolean test(JavaClass javaClass) {
+                return !javaClass.isEquivalentTo(clazz);
             }
         };
     }
