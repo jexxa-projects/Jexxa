@@ -30,6 +30,11 @@ public abstract class ProjectContent
         return this;
     }
 
+    public ProjectContent ignorePackage(String packageName)
+    {
+        importedClasses = importedClasses.that(areNotIn(packageName));
+        return this;
+    }
     public abstract void validate();
 
     protected JavaClasses importedClasses()
@@ -46,6 +51,15 @@ public abstract class ProjectContent
             @Override
             public boolean test(JavaClass javaClass) {
                 return !javaClass.isEquivalentTo(clazz);
+            }
+        };
+    }
+
+    private static DescribedPredicate<JavaClass> areNotIn(String packageName) {
+        return new DescribedPredicate<>("Ignore package " + packageName) {
+            @Override
+            public boolean test(JavaClass javaClass) {
+                return !javaClass.getPackage().getName().contains(packageName);
             }
         };
     }
