@@ -89,6 +89,4 @@ public class PortsAndAdapters extends ProjectContent {
                 .allowEmptyShould(true);
         drivingAdapter.check(importedClasses());
     }
-
-
 }

@@ -112,7 +112,7 @@ public class JexxaTest
         Optional.ofNullable(JexxaMain.class.getResourceAsStream(JEXXA_TEST_PROPERTIES))
                 .ifPresentOrElse(
                         ThrowingConsumer.exceptionLogger(properties::load),
-                        () -> JexxaLogger.getLogger(this.getClass()).warn("NO PROPERTIES FILE FOUND {}", JEXXA_TEST_PROPERTIES)
+                        () -> JexxaLogger.getLogger(this.getClass()).warn("Properties file '{}' not found", JEXXA_TEST_PROPERTIES)
                 );
         return properties;
     }

@@ -1,5 +1,8 @@
 package io.jexxa.jexxatest.architecture;
 
+/**
+ * This class provides methods to validate the architecture of your application.
+ */
 @SuppressWarnings("unused")
 public final class ArchitectureRules {
     public static PortsAndAdapters portsAndAdapters(Class<?> project)
