@@ -5,5 +5,7 @@ import io.jexxa.addend.infrastructure.DrivenAdapter;
 
 @DrivenAdapter
 @SuppressWarnings("unused")
-public class JMSDrivenAdapter {
+public class JMSDrivenAdapter
+{
+    //Empty clas for testing architecture/package rules
 }
