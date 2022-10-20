@@ -1,17 +1,17 @@
-package io.jexxa.core.factory;
+package io.jexxa.utils.factory;
 
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.annotation.ValidApplicationService;
-import io.jexxa.utils.factory.ClassFactory;
+import io.jexxa.application.applicationservice.Java8DateTimeApplicationService;
+import io.jexxa.application.applicationservice.SimpleApplicationService;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static io.jexxa.core.factory.PackageConstants.JEXXA_APPLICATION_SERVICE;
 import static io.jexxa.utils.function.ThrowingConsumer.exceptionCollector;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,18 +21,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ClassFactoryTest
 {
     @Test
-    void createApplicationService()
+    void createApplicationServices()
     {
         //Arrange
-        var annotationScanner = new DependencyScanner();
-        annotationScanner.acceptPackage(JEXXA_APPLICATION_SERVICE);
         var collectedException = new ArrayList<Throwable>();
 
         var factoryResults = new ArrayList<>();
 
+        var validApplicationServices = List.of(SimpleApplicationService.class, Java8DateTimeApplicationService.class, SimpleApplicationService.class);
         //Act
-        var result = annotationScanner.getClassesWithAnnotation(ValidApplicationService.class);
-        result.forEach( exceptionCollector(element -> factoryResults.add( ClassFactory.newInstanceOf(element)), collectedException));
+        validApplicationServices.forEach( exceptionCollector(element -> factoryResults.add( ClassFactory.newInstanceOf(element)), collectedException));
 
         //Assert
         assertTrue(collectedException.isEmpty());
