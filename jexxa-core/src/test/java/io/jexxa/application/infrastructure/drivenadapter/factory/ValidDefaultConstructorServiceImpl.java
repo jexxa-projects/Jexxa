@@ -8,4 +8,5 @@ import io.jexxa.application.domainservice.ValidDefaultConstructorService;
  */
 public class ValidDefaultConstructorServiceImpl implements ValidDefaultConstructorService
 {
+    //Empty constructor to check invalid parameter handling
 }

@@ -26,6 +26,6 @@ public class BootstrapService<T>
 
     public static <T> Consumer<T> noInitFunction()
     {
-        return element -> {};
+        return element -> { /* just an empty function */};
     }
 }
