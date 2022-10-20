@@ -211,7 +211,7 @@ class RESTfulRPCAdapterIT
 
         var result = Unirest.get(REST_PATH + "getMessages")
                 .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
-                .asObject(new GenericType<List<String>>() {} ).getBody();
+                .asObject(new GenericType<List<String>>() {/*Empty anonymous class*/} ).getBody();
 
         //Assert
         assertTrue(response.isSuccess());
