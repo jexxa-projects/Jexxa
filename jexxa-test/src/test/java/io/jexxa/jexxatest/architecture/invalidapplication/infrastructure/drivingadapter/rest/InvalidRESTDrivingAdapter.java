@@ -4,8 +4,8 @@ import io.jexxa.addend.infrastructure.DrivingAdapter;
 import io.jexxa.jexxatest.architecture.invalidapplication.domain.invalid.InvalidRepository;
 
 @DrivingAdapter
-@SuppressWarnings("all") // As the name states. This is an invalid object used for testing purpose
 public class InvalidRESTDrivingAdapter {
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private final InvalidRepository invalidRepository;
 
     public InvalidRESTDrivingAdapter(InvalidRepository invalidRepository)

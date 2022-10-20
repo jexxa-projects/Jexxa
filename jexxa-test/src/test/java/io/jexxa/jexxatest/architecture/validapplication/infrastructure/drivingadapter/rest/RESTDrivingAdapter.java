@@ -4,8 +4,8 @@ import io.jexxa.addend.infrastructure.DrivingAdapter;
 import io.jexxa.jexxatest.architecture.validapplication.applicationservice.TestApplicationService;
 
 @DrivingAdapter
-@SuppressWarnings("all") //Class used for testing purpose
 public class RESTDrivingAdapter {
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private final TestApplicationService testApplicationService;
 
     public RESTDrivingAdapter(TestApplicationService testApplicationService)
