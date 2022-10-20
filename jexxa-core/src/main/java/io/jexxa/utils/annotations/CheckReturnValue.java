@@ -13,5 +13,5 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 @Documented
 public @interface CheckReturnValue
 {
-    
+   //Annotation to validate return value
 }
