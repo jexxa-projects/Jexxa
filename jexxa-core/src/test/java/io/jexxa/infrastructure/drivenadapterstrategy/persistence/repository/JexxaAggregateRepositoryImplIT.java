@@ -42,7 +42,7 @@ class JexxaAggregateRepositoryImplIT
     {
         //Arrange
         dropTable(repositoryProperties);
-        var objectUnderTest = JexxaAggregateRepositoryImpl.create(repositoryProperties);
+        var objectUnderTest = new JexxaAggregateRepositoryImpl(repositoryProperties);
         objectUnderTest.removeAll();
 
         //Act
@@ -59,7 +59,7 @@ class JexxaAggregateRepositoryImplIT
     {
         //Arrange
         dropTable(repositoryProperties);
-        var objectUnderTest = JexxaAggregateRepositoryImpl.create(repositoryProperties);
+        var objectUnderTest = new JexxaAggregateRepositoryImpl(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
 
@@ -78,7 +78,7 @@ class JexxaAggregateRepositoryImplIT
     {
         //Arrange
         dropTable(repositoryProperties);
-        var objectUnderTest = JexxaAggregateRepositoryImpl.create(repositoryProperties);
+        var objectUnderTest = new JexxaAggregateRepositoryImpl(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
 
@@ -99,7 +99,7 @@ class JexxaAggregateRepositoryImplIT
     {
         //Arrange
         dropTable(repositoryProperties);
-        var objectUnderTest = JexxaAggregateRepositoryImpl.create(repositoryProperties);
+        var objectUnderTest = new JexxaAggregateRepositoryImpl(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
 

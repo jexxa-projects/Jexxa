@@ -45,7 +45,7 @@ class JexxaEntityRepositoryImplIT
     {
         //Arrange
         dropTable(repositoryProperties);
-        var objectUnderTest = JexxaEntityRepositoryImpl.create(repositoryProperties);
+        var objectUnderTest = new JexxaEntityRepositoryImpl(repositoryProperties);
         objectUnderTest.removeAll();
 
         //Act
@@ -61,7 +61,7 @@ class JexxaEntityRepositoryImplIT
     {
         //Arrange
         dropTable(repositoryProperties);
-        var objectUnderTest = JexxaEntityRepositoryImpl.create(repositoryProperties);
+        var objectUnderTest = new JexxaEntityRepositoryImpl(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
         var firstElement = aggregateList.get(0);
@@ -77,7 +77,7 @@ class JexxaEntityRepositoryImplIT
     {
         //Arrange
         dropTable(repositoryProperties);
-        var objectUnderTest = JexxaEntityRepositoryImpl.create(repositoryProperties);
+        var objectUnderTest = new JexxaEntityRepositoryImpl(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
 
@@ -96,7 +96,7 @@ class JexxaEntityRepositoryImplIT
     {
         //Arrange
         dropTable(repositoryProperties);
-        var objectUnderTest = JexxaEntityRepositoryImpl.create(repositoryProperties);
+        var objectUnderTest = new JexxaEntityRepositoryImpl(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
 
@@ -116,7 +116,7 @@ class JexxaEntityRepositoryImplIT
     {
         //Arrange
         dropTable(repositoryProperties);
-        var objectUnderTest = JexxaEntityRepositoryImpl.create(repositoryProperties);
+        var objectUnderTest = new JexxaEntityRepositoryImpl(repositoryProperties);
         objectUnderTest.removeAll();
 
         aggregateList.forEach(objectUnderTest::add);
@@ -134,7 +134,7 @@ class JexxaEntityRepositoryImplIT
     {
         //Arrange
         dropTable(repositoryProperties);
-        var objectUnderTest = JexxaEntityRepositoryImpl.create(repositoryProperties);
+        var objectUnderTest = new JexxaEntityRepositoryImpl(repositoryProperties);
         objectUnderTest.removeAll();
         aggregateList.forEach(objectUnderTest::add);
 
