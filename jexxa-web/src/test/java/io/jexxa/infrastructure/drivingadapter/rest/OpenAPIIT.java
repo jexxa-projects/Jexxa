@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.Java8DateTimeApplicationService;
+import io.jexxa.application.applicationservice.SimpleApplicationService;
+import io.jexxa.application.domain.model.SpecialCasesValueObject;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,27 +13,35 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
 import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_PORT;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
+import static io.jexxa.infrastructure.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
-class OpenAPIJava8DateTimeTest
+class OpenAPIIT
 {
     private static final String OPENAPI_PATH = "http://localhost:7500/swagger-docs/";
-    private final Java8DateTimeApplicationService java8DateTimeApplicationService = new Java8DateTimeApplicationService();
-
 
     private RESTfulRPCAdapter objectUnderTest;
+
+
+    public static Stream<Object> applicationServiceConfig() {
+        return Stream.of(new SimpleApplicationService(), new Java8DateTimeApplicationService());
+    }
 
     @BeforeEach
     void setupTests(){
@@ -45,8 +55,6 @@ class OpenAPIJava8DateTimeTest
         properties.put(JEXXA_REST_OPEN_API_PATH, "swagger-docs");
 
         objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
-        objectUnderTest.register(java8DateTimeApplicationService);
-        objectUnderTest.start();
     }
 
     @AfterEach
@@ -58,14 +66,17 @@ class OpenAPIJava8DateTimeTest
     }
 
 
-    @Test
-    void testBasicStructure()
+    @ParameterizedTest
+    @MethodSource("applicationServiceConfig")
+    void testBasicStructure(Object applicationService)
     {
-        //Arrange -> Nothing to do
+        //Arrange
+        objectUnderTest.register(applicationService);
+        objectUnderTest.start();
 
         //Act
-       JsonObject result = Unirest.get(OPENAPI_PATH)
-                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
+        JsonObject result = Unirest.get(OPENAPI_PATH)
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
 
         //Assert - Fields of basic openAPI structure
@@ -76,12 +87,41 @@ class OpenAPIJava8DateTimeTest
         assertNotNull(result.get("paths"));
     }
 
+
     @Test
-    void testContentTypeIsJson()
+    void testSpecialCasesValueObject()
+    {
+        //Arrange -> Nothing to do
+        //Arrange
+        objectUnderTest.register(new SimpleApplicationService());
+        objectUnderTest.start();
+        //Act
+        JsonObject response = Unirest.get(OPENAPI_PATH)
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(JsonObject.class).getBody();
+
+        var result = response
+                .get("components").getAsJsonObject()
+                .get("schemas").getAsJsonObject()
+                .get(SpecialCasesValueObject.class.getSimpleName()).getAsJsonObject();
+
+        //Assert - Fields of basic openAPI structure
+        assertNotNull(result);
+        assertFalse(deepSearchKeys(result,"nullValue").isEmpty());
+        assertFalse(deepSearchKeys(result,"valueWithoutGetter").isEmpty());
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("applicationServiceConfig")
+    void testContentTypeIsJson(Object applicationService)
     {
         //Arrange
+        objectUnderTest.register(applicationService);
+        objectUnderTest.start();
+
         JsonObject openAPI = Unirest.get(OPENAPI_PATH)
-                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
 
         //Act
@@ -89,17 +129,21 @@ class OpenAPIJava8DateTimeTest
 
         //Assert - Fields of basic openAPI structure
         assertFalse( result.isEmpty() );
-        result.forEach( element -> assertNotNull( element.getAsJsonObject().get(RESTConstants.APPLICATION_TYPE) ) );
+        result.forEach( element -> assertNotNull( element.getAsJsonObject().get(APPLICATION_TYPE) ) );
     }
 
-   @Test
-    void testHTTPRequestMapping()
+    @ParameterizedTest
+    @MethodSource("applicationServiceConfig")
+    void testHTTPRequestMapping(Object applicationService)
     {
         //Arrange
-        var resTfulRPCConvention = new RESTfulRPCConvention(java8DateTimeApplicationService);
+        objectUnderTest.register(applicationService);
+        objectUnderTest.start();
+
+        var resTfulRPCConvention = new RESTfulRPCConvention(applicationService);
 
         JsonObject openAPI = Unirest.get(OPENAPI_PATH)
-                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
 
         //Act
