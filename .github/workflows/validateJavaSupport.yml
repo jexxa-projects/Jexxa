@@ -43,7 +43,7 @@ jobs:
           POSTGRES_USER: postgres
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v2
         with:

@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         # test against LTS Java version:
-        java: [ 17.0.4+8 ]
+        java: [ '17' ]
 
     # Service containers to run with `runner-job`
     services:
@@ -43,11 +43,11 @@ jobs:
           POSTGRES_USER: postgres
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up JDK ${{ matrix.java }}
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
-        distribution: 'zulu'
+        distribution: 'temurin'
         java-version: ${{ matrix.java }}
 
     - name: Maven build
