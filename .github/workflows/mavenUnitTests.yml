@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         # test against LTS Java version:
-        java: [ '17' ]
+        java: [ '17.0.4+8' ]
 
     steps:
     - uses: actions/checkout@v3
