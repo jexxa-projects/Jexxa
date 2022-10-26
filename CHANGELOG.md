@@ -4,8 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[5.2.3] - 2022-10-05
+## \[5.3.0] - 2022-10-26
+### Added
+- Jexxa-Test: Possibility to define one stubs for your tests
+
+### Changed
+- Jexxa now uses (de)serialization methods for Java records provided in latest GSon library
+
 ### Fixed
+- Updated dependencies 
+
+## \[5.2.3] - 2022-10-05
+### Added
 - Updated dependencies with security issues
 
 ## \[5.2.2] - 2022-10-03
