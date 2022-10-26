@@ -369,6 +369,20 @@ public final class JexxaMain
         return properties;
     }
 
+    /**
+     * Registers a driven adapter that is then injected inbound ports if its interface is requested.
+     * <p>
+     * Note: This method is typically only required if you need to define the created instances explicitly,
+     * such as defining stubs in unit tests.
+     *
+     * @param drivenAdapter that should be explicitly used for Jexxa's dependency injection
+     * @param <T> type of the driven adapter
+     */
+    public <T> void registerDrivenAdapter(Class<T> drivenAdapter)
+    {
+        drivenAdapterFactory.getInstanceOf(drivenAdapter, getProperties());
+    }
+
     List<String> getInfrastructure()
     {
         return drivenAdapterFactory.getAcceptPackages();

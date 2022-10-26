@@ -90,6 +90,12 @@ public class JexxaTest
         return jexxaMain;
     }
 
+    @SuppressWarnings("unused")
+    public <T> void registerStub(Class<T> outboundPort)
+    {
+        jexxaMain.registerDrivenAdapter(outboundPort);
+    }
+
     @CheckReturnValue
     public Properties getProperties()
     {
