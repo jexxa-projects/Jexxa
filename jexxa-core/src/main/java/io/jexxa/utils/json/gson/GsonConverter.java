@@ -10,7 +10,6 @@ import java.lang.reflect.Type;
 
 import static io.jexxa.utils.json.gson.DateTimeAdapter.registerDateTimeAdapter;
 import static io.jexxa.utils.json.gson.ExceptionFactory.registerExceptionAdapter;
-import static io.jexxa.utils.json.gson.RecordFactory.registerRecordFactory;
 
 @SuppressWarnings("unused")
 public class GsonConverter implements JSONConverter
@@ -72,7 +71,6 @@ public class GsonConverter implements JSONConverter
         var gsonBuilder = new GsonBuilder();
         registerDateTimeAdapter(gsonBuilder);
         registerExceptionAdapter(gsonBuilder);
-        registerRecordFactory(gsonBuilder);
         return gsonBuilder;
     }
 }
