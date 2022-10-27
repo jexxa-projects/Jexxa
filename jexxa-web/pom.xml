@@ -28,7 +28,11 @@
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
-
+    <dependency><!-- Workaround for Maven's transitive dependency mechanism: Added explicit dependencies for Jexxa-web to ensure that latest version of gson is used in an application-->
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>${gson.version}</version>
+    </dependency>
     <!-- dependencies for RESTulRPCAdapter -->
     <dependency>
       <groupId>io.javalin</groupId>

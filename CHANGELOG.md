@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[5.3.1] - 2022-10-27
+### Fixed
+- Explicitly define latest gson version as dependency for jexxa-web. This ensures that maven will use this version within your application because it is the shortest path as transitive dependency. In case your application uses an older gson version (also as transitive dependency), you could get an IllegalAccessException because deserialization of a Java record fails.  
+
+- Updated dependencies
+
 ## \[5.3.0] - 2022-10-26
 ### Added
 - Jexxa-Test: Possibility to define one stubs for your tests
