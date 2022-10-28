@@ -94,7 +94,7 @@
     <!-- version of maven dependencies for tutorials -->
     <aspectj.maven.plugin.version>1.12.6</aspectj.maven.plugin.version>
     <maven.jib.plugin>3.2.0</maven.jib.plugin>
-    <maven.shade.plugin>3.4.0</maven.shade.plugin>
+    <maven.shade.plugin>3.4.1</maven.shade.plugin>
   </properties>
 
   <build>
