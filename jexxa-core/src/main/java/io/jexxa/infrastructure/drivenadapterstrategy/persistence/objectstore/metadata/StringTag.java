@@ -17,7 +17,7 @@ public class StringTag<T, S>  extends MetaTag<T, S, String>
      * @param valueConverter defines a function that converts the data into a string
      */
     StringTag(Function<T, S> valueAccessor,
-              Function<S, ? extends String> valueConverter)
+              Function<S, String> valueConverter)
     {
         super(valueAccessor, valueConverter);
     }

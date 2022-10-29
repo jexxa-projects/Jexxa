@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 
 public class JDBCStringQuery <T, S, M extends Enum<M> & MetadataSchema> extends JDBCObjectQuery<T, S, M> implements IStringQuery<T, S>
 {
-    private final MetaTag<T, S, ? extends String> stringMetaTag;
+    private final MetaTag<T, S, String> stringMetaTag;
 
     private final Class<T> aggregateClazz;
     private final M nameOfRow;
