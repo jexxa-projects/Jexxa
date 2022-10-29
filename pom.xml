@@ -61,12 +61,13 @@
     <maven.compiler.release>17</maven.compiler.release>
 
     <!-- sonar configuration  -->
-    <sonar.organization>repplix</sonar.organization>
+    <sonar.organization>jexxa-projects</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.login>${sonar-login}</sonar.login>
     <sonar.java.source>1.17</sonar.java.source>
     <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco-ut/jacoco.xml,target/site/jacoco-it/jacoco.xml </sonar.coverage.jacoco.xmlReportPaths>
     <sonar.java.libraries>target</sonar.java.libraries>
+    <sonar.projectKey>jexxa-projects_Jexxa</sonar.projectKey>
     <argLine>-Xmx2048m -Xms1024m</argLine>
 
     <!-- version of compile dependencies -->
