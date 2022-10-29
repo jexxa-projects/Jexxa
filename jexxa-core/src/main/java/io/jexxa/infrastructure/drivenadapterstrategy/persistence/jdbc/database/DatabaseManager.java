@@ -5,7 +5,7 @@ import io.jexxa.utils.properties.JexxaJDBCProperties;
 import java.util.Locale;
 import java.util.Properties;
 
-final public class DatabaseManager
+public final class DatabaseManager
 {
     public static IDatabase getDatabase(Properties properties)
     {
