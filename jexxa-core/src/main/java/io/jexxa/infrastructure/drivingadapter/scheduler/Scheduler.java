@@ -1,9 +1,9 @@
 package io.jexxa.infrastructure.drivingadapter.scheduler;
 
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.utils.JexxaLogger;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,16 +32,16 @@ public class Scheduler implements IDrivingAdapter
 
     private void registerObject(Object port, List<Method> scheduledMethods)
     {
+        var invocationHandler = InvocationManager.getInvocationHandler(port);
         scheduledMethods.forEach( method ->
         {
             var schedulerConfiguration = method.getAnnotation(Scheduled.class);
-            executorService.scheduleAtFixedRate(() -> {
-                try {
-                    method.invoke(port);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    JexxaLogger.getLogger(Scheduler.class).warn("Could not execute method {}::{}.",port.getClass().getSimpleName(), method.getName()) ;
-                }
-            }, schedulerConfiguration.initialDelay(), schedulerConfiguration.fixedRate(), schedulerConfiguration.timeUnit());
+            executorService.scheduleAtFixedRate(
+                    () -> invocationHandler.invoke(method, port , new Object[0] ),
+                    schedulerConfiguration.initialDelay(),
+                    schedulerConfiguration.fixedRate(),
+                    schedulerConfiguration.timeUnit()
+            );
         });
     }
 
