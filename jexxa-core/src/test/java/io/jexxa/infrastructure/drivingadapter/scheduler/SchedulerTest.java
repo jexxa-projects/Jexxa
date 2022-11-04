@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SchedulerTest {
     private JexxaMain jexxaMain;
@@ -37,6 +38,25 @@ class SchedulerTest {
         jexxaMain.stop();
     }
 
+    @Test
+    void testMissingScheduledAnnotation()
+    {
+        //Arrange
+        var drivingAdapter = jexxaMain.bind(Scheduler.class);
+
+        //Act / Assert
+        assertThrows( IllegalArgumentException.class,  () -> drivingAdapter.to(MissingScheduledAnnotation.class));
+    }
+
+    @Test
+    void testInvalidScheduledAnnotation()
+    {
+        //Arrange
+        var drivingAdapter = jexxaMain.bind(Scheduler.class);
+
+        //Act / Assert
+        assertThrows( IllegalArgumentException.class,  () -> drivingAdapter.to(InvalidScheduledAnnotation.class));
+    }
 
     public static class ApplicationServiceTimer {
         private final SimpleApplicationService simpleApplicationService;
@@ -52,4 +72,35 @@ class SchedulerTest {
             simpleApplicationService.setSimpleValue(simpleApplicationService.getSimpleValue()+1);
         }
     }
+
+
+    public static class MissingScheduledAnnotation {
+        private final SimpleApplicationService simpleApplicationService;
+        public MissingScheduledAnnotation(SimpleApplicationService simpleApplicationService)
+        {
+            this.simpleApplicationService = simpleApplicationService;
+        }
+
+        @SuppressWarnings("unused")
+        public void run()
+        {
+            simpleApplicationService.setSimpleValue(simpleApplicationService.getSimpleValue()+1);
+        }
+    }
+
+    public static class InvalidScheduledAnnotation {
+        private final SimpleApplicationService simpleApplicationService;
+        public InvalidScheduledAnnotation(SimpleApplicationService simpleApplicationService)
+        {
+            this.simpleApplicationService = simpleApplicationService;
+        }
+
+        @SuppressWarnings("unused")
+        @Scheduled(timeUnit = MILLISECONDS)
+        public void run()
+        {
+            simpleApplicationService.setSimpleValue(simpleApplicationService.getSimpleValue()+1);
+        }
+    }
+
 }
