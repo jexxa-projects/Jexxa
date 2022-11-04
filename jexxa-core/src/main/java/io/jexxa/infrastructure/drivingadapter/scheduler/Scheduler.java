@@ -46,7 +46,7 @@ public class Scheduler implements IDrivingAdapter
                 executorService.scheduleWithFixedDelay(
                         () -> invocationHandler.invoke(method, port, new Object[0]),
                         schedulerConfiguration.initialDelay(),
-                        schedulerConfiguration.fixedRate(),
+                        schedulerConfiguration.fixedDelay(),
                         schedulerConfiguration.timeUnit());
             }
         });

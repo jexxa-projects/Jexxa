@@ -21,10 +21,28 @@ class SchedulerTest {
     }
 
     @Test
-    void testTimerInterval()
+    void testFixedRateScheduler()
     {
         //Arrange
-        jexxaMain.bind(Scheduler.class).to(ApplicationServiceTimer.class);
+        jexxaMain.bind(Scheduler.class).to(FixedRateScheduler.class);
+
+        //Act
+        jexxaMain.start();
+
+        //Assert
+        await()
+                .atMost(5, TimeUnit.SECONDS)
+                .pollDelay(50, MILLISECONDS)
+                .until(() -> jexxaMain.getInstanceOfPort(SimpleApplicationService.class).getSimpleValue() > 100);
+
+        jexxaMain.stop();
+    }
+
+    @Test
+    void testFixedDelayScheduler()
+    {
+        //Arrange
+        jexxaMain.bind(Scheduler.class).to(FixedDelayScheduler.class);
 
         //Act
         jexxaMain.start();
@@ -58,14 +76,29 @@ class SchedulerTest {
         assertThrows( IllegalArgumentException.class,  () -> drivingAdapter.to(InvalidScheduledAnnotation.class));
     }
 
-    public static class ApplicationServiceTimer {
+    public static class FixedRateScheduler {
         private final SimpleApplicationService simpleApplicationService;
-        public ApplicationServiceTimer(SimpleApplicationService simpleApplicationService)
+        public FixedRateScheduler(SimpleApplicationService simpleApplicationService)
         {
             this.simpleApplicationService = simpleApplicationService;
         }
 
         @Scheduled(fixedRate = 10, timeUnit = MILLISECONDS)
+        @SuppressWarnings("unused")
+        public void run()
+        {
+            simpleApplicationService.setSimpleValue(simpleApplicationService.getSimpleValue()+1);
+        }
+    }
+
+    public static class FixedDelayScheduler {
+        private final SimpleApplicationService simpleApplicationService;
+        public FixedDelayScheduler(SimpleApplicationService simpleApplicationService)
+        {
+            this.simpleApplicationService = simpleApplicationService;
+        }
+
+        @Scheduled(fixedDelay = 10, timeUnit = MILLISECONDS)
         @SuppressWarnings("unused")
         public void run()
         {
