@@ -20,7 +20,8 @@ public @interface Scheduled
      * {@link #timeUnit()}.
      * @return the fixed period
      */
-    int fixedRate();
+    int fixedRate() default -1;
+    int fixedDelay() default -1;
     TimeUnit timeUnit() default MILLISECONDS;
 
     /**

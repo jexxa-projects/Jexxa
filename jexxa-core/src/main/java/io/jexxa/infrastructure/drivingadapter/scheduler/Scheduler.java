@@ -36,12 +36,19 @@ public class Scheduler implements IDrivingAdapter
         scheduledMethods.forEach( method ->
         {
             var schedulerConfiguration = method.getAnnotation(Scheduled.class);
-            executorService.scheduleAtFixedRate(
-                    () -> invocationHandler.invoke(method, port , new Object[0] ),
-                    schedulerConfiguration.initialDelay(),
-                    schedulerConfiguration.fixedRate(),
-                    schedulerConfiguration.timeUnit()
-            );
+            if (schedulerConfiguration.fixedRate() >= 0) {
+                executorService.scheduleAtFixedRate(
+                        () -> invocationHandler.invoke(method, port, new Object[0]),
+                        schedulerConfiguration.initialDelay(),
+                        schedulerConfiguration.fixedRate(),
+                        schedulerConfiguration.timeUnit());
+            } else {
+                executorService.scheduleWithFixedDelay(
+                        () -> invocationHandler.invoke(method, port, new Object[0]),
+                        schedulerConfiguration.initialDelay(),
+                        schedulerConfiguration.fixedRate(),
+                        schedulerConfiguration.timeUnit());
+            }
         });
     }
 
@@ -63,15 +70,31 @@ public class Scheduler implements IDrivingAdapter
         }
     }
 
-    void validateSchedulerConfiguration(Object object)
+    private void validateSchedulerConfiguration(Object object)
     {
-        if (getSchedulerConfiguration(object).isEmpty())
+        var scheduledConfiguration = getSchedulerConfiguration(object);
+        if (scheduledConfiguration.isEmpty())
         {
             throw new IllegalArgumentException(
-                    String.format("Given object %s does not provide a %s for any public method!"
+                    String.format("Given object %s does not provide a %s annotation for any public method!"
                             , object.getClass().getSimpleName()
                             , Scheduled.class.getSimpleName()));
         }
+
+        var result = scheduledConfiguration
+                .stream()
+                .filter( element ->
+                        (element.getAnnotation(Scheduled.class).fixedDelay() < 0 && element.getAnnotation(Scheduled.class).fixedRate() < 0)
+                     || (element.getAnnotation(Scheduled.class).fixedDelay() >= 0 && element.getAnnotation(Scheduled.class).fixedRate() >= 0))
+                .findAny();
+
+        if (result.isPresent()) {
+                throw new IllegalArgumentException(
+                    String.format("Given method %s::%s does not provide a valid  value for `fixedInterval` or `fixedDelay` in @Scheduled (exact one of these values must be >=0)!"
+                            , object.getClass().getSimpleName()
+                            , result.get().getName()));
+        }
+
     }
 
     private List<Method> getSchedulerConfiguration(Object object)
