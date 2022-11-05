@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[5.4.0] - 2022-11-05
 ### Added
-- Jexxa-Core: Added new driving adapter `Scheduler` which allows to call methods on a fixed rate or fixed delay as described in issue #140. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more some examples hwo to use it. 
+- Jexxa-Core: Added new driving adapter `Scheduler` which allows to call methods on a fixed rate or fixed delay as described in [issue #140](https://github.com/jexxa-projects/Jexxa/issues/140). See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more some examples hwo to use it. 
 
 ### Fixed
 - Updated dependencies
