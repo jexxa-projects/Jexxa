@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 public class Scheduler implements IDrivingAdapter
 {
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
-
     private final Map<Object, List<Method>> scheduledMethods = new HashMap<>();
 
     @Override
@@ -27,10 +26,10 @@ public class Scheduler implements IDrivingAdapter
 
     @Override
     public void start() {
-        scheduledMethods.forEach(this::registerObject);
+        scheduledMethods.forEach(this::registerScheduledMethods);
     }
 
-    private void registerObject(Object port, List<Method> scheduledMethods)
+    private void registerScheduledMethods(Object port, List<Method> scheduledMethods)
     {
         var invocationHandler = InvocationManager.getInvocationHandler(port);
         scheduledMethods.forEach( method ->
