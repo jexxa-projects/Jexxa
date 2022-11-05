@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[5.4.0] - 2022-11-05
+### Added
+- Jexxa-Core: Added new driving adapter `Scheduler` which allows to call methods on a fixed rate or fixed delay as described in issue #140. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more some examples hwo to use it. 
+
+### Fixed
+- Updated dependencies
+
+
 ## \[5.3.1] - 2022-10-27
 ### Fixed
 - Explicitly define latest gson version as dependency for jexxa-web. This ensures that maven will use this version within your application because it is the shortest path as transitive dependency. In case your application uses an older gson version (also as transitive dependency), you could get an IllegalAccessException because deserialization of a Java record fails.  
