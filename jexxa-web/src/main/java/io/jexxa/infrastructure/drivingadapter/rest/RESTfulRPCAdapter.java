@@ -104,7 +104,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
             javalin.start();
         } catch (RuntimeException e)
         {
-            if (e.getMessage().contains("Port already in use.")) // Javalin states its default port of the server. Therefore, we correct the error message here."
+            if (e.getMessage().contains("Port already in use.")) // Javalin states its default port of the server. Therefore, we correct the error message here.
             {
                 throw new IllegalStateException(
                         RESTfulRPCAdapter.class.getSimpleName()
