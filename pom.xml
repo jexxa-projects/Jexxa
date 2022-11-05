@@ -51,7 +51,6 @@
     <maven.javadoc.plugin>3.4.1</maven.javadoc.plugin>
     <maven.templating.plugin>1.0.0</maven.templating.plugin>
     <maven.versions.plugin>2.13.0</maven.versions.plugin>
-    <project.scm.id>github-Jexxa</project.scm.id>
 
     <!--information for filtered sources  -->
     <build.timestamp>${maven.build.timestamp}</build.timestamp>
