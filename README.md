@@ -3,7 +3,7 @@
 [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/jexxa-projects/Jexxa.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/jexxa-projects/Jexxa/context:java)
 [![CI Badge](https://api.codiga.io/project/34534/score/svg)](https://app.codiga.io/hub/project/34534/Jexxa)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b6c1680824ef4ac5914c40073242dc86)](https://www.codacy.com/gh/repplix/Jexxa/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=repplix/Jexxa&amp;utm_campaign=Badge_Grade)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jexxa-projects_Jexxa&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jexxa-projects_Jexxa)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jexxa-projects_Jexxa&metric=alert_status)](https://sonarcloud.io/summary/overall?id=jexxa-projects_Jexxa)
  ![Java CI](https://github.com/jexxa-projects/Jexxa/workflows/Java%20CI/badge.svg)
 
 # Jexxa - A Ports and Adapters Framework for Java
