@@ -5,11 +5,11 @@
   <parent>
     <artifactId>jexxa</artifactId>
     <groupId>io.jexxa</groupId>
-    <version>5.4.0</version>
+    <version>5.4.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>jexxa-web</artifactId>
-  <version>5.4.0</version>
+  <version>5.4.1-SNAPSHOT</version>
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
