@@ -2,10 +2,11 @@ package io.jexxa.infrastructure.drivingadapter.scheduler;
 
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivingadapter.scheduler.portadapter.FixedDelayScheduler;
-import io.jexxa.infrastructure.drivingadapter.scheduler.portadapter.FixedRateScheduler;
+import io.jexxa.infrastructure.drivingadapter.scheduler.portadapter.FixedDelayIncrementer;
+import io.jexxa.infrastructure.drivingadapter.scheduler.portadapter.FixedRateIncrementer;
 import io.jexxa.infrastructure.drivingadapter.scheduler.portadapter.InvalidScheduledAnnotation;
 import io.jexxa.infrastructure.drivingadapter.scheduler.portadapter.MissingScheduledAnnotation;
+import io.jexxa.infrastructure.drivingadapter.scheduler.portadapter.MultipleIncrementer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +30,25 @@ class SchedulerTest {
     void testFixedRateScheduler()
     {
         //Arrange
-        jexxaMain.bind(Scheduler.class).to(FixedRateScheduler.class);
+        jexxaMain.bind(Scheduler.class).to(FixedRateIncrementer.class);
+
+        //Act
+        jexxaMain.start();
+
+        //Assert that simple value is incremented > 100 within 5 seconds
+        await()
+                .atMost(5, TimeUnit.SECONDS)
+                .pollDelay(50, MILLISECONDS)
+                .until(() -> jexxaMain.getInstanceOfPort(SimpleApplicationService.class).getSimpleValue() > 100);
+
+        jexxaMain.stop();
+    }
+
+    @Test
+    void testFixedDelayScheduler()
+    {
+        //Arrange
+        jexxaMain.bind(Scheduler.class).to(FixedDelayIncrementer.class);
 
         //Act
         jexxaMain.start();
@@ -44,19 +63,20 @@ class SchedulerTest {
     }
 
     @Test
-    void testFixedDelayScheduler()
+    void testMultipleScheduler()
     {
         //Arrange
-        jexxaMain.bind(Scheduler.class).to(FixedDelayScheduler.class);
+        jexxaMain.bind(Scheduler.class).to(MultipleIncrementer.class);
 
         //Act
         jexxaMain.start();
 
-        //Assert
+        //Assert that both values are incremented
         await()
                 .atMost(5, TimeUnit.SECONDS)
                 .pollDelay(50, MILLISECONDS)
-                .until(() -> jexxaMain.getInstanceOfPort(SimpleApplicationService.class).getSimpleValue() > 100);
+                .until(() -> jexxaMain.getInstanceOfPort(SimpleApplicationService.class).getSimpleValue() > 100
+                && jexxaMain.getInstanceOfPort(SimpleApplicationService.class).getSimpleValueObject().getValue() > 100);
 
         jexxaMain.stop();
     }
