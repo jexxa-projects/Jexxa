@@ -3,6 +3,7 @@ package io.jexxa.application.domain.model;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 public interface JexxaEntityRepository
 {
     void add(JexxaEntity jexxaEntity);

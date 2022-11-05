@@ -2,6 +2,7 @@ package io.jexxa.jexxatest.architecture.validapplication.applicationservice;
 
 import io.jexxa.addend.applicationcore.ApplicationService;
 
+@SuppressWarnings("unused")
 @ApplicationService
 public class TestApplicationService
 {

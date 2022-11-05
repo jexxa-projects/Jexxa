@@ -23,7 +23,7 @@ public final class SpecialCasesValueObject
         this.valueWithoutGetter = value;
     }
 
-    @SuppressWarnings("ConstantConditions")
+    @SuppressWarnings({"ConstantConditions", "unused"})
     public String getNullValue()
     {
         return nullValue;

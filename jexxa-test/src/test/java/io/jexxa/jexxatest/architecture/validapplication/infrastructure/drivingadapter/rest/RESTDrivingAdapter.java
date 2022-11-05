@@ -3,6 +3,7 @@ package io.jexxa.jexxatest.architecture.validapplication.infrastructure.drivinga
 import io.jexxa.addend.infrastructure.DrivingAdapter;
 import io.jexxa.jexxatest.architecture.validapplication.applicationservice.TestApplicationService;
 
+@SuppressWarnings("unused")
 @DrivingAdapter
 public class RESTDrivingAdapter {
     @SuppressWarnings({"FieldCanBeLocal", "unused"})

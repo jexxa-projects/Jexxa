@@ -3,6 +3,7 @@ package io.jexxa.jexxatest.architecture.invalidapplication.infrastructure.drivin
 import io.jexxa.addend.infrastructure.DrivingAdapter;
 import io.jexxa.jexxatest.architecture.invalidapplication.domain.invalid.InvalidRepository;
 
+@SuppressWarnings("unused")
 @DrivingAdapter
 public class InvalidRESTDrivingAdapter {
     @SuppressWarnings({"FieldCanBeLocal", "unused"})

@@ -35,6 +35,7 @@ public class GenericRepositoryImpl<Aggregate, AggregateID>
         return repository.get(aggregateID).orElseThrow();
     }
 
+    @SuppressWarnings("unused")
     public Optional<Aggregate> find(AggregateID aggregateID)
     {
         return repository.get(aggregateID);

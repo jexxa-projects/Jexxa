@@ -91,6 +91,7 @@ class MessageListenerIT
     {
         private String textMessage;
 
+        @SuppressWarnings("unused")
         @Override
         @JMSConfiguration(destination = TOPIC_DESTINATION, messagingType = JMSConfiguration.MessagingType.TOPIC)
         public void onMessage(String textMessage)
@@ -114,6 +115,7 @@ class MessageListenerIT
             super(JexxaValueObject.class);
         }
 
+        @SuppressWarnings("unused")
         @Override
         @JMSConfiguration(destination = QUEUE_DESTINATION, messagingType = JMSConfiguration.MessagingType.QUEUE)
         public void onMessage(JexxaValueObject jexxaValueObject)
