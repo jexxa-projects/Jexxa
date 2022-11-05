@@ -2,6 +2,10 @@ package io.jexxa.infrastructure.drivingadapter.scheduler;
 
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.core.JexxaMain;
+import io.jexxa.infrastructure.drivingadapter.scheduler.portadapter.FixedDelayScheduler;
+import io.jexxa.infrastructure.drivingadapter.scheduler.portadapter.FixedRateScheduler;
+import io.jexxa.infrastructure.drivingadapter.scheduler.portadapter.InvalidScheduledAnnotation;
+import io.jexxa.infrastructure.drivingadapter.scheduler.portadapter.MissingScheduledAnnotation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +22,7 @@ class SchedulerTest {
     void initBeforeEach()
     {
         jexxaMain = new JexxaMain(SchedulerTest.class);
+        jexxaMain.disableBanner();
     }
 
     @Test
@@ -76,64 +81,5 @@ class SchedulerTest {
         assertThrows( IllegalArgumentException.class,  () -> drivingAdapter.to(InvalidScheduledAnnotation.class));
     }
 
-    public static class FixedRateScheduler {
-        private final SimpleApplicationService simpleApplicationService;
-        public FixedRateScheduler(SimpleApplicationService simpleApplicationService)
-        {
-            this.simpleApplicationService = simpleApplicationService;
-        }
-
-        @Scheduled(fixedRate = 10, timeUnit = MILLISECONDS)
-        @SuppressWarnings("unused")
-        public void run()
-        {
-            simpleApplicationService.setSimpleValue(simpleApplicationService.getSimpleValue()+1);
-        }
-    }
-
-    public static class FixedDelayScheduler {
-        private final SimpleApplicationService simpleApplicationService;
-        public FixedDelayScheduler(SimpleApplicationService simpleApplicationService)
-        {
-            this.simpleApplicationService = simpleApplicationService;
-        }
-
-        @Scheduled(fixedDelay = 10, timeUnit = MILLISECONDS)
-        @SuppressWarnings("unused")
-        public void run()
-        {
-            simpleApplicationService.setSimpleValue(simpleApplicationService.getSimpleValue()+1);
-        }
-    }
-
-
-    public static class MissingScheduledAnnotation {
-        private final SimpleApplicationService simpleApplicationService;
-        public MissingScheduledAnnotation(SimpleApplicationService simpleApplicationService)
-        {
-            this.simpleApplicationService = simpleApplicationService;
-        }
-
-        @SuppressWarnings("unused")
-        public void run()
-        {
-            simpleApplicationService.setSimpleValue(simpleApplicationService.getSimpleValue()+1);
-        }
-    }
-
-    public static class InvalidScheduledAnnotation {
-        private final SimpleApplicationService simpleApplicationService;
-        public InvalidScheduledAnnotation(SimpleApplicationService simpleApplicationService)
-        {
-            this.simpleApplicationService = simpleApplicationService;
-        }
-
-        @SuppressWarnings("unused")
-        @Scheduled(timeUnit = MILLISECONDS)
-        public void run()
-        {
-            simpleApplicationService.setSimpleValue(simpleApplicationService.getSimpleValue()+1);
-        }
-    }
 
 }

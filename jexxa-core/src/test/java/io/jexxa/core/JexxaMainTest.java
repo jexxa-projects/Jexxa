@@ -43,6 +43,7 @@ class JexxaMainTest
     {
         RepositoryManager.setDefaultStrategy(IMDBRepository.class);
         objectUnderTest = new JexxaMain(JexxaTestApplication.class);
+        objectUnderTest.disableBanner();
     }
 
     @AfterEach
