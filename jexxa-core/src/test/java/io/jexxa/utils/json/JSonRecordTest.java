@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JSonRecordTest
 {
-
     @Test
     void testRecordWithListOfRecords()
     {
@@ -70,5 +69,4 @@ class JSonRecordTest
     private record RecordWithListOfInteger(String stringParam, List<Integer> integers) { }
 
     private record RecordWithMapOfRecord(String stringParam, Map<String, SimpleRecord> simpleRecordMap) { }
-
 }

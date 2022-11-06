@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JSonDateTimeTest
 {
-
     private final JSONConverter objectUnderTest = JSONManager.getJSONConverter();
 
     @Test

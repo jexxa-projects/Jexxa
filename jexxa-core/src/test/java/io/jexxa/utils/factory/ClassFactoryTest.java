@@ -4,6 +4,7 @@ package io.jexxa.utils.factory;
 import io.jexxa.TestConstants;
 import io.jexxa.application.applicationservice.Java8DateTimeApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -35,5 +36,6 @@ class ClassFactoryTest
         //Assert
         assertTrue(collectedException.isEmpty());
         assertFalse(factoryResults.isEmpty());
+        factoryResults.forEach(Assertions::assertNotNull);
     }
 }
