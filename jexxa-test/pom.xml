@@ -50,14 +50,15 @@
             <version>${addend.version}</version>
             <scope>compile</scope>
         </dependency>
+
+
+        <!-- dependencies for tests -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.simple.version}</version>
+            <scope>test</scope>
         </dependency>
-
-
-        <!-- dependencies for tests -->
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
