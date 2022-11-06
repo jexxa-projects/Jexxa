@@ -1,5 +1,6 @@
 package io.jexxa.adapterapi.invocation;
 
+import io.jexxa.adapterapi.CountingObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

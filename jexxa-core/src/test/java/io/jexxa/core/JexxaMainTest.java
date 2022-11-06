@@ -192,7 +192,6 @@ class JexxaMainTest
 
         //Assert
         assertThrows( RuntimeException.class, () -> result.to(ThrowingPortAdapter.class));
-
     }
 
 

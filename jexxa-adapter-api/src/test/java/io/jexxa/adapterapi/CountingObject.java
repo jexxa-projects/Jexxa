@@ -1,4 +1,4 @@
-package io.jexxa.adapterapi.invocation;
+package io.jexxa.adapterapi;
 
 public class CountingObject {
     private int counter;
