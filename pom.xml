@@ -225,6 +225,7 @@
           <compilerArgument>-Xlint:all</compilerArgument>
           <showWarnings>true</showWarnings>
           <showDeprecation>true</showDeprecation>
+          <release>${maven.compiler.release}</release>
         </configuration>
       </plugin>
 
