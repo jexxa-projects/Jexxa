@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         # test against supported Java version:
-        java: [ '17', '18']
+        java: [ '17', '18', '19']
 
     # Service containers to run with `runner-job`
     services:
