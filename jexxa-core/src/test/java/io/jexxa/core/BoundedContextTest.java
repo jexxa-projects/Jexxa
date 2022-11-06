@@ -76,6 +76,20 @@ class BoundedContextTest
         assertFalse(objectUnderTest.diagnostics().get(1).isHealthy());
     }
 
+    @Test
+    void testJexxaVersion()
+    {
+        //Arrange --
+
+        //Act
+        var jexxaVersion = objectUnderTest.jexxaVersion();
+
+        //Assert
+        assertFalse(jexxaVersion.version().isEmpty());
+        assertFalse(jexxaVersion.buildTimestamp().isEmpty());
+        assertFalse(jexxaVersion.projectName().isEmpty());
+        assertFalse(jexxaVersion.repository().isEmpty());
+    }
 
     public static class SimpleHealthCheck extends HealthCheck
     {
