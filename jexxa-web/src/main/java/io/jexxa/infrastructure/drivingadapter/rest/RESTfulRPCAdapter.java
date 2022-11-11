@@ -8,6 +8,7 @@ import io.javalin.config.JavalinConfig;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.json.JsonMapper;
+import io.javalin.plugin.bundled.CorsPluginConfig;
 import io.javalin.util.JavalinLogger;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
@@ -38,6 +39,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
+import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
 
 
@@ -51,7 +53,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     private Server server;
     private ServerConnector sslConnector;
     private ServerConnector httpConnector;
-    private final OpenAPIConvention openAPIConvention = new OpenAPIConvention();
+    private OpenAPIConvention openAPIConvention;
 
     private static final Map<Properties, RESTfulRPCAdapter> RPC_ADAPTER_MAP = new HashMap<>();
 
@@ -67,6 +69,8 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
             validateIsTrue( properties.containsKey( JexxaWebProperties.JEXXA_REST_KEYSTORE_PASSWORD) || properties.containsKey( JexxaWebProperties.JEXXA_REST_FILE_KEYSTORE_PASSWORD)
                     , "You need to define a location for keystore-password ("+ JexxaWebProperties.JEXXA_REST_KEYSTORE_PASSWORD + "or" + JexxaWebProperties.JEXXA_REST_FILE_KEYSTORE_PASSWORD + ")");
         }
+
+        openAPIConvention = new OpenAPIConvention(properties);
 
         setupJavalin();
 
@@ -102,7 +106,6 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     {
         try
         {
-            openAPIConvention.showInfo();
             javalin.start();
         } catch (RuntimeException e)
         {
@@ -209,14 +212,14 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         }
 
         // Print OPENAPI links
-        /* TODO if (isHTTPEnabled() ) {
+        if (isHTTPEnabled()) {
             openAPIConvention.getPath().ifPresent(path -> JexxaLogger.getLogger(JexxaBanner.class).info("OpenAPI available at: {}"
                     , "http://" + getHostname() + ":" + getHTTPPort() +  path ) );
         }
         if (isHTTPSEnabled()) {
             openAPIConvention.getPath().ifPresent(path -> JexxaLogger.getLogger(JexxaBanner.class).info("OpenAPI available at: {}"
                     , "https://" + getHostname() + ":" + getHTTPSPort() + path ) );
-        }*/
+        }
     }
 
     /**
@@ -379,10 +382,16 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     private void setupJavalin()
     {
         this.javalin = Javalin.create(this::getJavalinConfig);
+
+        var openAPIPath = properties.getProperty(JEXXA_REST_OPEN_API_PATH);
+        if (openAPIPath != null && !openAPIPath.isEmpty()) {
+            openAPIConvention = new OpenAPIConvention(properties);
+            javalin.get(openAPIPath, httpCtx -> httpCtx.result(openAPIConvention.getInfo()));
+        }
+
     }
 
-    private void getJavalinConfig(JavalinConfig javalinConfig)
-    {
+    private void getJavalinConfig(JavalinConfig javalinConfig) {
         javalinConfig.jetty.server(this::getServer);
         //TODO: Disable logging jetty
 
@@ -391,17 +400,15 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         javalinConfig.jsonMapper(new JexxaJSONMapper());
         Location location = Location.CLASSPATH;
 
-        if ( properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_EXTERNAL, "false").equalsIgnoreCase("true") )
-        {
+        if (properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_EXTERNAL, "false").equalsIgnoreCase("true")) {
             location = Location.EXTERNAL;
         }
 
-        if ( properties.containsKey(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT) )
-        {
-            javalinConfig.staticFiles.add(properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT), location );
+        if (properties.containsKey(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT)) {
+            javalinConfig.staticFiles.add(properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT), location);
         }
 
-        //this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig );
+        javalinConfig.plugins.enableCors(cors -> cors.add(CorsPluginConfig::anyHost));
     }
 
     private Server getServer()
@@ -488,6 +495,5 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         public  <T> T fromJsonString(@NotNull String json, @NotNull Type targetClass) {
             return JSONManager.getJSONConverter().fromJson(json, targetClass);
         }
-
     }
 }

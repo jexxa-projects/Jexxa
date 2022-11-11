@@ -7,7 +7,12 @@ import org.eclipse.microprofile.openapi.models.OpenAPI;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Optional;
+import java.util.Properties;
 
+import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_VERSION;
 import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponse;
 import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponses;
 import static org.eclipse.microprofile.openapi.OASFactory.createInfo;
@@ -15,25 +20,24 @@ import static org.eclipse.microprofile.openapi.OASFactory.createOpenAPI;
 import static org.eclipse.microprofile.openapi.OASFactory.createOperation;
 import static org.eclipse.microprofile.openapi.OASFactory.createPathItem;
 import static org.eclipse.microprofile.openapi.OASFactory.createPaths;
-import static org.eclipse.microprofile.openapi.OASFactory.createServer;
 
 @SuppressWarnings("java:S1602") // required to avoid ambiguous warnings
 public class OpenAPIConvention
 {
     private final OpenAPI openAPI;
+    private final Properties properties;
 
-    public OpenAPIConvention()
+    public OpenAPIConvention(Properties properties)
     {
+        this.properties = properties;
+
         openAPI = createOpenAPI()
                 .openapi("3.0.1")
                 .info(
                         createInfo()
-                                .title("Ping Specification")
-                                .version("1.0")
-                )
-                .addServer(
-                        createServer()
-                                .url("http://localhost:8080/")
+                                .title(properties.getProperty(JEXXA_CONTEXT_NAME, "Unknown Context"))
+                                .description("Auto generated OpenAPI for " + properties.getProperty(JEXXA_CONTEXT_NAME, "Unknown Context"))
+                                .version(properties.getProperty(JEXXA_CONTEXT_VERSION, "1.0"))
                 )
                 .paths(
                         createPaths()
@@ -74,16 +78,18 @@ public class OpenAPIConvention
 
     }
 
-    public void showInfo() {
-        String content;
+    public String getInfo() {
         try {
-            content = OpenApiSerializer.serialize(openAPI, Format.YAML);
+            return OpenApiSerializer.serialize(openAPI, Format.JSON);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(content);
     }
 
+    public Optional<String> getPath()
+    {
+        return Optional.of("/" + properties.getProperty(JEXXA_REST_OPEN_API_PATH));
+    }
 
 
   /*  private static final String APPLICATION_TYPE_JSON = "application/json";

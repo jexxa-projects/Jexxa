@@ -43,6 +43,13 @@
     </dependency>
 
     <dependency>
+      <groupId>io.javalin.community.openapi</groupId>
+      <artifactId>javalin-openapi-plugin</artifactId>
+      <version>${javalin.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
       <groupId>io.smallrye</groupId>
       <artifactId>smallrye-open-api-core</artifactId>
       <version>3.0.1</version>
