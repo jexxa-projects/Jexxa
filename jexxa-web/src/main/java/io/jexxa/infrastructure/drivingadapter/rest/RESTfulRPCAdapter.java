@@ -51,7 +51,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     private Server server;
     private ServerConnector sslConnector;
     private ServerConnector httpConnector;
-    private OpenAPIConvention openAPIConvention;
+    private final OpenAPIConvention openAPIConvention = new OpenAPIConvention();
 
     private static final Map<Properties, RESTfulRPCAdapter> RPC_ADAPTER_MAP = new HashMap<>();
 
@@ -102,6 +102,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     {
         try
         {
+            openAPIConvention.showInfo();
             javalin.start();
         } catch (RuntimeException e)
         {
@@ -283,7 +284,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
                 )
         );
 
-        // TODO: getCommands.forEach( method -> openAPIConvention.documentGET(method.method(), method.resourcePath()));
+        getCommands.forEach( method -> openAPIConvention.documentGET(method.method(), method.resourcePath()));
     }
 
     private void registerPOSTMethods(Object object)
@@ -297,7 +298,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
                 )
         );
 
-        // TODO: postCommands.forEach( method -> openAPIConvention.documentPOST(method.method(), method.resourcePath()));
+        postCommands.forEach( method -> openAPIConvention.documentPOST(method.method(), method.resourcePath()));
     }
 
 

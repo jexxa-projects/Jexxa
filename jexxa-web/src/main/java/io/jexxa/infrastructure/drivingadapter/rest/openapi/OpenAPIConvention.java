@@ -1,9 +1,91 @@
 package io.jexxa.infrastructure.drivingadapter.rest.openapi;
 
 
+import io.smallrye.openapi.runtime.io.Format;
+import io.smallrye.openapi.runtime.io.OpenApiSerializer;
+import org.eclipse.microprofile.openapi.models.OpenAPI;
+
+import java.io.IOException;
+import java.lang.reflect.Method;
+
+import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponse;
+import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponses;
+import static org.eclipse.microprofile.openapi.OASFactory.createInfo;
+import static org.eclipse.microprofile.openapi.OASFactory.createOpenAPI;
+import static org.eclipse.microprofile.openapi.OASFactory.createOperation;
+import static org.eclipse.microprofile.openapi.OASFactory.createPathItem;
+import static org.eclipse.microprofile.openapi.OASFactory.createPaths;
+import static org.eclipse.microprofile.openapi.OASFactory.createServer;
+
 @SuppressWarnings("java:S1602") // required to avoid ambiguous warnings
 public class OpenAPIConvention
 {
+    private final OpenAPI openAPI;
+
+    public OpenAPIConvention()
+    {
+        openAPI = createOpenAPI()
+                .openapi("3.0.1")
+                .info(
+                        createInfo()
+                                .title("Ping Specification")
+                                .version("1.0")
+                )
+                .addServer(
+                        createServer()
+                                .url("http://localhost:8080/")
+                )
+                .paths(
+                        createPaths()
+                );
+    }
+    public void documentGET(Method method, String resourcePath)
+    {
+        openAPI.getPaths().addPathItem(
+            resourcePath, createPathItem()
+                        .GET(createOperation()
+                                .operationId(method.getName())
+                                .responses(
+                                        createAPIResponses()
+                                                .addAPIResponse(
+                                                        "200", createAPIResponse()
+                                                                .description("OK")
+                                                    )
+                                    )
+                    )
+        );
+    }
+
+    public void documentPOST(Method method, String resourcePath)
+    {
+        openAPI.getPaths().addPathItem(
+                resourcePath, createPathItem()
+                        .POST(createOperation()
+                                .operationId(method.getName())
+                                .responses(
+                                        createAPIResponses()
+                                                .addAPIResponse(
+                                                        "200", createAPIResponse()
+                                                                .description("OK")
+                                                )
+                                )
+                        )
+        );
+
+    }
+
+    public void showInfo() {
+        String content;
+        try {
+            content = OpenApiSerializer.serialize(openAPI, Format.YAML);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(content);
+    }
+
+
+
   /*  private static final String APPLICATION_TYPE_JSON = "application/json";
     private static final String JSON_OBJECT_TYPE = "object";
     private static final String JSON_ARRAY_TYPE = "array";
