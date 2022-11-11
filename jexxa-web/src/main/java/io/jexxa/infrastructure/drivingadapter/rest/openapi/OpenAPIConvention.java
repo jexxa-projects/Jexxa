@@ -1,61 +1,10 @@
 package io.jexxa.infrastructure.drivingadapter.rest.openapi;
 
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.util.StdDateFormat;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.gson.JsonParser;
-import com.kjetland.jackson.jsonSchema.JsonSchemaGenerator;
-import io.javalin.core.JavalinConfig;
-import io.javalin.plugin.openapi.OpenApiOptions;
-import io.javalin.plugin.openapi.OpenApiPlugin;
-import io.javalin.plugin.openapi.annotations.HttpMethod;
-import io.javalin.plugin.openapi.dsl.DocumentedContent;
-import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
-import io.javalin.plugin.openapi.dsl.OpenApiDocumentation;
-import io.javalin.plugin.openapi.utils.OpenApiVersionUtil;
-import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.json.JSONManager;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.media.ArraySchema;
-import io.swagger.v3.oas.models.media.BooleanSchema;
-import io.swagger.v3.oas.models.media.ComposedSchema;
-import io.swagger.v3.oas.models.media.IntegerSchema;
-import io.swagger.v3.oas.models.media.NumberSchema;
-import io.swagger.v3.oas.models.media.ObjectSchema;
-import io.swagger.v3.oas.models.media.Schema;
-import io.swagger.v3.oas.models.media.StringSchema;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-
-import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_ENUMS_USING_TO_STRING;
-import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
-import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
-import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_VERSION;
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
-
 @SuppressWarnings("java:S1602") // required to avoid ambiguous warnings
 public class OpenAPIConvention
 {
-    private static final String APPLICATION_TYPE_JSON = "application/json";
+  /*  private static final String APPLICATION_TYPE_JSON = "application/json";
     private static final String JSON_OBJECT_TYPE = "object";
     private static final String JSON_ARRAY_TYPE = "array";
 
@@ -412,5 +361,5 @@ public class OpenAPIConvention
         {
             //private constructor
         }
-    }
+    }*/
 }

@@ -9,6 +9,7 @@ import io.jexxa.application.domain.model.SpecialCasesValueObject;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -68,6 +69,7 @@ class OpenAPIIT
 
     @ParameterizedTest
     @MethodSource("applicationServiceConfig")
+    @Disabled
     void testBasicStructure(Object applicationService)
     {
         //Arrange
@@ -89,6 +91,7 @@ class OpenAPIIT
 
 
     @Test
+    @Disabled
     void testSpecialCasesValueObject()
     {
         //Arrange -> Nothing to do
@@ -114,6 +117,7 @@ class OpenAPIIT
 
     @ParameterizedTest
     @MethodSource("applicationServiceConfig")
+    @Disabled
     void testContentTypeIsJson(Object applicationService)
     {
         //Arrange
@@ -134,6 +138,7 @@ class OpenAPIIT
 
     @ParameterizedTest
     @MethodSource("applicationServiceConfig")
+    @Disabled
     void testHTTPRequestMapping(Object applicationService)
     {
         //Arrange

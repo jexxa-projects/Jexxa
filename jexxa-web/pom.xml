@@ -41,62 +41,6 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>io.javalin</groupId>
-      <artifactId>javalin-openapi</artifactId>
-      <version>${javalin.version}</version>
-      <!-- Exclude dependencies with security issues -->
-      <exclusions>
-        <exclusion>
-          <groupId>org.yaml</groupId>
-          <artifactId>snakeyaml</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>commons-io</groupId>
-          <artifactId>commons-io</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>commons-codec</groupId>
-          <artifactId>commons-codec</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.json</groupId>
-          <artifactId>json</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.webjars.npm</groupId>
-          <artifactId>jsonpointer</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.webjars.npm</groupId>
-          <artifactId>ansi-regex</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.webjars.npm</groupId>
-          <artifactId>y18n</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.mozilla</groupId>
-          <artifactId>rhino</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.httpcomponents</groupId>
-          <artifactId>httpclient</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.jetbrains.kotlin</groupId>
-          <artifactId>kotlin-stdlib</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.kjetland</groupId>
-          <artifactId>mbknor-jackson-jsonschema_2.13</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
       <version>${jackson.core.version}</version>
