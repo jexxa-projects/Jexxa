@@ -113,25 +113,27 @@ public class OpenAPIConvention
 
     private APIResponse documentReturnType(Method method)
     {
+        if (method.getReturnType().equals(void.class))
+        {
+            return createAPIResponse().description("OK");
+        }
+
+        var mediaType = createMediaType()
+                .schema(createInternalSchema(method.getReturnType(), method.getGenericReturnType()));
+
         var apiResponse = createAPIResponse()
-                .description("OK");
+                .description("OK")
+                .content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
+
 
         if ( isJsonArray(method.getReturnType()) )
         {
-            System.out.println("ARRAY!!! " + method.getName());
-            var mediaType = createMediaType();
-            mediaType.setSchema(createInternalSchema(method.getReturnType(), method.getGenericReturnType()));
-            apiResponse.content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
             addComponent(extractTypeFromArray(method.getGenericReturnType()));
-        } else if ( method.getReturnType() != void.class )
-        {
-            var mediaType = createMediaType();
-            mediaType.setSchema(createInternalSchema(method.getReturnType(), method.getGenericReturnType()));
-            apiResponse.content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
+        } else  {
             addComponent(method.getReturnType());
         }
 
-        return apiResponse; //If return type is void
+        return apiResponse;
     }
 
     public String getOpenAPI() {
