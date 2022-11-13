@@ -316,7 +316,6 @@ public class OpenAPIConvention
     private static Schema createInternalSchema(Class<?> clazz, Type genericType)
     {
         var schema = createSchema();
-        schema.setFormat(APPLICATION_TYPE_JSON);
 
         if ( isInteger(clazz) )
         {
@@ -376,7 +375,6 @@ public class OpenAPIConvention
     private Schema createComponentSchema(Class<?> clazz, Type genericType)
         {
             var schema = createSchema();
-            schema.setFormat(APPLICATION_TYPE_JSON);
 
             if ( isInteger(clazz) )
             {
