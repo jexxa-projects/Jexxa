@@ -386,7 +386,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         var openAPIPath = properties.getProperty(JEXXA_REST_OPEN_API_PATH);
         if (openAPIPath != null && !openAPIPath.isEmpty()) {
             openAPIConvention = new OpenAPIConvention(properties);
-            javalin.get(openAPIPath, httpCtx -> httpCtx.result(openAPIConvention.getInfo()));
+            javalin.get(openAPIPath, httpCtx -> httpCtx.result(openAPIConvention.getOpenAPI()));
         }
 
     }

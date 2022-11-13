@@ -3,33 +3,54 @@ package io.jexxa.infrastructure.drivingadapter.rest.openapi;
 
 import io.smallrye.openapi.runtime.io.Format;
 import io.smallrye.openapi.runtime.io.OpenApiSerializer;
+import org.eclipse.microprofile.openapi.models.Components;
 import org.eclipse.microprofile.openapi.models.OpenAPI;
+import org.eclipse.microprofile.openapi.models.media.Schema;
+import org.eclipse.microprofile.openapi.models.responses.APIResponse;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_VERSION;
 import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponse;
 import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponses;
+import static org.eclipse.microprofile.openapi.OASFactory.createComponents;
+import static org.eclipse.microprofile.openapi.OASFactory.createContent;
 import static org.eclipse.microprofile.openapi.OASFactory.createInfo;
+import static org.eclipse.microprofile.openapi.OASFactory.createMediaType;
 import static org.eclipse.microprofile.openapi.OASFactory.createOpenAPI;
 import static org.eclipse.microprofile.openapi.OASFactory.createOperation;
 import static org.eclipse.microprofile.openapi.OASFactory.createPathItem;
 import static org.eclipse.microprofile.openapi.OASFactory.createPaths;
+import static org.eclipse.microprofile.openapi.OASFactory.createSchema;
 
 @SuppressWarnings("java:S1602") // required to avoid ambiguous warnings
 public class OpenAPIConvention
 {
+    private static final String APPLICATION_TYPE_JSON = "application/json";
+
     private final OpenAPI openAPI;
     private final Properties properties;
+
+    private final Components components;
 
     public OpenAPIConvention(Properties properties)
     {
         this.properties = properties;
+        components = createComponents();
+
 
         openAPI = createOpenAPI()
                 .openapi("3.0.1")
@@ -41,10 +62,14 @@ public class OpenAPIConvention
                 )
                 .paths(
                         createPaths()
-                );
+                ).components(components);
     }
     public void documentGET(Method method, String resourcePath)
     {
+        if (isDisabled())
+        {
+            return;
+        }
         openAPI.getPaths().addPathItem(
             resourcePath, createPathItem()
                         .GET(createOperation()
@@ -52,9 +77,10 @@ public class OpenAPIConvention
                                 .responses(
                                         createAPIResponses()
                                                 .addAPIResponse(
-                                                        "200", createAPIResponse()
-                                                                .description("OK")
+                                                        "200", documentReturnType(method)
                                                     )
+                                        //TODO: Add BadRequest
+                                        //TODO: Add Parameters
                                     )
                     )
         );
@@ -62,33 +88,66 @@ public class OpenAPIConvention
 
     public void documentPOST(Method method, String resourcePath)
     {
+        if (isDisabled())
+        {
+            return;
+        }
+
         openAPI.getPaths().addPathItem(
                 resourcePath, createPathItem()
                         .POST(createOperation()
                                 .operationId(method.getName())
                                 .responses(
                                         createAPIResponses()
-                                                .addAPIResponse(
-                                                        "200", createAPIResponse()
-                                                                .description("OK")
-                                                )
+                                                .addAPIResponse("200", documentReturnType(method))
+                                        //TODO: Add BadRequest
+                                        //TODO: Add Parameters
                                 )
                         )
         );
-
+    }
+    public boolean isDisabled()
+    {
+        return getPath().isEmpty();
     }
 
-    public String getInfo() {
+    private APIResponse documentReturnType(Method method)
+    {
+        var apiResponse = createAPIResponse()
+                .description("OK");
+
+        if ( isJsonArray(method.getReturnType()) )
+        {
+            System.out.println("ARRAY!!! " + method.getName());
+            var mediaType = createMediaType();
+            mediaType.setSchema(createInternalSchema(method.getReturnType(), method.getGenericReturnType()));
+            apiResponse.content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
+            addComponent(extractTypeFromArray(method.getGenericReturnType()));
+        } else if ( method.getReturnType() != void.class )
+        {
+            var mediaType = createMediaType();
+            mediaType.setSchema(createInternalSchema(method.getReturnType(), method.getGenericReturnType()));
+            apiResponse.content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
+            addComponent(method.getReturnType());
+        }
+
+        return apiResponse; //If return type is void
+    }
+
+    public String getOpenAPI() {
         try {
             return OpenApiSerializer.serialize(openAPI, Format.JSON);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 
     public Optional<String> getPath()
     {
-        return Optional.of("/" + properties.getProperty(JEXXA_REST_OPEN_API_PATH));
+        if (properties.containsKey(JEXXA_REST_OPEN_API_PATH)) {
+            return Optional.of("/" + properties.getProperty(JEXXA_REST_OPEN_API_PATH));
+        }
+        return Optional.empty();
     }
 
 
@@ -231,9 +290,9 @@ public class OpenAPIConvention
             openApiDocumentation.body(documentedContend);
             openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
         }
-    }
+    }*/
 
-    private static String createJsonSchema(Class<?> clazz) throws JsonProcessingException
+    /*private static String createJsonSchema(Class<?> clazz) throws JsonProcessingException
     {
         var mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -251,145 +310,113 @@ public class OpenAPIConvention
         var jsonSchema = jsonSchemaGenerator.generateJsonSchema(clazz);
 
         return mapper.writeValueAsString(jsonSchema);
-    }
+    }*/
 
-    private static Object createExampleInstance(Class<?> clazz, Type genericType)
+
+    private static Schema createInternalSchema(Class<?> clazz, Type genericType)
     {
-        if ( isJava8Date(clazz) )
-        {
-            return java8DateExample(clazz);
-        }
+        var schema = createSchema();
+        schema.setFormat(APPLICATION_TYPE_JSON);
 
-        return createGenericExample(clazz, genericType);
-    }
-
-    private static Object java8DateExample(Class<?> clazz)
-    {
-        if ( clazz.equals( LocalDate.class ) )
-        {
-            return LocalDate.of(1970, 1, 1).toString();
-        }
-
-        if ( clazz.equals( LocalDateTime.class ) )
-        {
-            return LocalDateTime.of(LocalDate.of(1970, 1, 1), LocalTime.of(0,0,0) ).toString();
-        }
-
-        if (  clazz.equals(ZonedDateTime.class) )
-        {
-            return ZonedDateTime.of(1970,1,1,0,0,0,0, ZoneId.systemDefault()).withFixedOffsetZone().toString();
-        }
-
-        return null;
-    }
-
-    private static Object createGenericExample(Class<?> clazz, Type genericType)
-    {
-        try
-        {
-            // We create a JsonSchema and try to create an instance of given class from it.
-            // Motivation is that if we cannot create an Object via class -> JsonSchema -> Object it is most unlikely that we can handle attribute in some meaningful way
-            var schemaString = createJsonSchema(clazz);
-            var jsonObject = JsonParser.parseString(schemaString).getAsJsonObject();
-            if (jsonObject == null || jsonObject.get("type") == null )
-            {
-                JexxaLogger.getLogger(OpenAPIConvention.class).warn("Could not create Json schema for given class `{}`", clazz.getName());
-                return null;
-            }
-
-            var typeInformation = jsonObject.get("type");
-
-            //Handle JsonObject
-            if (typeInformation.getAsString().equals(JSON_OBJECT_TYPE))
-            {
-                if (Modifier.isAbstract( clazz.getModifiers()) || Modifier.isInterface( clazz.getModifiers() ) )
-                {
-                    JexxaLogger.getLogger(OpenAPIConvention.class).warn("Given class `{}` is abstract or an interface => Can not create an example object for OpenAPI", clazz.getName());
-                    return null;
-                }
-
-                return JSONManager.getJSONConverter().fromJson(jsonObject.toString(), clazz);
-            }
-
-            //Handle JsonArray
-            if (typeInformation.getAsString().equals(JSON_ARRAY_TYPE))
-            {
-                var result = new Object[1];
-                result[0] = createExampleInstance(extractTypeFromArray(genericType), null);
-                return result;
-            }
-
-            //Handle primitive values
-            return createPrimitive(clazz);
-        } catch (Exception | NoSuchMethodError e ) {
-            if (!clazz.isRecord()) { // Records include some isolation fields that can not be created and are not meaningful for a template. Therefore, we show this message only given type is not a record
-                JexxaLogger.getLogger(OpenAPIConvention.class).warn("[OpenAPI] Could not create an example Object {}", clazz.getName());
-            }
-        }
-        return null;
-    }
-
-
-    private static Object createPrimitive(Class<?> clazz)
-    {
-        if (isInteger(clazz) || isNumber(clazz))
-        {
-            return 1;
-        }
-
-        if (isBoolean( clazz))
-        {
-            return true;
-        }
-
-        if (isString(clazz))
-        {
-            return "string";
-        }
-
-        return null;
-    }
-
-    private static Schema<?> createSchema(Class<?> clazz, Type genericType)
-    {
         if ( isInteger(clazz) )
         {
-            return new IntegerSchema();
+            schema.setType(Schema.SchemaType.INTEGER);
+            return schema;
         }
 
         if ( isNumber(clazz) )
         {
-            return new NumberSchema();
+            schema.setType(Schema.SchemaType.NUMBER);
+            return schema;
         }
 
         if ( isBoolean(clazz) )
         {
-            return new BooleanSchema();
+            schema.setType(Schema.SchemaType.BOOLEAN);
+            return schema;
         }
 
-        if ( isString(clazz) )
+        if ( isString(clazz) || isJava8Date(clazz))
         {
-            return new StringSchema();
-        }
-
-        if ( isJava8Date(clazz) )
-        {
-            return new StringSchema();
+            schema.setType(Schema.SchemaType.STRING);
+            return schema;
         }
 
         if ( isJsonArray(clazz) )
         {
-            var schema = new ArraySchema();
-            schema.setItems(createSchema(extractTypeFromArray(genericType), null));
+            schema.setType(Schema.SchemaType.ARRAY);
+            schema.setItems(createInternalSchema(extractTypeFromArray(genericType), null));
             return schema;
         }
 
-        var result = new ObjectSchema();
-
-        result.set$ref(clazz.getSimpleName());
-
-        return result;
+        schema.setType(Schema.SchemaType.OBJECT);
+        schema.setRef(clazz.getSimpleName());
+        return schema;
     }
+
+    private void addComponent(Class<?> clazz)
+    {
+        // do not add build in data types as components
+        if (isBoolean(clazz) || isInteger(clazz) || isNumber(clazz) || isString(clazz) || isJava8Date(clazz))
+        {
+            return;
+        }
+
+        if (components.getSchemas() == null || !components.getSchemas().containsKey(clazz.getSimpleName()))
+        {
+            var schema = createSchema();
+            schema.setType(Schema.SchemaType.OBJECT);
+            Stream.of(clazz.getDeclaredFields())
+                    .filter(element -> !Modifier.isStatic(element.getModifiers()))
+                    .forEach(element -> schema.addProperty(element.getName(), createComponentSchema(element.getType(), element.getGenericType())));
+            components.addSchema(clazz.getSimpleName(), schema);
+        }
+    }
+
+    private Schema createComponentSchema(Class<?> clazz, Type genericType)
+        {
+            var schema = createSchema();
+            schema.setFormat(APPLICATION_TYPE_JSON);
+
+            if ( isInteger(clazz) )
+            {
+                schema.setType(Schema.SchemaType.INTEGER);
+                return schema;
+            }
+
+            if ( isNumber(clazz) )
+            {
+                schema.setType(Schema.SchemaType.NUMBER);
+                return schema;
+            }
+
+            if ( isBoolean(clazz) )
+            {
+                schema.setType(Schema.SchemaType.BOOLEAN);
+                return schema;
+            }
+
+            if ( isString(clazz) || isJava8Date(clazz))
+            {
+                schema.setType(Schema.SchemaType.STRING);
+                return schema;
+            }
+
+            if ( isJsonArray(clazz) )
+            {
+                schema.setType(Schema.SchemaType.ARRAY);
+                //TODO: schema.setRef(extractTypeFromArray(genericType).getSimpleName());
+                // TODO Handle arrays
+                return schema;
+            }
+
+            schema.setType(Schema.SchemaType.OBJECT);
+            Stream.of(clazz.getDeclaredFields())
+                .filter(element -> !Modifier.isStatic(element.getModifiers()))
+                .forEach(element -> schema.addProperty(element.getName(), createComponentSchema(element.getType(), element.getGenericType())));
+
+            return schema;
+        }
 
 
     private static boolean isInteger(Class<?> clazz)
@@ -449,5 +476,5 @@ public class OpenAPIConvention
         {
             //private constructor
         }
-    }*/
+    }
 }
