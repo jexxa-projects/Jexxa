@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -76,10 +77,8 @@ public class OpenAPIConvention
                                 .operationId(method.getName())
                                 .responses(
                                         createAPIResponses()
-                                                .addAPIResponse(
-                                                        "200", documentReturnType(method)
-                                                    )
-                                        //TODO: Add BadRequest
+                                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_OK), documentReturnType(method))
+                                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_BAD_REQUEST), documentException())
                                         //TODO: Add Parameters
                                     )
                     )
@@ -99,13 +98,26 @@ public class OpenAPIConvention
                                 .operationId(method.getName())
                                 .responses(
                                         createAPIResponses()
-                                                .addAPIResponse("200", documentReturnType(method))
-                                        //TODO: Add BadRequest
+                                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_OK), documentReturnType(method))
+                                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_BAD_REQUEST), documentException())
                                         //TODO: Add Parameters
                                 )
                         )
         );
     }
+
+    private APIResponse documentException()
+    {
+        addComponent(BadRequestResponse.class);
+
+        var mediaType = createMediaType()
+                .schema(createInternalSchema(BadRequestResponse.class, BadRequestResponse.class));
+
+        return createAPIResponse()
+                .description("BAD REQUEST")
+                .content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
+    }
+
     public boolean isDisabled()
     {
         return getPath().isEmpty();
