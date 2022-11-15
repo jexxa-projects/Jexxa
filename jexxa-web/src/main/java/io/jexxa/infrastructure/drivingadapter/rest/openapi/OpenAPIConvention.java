@@ -79,8 +79,8 @@ public class OpenAPIConvention
                 .operationId(method.getName())
                 .responses(
                         createAPIResponses()
-                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_OK), documentReturnType(method))
-                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_BAD_REQUEST), documentException())
+                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_OK), createAPIResponseForReturnType(method))
+                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_BAD_REQUEST), createAPIResponseForException())
                 );
 
         createRequestBody(method).ifPresent(operation::requestBody);
@@ -103,8 +103,8 @@ public class OpenAPIConvention
                 .operationId(method.getName())
                 .responses(
                         createAPIResponses()
-                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_OK), documentReturnType(method))
-                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_BAD_REQUEST), documentException())
+                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_OK), createAPIResponseForReturnType(method))
+                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_BAD_REQUEST), createAPIResponseForException())
                 );
 
 
@@ -142,7 +142,13 @@ public class OpenAPIConvention
     private void addComponents(Method method)
     {
         Stream.of(method.getParameters()).map(Parameter::getType).forEach(this::addComponent);
-        Stream.of(method.getReturnType()).filter( returnType -> !returnType.equals(void.class)).forEach(this::addComponent);
+
+        if ( isCollection(method.getReturnType()) )
+        {
+            addComponent(extractTypeFromCollection(method.getGenericReturnType()));
+        } else  {
+            addComponent(method.getReturnType());
+        }
         addComponent(BadRequestResponse.class);
     }
 
@@ -179,42 +185,30 @@ public class OpenAPIConvention
     }
 
 
-    private APIResponse documentException()
+    private APIResponse createAPIResponseForException()
     {
-        addComponent(BadRequestResponse.class);
-
-        var mediaType = createMediaType()
-                .schema(createInternalSchema(BadRequestResponse.class, BadRequestResponse.class));
-
         return createAPIResponse()
                 .description("BAD REQUEST")
-                .content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
+                .content(createContent().addMediaType(APPLICATION_TYPE_JSON,
+                        createMediaType()
+                                .schema(createInternalSchema(BadRequestResponse.class, BadRequestResponse.class))
+                ));
     }
 
 
-    private APIResponse documentReturnType(Method method)
+    private APIResponse createAPIResponseForReturnType(Method method)
     {
         if (method.getReturnType().equals(void.class))
         {
             return createAPIResponse().description("OK");
         }
 
-        var mediaType = createMediaType()
-                .schema(createInternalSchema(method.getReturnType(), method.getGenericReturnType()));
-
-        var apiResponse = createAPIResponse()
+        return createAPIResponse()
                 .description("OK")
-                .content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
-
-
-        if ( isJsonArray(method.getReturnType()) )
-        {
-            addComponent(extractTypeFromArray(method.getGenericReturnType()));
-        } else  {
-            addComponent(method.getReturnType());
-        }
-
-        return apiResponse;
+                .content(createContent().addMediaType(APPLICATION_TYPE_JSON,
+                        createMediaType()
+                                .schema(createInternalSchema(method.getReturnType(), method.getGenericReturnType()))
+                ));
     }
 
 
@@ -246,10 +240,10 @@ public class OpenAPIConvention
             return schema;
         }
 
-        if ( isJsonArray(clazz) )
+        if ( isCollection(clazz) )
         {
             schema.setType(Schema.SchemaType.ARRAY);
-            schema.setItems(createInternalSchema(extractTypeFromArray(genericType), null));
+            schema.setItems(createInternalSchema(extractTypeFromCollection(genericType), null));
             return schema;
         }
 
@@ -261,7 +255,7 @@ public class OpenAPIConvention
     private void addComponent(Class<?> clazz)
     {
         // do not add build in data types as components
-        if (isBoolean(clazz) || isInteger(clazz) || isNumber(clazz) || isString(clazz) || isJava8Date(clazz))
+        if (isBoolean(clazz) || isInteger(clazz) || isNumber(clazz) || isString(clazz) || isJava8Date(clazz) || clazz.equals(void.class))
         {
             return;
         }
@@ -305,7 +299,7 @@ public class OpenAPIConvention
             return schema;
         }
 
-        if ( isJsonArray(clazz) )
+        if ( isCollection(clazz) )
         {
             schema.setType(Schema.SchemaType.ARRAY);
             // TODO Handle arrays
@@ -341,10 +335,10 @@ public class OpenAPIConvention
             return "2022-11-13T06:08:41Z";
         }
 
-        if ( isJsonArray(clazz) )
+        if ( isCollection(clazz) )
         {
             var returnValue = new Object[1];
-            returnValue[0]= createExample(extractTypeFromArray(genericType), genericType);
+            returnValue[0]= createExample(extractTypeFromCollection(genericType), genericType);
             return returnValue;
         }
 
@@ -386,12 +380,12 @@ public class OpenAPIConvention
                 clazz.equals( char.class );
     }
 
-    private static boolean isJsonArray(Class<?> clazz)
+    private static boolean isCollection(Class<?> clazz)
     {
         return clazz.isArray() || Collection.class.isAssignableFrom(clazz);
     }
 
-    private static Class<?> extractTypeFromArray(Type type)
+    private static Class<?> extractTypeFromCollection(Type type)
     {
         var parameterType = (ParameterizedType) type;
         return (Class<?>)parameterType.getActualTypeArguments()[0];
