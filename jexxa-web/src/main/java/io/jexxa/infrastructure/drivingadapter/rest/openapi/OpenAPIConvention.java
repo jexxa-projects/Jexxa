@@ -41,7 +41,6 @@ import static org.eclipse.microprofile.openapi.OASFactory.createPathItem;
 import static org.eclipse.microprofile.openapi.OASFactory.createPaths;
 import static org.eclipse.microprofile.openapi.OASFactory.createSchema;
 
-@SuppressWarnings("java:S1602") // required to avoid ambiguous warnings
 public class OpenAPIConvention
 {
     private static final String APPLICATION_TYPE_JSON = "application/json";
@@ -159,28 +158,29 @@ public class OpenAPIConvention
         }
 
         var requestBody = new RequestBodyImpl();
+        requestBody.setRequired(true);
 
         if (method.getParameterCount()  == 1 )
         {
-            requestBody.setRequired(true);
-            var mediaType = createMediaType();
-            mediaType.schema(createInternalSchema(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]))
-                    .setExample(createExample(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]));
+            var mediaType = createMediaType()
+                    .schema(createReferenceSchema(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]))
+                    .example(createExample(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]));
+
             requestBody.content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
         }  else if ( method.getParameterCount() > 1 )
         {
-            requestBody.setRequired(true);
             var schema = createSchema();
             var example = new ArrayList<>(method.getParameterCount());
             for (var i = 0; i < method.getParameterTypes().length; ++i)
             {
-                schema.addAnyOf(createInternalSchema(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]));
+                schema.addAnyOf(createReferenceSchema(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]));
                 example.add( createExample(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]));
             }
             var mediaType = createMediaType().schema(schema);
             mediaType.setExample(example);
             requestBody.content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
         }
+
         return Optional.of(requestBody);
     }
 
@@ -191,7 +191,7 @@ public class OpenAPIConvention
                 .description("BAD REQUEST")
                 .content(createContent().addMediaType(APPLICATION_TYPE_JSON,
                         createMediaType()
-                                .schema(createInternalSchema(BadRequestResponse.class, BadRequestResponse.class))
+                                .schema(createReferenceSchema(BadRequestResponse.class, BadRequestResponse.class))
                 ));
     }
 
@@ -207,12 +207,12 @@ public class OpenAPIConvention
                 .description("OK")
                 .content(createContent().addMediaType(APPLICATION_TYPE_JSON,
                         createMediaType()
-                                .schema(createInternalSchema(method.getReturnType(), method.getGenericReturnType()))
+                                .schema(createReferenceSchema(method.getReturnType(), method.getGenericReturnType()))
                 ));
     }
 
 
-    private static Schema createInternalSchema(Class<?> clazz, Type genericType)
+    private static Schema createReferenceSchema(Class<?> clazz, Type genericType)
     {
         if (isBaseType(clazz))
         {
@@ -221,9 +221,12 @@ public class OpenAPIConvention
 
         if ( isCollection(clazz) )
         {
-            return createSchema()
-                    .type(Schema.SchemaType.ARRAY)
-                    .items(createInternalSchema(extractTypeFromCollection(genericType), null));
+            if (genericType != null ) {
+                return createSchema()
+                        .type(Schema.SchemaType.ARRAY)
+                        .items(createReferenceSchema(extractTypeFromCollection(genericType), null));
+            }
+            return createSchema().type(Schema.SchemaType.ARRAY);
         }
 
         return createSchema()
@@ -259,8 +262,11 @@ public class OpenAPIConvention
 
         if ( isCollection(clazz) )
         {
+            if (genericType != null) {
+                createComponentSchema(extractTypeFromCollection(genericType), null);
+                return createSchema().type(Schema.SchemaType.ARRAY).ref(extractTypeFromCollection(genericType).getSimpleName());
+            }
             return createSchema().type(Schema.SchemaType.ARRAY);
-            // TODO Handle arrays
         }
 
         var schema = createSchema();
@@ -320,10 +326,10 @@ public class OpenAPIConvention
             return "2022-11-13T06:08:41Z";
         }
 
-        if ( isCollection(clazz) )
+        if ( isCollection(clazz) && genericType != null)
         {
             var returnValue = new Object[1];
-            returnValue[0]= createExample(extractTypeFromCollection(genericType), genericType);
+            returnValue[0] = createExample(extractTypeFromCollection(genericType), genericType);
             return returnValue;
         }
 
