@@ -214,48 +214,27 @@ public class OpenAPIConvention
 
     private static Schema createInternalSchema(Class<?> clazz, Type genericType)
     {
-        var schema = createSchema();
-
-        if ( isInteger(clazz) )
+        if (isBaseType(clazz))
         {
-            schema.setType(Schema.SchemaType.INTEGER);
-            return schema;
-        }
-
-        if ( isNumber(clazz) )
-        {
-            schema.setType(Schema.SchemaType.NUMBER);
-            return schema;
-        }
-
-        if ( isBoolean(clazz) )
-        {
-            schema.setType(Schema.SchemaType.BOOLEAN);
-            return schema;
-        }
-
-        if ( isString(clazz) || isJava8Date(clazz))
-        {
-            schema.setType(Schema.SchemaType.STRING);
-            return schema;
+            return createSchemaBaseType(clazz);
         }
 
         if ( isCollection(clazz) )
         {
-            schema.setType(Schema.SchemaType.ARRAY);
-            schema.setItems(createInternalSchema(extractTypeFromCollection(genericType), null));
-            return schema;
+            return createSchema()
+                    .type(Schema.SchemaType.ARRAY)
+                    .items(createInternalSchema(extractTypeFromCollection(genericType), null));
         }
 
-        schema.setType(Schema.SchemaType.OBJECT);
-        schema.setRef(clazz.getSimpleName());
-        return schema;
+        return createSchema()
+                .type(Schema.SchemaType.OBJECT)
+                .ref(clazz.getSimpleName());
     }
 
     private void addComponent(Class<?> clazz)
     {
         // do not add build in data types as components
-        if (isBoolean(clazz) || isInteger(clazz) || isNumber(clazz) || isString(clazz) || isJava8Date(clazz) || clazz.equals(void.class))
+        if (isBaseType(clazz) || clazz.equals(void.class))
         {
             return;
         }
@@ -273,45 +252,51 @@ public class OpenAPIConvention
 
     private Schema createComponentSchema(Class<?> clazz, Type genericType)
     {
-        var schema = createSchema();
-
-        if ( isInteger(clazz) )
+        if (isBaseType(clazz))
         {
-            schema.setType(Schema.SchemaType.INTEGER);
-            return schema;
-        }
-
-        if ( isNumber(clazz) )
-        {
-            schema.setType(Schema.SchemaType.NUMBER);
-            return schema;
-        }
-
-        if ( isBoolean(clazz) )
-        {
-            schema.setType(Schema.SchemaType.BOOLEAN);
-            return schema;
-        }
-
-        if ( isString(clazz) || isJava8Date(clazz))
-        {
-            schema.setType(Schema.SchemaType.STRING);
-            return schema;
+            return createSchemaBaseType(clazz);
         }
 
         if ( isCollection(clazz) )
         {
-            schema.setType(Schema.SchemaType.ARRAY);
+            return createSchema().type(Schema.SchemaType.ARRAY);
             // TODO Handle arrays
-            return schema;
         }
 
+        var schema = createSchema();
         schema.setType(Schema.SchemaType.OBJECT);
         Stream.of(clazz.getDeclaredFields())
             .filter(element -> !Modifier.isStatic(element.getModifiers()))
-            .forEach(element -> schema.addProperty(element.getName(), createComponentSchema(element.getType(), element.getGenericType())));
+            .forEach(element -> schema.addProperty(element.getName(),
+                    createComponentSchema(element.getType(), element.getGenericType())
+            ));
 
         return schema;
+    }
+
+    private static Schema createSchemaBaseType(Class<?> clazz)
+    {
+        if ( isInteger(clazz) )
+        {
+            return createSchema().type(Schema.SchemaType.INTEGER);
+        }
+
+        if ( isNumber(clazz) )
+        {
+            return createSchema().type(Schema.SchemaType.NUMBER);
+        }
+
+        if ( isBoolean(clazz) )
+        {
+            return createSchema().type(Schema.SchemaType.BOOLEAN);
+        }
+
+        if ( isString(clazz) || isJava8Date(clazz))
+        {
+            return createSchema().type(Schema.SchemaType.STRING);
+        }
+
+        throw new IllegalArgumentException("Given Class " + clazz.getSimpleName() + " is not a base type");
     }
 
     private Object createExample(Class<?> clazz, Type genericType)
@@ -378,6 +363,11 @@ public class OpenAPIConvention
     {
         return clazz.equals( String.class ) ||
                 clazz.equals( char.class );
+    }
+
+    private static boolean isBaseType(Class<?> clazz)
+    {
+        return isBoolean(clazz) || isString(clazz) || isNumber(clazz) || isJava8Date(clazz) || isInteger(clazz);
     }
 
     private static boolean isCollection(Class<?> clazz)
