@@ -13,6 +13,7 @@ import org.eclipse.microprofile.openapi.models.responses.APIResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
@@ -87,6 +88,8 @@ public class OpenAPIConvention
         openAPI.getPaths().addPathItem(
             resourcePath, createPathItem().GET(operation)
         );
+
+        addComponents(method);
     }
 
 
@@ -110,6 +113,37 @@ public class OpenAPIConvention
         openAPI.getPaths().addPathItem(
                 resourcePath, createPathItem().POST(operation)
         );
+
+        addComponents(method);
+    }
+
+    public boolean isDisabled()
+    {
+        return getPath().isEmpty();
+    }
+
+
+    public String getOpenAPI() {
+        try {
+            return OpenApiSerializer.serialize(openAPI, Format.JSON);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public Optional<String> getPath()
+    {
+        if (properties.containsKey(JEXXA_REST_OPEN_API_PATH)) {
+            return Optional.of("/" + properties.getProperty(JEXXA_REST_OPEN_API_PATH));
+        }
+        return Optional.empty();
+    }
+
+    private void addComponents(Method method)
+    {
+        Stream.of(method.getParameters()).map(Parameter::getType).forEach(this::addComponent);
+        Stream.of(method.getReturnType()).filter( returnType -> !returnType.equals(void.class)).forEach(this::addComponent);
+        addComponent(BadRequestResponse.class);
     }
 
     private Optional<RequestBody> createRequestBody(Method method) {
@@ -123,11 +157,10 @@ public class OpenAPIConvention
         if (method.getParameterCount()  == 1 )
         {
             requestBody.setRequired(true);
-            var mediaType = createMediaType().schema(createInternalSchema(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]));
-            mediaType.setExample(createExample(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]));
+            var mediaType = createMediaType();
+            mediaType.schema(createInternalSchema(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]))
+                    .setExample(createExample(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]));
             requestBody.content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
-            addComponent(method.getParameterTypes()[0]);
-
         }  else if ( method.getParameterCount() > 1 )
         {
             requestBody.setRequired(true);
@@ -137,7 +170,6 @@ public class OpenAPIConvention
             {
                 schema.addAnyOf(createInternalSchema(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]));
                 example.add( createExample(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]));
-                addComponent(method.getParameterTypes()[i]);
             }
             var mediaType = createMediaType().schema(schema);
             mediaType.setExample(example);
@@ -145,6 +177,7 @@ public class OpenAPIConvention
         }
         return Optional.of(requestBody);
     }
+
 
     private APIResponse documentException()
     {
@@ -158,10 +191,6 @@ public class OpenAPIConvention
                 .content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
     }
 
-    public boolean isDisabled()
-    {
-        return getPath().isEmpty();
-    }
 
     private APIResponse documentReturnType(Method method)
     {
@@ -188,21 +217,6 @@ public class OpenAPIConvention
         return apiResponse;
     }
 
-    public String getOpenAPI() {
-        try {
-            return OpenApiSerializer.serialize(openAPI, Format.JSON);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    public Optional<String> getPath()
-    {
-        if (properties.containsKey(JEXXA_REST_OPEN_API_PATH)) {
-            return Optional.of("/" + properties.getProperty(JEXXA_REST_OPEN_API_PATH));
-        }
-        return Optional.empty();
-    }
 
     private static Schema createInternalSchema(Class<?> clazz, Type genericType)
     {
