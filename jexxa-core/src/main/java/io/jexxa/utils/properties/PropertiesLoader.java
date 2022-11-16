@@ -61,7 +61,6 @@ public class PropertiesLoader {
         propertiesFiles.add(JEXXA_APPLICATION_PROPERTIES);
     }
 
-
     private Properties removeEmptyValues(Properties properties) {
         var filteredMap = properties.entrySet()
                 .stream()
@@ -78,6 +77,7 @@ public class PropertiesLoader {
         try (InputStream resourceStream = PropertiesLoader.class.getResourceAsStream(resource)) {
             if (resourceStream != null) {
                 properties.load(resourceStream);
+                propertiesFiles.add(resource);
             } else {
                 throw new FileNotFoundException(resource);
             }
@@ -85,11 +85,11 @@ public class PropertiesLoader {
             //2. try to import properties from outside the jar
             try (FileInputStream file = new FileInputStream(resource)) {
                 properties.load(file);
+                propertiesFiles.add(resource);
             } catch (IOException f) {
                 throw new IllegalArgumentException("Properties file " + resource + " not available. Please check the filename!", f);
             }
         }
-        propertiesFiles.add(resource);
     }
 
 }
