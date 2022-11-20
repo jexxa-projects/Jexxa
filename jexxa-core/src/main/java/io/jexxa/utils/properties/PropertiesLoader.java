@@ -46,12 +46,12 @@ public class PropertiesLoader {
         }
 
         //5. set system properties
-        setSystemProperites(properties);
+        setSystemProperties(properties);
 
         return removeEmptyValues(properties);
     }
 
-    private void setSystemProperites(Properties properties) {
+    private void setSystemProperties(Properties properties) {
         if (properties.containsKey(JEXXA_USER_TIMEZONE))
         {
             System.getProperties().setProperty("user.timezone", properties.getProperty(JEXXA_USER_TIMEZONE));
