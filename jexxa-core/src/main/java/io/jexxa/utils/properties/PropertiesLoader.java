@@ -15,6 +15,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_USER_TIMEZONE;
 
 public class PropertiesLoader {
     private final Class<?> context;
@@ -44,7 +45,17 @@ public class PropertiesLoader {
             importProperties(this.properties.getProperty(JexxaCoreProperties.JEXXA_CONFIG_IMPORT));
         }
 
+        //5. set system properties
+        setSystemProperites(properties);
+
         return removeEmptyValues(properties);
+    }
+
+    private void setSystemProperites(Properties properties) {
+        if (properties.containsKey(JEXXA_USER_TIMEZONE))
+        {
+            System.getProperties().setProperty("user.timezone", properties.getProperty(JEXXA_USER_TIMEZONE));
+        }
     }
 
     public List<String> getPropertiesFiles() {

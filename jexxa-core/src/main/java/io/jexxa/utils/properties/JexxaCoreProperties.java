@@ -17,8 +17,12 @@ public final class JexxaCoreProperties
     /** Defines the build timestamp of the context. This is typically set via maven */
     public static final String JEXXA_CONTEXT_BUILD_TIMESTAMP = "io.jexxa.context.build.timestamp";
 
+    /** Configures the global system property user.timezone to define the timezone used by the application */
+    public static final String JEXXA_USER_TIMEZONE = "io.jexxa.user.timezone";
+
     /** Defines the default properties file which is /jexxa-application.properties */
     public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";
+
     private JexxaCoreProperties()
     {
         //Private constructor
