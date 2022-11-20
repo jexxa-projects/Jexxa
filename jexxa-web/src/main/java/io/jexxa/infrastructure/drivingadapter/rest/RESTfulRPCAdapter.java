@@ -393,8 +393,6 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void getJavalinConfig(JavalinConfig javalinConfig) {
         javalinConfig.jetty.server(this::getServer);
-        //TODO: Disable logging jetty
-
 
         javalinConfig.showJavalinBanner = false;
         javalinConfig.jsonMapper(new JexxaJSONMapper());
@@ -486,7 +484,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     {
         @NotNull
         @Override
-        public String toJsonString(@NotNull Object obj, Type targetClass) {
+        public String toJsonString(@NotNull Object obj, @NotNull Type targetClass) {
             return JSONManager.getJSONConverter().toJson(obj);
         }
 
