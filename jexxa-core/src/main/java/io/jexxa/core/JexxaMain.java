@@ -12,7 +12,6 @@ import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.function.ThrowingConsumer;
 import io.jexxa.utils.properties.JexxaCoreProperties;
 import io.jexxa.utils.properties.PropertiesLoader;
-import org.slf4j.Logger;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -47,8 +46,6 @@ public final class JexxaMain
     private static final String DOMAIN_PROCESS_SERVICE = ".domainprocessservice";
     private static final String DOMAIN_WORKFLOW = ".domainworkflow";
     private static final String APPLICATION_SERVICE = ".applicationservice";
-
-    private static final Logger LOGGER = JexxaLogger.getLogger(JexxaMain.class);
 
     private final CompositeDrivingAdapter compositeDrivingAdapter = new CompositeDrivingAdapter();
     private final Properties properties;
@@ -304,7 +301,7 @@ public final class JexxaMain
     {
         if ( boundedContext.isRunning() )
         {
-            LOGGER.warn("BoundedContext '{}' already started", getBoundedContext().contextName());
+            JexxaLogger.getLogger(JexxaMain.class).warn("BoundedContext '{}' already started", getBoundedContext().contextName());
             return this;
         }
 
@@ -335,7 +332,7 @@ public final class JexxaMain
     void printStartupDuration()
     {
         var startTime = getBoundedContext().uptime();
-        LOGGER.info("BoundedContext '{}' successfully started in {}.{} seconds", getBoundedContext().contextName(), startTime.toSeconds(), String.format("%03d", startTime.toMillisPart()));
+        JexxaLogger.getLogger(JexxaMain.class).info("BoundedContext '{}' successfully started in {}.{} seconds", getBoundedContext().contextName(), startTime.toSeconds(), String.format("%03d", startTime.toMillisPart()));
     }
 
     @SuppressWarnings("java:S2629")
@@ -345,7 +342,7 @@ public final class JexxaMain
         {
             boundedContext.stop();
             compositeDrivingAdapter.stop();
-            LOGGER.info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
+            JexxaLogger.getLogger(JexxaMain.class).info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
         }
         executorService.shutdown();
     }
@@ -529,7 +526,7 @@ public final class JexxaMain
                 JexxaBanner.show(jexxaMain.getProperties());
             }
 
-            LOGGER.error("Could not startup Jexxa! {}", errorMessage);
+            JexxaLogger.getLogger(JexxaMain.class).error("Could not startup Jexxa! {}", errorMessage);
 
             jexxaMain.stop();
         }

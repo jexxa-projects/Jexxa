@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[5.5.0] - 2022-11-20
+### Added
+- Jexxa-Core: Provide possibility to configure user.timezone via jexxa-application.properties value `io.jexxa.user.timezone`. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information
+
+### Changed
+- [Issue #142](https://github.com/jexxa-projects/Jexxa/issues/140) Jexxa-Web : Updated from javalin4 to javalin5. This required to reimplement OpenAPI functionality because javalin5 no longer supports a Java-DSL to provide OpenAPI information. Even though the public API of Jexxa-Web is not changed we decided to increment minor version due to the re-implementation of OpenAPI 
+
+### Fixed
+- Updated dependencies
+
+
 ## \[5.4.0] - 2022-11-05
 ### Added
 - Jexxa-Core: Added new driving adapter `Scheduler` which allows to call methods on a fixed rate or fixed delay as described in [issue #140](https://github.com/jexxa-projects/Jexxa/issues/140). See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more some examples hwo to use it. 

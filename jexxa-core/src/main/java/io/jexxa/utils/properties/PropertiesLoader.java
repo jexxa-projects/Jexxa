@@ -15,6 +15,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
+import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_USER_TIMEZONE;
 
 public class PropertiesLoader {
     private final Class<?> context;
@@ -44,7 +45,17 @@ public class PropertiesLoader {
             importProperties(this.properties.getProperty(JexxaCoreProperties.JEXXA_CONFIG_IMPORT));
         }
 
+        //5. set system properties
+        setSystemProperties(properties);
+
         return removeEmptyValues(properties);
+    }
+
+    private void setSystemProperties(Properties properties) {
+        if (properties.containsKey(JEXXA_USER_TIMEZONE))
+        {
+            System.getProperties().setProperty("user.timezone", properties.getProperty(JEXXA_USER_TIMEZONE));
+        }
     }
 
     public List<String> getPropertiesFiles() {
@@ -60,7 +71,6 @@ public class PropertiesLoader {
 
         propertiesFiles.add(JEXXA_APPLICATION_PROPERTIES);
     }
-
 
     private Properties removeEmptyValues(Properties properties) {
         var filteredMap = properties.entrySet()
@@ -78,6 +88,7 @@ public class PropertiesLoader {
         try (InputStream resourceStream = PropertiesLoader.class.getResourceAsStream(resource)) {
             if (resourceStream != null) {
                 properties.load(resourceStream);
+                propertiesFiles.add(resource);
             } else {
                 throw new FileNotFoundException(resource);
             }
@@ -85,11 +96,11 @@ public class PropertiesLoader {
             //2. try to import properties from outside the jar
             try (FileInputStream file = new FileInputStream(resource)) {
                 properties.load(file);
+                propertiesFiles.add(resource);
             } catch (IOException f) {
                 throw new IllegalArgumentException("Properties file " + resource + " not available. Please check the filename!", f);
             }
         }
-        propertiesFiles.add(resource);
     }
 
 }

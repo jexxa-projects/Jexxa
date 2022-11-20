@@ -4,12 +4,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.javalin.Javalin;
-import io.javalin.core.JavalinConfig;
-import io.javalin.core.util.JavalinLogger;
+import io.javalin.config.JavalinConfig;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
-import io.javalin.jetty.JettyUtil;
-import io.javalin.plugin.json.JsonMapper;
+import io.javalin.json.JsonMapper;
+import io.javalin.plugin.bundled.CorsPluginConfig;
+import io.javalin.util.JavalinLogger;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
@@ -19,6 +19,9 @@ import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.json.JSONConverter;
 import io.jexxa.utils.json.JSONManager;
 import io.jexxa.utils.properties.Secret;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -27,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -35,6 +39,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
+import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
 import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
 
 
@@ -65,6 +70,8 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
                     , "You need to define a location for keystore-password ("+ JexxaWebProperties.JEXXA_REST_KEYSTORE_PASSWORD + "or" + JexxaWebProperties.JEXXA_REST_FILE_KEYSTORE_PASSWORD + ")");
         }
 
+        openAPIConvention = new OpenAPIConvention(properties);
+
         setupJavalin();
 
         registerExceptionHandler();
@@ -75,8 +82,6 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     public static RESTfulRPCAdapter createAdapter(Properties properties)
     {
         JavalinLogger.startupInfo = false;
-        JettyUtil.logDuringStartup = false;
-        JettyUtil.disableJettyLogger();
 
         if ( RPC_ADAPTER_MAP.containsKey(properties) )
         {
@@ -207,7 +212,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         }
 
         // Print OPENAPI links
-        if (isHTTPEnabled() ) {
+        if (isHTTPEnabled()) {
             openAPIConvention.getPath().ifPresent(path -> JexxaLogger.getLogger(JexxaBanner.class).info("OpenAPI available at: {}"
                     , "http://" + getHostname() + ":" + getHTTPPort() +  path ) );
         }
@@ -377,26 +382,33 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     private void setupJavalin()
     {
         this.javalin = Javalin.create(this::getJavalinConfig);
+
+        var openAPIPath = properties.getProperty(JEXXA_REST_OPEN_API_PATH);
+        if (openAPIPath != null && !openAPIPath.isEmpty()) {
+            openAPIConvention = new OpenAPIConvention(properties);
+            javalin.get(openAPIPath, httpCtx -> httpCtx.result(openAPIConvention.getOpenAPI()));
+        }
+
     }
 
-    private void getJavalinConfig(JavalinConfig javalinConfig)
-    {
-        javalinConfig.server(this::getServer);
+    private void getJavalinConfig(JavalinConfig javalinConfig) {
+        javalinConfig.jetty.server(this::getServer);
+        //TODO: Disable logging jetty
+
+
         javalinConfig.showJavalinBanner = false;
         javalinConfig.jsonMapper(new JexxaJSONMapper());
         Location location = Location.CLASSPATH;
 
-        if ( properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_EXTERNAL, "false").equalsIgnoreCase("true") )
-        {
+        if (properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_EXTERNAL, "false").equalsIgnoreCase("true")) {
             location = Location.EXTERNAL;
         }
 
-        if ( properties.containsKey(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT) )
-        {
-            javalinConfig.addStaticFiles(properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT), location );
+        if (properties.containsKey(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT)) {
+            javalinConfig.staticFiles.add(properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT), location);
         }
 
-        this.openAPIConvention = new OpenAPIConvention(properties, javalinConfig );
+        javalinConfig.plugins.enableCors(cors -> cors.add(CorsPluginConfig::anyHost));
     }
 
     private Server getServer()
@@ -414,9 +426,19 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
 
             if (isHTTPSEnabled())
             {
-                sslConnector = new ServerConnector(server, getSslContextFactory());
+                HttpConfiguration httpsConfig = new HttpConfiguration();
+                httpsConfig.setSendServerVersion(false);
+                httpsConfig.setRequestHeaderSize(512 * 1024);
+                httpsConfig.setResponseHeaderSize(512 * 1024);
+
+                SecureRequestCustomizer src = new SecureRequestCustomizer();
+                src.setSniHostCheck(false);
+                httpsConfig.addCustomizer(src);
+
+                sslConnector = new ServerConnector(server, getSslContextFactory(), new HttpConnectionFactory(httpsConfig));
                 sslConnector.setHost(getHostname());
                 sslConnector.setPort(getHTTPSPortFromProperties());
+
                 server.addConnector(sslConnector);
             }
         }
@@ -424,7 +446,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         return server;
     }
 
-    private SslContextFactory getSslContextFactory()
+    private SslContextFactory.Server getSslContextFactory()
     {
         URL keystoreURL = RESTfulRPCAdapter.class.getResource("/" + getKeystore());
 
@@ -464,15 +486,14 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     {
         @NotNull
         @Override
-        public String toJsonString(@NotNull Object obj) {
+        public String toJsonString(@NotNull Object obj, Type targetClass) {
             return JSONManager.getJSONConverter().toJson(obj);
         }
 
         @NotNull
         @Override
-        public  <T> T fromJsonString(@NotNull String json, @NotNull Class<T> targetClass) {
+        public  <T> T fromJsonString(@NotNull String json, @NotNull Type targetClass) {
             return JSONManager.getJSONConverter().fromJson(json, targetClass);
         }
-
     }
 }

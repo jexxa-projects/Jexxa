@@ -1,360 +1,340 @@
 package io.jexxa.infrastructure.drivingadapter.rest.openapi;
 
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.util.StdDateFormat;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.gson.JsonParser;
-import com.kjetland.jackson.jsonSchema.JsonSchemaGenerator;
-import io.javalin.core.JavalinConfig;
-import io.javalin.plugin.openapi.OpenApiOptions;
-import io.javalin.plugin.openapi.OpenApiPlugin;
-import io.javalin.plugin.openapi.annotations.HttpMethod;
-import io.javalin.plugin.openapi.dsl.DocumentedContent;
-import io.javalin.plugin.openapi.dsl.OpenApiBuilder;
-import io.javalin.plugin.openapi.dsl.OpenApiDocumentation;
-import io.javalin.plugin.openapi.utils.OpenApiVersionUtil;
-import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.json.JSONManager;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.media.ArraySchema;
-import io.swagger.v3.oas.models.media.BooleanSchema;
-import io.swagger.v3.oas.models.media.ComposedSchema;
-import io.swagger.v3.oas.models.media.IntegerSchema;
-import io.swagger.v3.oas.models.media.NumberSchema;
-import io.swagger.v3.oas.models.media.ObjectSchema;
-import io.swagger.v3.oas.models.media.Schema;
-import io.swagger.v3.oas.models.media.StringSchema;
+import io.smallrye.openapi.api.models.parameters.RequestBodyImpl;
+import io.smallrye.openapi.runtime.io.Format;
+import io.smallrye.openapi.runtime.io.OpenApiSerializer;
+import org.eclipse.microprofile.openapi.models.Components;
+import org.eclipse.microprofile.openapi.models.OpenAPI;
+import org.eclipse.microprofile.openapi.models.media.Schema;
+import org.eclipse.microprofile.openapi.models.parameters.RequestBody;
+import org.eclipse.microprofile.openapi.models.responses.APIResponse;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Stream;
 
-import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_ENUMS_USING_TO_STRING;
 import static io.jexxa.infrastructure.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_VERSION;
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
+import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponse;
+import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponses;
+import static org.eclipse.microprofile.openapi.OASFactory.createComponents;
+import static org.eclipse.microprofile.openapi.OASFactory.createContent;
+import static org.eclipse.microprofile.openapi.OASFactory.createInfo;
+import static org.eclipse.microprofile.openapi.OASFactory.createMediaType;
+import static org.eclipse.microprofile.openapi.OASFactory.createOpenAPI;
+import static org.eclipse.microprofile.openapi.OASFactory.createOperation;
+import static org.eclipse.microprofile.openapi.OASFactory.createPathItem;
+import static org.eclipse.microprofile.openapi.OASFactory.createPaths;
+import static org.eclipse.microprofile.openapi.OASFactory.createSchema;
 
-@SuppressWarnings("java:S1602") // required to avoid ambiguous warnings
 public class OpenAPIConvention
 {
     private static final String APPLICATION_TYPE_JSON = "application/json";
-    private static final String JSON_OBJECT_TYPE = "object";
-    private static final String JSON_ARRAY_TYPE = "array";
 
+    private final OpenAPI openAPI;
     private final Properties properties;
-    private final JavalinConfig javalinConfig;
-    private OpenApiOptions openApiOptions;
 
-    public OpenAPIConvention(Properties properties, JavalinConfig javalinConfig)
+    private final Components components;
+
+    public OpenAPIConvention(Properties properties)
     {
         this.properties = properties;
-        this.javalinConfig = javalinConfig;
+        components = createComponents();
 
-        initOpenAPI();
+
+        openAPI = createOpenAPI()
+                .openapi("3.0.1")
+                .info(
+                        createInfo()
+                                .title(properties.getProperty(JEXXA_CONTEXT_NAME, "Unknown Context"))
+                                .description("Auto generated OpenAPI for " + properties.getProperty(JEXXA_CONTEXT_NAME, "Unknown Context"))
+                                .version(properties.getProperty(JEXXA_CONTEXT_VERSION, "1.0"))
+                )
+                .paths(
+                        createPaths()
+                ).components(components);
     }
-    private void initOpenAPI()
+    public void documentGET(Method method, String resourcePath)
     {
-        if (properties.containsKey(JEXXA_REST_OPEN_API_PATH))
+        if (isDisabled())
         {
-            OpenApiVersionUtil.INSTANCE.setLogWarnings(false);
-
-            var applicationInfo = new Info()
-                    .version(properties.getProperty(JEXXA_CONTEXT_VERSION, "1.0"))
-                    .description("Auto generated OpenAPI for " + properties.getProperty(JEXXA_CONTEXT_NAME, "Unknown Context"))
-                    .title(properties.getProperty(JEXXA_CONTEXT_NAME, "Unknown Context"));
-
-            openApiOptions = new OpenApiOptions(applicationInfo)
-                    .path("/" + properties.getProperty(JEXXA_REST_OPEN_API_PATH));
-
-            //Show all fields of an ValueObject
-            openApiOptions.getJacksonMapper().setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-
-            javalinConfig.registerPlugin(new OpenApiPlugin(openApiOptions));
-            javalinConfig.enableCorsForAllOrigins();
-
-            openApiOptions.defaultDocumentation(doc -> {
-                doc.json(String.valueOf(HTTP_BAD_REQUEST), BadRequestResponse.class);
-                doc.json(String.valueOf(HTTP_BAD_REQUEST), BadRequestResponse.class);
-            });
+            return;
         }
+        var operation = createOperation()
+                .operationId(method.getName())
+                .responses(
+                        createAPIResponses()
+                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_OK), createAPIResponseForReturnType(method))
+                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_BAD_REQUEST), createAPIResponseForException())
+                );
+
+        createRequestBody(method).ifPresent(operation::requestBody);
+
+        openAPI.getPaths().addPathItem(
+            resourcePath, createPathItem().GET(operation)
+        );
+
+        addComponents(method);
     }
 
-    boolean isEnabled()
+
+    public void documentPOST(Method method, String resourcePath)
     {
-        return openApiOptions != null;
+        if (isDisabled())
+        {
+            return;
+        }
+        var operation = createOperation()
+                .operationId(method.getName())
+                .responses(
+                        createAPIResponses()
+                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_OK), createAPIResponseForReturnType(method))
+                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_BAD_REQUEST), createAPIResponseForException())
+                );
+
+
+        createRequestBody(method).ifPresent(operation::requestBody);
+
+        openAPI.getPaths().addPathItem(
+                resourcePath, createPathItem().POST(operation)
+        );
+
+        addComponents(method);
+    }
+
+    public boolean isDisabled()
+    {
+        return getPath().isEmpty();
+    }
+
+
+    public String getOpenAPI() {
+        try {
+            return OpenApiSerializer.serialize(openAPI, Format.JSON);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     public Optional<String> getPath()
     {
-        if (isEnabled()) {
+        if (properties.containsKey(JEXXA_REST_OPEN_API_PATH)) {
             return Optional.of("/" + properties.getProperty(JEXXA_REST_OPEN_API_PATH));
         }
-
         return Optional.empty();
     }
 
-    public void documentGET(Method method, String resourcePath)
+    private void addComponents(Method method)
     {
-        if ( openApiOptions == null )
+        Stream.of(method.getParameters()).map(Parameter::getType).forEach(this::addComponent);
+
+        if ( isCollection(method.getReturnType()) )
         {
-            return;
+            addComponent(extractTypeFromCollection(method.getGenericReturnType()));
+        } else  {
+            addComponent(method.getReturnType());
         }
-
-        var openApiDocumentation = OpenApiBuilder
-                .document()
-                .operation(openApiOperation -> {
-                    openApiOperation.operationId(method.getName());
-                });
-
-        documentReturnType(method, openApiDocumentation);
-
-        openApiOptions.setDocumentation(resourcePath, HttpMethod.GET, openApiDocumentation);
+        addComponent(BadRequestResponse.class);
     }
 
-    public void documentPOST(Method method, String resourcePath)
-    {
-        if ( openApiOptions == null )
+    private Optional<RequestBody> createRequestBody(Method method) {
+        if (method.getParameters().length == 0)
         {
-            return;
+            return Optional.empty();
         }
 
-        var openApiDocumentation = OpenApiBuilder
-                .document()
-                .operation(openApiOperation -> {
-                    openApiOperation.operationId(method.getName());
-                });
+        var requestBody = new RequestBodyImpl();
+        requestBody.setRequired(true);
 
-        documentParameters(method, openApiDocumentation);
-
-        documentReturnType(method, openApiDocumentation);
-
-        openApiOptions.setDocumentation(resourcePath, HttpMethod.POST, openApiDocumentation);
-    }
-
-    private static void documentReturnType(Method method, OpenApiDocumentation openApiDocumentation)
-    {
-        if ( isJsonArray(method.getReturnType()) )
+        if (method.getParameterCount()  == 1 )
         {
-            openApiDocumentation.jsonArray("200", extractTypeFromArray(method.getGenericReturnType()));
-        } else if ( method.getReturnType() != void.class )
-        {
-            openApiDocumentation.json("200", method.getReturnType());
-        }
-        else {
-            openApiDocumentation.result("200");
-        }
-    }
+            var mediaType = createMediaType()
+                    .schema(createReferenceSchema(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]))
+                    .example(createExample(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]));
 
-    private static void documentParameters(Method method, OpenApiDocumentation openApiDocumentation)
-    {
-        if (method.getParameters().length == 1 )
+            requestBody.content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
+        }  else if ( method.getParameterCount() > 1 )
         {
-            var schema = createSchema(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]);
-            schema.setExample(createExampleInstance(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]));
-
-            //For some reason I have to add requests as DocumentedContent. Otherwise, components seems to be not correctly created
-            openApiDocumentation.body(List.of(new DocumentedContent(method.getParameterTypes()[0], isJsonArray(method.getParameterTypes()[0]), APPLICATION_TYPE_JSON )));
-            openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
-        }  else if ( method.getParameters().length > 1 )
-        {
-            var schema = new ComposedSchema();
-            var exampleObjects = new Object[method.getParameterTypes().length];
-            var documentedContend = new ArrayList<DocumentedContent>();
-
+            var schema = createSchema();
+            var example = new ArrayList<>(method.getParameterCount());
             for (var i = 0; i < method.getParameterTypes().length; ++i)
             {
-                exampleObjects[i] = createExampleInstance(method.getParameterTypes()[i],method.getGenericParameterTypes()[i]);
-                var parameterSchema = createSchema(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]);
-                parameterSchema.setExample(exampleObjects[i]);
-
-                documentedContend.add( new DocumentedContent(method.getParameterTypes()[i], isJsonArray(method.getParameterTypes()[i]), APPLICATION_TYPE_JSON ));
-                schema.addAnyOfItem(parameterSchema);
+                schema.addAnyOf(createReferenceSchema(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]));
+                example.add( createExample(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]));
             }
-
-            schema.setExample(exampleObjects);
-            //For some reason I have to add requests as DocumentedContent. Otherwise, components seems to be not correctly created
-            openApiDocumentation.body(documentedContend);
-            openApiDocumentation.body(schema, APPLICATION_TYPE_JSON);
+            var mediaType = createMediaType().schema(schema);
+            mediaType.setExample(example);
+            requestBody.content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
         }
+
+        return Optional.of(requestBody);
     }
 
-    private static String createJsonSchema(Class<?> clazz) throws JsonProcessingException
+
+    private APIResponse createAPIResponseForException()
     {
-        var mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.registerModule(new Jdk8Module());
-
-
-        //There are other configuration options you can set.  This is the one I needed.
-        mapper.configure(WRITE_ENUMS_USING_TO_STRING, true);
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        // StdDateFormat is ISO8601 since jackson 2.9
-        mapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
-        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-
-        var jsonSchemaGenerator = new JsonSchemaGenerator(mapper);
-        var jsonSchema = jsonSchemaGenerator.generateJsonSchema(clazz);
-
-        return mapper.writeValueAsString(jsonSchema);
+        return createAPIResponse()
+                .description("BAD REQUEST")
+                .content(createContent().addMediaType(APPLICATION_TYPE_JSON,
+                        createMediaType()
+                                .schema(createReferenceSchema(BadRequestResponse.class, BadRequestResponse.class))
+                ));
     }
 
-    private static Object createExampleInstance(Class<?> clazz, Type genericType)
+
+    private APIResponse createAPIResponseForReturnType(Method method)
     {
-        if ( isJava8Date(clazz) )
+        if (method.getReturnType().equals(void.class))
         {
-            return java8DateExample(clazz);
+            return createAPIResponse().description("OK");
         }
 
-        return createGenericExample(clazz, genericType);
+        return createAPIResponse()
+                .description("OK")
+                .content(createContent().addMediaType(APPLICATION_TYPE_JSON,
+                        createMediaType()
+                                .schema(createReferenceSchema(method.getReturnType(), method.getGenericReturnType()))
+                ));
     }
 
-    private static Object java8DateExample(Class<?> clazz)
+
+    private static Schema createReferenceSchema(Class<?> clazz, Type genericType)
     {
-        if ( clazz.equals( LocalDate.class ) )
+        if (isBaseType(clazz))
         {
-            return LocalDate.of(1970, 1, 1).toString();
+            return createSchemaBaseType(clazz);
         }
 
-        if ( clazz.equals( LocalDateTime.class ) )
+        if ( isCollection(clazz) )
         {
-            return LocalDateTime.of(LocalDate.of(1970, 1, 1), LocalTime.of(0,0,0) ).toString();
-        }
-
-        if (  clazz.equals(ZonedDateTime.class) )
-        {
-            return ZonedDateTime.of(1970,1,1,0,0,0,0, ZoneId.systemDefault()).withFixedOffsetZone().toString();
-        }
-
-        return null;
-    }
-
-    private static Object createGenericExample(Class<?> clazz, Type genericType)
-    {
-        try
-        {
-            // We create a JsonSchema and try to create an instance of given class from it.
-            // Motivation is that if we cannot create an Object via class -> JsonSchema -> Object it is most unlikely that we can handle attribute in some meaningful way
-            var schemaString = createJsonSchema(clazz);
-            var jsonObject = JsonParser.parseString(schemaString).getAsJsonObject();
-            if (jsonObject == null || jsonObject.get("type") == null )
-            {
-                JexxaLogger.getLogger(OpenAPIConvention.class).warn("Could not create Json schema for given class `{}`", clazz.getName());
-                return null;
+            if (genericType != null ) {
+                return createSchema()
+                        .type(Schema.SchemaType.ARRAY)
+                        .items(createReferenceSchema(extractTypeFromCollection(genericType), null));
             }
-
-            var typeInformation = jsonObject.get("type");
-
-            //Handle JsonObject
-            if (typeInformation.getAsString().equals(JSON_OBJECT_TYPE))
-            {
-                if (Modifier.isAbstract( clazz.getModifiers()) || Modifier.isInterface( clazz.getModifiers() ) )
-                {
-                    JexxaLogger.getLogger(OpenAPIConvention.class).warn("Given class `{}` is abstract or an interface => Can not create an example object for OpenAPI", clazz.getName());
-                    return null;
-                }
-
-                return JSONManager.getJSONConverter().fromJson(jsonObject.toString(), clazz);
-            }
-
-            //Handle JsonArray
-            if (typeInformation.getAsString().equals(JSON_ARRAY_TYPE))
-            {
-                var result = new Object[1];
-                result[0] = createExampleInstance(extractTypeFromArray(genericType), null);
-                return result;
-            }
-
-            //Handle primitive values
-            return createPrimitive(clazz);
-        } catch (Exception | NoSuchMethodError e ) {
-            if (!clazz.isRecord()) { // Records include some isolation fields that can not be created and are not meaningful for a template. Therefore, we show this message only given type is not a record
-                JexxaLogger.getLogger(OpenAPIConvention.class).warn("[OpenAPI] Could not create an example Object {}", clazz.getName());
-            }
+            return createSchema().type(Schema.SchemaType.ARRAY);
         }
-        return null;
+
+        return createSchema()
+                .type(Schema.SchemaType.OBJECT)
+                .ref(clazz.getSimpleName());
     }
 
-
-    private static Object createPrimitive(Class<?> clazz)
+    private void addComponent(Class<?> clazz)
     {
-        if (isInteger(clazz) || isNumber(clazz))
+        // do not add build in data types as components
+        if (isBaseType(clazz) || clazz.equals(void.class))
         {
-            return 1;
+            return;
         }
 
-        if (isBoolean( clazz))
+        if (components.getSchemas() == null || !components.getSchemas().containsKey(clazz.getSimpleName()))
         {
-            return true;
+            var schema = createSchema();
+            schema.setType(Schema.SchemaType.OBJECT);
+            Stream.of(clazz.getDeclaredFields())
+                    .filter(element -> !Modifier.isStatic(element.getModifiers()))
+                    .forEach(element -> schema.addProperty(element.getName(), createComponentSchema(element.getType(), element.getGenericType())));
+            components.addSchema(clazz.getSimpleName(), schema);
         }
-
-        if (isString(clazz))
-        {
-            return "string";
-        }
-
-        return null;
     }
 
-    private static Schema<?> createSchema(Class<?> clazz, Type genericType)
+    private Schema createComponentSchema(Class<?> clazz, Type genericType)
+    {
+        if (isBaseType(clazz))
+        {
+            return createSchemaBaseType(clazz);
+        }
+
+        if ( isCollection(clazz) )
+        {
+            if (genericType != null) {
+                createComponentSchema(extractTypeFromCollection(genericType), null);
+                return createSchema().type(Schema.SchemaType.ARRAY).ref(extractTypeFromCollection(genericType).getSimpleName());
+            }
+            return createSchema().type(Schema.SchemaType.ARRAY);
+        }
+
+        var schema = createSchema();
+        schema.setType(Schema.SchemaType.OBJECT);
+        Stream.of(clazz.getDeclaredFields())
+            .filter(element -> !Modifier.isStatic(element.getModifiers()))
+            .forEach(element -> schema.addProperty(element.getName(),
+                    createComponentSchema(element.getType(), element.getGenericType())
+            ));
+
+        return schema;
+    }
+
+    private static Schema createSchemaBaseType(Class<?> clazz)
     {
         if ( isInteger(clazz) )
         {
-            return new IntegerSchema();
+            return createSchema().type(Schema.SchemaType.INTEGER);
         }
 
         if ( isNumber(clazz) )
         {
-            return new NumberSchema();
+            return createSchema().type(Schema.SchemaType.NUMBER);
         }
 
         if ( isBoolean(clazz) )
         {
-            return new BooleanSchema();
+            return createSchema().type(Schema.SchemaType.BOOLEAN);
         }
 
-        if ( isString(clazz) )
+        if ( isString(clazz) || isJava8Date(clazz))
         {
-            return new StringSchema();
+            return createSchema().type(Schema.SchemaType.STRING);
         }
 
-        if ( isJava8Date(clazz) )
-        {
-            return new StringSchema();
-        }
-
-        if ( isJsonArray(clazz) )
-        {
-            var schema = new ArraySchema();
-            schema.setItems(createSchema(extractTypeFromArray(genericType), null));
-            return schema;
-        }
-
-        var result = new ObjectSchema();
-
-        result.set$ref(clazz.getSimpleName());
-
-        return result;
+        throw new IllegalArgumentException("Given Class " + clazz.getSimpleName() + " is not a base type");
     }
 
+    private Object createExample(Class<?> clazz, Type genericType)
+    {
+        if ( isInteger(clazz) || isNumber(clazz))
+        {
+            return 0;
+        }
 
+        if ( isBoolean(clazz) )
+        {
+            return true;
+        }
+
+        if ( isString(clazz))
+        {
+            return "";
+        }
+        if ( isJava8Date(clazz))
+        {
+            return "2022-11-13T06:08:41Z";
+        }
+
+        if ( isCollection(clazz) && genericType != null)
+        {
+            var returnValue = new Object[1];
+            returnValue[0] = createExample(extractTypeFromCollection(genericType), genericType);
+            return returnValue;
+        }
+
+        return null;
+    }
     private static boolean isInteger(Class<?> clazz)
     {
         return clazz.equals(Short.class) ||
@@ -391,12 +371,17 @@ public class OpenAPIConvention
                 clazz.equals( char.class );
     }
 
-    private static boolean isJsonArray(Class<?> clazz)
+    private static boolean isBaseType(Class<?> clazz)
+    {
+        return isBoolean(clazz) || isString(clazz) || isNumber(clazz) || isJava8Date(clazz) || isInteger(clazz);
+    }
+
+    private static boolean isCollection(Class<?> clazz)
     {
         return clazz.isArray() || Collection.class.isAssignableFrom(clazz);
     }
 
-    private static Class<?> extractTypeFromArray(Type type)
+    private static Class<?> extractTypeFromCollection(Type type)
     {
         var parameterType = (ParameterizedType) type;
         return (Class<?>)parameterType.getActualTypeArguments()[0];
