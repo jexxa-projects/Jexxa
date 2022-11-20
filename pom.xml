@@ -39,7 +39,7 @@
     <maven.compiler.plugin>3.10.1</maven.compiler.plugin>
     <maven.deploy.plugin>3.0.0</maven.deploy.plugin>
     <maven.failsafe.plugin>3.0.0-M7</maven.failsafe.plugin>
-    <maven.install.plugin>3.0.1</maven.install.plugin>
+    <maven.install.plugin>3.1.0</maven.install.plugin>
     <maven.jar.plugin>3.3.0</maven.jar.plugin>
     <maven.resources.plugin>3.3.0</maven.resources.plugin>
     <maven.site.plugin>4.0.0-M3</maven.site.plugin>
@@ -73,10 +73,10 @@
     <argLine>-Xmx2048m -Xms1024m</argLine>
 
     <!-- version of compile dependencies -->
-    <classgraph.version>4.8.150</classgraph.version>
+    <classgraph.version>4.8.151</classgraph.version>
     <javalin.version>5.1.3</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
-    <slf4j.api.version>2.0.3</slf4j.api.version>
+    <slf4j.api.version>2.0.4</slf4j.api.version>
     <gson.version>2.10</gson.version>
     <commons.lang3.version>3.12.0</commons.lang3.version>
     <jackson.core.version>2.14.0</jackson.core.version>
@@ -89,7 +89,7 @@
     <junit.platform.launcher.version>1.9.1</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.9.1</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.9.1</junit.jupiter.params.version>
-    <slf4j.simple.version>2.0.3</slf4j.simple.version>
+    <slf4j.simple.version>2.0.4</slf4j.simple.version>
     <awaitility.version>4.2.0</awaitility.version>
     <archunit.version>1.0.0</archunit.version>
     <addend.version>1.3.0</addend.version>
