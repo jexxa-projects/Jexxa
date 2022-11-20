@@ -218,7 +218,7 @@ public class PortFactory
                 .filter(constructor -> !constructor.getParameterTypes()[0].isInterface())
                 .findFirst()
                 .<Class<?>>map(constructor -> constructor.getParameterTypes()[0])
-                .orElseThrow(() -> new RuntimeException("PortWrapper " + portAdapter.getSimpleName() + " requires unknown port"));
+                .orElseThrow(() -> new IllegalArgumentException("PortWrapper " + portAdapter.getSimpleName() + " requires unknown port"));
     }
 
     static class InvalidPortConfigurationException extends RuntimeException
