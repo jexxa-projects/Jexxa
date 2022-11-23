@@ -2,6 +2,7 @@ package io.jexxa.application.applicationservice;
 
 
 import io.jexxa.application.annotation.ValidApplicationService;
+import io.jexxa.application.domain.model.JexxaRecord;
 import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.application.domain.model.SpecialCasesValueObject;
 
@@ -112,6 +113,11 @@ public class SimpleApplicationService
     public SpecialCasesValueObject getSpecialCasesValueObject()
     {
         return  SpecialCasesValueObject.SPECIAL_CASES_VALUE_OBJECT;
+    }
+
+    public JexxaRecord getJexxaRecord()
+    {
+        return  new JexxaRecord(new String[0]);
     }
 
     /** The following static methods should NOT be offered by any DrivingAdapter according to our conventions  */

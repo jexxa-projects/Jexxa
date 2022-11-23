@@ -1,6 +1,7 @@
 package io.jexxa.infrastructure.drivingadapter.rest.openapi;
 
 
+import io.jexxa.utils.JexxaLogger;
 import io.smallrye.openapi.api.models.parameters.RequestBodyImpl;
 import io.smallrye.openapi.runtime.io.Format;
 import io.smallrye.openapi.runtime.io.OpenApiSerializer;
@@ -74,21 +75,27 @@ public class OpenAPIConvention
         {
             return;
         }
-        var operation = createOperation()
-                .operationId(method.getName())
-                .responses(
-                        createAPIResponses()
-                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_OK), createAPIResponseForReturnType(method))
-                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_BAD_REQUEST), createAPIResponseForException())
-                );
+        try {
+            var operation = createOperation()
+                    .operationId(method.getName())
+                    .responses(
+                            createAPIResponses()
+                                    .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_OK), createAPIResponseForReturnType(method))
+                                    .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_BAD_REQUEST), createAPIResponseForException())
+                    );
 
-        createRequestBody(method).ifPresent(operation::requestBody);
+            createRequestBody(method).ifPresent(operation::requestBody);
 
-        openAPI.getPaths().addPathItem(
-            resourcePath, createPathItem().GET(operation)
-        );
+            openAPI.getPaths().addPathItem(
+                    resourcePath, createPathItem().GET(operation)
+            );
 
-        addComponents(method);
+            addComponents(method);
+        } catch (ClassCastException e)
+        {
+                JexxaLogger.getLogger(OpenAPIConvention.class).error("Could not generate OpenAPI for method {}::{}. Please check attributes and return type.", method.getDeclaringClass().getName(),  method.getName());
+        }
+
     }
 
 
@@ -98,22 +105,27 @@ public class OpenAPIConvention
         {
             return;
         }
-        var operation = createOperation()
-                .operationId(method.getName())
-                .responses(
-                        createAPIResponses()
-                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_OK), createAPIResponseForReturnType(method))
-                                .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_BAD_REQUEST), createAPIResponseForException())
-                );
+        try {
+            var operation = createOperation()
+                    .operationId(method.getName())
+                    .responses(
+                            createAPIResponses()
+                                    .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_OK), createAPIResponseForReturnType(method))
+                                    .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_BAD_REQUEST), createAPIResponseForException())
+                    );
 
 
-        createRequestBody(method).ifPresent(operation::requestBody);
+            createRequestBody(method).ifPresent(operation::requestBody);
 
-        openAPI.getPaths().addPathItem(
-                resourcePath, createPathItem().POST(operation)
-        );
+            openAPI.getPaths().addPathItem(
+                    resourcePath, createPathItem().POST(operation)
+            );
 
-        addComponents(method);
+            addComponents(method);
+        } catch (ClassCastException e)
+        {
+            JexxaLogger.getLogger(OpenAPIConvention.class).error("Could not generate OpenAPI for method {}::{}. Please check attributes and return type.", method.getDeclaringClass().getName(),  method.getName());
+        }
     }
 
     public boolean isDisabled()
@@ -144,7 +156,7 @@ public class OpenAPIConvention
 
         if ( isCollection(method.getReturnType()) )
         {
-            addComponent(extractTypeFromCollection(method.getGenericReturnType()));
+            addComponent(extractTypeFromCollection(method.getReturnType(), method.getGenericReturnType()));
         } else  {
             addComponent(method.getReturnType());
         }
@@ -224,7 +236,7 @@ public class OpenAPIConvention
             if (genericType != null ) {
                 return createSchema()
                         .type(Schema.SchemaType.ARRAY)
-                        .items(createReferenceSchema(extractTypeFromCollection(genericType), null));
+                        .items(createReferenceSchema(extractTypeFromCollection(clazz, genericType), null));
             }
             return createSchema().type(Schema.SchemaType.ARRAY);
         }
@@ -263,8 +275,13 @@ public class OpenAPIConvention
         if ( isCollection(clazz) )
         {
             if (genericType != null) {
-                createComponentSchema(extractTypeFromCollection(genericType), null);
-                return createSchema().type(Schema.SchemaType.ARRAY).ref(extractTypeFromCollection(genericType).getSimpleName());
+                createComponentSchema(extractTypeFromCollection(clazz, genericType), null);
+                var extractedType = extractTypeFromCollection(clazz, genericType);
+                if (isBaseType(extractedType)) {
+                    return createSchema().type(Schema.SchemaType.ARRAY).items(createSchemaBaseType(extractedType));
+                } else {
+                    return createSchema().type(Schema.SchemaType.ARRAY).ref(extractedType.getSimpleName());
+                }
             }
             return createSchema().type(Schema.SchemaType.ARRAY);
         }
@@ -329,7 +346,7 @@ public class OpenAPIConvention
         if ( isCollection(clazz) && genericType != null)
         {
             var returnValue = new Object[1];
-            returnValue[0] = createExample(extractTypeFromCollection(genericType), genericType);
+            returnValue[0] = createExample(extractTypeFromCollection(clazz, genericType), genericType);
             return returnValue;
         }
 
@@ -381,10 +398,14 @@ public class OpenAPIConvention
         return clazz.isArray() || Collection.class.isAssignableFrom(clazz);
     }
 
-    private static Class<?> extractTypeFromCollection(Type type)
+    private static Class<?> extractTypeFromCollection(Class<?> clazz, Type type)
     {
-        var parameterType = (ParameterizedType) type;
-        return (Class<?>)parameterType.getActualTypeArguments()[0];
+       if (clazz.isArray()) {
+            return clazz.getComponentType();
+        } else {
+           var parameterType = (ParameterizedType) type;
+           return (Class<?>) parameterType.getActualTypeArguments()[0];
+        }
     }
 
     @SuppressWarnings({"java:S1104", "java:S116", "java:S1170","unused"})
