@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[5.5.1] - 2022-11-23
+### Fixed
+- Generation of OpenAPI documentation for arrays of base types, such as String[] 
+- Updated dependencies
+ 
 ## \[5.5.0] - 2022-11-20
 ### Added
 - Jexxa-Core: Provide possibility to configure user.timezone via jexxa-application.properties value `io.jexxa.user.timezone`. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information
