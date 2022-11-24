@@ -35,7 +35,6 @@ import java.util.List;
  *  <li> In all other cases </li>
  *  </ul>
  */
-@SuppressWarnings("ClassCanBeRecord")
 class RESTfulRPCConvention
 {
     private final Object object;
