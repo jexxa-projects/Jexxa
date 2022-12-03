@@ -61,7 +61,7 @@ class HttpsRESTfulRPCAdapterIT
         properties.put(JexxaWebProperties.JEXXA_REST_HOST, defaultHost);
         properties.put(JexxaWebProperties.JEXXA_REST_HTTPS_PORT, httpsPort.toString());
         properties.put(JexxaWebProperties.JEXXA_REST_KEYSTORE_PASSWORD, "test123");
-        properties.put(JexxaWebProperties.JEXXA_REST_KEYSTORE, "keystore.jks");
+        properties.put(JexxaWebProperties.JEXXA_REST_KEYSTORE, "certificate/keystore.jks");
 
         var objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
         objectUnderTest.register(simpleApplicationService);
