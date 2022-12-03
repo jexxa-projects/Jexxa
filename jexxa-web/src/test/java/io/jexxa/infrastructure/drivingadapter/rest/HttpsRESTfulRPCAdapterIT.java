@@ -14,11 +14,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import javax.net.ssl.SSLContext;
-import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.util.Properties;
 import java.util.stream.Stream;
 
@@ -39,16 +37,9 @@ class HttpsRESTfulRPCAdapterIT
     }
 
     @BeforeEach
-    void initTest() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException, CertificateException, IOException
+    void initTest() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException
     {
-        // NOTE: To run this test we need to create a truststore has described here https://magicmonster.com/kb/prg/java/ssl/pkix_path_building_failed/
-
-        //Arrange
-        SSLContext sslContext =  new SSLContextBuilder().loadTrustMaterial(
-                HttpsRESTfulRPCAdapterIT.class.getResource("/trustStore.jks"), //path to jks file
-                "changeit".toCharArray(), //enters the truststore password for use
-                new TrustSelfSignedStrategy() //will trust own CA and all self-signed certs
-        ).build();
+        SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(new TrustSelfSignedStrategy()).build();
 
         CloseableHttpClient customHttpClient = HttpClients.custom().setSSLContext(sslContext)
                 .setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
