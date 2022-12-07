@@ -24,13 +24,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Tag(TestConstants.UNIT_TEST)
 class BoundedContextTest
 {
-    private final JexxaMain jexxaMain = new JexxaMain(JexxaTestApplication.class);
+    private JexxaMain jexxaMain;
     private BoundedContext objectUnderTest;
 
 
     @BeforeEach
     void init()
     {
+        jexxaMain = new JexxaMain(JexxaTestApplication.class);
+
         objectUnderTest = jexxaMain
                 .disableBanner()
                 .getBoundedContext();
