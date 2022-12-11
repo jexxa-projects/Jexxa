@@ -94,7 +94,7 @@
     <slf4j.simple.version>2.0.5</slf4j.simple.version>
     <awaitility.version>4.2.0</awaitility.version>
     <archunit.version>1.0.1</archunit.version>
-    <addend.version>1.3.0</addend.version>
+    <addend.version>2.0.0</addend.version>
 
     <!-- version of maven dependencies for tutorials -->
     <aspectj.maven.plugin.version>1.12.6</aspectj.maven.plugin.version>
