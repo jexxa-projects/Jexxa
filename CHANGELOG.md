@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[5.5.3] - 2022-12-11
+### Fixed
+- Updated dependencies
+
 ## \[5.5.2] - 2022-12-03
 ### Fixed
 - Removed unnecessary transitive dependency snakeyaml due to security issue [CVE-2022-41854](https://devhub.checkmarx.com/cve-details/CVE-2022-41854/)
