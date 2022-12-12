@@ -25,6 +25,7 @@ import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTIN
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
@@ -120,6 +121,7 @@ class MessageListenerIT
         @JMSConfiguration(destination = QUEUE_DESTINATION, messagingType = JMSConfiguration.MessagingType.QUEUE)
         public void onMessage(JexxaValueObject jexxaValueObject)
         {
+            assertTrue(messageContains("valueInPercent"));
             this.jexxaValueObject = jexxaValueObject;
         }
 
