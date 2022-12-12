@@ -5,7 +5,6 @@ import io.jexxa.TestConstants;
 import io.jexxa.adapterapi.drivingadapter.HealthCheck;
 import io.jexxa.application.JexxaTestApplication;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -40,18 +39,22 @@ class BoundedContextTest
     }
 
     @Test
-    @Disabled
     void shutdown()
     {
         //Arrange
         var thread = new Thread(jexxaMain::run);
         thread.start();
 
-        await().atMost(1, TimeUnit.SECONDS).until(() -> (objectUnderTest != null && objectUnderTest.isRunning()));
+        System.out.println(">Await");
+        await().atMost(1, TimeUnit.SECONDS)
+                .until(() -> (objectUnderTest != null && objectUnderTest.isRunning()));
+        System.out.println("<Await");
 
         //Act
         objectUnderTest.stop();
+        System.out.println(">stop");
         assertTimeout(Duration.ofSeconds(1), (Executable) thread::join);
+        System.out.println(">AssertTimout");
     }
 
     @Test
