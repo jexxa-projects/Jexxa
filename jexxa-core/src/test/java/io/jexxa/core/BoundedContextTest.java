@@ -5,6 +5,7 @@ import io.jexxa.TestConstants;
 import io.jexxa.adapterapi.drivingadapter.HealthCheck;
 import io.jexxa.application.JexxaTestApplication;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -39,6 +40,7 @@ class BoundedContextTest
     }
 
     @Test
+    @Disabled
     void shutdown()
     {
         //Arrange
