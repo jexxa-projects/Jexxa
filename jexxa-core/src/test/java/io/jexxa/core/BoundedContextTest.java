@@ -45,16 +45,14 @@ class BoundedContextTest
         var thread = new Thread(jexxaMain::run);
         thread.start();
 
-        System.out.println(">Await");
         await().atMost(1, TimeUnit.SECONDS)
                 .until(() -> (objectUnderTest != null && objectUnderTest.isRunning()));
-        System.out.println("<Await");
 
         //Act
-        objectUnderTest.stop();
-        System.out.println(">stop");
+        jexxaMain.stop();
+
+        //Assert
         assertTimeout(Duration.ofSeconds(1), (Executable) thread::join);
-        System.out.println(">AssertTimout");
     }
 
     @Test
