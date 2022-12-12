@@ -49,7 +49,7 @@ class BoundedContextTest
                 .until(() -> (objectUnderTest != null && objectUnderTest.isRunning()));
 
         //Act
-        jexxaMain.stop();
+        objectUnderTest.stop();
 
         //Assert
         assertTimeout(Duration.ofSeconds(1), (Executable) thread::join);

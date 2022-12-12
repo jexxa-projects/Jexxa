@@ -58,7 +58,7 @@ public final class BoundedContext
     }
 
 
-    public boolean isRunning()
+    public synchronized boolean isRunning()
     {
         return isRunning;
     }
@@ -93,6 +93,11 @@ public final class BoundedContext
 
     synchronized JexxaMain waitForShutdown()
     {
+        if (!isRunning)
+        {
+            return jexxaMain;
+        }
+
         setupSignalHandler();
         isWaiting = true;
 
