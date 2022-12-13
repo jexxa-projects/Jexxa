@@ -432,6 +432,11 @@ public final class JexxaMain
         compositeDrivingAdapter.add(drivingAdapter);
     }
 
+    PortFactory getPortFactory()
+    {
+        return portFactory;
+    }
+
     <T> void addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
     {
         var instance = portFactory.getInstanceOf(bootstrapService, properties);

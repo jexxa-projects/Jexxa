@@ -24,6 +24,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
+import java.util.concurrent.TimeUnit;
+
 import static io.jexxa.TestConstants.UNIT_TEST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -43,7 +45,8 @@ class JexxaMainTest
     {
         RepositoryManager.setDefaultStrategy(IMDBRepository.class);
         objectUnderTest = new JexxaMain(JexxaTestApplication.class);
-        objectUnderTest.disableBanner();
+        objectUnderTest.logUnhealthyDiagnostics(1, TimeUnit.SECONDS)
+                .disableBanner();
     }
 
     @AfterEach
@@ -211,6 +214,18 @@ class JexxaMainTest
         assertTrue(jexxaApplicationService.getAggregateCount() > 0);
     }
 
+    @Test
+    void bootstrapAnnotation()
+    {
+        //Arrange
+        RepositoryManager.setDefaultStrategy(IMDBRepository.class);
+
+        //Act
+        var portFactory = objectUnderTest.bootstrapAnnotation(ValidApplicationService.class).getPortFactory();
+
+        //Assert
+        assertTrue(portFactory.isAvailable(SimpleApplicationService.class));
+    }
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void getInstanceOfInvalidPort()
