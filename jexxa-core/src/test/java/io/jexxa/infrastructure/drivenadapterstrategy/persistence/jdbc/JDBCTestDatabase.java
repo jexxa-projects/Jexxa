@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryConfig.repositoryConfig;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryConfig.jdbcRepositoryConfig;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.DOUBLE_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.FLOAT_TYPE;
 import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.JDBCTestSchema.INTEGER_TYPE;
@@ -51,12 +51,7 @@ public final class JDBCTestDatabase
 
     @SuppressWarnings("unused")
     public static Stream<Properties> repositoryConfigJDBC() {
-        return repositoryConfig("jexxa");
-    }
-
-    public static Properties getPostgresProperties()
-    {
-        return repositoryConfigJDBC().findFirst().orElseThrow();
+        return jdbcRepositoryConfig("jexxa");
     }
 
 

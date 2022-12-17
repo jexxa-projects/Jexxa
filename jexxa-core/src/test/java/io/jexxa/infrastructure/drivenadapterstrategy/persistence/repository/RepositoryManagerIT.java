@@ -12,7 +12,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.util.Properties;
 
 import static io.jexxa.TestConstants.INTEGRATION_TEST;
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCTestDatabase.getPostgresProperties;
+import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.RepositoryConfig.postgresRepositoryConfig;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -49,7 +49,7 @@ class RepositoryManagerIT
         //Arrange
         RepositoryManager.setDefaultStrategy(null);
 
-        var postgresProperties = getDefaultProperties();
+        var postgresProperties = postgresRepositoryConfig("jexxa");
 
         //Act
         var result =  RepositoryManager.getRepository(JexxaEntity.class,
@@ -66,7 +66,7 @@ class RepositoryManagerIT
     void validateDefaultStrategyOverProperties()
     {
         //Arrange: Define a JDBC connection in properties but also set a default strategy
-        var postgresProperties = getDefaultProperties();
+        var postgresProperties = postgresRepositoryConfig("jexxa");
 
         //Act
         RepositoryManager.setDefaultStrategy(IMDBRepository.class);
@@ -84,7 +84,7 @@ class RepositoryManagerIT
     void validateSpecificStrategyOverDefaultStrategy()
     {
         //Arrange: Define a JDBC connection in properties but also set a default strategy
-        var postgresProperties = getDefaultProperties();
+        var postgresProperties = postgresRepositoryConfig("jexxa");
 
         RepositoryManager.setDefaultStrategy(IMDBRepository.class);  // Set a default strategy which is used in case no specific strategy is defines
 
@@ -98,10 +98,5 @@ class RepositoryManagerIT
         //Assert
         assertNotNull(result);
         assertEquals(JDBCKeyValueRepository.class.getName(), result.getClass().getName() );
-    }
-
-    private Properties getDefaultProperties()
-    {
-        return getPostgresProperties();
     }
 }

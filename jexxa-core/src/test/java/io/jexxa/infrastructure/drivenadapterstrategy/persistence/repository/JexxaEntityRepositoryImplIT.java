@@ -31,6 +31,7 @@ class JexxaEntityRepositoryImplIT
     private List<JexxaEntity> aggregateList;
     private static final String ALL_REPOSITORY_CONFIGS = "repositoryConfig";
 
+
     @BeforeEach
     void initTests()
     {
