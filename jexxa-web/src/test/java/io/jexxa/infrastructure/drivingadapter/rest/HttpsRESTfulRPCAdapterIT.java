@@ -59,6 +59,7 @@ class HttpsRESTfulRPCAdapterIT
         var defaultHost = "0.0.0.0";
 
         properties.put(JexxaWebProperties.JEXXA_REST_HOST, defaultHost);
+        properties.put(JexxaWebProperties.JEXXA_REST_PORT, Integer.toString(0));
         properties.put(JexxaWebProperties.JEXXA_REST_HTTPS_PORT, httpsPort.toString());
         properties.put(JexxaWebProperties.JEXXA_REST_KEYSTORE_PASSWORD, "test123");
         properties.put(JexxaWebProperties.JEXXA_REST_KEYSTORE, "certificate/keystore.jks");
@@ -68,6 +69,8 @@ class HttpsRESTfulRPCAdapterIT
         objectUnderTest.start();
 
         String restPath = "https://localhost:" + objectUnderTest.getHTTPSPort() + "/SimpleApplicationService/";
+
+        objectUnderTest.bannerInformation(properties);
 
         //Act
         Integer result = Unirest.get(restPath + METHOD_GET_SIMPLE_VALUE)
