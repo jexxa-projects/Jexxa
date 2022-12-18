@@ -1,6 +1,6 @@
 package io.jexxa.infrastructure.drivingadapter.rest;
 
-import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.javalin.Javalin;
@@ -326,9 +326,10 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     private Object[] deserializeParameters(String jsonString, Method method)
     {
         try {
-            if (jsonString == null ||
-                    jsonString.isEmpty() ||
-                    method.getParameterCount() == 0) {
+            if ( jsonString == null
+                    || jsonString.isEmpty()
+                    || method.getParameterCount() == 0)
+            {
                 return new Object[]{};
             }
 
@@ -336,22 +337,15 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
 
             // In case we have more than one attribute, we assume a JSonArray
             if (method.getParameterCount() > 1) {
-                if (!jsonElement.isJsonArray()) {
-                    throw new IllegalArgumentException("Multiple method attributes musst be passed inside a JSonArray");
-                }
                 return readArray(jsonElement.getAsJsonArray(), method);
             } else {
-                var result = new Object[1];
-                result[0] = jsonConverter.fromJson(jsonString, method.getParameterTypes()[0]);
-                return result;
+                return new Object[]{jsonConverter.fromJson(jsonString, method.getParameterTypes()[0])};
             }
         }
-        catch (IllegalArgumentException e)
-        {
+        catch (IllegalArgumentException e)  {
             throw e;
         }
-        catch (RuntimeException e)
-        {
+        catch (RuntimeException e)  {
             if (e.getCause() != null && e.getCause().getMessage() != null)
             {
                 throw new IllegalArgumentException("Could not deserialize attributes for method " + method.getName() + " Reason: " + e.getCause().getMessage(), e );
@@ -361,8 +355,13 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         }
     }
 
-    private Object[] readArray(JsonArray jsonArray, Method method)
+    private Object[] readArray(JsonElement jsonElement, Method method)
     {
+        if (!jsonElement.isJsonArray()) {
+            throw new IllegalArgumentException("Multiple method attributes musst be passed inside a JSonArray");
+        }
+        var jsonArray = jsonElement.getAsJsonArray();
+
         if (jsonArray.size() != method.getParameterCount())
         {
             throw new IllegalArgumentException("Invalid Number of parameters for method " + method.getName());
