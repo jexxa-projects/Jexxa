@@ -79,12 +79,12 @@ Maven:
     <dependency>
       <groupId>io.jexxa</groupId>
       <artifactId>jexxa-web</artifactId>
-      <version>5.5.3</version>
+      <version>5.5.4</version>
     </dependency>
     <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-simple</artifactId>
-        <version>2.0.5</version>
+        <version>2.0.6</version>
     </dependency>
 </dependencies>
 ```
@@ -92,8 +92,8 @@ Maven:
 Gradle:
 
 ```groovy
-compile "io.jexxa:jexxa-web:5.5.3"
-compile "org.slf4j:slf4j-simple:2.0.5"
+compile "io.jexxa:jexxa-web:5.5.4"
+compile "org.slf4j:slf4j-simple:2.0.6"
 ``` 
 
 ### Configure your Jexxa application  
