@@ -10,7 +10,6 @@ public record VersionInfo(String version, String repository, String projectName,
     public static class VersionInfoBuilder {
         private String version;
         private String repository;
-
         private String projectName;
         private String buildTimestamp;
 

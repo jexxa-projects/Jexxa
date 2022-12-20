@@ -16,7 +16,6 @@ public final class BoundedContext
 {
     private boolean isRunning = false;
     private boolean isWaiting = false;
-
     private final String contextName;
     private final Clock clock = Clock.systemUTC();
     private final Instant startTime;
