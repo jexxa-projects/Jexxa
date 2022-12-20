@@ -24,7 +24,7 @@ a|*Module*
 a|*Description*
 
 a| Jexxa-Adapter-API
-a| Defines the API for driving adapters. In case you need to implement a new driving adapter, you should use this dependency.
+a| Defines the API for driving adapters. In case you need to implement a new driving adapter, you have to use this dependency.
 
 a| Jexxa-Core
 a| Provides the core functionality of Jexxa as described in <<Jexxa Features>>. In case you write a new business application, you will need this package.
@@ -66,6 +66,8 @@ The steps for configuring your application are always similar as you can see in 
 
 3. Startup your application using `JexxaMain.run()`. Please note that this method implements a *fail-fast* approach. If this method
 is successfully executed, your application is up and running. In more detail, a connection to all involved technology stacks such as a database or messaging system is established, all required objects are successfully instantiated in order to execute your business logic. In case of any errors, this method will fail.
+
+NOTE: Jexxa provides a reconnection mechanism for all provided driving- and driven-adapter. But this reconnection mechanism is only used after an initial successfully start.
 
 
 === BoundedContext
@@ -119,7 +121,7 @@ Jexxa defines some conventions for realizing implicit constructor injection whic
 The `RESTfulRPCAdapter` is a simple RPC mechanism utilizing REST. Based on the https://martinfowler.com/articles/richardsonMaturityModel.html[REST maturity model] from Richardson it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST on a higher maturity level.
 
 [TIP]
-When you start using this adapter, I recommend enabling OpenAPI support at least during development as described https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStoreJ/README-OPENAPI.md[here]. It simplifies understanding the REST API.
+When you start using this adapter, I recommend enabling OpenAPI support at least during development as described https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README-OPENAPI.md[here]. It simplifies understanding the REST API.
 
 This adapter uses following conventions:
 
