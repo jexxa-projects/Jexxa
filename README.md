@@ -77,10 +77,11 @@ Maven:
 ```xml
 <dependencies>
     <dependency>
-      <groupId>io.jexxa</groupId>
-      <artifactId>jexxa-web</artifactId>
-      <version>5.5.4</version>
+       <groupId>io.jexxa</groupId>
+       <artifactId>jexxa-web</artifactId>
+       <version>5.5.4</version>
     </dependency>
+    
     <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-simple</artifactId>
