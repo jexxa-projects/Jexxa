@@ -5,6 +5,21 @@ import java.util.Arrays;
 public final class PortConvention
 {
 
+    /**
+     * Validates if given clazz matches the convention of a port.
+     * If one of the conventions are not matched an exception is thrown:
+     * <t>
+     *     <li>
+     *         Exactly one public constructor.
+     *     </li>
+     *     <li>
+     *         Attributes of the constructor must be interfaces
+     *     </li>
+     * </t>
+     *
+     * @param clazz that should be used as a Port
+     * @param <T> generic type of the port
+     */
     public static <T> void validate(Class<T> clazz)
     {
         if ( clazz.getConstructors().length == 0)
@@ -17,12 +32,12 @@ public final class PortConvention
             throw new PortConventionViolation("More than one public constructor available for Port : " + clazz.getName());
         }
 
-        var result = Arrays
-                .stream(clazz.getConstructors()[0].getParameterTypes())
+        var nonInterfaceAttribute =
+                Arrays.stream(clazz.getConstructors()[0].getParameterTypes())
                 .filter(attribute -> !attribute.isInterface())
-                .toList();
+                .findAny();
 
-        if (!result.isEmpty())
+        if (nonInterfaceAttribute.isPresent())
         {
             throw new PortConventionViolation(clazz);
         }
