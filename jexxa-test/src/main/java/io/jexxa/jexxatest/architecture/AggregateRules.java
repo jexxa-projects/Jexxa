@@ -16,6 +16,24 @@ import static io.jexxa.jexxatest.architecture.PackageName.APPLICATIONSERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_SERVICE;
 
+/**
+ * Validates the following rules for @Aggregates:
+ * <li>
+ *     Only classes annotated with @Aggregate are allowed to have other aggregates as members.
+ * </li>
+ * <li>
+ *     Only classes annotated with @Aggregate or inner classes (such as *Factories) have mutable fields.
+ *     All other classes must have immutable fields.
+ * </li>
+ * <li>
+ *     Only methods of a Repository accepts an Aggregate as method parameter.
+ * </li>
+ * <li>
+ *     Only methods of a Repository or an Aggregate may return an Aggregate. Classes that are annotated with Application-,
+ *     Domain-, or InfrastructureService are not allowed to return or expose an Aggregate.
+ *  </li>
+ *
+ */
 public class AggregateRules extends ProjectContent {
 
     @SuppressWarnings("unused")
