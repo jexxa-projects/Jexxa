@@ -24,6 +24,13 @@ public class BootstrapService<T>
         return jexxaMain;
     }
 
+    @CheckReturnValue
+    public JexxaMain and()
+    {
+        jexxaMain.addBootstrapService(bootstrapServiceClass, noInitFunction());
+        return jexxaMain;
+    }
+
     public static <T> Consumer<T> noInitFunction()
     {
         return element -> { /* just an empty function */};
