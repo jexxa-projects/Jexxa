@@ -45,8 +45,6 @@ import static io.jexxa.infrastructure.drivingadapter.rest.RESTfulRPCConvention.c
 
 public final class RESTfulRPCAdapter implements IDrivingAdapter
 {
-
-
     private final JSONConverter jsonConverter = JSONManager.getJSONConverter();
     private final Properties properties;
     private Javalin javalin;
