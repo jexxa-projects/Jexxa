@@ -41,24 +41,24 @@ public class JexxaTest
     {
         Objects.requireNonNull(jexxaMain);
         this.jexxaMain = jexxaMain;
-        jexxaMain.addProperties( loadProperties() );
+        jexxaMain.addProperties( loadJexxaTestProperties() );
 
         initForUnitTests();
     }
 
     private JexxaTest()
     {
-        jexxaMain.addProperties( loadProperties() );
+        jexxaMain.addProperties( loadJexxaTestProperties() );
 
         initForUnitTests();
     }
 
     public static synchronized <T> JexxaTest getJexxaTest(Class<T> jexxaApplication)
     {
-            if (jexxaMain == null) {
-                jexxaMain = new JexxaMain(jexxaApplication);
-            }
-            return new JexxaTest();
+        if (jexxaMain == null) {
+            jexxaMain = new JexxaMain(jexxaApplication);
+        }
+        return new JexxaTest();
     }
 
 
@@ -112,13 +112,13 @@ public class JexxaTest
         MessageRecorderManager.clear();
     }
 
-    private Properties loadProperties()
+    static Properties loadJexxaTestProperties()
     {
         var properties = new Properties();
         Optional.ofNullable(JexxaMain.class.getResourceAsStream(JEXXA_TEST_PROPERTIES))
                 .ifPresentOrElse(
                         ThrowingConsumer.exceptionLogger(properties::load),
-                        () -> JexxaLogger.getLogger(this.getClass()).warn("Properties file '{}' not found", JEXXA_TEST_PROPERTIES)
+                        () -> JexxaLogger.getLogger(JexxaTest.class).warn("Properties file '{}' not found", JEXXA_TEST_PROPERTIES)
                 );
         return properties;
     }
