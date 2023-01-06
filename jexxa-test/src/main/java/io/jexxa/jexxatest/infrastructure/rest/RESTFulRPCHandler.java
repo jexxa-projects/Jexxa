@@ -1,7 +1,5 @@
 package io.jexxa.jexxatest.infrastructure.rest;
 
-import io.jexxa.jexxatest.JexxaIntegrationTest;
-import io.jexxa.utils.JexxaLogger;
 import kong.unirest.Unirest;
 
 import java.util.Properties;
@@ -24,8 +22,6 @@ public class RESTFulRPCHandler
 
     public <T> T getRequest(String method, Class<T> returnType)
     {
-        JexxaLogger.getLogger(JexxaIntegrationTest.class).error("Invoke method: " + restPrefix + method);
-
         return Unirest.get(restPrefix + method)
                 .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
                 .asObject(returnType)
@@ -34,8 +30,6 @@ public class RESTFulRPCHandler
 
     public <T> T postRequest(String method, Class<T> returnType, Object parameter)
     {
-        JexxaLogger.getLogger(JexxaIntegrationTest.class).error("Invoke method: " + restPrefix + method);
-
         return Unirest.post(restPrefix + method)
                 .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
                 .body(parameter)
@@ -44,8 +38,6 @@ public class RESTFulRPCHandler
 
     public <T> T postRequest(String method, Class<T> returnType, Object... parameters)
     {
-        JexxaLogger.getLogger(JexxaIntegrationTest.class).error("Invoke method: " + restPrefix + method);
-
         return Unirest.post(restPrefix + method)
                 .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
                 .body(Stream.of(parameters).toArray())
@@ -61,8 +53,6 @@ public class RESTFulRPCHandler
         if (properties.containsKey(JEXXA_REST_HTTPS_PORT)){
             return "https://localhost:" + properties.getProperty(JEXXA_REST_HTTPS_PORT) + "/" + clazz.getSimpleName() + "/";
         }
-
-        properties.forEach((key, value)-> JexxaLogger.getLogger(JexxaIntegrationTest.class).error(key +" -> " + value));
 
         throw new IllegalArgumentException("Properties do not contain valid HTTP/HTTPS configuration");
     }

@@ -18,6 +18,13 @@
         </license>
     </licenses>
 
+    <properties>
+        <context.command.start>
+            -jar -Dio.jexxa.config.import=./src/test/resources/jexxa-test.properties ${project.build.directory}/${project.artifactId}-jar-with-dependencies.jar
+        </context.command.start>
+        <maven.exec.plugin>3.1.0</maven.exec.plugin>
+    </properties>
+
 
     <dependencies>
         <dependency>
@@ -79,6 +86,12 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <version>${junit.jupiter.params.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jexxa</groupId>
+            <artifactId>jexxa-web</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
