@@ -55,8 +55,9 @@ public class JexxaIntegrationTestIT {
         var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
 
         //Act
-        simpleApplicationService.postRequest("setSimpleValue", Void.class, 5);
-        var result = simpleApplicationService.getRequest("getSimpleValue", Integer.class);
+        simpleApplicationService.postRequest(Void.class,"setSimpleValue", 5);
+
+        var result = simpleApplicationService.getRequest(Integer.class, "getSimpleValue");
 
         //Assert
         assertEquals(5, result);
@@ -71,8 +72,8 @@ public class JexxaIntegrationTestIT {
         var newValue = new JexxaValueObject(44);
 
         //Act
-        simpleApplicationService.postRequest("setSimpleValueObject", Void.class, newValue);
-        var result = simpleApplicationService.getRequest("getSimpleValueObject", JexxaValueObject.class);
+        simpleApplicationService.postRequest(Void.class, "setSimpleValueObject", newValue);
+        var result = simpleApplicationService.getRequest(JexxaValueObject.class, "getSimpleValueObject");
 
         //Assert
         assertEquals(newValue, result);
@@ -86,13 +87,28 @@ public class JexxaIntegrationTestIT {
         var messageList = List.of("message1", "message2", "message3");
 
         //Act
-        simpleApplicationService.postRequest("setMessages", Void.class, messageList);
-        var result = simpleApplicationService.getRequest("getMessages", new GenericType<List<String>>(){});
+        simpleApplicationService.postRequest(Void.class,"setMessages", messageList);
+        var result = simpleApplicationService.getRequest(new GenericType<List<String>>(){}, "getMessages");
 
         //Assert
         assertEquals(messageList, result);
     }
 
+    @Test
+    void testSetSimpleValueObjectTwice()
+    {
+        //Arrange
+        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+
+        //Act
+        simpleApplicationService.postRequest(Void.class, "setSimpleValueObjectTwice",
+                        new JexxaValueObject(44), new JexxaValueObject(88));
+
+        var result = simpleApplicationService.getRequest(JexxaValueObject.class, "getSimpleValueObject");
+
+        //Assert
+        assertEquals(new JexxaValueObject(88), result);
+    }
 
     static void runApplication()
     {

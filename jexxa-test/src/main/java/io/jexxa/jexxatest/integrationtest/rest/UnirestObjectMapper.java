@@ -1,4 +1,4 @@
-package io.jexxa.jexxatest.infrastructure.integrationtest.rest;
+package io.jexxa.jexxatest.integrationtest.rest;
 
 import io.jexxa.utils.json.JSONManager;
 import kong.unirest.GenericType;

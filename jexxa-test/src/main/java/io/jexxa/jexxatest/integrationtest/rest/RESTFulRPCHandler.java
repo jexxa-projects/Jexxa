@@ -1,4 +1,4 @@
-package io.jexxa.jexxatest.infrastructure.integrationtest.rest;
+package io.jexxa.jexxatest.integrationtest.rest;
 
 import kong.unirest.GenericType;
 import kong.unirest.Unirest;
@@ -21,7 +21,7 @@ public class RESTFulRPCHandler
         this.restPrefix = getRestPrefix(properties, endpointClazz);
     }
 
-    public <T> T getRequest(String method, Class<T> returnType)
+    public <T> T getRequest(Class<T> returnType, String method)
     {
         return Unirest.get(restPrefix + method)
                 .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
@@ -29,15 +29,15 @@ public class RESTFulRPCHandler
                 .getBody();
     }
 
-    public <T> T getRequest(String method, GenericType<T> genericType)
+    public <T> T getRequest(GenericType<T> genericReturnType, String method)
     {
         return Unirest.get(restPrefix + method)
                 .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
-                .asObject(genericType)
+                .asObject(genericReturnType)
                 .getBody();
     }
 
-    public <T> T postRequest(String method, Class<T> returnType, Object parameter)
+    public <T> T postRequest(Class<T> returnType, String method, Object parameter)
     {
         return Unirest.post(restPrefix + method)
                 .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
@@ -45,7 +45,7 @@ public class RESTFulRPCHandler
                 .asObject(returnType).getBody();
     }
 
-    public <T> T postRequest(String method, Class<T> returnType, Object... parameters)
+    public <T> T postRequest(Class<T> returnType, String method, Object... parameters)
     {
         return Unirest.post(restPrefix + method)
                 .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())

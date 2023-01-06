@@ -126,8 +126,7 @@ class RESTfulRPCAdapterIT
     }
 
 
-    @Test
-        // RPC call test: void setSimpleValue(44)
+    @Test  // RPC call test: void setSimpleValue(44)
     void testPOSTCommandWithOneAttribute()
     {
         //Arrange
@@ -149,8 +148,7 @@ class RESTfulRPCAdapterIT
         assertEquals(newValue, newResult.intValue());
     }
 
-    @Test
-        // RPC call test: void setSimpleValueObject(SimpleValueObject(44))
+    @Test // RPC call test: void setSimpleValueObject(SimpleValueObject(44))
     void testPOSTCommandWithOneObject()
     {
         //Arrange
@@ -172,8 +170,7 @@ class RESTfulRPCAdapterIT
         assertEquals(newValue.getValue(), newResult.intValue());
     }
 
-    @Test
-        // RPC call test: void setMessages(List<String>)
+    @Test  // RPC call test: void setMessages(List<String>)
     void testPOSTCommandWithList()
     {
         //Arrange
@@ -190,8 +187,7 @@ class RESTfulRPCAdapterIT
         assertEquals(messageList, simpleApplicationService.getMessages());
     }
 
-    @Test
-        // RPC call test: void setValueObjectsAndMessages
+    @Test  // RPC call test: void setValueObjectsAndMessages
     void testPOSTCommandWithMultipleLists()
     {
         //Arrange
@@ -220,8 +216,7 @@ class RESTfulRPCAdapterIT
         assertEquals(result, simpleApplicationService.getMessages());
     }
 
-    @Test
-        // RPC call test: void setSimpleValueObjectTwice(SimpleValueObject(44), SimpleValueObject(88))
+    @Test // RPC call test: void setSimpleValueObjectTwice(SimpleValueObject(44), SimpleValueObject(88))
     void testPOSTCommandWithTwoObjects()
     {
         //Arrange
@@ -243,8 +238,7 @@ class RESTfulRPCAdapterIT
         assertEquals(paramList[1].getValue(), newResult.intValue());
     }
 
-    @Test
-        // RPC call test:  int setGetSimpleValue(44)
+    @Test // RPC call test:  int setGetSimpleValue(44)
     void testPOSTCommandWithReturnValue()
     {
         //Arrange

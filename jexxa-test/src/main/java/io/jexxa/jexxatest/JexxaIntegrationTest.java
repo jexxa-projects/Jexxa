@@ -2,9 +2,9 @@ package io.jexxa.jexxatest;
 
 import io.jexxa.core.BoundedContext;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.jexxatest.infrastructure.integrationtest.rest.BoundedContextHandler;
-import io.jexxa.jexxatest.infrastructure.integrationtest.rest.RESTFulRPCHandler;
-import io.jexxa.jexxatest.infrastructure.integrationtest.rest.UnirestObjectMapper;
+import io.jexxa.jexxatest.integrationtest.rest.BoundedContextHandler;
+import io.jexxa.jexxatest.integrationtest.rest.RESTFulRPCHandler;
+import io.jexxa.jexxatest.integrationtest.rest.UnirestObjectMapper;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestException;
 

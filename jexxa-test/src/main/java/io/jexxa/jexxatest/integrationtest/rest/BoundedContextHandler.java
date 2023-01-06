@@ -1,4 +1,4 @@
-package io.jexxa.jexxatest.infrastructure.integrationtest.rest;
+package io.jexxa.jexxatest.integrationtest.rest;
 
 import io.jexxa.adapterapi.drivingadapter.Diagnostics;
 import io.jexxa.core.VersionInfo;
@@ -17,36 +17,36 @@ public class BoundedContextHandler extends RESTFulRPCHandler
 
     public Duration uptime()
     {
-        return getRequest("uptime", Duration.class);
+        return getRequest(Duration.class, "uptime");
     }
 
     public String contextName()
     {
-        return getRequest("contextName", String.class);
+        return getRequest(String.class, "contextName");
     }
 
     public VersionInfo jexxaVersion()
     {
-        return getRequest("jexxaVersion", VersionInfo.class);
+        return getRequest(VersionInfo.class, "jexxaVersion");
     }
 
     public VersionInfo contextVersion()
     {
-        return getRequest("contextVersion", VersionInfo.class);
+        return getRequest(VersionInfo.class, "contextVersion");
     }
 
     public boolean isRunning()
     {
-        return getRequest("isRunning", Boolean.class);
+        return getRequest(Boolean.class, "isRunning");
     }
 
     public boolean isHealthy()
     {
-        return getRequest("isHealthy", Boolean.class);
+        return getRequest(Boolean.class, "isHealthy");
     }
 
     public List<Diagnostics> diagnostics()
     {
-        return getRequest("diagnostics", new GenericType<>() {});
+        return getRequest(new GenericType<>() {}, "diagnostics");
     }
 }
