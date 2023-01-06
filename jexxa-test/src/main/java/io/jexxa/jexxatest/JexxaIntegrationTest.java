@@ -2,8 +2,9 @@ package io.jexxa.jexxatest;
 
 import io.jexxa.core.BoundedContext;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.jexxatest.infrastructure.rest.BoundedContextHandler;
-import io.jexxa.jexxatest.infrastructure.rest.RESTFulRPCHandler;
+import io.jexxa.jexxatest.infrastructure.integrationtest.rest.BoundedContextHandler;
+import io.jexxa.jexxatest.infrastructure.integrationtest.rest.RESTFulRPCHandler;
+import io.jexxa.jexxatest.infrastructure.integrationtest.rest.UnirestObjectMapper;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestException;
 
@@ -26,6 +27,8 @@ public class JexxaIntegrationTest
 
         boundedContextHandler = new BoundedContextHandler(properties, BoundedContext.class);
 
+        Unirest.config().setObjectMapper(new UnirestObjectMapper());
+
         await().atMost(10, TimeUnit.SECONDS)
                 .pollDelay(100, TimeUnit.MILLISECONDS)
                 .ignoreException(UnirestException.class)
@@ -46,5 +49,4 @@ public class JexxaIntegrationTest
     {
         Unirest.shutDown();
     }
-
 }

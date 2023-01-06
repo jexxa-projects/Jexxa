@@ -1,5 +1,6 @@
-package io.jexxa.jexxatest.infrastructure.rest;
+package io.jexxa.jexxatest.infrastructure.integrationtest.rest;
 
+import kong.unirest.GenericType;
 import kong.unirest.Unirest;
 
 import java.util.Properties;
@@ -28,6 +29,14 @@ public class RESTFulRPCHandler
                 .getBody();
     }
 
+    public <T> T getRequest(String method, GenericType<T> genericType)
+    {
+        return Unirest.get(restPrefix + method)
+                .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+                .asObject(genericType)
+                .getBody();
+    }
+
     public <T> T postRequest(String method, Class<T> returnType, Object parameter)
     {
         return Unirest.post(restPrefix + method)
@@ -44,7 +53,7 @@ public class RESTFulRPCHandler
                 .asObject(returnType).getBody();
     }
 
-    private static String getRestPrefix(Properties properties, Class<?> clazz)
+    protected static String getRestPrefix(Properties properties, Class<?> clazz)
     {
         if (properties.containsKey(JEXXA_REST_PORT)){
             return "http://localhost:" + properties.getProperty(JEXXA_REST_PORT) + "/" + clazz.getSimpleName() + "/";

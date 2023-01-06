@@ -1,8 +1,11 @@
-package io.jexxa.jexxatest.infrastructure.rest;
+package io.jexxa.jexxatest.infrastructure.integrationtest.rest;
 
+import io.jexxa.adapterapi.drivingadapter.Diagnostics;
 import io.jexxa.core.VersionInfo;
+import kong.unirest.GenericType;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Properties;
 
 public class BoundedContextHandler extends RESTFulRPCHandler
@@ -12,10 +15,9 @@ public class BoundedContextHandler extends RESTFulRPCHandler
         super(properties, endpointClazz);
     }
 
-
     public Duration uptime()
     {
-        return getRequest("updime", Duration.class);
+        return getRequest("uptime", Duration.class);
     }
 
     public String contextName()
@@ -33,7 +35,6 @@ public class BoundedContextHandler extends RESTFulRPCHandler
         return getRequest("contextVersion", VersionInfo.class);
     }
 
-
     public boolean isRunning()
     {
         return getRequest("isRunning", Boolean.class);
@@ -44,10 +45,8 @@ public class BoundedContextHandler extends RESTFulRPCHandler
         return getRequest("isHealthy", Boolean.class);
     }
 
-  /*  public List<Diagnostics> diagnostics()
+    public List<Diagnostics> diagnostics()
     {
-        return getRequest("diagnostics", List<Diagnostics>.class);
-    }*/
-
-
+        return getRequest("diagnostics", new GenericType<>() {});
+    }
 }

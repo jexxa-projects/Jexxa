@@ -38,6 +38,8 @@ public class JexxaIntegrationTestIT {
 
         assertNotNull( boundedContext.contextVersion() );
         assertNotNull( boundedContext.jexxaVersion() );
+        assertNotNull( boundedContext.uptime() );
+        assertNotNull( boundedContext.diagnostics() );
 
         assertEquals(JexxaITTestApplication.class.getSimpleName(), boundedContext.contextName() );
     }
