@@ -287,7 +287,6 @@ class RESTfulRPCAdapterIT
     }
 
     @Test
-        // RPC call test: int getSimpleValue()
     void testGETCommandWithSpecialCasesValueObject()
     {
         //Arrange -> Nothing to do
@@ -304,10 +303,9 @@ class RESTfulRPCAdapterIT
     }
 
     @Test
-        // RPC call test: int getSimpleValue()
     void testGETCommandWithNullPointerException()
     {
-        //Arrange -> Nothing to do
+        //Arrange
         var gson = getJSONConverter();
 
         //Act
