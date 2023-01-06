@@ -2,6 +2,7 @@ package io.jexxa.jexxatest;
 
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domain.model.JexxaValueObject;
+import io.jexxa.application.domain.model.SpecialCasesValueObject;
 import io.jexxa.jexxatest.application.JexxaITTestApplication;
 import kong.unirest.GenericType;
 import org.junit.jupiter.api.AfterAll;
@@ -14,6 +15,7 @@ import java.util.concurrent.Executors;
 import static io.jexxa.jexxatest.JexxaTest.loadJexxaTestProperties;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JexxaIntegrationTestIT {
@@ -108,6 +110,60 @@ public class JexxaIntegrationTestIT {
 
         //Assert
         assertEquals(new JexxaValueObject(88), result);
+    }
+
+    @Test
+    void testSetGetSimpleValue()
+    {
+        //Arrange
+        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+        simpleApplicationService.postRequest(Void.class, "setSimpleValue", 22);
+
+        //Act
+        var oldValue = simpleApplicationService.postRequest(Integer.class, "setGetSimpleValue", 44);
+        var newValue = simpleApplicationService.getRequest(Integer.class, "getSimpleValue");
+
+        //Assert
+        assertEquals(22, oldValue);
+        assertEquals(44, newValue);
+    }
+
+    @Test
+    void testGetSpecialCasesValueObject()
+    {
+        //Arrange
+        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+
+        //Act
+        var result = simpleApplicationService.getRequest(SpecialCasesValueObject.class, "getSpecialCasesValueObject");
+
+        //Assert
+        assertEquals(SpecialCasesValueObject.SPECIAL_CASES_VALUE_OBJECT, result);
+    }
+
+
+    @Test
+    void testThrowExceptionTest()
+    {
+        //Arrange
+        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+
+        //Act / Assert
+        assertThrows(SimpleApplicationService.SimpleApplicationException.class,
+                () -> simpleApplicationService.postThrowingRequest(Void.class,"throwExceptionTest")
+        );
+    }
+
+    @Test
+    void testThrowNullPointerException()
+    {
+        //Arrange
+        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+
+        //Act / Assert
+        assertThrows(NullPointerException.class,
+                () -> simpleApplicationService.postRequest(Void.class,"throwNullPointerException")
+        );
     }
 
     static void runApplication()

@@ -17,7 +17,7 @@ import static org.awaitility.Awaitility.await;
 public class JexxaIntegrationTest
 {
     private final Properties properties;
-    BoundedContextHandler boundedContextHandler;
+    final BoundedContextHandler boundedContextHandler;
 
     public JexxaIntegrationTest(Class<?> application)
     {
