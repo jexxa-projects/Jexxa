@@ -45,6 +45,10 @@ public class JexxaIntegrationTest
         return boundedContextHandler;
     }
 
+    public Properties getProperties() {
+        return properties;
+    }
+
     public void shutDown()
     {
         Unirest.shutDown();

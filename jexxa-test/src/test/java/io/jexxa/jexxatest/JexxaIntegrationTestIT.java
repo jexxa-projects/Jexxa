@@ -4,6 +4,7 @@ import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.application.domain.model.SpecialCasesValueObject;
 import io.jexxa.jexxatest.application.JexxaITTestApplication;
+import io.jexxa.jexxatest.integrationtest.rest.BadRequestException;
 import kong.unirest.GenericType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -39,6 +40,8 @@ public class JexxaIntegrationTestIT {
         var boundedContext = jexxaIntegrationTest.getBoundedContext();
 
         //Act / Assert
+        assertNotNull(jexxaIntegrationTest.getProperties());
+
         assertTrue( boundedContext.isRunning() );
         assertTrue( boundedContext.isHealthy() );
 
@@ -150,7 +153,18 @@ public class JexxaIntegrationTestIT {
 
         //Act / Assert
         assertThrows(SimpleApplicationService.SimpleApplicationException.class,
-                () -> simpleApplicationService.postThrowingRequest(Void.class,"throwExceptionTest")
+                () -> simpleApplicationService.throwingPostRequest(Void.class,"throwExceptionTest")
+        );
+    }
+
+    @Test
+    void testUnknownMethod()
+    {
+        //Arrange
+        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+
+        assertThrows(BadRequestException.class,
+                () -> simpleApplicationService.getRequest(Integer.class,"unknownMethod")
         );
     }
 
@@ -162,7 +176,7 @@ public class JexxaIntegrationTestIT {
 
         //Act / Assert
         assertThrows(NullPointerException.class,
-                () -> simpleApplicationService.postRequest(Void.class,"throwNullPointerException")
+                () -> simpleApplicationService.getRequest(Integer.class,"throwNullPointerException")
         );
     }
 

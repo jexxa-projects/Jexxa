@@ -1,6 +1,7 @@
 package io.jexxa.jexxatest.integrationtest.rest;
 
 import kong.unirest.GenericType;
+import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 
 import java.util.Properties;
@@ -22,82 +23,125 @@ public class RESTFulRPCHandler
         this.restPrefix = getRestPrefix(properties, endpointClazz);
     }
 
+
     public <T> T getRequest(Class<T> returnType, String method)
     {
-        var response = Unirest.get(restPrefix + method)
+        return Unirest.get(restPrefix + method)
                 .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
-                .asObject(returnType);
-
-        if (response.isSuccess()) {
-            return response.getBody();
-        }
-
-        throw createRuntimeException(response.mapError(ExceptionWrapper.class));
+                .asObject(returnType)
+                .ifFailure(this::throwUncheckedException)
+                .getBody();
     }
 
     public <T> T getRequest(GenericType<T> genericReturnType, String method)
     {
+        return Unirest.get(restPrefix + method)
+                .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+                .asObject(genericReturnType)
+                .ifFailure(this::throwUncheckedException)
+                .getBody();
+    }
+
+    @SuppressWarnings({"unused", "DuplicatedCode"})
+    public <T> T throwingGetRequest(Class<T> returnType, String method) throws Exception
+    {
         var response = Unirest.get(restPrefix + method)
                 .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
-                .asObject(genericReturnType);
+                .asObject(returnType)
+                .ifFailure(this::throwUncheckedException);
 
-        if (response.isSuccess()) {
+        if (response.isSuccess()){
             return response.getBody();
         }
 
-        throw createRuntimeException(response.mapError(ExceptionWrapper.class));
+        throwCheckedException(response);
+        throwUncheckedException(response);
+        return null;
     }
 
+    @SuppressWarnings({"unused", "DuplicatedCode"})
+    public <T> T throwingGetRequest(GenericType<T> genericReturnType, String method) throws Exception
+    {
+        var response = Unirest.get(restPrefix + method)
+                .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+                .asObject(genericReturnType)
+                .ifFailure(this::throwUncheckedException);
+
+        if (response.isSuccess()){
+            return response.getBody();
+        }
+
+        throwCheckedException(response);
+        throwUncheckedException(response);
+        return null;
+    }
+
+
     public <T> T postRequest(Class<T> returnType, String method, Object parameter)
+    {
+        return Unirest.post(restPrefix + method)
+                .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+                .body(parameter)
+                .asObject(returnType)
+                .ifFailure(this::throwUncheckedException)
+                .getBody();
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public <T> T postRequest(Class<T> returnType, String method, Object... parameters)
+    {
+        return Unirest.post(restPrefix + method)
+                .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+                .body(Stream.of(parameters).toArray())
+                .asObject(returnType)
+                .ifFailure(this::throwUncheckedException)
+                .getBody();
+    }
+
+    @SuppressWarnings("unused")
+    public <T> T throwingPostRequest(Class<T> returnType, String method, Object parameter) throws Exception
     {
         var response = Unirest.post(restPrefix + method)
                 .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
                 .body(parameter)
                 .asObject(returnType);
 
-        if (response.isSuccess()) {
+        if (response.isSuccess()){
             return response.getBody();
         }
 
-        var exceptionWrapper = response.mapError(ExceptionWrapper.class);
-        throw createRuntimeException(exceptionWrapper);
+        throwCheckedException(response);
+        throwUncheckedException(response);
+        return null;
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public <T> T postRequest(Class<T> returnType, String method, Object... parameters)
-    {
+    public <T> T throwingPostRequest(Class<T> returnType, String method, Object... parameters) throws Exception {
         var response = Unirest.post(restPrefix + method)
                 .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
                 .body(Stream.of(parameters).toArray())
                 .asObject(returnType);
 
-        if (response.isSuccess()) {
+        if (response.isSuccess()){
             return response.getBody();
         }
 
-        var exceptionWrapper = response.mapError(ExceptionWrapper.class);
-        throw createRuntimeException(exceptionWrapper);
+        throwCheckedException(response);
+        throwUncheckedException(response);
+        return null;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public <T> T postThrowingRequest(Class<T> returnType, String method, Object... parameters) throws Exception {
-        var response = Unirest.post(restPrefix + method)
-                .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
-                .body(Stream.of(parameters).toArray())
-                .asObject(returnType);
-
-        if (response.isSuccess()) {
-            return response.getBody();
-        }
-
-        var exceptionWrapper = response.mapError(ExceptionWrapper.class);
-        throwIfTypedException(exceptionWrapper);
-        throw createRuntimeException(exceptionWrapper);
-    }
 
     @SuppressWarnings("unchecked")
-    private void throwIfTypedException(ExceptionWrapper exceptionWrapper) throws Exception
+    private void throwCheckedException(HttpResponse<?> httpResponse) throws Exception
     {
+        var exceptionWrapper = httpResponse.mapError(ExceptionWrapper.class);
+
+        if (exceptionWrapper == null)
+        {
+            throw new BadRequestException(httpResponse);
+        }
+
         try {
             Class<?> clazz = Class.forName(exceptionWrapper.ExceptionType);
 
@@ -112,20 +156,27 @@ public class RESTFulRPCHandler
     }
 
     @SuppressWarnings("unchecked")
-    private RuntimeException createRuntimeException(ExceptionWrapper exceptionWrapper)
+    private <T> void throwUncheckedException(HttpResponse<T> httpResponse)
     {
+        var exceptionWrapper = httpResponse.mapError(ExceptionWrapper.class);
+
+        if (exceptionWrapper == null)
+        {
+            throw new BadRequestException(httpResponse);
+        }
+
         try {
             Class<?> clazz = Class.forName(exceptionWrapper.ExceptionType);
 
             if (RuntimeException.class.isAssignableFrom(clazz)) {
                 Class<? extends RuntimeException> exceptionClass = (Class<? extends RuntimeException>) clazz;
-                return getJSONConverter().fromJson(exceptionWrapper.Exception, exceptionClass);
+                throw getJSONConverter().fromJson(exceptionWrapper.Exception, exceptionClass);
             }
         } catch (ClassNotFoundException e)
         {
-            return new IllegalArgumentException(exceptionWrapper.Exception);
+            throw new IllegalArgumentException(exceptionWrapper.Exception);
         }
-        return new IllegalArgumentException(exceptionWrapper.Exception);
+        throw new IllegalArgumentException(exceptionWrapper.Exception);
     }
 
     private static String getRestPrefix(Properties properties, Class<?> clazz)
@@ -140,6 +191,7 @@ public class RESTFulRPCHandler
 
         throw new IllegalArgumentException("Properties do not contain valid HTTP/HTTPS configuration");
     }
+
     record ExceptionWrapper(String ExceptionType, String Exception, String ApplicationType)
     {
     }
