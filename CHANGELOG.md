@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Jexxa-Test: Provided convenience classes for implementing integration tests. For detailed information and example look [here](https://github.com/jexxa-projects/JexxaTemplate).
 
+### Changed
+- Jexxa-Core: static definitions of JMS properties are now provided via `JexxaJMSProperties` for unification reason. The old properties provided in `JMSAdapter` are declared deprecated.
+
+
 ### Fixed
 - Updated dependencies
 
