@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 
 import static io.jexxa.jexxatest.JexxaTest.loadJexxaTestProperties;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -82,6 +83,19 @@ public class JexxaIntegrationTestIT {
 
         //Assert
         assertEquals(newValue, result);
+    }
+
+
+    @Test
+    void testThrowingGet()
+    {
+        //Arrange
+        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+        simpleApplicationService.postRequest(Void.class, "setSimpleValueObject", new JexxaValueObject(44));
+
+        //Act / Assert
+        assertDoesNotThrow(() -> simpleApplicationService.throwingGetRequest(JexxaValueObject.class, "getSimpleValueObject"));
+        assertDoesNotThrow(() -> simpleApplicationService.throwingGetRequest(new GenericType<List<String>>(){}, "getMessages"));
     }
 
     @Test

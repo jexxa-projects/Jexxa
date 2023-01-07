@@ -26,29 +26,21 @@ public class RESTFulRPCHandler
 
     public <T> T getRequest(Class<T> returnType, String method)
     {
-        return Unirest.get(restPrefix + method)
-                .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
-                .asObject(returnType)
+        return internalGet(returnType, method)
                 .ifFailure(this::throwUncheckedException)
                 .getBody();
     }
 
     public <T> T getRequest(GenericType<T> genericReturnType, String method)
     {
-        return Unirest.get(restPrefix + method)
-                .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
-                .asObject(genericReturnType)
+        return internalGet(genericReturnType, method)
                 .ifFailure(this::throwUncheckedException)
                 .getBody();
     }
 
-    @SuppressWarnings({"unused", "DuplicatedCode"})
     public <T> T throwingGetRequest(Class<T> returnType, String method) throws Exception
     {
-        var response = Unirest.get(restPrefix + method)
-                .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
-                .asObject(returnType)
-                .ifFailure(this::throwUncheckedException);
+        var response = internalGet(returnType, method);
 
         if (response.isSuccess()){
             return response.getBody();
@@ -59,13 +51,10 @@ public class RESTFulRPCHandler
         return null;
     }
 
-    @SuppressWarnings({"unused", "DuplicatedCode"})
+
     public <T> T throwingGetRequest(GenericType<T> genericReturnType, String method) throws Exception
     {
-        var response = Unirest.get(restPrefix + method)
-                .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
-                .asObject(genericReturnType)
-                .ifFailure(this::throwUncheckedException);
+        var response = internalGet(genericReturnType, method);
 
         if (response.isSuccess()){
             return response.getBody();
@@ -178,6 +167,20 @@ public class RESTFulRPCHandler
         }
         throw new IllegalArgumentException(exceptionWrapper.Exception);
     }
+
+    private <T> HttpResponse<T> internalGet(GenericType<T> genericReturnType, String method)
+    {
+        return Unirest.get(restPrefix + method)
+                .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+                .asObject(genericReturnType);
+    }
+    private <T> HttpResponse<T> internalGet(Class<T> returnType, String method)
+    {
+        return Unirest.get(restPrefix + method)
+                .header(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+                .asObject(returnType);
+    }
+
 
     private static String getRestPrefix(Properties properties, Class<?> clazz)
     {
