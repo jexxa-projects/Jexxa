@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
  
 ## \[5.5.0] - 2022-11-20
 ### Added
-- Jexxa-Core: Provide possibility to configure user.timezone via jexxa-application.properties value `io.jexxa.user.timezone`. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information
+- Jexxa-Core: Provide possibility to configure `user.timezone` via jexxa-application.properties value `io.jexxa.user.timezone`. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information
 
 ### Changed
 - [Issue #142](https://github.com/jexxa-projects/Jexxa/issues/140) Jexxa-Web : Updated from javalin4 to javalin5. This required to reimplement OpenAPI functionality because javalin5 no longer supports a Java-DSL to provide OpenAPI information. Even though the public API of Jexxa-Web is not changed we decided to increment minor version due to the re-implementation of OpenAPI 
@@ -340,7 +340,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[2.8.1] - 2021-02-27
 ### Fixed
 -   Updated JaCoCo plugin so that tests run under Java 15
--   Corrected suffixes of integration tests so that maven option -DskipITs works correct 
+-   Corrected suffixes of integration tests so that maven option `-DskipITs` works correct 
 
 ## \[2.8.0] - 2021-02-03
 ### Added
@@ -492,7 +492,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[2.4.1] - 2020-10-03
 ### Fixed
--   Corrected artifact-id of module **jexxa-test** to lower cases. Changed package to jexxatest to avoid conflicts with main package jexxa(.test)  
+-   Corrected artifact-id of module **jexxa-test** to lower cases. Changed package to `jexxatest` to avoid conflicts with main package jexxa(.test)  
 
 ### Changed
 -   Improved javadoc
