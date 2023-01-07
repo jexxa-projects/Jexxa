@@ -6,6 +6,7 @@ import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.domain.model.JexxaEntity;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
+import io.jexxa.infrastructure.utils.messaging.ConfigurableListener;
 import io.jexxa.infrastructure.utils.messaging.ITMessageSender;
 import io.jexxa.infrastructure.utils.messaging.QueueListener;
 import io.jexxa.infrastructure.utils.messaging.SharedConnectionListener;
@@ -22,6 +23,7 @@ import java.time.Duration;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTINATION;
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,7 +59,7 @@ class JMSAdapterIT
         {
             objectUnderTest.register(topicListener);
 
-            ITMessageSender topicSender = new ITMessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+            ITMessageSender topicSender = new ITMessageSender(properties, TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
             //Act
             objectUnderTest.start();
             topicSender.send(MESSAGE);
@@ -68,6 +70,29 @@ class JMSAdapterIT
             assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
         }
     }
+
+    @Test
+    void startConfigurableListener()
+    {
+        //Arrange
+        var topicListener = new ConfigurableListener(TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+
+        try (  var objectUnderTest = new JMSAdapter(properties) )
+        {
+            objectUnderTest.register(topicListener);
+
+            ITMessageSender topicSender = new ITMessageSender(properties, TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+            //Act
+            objectUnderTest.start();
+            topicSender.send(MESSAGE);
+
+            //Assert
+            await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
+
+            assertTimeout(Duration.ofSeconds(1), objectUnderTest::stop);
+        }
+    }
+
 
 
     @Test
@@ -82,7 +107,7 @@ class JMSAdapterIT
             objectUnderTest.register(sharedConnectionListener1);
             objectUnderTest.register(sharedConnectionListener2);
 
-            ITMessageSender topicSender = new ITMessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+            ITMessageSender topicSender = new ITMessageSender(properties, TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
             //Act
             objectUnderTest.start();
             topicSender.send(MESSAGE);
@@ -108,7 +133,7 @@ class JMSAdapterIT
             objectUnderTest.register(topicListener1);
             objectUnderTest.register(topicListener2);
 
-            ITMessageSender topicSender = new ITMessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+            ITMessageSender topicSender = new ITMessageSender(properties, TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
             //Act
             objectUnderTest.start();
             topicSender.send(MESSAGE);
@@ -159,7 +184,7 @@ class JMSAdapterIT
                 .disableBanner()
                 .start();
 
-        ITMessageSender myProducer = new ITMessageSender(properties, TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+        ITMessageSender myProducer = new ITMessageSender(properties, TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
 
         //Act
         myProducer.send(MESSAGE);
@@ -184,7 +209,7 @@ class JMSAdapterIT
                 .disableBanner()
                 .start();
 
-        ITMessageSender myProducer = new ITMessageSender(jexxaMain.getProperties(), TopicListener.TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
+        ITMessageSender myProducer = new ITMessageSender(jexxaMain.getProperties(), TOPIC_DESTINATION, JMSConfiguration.MessagingType.TOPIC);
 
         //Act
         myProducer.send(MESSAGE);

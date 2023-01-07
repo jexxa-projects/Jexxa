@@ -20,6 +20,7 @@ import javax.jms.Session;
 import javax.jms.Topic;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -243,14 +244,33 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
     private JMSConfiguration getConfiguration(Object object)
     {
-        return Arrays.stream(object.getClass().getMethods())
-                .filter(method -> method.isAnnotationPresent(JMSConfiguration.class))
+        //Find method annotated with JMSConfiguration
+        var jmsConfigrationMethod = Arrays.stream(object.getClass().getMethods())
+                .filter(method -> method.isAnnotationPresent(JMSConfiguration.class) ||
+                        (JMSConfiguration.class.isAssignableFrom( method.getReturnType()) && method.getParameterCount() == 0))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(
                         String.format("Given object %s does not provide a %s for any public method!"
                                 , object.getClass().getSimpleName()
-                                , JMSConfiguration.class.getSimpleName())))
-                .getDeclaredAnnotation(JMSConfiguration.class);
+                                , JMSConfiguration.class.getSimpleName())));
+
+
+        if (jmsConfigrationMethod.isAnnotationPresent(JMSConfiguration.class))
+        {
+            //Return JMSConfiguration from annotation
+            return jmsConfigrationMethod.getAnnotation(JMSConfiguration.class);
+        } else {
+            //Else return JMSConfiguration by invoking a method
+            try {
+                return (JMSConfiguration) jmsConfigrationMethod.invoke(object);
+            } catch (IllegalAccessException | InvocationTargetException e)
+            {
+                throw new IllegalArgumentException(
+                        String.format("Given object %s does not provide a %s for any public method!"
+                                , object.getClass().getSimpleName()
+                                , JMSConfiguration.class.getSimpleName()));
+            }
+        }
     }
 
     private void initConnection() throws JMSException

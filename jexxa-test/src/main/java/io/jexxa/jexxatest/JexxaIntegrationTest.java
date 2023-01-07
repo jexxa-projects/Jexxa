@@ -2,6 +2,10 @@ package io.jexxa.jexxatest;
 
 import io.jexxa.core.BoundedContext;
 import io.jexxa.core.JexxaMain;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
+import io.jexxa.infrastructure.drivingadapter.messaging.DefaultJMSConfiguration;
+import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.jexxatest.integrationtest.rest.BoundedContextHandler;
 import io.jexxa.jexxatest.integrationtest.rest.RESTFulRPCHandler;
 import io.jexxa.jexxatest.integrationtest.rest.UnirestObjectMapper;
@@ -11,6 +15,7 @@ import kong.unirest.UnirestException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import static io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration.MessagingType.QUEUE;
 import static io.jexxa.jexxatest.JexxaTest.loadJexxaTestProperties;
 import static org.awaitility.Awaitility.await;
 
@@ -43,6 +48,16 @@ public class JexxaIntegrationTest
     public BoundedContextHandler getBoundedContext()
     {
         return boundedContextHandler;
+    }
+
+    MessageSender getMessageSender()
+    {
+        return MessageSenderManager.getMessageSender(JexxaIntegrationTest.class,  getProperties());
+    }
+
+    JMSConfiguration getJMSListener()
+    {
+        return new DefaultJMSConfiguration( "TGEST", QUEUE);
     }
 
     public Properties getProperties() {
