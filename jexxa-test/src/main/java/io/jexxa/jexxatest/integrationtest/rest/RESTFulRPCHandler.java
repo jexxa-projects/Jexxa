@@ -87,7 +87,6 @@ public class RESTFulRPCHandler
                 .getBody();
     }
 
-    @SuppressWarnings("unused")
     public <T> T throwingPostRequest(Class<T> returnType, String method, Object parameter) throws Exception
     {
         var response = Unirest.post(restPrefix + method)

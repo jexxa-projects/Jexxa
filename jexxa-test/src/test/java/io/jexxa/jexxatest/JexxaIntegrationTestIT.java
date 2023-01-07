@@ -91,9 +91,9 @@ public class JexxaIntegrationTestIT {
     {
         //Arrange
         var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
-        simpleApplicationService.postRequest(Void.class, "setSimpleValueObject", new JexxaValueObject(44));
 
         //Act / Assert
+        assertDoesNotThrow(() -> simpleApplicationService.throwingPostRequest(Void.class, "setSimpleValueObject", new JexxaValueObject(44)));
         assertDoesNotThrow(() -> simpleApplicationService.throwingGetRequest(JexxaValueObject.class, "getSimpleValueObject"));
         assertDoesNotThrow(() -> simpleApplicationService.throwingGetRequest(new GenericType<List<String>>(){}, "getMessages"));
     }
