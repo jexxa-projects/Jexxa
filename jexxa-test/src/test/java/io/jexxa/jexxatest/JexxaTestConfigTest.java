@@ -3,7 +3,6 @@ package io.jexxa.jexxatest;
 import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.JexxaObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb.IMDBObjectStore;
@@ -13,6 +12,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.Repo
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
 import io.jexxa.utils.properties.JexxaJDBCProperties;
+import io.jexxa.utils.properties.JexxaJMSProperties;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -126,10 +126,10 @@ class JexxaTestConfigTest
     private static Stream<Properties> messageSenderConfig() {
         var jmsProperties = new Properties();
 
-        jmsProperties.put(JMSSender.JNDI_FACTORY_KEY, "org.apache.activemq.jndi.ActiveMQInitialContextFactory");
-        jmsProperties.put(JMSSender.JNDI_PROVIDER_URL_KEY, "tcp://localhost:61616");
-        jmsProperties.put(JMSSender.JNDI_PASSWORD_KEY, ADMIN);
-        jmsProperties.put(JMSSender.JNDI_USER_KEY, ADMIN);
+        jmsProperties.put(JexxaJMSProperties.JNDI_FACTORY_KEY, "org.apache.activemq.jndi.ActiveMQInitialContextFactory");
+        jmsProperties.put(JexxaJMSProperties.JNDI_PROVIDER_URL_KEY, "tcp://localhost:61616");
+        jmsProperties.put(JexxaJMSProperties.JNDI_PASSWORD_KEY, ADMIN);
+        jmsProperties.put(JexxaJMSProperties.JNDI_USER_KEY, ADMIN);
 
 
         return Stream.of(new Properties(), jmsProperties);

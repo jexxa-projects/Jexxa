@@ -6,6 +6,7 @@ import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.utils.JexxaBanner;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
+import io.jexxa.utils.properties.JexxaJMSProperties;
 import io.jexxa.utils.properties.Secret;
 import org.apache.commons.lang3.Validate;
 
@@ -33,15 +34,24 @@ import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_SIMULATE;
 
 public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 {
+    @Deprecated(forRemoval = true)
     public static final String JNDI_PROVIDER_URL_KEY = "java.naming.provider.url";
+    @Deprecated(forRemoval = true)
     public static final String JNDI_USER_KEY = "java.naming.user";
+    @Deprecated(forRemoval = true)
     public static final String JNDI_PASSWORD_KEY = "java.naming.password";
+    @Deprecated(forRemoval = true)
     public static final String JNDI_FACTORY_KEY = "java.naming.factory.initial";
+    @Deprecated(forRemoval = true)
     public static final String JNDI_PASSWORD_FILE = "java.naming.file.password";
+    @Deprecated(forRemoval = true)
     public static final String JNDI_USER_FILE = "java.naming.file.user";
+    @Deprecated(forRemoval = true)
     public static final String JNDI_CLIENT_ID = "java.naming.client.id";
 
+    @Deprecated(forRemoval = true)
     public static final String DEFAULT_JNDI_PROVIDER_URL = "tcp://localhost:61616";
+    @Deprecated(forRemoval = true)
     public static final String DEFAULT_JNDI_FACTORY = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 
     private Connection connection;
@@ -202,8 +212,8 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
     public static Connection createConnection(Properties properties)
     {
-        var username = new Secret(properties, JNDI_USER_KEY, JNDI_USER_FILE);
-        var password = new Secret(properties, JNDI_PASSWORD_KEY, JNDI_PASSWORD_FILE);
+        var username = new Secret(properties, JexxaJMSProperties.JNDI_USER_KEY, JexxaJMSProperties.JNDI_USER_FILE);
+        var password = new Secret(properties, JexxaJMSProperties.JNDI_PASSWORD_KEY, JexxaJMSProperties.JNDI_PASSWORD_FILE);
 
         try
         {
@@ -213,11 +223,11 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
         catch (NamingException e)
         {
-            throw new IllegalStateException("No ConnectionFactory available via : " + properties.get(JNDI_PROVIDER_URL_KEY), e);
+            throw new IllegalStateException("No ConnectionFactory available via : " + properties.get(JexxaJMSProperties.JNDI_PROVIDER_URL_KEY), e);
         }
         catch (JMSException e)
         {
-            throw new IllegalStateException("Can not connect to " + properties.get(JNDI_PROVIDER_URL_KEY), e);
+            throw new IllegalStateException("Can not connect to " + properties.get(JexxaJMSProperties.JNDI_PROVIDER_URL_KEY), e);
         }
     }
 
@@ -252,11 +262,11 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         }
 
         connection = createConnection(properties);
-        if (properties.containsKey(JNDI_CLIENT_ID) &&
-                properties.getProperty(JNDI_CLIENT_ID) != null &&
-                !properties.getProperty(JNDI_CLIENT_ID).isEmpty() )
+        if (properties.containsKey(JexxaJMSProperties.JNDI_CLIENT_ID) &&
+                properties.getProperty(JexxaJMSProperties.JNDI_CLIENT_ID) != null &&
+                !properties.getProperty(JexxaJMSProperties.JNDI_CLIENT_ID).isEmpty() )
         {
-            connection.setClientID(properties.getProperty(JNDI_CLIENT_ID));
+            connection.setClientID(properties.getProperty(JexxaJMSProperties.JNDI_CLIENT_ID));
         }
 
         // NOTE: The exception handler is created after the session is successfully created
@@ -274,8 +284,8 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             return;
         }
 
-        Validate.isTrue(properties.containsKey(JNDI_PROVIDER_URL_KEY), "Property + " + JNDI_PROVIDER_URL_KEY + " is missing ");
-        Validate.isTrue(properties.containsKey(JNDI_FACTORY_KEY), "Property + " + JNDI_FACTORY_KEY + " is missing ");
+        Validate.isTrue(properties.containsKey(JexxaJMSProperties.JNDI_PROVIDER_URL_KEY), "Property + " + JexxaJMSProperties.JNDI_PROVIDER_URL_KEY + " is missing ");
+        Validate.isTrue(properties.containsKey(JexxaJMSProperties.JNDI_FACTORY_KEY), "Property + " + JexxaJMSProperties.JNDI_FACTORY_KEY + " is missing ");
     }
 
     /**
@@ -369,7 +379,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
                 .map(JMSConfiguration::destination).toArray()
         );
 
-        JexxaLogger.getLogger(JexxaBanner.class).info("JMS Listening on  : {}", properties.getProperty(JNDI_PROVIDER_URL_KEY));
+        JexxaLogger.getLogger(JexxaBanner.class).info("JMS Listening on  : {}", properties.getProperty(JexxaJMSProperties.JNDI_PROVIDER_URL_KEY));
         JexxaLogger.getLogger(JexxaBanner.class).info("   * JMS-Topics   : {}", topics);
         JexxaLogger.getLogger(JexxaBanner.class).info("   * JMS-Queues   : {}", queues);
     }

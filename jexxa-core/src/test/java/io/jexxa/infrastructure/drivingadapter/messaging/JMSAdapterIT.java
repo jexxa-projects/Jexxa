@@ -10,6 +10,7 @@ import io.jexxa.infrastructure.utils.messaging.ITMessageSender;
 import io.jexxa.infrastructure.utils.messaging.QueueListener;
 import io.jexxa.infrastructure.utils.messaging.SharedConnectionListener;
 import io.jexxa.infrastructure.utils.messaging.TopicListener;
+import io.jexxa.utils.properties.JexxaJMSProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertTimeout;
 @Tag(TestConstants.INTEGRATION_TEST)
 class JMSAdapterIT
 {
+    private static final String DEFAULT_JNDI_PROVIDER_URL = "tcp://localhost:61616";
+    private static final String DEFAULT_JNDI_FACTORY = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
     private static final String MESSAGE = "Hello World";
 
     private Properties properties;
@@ -202,8 +205,8 @@ class JMSAdapterIT
 
         //2.Arrange invalid properties: Invalid JNDI_FACTORY_KEY
         Properties propertiesInvalidProvider = new Properties();
-        propertiesInvalidProvider.put(JMSAdapter.JNDI_PROVIDER_URL_KEY, "invalid");
-        propertiesInvalidProvider.put(JMSAdapter.JNDI_FACTORY_KEY, JMSAdapter.DEFAULT_JNDI_FACTORY);
+        propertiesInvalidProvider.put(JexxaJMSProperties.JNDI_PROVIDER_URL_KEY, "invalid");
+        propertiesInvalidProvider.put(JexxaJMSProperties.JNDI_FACTORY_KEY, DEFAULT_JNDI_FACTORY);
 
         //2.Assert invalid properties: Invalid Driver
         assertThrows(IllegalArgumentException.class, () -> new JDBCKeyValueRepository<>(
@@ -214,8 +217,8 @@ class JMSAdapterIT
 
         //3. Arrange invalid properties: Invalid URL
         Properties propertiesInvalidFactory = new Properties();
-        propertiesInvalidFactory.put(JMSAdapter.JNDI_PROVIDER_URL_KEY, JMSAdapter.DEFAULT_JNDI_PROVIDER_URL);
-        propertiesInvalidFactory.put(JMSAdapter.JNDI_FACTORY_KEY, "invalid");
+        propertiesInvalidFactory.put(JexxaJMSProperties.JNDI_PROVIDER_URL_KEY, DEFAULT_JNDI_PROVIDER_URL);
+        propertiesInvalidFactory.put(JexxaJMSProperties.JNDI_FACTORY_KEY, "invalid");
 
         //3.Assert invalid properties: Invalid URL
         assertThrows(IllegalArgumentException.class, () -> new JDBCKeyValueRepository<>(

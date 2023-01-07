@@ -12,10 +12,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender.JNDI_FACTORY_KEY;
 import static io.jexxa.utils.JexxaBanner.addConfigBanner;
 import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_SIMULATE;
 import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_STRATEGY;
+import static io.jexxa.utils.properties.JexxaJMSProperties.JNDI_FACTORY_KEY;
 
 public final class MessageSenderManager
 {

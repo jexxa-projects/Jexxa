@@ -3,6 +3,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.function.ThrowingConsumer;
+import io.jexxa.utils.properties.JexxaJMSProperties;
 import io.jexxa.utils.properties.Secret;
 
 import javax.jms.Connection;
@@ -22,16 +23,25 @@ import java.util.Properties;
 @SuppressWarnings({"unused", "java:S1133"})
 public class JMSSender extends MessageSender implements AutoCloseable
 {
+    @Deprecated(forRemoval = true)
     public static final String JNDI_PROVIDER_URL_KEY = "java.naming.provider.url";
+    @Deprecated(forRemoval = true)
     public static final String JNDI_USER_KEY = "java.naming.user";
+    @Deprecated(forRemoval = true)
     public static final String JNDI_USER_FILE = "java.naming.file.user";
+    @Deprecated(forRemoval = true)
     public static final String JNDI_PASSWORD_KEY = "java.naming.password";
+    @Deprecated(forRemoval = true)
     public static final String JNDI_PASSWORD_FILE = "java.naming.file.password";
+    @Deprecated(forRemoval = true)
     public static final String JNDI_FACTORY_KEY = "java.naming.factory.initial";
 
 
+    @Deprecated(forRemoval = true)
     public static final String DEFAULT_JNDI_PROVIDER_URL = "tcp://localhost:61616";
+    @Deprecated(forRemoval = true)
     public static final String DEFAULT_JNDI_USER = "admin";
+    @Deprecated(forRemoval = true)
     public static final String DEFAULT_JNDI_FACTORY = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 
     private final Properties properties;
@@ -133,8 +143,8 @@ public class JMSSender extends MessageSender implements AutoCloseable
     @SuppressWarnings("java:S2095")
     private static Connection createConnection(Properties properties, JMSSender jmsSender)
     {
-        var username = new Secret(properties, JNDI_USER_KEY, JNDI_USER_FILE);
-        var password = new Secret(properties, JNDI_PASSWORD_KEY, JNDI_PASSWORD_FILE);
+        var username = new Secret(properties, JexxaJMSProperties.JNDI_USER_KEY, JexxaJMSProperties.JNDI_USER_FILE);
+        var password = new Secret(properties, JexxaJMSProperties.JNDI_PASSWORD_KEY, JexxaJMSProperties.JNDI_PASSWORD_FILE);
 
         try
         {
@@ -154,11 +164,11 @@ public class JMSSender extends MessageSender implements AutoCloseable
         }
         catch (NamingException e)
         {
-            throw new IllegalStateException("No ConnectionFactory available via : " + properties.get(JNDI_PROVIDER_URL_KEY), e);
+            throw new IllegalStateException("No ConnectionFactory available via : " + properties.get(JexxaJMSProperties.JNDI_PROVIDER_URL_KEY), e);
         }
         catch (JMSException e)
         {
-            throw new IllegalStateException("Can not connect to " + properties.get(JNDI_PROVIDER_URL_KEY), e);
+            throw new IllegalStateException("Can not connect to " + properties.get(JexxaJMSProperties.JNDI_PROVIDER_URL_KEY), e);
         }
     }
 

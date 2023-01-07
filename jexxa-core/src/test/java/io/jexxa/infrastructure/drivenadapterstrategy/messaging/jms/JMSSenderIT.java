@@ -10,6 +10,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderMana
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.utils.messaging.QueueListener;
 import io.jexxa.infrastructure.utils.messaging.TopicListener;
+import io.jexxa.utils.properties.JexxaJMSProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -24,8 +25,7 @@ import java.time.Duration;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender.JNDI_PASSWORD_FILE;
-import static io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender.JNDI_PASSWORD_KEY;
+
 import static io.jexxa.infrastructure.utils.messaging.QueueListener.QUEUE_DESTINATION;
 import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTINATION;
 import static org.awaitility.Awaitility.await;
@@ -189,8 +189,8 @@ class JMSSenderIT
         //Arrange
         var properties = new Properties();
         properties.putAll(jexxaMain.getProperties());
-        properties.remove(JNDI_PASSWORD_KEY);
-        properties.put(JNDI_PASSWORD_FILE, "src/test/resources/secrets/jndiPassword");
+        properties.remove(JexxaJMSProperties.JNDI_PASSWORD_KEY);
+        properties.put(JexxaJMSProperties.JNDI_PASSWORD_FILE, "src/test/resources/secrets/jndiPassword");
 
         objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, properties);
 
