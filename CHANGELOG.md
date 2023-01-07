@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[5.6.0] - 2023-mm-yy
+
+### Added
+- Jexxa-Core: Improved API for bootstrapping classes in main() that need no special initialization method. See [here](https://github.com/jexxa-projects/JexxaTemplate) for more information. 
+  
+- Jexxa-Core: JMSConfiguration can be provided by a method of the message listener. This allows to implement configurable message listener.  
+
+- Jexxa-Test: Provided convenience classes for implementing integration tests. For detailed information and example look [here](https://github.com/jexxa-projects/JexxaTemplate).
+
+### Fixed
+- Updated dependencies
+
 ## \[5.5.4] - 2022-12-19
 ### Fixed
 - Updated dependencies
