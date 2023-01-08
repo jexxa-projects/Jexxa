@@ -3,6 +3,7 @@ package io.jexxa.jexxatest;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.application.domain.model.SpecialCasesValueObject;
+import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.jexxatest.application.JexxaITTestApplication;
 import io.jexxa.jexxatest.integrationtest.rest.BadRequestException;
 import kong.unirest.GenericType;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static io.jexxa.jexxatest.JexxaTest.loadJexxaTestProperties;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -192,6 +194,25 @@ public class JexxaIntegrationTestIT {
         assertThrows(NullPointerException.class,
                 () -> simpleApplicationService.getRequest(Integer.class,"throwNullPointerException")
         );
+    }
+
+    @Test
+    void testJMSSupport()
+    {
+        //Arrange
+        var testTopic = "TestTopic";
+        var messageSender = jexxaIntegrationTest.getMessageSender();
+        var objectUnderTest =jexxaIntegrationTest.getMessageListener(testTopic, JMSConfiguration.MessagingType.TOPIC);
+
+        //Act
+        messageSender.send(new JexxaValueObject(42)).toTopic(testTopic).asJson();
+
+
+        var result = objectUnderTest.waitUntilMessageReceived(5, TimeUnit.SECONDS)
+                .pop(JexxaValueObject.class);
+
+        //Assert
+        assertEquals(new JexxaValueObject(42), result);
     }
 
     static void runApplication()

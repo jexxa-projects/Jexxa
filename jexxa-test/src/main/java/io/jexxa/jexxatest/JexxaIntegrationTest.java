@@ -6,7 +6,8 @@ import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
-import io.jexxa.jexxatest.integrationtest.jms.JMSITListener;
+import io.jexxa.jexxatest.integrationtest.messaging.JMSListener;
+import io.jexxa.jexxatest.integrationtest.messaging.MessageListener;
 import io.jexxa.jexxatest.integrationtest.rest.BoundedContextHandler;
 import io.jexxa.jexxatest.integrationtest.rest.RESTFulRPCHandler;
 import io.jexxa.jexxatest.integrationtest.rest.UnirestObjectMapper;
@@ -54,16 +55,14 @@ public class JexxaIntegrationTest
         return boundedContextHandler;
     }
 
-    @SuppressWarnings("unused")
     public MessageSender getMessageSender()
     {
         return MessageSenderManager.getMessageSender(JexxaIntegrationTest.class,  getProperties());
     }
 
-    @SuppressWarnings("unused")
-    public JMSITListener getJMSListener(String destination, JMSConfiguration.MessagingType messagingType)
+    public MessageListener getMessageListener(String destination, JMSConfiguration.MessagingType messagingType)
     {
-        var jmsListener = new JMSITListener(destination, messagingType);
+        var jmsListener = new JMSListener(destination, messagingType);
         var jmsAdapter = new JMSAdapter(getProperties());
         jmsAdapter.register(jmsListener);
         jmsAdapter.start();

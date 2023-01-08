@@ -1,4 +1,4 @@
-package io.jexxa.jexxatest.integrationtest.jms;
+package io.jexxa.jexxatest.integrationtest.messaging;
 
 import io.jexxa.infrastructure.drivingadapter.messaging.DefaultJMSConfiguration;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
@@ -10,12 +10,12 @@ import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.await;
 
-public class JMSITListener extends JSONMessageListener {
+public class JMSListener extends JSONMessageListener implements MessageListener  {
     private final List<String> messageList = new ArrayList<>();
     private final String topicDestination;
     private final JMSConfiguration.MessagingType messagingType;
 
-    public JMSITListener(String topicDestination, JMSConfiguration.MessagingType messagingType)
+    public JMSListener(String topicDestination, JMSConfiguration.MessagingType messagingType)
     {
         this.topicDestination = topicDestination;
         this.messagingType = messagingType;
@@ -31,13 +31,13 @@ public class JMSITListener extends JSONMessageListener {
     }
 
     @SuppressWarnings("unused")
-    public void clearMessages()
+    public void clear()
     {
         messageList.clear();
     }
 
     @SuppressWarnings("unused")
-    public <T> T getMessage(Class<T> clazz)
+    public <T> T pop(Class<T> clazz)
     {
         if (messageList.isEmpty())
         {
@@ -48,11 +48,13 @@ public class JMSITListener extends JSONMessageListener {
     }
 
     @SuppressWarnings("unused")
-    public void waitUntilMessageReceived(int timeout, TimeUnit timeUnit)
+    public JMSListener waitUntilMessageReceived(int timeout, TimeUnit timeUnit)
     {
         await().atMost(timeout, timeUnit)
                 .pollDelay(100, TimeUnit.MILLISECONDS)
                 .until(() -> !getMessages().isEmpty());
+
+        return this;
     }
 
     @SuppressWarnings("unused") // Used by JMSAdapter
