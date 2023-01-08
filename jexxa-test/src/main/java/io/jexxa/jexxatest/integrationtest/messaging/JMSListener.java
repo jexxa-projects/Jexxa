@@ -45,7 +45,7 @@ public class JMSListener extends JSONMessageListener implements MessageListener 
         return fromJson( messageList.remove(0), clazz);
     }
 
-    public JMSListener waitUntilMessageReceived(int timeout, TimeUnit timeUnit)
+    public JMSListener awaitMessage(int timeout, TimeUnit timeUnit)
     {
         await().atMost(timeout, timeUnit)
                 .pollDelay(100, TimeUnit.MILLISECONDS)

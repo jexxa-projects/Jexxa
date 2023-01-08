@@ -1,21 +1,11 @@
 package io.jexxa.jexxatest;
 
-import io.jexxa.core.BoundedContext;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
-import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
-import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
-import io.jexxa.jexxatest.integrationtest.messaging.JMSListener;
-import io.jexxa.jexxatest.integrationtest.messaging.MessageListener;
-import io.jexxa.jexxatest.integrationtest.rest.BoundedContextHandler;
-import io.jexxa.jexxatest.integrationtest.rest.RESTFulRPCHandler;
-import io.jexxa.jexxatest.integrationtest.rest.UnirestObjectMapper;
+import io.jexxa.jexxatest.integrationtest.messaging.MessageBinding;
+import io.jexxa.jexxatest.integrationtest.rest.RESTBinding;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -25,60 +15,40 @@ import static org.awaitility.Awaitility.await;
 public class JexxaIntegrationTest
 {
     private final Properties properties;
-    private BoundedContextHandler boundedContextHandler;
-
-    private final List<JMSAdapter> adapterList = new ArrayList<>();
+    private final Class<?> application;
+    private RESTBinding restBinding;
+    private MessageBinding messageBinding;
 
     public JexxaIntegrationTest(Class<?> application)
     {
+        this.application = application;
         var jexxaMain = new JexxaMain(application);
         jexxaMain.addProperties( loadJexxaTestProperties() );
         this.properties = jexxaMain.getProperties();
     }
 
-    public void establishRESTBinding()
+    public RESTBinding getRESTBinding()
     {
-        Unirest.config().setObjectMapper(new UnirestObjectMapper());
-        boundedContextHandler = new BoundedContextHandler(properties, BoundedContext.class);
+        if (restBinding == null)
+        {
+            restBinding = new RESTBinding(getProperties());
+            await().atMost(10, TimeUnit.SECONDS)
+                    .pollDelay(100, TimeUnit.MILLISECONDS)
+                    .ignoreException(UnirestException.class)
+                    .until(() -> restBinding.getBoundedContext().isRunning());
+        }
 
-        await().atMost(10, TimeUnit.SECONDS)
-                .pollDelay(100, TimeUnit.MILLISECONDS)
-                .ignoreException(UnirestException.class)
-                .until(boundedContextHandler::isRunning);
+        return restBinding;
     }
 
-    public RESTFulRPCHandler getRESTFulRPCHandler(Class<?> endpoint)
+    public MessageBinding getMessageBinding()
     {
-        return new RESTFulRPCHandler(properties, endpoint);
-    }
+        if (messageBinding == null)
+        {
+            messageBinding = new MessageBinding(application, getProperties());
+        }
 
-    public BoundedContextHandler getBoundedContext()
-    {
-        return boundedContextHandler;
-    }
-
-    public MessageSender getMessageSender()
-    {
-        return MessageSenderManager.getMessageSender(JexxaIntegrationTest.class,  getProperties());
-    }
-
-    public MessageListener getMessageListener(String destination, JMSConfiguration.MessagingType messagingType)
-    {
-        var jmsListener = new JMSListener(destination, messagingType);
-        var jmsAdapter = new JMSAdapter(getProperties());
-        jmsAdapter.register(jmsListener);
-        jmsAdapter.start();
-        adapterList.add(jmsAdapter);
-
-        return jmsListener;
-    }
-
-    public void registerMessageListener(MessageListener messageListener)
-    {
-        var jmsAdapter = new JMSAdapter(getProperties());
-        jmsAdapter.register(messageListener);
-        jmsAdapter.start();
-        adapterList.add(jmsAdapter);
+        return messageBinding;
     }
 
     public Properties getProperties() {
@@ -87,8 +57,10 @@ public class JexxaIntegrationTest
 
     public void shutDown()
     {
-        adapterList.forEach(JMSAdapter::stop);
-        adapterList.clear();
+        if (messageBinding != null)
+        {
+            messageBinding.close();
+        }
         Unirest.shutDown();
     }
 }

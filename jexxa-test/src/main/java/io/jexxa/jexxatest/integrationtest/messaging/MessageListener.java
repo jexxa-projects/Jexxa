@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public interface MessageListener {
-    MessageListener waitUntilMessageReceived(int timeout, TimeUnit timeUnit);
+    MessageListener awaitMessage(int timeout, TimeUnit timeUnit);
 
     List<String> getMessages();
 

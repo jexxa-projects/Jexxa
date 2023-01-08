@@ -19,25 +19,26 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class RESTFulRPCHandlerIT {
+public class RESTBindingIT {
     private static final JexxaIntegrationTest jexxaIntegrationTest = new JexxaIntegrationTest(JexxaITTestApplication.class);
+    private static RESTBinding objectUnderTest;
 
     @BeforeAll
     static void initBeforeAll()
     {
         //Start the application
         var result = Executors.newSingleThreadExecutor();
-        result.execute(RESTFulRPCHandlerIT::runApplication);
+        result.execute(RESTBindingIT::runApplication);
 
         //Connect the integration test to the application
-        jexxaIntegrationTest.establishRESTBinding();
+        objectUnderTest = jexxaIntegrationTest.getRESTBinding();
     }
 
     @Test
     void testBoundedContextHandler()
     {
         //Arrange
-        var boundedContext = jexxaIntegrationTest.getBoundedContext();
+        var boundedContext = objectUnderTest.getBoundedContext();
 
         //Act / Assert
         assertNotNull(jexxaIntegrationTest.getProperties());
@@ -57,7 +58,7 @@ public class RESTFulRPCHandlerIT {
     void testSimpleValue()
     {
         //Arrange
-        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+        var simpleApplicationService = objectUnderTest.getRESTHandler(SimpleApplicationService.class);
 
         //Act
         simpleApplicationService.postRequest(Void.class,"setSimpleValue", 5);
@@ -73,7 +74,7 @@ public class RESTFulRPCHandlerIT {
     void testSimpleValueObject()
     {
         //Arrange
-        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+        var simpleApplicationService = objectUnderTest.getRESTHandler(SimpleApplicationService.class);
         var newValue = new JexxaValueObject(44);
 
         //Act
@@ -89,7 +90,7 @@ public class RESTFulRPCHandlerIT {
     void testThrowingGet()
     {
         //Arrange
-        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+        var simpleApplicationService = objectUnderTest.getRESTHandler(SimpleApplicationService.class);
 
         //Act / Assert
         assertDoesNotThrow(() -> simpleApplicationService.throwingPostRequest(Void.class, "setSimpleValueObject", new JexxaValueObject(44)));
@@ -101,7 +102,7 @@ public class RESTFulRPCHandlerIT {
     void testSetMessages()
     {
         //Arrange
-        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+        var simpleApplicationService = objectUnderTest.getRESTHandler(SimpleApplicationService.class);
         var messageList = List.of("message1", "message2", "message3");
 
         //Act
@@ -116,7 +117,7 @@ public class RESTFulRPCHandlerIT {
     void testSetSimpleValueObjectTwice()
     {
         //Arrange
-        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+        var simpleApplicationService = objectUnderTest.getRESTHandler(SimpleApplicationService.class);
 
         //Act
         simpleApplicationService.postRequest(Void.class, "setSimpleValueObjectTwice",
@@ -132,7 +133,7 @@ public class RESTFulRPCHandlerIT {
     void testSetGetSimpleValue()
     {
         //Arrange
-        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+        var simpleApplicationService = objectUnderTest.getRESTHandler(SimpleApplicationService.class);
         simpleApplicationService.postRequest(Void.class, "setSimpleValue", 22);
 
         //Act
@@ -148,7 +149,7 @@ public class RESTFulRPCHandlerIT {
     void testGetSpecialCasesValueObject()
     {
         //Arrange
-        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+        var simpleApplicationService = objectUnderTest.getRESTHandler(SimpleApplicationService.class);
 
         //Act
         var result = simpleApplicationService.getRequest(SpecialCasesValueObject.class, "getSpecialCasesValueObject");
@@ -162,7 +163,7 @@ public class RESTFulRPCHandlerIT {
     void testThrowExceptionTest()
     {
         //Arrange
-        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+        var simpleApplicationService = objectUnderTest.getRESTHandler(SimpleApplicationService.class);
 
         //Act / Assert
         assertThrows(SimpleApplicationService.SimpleApplicationException.class,
@@ -174,7 +175,7 @@ public class RESTFulRPCHandlerIT {
     void testUnknownMethod()
     {
         //Arrange
-        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+        var simpleApplicationService = objectUnderTest.getRESTHandler(SimpleApplicationService.class);
 
         assertThrows(BadRequestException.class,
                 () -> simpleApplicationService.getRequest(Integer.class,"unknownMethod")
@@ -185,7 +186,7 @@ public class RESTFulRPCHandlerIT {
     void testThrowNullPointerException()
     {
         //Arrange
-        var simpleApplicationService = jexxaIntegrationTest.getRESTFulRPCHandler(SimpleApplicationService.class);
+        var simpleApplicationService = objectUnderTest.getRESTHandler(SimpleApplicationService.class);
 
         //Act / Assert
         assertThrows(NullPointerException.class,
