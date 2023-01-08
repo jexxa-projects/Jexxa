@@ -86,6 +86,7 @@ public final class JexxaMain
     {
         Objects.requireNonNull(applicationProperties);
         Objects.requireNonNull(context);
+        JexxaBanner.clear();
 
         // Handle properties in following forder:
         // 0. Add default JEXXA_CONTEXT_MAIN
@@ -345,6 +346,7 @@ public final class JexxaMain
             JexxaLogger.getLogger(JexxaMain.class).info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
         }
         executorService.shutdown();
+        JexxaBanner.clear();
     }
 
     @SuppressWarnings("UnusedReturnValue")

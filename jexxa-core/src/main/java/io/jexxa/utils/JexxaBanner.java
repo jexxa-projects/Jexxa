@@ -23,6 +23,12 @@ public final class JexxaBanner
         JEXXA_BANNER.accessBanner.add(consumer);
     }
 
+    public static void clear()
+    {
+        JEXXA_BANNER.accessBanner.clear();
+        JEXXA_BANNER.configBanner.clear();
+    }
+
     public static void show(Properties properties)
     {
         JexxaLogger.getLogger(JexxaBanner.class).info("Config Information: ");
