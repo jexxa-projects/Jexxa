@@ -197,7 +197,7 @@ public class JexxaIntegrationTestIT {
     }
 
     @Test
-    void testJMSSupport()
+    void testMessageListener()
     {
         //Arrange
         var testTopic = "TestTopic";
@@ -207,12 +207,37 @@ public class JexxaIntegrationTestIT {
         //Act
         messageSender.send(new JexxaValueObject(42)).toTopic(testTopic).asJson();
 
-
-        var result = objectUnderTest.waitUntilMessageReceived(5, TimeUnit.SECONDS)
+        var result = objectUnderTest
+                .waitUntilMessageReceived(5, TimeUnit.SECONDS)
                 .pop(JexxaValueObject.class);
 
         //Assert
         assertEquals(new JexxaValueObject(42), result);
+        assertTrue(objectUnderTest.getMessages().isEmpty());
+    }
+
+    @Test
+    void testClearMessageListener()
+    {
+        //Arrange
+        var testTopic = "TestTopic";
+        var messageSender = jexxaIntegrationTest.getMessageSender();
+        var objectUnderTest =jexxaIntegrationTest.getMessageListener(testTopic, JMSConfiguration.MessagingType.TOPIC);
+
+        //Act
+        messageSender.send(new JexxaValueObject(42)).toTopic(testTopic).asJson();
+        objectUnderTest
+                .waitUntilMessageReceived(5, TimeUnit.SECONDS)
+                .clear();
+
+        messageSender.send(new JexxaValueObject(42)).toTopic(testTopic).asJson();
+        var result = objectUnderTest
+                .waitUntilMessageReceived(5, TimeUnit.SECONDS)
+                .pop(JexxaValueObject.class);
+
+        //Assert
+        assertEquals(new JexxaValueObject(42), result);
+        assertTrue(objectUnderTest.getMessages().isEmpty());
     }
 
     static void runApplication()

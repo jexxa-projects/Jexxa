@@ -30,13 +30,11 @@ public class JMSListener extends JSONMessageListener implements MessageListener 
         return messageList;
     }
 
-    @SuppressWarnings("unused")
     public void clear()
     {
         messageList.clear();
     }
 
-    @SuppressWarnings("unused")
     public <T> T pop(Class<T> clazz)
     {
         if (messageList.isEmpty())
@@ -47,7 +45,6 @@ public class JMSListener extends JSONMessageListener implements MessageListener 
         return fromJson( messageList.remove(0), clazz);
     }
 
-    @SuppressWarnings("unused")
     public JMSListener waitUntilMessageReceived(int timeout, TimeUnit timeUnit)
     {
         await().atMost(timeout, timeUnit)
