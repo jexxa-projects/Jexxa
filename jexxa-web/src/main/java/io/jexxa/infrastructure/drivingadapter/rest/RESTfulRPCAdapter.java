@@ -240,6 +240,33 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         javalin.exception(InvocationTargetRuntimeException.class, (e, ctx) ->  handleTargetException(e.getTargetException(), ctx));
         javalin.exception(IllegalArgumentException.class, this::handleTargetException);
         javalin.exception(RuntimeException.class, this::handleRuntimeException);
+
+        javalin.error(404, this::handleResourceNotFound);
+    }
+
+    private void handleResourceNotFound(Context ctx)
+    {
+        if  (openAPIConvention != null && !openAPIConvention.isDisabled() && openAPIConvention.getPath().isPresent()) {
+            var response = "Resource " + ctx.path() + " is not available. " +
+                    "Check OpenAPI specification: " +
+                    getProtocolByPort(ctx.port()) + "://" + ctx.host() + openAPIConvention.getPath().get() + " ";
+            ctx.status(404);
+            ctx.result(response);
+        } else {
+            var response = "Resource " + ctx.path() + " is not available." ;
+            ctx.status(404);
+            ctx.result(response);
+        }
+    }
+
+    private String getProtocolByPort(int port)
+    {
+        if (port == getHTTPPort())
+        {
+            return "http";
+        }  else {
+            return "https";
+        }
     }
 
     private void handleTargetException(Throwable targetException, Context ctx )
