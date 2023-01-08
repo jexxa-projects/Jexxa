@@ -19,9 +19,9 @@ public class RESTBinding
         this.properties = properties;
     }
 
-    public RESTFulRPCHandler getRESTHandler(Class<?> endpoint)
+    public RESTHandler getRESTHandler(Class<?> endpoint)
     {
-        return new RESTFulRPCHandler(properties, endpoint);
+        return new RESTHandler(properties, endpoint);
     }
 
     public BoundedContextHandler getBoundedContext()

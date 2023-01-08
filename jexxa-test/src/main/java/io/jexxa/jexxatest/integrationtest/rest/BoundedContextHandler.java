@@ -8,7 +8,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
 
-public class BoundedContextHandler extends RESTFulRPCHandler
+public class BoundedContextHandler extends RESTHandler
 {
     public BoundedContextHandler(Properties properties, Class<?> endpointClazz)
     {

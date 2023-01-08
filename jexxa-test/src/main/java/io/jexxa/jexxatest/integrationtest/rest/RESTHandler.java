@@ -11,14 +11,14 @@ import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 import static kong.unirest.ContentType.APPLICATION_JSON;
 import static kong.unirest.HeaderNames.CONTENT_TYPE;
 
-public class RESTFulRPCHandler
+public class RESTHandler
 {
     private static final String JEXXA_REST_PORT = "io.jexxa.rest.port";
     private static final String JEXXA_REST_HTTPS_PORT = "io.jexxa.rest.https_port";
 
     private final String restPrefix;
 
-    public RESTFulRPCHandler(Properties properties, Class<?> endpointClazz)
+    public RESTHandler(Properties properties, Class<?> endpointClazz)
     {
         this.restPrefix = getRestPrefix(properties, endpointClazz);
     }
