@@ -71,6 +71,14 @@ public class JexxaIntegrationTest
         return jmsListener;
     }
 
+    public void registerMessageListener(MessageListener messageListener)
+    {
+        var jmsAdapter = new JMSAdapter(getProperties());
+        jmsAdapter.register(messageListener);
+        jmsAdapter.start();
+        adapterList.add(jmsAdapter);
+    }
+
     public Properties getProperties() {
         return properties;
     }

@@ -5,6 +5,7 @@ import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.application.domain.model.SpecialCasesValueObject;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.jexxatest.application.JexxaITTestApplication;
+import io.jexxa.jexxatest.integrationtest.messaging.JMSListener;
 import io.jexxa.jexxatest.integrationtest.rest.BadRequestException;
 import kong.unirest.GenericType;
 import org.junit.jupiter.api.AfterAll;
@@ -203,6 +204,27 @@ public class JexxaIntegrationTestIT {
         var testTopic = "TestTopic";
         var messageSender = jexxaIntegrationTest.getMessageSender();
         var objectUnderTest =jexxaIntegrationTest.getMessageListener(testTopic, JMSConfiguration.MessagingType.TOPIC);
+
+        //Act
+        messageSender.send(new JexxaValueObject(42)).toTopic(testTopic).asJson();
+
+        var result = objectUnderTest
+                .waitUntilMessageReceived(5, TimeUnit.SECONDS)
+                .pop(JexxaValueObject.class);
+
+        //Assert
+        assertEquals(new JexxaValueObject(42), result);
+        assertTrue(objectUnderTest.getMessages().isEmpty());
+    }
+
+    @Test
+    void testRegisterMessageListener()
+    {
+        //Arrange
+        var testTopic = "TestTopic";
+        var messageSender = jexxaIntegrationTest.getMessageSender();
+        var objectUnderTest = new JMSListener(testTopic, JMSConfiguration.MessagingType.TOPIC);
+        jexxaIntegrationTest.registerMessageListener(objectUnderTest);
 
         //Act
         messageSender.send(new JexxaValueObject(42)).toTopic(testTopic).asJson();
