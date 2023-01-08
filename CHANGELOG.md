@@ -4,18 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[5.6.0] - 2023-mm-yy
+## \[5.6.0] - 2023-01-08
 
 ### Added
-- Jexxa-Core: Improved API for bootstrapping classes in main() that need no special initialization method. See [here](https://github.com/jexxa-projects/JexxaTemplate) for more information. 
+- Jexxa-Core: Improved API for bootstrapping classes in main() that need no initialization method. See [here](https://github.com/jexxa-projects/JexxaTemplate) for more information. 
   
-- Jexxa-Core: JMSConfiguration can be provided by a method of the message listener. This allows to implement configurable message listener.  
+- Jexxa-Core: JMSConfiguration can be provided by a method of the message listener. This allows to implement configurable message listener. See [here]() for an example  
 
 - Jexxa-Test: Provided convenience classes for implementing integration tests. For detailed information and example look [here](https://github.com/jexxa-projects/JexxaTemplate).
 
 ### Changed
 - Jexxa-Core: static definitions of JMS properties are now provided via `JexxaJMSProperties` for unification reason. The old properties provided in `JMSAdapter` are declared deprecated.
-
 
 ### Fixed
 - Updated dependencies

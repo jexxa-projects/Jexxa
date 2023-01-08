@@ -79,7 +79,7 @@ Maven:
     <dependency>
        <groupId>io.jexxa</groupId>
        <artifactId>jexxa-web</artifactId>
-       <version>5.5.4</version>
+       <version>5.6.0</version>
     </dependency>
     
     <dependency>
