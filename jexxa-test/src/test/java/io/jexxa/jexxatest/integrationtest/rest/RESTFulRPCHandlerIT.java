@@ -1,12 +1,10 @@
-package io.jexxa.jexxatest;
+package io.jexxa.jexxatest.integrationtest.rest;
 
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.application.domain.model.SpecialCasesValueObject;
-import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
+import io.jexxa.jexxatest.JexxaIntegrationTest;
 import io.jexxa.jexxatest.application.JexxaITTestApplication;
-import io.jexxa.jexxatest.integrationtest.messaging.JMSListener;
-import io.jexxa.jexxatest.integrationtest.rest.BadRequestException;
 import kong.unirest.GenericType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,27 +12,25 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
-import static io.jexxa.jexxatest.JexxaTest.loadJexxaTestProperties;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class JexxaIntegrationTestIT {
-    private static JexxaIntegrationTest jexxaIntegrationTest;
+public class RESTFulRPCHandlerIT {
+    private static final JexxaIntegrationTest jexxaIntegrationTest = new JexxaIntegrationTest(JexxaITTestApplication.class);
 
     @BeforeAll
     static void initBeforeAll()
     {
         //Start the application
         var result = Executors.newSingleThreadExecutor();
-        result.execute(JexxaIntegrationTestIT::runApplication);
+        result.execute(RESTFulRPCHandlerIT::runApplication);
 
         //Connect the integration test to the application
-        jexxaIntegrationTest = new JexxaIntegrationTest(JexxaITTestApplication.class);
+        jexxaIntegrationTest.establishRESTBinding();
     }
 
     @Test
@@ -124,7 +120,7 @@ public class JexxaIntegrationTestIT {
 
         //Act
         simpleApplicationService.postRequest(Void.class, "setSimpleValueObjectTwice",
-                        new JexxaValueObject(44), new JexxaValueObject(88));
+                new JexxaValueObject(44), new JexxaValueObject(88));
 
         var result = simpleApplicationService.getRequest(JexxaValueObject.class, "getSimpleValueObject");
 
@@ -197,74 +193,10 @@ public class JexxaIntegrationTestIT {
         );
     }
 
-    @Test
-    void testMessageListener()
-    {
-        //Arrange
-        var testTopic = "TestTopic";
-        var messageSender = jexxaIntegrationTest.getMessageSender();
-        var objectUnderTest =jexxaIntegrationTest.getMessageListener(testTopic, JMSConfiguration.MessagingType.TOPIC);
-
-        //Act
-        messageSender.send(new JexxaValueObject(42)).toTopic(testTopic).asJson();
-
-        var result = objectUnderTest
-                .waitUntilMessageReceived(5, TimeUnit.SECONDS)
-                .pop(JexxaValueObject.class);
-
-        //Assert
-        assertEquals(new JexxaValueObject(42), result);
-        assertTrue(objectUnderTest.getMessages().isEmpty());
-    }
-
-    @Test
-    void testRegisterMessageListener()
-    {
-        //Arrange
-        var testTopic = "TestTopic";
-        var messageSender = jexxaIntegrationTest.getMessageSender();
-        var objectUnderTest = new JMSListener(testTopic, JMSConfiguration.MessagingType.TOPIC);
-        jexxaIntegrationTest.registerMessageListener(objectUnderTest);
-
-        //Act
-        messageSender.send(new JexxaValueObject(42)).toTopic(testTopic).asJson();
-
-        var result = objectUnderTest
-                .waitUntilMessageReceived(5, TimeUnit.SECONDS)
-                .pop(JexxaValueObject.class);
-
-        //Assert
-        assertEquals(new JexxaValueObject(42), result);
-        assertTrue(objectUnderTest.getMessages().isEmpty());
-    }
-
-    @Test
-    void testClearMessageListener()
-    {
-        //Arrange
-        var testTopic = "TestTopic";
-        var messageSender = jexxaIntegrationTest.getMessageSender();
-        var objectUnderTest =jexxaIntegrationTest.getMessageListener(testTopic, JMSConfiguration.MessagingType.TOPIC);
-
-        //Act
-        messageSender.send(new JexxaValueObject(42)).toTopic(testTopic).asJson();
-        objectUnderTest
-                .waitUntilMessageReceived(5, TimeUnit.SECONDS)
-                .clear();
-
-        messageSender.send(new JexxaValueObject(42)).toTopic(testTopic).asJson();
-        var result = objectUnderTest
-                .waitUntilMessageReceived(5, TimeUnit.SECONDS)
-                .pop(JexxaValueObject.class);
-
-        //Assert
-        assertEquals(new JexxaValueObject(42), result);
-        assertTrue(objectUnderTest.getMessages().isEmpty());
-    }
 
     static void runApplication()
     {
-        JexxaITTestApplication.main(loadJexxaTestProperties());
+        JexxaITTestApplication.main(jexxaIntegrationTest.getProperties());
     }
 
 
@@ -274,5 +206,4 @@ public class JexxaIntegrationTestIT {
         JexxaITTestApplication.shutDown();
         jexxaIntegrationTest.shutDown();
     }
-
 }

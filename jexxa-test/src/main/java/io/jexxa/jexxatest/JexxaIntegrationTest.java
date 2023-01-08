@@ -25,7 +25,7 @@ import static org.awaitility.Awaitility.await;
 public class JexxaIntegrationTest
 {
     private final Properties properties;
-    private final BoundedContextHandler boundedContextHandler;
+    private BoundedContextHandler boundedContextHandler;
 
     private final List<JMSAdapter> adapterList = new ArrayList<>();
 
@@ -34,10 +34,12 @@ public class JexxaIntegrationTest
         var jexxaMain = new JexxaMain(application);
         jexxaMain.addProperties( loadJexxaTestProperties() );
         this.properties = jexxaMain.getProperties();
+    }
 
-        boundedContextHandler = new BoundedContextHandler(properties, BoundedContext.class);
-
+    public void establishRESTBinding()
+    {
         Unirest.config().setObjectMapper(new UnirestObjectMapper());
+        boundedContextHandler = new BoundedContextHandler(properties, BoundedContext.class);
 
         await().atMost(10, TimeUnit.SECONDS)
                 .pollDelay(100, TimeUnit.MILLISECONDS)
@@ -85,7 +87,7 @@ public class JexxaIntegrationTest
 
     public void shutDown()
     {
-        adapterList.forEach(JMSAdapter::close);
+        adapterList.forEach(JMSAdapter::stop);
         adapterList.clear();
         Unirest.shutDown();
     }
