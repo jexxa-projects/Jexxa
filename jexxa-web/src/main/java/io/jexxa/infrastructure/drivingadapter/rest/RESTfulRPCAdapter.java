@@ -239,12 +239,24 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         javalin.exception(InvocationTargetException.class, (e, ctx) ->  handleTargetException(e.getTargetException(), ctx));
         javalin.exception(InvocationTargetRuntimeException.class, (e, ctx) ->  handleTargetException(e.getTargetException(), ctx));
         javalin.exception(IllegalArgumentException.class, this::handleTargetException);
+        javalin.exception(RuntimeException.class, this::handleRuntimeException);
     }
 
     private void handleTargetException(Throwable targetException, Context ctx )
     {
-        if ( targetException != null )
-        {
+        internalHandleException(targetException, ctx);
+        ctx.status(400);
+    }
+
+    private void handleRuntimeException(RuntimeException runtimeException, Context ctx )
+    {
+        internalHandleException(runtimeException, ctx);
+        ctx.status(500);
+    }
+
+    private void internalHandleException(Throwable targetException, Context ctx)
+    {
+        if ( targetException != null ) {
             targetException.getStackTrace(); // Ensures that stack trace is filled in
             var ctxMethod = ctx.method();
             var ctxBody = ctx.body();
@@ -262,7 +274,6 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
 
             ctx.result(exceptionWrapper.toString());
         }
-        ctx.status(400);
     }
 
     private String toJson(Throwable e)
