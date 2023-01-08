@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 public interface MessageListener {
     MessageListener awaitMessage(int timeout, TimeUnit timeUnit);
 
-    List<String> getMessages();
+    List<String> getAll();
 
     <T> T pop(Class<T> clazz);
     void clear();

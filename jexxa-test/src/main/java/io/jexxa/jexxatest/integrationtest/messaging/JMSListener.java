@@ -25,7 +25,7 @@ public class JMSListener extends JSONMessageListener implements MessageListener 
         messageList.add(message);
     }
 
-    public List<String> getMessages()
+    public List<String> getAll()
     {
         return messageList;
     }
@@ -49,7 +49,7 @@ public class JMSListener extends JSONMessageListener implements MessageListener 
     {
         await().atMost(timeout, timeUnit)
                 .pollDelay(100, TimeUnit.MILLISECONDS)
-                .until(() -> !getMessages().isEmpty());
+                .until(() -> !getAll().isEmpty());
 
         return this;
     }

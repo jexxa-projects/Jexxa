@@ -41,7 +41,7 @@ public class MessageBindingIT {
 
         //Assert
         assertEquals(new JexxaValueObject(42), result);
-        assertTrue(messageListener.getMessages().isEmpty());
+        assertTrue(messageListener.getAll().isEmpty());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class MessageBindingIT {
 
         //Assert
         assertEquals(new JexxaValueObject(42), result);
-        assertTrue(messageListener.getMessages().isEmpty());
+        assertTrue(messageListener.getAll().isEmpty());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class MessageBindingIT {
 
         //Assert
         assertEquals(new JexxaValueObject(42), result);
-        assertTrue(messageListener.getMessages().isEmpty());
+        assertTrue(messageListener.getAll().isEmpty());
     }
 
     @AfterAll
