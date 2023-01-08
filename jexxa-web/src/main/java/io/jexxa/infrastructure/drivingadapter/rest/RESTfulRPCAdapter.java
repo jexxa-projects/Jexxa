@@ -246,10 +246,11 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void handleResourceNotFound(Context ctx)
     {
-        if  (openAPIConvention != null && !openAPIConvention.isDisabled() && openAPIConvention.getPath().isPresent()) {
+        if  (openAPIConvention != null && !openAPIConvention.isDisabled() ) {
+            var openAPIPath = openAPIConvention.getPath().orElse("");
             var response = "Resource " + ctx.path() + " is not available. " +
                     "Check OpenAPI specification: " +
-                    getProtocolByPort(ctx.port()) + "://" + ctx.host() + openAPIConvention.getPath().get() + " ";
+                    getProtocolByPort(ctx.port()) + "://" + ctx.host() + openAPIPath + " ";
             ctx.status(404);
             ctx.result(response);
         } else {
