@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Jexxa-Core: Improved API for bootstrapping classes in main() that need no initialization method. See [here](https://github.com/jexxa-projects/JexxaTemplate) for more information. 
   
-- Jexxa-Core: JMSConfiguration can be provided by a method of the message listener. This allows to implement configurable message listener. See [here]() for an example  
+- Jexxa-Core: JMSConfiguration can be provided by a method of the message listener. This allows to implement configurable message listener. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-core/src/test/java/io/jexxa/infrastructure/utils/messaging/ConfigurableListener.java) for an example.  
 
 - Jexxa-Test: Provided convenience classes for implementing integration tests. For detailed information and example look [here](https://github.com/jexxa-projects/JexxaTemplate).
 
