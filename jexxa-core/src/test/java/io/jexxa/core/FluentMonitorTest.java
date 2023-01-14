@@ -26,7 +26,7 @@ class FluentMonitorTest {
         jexxaMain.bind(ProxyDrivingAdapter.class).to(ProxyPortAdapter.class);
 
         //Act
-        jexxaMain.monitor(ProxyPortAdapter.class).incomingCalls(timerMonitor(maxTimeout));
+        jexxaMain.monitor(ProxyPortAdapter.class).with(timerMonitor(maxTimeout));
 
         var firstResult = boundedContext.isHealthy();
 

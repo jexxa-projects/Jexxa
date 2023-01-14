@@ -1,14 +1,13 @@
 package io.jexxa.infrastructure.monitor;
 
 
-import io.jexxa.adapterapi.drivingadapter.HealthCheck;
-import io.jexxa.adapterapi.interceptor.BeforeInterceptor;
 import io.jexxa.adapterapi.invocation.InvocationContext;
+import io.jexxa.adapterapi.invocation.monitor.BeforeMonitor;
 
 import java.time.Duration;
 import java.time.Instant;
 
-public class TimerMonitor extends HealthCheck implements BeforeInterceptor
+public class TimerMonitor extends BeforeMonitor
 {
     private Instant lastUpdate = Instant.now();
     private final Duration messageTimeout;
