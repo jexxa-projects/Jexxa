@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class FluentMonitorTest {
 
     @Test
-    void incomingCalls()
+    void beforeMonitor()
     {
         //Arrange
         var jexxaMain = new JexxaMain(JexxaTestApplication.class);
