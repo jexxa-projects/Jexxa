@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## \[5.x.x] - 2023-mm-dd
+
+
+### Fixed
+- Updated dependencies
+- Interceptors work correctly with method using abstract parameters  
+
 ## \[5.6.0] - 2023-01-08
 
 ### Added
