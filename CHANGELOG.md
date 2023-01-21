@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Updated dependencies
-- Interceptors work correctly with method using abstract parameters  
+- Interceptors work correctly with methods using abstract parameters  
 
 ## \[5.6.0] - 2023-01-08
 
