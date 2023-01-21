@@ -1,7 +1,6 @@
 package io.jexxa.utils.properties;
 
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.function.ThrowingConsumer;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,7 +9,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -63,13 +61,17 @@ public class PropertiesLoader {
     }
 
     private void loadJexxaApplicationProperties(Properties properties) {
-        Optional.ofNullable(PropertiesLoader.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES))
-                .ifPresentOrElse(
-                        ThrowingConsumer.exceptionLogger(properties::load),
-                        () -> JexxaLogger.getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JEXXA_APPLICATION_PROPERTIES)
-                );
-
-        propertiesFiles.add(JEXXA_APPLICATION_PROPERTIES);
+        try ( InputStream inputStream = PropertiesLoader.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES) )
+        {
+            if (inputStream != null) {
+                properties.load(inputStream);
+                propertiesFiles.add(JEXXA_APPLICATION_PROPERTIES);
+            } else {
+                JexxaLogger.getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JEXXA_APPLICATION_PROPERTIES);
+            }
+        } catch ( IOException e ) {
+            JexxaLogger.getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JEXXA_APPLICATION_PROPERTIES);
+        }
     }
 
     private Properties removeEmptyValues(Properties properties) {
