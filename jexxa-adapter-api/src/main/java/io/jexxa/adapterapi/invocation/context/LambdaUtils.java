@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -30,9 +31,12 @@ final class LambdaUtils {
         try {
             var serializedLambda = Objects.requireNonNull(getSerializedLambda(functionalInterface));
 
-            return targetObject
+            return Arrays.stream(targetObject
                     .getClass()
-                    .getMethod(serializedLambda.getImplMethodName(), argTypes);
+                    .getMethods())
+                    .filter(element -> element.getName().equals(serializedLambda.getImplMethodName()))
+                    .filter(element -> isAssignable(element.getParameterTypes(), argTypes))
+                    .findAny().orElseThrow(() -> new NoSuchMethodException( "Method not found " + targetObject.getClass() + "::" + serializedLambda.getImplMethodName() ));
         } catch (NoSuchMethodException e) { // Check if an alternative method with primitive types is available
             if (includePrimitives(argTypes))
             {
@@ -105,6 +109,25 @@ final class LambdaUtils {
         }
         return false;
     }
+
+    private static boolean isAssignable(Class<?>[] original, Class<?>[] assignee)
+    {
+        if (original.length != assignee.length)
+        {
+            return false;
+        }
+
+        for (int i = 0; i< original.length; i++)
+        {
+            if ( !original[i].isAssignableFrom(assignee[i]))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
 
     private LambdaUtils()
