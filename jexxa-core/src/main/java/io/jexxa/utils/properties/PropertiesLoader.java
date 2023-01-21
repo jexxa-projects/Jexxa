@@ -66,7 +66,7 @@ public class PropertiesLoader {
         Optional.ofNullable(PropertiesLoader.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES))
                 .ifPresentOrElse(
                         ThrowingConsumer.exceptionLogger(properties::load),
-                        () -> JexxaLogger.getLogger(PropertiesLoader.class).warn("NO PROPERTIES FILE FOUND {}", JEXXA_APPLICATION_PROPERTIES)
+                        () -> JexxaLogger.getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JEXXA_APPLICATION_PROPERTIES)
                 );
 
         propertiesFiles.add(JEXXA_APPLICATION_PROPERTIES);
