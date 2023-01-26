@@ -58,13 +58,13 @@ public class PortsAndAdapters extends ProjectContent {
 
     public PortsAndAdapters addDrivenAdapterPackage(String drivenAdapterPackage)
     {
-        onionArchitecture.adapter(drivenAdapterPackage, project().getPackageName() + "." + "infrastructure.drivenadapter." + drivenAdapterPackage + "..");
+        onionArchitecture.adapter("drivenAdapter." + drivenAdapterPackage, project().getPackageName() + "." + "infrastructure.drivenadapter." + drivenAdapterPackage + "..");
         return this;
     }
 
     public PortsAndAdapters addDrivingAdapterPackage(String drivingAdapterPackage)
     {
-        onionArchitecture.adapter(drivingAdapterPackage, project().getPackageName() + ".infrastructure.drivingadapter." + drivingAdapterPackage + "..");
+        onionArchitecture.adapter("drivingAdapter." + drivingAdapterPackage, project().getPackageName() + ".infrastructure.drivingadapter." + drivingAdapterPackage + "..");
         return this;
     }
 

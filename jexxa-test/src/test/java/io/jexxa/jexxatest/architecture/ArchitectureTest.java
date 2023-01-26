@@ -14,7 +14,9 @@ class ArchitectureTest {
     {
         var objectUnderTest = new PortsAndAdapters(ValidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS)
                 .addDrivenAdapterPackage("jms")
-                .addDrivingAdapterPackage("rest");
+
+                .addDrivingAdapterPackage("rest")
+                .addDrivingAdapterPackage("jms");
 
         objectUnderTest.validate();
     }
