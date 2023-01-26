@@ -5,12 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## \[5.x.x] - 2023-mm-dd
+## \[5.6.1] - 2023-01-26
 
 
 ### Fixed
+- [ #185 ] Architecture test PortsAndAdapters fails on valid setup
+- Interceptors work correctly with methods using abstract parameters
 - Updated dependencies
-- Interceptors work correctly with methods using abstract parameters  
 
 ## \[5.6.0] - 2023-01-08
 
