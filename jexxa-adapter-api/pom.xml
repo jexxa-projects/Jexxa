@@ -4,11 +4,11 @@
     <parent>
     <artifactId>jexxa</artifactId>
     <groupId>io.jexxa</groupId>
-    <version>5.6.2</version>
+    <version>5.6.3-SNAPSHOT</version>
   </parent>
 
   <artifactId>jexxa-adapter-api</artifactId>
-  <version>3.6.2</version>
+  <version>3.6.3-SNAPSHOT</version>
 
   <name>Jexxa-Adapter-API</name>
 
