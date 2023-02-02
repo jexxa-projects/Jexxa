@@ -5,8 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## \[5.6.1] - 2023-01-26
+## \[5.6.2] - 2023-02-02
 
+### Fixed
+- Updated dependencies
+
+## \[5.6.1] - 2023-01-26
 
 ### Fixed
 - [ #185 ] Architecture test PortsAndAdapters fails on valid setup
