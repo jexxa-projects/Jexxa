@@ -139,7 +139,7 @@ public class RESTHandler
             }
         } catch (ClassNotFoundException e)
         {
-            throw new IllegalArgumentException(exceptionWrapper.Exception);
+            throw new IllegalArgumentException(exceptionWrapper.Exception, e);
         }
     }
 
@@ -162,7 +162,7 @@ public class RESTHandler
             }
         } catch (ClassNotFoundException e)
         {
-            throw new IllegalArgumentException(exceptionWrapper.Exception);
+            throw new IllegalArgumentException(exceptionWrapper.Exception, e);
         }
         throw new IllegalArgumentException(exceptionWrapper.Exception);
     }

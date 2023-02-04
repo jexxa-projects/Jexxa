@@ -296,7 +296,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
                 throw new IllegalArgumentException(
                         String.format("Given object %s does not provide a %s for any public method!"
                                 , object.getClass().getSimpleName()
-                                , JMSConfiguration.class.getSimpleName()));
+                                , JMSConfiguration.class.getSimpleName()), e);
             }
         }
     }
