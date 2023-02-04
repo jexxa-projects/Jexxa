@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RESTBindingIT {
-    private static final JexxaIntegrationTest jexxaIntegrationTest = new JexxaIntegrationTest(JexxaITTestApplication.class);
+    private static final JexxaIntegrationTest JEXXA_INTEGRATION_TEST = new JexxaIntegrationTest(JexxaITTestApplication.class);
     private static RESTBinding objectUnderTest;
 
     @BeforeAll
@@ -31,7 +31,7 @@ public class RESTBindingIT {
         result.execute(RESTBindingIT::runApplication);
 
         //Connect the integration test to the application
-        objectUnderTest = jexxaIntegrationTest.getRESTBinding();
+        objectUnderTest = JEXXA_INTEGRATION_TEST.getRESTBinding();
     }
 
     @Test
@@ -41,7 +41,7 @@ public class RESTBindingIT {
         var boundedContext = objectUnderTest.getBoundedContext();
 
         //Act / Assert
-        assertNotNull(jexxaIntegrationTest.getProperties());
+        assertNotNull(JEXXA_INTEGRATION_TEST.getProperties());
 
         assertTrue( boundedContext.isRunning() );
         assertTrue( boundedContext.isHealthy() );
@@ -197,7 +197,7 @@ public class RESTBindingIT {
 
     static void runApplication()
     {
-        JexxaITTestApplication.main(jexxaIntegrationTest.getProperties());
+        JexxaITTestApplication.main(JEXXA_INTEGRATION_TEST.getProperties());
     }
 
 
@@ -205,6 +205,6 @@ public class RESTBindingIT {
     static void tearDown()
     {
         JexxaITTestApplication.shutDown();
-        jexxaIntegrationTest.shutDown();
+        JEXXA_INTEGRATION_TEST.shutDown();
     }
 }

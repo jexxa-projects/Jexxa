@@ -15,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MessageBindingIT {
 
-    private final static JexxaIntegrationTest jexxaIntegrationTest = new JexxaIntegrationTest(JexxaITTestApplication.class);
+    private final static JexxaIntegrationTest JEXXA_INTEGRATION_TEST = new JexxaIntegrationTest(JexxaITTestApplication.class);
     private static MessageBinding objectUnderTest;
 
     @BeforeAll
     static void initBeforeAll()
     {
-        objectUnderTest = jexxaIntegrationTest.getMessageBinding();
+        objectUnderTest = JEXXA_INTEGRATION_TEST.getMessageBinding();
     }
 
     @Test
@@ -92,7 +92,7 @@ public class MessageBindingIT {
     @AfterAll
     static void tearDown()
     {
-        jexxaIntegrationTest.shutDown();
+        JEXXA_INTEGRATION_TEST.shutDown();
     }
 
 }
