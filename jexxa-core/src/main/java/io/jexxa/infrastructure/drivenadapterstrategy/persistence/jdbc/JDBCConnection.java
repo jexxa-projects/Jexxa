@@ -99,7 +99,9 @@ public class JDBCConnection implements AutoCloseable
         autoCommit = true;
         try {
             connection.setAutoCommit(true);
-        } catch (SQLException ignored) {}
+        } catch (SQLException e) {
+            throw new IllegalStateException("Could not enable auto commit for JDBC connection", e);
+        }
     }
 
     public void disableAutoCommit()
@@ -107,7 +109,9 @@ public class JDBCConnection implements AutoCloseable
         autoCommit = false;
         try {
             connection.setAutoCommit(false);
-        } catch (SQLException ignored) {}
+        } catch (SQLException e) {
+            throw new IllegalStateException("Could not disable auto commit for JDBC connection", e);
+        }
     }
 
     public void commit()
@@ -115,7 +119,10 @@ public class JDBCConnection implements AutoCloseable
         if (!autoCommit) {
             try {
                 connection.commit();
-            } catch (SQLException ignored) {}
+                System.out.println("JDBC statements committed successfully ");
+            } catch (SQLException e) {
+                throw new IllegalStateException("Could not perform commit operation on JDBC connection", e);
+            }
         }
     }
 
@@ -124,7 +131,9 @@ public class JDBCConnection implements AutoCloseable
         if (!autoCommit) {
             try {
                 connection.rollback();
-            } catch (SQLException ignored) {}
+            } catch (SQLException e) {
+                throw new IllegalStateException("Could not perform rollback operation on JDBC connection", e);
+            }
         }
     }
 
