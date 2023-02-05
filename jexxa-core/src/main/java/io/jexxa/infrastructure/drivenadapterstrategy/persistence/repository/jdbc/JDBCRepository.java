@@ -4,6 +4,7 @@ import io.jexxa.adapterapi.invocation.transaction.TransactionHandler;
 import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnectionPool;
+import io.jexxa.utils.JexxaLogger;
 
 import java.util.Objects;
 import java.util.Properties;
@@ -40,6 +41,11 @@ public abstract class JDBCRepository implements TransactionHandler {
 
     public void rollback()
     {
-        getConnection().rollback();
+        try {
+            getConnection().rollback();
+        } catch (IllegalStateException e)
+        {
+            JexxaLogger.getLogger(getClass()).error("An exception occurred during rollback. Reason: {}", e.getMessage());
+        }
     }
 }
