@@ -1,26 +1,19 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc;
 
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
-import io.jexxa.utils.function.ThrowingConsumer;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnectionPool;
 
 import java.util.Objects;
 import java.util.Properties;
 
-public abstract class JDBCRepository  implements AutoCloseable
+public abstract class JDBCRepository
 {
-    private final JDBCConnection jdbcConnection;
+    private final Properties properties;
 
     protected JDBCRepository(Properties properties)
     {
-        Objects.requireNonNull(properties);
-
-        this.jdbcConnection = new JDBCConnection(properties);
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void close()
-    {
-        ThrowingConsumer.exceptionLogger(JDBCConnection::close);
+        this.properties = Objects.requireNonNull(properties);
+        getConnection(); // To ensure that connection is valid
     }
 
     /**
@@ -31,7 +24,7 @@ public abstract class JDBCRepository  implements AutoCloseable
      */
     public final JDBCConnection getConnection()
     {
-        return jdbcConnection.validateConnection();
+        return JDBCConnectionPool.getConnection(properties);
     }
 
 }

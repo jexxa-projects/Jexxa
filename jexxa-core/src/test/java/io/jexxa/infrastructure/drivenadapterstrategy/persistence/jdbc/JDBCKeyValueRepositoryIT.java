@@ -4,7 +4,6 @@ import io.jexxa.TestConstants;
 import io.jexxa.application.domain.model.JexxaEntity;
 import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.jdbc.JDBCKeyValueRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.Properties;
 
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
@@ -48,13 +46,6 @@ class JDBCKeyValueRepositoryIT
                 JexxaEntity::getKey,
                 properties
         );
-    }
-
-    @AfterEach
-    void tearDown()
-    {
-        Optional.ofNullable(objectUnderTest)
-                .ifPresent(JDBCKeyValueRepository::close);
     }
 
 
