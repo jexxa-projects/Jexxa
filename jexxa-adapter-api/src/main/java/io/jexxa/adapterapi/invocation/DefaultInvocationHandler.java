@@ -12,6 +12,7 @@ import io.jexxa.adapterapi.invocation.function.SerializableConsumer;
 import io.jexxa.adapterapi.invocation.function.SerializableFunction;
 import io.jexxa.adapterapi.invocation.function.SerializableRunnable;
 import io.jexxa.adapterapi.invocation.function.SerializableSupplier;
+import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -100,9 +101,16 @@ public class DefaultInvocationHandler implements AroundInterceptor, BeforeInterc
     protected void invoke(InvocationContext invocationContext)  {
         synchronized (GLOBAL_SYNCHRONIZATION_OBJECT)
         {
-            before(invocationContext);
-            around(invocationContext);
-            after(invocationContext);
+            try {
+                TransactionManager.initTransaction();
+                before(invocationContext);
+                around(invocationContext);
+                after(invocationContext);
+                TransactionManager.closeTransaction();
+            } catch (Throwable e) {
+                TransactionManager.closeTransaction();
+                throw e;
+            }
         }
     }
 }

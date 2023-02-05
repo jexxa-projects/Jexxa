@@ -26,6 +26,7 @@ public class JDBCConnection implements AutoCloseable
 
     private Connection connection;
     private final Properties properties;
+    private boolean autoCommit = true;
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCConnection.class);
 
@@ -37,7 +38,7 @@ public class JDBCConnection implements AutoCloseable
 
         autocreateDatabase(properties);
 
-        this.connection = initJDBCConnection(properties);
+        this.connection = initJDBCConnection(properties, autoCommit);
         this.properties = properties;
     }
 
@@ -91,6 +92,40 @@ public class JDBCConnection implements AutoCloseable
         }
 
         return this;
+    }
+
+    public void enableAutoCommit()
+    {
+        autoCommit = true;
+        try {
+            connection.setAutoCommit(true);
+        } catch (SQLException ignored) {}
+    }
+
+    public void disableAutoCommit()
+    {
+        autoCommit = false;
+        try {
+            connection.setAutoCommit(false);
+        } catch (SQLException ignored) {}
+    }
+
+    public void commit()
+    {
+        if (!autoCommit) {
+            try {
+                connection.commit();
+            } catch (SQLException ignored) {}
+        }
+    }
+
+    public void rollback()
+    {
+        if (!autoCommit) {
+            try {
+                connection.rollback();
+            } catch (SQLException ignored) {}
+        }
     }
 
     @SuppressWarnings("java:S1172")
@@ -179,12 +214,12 @@ public class JDBCConnection implements AutoCloseable
     {
         if ( connection == null )
         {
-            connection = initJDBCConnection(properties);
+            connection = initJDBCConnection(properties, autoCommit);
         }
         return connection;
     }
 
-    private static Connection initJDBCConnection(Properties properties)
+    private static Connection initJDBCConnection(Properties properties, boolean autoCommit)
     {
         var username = new Secret(properties, JexxaJDBCProperties.JEXXA_JDBC_USERNAME, JexxaJDBCProperties.JEXXA_JDBC_FILE_USERNAME);
         var password = new Secret(properties, JexxaJDBCProperties.JEXXA_JDBC_PASSWORD, JexxaJDBCProperties.JEXXA_JDBC_FILE_PASSWORD);
@@ -196,7 +231,7 @@ public class JDBCConnection implements AutoCloseable
                     password.getSecret()
             );
 
-            connection.setAutoCommit(true);
+            connection.setAutoCommit(autoCommit);
             return connection;
         }
         catch (SQLException e)
