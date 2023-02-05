@@ -2,6 +2,7 @@ package io.jexxa.core;
 
 import io.jexxa.adapterapi.drivingadapter.HealthCheck;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
 import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
@@ -87,6 +88,7 @@ public final class JexxaMain
         Objects.requireNonNull(applicationProperties);
         Objects.requireNonNull(context);
         JexxaBanner.clear();
+        TransactionManager.init();
 
         // Handle properties in following forder:
         // 0. Add default JEXXA_CONTEXT_MAIN

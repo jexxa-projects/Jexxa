@@ -12,7 +12,7 @@ public class TransactionManager {
         return INSTANCE;
     }
 
-    public static void addTransactionHandler(TransactionHandler transactionHandler)
+    public static void registerTransactionHandler(TransactionHandler transactionHandler)
     {
         INSTANCE.transactionHandlerList.add(transactionHandler);
     }
@@ -27,6 +27,17 @@ public class TransactionManager {
     {
         INSTANCE.transactionHandlerList.forEach(TransactionHandler::closeTransaction);
         System.out.println("Closed Transaction");
+    }
+
+    public static void rollback()
+    {
+        INSTANCE.transactionHandlerList.forEach(TransactionHandler::rollback);
+        System.out.println("rollback Transaction");
+    }
+
+    public static void init()
+    {
+        getInstance().transactionHandlerList.clear();
     }
 
 

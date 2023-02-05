@@ -108,6 +108,7 @@ public class DefaultInvocationHandler implements AroundInterceptor, BeforeInterc
                 after(invocationContext);
                 TransactionManager.closeTransaction();
             } catch (Throwable e) {
+                TransactionManager.rollback();
                 TransactionManager.closeTransaction();
                 throw e;
             }
