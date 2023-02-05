@@ -16,6 +16,7 @@ import java.util.Properties;
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -118,6 +119,57 @@ class JDBCKeyValueRepositoryIT
 
         objectUnderTest.getConnection().close();
         assertDoesNotThrow(this::addAggregate);
+    }
+
+    @Test
+    void testSuccessfulTransaction()
+    {
+        //Arrange
+        objectUnderTest.initTransaction();
+        objectUnderTest.add(aggregate);
+
+        //act
+        objectUnderTest.closeTransaction();
+
+
+        //Assert
+        assertFalse(objectUnderTest.get(aggregate.getKey()).isEmpty());
+    }
+
+    @Test
+    void testTransactionRollback()
+    {
+        //Arrange
+        objectUnderTest.initTransaction();
+        objectUnderTest.add(aggregate);
+
+        //act
+        objectUnderTest.rollback();
+        objectUnderTest.closeTransaction();
+
+
+        //Assert
+        assertTrue(objectUnderTest.get(aggregate.getKey()).isEmpty());
+    }
+
+    @Test
+    void testFailedTransaction()
+    {
+        //Arrange
+        objectUnderTest.initTransaction();
+        objectUnderTest.add(aggregate);
+
+        //act
+        try {
+            objectUnderTest.add(aggregate);
+        } catch (RuntimeException e) {
+            objectUnderTest.rollback();
+        }
+        objectUnderTest.closeTransaction();
+
+
+        //Assert
+        assertTrue(objectUnderTest.get(aggregate.getKey()).isEmpty());
     }
 
 }
