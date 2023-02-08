@@ -119,7 +119,6 @@ public class JDBCConnection implements AutoCloseable
         if (!autoCommit) {
             try {
                 connection.commit();
-                System.out.println("JDBC statements committed successfully ");
             } catch (SQLException e) {
                 throw new IllegalStateException("Could not perform commit operation on JDBC connection", e);
             }
