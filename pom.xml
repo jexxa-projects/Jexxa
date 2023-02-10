@@ -37,7 +37,7 @@
     <gpg.plugin.version>3.0.1</gpg.plugin.version>
     <maven.clean.plugin>3.2.0</maven.clean.plugin>
     <maven.compiler.plugin>3.10.1</maven.compiler.plugin>
-    <maven.deploy.plugin>3.0.0</maven.deploy.plugin>
+    <maven.deploy.plugin>3.1.0</maven.deploy.plugin>
     <maven.failsafe.plugin>3.0.0-M8</maven.failsafe.plugin>
     <maven.install.plugin>3.1.0</maven.install.plugin>
     <maven.jar.plugin>3.3.0</maven.jar.plugin>
@@ -86,7 +86,7 @@
 
 
     <!-- version of test dependencies -->
-    <activemq.artemis.client.version>2.27.1</activemq.artemis.client.version>
+    <activemq.artemis.client.version>2.28.0</activemq.artemis.client.version>
     <postgres.version>42.5.3</postgres.version>
     <unirest.java.version>3.14.1</unirest.java.version>
     <junit.platform.launcher.version>1.9.2</junit.platform.launcher.version>

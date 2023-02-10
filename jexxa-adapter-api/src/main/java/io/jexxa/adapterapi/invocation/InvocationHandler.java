@@ -16,6 +16,7 @@ public interface InvocationHandler
      * @param object concrete instance of the object on which the method should be called
      * @param args attributes
      * @return result of the method
+     * @throws InvocationTargetRuntimeException includes occurred exceptions.
      */
     Object invoke(Method method, Object object, Object[] args );
 
