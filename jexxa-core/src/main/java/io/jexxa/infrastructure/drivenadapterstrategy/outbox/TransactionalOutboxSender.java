@@ -70,7 +70,6 @@ public class TransactionalOutboxSender extends MessageSender {
                 UUID.randomUUID(), message,
                 destination, messageProperties,
                 messageType, DestinationType.TOPIC));
-
     }
 
     private void sendOutboxMessages()
