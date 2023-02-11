@@ -12,6 +12,9 @@ public final class JexxaJDBCProperties
     public static final String JEXXA_JDBC_AUTOCREATE_DATABASE = "io.jexxa.jdbc.autocreate.database";
     public static final String JEXXA_JDBC_AUTOCREATE_TABLE = "io.jexxa.jdbc.autocreate.table";
 
+    /** Defines the jdbc transaction level. This must be one of the following values "read-uncommitted", "read-committed", "repeatable-read", "serializable"*/
+    public static final String JEXXA_JDBC_TRANSACTION_ISOLATION_LEVEL = "io.jexxa.jdbc.transaction.isolation.level";
+
     public static final String JEXXA_REPOSITORY_STRATEGY = "io.jexxa.repository.strategy";
 
     public static final String JEXXA_OBJECTSTORE_STRATEGY = "io.jexxa.objectstore.strategy";

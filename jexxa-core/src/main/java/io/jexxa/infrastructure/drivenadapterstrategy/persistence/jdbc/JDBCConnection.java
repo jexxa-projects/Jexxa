@@ -19,13 +19,33 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
+
 public class JDBCConnection implements AutoCloseable
 {
+
+    public enum IsolationLevel {
+        READ_UNCOMMITTED(Connection.TRANSACTION_READ_UNCOMMITTED),
+        READ_COMMITTED(Connection.TRANSACTION_READ_COMMITTED),
+        REPEATABLE_READ(Connection.TRANSACTION_REPEATABLE_READ),
+        SERIALIZABLE(Connection.TRANSACTION_SERIALIZABLE);
+        private final int transactionID;
+        IsolationLevel(int transactionID)
+        {
+            this.transactionID = transactionID;
+        }
+
+        public int getID()
+        {
+            return transactionID;
+        }
+    }
+
 
     public static final int NO_TIMEOUT = 0;
 
     private Connection connection;
     private final Properties properties;
+    private IsolationLevel isolationLevel;
     private boolean autoCommit = true;
 
     private static final Logger LOGGER = JexxaLogger.getLogger(JDBCConnection.class);
@@ -40,7 +60,43 @@ public class JDBCConnection implements AutoCloseable
 
         this.connection = initJDBCConnection(properties, autoCommit);
         this.properties = properties;
+        setIsolationLevel();
     }
+
+    @SuppressWarnings("MagicConstant") // The enum IsolationLevel ensures correct constant
+    public void setIsolationLevel(IsolationLevel isolationLevel) {
+        this.isolationLevel = isolationLevel;
+        if (isolationLevel != null)
+        {
+            try {
+                if ( getConnection().getMetaData().supportsTransactionIsolationLevel(isolationLevel.getID()))
+                {
+                    getConnection().setTransactionIsolation(isolationLevel.getID());
+                }
+            } catch (SQLException e)
+            {
+                throw new IllegalStateException("Configuring IsolationLevel failed. Check if isolation level is supported by your DB", e);
+            }
+        }
+    }
+
+    protected void setIsolationLevel()
+    {
+        if (isolationLevel == null
+                && properties.containsKey(JexxaJDBCProperties.JEXXA_JDBC_TRANSACTION_ISOLATION_LEVEL))
+        {
+            isolationLevel = IsolationLevel.valueOf(properties
+                    .getProperty(JexxaJDBCProperties.JEXXA_JDBC_TRANSACTION_ISOLATION_LEVEL)
+                    .toUpperCase(Locale.ROOT)
+            );
+        }
+
+        if (isolationLevel != null)
+        {
+            setIsolationLevel(isolationLevel);
+        }
+    }
+
 
     public final void autocreateDatabase(final Properties properties)
     {
@@ -223,6 +279,7 @@ public class JDBCConnection implements AutoCloseable
         if ( connection == null )
         {
             connection = initJDBCConnection(properties, autoCommit);
+            setIsolationLevel();
         }
         return connection;
     }
