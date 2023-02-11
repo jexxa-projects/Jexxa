@@ -1,8 +1,8 @@
 package io.jexxa.core;
 
+import io.jexxa.adapterapi.JexxaContext;
 import io.jexxa.adapterapi.drivingadapter.HealthCheck;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
-import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
 import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
@@ -87,8 +87,7 @@ public final class JexxaMain
     {
         Objects.requireNonNull(applicationProperties);
         Objects.requireNonNull(context);
-        JexxaBanner.clear();
-        TransactionManager.init();
+        JexxaContext.init();
 
         // Handle properties in following forder:
         // 0. Add default JEXXA_CONTEXT_MAIN
@@ -348,7 +347,7 @@ public final class JexxaMain
             JexxaLogger.getLogger(JexxaMain.class).info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
         }
         executorService.shutdown();
-        JexxaBanner.clear();
+        JexxaContext.cleanup();
     }
 
     @SuppressWarnings("UnusedReturnValue")

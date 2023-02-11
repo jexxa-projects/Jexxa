@@ -1,5 +1,7 @@
 package io.jexxa.adapterapi.invocation.transaction;
 
+import io.jexxa.adapterapi.JexxaContext;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +34,15 @@ public class TransactionManager {
         INSTANCE.transactionHandlerList.forEach(TransactionHandler::rollback);
     }
 
-    public static void init()
+    public static void clear()
     {
         getInstance().transactionHandlerList.clear();
     }
 
+    private TransactionManager()
+    {
+        JexxaContext.registerInitHandler(TransactionManager::clear);
+        JexxaContext.registerCleanupHandler(TransactionManager::clear);
+    }
 
 }
