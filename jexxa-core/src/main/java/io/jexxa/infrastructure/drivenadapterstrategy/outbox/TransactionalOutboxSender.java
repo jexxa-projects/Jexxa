@@ -3,6 +3,7 @@ package io.jexxa.infrastructure.drivenadapterstrategy.outbox;
 import io.jexxa.adapterapi.JexxaContext;
 import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
+import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
@@ -89,7 +90,13 @@ public class TransactionalOutboxSender extends MessageSender {
     private void sendToQueue(JexxaOutboxMessage outboxMessage)
     {
         var messageSender = MessageSenderManager.getMessageSender(TransactionalOutboxSender.class, properties);
-        var producer = messageSender.send(outboxMessage.message()).toQueue(outboxMessage.destination);
+        MessageProducer producer;
+        if (outboxMessage.messageType.equals(MessageType.TEXT_MESSAGE))
+        {
+            producer = messageSender.send(outboxMessage.message()).toQueue(outboxMessage.destination);
+        } else {
+            producer = messageSender.sendByteMessage(outboxMessage.message()).toQueue(outboxMessage.destination);
+        }
         outboxMessage.messageProperties.forEach((key, value) -> producer.addHeader((String)key, (String)value));
         producer.asString();
     }
@@ -98,7 +105,13 @@ public class TransactionalOutboxSender extends MessageSender {
     private void sendToTopic( JexxaOutboxMessage outboxMessage)
     {
         var messageSender = MessageSenderManager.getMessageSender(TransactionalOutboxSender.class, properties);
-        var producer = messageSender.send(outboxMessage.message()).toTopic(outboxMessage.destination);
+        MessageProducer producer;
+        if (outboxMessage.messageType.equals(MessageType.TEXT_MESSAGE))
+        {
+            producer = messageSender.send(outboxMessage.message()).toTopic(outboxMessage.destination);
+        } else {
+            producer = messageSender.sendByteMessage(outboxMessage.message()).toTopic(outboxMessage.destination);
+        }
         outboxMessage.messageProperties.forEach((key, value) -> producer.addHeader((String)key, (String)value));
         producer.asString();
     }

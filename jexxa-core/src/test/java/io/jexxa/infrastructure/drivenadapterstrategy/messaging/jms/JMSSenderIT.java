@@ -7,6 +7,7 @@ import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.outbox.TransactionalOutboxSender;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.utils.messaging.QueueListener;
 import io.jexxa.infrastructure.utils.messaging.TopicListener;
@@ -16,6 +17,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import javax.jms.BytesMessage;
 import javax.jms.Connection;
@@ -24,7 +27,7 @@ import javax.jms.TextMessage;
 import java.time.Duration;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-
+import java.util.stream.Stream;
 
 import static io.jexxa.infrastructure.utils.messaging.QueueListener.QUEUE_DESTINATION;
 import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTINATION;
@@ -51,6 +54,7 @@ class JMSSenderIT
         jexxaMain = new JexxaMain(JexxaTestApplication.class);
         topicListener = new TopicListener();
         queueListener = new QueueListener();
+        MessageSenderManager.setDefaultStrategy(JMSSender.class);
         objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
         jexxaMain.disableBanner()
@@ -59,11 +63,22 @@ class JMSSenderIT
                 .start();
     }
 
-
-    @Test
-    void sendMessageToTopic()
+    @SuppressWarnings("unused")
+    static Stream<Class<? extends MessageSender>> getMessageSenderConfig()
     {
-        //Arrange --
+        return Stream.of(JMSSender.class, TransactionalOutboxSender.class);
+    }
+
+    private static final String MESSAGE_SENDER_CONFIG = "getMessageSenderConfig";
+
+    @ParameterizedTest
+    @MethodSource(MESSAGE_SENDER_CONFIG)
+    void sendMessageToTopic(Class<? extends MessageSender> messageSender)
+    {
+        //Arrange
+        MessageSenderManager.setDefaultStrategy(messageSender);
+        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
+
 
         //Act
         objectUnderTest
@@ -81,10 +96,13 @@ class JMSSenderIT
     }
 
 
-    @Test
-    void sendMessageToQueue()
+    @ParameterizedTest
+    @MethodSource(MESSAGE_SENDER_CONFIG)
+    void sendMessageToQueue(Class<? extends MessageSender> messageSender)
     {
-        //Arrange --
+        //Arrange
+        MessageSenderManager.setDefaultStrategy(messageSender);
+        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
         //Act
         objectUnderTest
@@ -100,10 +118,13 @@ class JMSSenderIT
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
-    @Test
-    void sendMessageToQueueAsString()
+    @ParameterizedTest
+    @MethodSource(MESSAGE_SENDER_CONFIG)
+    void sendMessageToQueueAsString(Class<? extends MessageSender> messageSender)
     {
-        //Arrange --
+        //Arrange
+        MessageSenderManager.setDefaultStrategy(messageSender);
+        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
         //Act
         objectUnderTest
@@ -119,10 +140,57 @@ class JMSSenderIT
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
+
+    @ParameterizedTest
+    @MethodSource(MESSAGE_SENDER_CONFIG)
+    void sendByteMessageToTopic(Class<? extends MessageSender> messageSender)
+    {
+        //Arrange
+        MessageSenderManager.setDefaultStrategy(messageSender);
+        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
+
+        //Act
+        objectUnderTest
+                .sendByteMessage(message)
+                .toTopic(TOPIC_DESTINATION)
+                .addHeader(TYPE, message.getClass().getSimpleName())
+                .asJson();
+
+        //Assert
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
+
+        assertDoesNotThrow(() -> (BytesMessage)topicListener.getMessages().get(0));
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
+    @ParameterizedTest
+    @MethodSource(MESSAGE_SENDER_CONFIG)
+    void sendByteMessageToQueue(Class<? extends MessageSender> messageSender)
+    {
+        //Arrange
+        MessageSenderManager.setDefaultStrategy(messageSender);
+        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
+
+        //Act
+        objectUnderTest
+                .sendByteMessage(message)
+                .toQueue(QUEUE_DESTINATION)
+                .addHeader(TYPE, message.getClass().getSimpleName())
+                .asJson();
+
+        //Assert
+        await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
+
+        assertDoesNotThrow(() -> (BytesMessage)queueListener.getMessages().get(0));
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
     @Test
     void sendMessageReconnectQueue() throws JMSException
     {
-        //Arrange --
+        //Arrange
+        MessageSenderManager.setDefaultStrategy(JMSSender.class); // Reconnect is only meaningful for JMSSender
+        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
         //Act (simulate an error in between sending two messages
         objectUnderTest
@@ -142,44 +210,6 @@ class JMSSenderIT
         await().atMost(1, TimeUnit.SECONDS).until(() -> queueListener.getMessages().size() >= 2);
         assertDoesNotThrow(() -> (TextMessage)queueListener.getMessages().get(0));
 
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
-    }
-
-    @Test
-    void sendByteMessageToTopic()
-    {
-        //Arrange --
-
-        //Act
-        objectUnderTest
-                .sendByteMessage(message)
-                .toTopic(TOPIC_DESTINATION)
-                .addHeader(TYPE, message.getClass().getSimpleName())
-                .asJson();
-
-        //Assert
-        await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
-
-        assertDoesNotThrow(() -> (BytesMessage)topicListener.getMessages().get(0));
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
-    }
-
-    @Test
-    void sendByteMessageToQueue()
-    {
-        //Arrange --
-
-        //Act
-        objectUnderTest
-                .sendByteMessage(message)
-                .toQueue(QUEUE_DESTINATION)
-                .addHeader(TYPE, message.getClass().getSimpleName())
-                .asJson();
-
-        //Assert
-        await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
-
-        assertDoesNotThrow(() -> (BytesMessage)queueListener.getMessages().get(0));
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
