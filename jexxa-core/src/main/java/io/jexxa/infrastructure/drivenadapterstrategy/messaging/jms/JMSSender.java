@@ -136,7 +136,6 @@ public class JMSSender extends MessageSender implements AutoCloseable
                 jmsMessage.setStringProperty(entry.getKey().toString(), entry.getValue().toString());
             }
         }
-
         messageProducer.send(jmsMessage);
     }
 

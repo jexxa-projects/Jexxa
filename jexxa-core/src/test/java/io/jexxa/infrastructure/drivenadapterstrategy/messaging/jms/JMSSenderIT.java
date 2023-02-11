@@ -46,7 +46,6 @@ class JMSSenderIT
     private QueueListener queueListener;
     private JexxaMain jexxaMain;
 
-    private MessageSender objectUnderTest;
 
     @BeforeEach
     void initTests()
@@ -54,8 +53,6 @@ class JMSSenderIT
         jexxaMain = new JexxaMain(JexxaTestApplication.class);
         topicListener = new TopicListener();
         queueListener = new QueueListener();
-        MessageSenderManager.setDefaultStrategy(JMSSender.class);
-        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
         jexxaMain.disableBanner()
                 .bind(JMSAdapter.class).to(queueListener)
@@ -77,7 +74,7 @@ class JMSSenderIT
     {
         //Arrange
         MessageSenderManager.setDefaultStrategy(messageSender);
-        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
+        var objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
 
         //Act
@@ -102,7 +99,7 @@ class JMSSenderIT
     {
         //Arrange
         MessageSenderManager.setDefaultStrategy(messageSender);
-        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
+        var objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
         //Act
         objectUnderTest
@@ -124,7 +121,7 @@ class JMSSenderIT
     {
         //Arrange
         MessageSenderManager.setDefaultStrategy(messageSender);
-        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
+        var objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
         //Act
         objectUnderTest
@@ -147,7 +144,7 @@ class JMSSenderIT
     {
         //Arrange
         MessageSenderManager.setDefaultStrategy(messageSender);
-        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
+        var objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
         //Act
         objectUnderTest
@@ -169,7 +166,7 @@ class JMSSenderIT
     {
         //Arrange
         MessageSenderManager.setDefaultStrategy(messageSender);
-        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
+        var objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
         //Act
         objectUnderTest
@@ -190,7 +187,7 @@ class JMSSenderIT
     {
         //Arrange
         MessageSenderManager.setDefaultStrategy(JMSSender.class); // Reconnect is only meaningful for JMSSender
-        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
+        var objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
         //Act (simulate an error in between sending two messages
         objectUnderTest
@@ -221,8 +218,9 @@ class JMSSenderIT
         properties.putAll(jexxaMain.getProperties());
         properties.remove(JexxaJMSProperties.JNDI_PASSWORD_KEY);
         properties.put(JexxaJMSProperties.JNDI_PASSWORD_FILE, "src/test/resources/secrets/jndiPassword");
+        MessageSenderManager.setDefaultStrategy(JMSSender.class);
 
-        objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, properties);
+        var objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, properties);
 
         //Act
         objectUnderTest

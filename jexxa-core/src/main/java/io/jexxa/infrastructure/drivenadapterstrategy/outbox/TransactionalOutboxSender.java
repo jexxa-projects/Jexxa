@@ -93,11 +93,13 @@ public class TransactionalOutboxSender extends MessageSender {
         MessageProducer producer;
         if (outboxMessage.messageType.equals(MessageType.TEXT_MESSAGE))
         {
-            producer = messageSender.send(outboxMessage.message()).toQueue(outboxMessage.destination);
+            producer = messageSender.send(outboxMessage.message()).toQueue(outboxMessage.destination());
         } else {
-            producer = messageSender.sendByteMessage(outboxMessage.message()).toQueue(outboxMessage.destination);
+            producer = messageSender.sendByteMessage(outboxMessage.message()).toQueue(outboxMessage.destination());
         }
-        outboxMessage.messageProperties.forEach((key, value) -> producer.addHeader((String)key, (String)value));
+        if (outboxMessage.messageProperties() != null) {
+            outboxMessage.messageProperties().forEach((key, value) -> producer.addHeader((String) key, (String) value));
+        }
         producer.asString();
     }
 
@@ -106,13 +108,15 @@ public class TransactionalOutboxSender extends MessageSender {
     {
         var messageSender = MessageSenderManager.getMessageSender(TransactionalOutboxSender.class, properties);
         MessageProducer producer;
-        if (outboxMessage.messageType.equals(MessageType.TEXT_MESSAGE))
+        if (outboxMessage.messageType().equals(MessageType.TEXT_MESSAGE))
         {
-            producer = messageSender.send(outboxMessage.message()).toTopic(outboxMessage.destination);
+            producer = messageSender.send(outboxMessage.message()).toTopic(outboxMessage.destination());
         } else {
-            producer = messageSender.sendByteMessage(outboxMessage.message()).toTopic(outboxMessage.destination);
+            producer = messageSender.sendByteMessage(outboxMessage.message()).toTopic(outboxMessage.destination());
         }
-        outboxMessage.messageProperties.forEach((key, value) -> producer.addHeader((String)key, (String)value));
+        if (outboxMessage.messageProperties() != null) {
+            outboxMessage.messageProperties().forEach((key, value) -> producer.addHeader((String) key, (String) value));
+        }
         producer.asString();
     }
 

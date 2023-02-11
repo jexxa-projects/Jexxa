@@ -7,18 +7,21 @@ import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
+import io.jexxa.infrastructure.drivenadapterstrategy.outbox.TransactionalOutboxSender;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.JSONMessageListener;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.TypedMessageListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import static io.jexxa.infrastructure.utils.messaging.QueueListener.QUEUE_DESTINATION;
 import static io.jexxa.infrastructure.utils.messaging.TopicListener.TOPIC_DESTINATION;
@@ -39,7 +42,6 @@ class MessageListenerIT
     private TextMessageListener jsonMessageListener;
     private JexxaMain jexxaMain;
 
-    private MessageSender objectUnderTest;
 
     @BeforeEach
     void initTests()
@@ -47,18 +49,28 @@ class MessageListenerIT
         jexxaMain = new JexxaMain(JexxaTestApplication.class);
         jsonMessageListener = new TextMessageListener();
         typedListener = new JexxaValueObjectListener();
-        objectUnderTest = MessageSenderManager.getMessageSender(MessageListenerIT.class, jexxaMain.getProperties());
 
         jexxaMain.bind(JMSAdapter.class).to(typedListener)
                 .bind(JMSAdapter.class).to(jsonMessageListener)
                 .disableBanner()
                 .start();
     }
-
-    @Test
-    void receiveDomainEvent()
+    @SuppressWarnings("unused")
+    static Stream<Class<? extends MessageSender>> getMessageSenderConfig()
     {
-        //Arrange --
+        return Stream.of(JMSSender.class, TransactionalOutboxSender.class);
+    }
+
+    private static final String MESSAGE_SENDER_CONFIG = "getMessageSenderConfig";
+
+    @ParameterizedTest
+    @MethodSource(MESSAGE_SENDER_CONFIG)
+    void receiveDomainEvent(Class<? extends MessageSender> messageSender)
+    {
+        //Arrange
+        MessageSenderManager.setDefaultStrategy(messageSender);
+        var objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
+
         //Act
         objectUnderTest
                 .send(domainEvent)
@@ -71,10 +83,14 @@ class MessageListenerIT
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
-    @Test
-    void receiveTypedMessage()
+    @ParameterizedTest
+    @MethodSource(MESSAGE_SENDER_CONFIG)
+    void receiveTypedMessage(Class<? extends MessageSender> messageSender)
     {
-        //Arrange --
+        //Arrange
+        MessageSenderManager.setDefaultStrategy(messageSender);
+        var objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
+
         //Act
         objectUnderTest
                 .send(message)
@@ -98,7 +114,6 @@ class MessageListenerIT
         public void onMessage(String textMessage)
         {
             this.textMessage = textMessage;
-
         }
 
         public String getTextMessage()
