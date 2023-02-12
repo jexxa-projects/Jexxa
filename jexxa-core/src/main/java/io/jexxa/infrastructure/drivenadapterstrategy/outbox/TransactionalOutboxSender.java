@@ -17,6 +17,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This class implements the  <a href="https://microservices.io/patterns/data/transactional-outbox.html">transactional outbox pattern</a>.
+ * This class encapsulates both parts, storing messages to a database within the transaction of the incoming method call
+ * and the message relay part.
+ * <br>
+ * In the current implementation, we check each 300 ms if a new message is available that is then forwarded.
+ */
 @SuppressWarnings("unused")
 public class TransactionalOutboxSender extends MessageSender {
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
@@ -32,7 +39,7 @@ public class TransactionalOutboxSender extends MessageSender {
                         , JexxaOutboxMessage::messageId
                         , properties );
 
-        executor.scheduleAtFixedRate( this::transactionalSend, 500, 500, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate( this::transactionalSend, 300, 300, TimeUnit.MILLISECONDS);
         JexxaContext.registerCleanupHandler(this::cleanup);
     }
 
@@ -47,6 +54,10 @@ public class TransactionalOutboxSender extends MessageSender {
         }
     }
 
+    /**
+     * This method is the entry point for the message relay part of the transactional outbox pattern.
+     * It calls method {@link #sendOutboxMessages()} in a transaction managed by the invocation manager
+     */
     public void transactionalSend()
     {
         try {
