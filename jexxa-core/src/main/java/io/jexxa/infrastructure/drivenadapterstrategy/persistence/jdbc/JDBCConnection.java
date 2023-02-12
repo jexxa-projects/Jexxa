@@ -87,7 +87,7 @@ public class JDBCConnection implements AutoCloseable
         {
             isolationLevel = IsolationLevel.valueOf(properties
                     .getProperty(JexxaJDBCProperties.JEXXA_JDBC_TRANSACTION_ISOLATION_LEVEL)
-                    .toUpperCase(Locale.ROOT)
+                    .toUpperCase(Locale.ROOT).replace('-', '_')
             );
         }
 
