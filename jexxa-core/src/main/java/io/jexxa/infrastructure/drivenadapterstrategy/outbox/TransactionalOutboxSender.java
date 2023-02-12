@@ -54,6 +54,9 @@ public class TransactionalOutboxSender extends MessageSender {
         } catch (InvocationTargetRuntimeException e)
         {
             JexxaLogger.getLogger(getClass()).warn("Could not send outbox messages. Reason: {}", e.getTargetException().getMessage());
+        } catch (Throwable e)
+        {
+            JexxaLogger.getLogger(getClass()).error("{} occurred in transactionalSend occurred. Reason: {}", e.getClass().getSimpleName(), e.getMessage());
         }
     }
 
