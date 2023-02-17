@@ -7,6 +7,8 @@ import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
+import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnectionPool;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
 import io.jexxa.utils.JexxaLogger;
@@ -38,6 +40,8 @@ public class TransactionalOutboxSender extends MessageSender {
                 .getRepository(JexxaOutboxMessage.class
                         , JexxaOutboxMessage::messageId
                         , properties );
+
+        JDBCConnectionPool.configureExclusiveConnection(outboxRepository, JDBCConnection.IsolationLevel.SERIALIZABLE);
 
         executor.scheduleAtFixedRate( this::transactionalSend, 300, 300, TimeUnit.MILLISECONDS);
         JexxaContext.registerCleanupHandler(this::cleanup);
@@ -141,4 +145,5 @@ public class TransactionalOutboxSender extends MessageSender {
                               Properties messageProperties, MessageType messageType,
                               DestinationType destinationType)
     {   }
+
 }
