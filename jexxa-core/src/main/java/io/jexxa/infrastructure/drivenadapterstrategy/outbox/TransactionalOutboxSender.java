@@ -118,7 +118,7 @@ public class TransactionalOutboxSender extends MessageSender {
         if (outboxMessage.messageProperties() != null) {
             outboxMessage.messageProperties().forEach((key, value) -> producer.addHeader((String) key, (String) value));
         }
-        producer.asString();
+        producer.addHeader("domain_event_id", outboxMessage.messageId().toString()).asString();
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -135,7 +135,7 @@ public class TransactionalOutboxSender extends MessageSender {
         if (outboxMessage.messageProperties() != null) {
             outboxMessage.messageProperties().forEach((key, value) -> producer.addHeader((String) key, (String) value));
         }
-        producer.asString();
+        producer.addHeader("domain_event_id", outboxMessage.messageId().toString()).asString();
     }
 
 
