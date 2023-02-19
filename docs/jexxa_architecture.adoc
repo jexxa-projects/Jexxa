@@ -495,6 +495,7 @@ of interceptors. Since treating Port Adapter is singleton reduces overall comple
 |===
 
 === Transactions
+// suppress inspection "GrazieInspection"
 Jexxa does not support any two-phase commit protocol for distributed transaction as required when using multiple driven
 adapters in a single use case. Traditional enterprise frameworks for example often spawn (by default) a transaction
 between the used technology stacks. Main reason was that multiple centralized databases were involved in a single operation that were

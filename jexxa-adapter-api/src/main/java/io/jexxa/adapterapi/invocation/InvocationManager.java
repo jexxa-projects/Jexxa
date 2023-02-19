@@ -8,12 +8,7 @@ public final class InvocationManager {
 
     public static InvocationHandler getInvocationHandler(Object object)
     {
-        if ( ! INVOCATION_HANDLER_MAP.containsKey(object) )
-        {
-            INVOCATION_HANDLER_MAP.put(object, createDefaultInvocationHandler());
-        }
-
-        return INVOCATION_HANDLER_MAP.get(object);
+        return INVOCATION_HANDLER_MAP.computeIfAbsent(object, key -> createDefaultInvocationHandler());
     }
 
     public static DefaultInvocationHandler getRootInterceptor(Object object)

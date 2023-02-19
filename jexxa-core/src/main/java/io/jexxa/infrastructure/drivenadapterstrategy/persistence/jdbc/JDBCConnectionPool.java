@@ -53,25 +53,17 @@ public class JDBCConnectionPool implements AutoCloseable {
 
     private JDBCConnection getSharedConnection(Properties properties, String connectionName)
     {
-        if (!sharedConnectionMap.containsKey(connectionName))
-        {
-            var newConnection = new JDBCConnection(properties);
-            sharedConnectionMap.put(properties.getProperty(JexxaJDBCProperties.JEXXA_JDBC_URL), newConnection);
-        }
-
-        return sharedConnectionMap.get(connectionName).validateConnection();
+        return sharedConnectionMap
+                .computeIfAbsent(connectionName, key -> new JDBCConnection(properties))
+                .validateConnection();
     }
 
     private JDBCConnection getExclusiveConnection(Properties properties, Object managingObject)
     {
-        if (!exclusiveConnectionMap.containsKey(managingObject))
-        {
-            var newConnection = new JDBCConnection(properties);
-            newConnection.setIsolationLevel(connectionConfiguration.get(managingObject));
-            exclusiveConnectionMap.put(managingObject, newConnection);
-        }
-
-        return exclusiveConnectionMap.get(managingObject).validateConnection();
+        return exclusiveConnectionMap
+                .computeIfAbsent(managingObject, key -> new JDBCConnection(properties))
+                .setIsolationLevel(connectionConfiguration.get(managingObject))
+                .validateConnection();
     }
 
     @Override

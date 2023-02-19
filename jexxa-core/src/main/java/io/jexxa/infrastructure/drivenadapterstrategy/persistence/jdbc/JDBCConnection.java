@@ -64,7 +64,7 @@ public class JDBCConnection implements AutoCloseable
     }
 
     @SuppressWarnings("MagicConstant") // The enum IsolationLevel ensures correct constant
-    public void setIsolationLevel(IsolationLevel isolationLevel) {
+    public JDBCConnection setIsolationLevel(IsolationLevel isolationLevel) {
         this.isolationLevel = isolationLevel;
         if (isolationLevel != null)
         {
@@ -75,9 +75,11 @@ public class JDBCConnection implements AutoCloseable
                 }
             } catch (SQLException e)
             {
+                close();
                 throw new IllegalStateException("Configuring IsolationLevel failed. Check if isolation level is supported by your DB", e);
             }
         }
+        return this;
     }
 
     protected void setIsolationLevel()
