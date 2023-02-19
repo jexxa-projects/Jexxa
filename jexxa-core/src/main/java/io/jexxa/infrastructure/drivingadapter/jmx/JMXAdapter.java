@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
+@Deprecated(forRemoval = true)
 public class JMXAdapter implements IDrivingAdapter
 {
     private final List<MBeanConvention> registeredMBeans = new ArrayList<>();
