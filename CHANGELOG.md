@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## \[5.7.0] - 2023-02-xx
+### Added
+- [ #186 ] Jexxa-Core: Added support for transactional outbox pattern for sending JMS messages. By default, the old JMSSender is still used. See [here](jexxa-core/src/test/java/io/jexxa/infrastructure/drivenadapterstrategy/messaging/jms/JMSSenderIT.java) how to enable the new message sender.    
+
+### Changed
+- Jexxa-Core: Declared JMXDrivingAdapter as deprecated since it is no longer used in any project.
+
+### Fixed
+- Updated dependencies
+
 ## \[5.6.2] - 2023-02-02
 
 ### Fixed

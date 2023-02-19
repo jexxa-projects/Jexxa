@@ -43,7 +43,7 @@ public final class JexxaWebProperties
     public static final String JEXXA_REST_STATIC_FILES_ROOT = "io.jexxa.rest.static_files_root";
 
     /**
-     * Defines the directory path to the static files provided via http(s) outside of the jar
+     * Defines the directory path to the static files provided via http(s) outside the jar
      */
     public static final String JEXXA_REST_STATIC_FILES_EXTERNAL = "io.jexxa.rest.static_files_external";
 

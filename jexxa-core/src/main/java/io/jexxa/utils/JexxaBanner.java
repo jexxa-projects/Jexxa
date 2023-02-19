@@ -1,5 +1,7 @@
 package io.jexxa.utils;
 
+import io.jexxa.adapterapi.JexxaContext;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -41,6 +43,7 @@ public final class JexxaBanner
 
     private JexxaBanner()
     {
-        // private constructor
+        JexxaContext.registerCleanupHandler(JexxaBanner::clear);
+        JexxaContext.registerInitHandler(JexxaBanner::clear);
     }
 }

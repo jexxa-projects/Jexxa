@@ -27,6 +27,7 @@ import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
 import static java.util.stream.Collectors.toList;
 import static javax.management.MBeanOperationInfo.UNKNOWN;
 
+@Deprecated(forRemoval = true)
 public class MBeanConvention implements DynamicMBean
 {
     private final Object object;
