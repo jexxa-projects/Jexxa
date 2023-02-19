@@ -58,7 +58,6 @@ public class SimpleApplicationService
     public int throwNullPointerException()   // Test runtime exception
     {
         JexxaValueObject jexxaValueObject = null;
-        //noinspection ConstantConditions
         return jexxaValueObject.getValue();
     }
 

@@ -42,7 +42,6 @@ public class  JDBCBuilder <T extends Enum<T>>
     }
 
 
-    @SuppressWarnings("ClassCanBeRecord")
     public static class JDBCCondition<V extends Enum<V>, T extends JDBCBuilder<V> >
     {
         private final T queryBuilder;

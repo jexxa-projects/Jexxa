@@ -16,7 +16,7 @@ public class JDBCConnectionPool implements AutoCloseable {
     private final Map<Object, JDBCConnection> exclusiveConnectionMap = new HashMap<>();
     private final Map<Object, JDBCConnection.IsolationLevel> connectionConfiguration = new HashMap<>();
 
-    static public JDBCConnection getConnection(Properties properties, Object managingObject)
+    public static JDBCConnection getConnection(Properties properties, Object managingObject)
     {
         var connectionName = properties.getProperty(JexxaJDBCProperties.JEXXA_JDBC_URL);
 
@@ -33,7 +33,7 @@ public class JDBCConnectionPool implements AutoCloseable {
     }
 
 
-    static public void configureExclusiveConnection(Object managingObject, JDBCConnection.IsolationLevel isolationLevel)
+    public static void configureExclusiveConnection(Object managingObject, JDBCConnection.IsolationLevel isolationLevel)
     {
         JDBC_CONNECTION_POOL.connectionConfiguration.put(managingObject, isolationLevel);
     }
