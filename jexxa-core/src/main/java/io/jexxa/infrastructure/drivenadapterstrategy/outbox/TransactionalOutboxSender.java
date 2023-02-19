@@ -11,6 +11,7 @@ import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnec
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnectionPool;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
+import io.jexxa.infrastructure.drivingadapter.scheduler.Scheduler;
 import io.jexxa.utils.JexxaLogger;
 
 import java.util.Properties;
@@ -53,8 +54,10 @@ public class TransactionalOutboxSender extends MessageSender {
             if (!executor.awaitTermination(1, TimeUnit.SECONDS)) {
                 executor.shutdownNow();
             }
-        } catch (InterruptedException ignored) {
+        } catch (InterruptedException e) {
             executor.shutdownNow();
+            JexxaLogger.getLogger(Scheduler.class).warn("ExecutorService could not be stopped -> Force shutdown.", e);
+            Thread.currentThread().interrupt();
         }
     }
 
