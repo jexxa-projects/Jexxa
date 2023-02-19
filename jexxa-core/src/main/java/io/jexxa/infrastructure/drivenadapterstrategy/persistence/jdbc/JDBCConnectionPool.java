@@ -61,8 +61,11 @@ public class JDBCConnectionPool implements AutoCloseable {
     private JDBCConnection getExclusiveConnection(Properties properties, Object managingObject)
     {
         return exclusiveConnectionMap
-                .computeIfAbsent(managingObject, key -> new JDBCConnection(properties))
-                .setIsolationLevel(connectionConfiguration.get(managingObject))
+                .computeIfAbsent(managingObject, key -> {
+                    var jdbcConnection = new JDBCConnection(properties);
+                    jdbcConnection.setIsolationLevel(connectionConfiguration.get(managingObject));
+                    return jdbcConnection;
+                })
                 .validateConnection();
     }
 

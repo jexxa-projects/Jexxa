@@ -75,7 +75,6 @@ public class JDBCConnection implements AutoCloseable
                 }
             } catch (SQLException e)
             {
-                close();
                 throw new IllegalStateException("Configuring IsolationLevel failed. Check if isolation level is supported by your DB", e);
             }
         }
