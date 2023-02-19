@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
+/**
+ * @deprecated Removed since it was not used in past years
+ */
 @Deprecated(forRemoval = true)
 public class JMXAdapter implements IDrivingAdapter
 {
