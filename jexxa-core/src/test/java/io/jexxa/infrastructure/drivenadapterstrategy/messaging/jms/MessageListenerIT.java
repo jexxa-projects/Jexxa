@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Tag(TestConstants.INTEGRATION_TEST)
 class MessageListenerIT
 {
+    private static final String MESSAGE_SENDER_CONFIG = "getMessageSenderConfig";
     private final JexxaValueObject message = new JexxaValueObject(42);
     private final JexxaDomainEvent domainEvent = JexxaDomainEvent.create(message);
 
@@ -60,8 +61,6 @@ class MessageListenerIT
     {
         return Stream.of(JMSSender.class, TransactionalOutboxSender.class);
     }
-
-    private static final String MESSAGE_SENDER_CONFIG = "getMessageSenderConfig";
 
     @ParameterizedTest
     @MethodSource(MESSAGE_SENDER_CONFIG)

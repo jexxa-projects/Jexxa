@@ -39,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertTimeout;
 @Tag(TestConstants.INTEGRATION_TEST)
 class JMSSenderIT
 {
+    private static final String MESSAGE_SENDER_CONFIG = "getMessageSenderConfig";
     private static final String TYPE = "type";
     private final JexxaValueObject message = new JexxaValueObject(42);
 
@@ -66,8 +67,6 @@ class JMSSenderIT
         return Stream.of(JMSSender.class, TransactionalOutboxSender.class);
     }
 
-    private static final String MESSAGE_SENDER_CONFIG = "getMessageSenderConfig";
-
     @ParameterizedTest
     @MethodSource(MESSAGE_SENDER_CONFIG)
     void sendMessageToTopic(Class<? extends MessageSender> messageSender)
@@ -75,7 +74,6 @@ class JMSSenderIT
         //Arrange
         MessageSenderManager.setDefaultStrategy(messageSender);
         var objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
-
 
         //Act
         objectUnderTest
