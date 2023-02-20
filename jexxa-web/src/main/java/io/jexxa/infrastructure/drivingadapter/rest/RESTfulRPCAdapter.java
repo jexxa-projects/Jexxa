@@ -59,7 +59,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     {
         this.properties = properties;
 
-        validateIsTrue(isHTTPEnabled() || isHTTPSEnabled(), "Neither HTTP (" + JexxaWebProperties.JEXXA_REST_PORT + ") nor HTTPS (" + JexxaWebProperties.JEXXA_REST_HTTPS_PORT + ") is enabled!");
+        validateIsTrue(isHTTPEnabled() || isHTTPSEnabled(), "Neither HTTP (" + JexxaWebProperties.JEXXA_REST_PORT + ") nor HTTPS (" + JexxaWebProperties.JEXXA_REST_HTTPS_PORT + ") is enabled! -> Check your jexxa-application.properties");
 
         if ( isHTTPSEnabled() )
         {
