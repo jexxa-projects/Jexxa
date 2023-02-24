@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[5.7.1] - 2023-mm-dd
+## \[5.7.1] - 2023-02-24
 ### Fixed
 - Updated dependencies
 - [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/drivenadapterstrategy/outbox/TransactionalOutboxSender.java) initiates sending of messages directly after storing messages so that no additional delay occurs 
