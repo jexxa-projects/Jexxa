@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [ #186 ] Jexxa-Core: Added support for transactional outbox pattern for sending JMS messages, called `TransactionalOutboxSender`. By default, the old `JMSSender` is still used. See [here](jexxa-core/src/test/java/io/jexxa/infrastructure/drivenadapterstrategy/messaging/jms/JMSSenderIT.java) how to enable the new message sender.    
 
 ### Changed
-- Jexxa-Core: Declared `JMXDrivingAdapter` as deprecated since it is no longer used in any project.
+- Jexxa-Core: Declared driving adapter [`JMXAdapter`](jexxa-core/src/main/java/io/jexxa/infrastructure/drivingadapter/jmx/JMXAdapter.java) as deprecated since it is no longer used in any project.
 
 ### Fixed
 - Updated dependencies
