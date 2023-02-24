@@ -51,7 +51,7 @@
     <maven.enforcer.plugin>3.1.0</maven.enforcer.plugin>
     <maven.javadoc.plugin>3.5.0</maven.javadoc.plugin>
     <maven.templating.plugin>1.0.0</maven.templating.plugin>
-    <maven.versions.plugin>2.14.2</maven.versions.plugin>
+    <maven.versions.plugin>2.15.0</maven.versions.plugin>
     <project.scm.id>github-Jexxa</project.scm.id>
 
     <!--information for filtered sources  -->
