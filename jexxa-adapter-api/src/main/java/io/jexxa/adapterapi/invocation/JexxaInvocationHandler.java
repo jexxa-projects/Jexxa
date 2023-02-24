@@ -7,11 +7,7 @@ import io.jexxa.adapterapi.invocation.function.SerializableSupplier;
 
 import java.lang.reflect.Method;
 
-/**
- * @deprecated will be replaced by {@link JexxaInvocationHandler} to avoid conflict with InvocationHandler from java.lang
- */
-@Deprecated(forRemoval = true)
-public interface InvocationHandler
+public interface JexxaInvocationHandler
 {
     /**
      * This method performs a method invocation on given method.
