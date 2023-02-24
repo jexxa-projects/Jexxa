@@ -65,6 +65,7 @@ public class TransactionalOutboxSender extends MessageSender {
      * This method is the entry point for the message relay part of the transactional outbox pattern.
      * It calls method {@link #sendOutboxMessages()} in a transaction managed by the invocation manager
      */
+    @SuppressWarnings("java:S1181")
     public void transactionalSend()
     {
         try {
@@ -84,6 +85,7 @@ public class TransactionalOutboxSender extends MessageSender {
                 UUID.randomUUID(), message,
                 destination, messageProperties,
                 messageType, DestinationType.QUEUE));
+        executor.schedule( this::transactionalSend,0, TimeUnit.MICROSECONDS);
     }
 
     @Override
@@ -92,6 +94,7 @@ public class TransactionalOutboxSender extends MessageSender {
                 UUID.randomUUID(), message,
                 destination, messageProperties,
                 messageType, DestinationType.TOPIC));
+        executor.schedule( this::transactionalSend,0, TimeUnit.MICROSECONDS);
     }
 
     private void sendOutboxMessages()
