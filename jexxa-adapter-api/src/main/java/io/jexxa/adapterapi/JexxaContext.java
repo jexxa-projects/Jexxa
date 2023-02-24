@@ -31,6 +31,6 @@ public class JexxaContext {
 
     private JexxaContext()
     {
-
+        //Private constructor to ensure Singleton
     }
 }
