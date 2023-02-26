@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 class InvocationContextTest {
     private CountingObject objectUnderTest;
-    private InvocationHandler invocationHandler;
+    private JexxaInvocationHandler invocationHandler;
     private Method invocationMethod;
     private final InvocationContext[] resultingContext = new InvocationContext[4];
 

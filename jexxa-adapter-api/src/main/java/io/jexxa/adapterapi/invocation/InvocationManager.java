@@ -6,7 +6,7 @@ public final class InvocationManager {
     private static final HashMap<Object, DefaultInvocationHandler> INVOCATION_HANDLER_MAP = new HashMap<>();
 
 
-    public static InvocationHandler getInvocationHandler(Object object)
+    public static JexxaInvocationHandler getInvocationHandler(Object object)
     {
         return INVOCATION_HANDLER_MAP.computeIfAbsent(object, key -> createDefaultInvocationHandler());
     }

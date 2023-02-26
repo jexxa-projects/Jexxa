@@ -23,60 +23,6 @@ import java.util.Properties;
 @SuppressWarnings({"unused", "java:S1133"})
 public class JMSSender extends MessageSender implements AutoCloseable
 {
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String JNDI_PROVIDER_URL_KEY = "java.naming.provider.url";
-
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String JNDI_USER_KEY = "java.naming.user";
-
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String JNDI_USER_FILE = "java.naming.file.user";
-
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String JNDI_PASSWORD_KEY = "java.naming.password";
-
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String JNDI_PASSWORD_FILE = "java.naming.file.password";
-
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String JNDI_FACTORY_KEY = "java.naming.factory.initial";
-
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String DEFAULT_JNDI_PROVIDER_URL = "tcp://localhost:61616";
-
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String DEFAULT_JNDI_USER = "admin";
-
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String DEFAULT_JNDI_FACTORY = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
-
     private final Properties properties;
 
     private Connection connection;

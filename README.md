@@ -17,7 +17,7 @@ Goal of this framework is to support the development of _durable_ business appli
 
 In addition, Jexxa offers following production-proven features:    
 
-*   Integrated most common driving adapters: RMI over REST, JMX, and JMS. 
+*   Integrated most common driving adapters: RMI over REST, and JMS. 
 *   Integrated strategies for most common driven adapters: JDBC, in memory DB (IMDB), and JMS. 
 *   Integrated stubs to write unit-tests without mock frameworks.  
 

@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class DefaultInvocationHandlerTest {
 
     private CountingObject objectUnderTest;
-    private InvocationHandler invocationHandler;
+    private JexxaInvocationHandler invocationHandler;
     private Method invocationMethod;
 
 

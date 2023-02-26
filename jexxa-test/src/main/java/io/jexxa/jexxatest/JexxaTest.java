@@ -13,7 +13,6 @@ import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.annotations.CheckReturnValue;
 import io.jexxa.utils.function.ThrowingConsumer;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -32,19 +31,6 @@ public class JexxaTest
     public static final String JEXXA_TEST_PROPERTIES = "/jexxa-test.properties";
 
     private static JexxaMain jexxaMain;
-
-    /**
-     * @deprecated Use method {@link #getJexxaTest} instead
-     */
-    @Deprecated(forRemoval = false)
-    public JexxaTest(JexxaMain jexxaMain)
-    {
-        Objects.requireNonNull(jexxaMain);
-        this.jexxaMain = jexxaMain;
-        jexxaMain.addProperties( loadJexxaTestProperties() );
-
-        initForUnitTests();
-    }
 
     private JexxaTest()
     {
