@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - `io.jexxa.rest.keystore` &rarr; `io.jexxa.rest.keystore.location`
 
 - Removed all deprecated declarations:
-  - Jexxa-Adapter-API: Removed `InvocationHandler` which is named no `JexxaInvocationHandler` 
+  - Jexxa-Adapter-API: Removed `InvocationHandler` which is named now `JexxaInvocationHandler` 
   - Jexxa-Core: Removed deprecated `JMXAdapter` and deprecated static properties
   - Jexxa-Web: Removed deprecated static properties 
 
