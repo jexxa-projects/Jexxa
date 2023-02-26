@@ -43,9 +43,10 @@ public abstract class JSONMessageListener implements MessageListener
 
             onMessage( currentMessageText );
         }
-        catch (RuntimeException | JMSException exception)
+        catch (JMSException exception)
         {
-            JexxaLogger.getLogger(getClass()).error(exception.getMessage());
+            //In case of a JMS exception we assume that data cannot be read due to some internal JMS issues and discard the message
+            JexxaLogger.getLogger(getClass()).error("Could not process received message as text or byte message -> Discard it. Reason: {}", exception.getMessage());
         }
         currentMessage = null;
         currentMessageText = null;
