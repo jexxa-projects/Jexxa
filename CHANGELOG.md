@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[6.0.0] - 2023-mm-dd
 
 ### Changed
+- [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/drivenadapterstrategy/outbox/TransactionalOutboxSender.java) is now used by default for sending messages.   
+
 - Changed HTTP-properties to meet declaration convention: 
   - `io.jexxa.rest.open_api_path` -> `io.jexxa.rest.openapi.path`
   - `io.jexxa.rest.static_files_root` -> `io.jexxa.rest.static.files.root`
