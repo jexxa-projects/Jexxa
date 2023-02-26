@@ -1,7 +1,7 @@
 package io.jexxa.infrastructure.drivenadapterstrategy.messaging;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.logging.MessageLogger;
+import io.jexxa.infrastructure.drivenadapterstrategy.outbox.TransactionalOutboxSender;
 import io.jexxa.utils.JexxaBanner;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.annotations.CheckReturnValue;
@@ -13,9 +13,7 @@ import java.util.Objects;
 import java.util.Properties;
 
 import static io.jexxa.utils.JexxaBanner.addConfigBanner;
-import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_SIMULATE;
-import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_STRATEGY;
-import static io.jexxa.utils.properties.JexxaJMSProperties.JNDI_FACTORY_KEY;
+import static io.jexxa.utils.properties.JexxaJMSProperties.*;
 
 public final class MessageSenderManager
 {
@@ -67,7 +65,7 @@ public final class MessageSenderManager
         // 4. If a JNDI Factory is defined and simulation mode is deactivated => Use JMSSender
         if (properties.containsKey(JNDI_FACTORY_KEY) && !properties.containsKey(JEXXA_JMS_SIMULATE))
         {
-            return JMSSender.class;
+            return TransactionalOutboxSender.class;
         }
 
         // 5. In all other cases (including simulation mode) return a MessageLogger
