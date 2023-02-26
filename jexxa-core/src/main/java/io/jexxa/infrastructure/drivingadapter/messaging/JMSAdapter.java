@@ -35,54 +35,6 @@ import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_SIMULATE;
 
 public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 {
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String JNDI_PROVIDER_URL_KEY = "java.naming.provider.url";
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String JNDI_USER_KEY = "java.naming.user";
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String JNDI_PASSWORD_KEY = "java.naming.password";
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String JNDI_FACTORY_KEY = "java.naming.factory.initial";
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String JNDI_PASSWORD_FILE = "java.naming.file.password";
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String JNDI_USER_FILE = "java.naming.file.user";
-    /**
-     * @deprecated Moved to {@link JexxaJMSProperties}
-     */
-    @Deprecated(forRemoval = true)
-    public static final String JNDI_CLIENT_ID = "java.naming.client.id";
-
-    /**
-     * @deprecated Default value will be removed becaus it is not meaningful
-     */
-    @Deprecated(forRemoval = true)
-    public static final String DEFAULT_JNDI_PROVIDER_URL = "tcp://localhost:61616";
-
-    /**
-     * @deprecated Default value will be removed becaus it is not meaningful
-     */
-    @Deprecated(forRemoval = true)
-    public static final String DEFAULT_JNDI_FACTORY = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
-
     private Connection connection;
     private final List<Session> sessionList = new ArrayList<>();
     private final List<MessageConsumer> consumerList = new ArrayList<>();
