@@ -14,7 +14,7 @@ import static kong.unirest.HeaderNames.CONTENT_TYPE;
 public class RESTHandler
 {
     private static final String JEXXA_REST_PORT = "io.jexxa.rest.port";
-    private static final String JEXXA_REST_HTTPS_PORT = "io.jexxa.rest.https_port";
+    private static final String JEXXA_REST_HTTPS_PORT = "io.jexxa.rest.https.port";
 
     private final String restPrefix;
 

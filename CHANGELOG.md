@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[6.0.0] - 2023-mm-dd
+
+### Changed
+- Changed HTTP-properties to meet declaration convention: 
+  - `io.jexxa.rest.open_api_path` -> `io.jexxa.rest.openapi.path`
+  - `io.jexxa.rest.static_files_root` -> `io.jexxa.rest.static.files.root`
+  - `io.jexxa.rest.static_files_external` -> `io.jexxa.rest.static.files.external` 
+
+- Changed HTTPS-properties to meet declaration convention:
+  - `io.jexxa.rest.https_port`-> `io.jexxa.rest.https.port`
+  - `io.jexxa.rest.keystore_password` -> `io.jexxa.rest.keystore.password`
+  - `io.jexxa.rest.file.keystore_password` -> `io.jexxa.rest.keystore.file.password`
+  - `io.jexxa.rest.keystore` -> `io.jexxa.rest.keystore.location`
+
+- Removed all deprecated declarations:
+  - Jexxa-Adapter-API: Removed `InvocationHandler` which is named no `JexxaInvocationHandler` 
+  - Jexxa-Core: Removed deprecated `JMXAdapter` and deprecated static properties
+  - Jexxa-Web: Removed deprecated static properties 
+
 ## \[5.7.1] - 2023-02-24
 ### Fixed
 - Updated dependencies
@@ -14,7 +33,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [ #186 ] Jexxa-Core: Added support for transactional outbox pattern for sending JMS messages, called [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/drivenadapterstrategy/outbox/TransactionalOutboxSender.java). By default, the old [`JMSSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/drivenadapterstrategy/messaging/jms/JMSSender.java) is still used. See [here](jexxa-core/src/test/java/io/jexxa/infrastructure/drivenadapterstrategy/messaging/jms/JMSSenderIT.java) how to enable the new message sender.    
 
 ### Changed
-- Jexxa-Core: Declared driving adapter [`JMXAdapter`](jexxa-core/src/main/java/io/jexxa/infrastructure/drivingadapter/jmx/JMXAdapter.java) as deprecated since it is no longer used in any project.
+- Jexxa-Core: Declared driving adapter `JMXAdapter` as deprecated since it is no longer used in any project.
 
 ### Fixed
 - Updated dependencies
