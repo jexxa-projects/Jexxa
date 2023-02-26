@@ -120,7 +120,7 @@ public class RESTHandler
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "java:S112"})
     private void throwCheckedException(HttpResponse<?> httpResponse) throws Exception
     {
         var exceptionWrapper = httpResponse.mapError(ExceptionWrapper.class);
