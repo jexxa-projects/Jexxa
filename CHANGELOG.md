@@ -10,15 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/drivenadapterstrategy/outbox/TransactionalOutboxSender.java) is now used by default for sending messages.   
 
 - Changed HTTP-properties to meet declaration convention: 
-  - `io.jexxa.rest.open_api_path` -> `io.jexxa.rest.openapi.path`
-  - `io.jexxa.rest.static_files_root` -> `io.jexxa.rest.static.files.root`
-  - `io.jexxa.rest.static_files_external` -> `io.jexxa.rest.static.files.external` 
+  - `io.jexxa.rest.open_api_path` &rarr; `io.jexxa.rest.openapi.path`
+  - `io.jexxa.rest.static_files_root` &rarr; `io.jexxa.rest.static.files.root`
+  - `io.jexxa.rest.static_files_external` &rarr; `io.jexxa.rest.static.files.external` 
 
 - Changed HTTPS-properties to meet declaration convention:
-  - `io.jexxa.rest.https_port`-> `io.jexxa.rest.https.port`
-  - `io.jexxa.rest.keystore_password` -> `io.jexxa.rest.keystore.password`
-  - `io.jexxa.rest.file.keystore_password` -> `io.jexxa.rest.keystore.file.password`
-  - `io.jexxa.rest.keystore` -> `io.jexxa.rest.keystore.location`
+  - `io.jexxa.rest.https_port` &rarr; `io.jexxa.rest.https.port`
+  - `io.jexxa.rest.keystore_password` &rarr; `io.jexxa.rest.keystore.password`
+  - `io.jexxa.rest.file.keystore_password` &rarr; `io.jexxa.rest.keystore.file.password`
+  - `io.jexxa.rest.keystore` &rarr; `io.jexxa.rest.keystore.location`
 
 - Removed all deprecated declarations:
   - Jexxa-Adapter-API: Removed `InvocationHandler` which is named no `JexxaInvocationHandler` 
