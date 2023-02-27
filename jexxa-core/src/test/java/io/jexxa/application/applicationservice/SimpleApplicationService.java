@@ -55,6 +55,7 @@ public class SimpleApplicationService
         throw new SimpleApplicationException("TestException");
     }
 
+    @SuppressWarnings("DataFlowIssue") // Because this method should caus a NullPointerException for testing purpose
     public int throwNullPointerException()   // Test runtime exception
     {
         JexxaValueObject jexxaValueObject = null;

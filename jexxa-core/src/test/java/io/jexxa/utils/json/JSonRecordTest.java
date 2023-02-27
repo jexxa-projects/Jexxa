@@ -10,6 +10,7 @@ import static io.jexxa.utils.json.JSONManager.getJSONConverter;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SuppressWarnings("SameParameterValue")
 class JSonRecordTest
 {
     @Test

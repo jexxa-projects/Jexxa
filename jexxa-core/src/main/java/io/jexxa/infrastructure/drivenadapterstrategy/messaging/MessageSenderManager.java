@@ -28,7 +28,8 @@ public final class MessageSenderManager
     }
 
     @CheckReturnValue
-    @SuppressWarnings("unchecked") // When registering a MessageSender we check its type so that we can perform an unchecked cast
+    @SuppressWarnings({"unchecked", "DuplicatedCode"})
+    // When registering a MessageSender we check its type so that we can perform an unchecked cast
     private <T> Class<? extends MessageSender> getStrategy(Class<T> aggregateClazz, Properties properties)
     {
         // 1. Check if a dedicated strategy is registered for aggregateClazz
