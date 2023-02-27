@@ -18,7 +18,7 @@ public class JDBCConnectionPool implements AutoCloseable {
     private final Map<Object, JDBCConnection> exclusiveConnectionMap = new ConcurrentHashMap<>();
     private final Map<Object, JDBCConnection.IsolationLevel> connectionConfiguration = new ConcurrentHashMap<>();
 
-    public static JDBCConnection getConnection(Properties properties, Object managingObject)
+    public static synchronized JDBCConnection getConnection(Properties properties, Object managingObject)
     {
         var connectionName = properties.getProperty(JexxaJDBCProperties.JEXXA_JDBC_URL);
 
