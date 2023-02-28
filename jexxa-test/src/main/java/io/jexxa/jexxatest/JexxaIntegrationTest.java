@@ -18,11 +18,12 @@ public class JexxaIntegrationTest
     private final Class<?> application;
     private RESTBinding restBinding;
     private MessageBinding messageBinding;
+    private final JexxaMain jexxaMain;
 
     public JexxaIntegrationTest(Class<?> application)
     {
         this.application = application;
-        var jexxaMain = new JexxaMain(application);
+        jexxaMain = new JexxaMain(application);
         jexxaMain.addProperties( loadJexxaTestProperties() );
         this.properties = jexxaMain.getProperties();
     }
@@ -62,5 +63,6 @@ public class JexxaIntegrationTest
             messageBinding.close();
         }
         Unirest.shutDown();
+        jexxaMain.stop();
     }
 }
