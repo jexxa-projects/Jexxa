@@ -7,8 +7,6 @@ import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
 import io.jexxa.infrastructure.drivenadapterstrategy.messaging.jms.JMSSender;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.jdbc.JDBCConnectionPool;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.IRepository;
 import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
 import io.jexxa.infrastructure.drivingadapter.scheduler.Scheduler;
@@ -29,35 +27,64 @@ import java.util.concurrent.TimeUnit;
  */
 @SuppressWarnings("unused")
 public class TransactionalOutboxSender extends MessageSender {
+    private static TransactionalOutboxSender transactionalOutboxSender;
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     private final IRepository<JexxaOutboxMessage, UUID> outboxRepository;
-    private final Properties properties;
+    private final MessageSender messageSender;
 
-    public TransactionalOutboxSender(Properties properties)
+
+    public static MessageSender createInstance(Properties properties)
     {
-        MessageSenderManager.setStrategy(JMSSender.class, TransactionalOutboxSender.class); // Ensure that we get a JMSSender for internal sending
-        this.properties = properties;
+        if (transactionalOutboxSender == null)
+        {
+            transactionalOutboxSender = new TransactionalOutboxSender(properties);
+        }
+        return transactionalOutboxSender;
+    }
+
+    private TransactionalOutboxSender(Properties properties)
+    {
         this.outboxRepository = RepositoryManager
                 .getRepository(JexxaOutboxMessage.class
                         , JexxaOutboxMessage::messageId
                         , properties );
 
-        JDBCConnectionPool.configureExclusiveConnection(outboxRepository, JDBCConnection.IsolationLevel.SERIALIZABLE);
+        MessageSenderManager.setStrategy(JMSSender.class, TransactionalOutboxSender.class); // Ensure that we get a JMSSender for internal sending
+        this.messageSender = MessageSenderManager.getMessageSender(TransactionalOutboxSender.class, properties);
 
-        executor.scheduleAtFixedRate( this::transactionalSend, 300, 300, TimeUnit.MILLISECONDS);
-        JexxaContext.registerCleanupHandler(this::cleanup);
+        executor.schedule( this::transactionalSend, 300, TimeUnit.MILLISECONDS);
+        JexxaContext.registerCleanupHandler(TransactionalOutboxSender::cleanup);
     }
 
-    public void cleanup() {
+    public static void cleanup()
+    {
+        if (transactionalOutboxSender != null){
+            transactionalOutboxSender.internalCleanup();
+            transactionalOutboxSender = null;
+        }
+    }
+
+    void internalCleanup() {
         try {
             executor.shutdown();
             if (!executor.awaitTermination(1, TimeUnit.SECONDS)) {
+                JexxaLogger.getLogger(this.getClass()).warn("Could not successfully stop running operations -> Force shutdown");
                 executor.shutdownNow();
             }
         } catch (InterruptedException e) {
             executor.shutdownNow();
-            JexxaLogger.getLogger(Scheduler.class).warn("ExecutorService could not be stopped -> Force shutdown.", e);
+            JexxaLogger.getLogger(Scheduler.class).warn("ExecutorService could not be stopped -> Interrupt thread.", e);
             Thread.currentThread().interrupt();
+        }
+
+        if (messageSender instanceof AutoCloseable autoCloseable)
+        {
+            try {
+                autoCloseable.close();
+            } catch (Exception e)
+            {
+                JexxaLogger.getLogger(TransactionalOutboxSender.class).error(e.getMessage());
+            }
         }
     }
 
@@ -69,13 +96,14 @@ public class TransactionalOutboxSender extends MessageSender {
     public void transactionalSend()
     {
         try {
-            InvocationManager.getInvocationHandler(this).invoke(this, this::sendOutboxMessages);
+            var handler = InvocationManager.getInvocationHandler(this);
+            handler.invoke(this, this::sendOutboxMessages);
         } catch (InvocationTargetRuntimeException e)
         {
             JexxaLogger.getLogger(getClass()).warn("Could not send outbox messages. Reason: {}", e.getTargetException().getMessage());
         } catch (Throwable e)
         {
-            JexxaLogger.getLogger(getClass()).error("{} occurred in transactionalSend occurred. Reason: {}", e.getClass().getSimpleName(), e.getMessage());
+            JexxaLogger.getLogger(getClass()).error("{} occurred in transactionalSend. Reason: {}", e.getClass().getSimpleName(), e.getMessage());
         }
     }
 
@@ -100,12 +128,12 @@ public class TransactionalOutboxSender extends MessageSender {
     private void sendOutboxMessages()
     {
         outboxRepository.get().stream()
-                .filter(outboxMessage -> outboxMessage.destinationType.equals(DestinationType.QUEUE))
-                .forEach(this::sendToQueue);
+            .filter(outboxMessage -> outboxMessage.destinationType.equals(DestinationType.QUEUE))
+            .forEach(this::sendToQueue);
 
         outboxRepository.get().stream()
-                .filter(outboxMessage -> outboxMessage.destinationType.equals(DestinationType.TOPIC))
-                .forEach(this::sendToTopic);
+            .filter(outboxMessage -> outboxMessage.destinationType.equals(DestinationType.TOPIC))
+            .forEach(this::sendToTopic);
 
         outboxRepository.removeAll();
     }
@@ -113,7 +141,6 @@ public class TransactionalOutboxSender extends MessageSender {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void sendToQueue(JexxaOutboxMessage outboxMessage)
     {
-        var messageSender = MessageSenderManager.getMessageSender(TransactionalOutboxSender.class, properties);
         MessageProducer producer;
         if (outboxMessage.messageType.equals(MessageType.TEXT_MESSAGE))
         {
@@ -130,7 +157,6 @@ public class TransactionalOutboxSender extends MessageSender {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void sendToTopic( JexxaOutboxMessage outboxMessage)
     {
-        var messageSender = MessageSenderManager.getMessageSender(TransactionalOutboxSender.class, properties);
         MessageProducer producer;
         if (outboxMessage.messageType().equals(MessageType.TEXT_MESSAGE))
         {
