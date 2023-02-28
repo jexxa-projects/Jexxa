@@ -10,16 +10,21 @@ import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderMana
 import io.jexxa.infrastructure.drivenadapterstrategy.outbox.TransactionalOutboxSender;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
+import io.jexxa.infrastructure.drivingadapter.messaging.listener.IdempotentListener;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.JSONMessageListener;
 import io.jexxa.infrastructure.drivingadapter.messaging.listener.TypedMessageListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -41,6 +46,7 @@ class MessageListenerIT
 
     private JexxaValueObjectListener typedListener;
     private TextMessageListener jsonMessageListener;
+    private JexxaValueObjectIdempotentListener idempotentListener;
     private JexxaMain jexxaMain;
 
 
@@ -50,8 +56,10 @@ class MessageListenerIT
         jexxaMain = new JexxaMain(JexxaTestApplication.class);
         jsonMessageListener = new TextMessageListener();
         typedListener = new JexxaValueObjectListener();
+        idempotentListener = new JexxaValueObjectIdempotentListener();
 
         jexxaMain.bind(JMSAdapter.class).to(typedListener)
+                .bind(JMSAdapter.class).to(idempotentListener)
                 .bind(JMSAdapter.class).to(jsonMessageListener)
                 .disableBanner()
                 .start();
@@ -102,9 +110,39 @@ class MessageListenerIT
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
-
-     private static class TextMessageListener extends JSONMessageListener
+    @Test
+    void validateIdempotentMessaging()
     {
+        //Arrange
+        MessageSenderManager.setDefaultStrategy(JMSSender.class);
+        var objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
+        UUID uuid = UUID.randomUUID();
+
+        //Act
+        objectUnderTest
+                .send(message)
+                .toTopic(TOPIC_DESTINATION)
+                .addHeader("domain_event_id", uuid.toString())
+                .asJson();
+
+        objectUnderTest
+                .send(message)
+                .toTopic(TOPIC_DESTINATION)
+                .addHeader("domain_event_id", uuid.toString())
+                .asJson();
+
+        //Assert - 2 Messages must be received from jsonMessageListener but only one from idempotentListener due to same ID
+        await().atMost(2, TimeUnit.SECONDS).until(() -> jsonMessageListener.getReceivedMessages().size() == 2);
+        assertEquals(1, idempotentListener.getReceivedMessages().size());
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
+
+
+
+    private static class TextMessageListener extends JSONMessageListener
+    {
+        private final List<String> receivedMessages = new ArrayList<>();
+
         private String textMessage;
 
         @SuppressWarnings("unused")
@@ -113,12 +151,17 @@ class MessageListenerIT
         public void onMessage(String textMessage)
         {
             this.textMessage = textMessage;
+            receivedMessages.add(textMessage);
         }
 
         public String getTextMessage()
         {
             return textMessage;
         }
+        public List<String> getReceivedMessages() {
+            return receivedMessages;
+        }
+
     }
 
     private static class JexxaValueObjectListener extends TypedMessageListener<JexxaValueObject>
@@ -143,8 +186,26 @@ class MessageListenerIT
         {
             return jexxaValueObject;
         }
+
     }
 
+    private static class JexxaValueObjectIdempotentListener extends IdempotentListener<JexxaDomainEvent>
+    {
+        private final List<JexxaDomainEvent> receivedMessages = new ArrayList<>();
 
+        protected JexxaValueObjectIdempotentListener() {
+            super(JexxaDomainEvent.class);
+        }
+
+        @Override
+        @JMSConfiguration(destination = TOPIC_DESTINATION, messagingType = JMSConfiguration.MessagingType.TOPIC)
+        public void onMessage(JexxaDomainEvent message) {
+            receivedMessages.add(message);
+        }
+
+        public List<JexxaDomainEvent> getReceivedMessages() {
+            return receivedMessages;
+        }
+    }
 
 }
