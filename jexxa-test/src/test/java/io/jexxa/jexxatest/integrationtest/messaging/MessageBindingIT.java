@@ -29,14 +29,11 @@ class MessageBindingIT {
     {
         //Arrange
         var testTopic = "TestTopic";
-        System.out.println("HERE 1");
         var messageSender = objectUnderTest.getMessageSender();
         var messageListener = objectUnderTest.getMessageListener(testTopic, JMSConfiguration.MessagingType.TOPIC);
-        System.out.println("HERE 2");
 
         //Act
         messageSender.send(new JexxaValueObject(42)).toTopic(testTopic).asJson();
-        System.out.println("HERE 3");
 
         var result = messageListener
                 .awaitMessage(5, TimeUnit.SECONDS)
@@ -97,5 +94,4 @@ class MessageBindingIT {
     {
         JEXXA_INTEGRATION_TEST.shutDown();
     }
-
 }
