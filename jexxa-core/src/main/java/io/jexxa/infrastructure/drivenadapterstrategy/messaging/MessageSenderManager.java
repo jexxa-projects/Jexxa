@@ -100,9 +100,17 @@ public final class MessageSenderManager
             var strategy = MESSAGE_SENDER_MANAGER.getStrategy(sendingClass, properties);
 
             var result = ClassFactory.newInstanceOf(strategy, new Object[]{properties});
+            if (result.isEmpty()) //Try factory method with properties
+            {
+                result = ClassFactory.newInstanceOf(MessageSender.class, strategy,new Object[]{properties});
+            }
             if (result.isEmpty()) //Try default constructor
             {
                 result = ClassFactory.newInstanceOf(strategy);
+            }
+            if (result.isEmpty()) //Try factory method without properties
+            {
+                result = ClassFactory.newInstanceOf(MessageSender.class, strategy);
             }
 
             return result.orElseThrow();
@@ -114,7 +122,7 @@ public final class MessageSenderManager
                 throw new IllegalArgumentException(e.getCause().getMessage(), e);
             }
 
-            throw new IllegalArgumentException("No suitable default IRepository available", e);
+            throw new IllegalArgumentException("No suitable default MessageSender available", e);
         }
     }
 
