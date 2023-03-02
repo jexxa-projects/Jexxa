@@ -41,6 +41,11 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
     }
     public abstract void onMessage(T message);
 
+    protected String uniqueID()
+    {
+        return DEFAULT_MESSAGE_ID;
+    }
+
     protected boolean messageHeaderIncludes(String key)
     {
         try {
@@ -67,10 +72,4 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
         }
         return null;
     }
-
-    protected String uniqueID()
-    {
-        return DEFAULT_MESSAGE_ID;
-    }
-
 }
