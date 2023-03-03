@@ -212,6 +212,11 @@ public class JDBCConnection implements AutoCloseable
         return new JDBCTableBuilder<>(this::validateConnection);
     }
 
+    public JDBCTableBuilder<?> createTableCommand()
+    {
+        return new JDBCTableBuilder<>(this::validateConnection);
+    }
+
     /**
      * This method resets the internal JDBC connection in the following way:
      * <ol>

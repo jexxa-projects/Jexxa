@@ -4,7 +4,6 @@ import io.jexxa.api.wrapper.jdbc.JDBCCommand;
 import io.jexxa.api.wrapper.jdbc.JDBCConnection;
 import io.jexxa.api.wrapper.jdbc.JDBCQuery;
 import io.jexxa.api.wrapper.jdbc.builder.SQLDataType;
-import io.jexxa.drivenadapter.strategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 
 import java.util.List;
 import java.util.Locale;
@@ -63,7 +62,7 @@ public class GenericSQLDatabase implements IDatabase
     @Override
     public void alterColumnType(JDBCConnection jdbcConnection, Class<?> tableName, String columnName, SQLDataType sqlDataType)
     {
-        jdbcConnection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
+        jdbcConnection.createTableCommand()
                 .alterTable(tableName)
                 .alterColumn(columnName, sqlDataType)
                 .create()

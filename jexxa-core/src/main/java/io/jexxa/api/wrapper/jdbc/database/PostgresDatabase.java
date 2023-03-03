@@ -2,7 +2,6 @@ package io.jexxa.api.wrapper.jdbc.database;
 
 import io.jexxa.api.wrapper.jdbc.JDBCConnection;
 import io.jexxa.api.wrapper.jdbc.builder.SQLDataType;
-import io.jexxa.drivenadapter.strategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 
 public class PostgresDatabase extends GenericSQLDatabase
 {
@@ -24,9 +23,9 @@ public class PostgresDatabase extends GenericSQLDatabase
 
 
     @Override
-    public void alterColumnType(JDBCConnection jdbcConnection, Class<?> tableName, String columnName, SQLDataType sqlDataType)
+    public  void alterColumnType(JDBCConnection jdbcConnection, Class<?> tableName, String columnName, SQLDataType sqlDataType)
     {
-        var keyRow = jdbcConnection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
+        var keyRow = jdbcConnection.createTableCommand()
                 .alterTable(tableName)
                 .alterColumn(columnName, sqlDataType, " USING " + columnName + "::" + sqlDataType)
                 .create();
