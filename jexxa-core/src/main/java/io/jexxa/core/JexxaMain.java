@@ -8,7 +8,6 @@ import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
 import io.jexxa.utils.JexxaBanner;
-import io.jexxa.utils.JexxaLogger;
 import io.jexxa.api.annotation.CheckReturnValue;
 import io.jexxa.api.function.ThrowingConsumer;
 import io.jexxa.utils.properties.JexxaCoreProperties;
@@ -27,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 import static io.jexxa.utils.JexxaBanner.addConfigBanner;
 
 /**
@@ -247,7 +247,7 @@ public final class JexxaMain
                     .diagnostics()
                     .stream()
                     .filter(element -> !element.isHealthy())
-                    .forEach(element -> JexxaLogger.getLogger(JexxaMain.class).error(element.statusMessage()));
+                    .forEach(element -> getLogger(JexxaMain.class).error(element.statusMessage()));
         }
     }
 
@@ -303,7 +303,7 @@ public final class JexxaMain
     {
         if ( boundedContext.isRunning() )
         {
-            JexxaLogger.getLogger(JexxaMain.class).warn("BoundedContext '{}' already started", getBoundedContext().contextName());
+            getLogger(JexxaMain.class).warn("BoundedContext '{}' already started", getBoundedContext().contextName());
             return this;
         }
 
@@ -323,18 +323,18 @@ public final class JexxaMain
     @SuppressWarnings("java:S2629")
     void printStartupInfo(Properties properties)
     {
-        JexxaLogger.getLogger(JexxaBanner.class).info( "Jexxa Version                  : {}", getBoundedContext().jexxaVersion() );
-        JexxaLogger.getLogger(JexxaBanner.class).info( "Context Version                : {}", getBoundedContext().contextVersion() );
+        getLogger(JexxaBanner.class).info( "Jexxa Version                  : {}", getBoundedContext().jexxaVersion() );
+        getLogger(JexxaBanner.class).info( "Context Version                : {}", getBoundedContext().contextVersion() );
 
-        JexxaLogger.getLogger(JexxaBanner.class).info( "Used Driving Adapter           : {}", Arrays.toString(compositeDrivingAdapter.adapterNames().toArray()));
-        JexxaLogger.getLogger(JexxaBanner.class).info( "Used Properties Files          : {}", Arrays.toString(propertiesLoader.getPropertiesFiles().toArray()));
+        getLogger(JexxaBanner.class).info( "Used Driving Adapter           : {}", Arrays.toString(compositeDrivingAdapter.adapterNames().toArray()));
+        getLogger(JexxaBanner.class).info( "Used Properties Files          : {}", Arrays.toString(propertiesLoader.getPropertiesFiles().toArray()));
     }
 
     @SuppressWarnings("java:S2629")
     void printStartupDuration()
     {
         var startTime = getBoundedContext().uptime();
-        JexxaLogger.getLogger(JexxaMain.class).info("BoundedContext '{}' successfully started in {}.{} seconds", getBoundedContext().contextName(), startTime.toSeconds(), String.format("%03d", startTime.toMillisPart()));
+        getLogger(JexxaMain.class).info("BoundedContext '{}' successfully started in {}.{} seconds", getBoundedContext().contextName(), startTime.toSeconds(), String.format("%03d", startTime.toMillisPart()));
     }
 
     @SuppressWarnings("java:S2629")
@@ -344,7 +344,7 @@ public final class JexxaMain
         {
             boundedContext.stop();
             compositeDrivingAdapter.stop();
-            JexxaLogger.getLogger(JexxaMain.class).info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
+            getLogger(JexxaMain.class).info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
         }
         executorService.shutdown();
         JexxaContext.cleanup();
@@ -496,7 +496,7 @@ public final class JexxaMain
         @Override
         public void stop()
         {
-            drivingAdapters.forEach(ThrowingConsumer.exceptionLogger(IDrivingAdapter::stop, JexxaLogger.getLogger(JexxaMain.class)));
+            drivingAdapters.forEach(ThrowingConsumer.exceptionLogger(IDrivingAdapter::stop, getLogger(JexxaMain.class)));
         }
 
         @Override
@@ -534,7 +534,7 @@ public final class JexxaMain
                 JexxaBanner.show(jexxaMain.getProperties());
             }
 
-            JexxaLogger.getLogger(JexxaMain.class).error("Could not startup Jexxa! {}", errorMessage);
+            getLogger(JexxaMain.class).error("Could not startup Jexxa! {}", errorMessage);
 
             jexxaMain.stop();
         }

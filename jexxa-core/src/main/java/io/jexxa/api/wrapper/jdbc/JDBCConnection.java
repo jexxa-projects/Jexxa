@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.api.wrapper.slf4j.SLF4jLogger.getSLF4JLogger;
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getSLF4JLogger;
 
 
 public class JDBCConnection implements AutoCloseable

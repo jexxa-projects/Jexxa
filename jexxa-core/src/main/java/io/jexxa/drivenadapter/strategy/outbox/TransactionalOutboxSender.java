@@ -9,13 +9,14 @@ import io.jexxa.drivenadapter.strategy.messaging.MessageSender;
 import io.jexxa.drivenadapter.strategy.messaging.jms.JMSSender;
 import io.jexxa.drivenadapter.strategy.persistence.repository.IRepository;
 import io.jexxa.drivenadapter.strategy.persistence.repository.RepositoryManager;
-import io.jexxa.utils.JexxaLogger;
 
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 
 /**
  * This class implements the  <a href="https://microservices.io/patterns/data/transactional-outbox.html">transactional outbox pattern</a>.
@@ -67,12 +68,12 @@ public class TransactionalOutboxSender extends MessageSender {
         try {
             executor.shutdown();
             if (!executor.awaitTermination(1, TimeUnit.SECONDS)) {
-                JexxaLogger.getLogger(this.getClass()).warn("Could not successfully stop running operations -> Force shutdown");
+                getLogger(this.getClass()).warn("Could not successfully stop running operations -> Force shutdown");
                 executor.shutdownNow();
             }
         } catch (InterruptedException e) {
             executor.shutdownNow();
-            JexxaLogger.getLogger(TransactionalOutboxSender.class).warn("ExecutorService could not be stopped -> Interrupt thread.", e);
+            getLogger(TransactionalOutboxSender.class).warn("ExecutorService could not be stopped -> Interrupt thread.", e);
             Thread.currentThread().interrupt();
         }
 
@@ -82,7 +83,7 @@ public class TransactionalOutboxSender extends MessageSender {
                 autoCloseable.close();
             } catch (Exception e)
             {
-                JexxaLogger.getLogger(TransactionalOutboxSender.class).error(e.getMessage());
+                getLogger(TransactionalOutboxSender.class).error(e.getMessage());
             }
         }
     }
@@ -99,10 +100,10 @@ public class TransactionalOutboxSender extends MessageSender {
             handler.invoke(this, this::sendOutboxMessages);
         } catch (InvocationTargetRuntimeException e)
         {
-            JexxaLogger.getLogger(getClass()).warn("Could not send outbox messages. Reason: {}", e.getTargetException().getMessage());
+            getLogger(getClass()).warn("Could not send outbox messages. Reason: {}", e.getTargetException().getMessage());
         } catch (Throwable e)
         {
-            JexxaLogger.getLogger(getClass()).error("{} occurred in transactionalSend. Reason: {}", e.getClass().getSimpleName(), e.getMessage());
+            getLogger(getClass()).error("{} occurred in transactionalSend. Reason: {}", e.getClass().getSimpleName(), e.getMessage());
         }
     }
 

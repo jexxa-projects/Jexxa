@@ -5,7 +5,6 @@ import io.jexxa.drivenadapter.strategy.persistence.objectstore.imdb.IMDBObjectSt
 import io.jexxa.drivenadapter.strategy.persistence.objectstore.jdbc.JDBCObjectStore;
 import io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.utils.JexxaBanner;
-import io.jexxa.utils.JexxaLogger;
 import io.jexxa.api.annotation.CheckReturnValue;
 import io.jexxa.api.wrapper.factory.ClassFactory;
 
@@ -16,6 +15,7 @@ import java.util.function.Function;
 
 import static io.jexxa.api.wrapper.jdbc.JexxaJDBCProperties.JEXXA_JDBC_DRIVER;
 import static io.jexxa.api.wrapper.jdbc.JexxaJDBCProperties.JEXXA_OBJECTSTORE_STRATEGY;
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_STRATEGY;
 
 
@@ -118,7 +118,7 @@ public final class ObjectStoreManager
             try {
                 return Class.forName(properties.getProperty(JEXXA_OBJECTSTORE_STRATEGY));
             } catch (ClassNotFoundException e) {
-                JexxaLogger.getLogger(ObjectStoreManager.class).warn("Unknown or invalid object store {} -> Ignore setting", properties.getProperty(JEXXA_JMS_STRATEGY));
+                getLogger(ObjectStoreManager.class).warn("Unknown or invalid object store {} -> Ignore setting", properties.getProperty(JEXXA_JMS_STRATEGY));
             }
         }
 
@@ -134,6 +134,6 @@ public final class ObjectStoreManager
 
     public void bannerInformation(Properties properties)
     {
-        JexxaLogger.getLogger(JexxaBanner.class).info("Used ObjectStore Strategie     : [{}]",getDefaultObjectStore(properties).getSimpleName());
+        getLogger(JexxaBanner.class).info("Used ObjectStore Strategie     : [{}]",getDefaultObjectStore(properties).getSimpleName());
     }
 }

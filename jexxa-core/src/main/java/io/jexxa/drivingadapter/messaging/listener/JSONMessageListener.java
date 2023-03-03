@@ -2,7 +2,6 @@ package io.jexxa.drivingadapter.messaging.listener;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import io.jexxa.utils.JexxaLogger;
 
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
@@ -15,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static io.jexxa.api.wrapper.json.JSONManager.getJSONConverter;
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 
 @SuppressWarnings("unused")
 public abstract class JSONMessageListener implements MessageListener
@@ -46,7 +46,7 @@ public abstract class JSONMessageListener implements MessageListener
         catch (JMSException exception)
         {
             //In case of a JMS exception we assume that data cannot be read due to some internal JMS issues and discard the message
-            JexxaLogger.getLogger(getClass()).error("Could not process received message as text or byte message -> Discard it. Reason: {}", exception.getMessage());
+            getLogger(getClass()).error("Could not process received message as text or byte message -> Discard it. Reason: {}", exception.getMessage());
         }
         currentMessage = null;
         currentMessageText = null;

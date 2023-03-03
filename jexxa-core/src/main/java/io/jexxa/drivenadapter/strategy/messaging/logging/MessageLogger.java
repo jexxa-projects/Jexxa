@@ -1,15 +1,16 @@
 package io.jexxa.drivenadapter.strategy.messaging.logging;
 
 import io.jexxa.drivenadapter.strategy.messaging.MessageSender;
-import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
 import java.util.Properties;
 
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
+
 @SuppressWarnings("unused")
 public class MessageLogger extends MessageSender
 {
-    private static final Logger MESSAGE_LOGGER = JexxaLogger.getLogger(MessageLogger.class);
+    private static final Logger MESSAGE_LOGGER = getLogger(MessageLogger.class);
 
     @Override
     protected void sendToQueue(String message, String destination, Properties messageProperties, MessageSender.MessageType messageType)

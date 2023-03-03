@@ -2,7 +2,6 @@ package io.jexxa.drivingadapter.scheduler;
 
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
-import io.jexxa.utils.JexxaLogger;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -12,6 +11,8 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 
 public class Scheduler implements IDrivingAdapter
 {
@@ -64,7 +65,7 @@ public class Scheduler implements IDrivingAdapter
         catch (InterruptedException e)
         {
             executorService.shutdownNow();
-            JexxaLogger.getLogger(Scheduler.class).warn("ExecutorService could not be stopped -> Force shutdown.", e);
+            getLogger(Scheduler.class).warn("ExecutorService could not be stopped -> Force shutdown.", e);
             Thread.currentThread().interrupt();
         }
     }

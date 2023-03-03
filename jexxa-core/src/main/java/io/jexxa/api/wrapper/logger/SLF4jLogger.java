@@ -1,16 +1,20 @@
-package io.jexxa.utils;
+package io.jexxa.api.wrapper.logger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class JexxaLogger
+public final class SLF4jLogger
 {
+    public static Logger getSLF4JLogger(Class<?> clazz)
+    {
+        return LoggerFactory.getLogger(clazz);
+    }
     public static Logger getLogger(Class<?> clazz)
     {
         return LoggerFactory.getLogger(clazz);
     }
 
-    private JexxaLogger()
+    private SLF4jLogger()
     {
         //Private constructor
     }

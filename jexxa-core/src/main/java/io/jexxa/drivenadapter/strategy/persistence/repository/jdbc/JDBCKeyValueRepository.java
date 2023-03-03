@@ -4,7 +4,6 @@ import io.jexxa.drivenadapter.strategy.persistence.repository.IRepository;
 import io.jexxa.api.wrapper.jdbc.builder.JDBCObject;
 import io.jexxa.api.wrapper.jdbc.database.DatabaseManager;
 import io.jexxa.api.wrapper.jdbc.database.IDatabase;
-import io.jexxa.utils.JexxaLogger;
 import io.jexxa.api.wrapper.jdbc.JexxaJDBCProperties;
 import org.slf4j.Logger;
 
@@ -16,13 +15,14 @@ import java.util.function.Function;
 
 import static io.jexxa.api.wrapper.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
 import static io.jexxa.api.wrapper.jdbc.builder.SQLDataType.JSONB;
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 import static io.jexxa.drivenadapter.strategy.persistence.repository.jdbc.JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_KEY;
 import static io.jexxa.drivenadapter.strategy.persistence.repository.jdbc.JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE;
 import static io.jexxa.api.wrapper.json.JSONManager.getJSONConverter;
 
 public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRepository<T, K>
 {
-    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCKeyValueRepository.class);
+    private static final Logger LOGGER = getLogger(JDBCKeyValueRepository.class);
 
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;

@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
-import static io.jexxa.api.wrapper.slf4j.SLF4jLogger.getSLF4JLogger;
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getSLF4JLogger;
 
 final class ExceptionFactory implements TypeAdapterFactory
 {

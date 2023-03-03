@@ -1,7 +1,7 @@
 package io.jexxa.drivenadapter.strategy.messaging.jms;
 
-import io.jexxa.drivenadapter.strategy.messaging.MessageSender;
 import io.jexxa.api.function.ThrowingConsumer;
+import io.jexxa.drivenadapter.strategy.messaging.MessageSender;
 import io.jexxa.utils.properties.JexxaJMSProperties;
 import io.jexxa.utils.properties.Secret;
 
@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.utils.JexxaLogger.getLogger;
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 
 @SuppressWarnings({"unused", "java:S1133"})
 public class JMSSender extends MessageSender implements AutoCloseable

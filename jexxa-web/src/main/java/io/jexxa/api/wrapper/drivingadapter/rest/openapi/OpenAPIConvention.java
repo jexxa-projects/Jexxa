@@ -1,7 +1,6 @@
 package io.jexxa.api.wrapper.drivingadapter.rest.openapi;
 
 
-import io.jexxa.utils.JexxaLogger;
 import io.smallrye.openapi.api.models.parameters.RequestBodyImpl;
 import io.smallrye.openapi.runtime.io.Format;
 import io.smallrye.openapi.runtime.io.OpenApiSerializer;
@@ -41,6 +40,8 @@ import static org.eclipse.microprofile.openapi.OASFactory.createOperation;
 import static org.eclipse.microprofile.openapi.OASFactory.createPathItem;
 import static org.eclipse.microprofile.openapi.OASFactory.createPaths;
 import static org.eclipse.microprofile.openapi.OASFactory.createSchema;
+
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 
 public class OpenAPIConvention
 {
@@ -93,7 +94,7 @@ public class OpenAPIConvention
             addComponents(method);
         } catch (ClassCastException e)
         {
-                JexxaLogger.getLogger(OpenAPIConvention.class).error("Could not generate OpenAPI for method {}::{}. Please check attributes and return type.", method.getDeclaringClass().getName(),  method.getName());
+                getLogger(OpenAPIConvention.class).error("Could not generate OpenAPI for method {}::{}. Please check attributes and return type.", method.getDeclaringClass().getName(),  method.getName());
         }
 
     }
@@ -124,7 +125,7 @@ public class OpenAPIConvention
             addComponents(method);
         } catch (ClassCastException e)
         {
-            JexxaLogger.getLogger(OpenAPIConvention.class).error("Could not generate OpenAPI for method {}::{}. Please check attributes and return type.", method.getDeclaringClass().getName(),  method.getName());
+            getLogger(OpenAPIConvention.class).error("Could not generate OpenAPI for method {}::{}. Please check attributes and return type.", method.getDeclaringClass().getName(),  method.getName());
         }
     }
 

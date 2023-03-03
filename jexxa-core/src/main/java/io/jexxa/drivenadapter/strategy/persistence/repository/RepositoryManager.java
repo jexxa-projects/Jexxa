@@ -5,7 +5,6 @@ import io.jexxa.drivenadapter.strategy.persistence.objectstore.ObjectStoreManage
 import io.jexxa.drivenadapter.strategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.drivenadapter.strategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 import io.jexxa.utils.JexxaBanner;
-import io.jexxa.utils.JexxaLogger;
 import io.jexxa.api.annotation.CheckReturnValue;
 import io.jexxa.api.wrapper.factory.ClassFactory;
 import io.jexxa.api.wrapper.jdbc.JexxaJDBCProperties;
@@ -16,6 +15,7 @@ import java.util.Properties;
 import java.util.function.Function;
 
 import static io.jexxa.api.wrapper.jdbc.JexxaJDBCProperties.JEXXA_REPOSITORY_STRATEGY;
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_STRATEGY;
 
 
@@ -115,7 +115,7 @@ public final class RepositoryManager
             try {
                 return Class.forName(properties.getProperty(JEXXA_REPOSITORY_STRATEGY));
             } catch (ClassNotFoundException e) {
-                JexxaLogger.getLogger(ObjectStoreManager.class).warn("Unknown or invalid repository {} -> Ignore setting", properties.getProperty(JEXXA_JMS_STRATEGY));
+                getLogger(ObjectStoreManager.class).warn("Unknown or invalid repository {} -> Ignore setting", properties.getProperty(JEXXA_JMS_STRATEGY));
             }
         }
         // 4. If a JDBC driver is stated in Properties => Use JDBCKeyValueRepository
@@ -130,7 +130,7 @@ public final class RepositoryManager
 
     public void bannerInformation(Properties properties)
     {
-        JexxaLogger.getLogger(JexxaBanner.class).info("Used Repository Strategie      : [{}]",getDefaultRepository(properties).getSimpleName());
+        getLogger(JexxaBanner.class).info("Used Repository Strategie      : [{}]",getDefaultRepository(properties).getSimpleName());
     }
 
 }

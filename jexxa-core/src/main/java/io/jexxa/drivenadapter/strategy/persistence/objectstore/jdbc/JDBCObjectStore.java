@@ -9,7 +9,6 @@ import io.jexxa.api.wrapper.jdbc.builder.JDBCObject;
 import io.jexxa.api.wrapper.jdbc.builder.SQLDataType;
 import io.jexxa.api.wrapper.jdbc.database.DatabaseManager;
 import io.jexxa.api.wrapper.jdbc.database.IDatabase;
-import io.jexxa.utils.JexxaLogger;
 import io.jexxa.api.wrapper.jdbc.JexxaJDBCProperties;
 import org.slf4j.Logger;
 
@@ -25,12 +24,13 @@ import static io.jexxa.api.wrapper.jdbc.builder.JDBCTableBuilder.SQLConstraint.P
 import static io.jexxa.api.wrapper.jdbc.builder.SQLDataType.JSONB;
 import static io.jexxa.api.wrapper.jdbc.builder.SQLDataType.NUMERIC;
 import static io.jexxa.api.wrapper.jdbc.builder.SQLDataType.TEXT;
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 
 
 @SuppressWarnings("unused")
 public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JDBCKeyValueRepository<T, K> implements IObjectStore<T, K, M>
 {
-    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCObjectStore.class);
+    private static final Logger LOGGER = getLogger(JDBCObjectStore.class);
 
     private final Function<T, K> keyFunction;
     private final Class<T> aggregateClazz;

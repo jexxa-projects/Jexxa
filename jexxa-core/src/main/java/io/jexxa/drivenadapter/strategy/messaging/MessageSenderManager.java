@@ -3,7 +3,6 @@ package io.jexxa.drivenadapter.strategy.messaging;
 import io.jexxa.drivenadapter.strategy.messaging.logging.MessageLogger;
 import io.jexxa.drivenadapter.strategy.outbox.TransactionalOutboxSender;
 import io.jexxa.utils.JexxaBanner;
-import io.jexxa.utils.JexxaLogger;
 import io.jexxa.api.annotation.CheckReturnValue;
 import io.jexxa.api.wrapper.factory.ClassFactory;
 
@@ -12,6 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 import static io.jexxa.utils.JexxaBanner.addConfigBanner;
 import static io.jexxa.utils.properties.JexxaJMSProperties.*;
 
@@ -58,8 +58,8 @@ public final class MessageSenderManager
                 return (Class<? extends MessageSender>) Class.forName(properties.getProperty(JEXXA_JMS_STRATEGY));
             } catch (ClassNotFoundException e)
             {
-                JexxaLogger.getLogger(MessageSenderManager.class).warn("Unknown or invalid message sender {} -> Ignore setting", properties.getProperty(JEXXA_JMS_STRATEGY));
-                JexxaLogger.getLogger(MessageSenderManager.class).warn(String.valueOf(e));
+                getLogger(MessageSenderManager.class).warn("Unknown or invalid message sender {} -> Ignore setting", properties.getProperty(JEXXA_JMS_STRATEGY));
+                getLogger(MessageSenderManager.class).warn(String.valueOf(e));
             }
         }
 
@@ -128,6 +128,6 @@ public final class MessageSenderManager
 
     public void bannerInformation(Properties properties)
     {
-        JexxaLogger.getLogger(JexxaBanner.class).info("Used Message Sender Strategie  : [{}]", MESSAGE_SENDER_MANAGER.getStrategy(null, properties).getSimpleName());
+        getLogger(JexxaBanner.class).info("Used Message Sender Strategie  : [{}]", MESSAGE_SENDER_MANAGER.getStrategy(null, properties).getSimpleName());
     }
 }

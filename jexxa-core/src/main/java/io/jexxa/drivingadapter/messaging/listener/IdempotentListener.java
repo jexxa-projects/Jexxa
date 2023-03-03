@@ -1,11 +1,11 @@
 package io.jexxa.drivingadapter.messaging.listener;
 
-import io.jexxa.utils.JexxaLogger;
-
 import javax.jms.JMSException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 
 public abstract class IdempotentListener<T> extends JSONMessageListener
 {
@@ -24,7 +24,7 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
         var uniqueID = uniqueID();
         if ( !messageHeaderIncludes( uniqueID ))
         {
-            JexxaLogger.getLogger(getClass()).warn("Message does not include an ID {} -> Process message", uniqueID);
+            getLogger(getClass()).warn("Message does not include an ID {} -> Process message", uniqueID);
             onMessage( fromJson(message, clazz ));
             return;
         }
@@ -32,7 +32,7 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
         // If we already processed the ID, we show an info message and return
         String messageID = getMessageHeaderValue(uniqueID);
         if (processedMessages.contains(messageID)) {
-            JexxaLogger.getLogger(getClass()).info("Message with key {} already processed -> Ignore it", messageID);
+            getLogger(getClass()).info("Message with key {} already processed -> Ignore it", messageID);
             return;
         }
 

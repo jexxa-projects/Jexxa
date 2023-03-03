@@ -1,7 +1,5 @@
 package io.jexxa.utils.properties;
 
-import io.jexxa.utils.JexxaLogger;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,6 +10,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_USER_TIMEZONE;
 
@@ -67,10 +66,10 @@ public class PropertiesLoader {
                 properties.load(inputStream);
                 propertiesFiles.add(JEXXA_APPLICATION_PROPERTIES);
             } else {
-                JexxaLogger.getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JEXXA_APPLICATION_PROPERTIES);
+                getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JEXXA_APPLICATION_PROPERTIES);
             }
         } catch ( IOException e ) {
-            JexxaLogger.getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JEXXA_APPLICATION_PROPERTIES);
+            getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JEXXA_APPLICATION_PROPERTIES);
         }
     }
 

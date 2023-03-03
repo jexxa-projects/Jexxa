@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.function.Consumer;
 
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
+
 public final class JexxaBanner
 {
     private static final JexxaBanner JEXXA_BANNER  = new JexxaBanner();
@@ -33,11 +35,11 @@ public final class JexxaBanner
 
     public static void show(Properties properties)
     {
-        JexxaLogger.getLogger(JexxaBanner.class).info("Config Information: ");
+        getLogger(JexxaBanner.class).info("Config Information: ");
         JEXXA_BANNER.configBanner.forEach(element -> element.accept(properties));
 
-        JexxaLogger.getLogger(JexxaBanner.class).info("");
-        JexxaLogger.getLogger(JexxaBanner.class).info("Access Information: ");
+        getLogger(JexxaBanner.class).info("");
+        getLogger(JexxaBanner.class).info("Access Information: ");
         JEXXA_BANNER.accessBanner.forEach(element -> element.accept(properties));
     }
 

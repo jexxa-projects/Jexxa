@@ -17,7 +17,6 @@ import io.jexxa.api.wrapper.drivingadapter.rest.openapi.OpenAPIConvention;
 import io.jexxa.api.wrapper.json.JSONConverter;
 import io.jexxa.api.wrapper.json.JSONManager;
 import io.jexxa.utils.JexxaBanner;
-import io.jexxa.utils.JexxaLogger;
 import io.jexxa.utils.properties.Secret;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -41,6 +40,7 @@ import java.util.Properties;
 
 import static io.jexxa.api.wrapper.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
 import static io.jexxa.api.wrapper.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
+import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 
 
 public final class RESTfulRPCAdapter implements IDrivingAdapter
@@ -83,7 +83,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
 
         if ( RPC_ADAPTER_MAP.containsKey(properties) )
         {
-            JexxaLogger.getLogger(RESTfulRPCAdapter.class).warn("Tried to create an RESTfulRPCAdapter with same properties twice! Return already instantiated adapter.");
+            getLogger(RESTfulRPCAdapter.class).warn("Tried to create an RESTfulRPCAdapter with same properties twice! Return already instantiated adapter.");
         } else {
             RPC_ADAPTER_MAP.put(properties, new RESTfulRPCAdapter(properties));
         }
@@ -202,20 +202,20 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     {
         // Print Listening ports
         if (isHTTPEnabled() ) {
-            JexxaLogger.getLogger(JexxaBanner.class).info("Listening on: {}", "http://" + getHostname() + ":" + getHTTPPort()  );
+            getLogger(JexxaBanner.class).info("Listening on: {}", "http://" + getHostname() + ":" + getHTTPPort()  );
         }
 
         if (isHTTPSEnabled() ) {
-            JexxaLogger.getLogger(JexxaBanner.class).info("Listening on: {}", "https://" + getHostname() + ":" + getHTTPSPort() );
+            getLogger(JexxaBanner.class).info("Listening on: {}", "https://" + getHostname() + ":" + getHTTPSPort() );
         }
 
         // Print OPENAPI links
         if (isHTTPEnabled()) {
-            openAPIConvention.getPath().ifPresent(path -> JexxaLogger.getLogger(JexxaBanner.class).info("OpenAPI available at: {}"
+            openAPIConvention.getPath().ifPresent(path -> getLogger(JexxaBanner.class).info("OpenAPI available at: {}"
                     , "http://" + getHostname() + ":" + getHTTPPort() +  path ) );
         }
         if (isHTTPSEnabled()) {
-            openAPIConvention.getPath().ifPresent(path -> JexxaLogger.getLogger(JexxaBanner.class).info("OpenAPI available at: {}"
+            openAPIConvention.getPath().ifPresent(path -> getLogger(JexxaBanner.class).info("OpenAPI available at: {}"
                     , "https://" + getHostname() + ":" + getHTTPSPort() + path ) );
         }
     }
@@ -290,10 +290,10 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
             var ctxBody = ctx.body();
             var ctxPath = ctx.path();
 
-            JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("{} occurred when processing {} request {}",
+            getLogger(RESTfulRPCAdapter.class).error("{} occurred when processing {} request {}",
                     targetException.getClass().getSimpleName(), ctxMethod, ctxPath);
-            JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Content of Body: {}", ctxBody);
-            JexxaLogger.getLogger(RESTfulRPCAdapter.class).error("Exception message: {}", targetException.getMessage());
+            getLogger(RESTfulRPCAdapter.class).error("Content of Body: {}", ctxBody);
+            getLogger(RESTfulRPCAdapter.class).error("Exception message: {}", targetException.getMessage());
 
             var exceptionWrapper = new JsonObject();
             exceptionWrapper.addProperty("ExceptionType", targetException.getClass().getName());

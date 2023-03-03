@@ -1,9 +1,8 @@
 package io.jexxa.api.wrapper.utils.messaging;
 
+import io.jexxa.api.function.ThrowingConsumer;
 import io.jexxa.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.drivingadapter.messaging.JMSConfiguration;
-import io.jexxa.utils.JexxaLogger;
-import io.jexxa.api.function.ThrowingConsumer;
 
 import javax.jms.Connection;
 import javax.jms.DeliveryMode;
@@ -15,7 +14,7 @@ import javax.jms.TextMessage;
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.utils.JexxaLogger.getLogger;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class ITMessageSender implements AutoCloseable
 {
@@ -60,7 +59,7 @@ public class ITMessageSender implements AutoCloseable
         }
         catch (JMSException e)
         {
-            JexxaLogger.getLogger(getClass()).error(e.getMessage());
+            getLogger(getClass()).error(e.getMessage());
         }
     }
 
