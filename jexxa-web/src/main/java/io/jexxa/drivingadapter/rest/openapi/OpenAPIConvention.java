@@ -1,4 +1,4 @@
-package io.jexxa.api.wrapper.drivingadapter.rest.openapi;
+package io.jexxa.drivingadapter.rest.openapi;
 
 
 import io.smallrye.openapi.api.models.parameters.RequestBodyImpl;
@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.api.wrapper.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
+import static io.jexxa.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
 import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_VERSION;
 import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponse;

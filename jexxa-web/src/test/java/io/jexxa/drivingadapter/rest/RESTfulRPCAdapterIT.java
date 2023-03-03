@@ -1,4 +1,4 @@
-package io.jexxa.api.wrapper.drivingadapter.rest;
+package io.jexxa.drivingadapter.rest;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

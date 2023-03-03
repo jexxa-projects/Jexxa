@@ -1,4 +1,4 @@
-package io.jexxa.api.wrapper.drivingadapter.rest;
+package io.jexxa.drivingadapter.rest;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -13,7 +13,7 @@ import io.javalin.util.JavalinLogger;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
-import io.jexxa.api.wrapper.drivingadapter.rest.openapi.OpenAPIConvention;
+import io.jexxa.drivingadapter.rest.openapi.OpenAPIConvention;
 import io.jexxa.api.wrapper.json.JSONConverter;
 import io.jexxa.api.wrapper.json.JSONManager;
 import io.jexxa.utils.JexxaBanner;
@@ -38,8 +38,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.api.wrapper.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
-import static io.jexxa.api.wrapper.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
+import static io.jexxa.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
 import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
 
 
@@ -419,7 +418,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     {
         this.javalin = Javalin.create(this::getJavalinConfig);
 
-        var openAPIPath = properties.getProperty(JEXXA_REST_OPEN_API_PATH);
+        var openAPIPath = properties.getProperty(JexxaWebProperties.JEXXA_REST_OPEN_API_PATH);
         if (openAPIPath != null && !openAPIPath.isEmpty()) {
             openAPIConvention = new OpenAPIConvention(properties);
             javalin.get(openAPIPath, httpCtx -> httpCtx.result(openAPIConvention.getOpenAPI()));

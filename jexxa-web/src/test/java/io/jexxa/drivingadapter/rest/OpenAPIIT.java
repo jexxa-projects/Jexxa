@@ -1,4 +1,4 @@
-package io.jexxa.api.wrapper.drivingadapter.rest;
+package io.jexxa.drivingadapter.rest;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -22,10 +22,10 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.api.wrapper.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
-import static io.jexxa.api.wrapper.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_PORT;
-import static io.jexxa.api.wrapper.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
-import static io.jexxa.api.wrapper.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
+import static io.jexxa.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
+import static io.jexxa.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_PORT;
+import static io.jexxa.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
+import static io.jexxa.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

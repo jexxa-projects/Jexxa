@@ -1,4 +1,4 @@
-package io.jexxa.api.wrapper.drivingadapter.rest;
+package io.jexxa.drivingadapter.rest;
 
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import kong.unirest.Unirest;
@@ -20,7 +20,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.api.wrapper.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -64,7 +63,7 @@ class HttpsRESTfulRPCAdapterIT
         properties.put(JexxaWebProperties.JEXXA_REST_HTTPS_PORT, httpsPort.toString());
         properties.put(JexxaWebProperties.JEXXA_REST_KEYSTORE_PASSWORD, "test123");
         properties.put(JexxaWebProperties.JEXXA_REST_KEYSTORE, "certificate/keystore.jks");
-        properties.put(JEXXA_REST_OPEN_API_PATH, "swagger-docs");
+        properties.put(JexxaWebProperties.JEXXA_REST_OPEN_API_PATH, "swagger-docs");
 
         var objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
         objectUnderTest.register(simpleApplicationService);

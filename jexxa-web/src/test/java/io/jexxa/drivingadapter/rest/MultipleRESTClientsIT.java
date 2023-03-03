@@ -1,4 +1,4 @@
-package io.jexxa.api.wrapper.drivingadapter.rest;
+package io.jexxa.drivingadapter.rest;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.JexxaTestApplication;

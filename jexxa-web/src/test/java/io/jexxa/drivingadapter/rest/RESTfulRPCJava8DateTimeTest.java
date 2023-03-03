@@ -1,4 +1,4 @@
-package io.jexxa.api.wrapper.drivingadapter.rest;
+package io.jexxa.drivingadapter.rest;
 
 import io.jexxa.api.wrapper.json.JSONManager;
 import io.jexxa.application.applicationservice.Java8DateTimeApplicationService;
@@ -17,9 +17,6 @@ import java.time.Period;
 import java.time.ZonedDateTime;
 import java.util.Properties;
 
-import static io.jexxa.api.wrapper.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_PORT;
-import static io.jexxa.api.wrapper.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
-import static io.jexxa.api.wrapper.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,7 +37,7 @@ class RESTfulRPCJava8DateTimeTest
         var defaultPort = 7500;
 
         properties.put(JexxaWebProperties.JEXXA_REST_HOST, defaultHost);
-        properties.put(JEXXA_REST_PORT, Integer.toString(defaultPort));
+        properties.put(JexxaWebProperties.JEXXA_REST_PORT, Integer.toString(defaultPort));
 
         objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
         objectUnderTest.register(java8DateTimeApplicationService);
@@ -91,12 +88,12 @@ class RESTfulRPCJava8DateTimeTest
 
         //Act
         var response = Unirest.post(REST_PATH + "setLocalDate")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(localDate)
                 .asEmpty();
 
         LocalDate result = Unirest.get(REST_PATH + "getLocalDate")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(LocalDate.class).getBody();
 
         //Assert
@@ -113,12 +110,12 @@ class RESTfulRPCJava8DateTimeTest
 
         //Act
         var response = Unirest.post(REST_PATH + "setLocalDate")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(localDate.toString() )
                 .asEmpty();
 
         LocalDate result = Unirest.get(REST_PATH + "getLocalDate")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(LocalDate.class).getBody();
 
         //Assert
@@ -135,12 +132,12 @@ class RESTfulRPCJava8DateTimeTest
 
         //Act
         var response = Unirest.post(REST_PATH + "setLocalDateTime")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(localDateTime)
                 .asEmpty();
 
         LocalDateTime result = Unirest.get(REST_PATH + "getLocalDateTime")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(LocalDateTime.class).getBody();
 
         //Assert
@@ -157,12 +154,12 @@ class RESTfulRPCJava8DateTimeTest
 
         //Act
         var response = Unirest.post(REST_PATH + "setLocalTime")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(localTime)
                 .asEmpty();
 
         LocalTime result = Unirest.get(REST_PATH + "getLocalTime")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(LocalTime.class).getBody();
 
         //Assert
@@ -179,12 +176,12 @@ class RESTfulRPCJava8DateTimeTest
 
         //Act
         var response = Unirest.post(REST_PATH + "setZonedDateTime")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(zonedDateTime)
                 .asEmpty();
 
         var result = Unirest.get(REST_PATH + "getZonedDateTime")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(ZonedDateTime.class).getBody();
 
         //Assert
@@ -201,12 +198,12 @@ class RESTfulRPCJava8DateTimeTest
 
         //Act
         var response = Unirest.post(REST_PATH + "setDuration")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(duration)
                 .asEmpty();
 
         var result = Unirest.get(REST_PATH + "getDuration")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(Duration.class).getBody();
 
         //Assert
@@ -223,12 +220,12 @@ class RESTfulRPCJava8DateTimeTest
 
         //Act
         var response = Unirest.post(REST_PATH + "setPeriod")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(period)
                 .asEmpty();
 
         var result = Unirest.get(REST_PATH + "getPeriod")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(Period.class).getBody();
 
         //Assert
@@ -245,12 +242,12 @@ class RESTfulRPCJava8DateTimeTest
 
         //Act
         var response = Unirest.post(REST_PATH + "setInstant")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(instant)
                 .asEmpty();
 
         var result = Unirest.get(REST_PATH + "getInstant")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(Instant.class).getBody();
 
         //Assert
@@ -273,12 +270,12 @@ class RESTfulRPCJava8DateTimeTest
         );
         //Act
         var response = Unirest.post(REST_PATH + "setJava8DateTimeWrapper")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .body(java8DateTimeWrapper)
                 .asEmpty();
 
         var result = Unirest.get(REST_PATH + "getJava8DateTimeWrapper")
-                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
                 .asObject(Java8DateTimeApplicationService.Java8DateTimeWrapper.class).getBody();
 
         //Assert

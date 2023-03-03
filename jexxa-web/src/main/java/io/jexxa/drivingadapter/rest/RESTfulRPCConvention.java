@@ -1,4 +1,4 @@
-package io.jexxa.api.wrapper.drivingadapter.rest;
+package io.jexxa.drivingadapter.rest;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
