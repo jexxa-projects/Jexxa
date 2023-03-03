@@ -162,13 +162,13 @@ class JDBCKeyValueRepositoryIT
         //act
         try {
             objectUnderTest.add(aggregate);
-        } catch (RuntimeException e) {
+        } catch (IllegalArgumentException e) {
             objectUnderTest.rollback();
         }
         objectUnderTest.closeTransaction();
 
 
-        //Assert
+        //Assert - since the second .add statement failed, no aggregate has been added
         assertTrue(objectUnderTest.get(aggregate.getKey()).isEmpty());
     }
 
