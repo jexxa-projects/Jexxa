@@ -76,7 +76,7 @@ class DependencyScannerTest
     void getClassesImplementingInterfaceInSpecificPackage() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
-        var packageName = "io.jexxa.infrastructure.drivingadapter.messaging";
+        var packageName = "io.jexxa.drivingadapter.messaging";
 
         //Act
         List<Class<?>> drivingAdapters = objectUnderTest.

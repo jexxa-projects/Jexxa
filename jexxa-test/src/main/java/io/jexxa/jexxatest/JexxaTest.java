@@ -1,11 +1,11 @@
 package io.jexxa.jexxatest;
 
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb.IMDBObjectStore;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.drivenadapter.strategy.messaging.MessageSenderManager;
+import io.jexxa.drivenadapter.strategy.persistence.objectstore.ObjectStoreManager;
+import io.jexxa.drivenadapter.strategy.persistence.objectstore.imdb.IMDBObjectStore;
+import io.jexxa.drivenadapter.strategy.persistence.repository.RepositoryManager;
+import io.jexxa.drivenadapter.strategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorderManager;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;

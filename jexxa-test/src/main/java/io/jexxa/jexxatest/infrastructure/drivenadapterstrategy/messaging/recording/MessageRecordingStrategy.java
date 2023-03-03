@@ -1,7 +1,7 @@
 package io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording;
 
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageProducer;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
+import io.jexxa.drivenadapter.strategy.messaging.MessageProducer;
+import io.jexxa.drivenadapter.strategy.messaging.MessageSender;
 import io.jexxa.utils.annotations.CheckReturnValue;
 
 import java.util.Objects;

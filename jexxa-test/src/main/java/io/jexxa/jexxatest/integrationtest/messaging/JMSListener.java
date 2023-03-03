@@ -1,8 +1,8 @@
 package io.jexxa.jexxatest.integrationtest.messaging;
 
-import io.jexxa.infrastructure.drivingadapter.messaging.DefaultJMSConfiguration;
-import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
-import io.jexxa.infrastructure.drivingadapter.messaging.listener.JSONMessageListener;
+import io.jexxa.drivingadapter.messaging.DefaultJMSConfiguration;
+import io.jexxa.drivingadapter.messaging.JMSConfiguration;
+import io.jexxa.drivingadapter.messaging.listener.JSONMessageListener;
 
 import java.util.ArrayList;
 import java.util.List;

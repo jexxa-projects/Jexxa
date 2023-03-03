@@ -2,14 +2,14 @@ package io.jexxa.jexxatest;
 
 import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.domain.model.JexxaValueObject;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.JexxaObject;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb.IMDBObjectStore;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.drivenadapter.strategy.messaging.MessageSenderManager;
+import io.jexxa.drivenadapter.strategy.persistence.objectstore.JexxaObject;
+import io.jexxa.drivenadapter.strategy.persistence.objectstore.ObjectStoreManager;
+import io.jexxa.drivenadapter.strategy.persistence.objectstore.imdb.IMDBObjectStore;
+import io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetaTag;
+import io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetadataSchema;
+import io.jexxa.drivenadapter.strategy.persistence.repository.RepositoryManager;
+import io.jexxa.drivenadapter.strategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
 import io.jexxa.utils.properties.JexxaJDBCProperties;
 import io.jexxa.utils.properties.JexxaJMSProperties;
@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numericTag;
+import static io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetaTags.numericTag;
 import static io.jexxa.jexxatest.JexxaTest.getJexxaTest;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 

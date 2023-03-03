@@ -2,8 +2,8 @@ package io.jexxa.application.infrastructure.drivenadapter.messaging;
 
 import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.application.domainservice.ValidDomainSender;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSender;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
+import io.jexxa.drivenadapter.strategy.messaging.MessageSender;
+import io.jexxa.drivenadapter.strategy.messaging.MessageSenderManager;
 
 import java.util.Properties;
 

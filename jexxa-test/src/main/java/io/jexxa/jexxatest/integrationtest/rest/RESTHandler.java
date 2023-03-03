@@ -7,7 +7,7 @@ import kong.unirest.Unirest;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import static io.jexxa.api.wrapper.json.JSONManager.getJSONConverter;
 import static kong.unirest.ContentType.APPLICATION_JSON;
 import static kong.unirest.HeaderNames.CONTENT_TYPE;
 

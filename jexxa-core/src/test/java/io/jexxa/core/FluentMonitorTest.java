@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-import static io.jexxa.infrastructure.monitor.Monitors.timerMonitor;
+import static io.jexxa.drivenadapter.strategy.monitor.Monitors.timerMonitor;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;

@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[6.0.0] - 2023-mm-dd
 
 ### Changed
-- [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/drivenadapterstrategy/outbox/TransactionalOutboxSender.java) is now used by default for sending messages.   
+- [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/javastdapi/drivenadapterstrategy/outbox/TransactionalOutboxSender.java) is now used by default for sending messages.   
 
 - Changed HTTP-properties to meet declaration convention: 
   - `io.jexxa.rest.open_api_path` &rarr; `io.jexxa.rest.openapi.path`
@@ -28,11 +28,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[5.7.1] - 2023-02-24
 ### Fixed
 - Updated dependencies
-- [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/drivenadapterstrategy/outbox/TransactionalOutboxSender.java) initiates sending of messages directly after storing messages so that no additional delay occurs 
+- [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/javastdapi/drivenadapterstrategy/outbox/TransactionalOutboxSender.java) initiates sending of messages directly after storing messages so that no additional delay occurs 
 
 ## \[5.7.0] - 2023-02-19
 ### Added
-- [ #186 ] Jexxa-Core: Added support for transactional outbox pattern for sending JMS messages, called [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/drivenadapterstrategy/outbox/TransactionalOutboxSender.java). By default, the old [`JMSSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/drivenadapterstrategy/messaging/jms/JMSSender.java) is still used. See [here](jexxa-core/src/test/java/io/jexxa/infrastructure/drivenadapterstrategy/messaging/jms/JMSSenderIT.java) how to enable the new message sender.    
+- [ #186 ] Jexxa-Core: Added support for transactional outbox pattern for sending JMS messages, called [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/javastdapi/drivenadapterstrategy/outbox/TransactionalOutboxSender.java). By default, the old [`JMSSender`](jexxa-core/src/main/java/io/jexxa/javastdapi/drivenadapterstrategy/messaging/jms/JMSSender.java) is still used. See [here](jexxa-core/src/test/java/io/jexxa/javastdapi/drivenadapterstrategy/messaging/jms/JMSSenderIT.java) how to enable the new message sender.    
 
 ### Changed
 - Jexxa-Core: Declared driving adapter `JMXAdapter` as deprecated since it is no longer used in any project.
@@ -275,7 +275,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Jexxa-Core/Jexxa-Web: Added files that provide all properties used by Jexxa: 
   - [JexxaCoreProperties](./jexxa-core/src/main/java/io/jexxa/utils/properties/JexxaCoreProperties.java)
   - [JexxaJDBCProperties](./jexxa-core/src/main/java/io/jexxa/utils/properties/JexxaJDBCProperties.java)
-  - [JexxaWebProperties](./jexxa-web/src/main/java/io/jexxa/infrastructure/drivingadapter/rest/JexxaWebProperties.java)
+  - [JexxaWebProperties](./jexxa-web/src/main/java/io/jexxa/javastdapi/drivingadapter/rest/JexxaWebProperties.java)
 
 - Jexxa-Adapter-API: Added possibility to set interceptor between `DrivingAdapters` and `InboundPorts`
 
