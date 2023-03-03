@@ -3,9 +3,8 @@ package io.jexxa.drivingadapter.messaging;
 
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
-import io.jexxa.utils.JexxaBanner;
-import io.jexxa.utils.JexxaLogger;
 import io.jexxa.api.function.ThrowingConsumer;
+import io.jexxa.utils.JexxaBanner;
 import io.jexxa.utils.properties.JexxaJMSProperties;
 import io.jexxa.utils.properties.Secret;
 import org.apache.commons.lang3.Validate;
@@ -31,6 +30,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static io.jexxa.utils.JexxaLogger.getLogger;
 import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_SIMULATE;
 
 public class JMSAdapter implements AutoCloseable, IDrivingAdapter
@@ -180,9 +180,9 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     @Override
     public void close()
     {
-        consumerList.forEach(consumer -> Optional.ofNullable(consumer).ifPresent(ThrowingConsumer.exceptionLogger(MessageConsumer::close)));
-        sessionList.forEach(ThrowingConsumer.exceptionLogger(Session::close));
-        Optional.ofNullable(connection).ifPresent(ThrowingConsumer.exceptionLogger(Connection::close));
+        consumerList.forEach(consumer -> Optional.ofNullable(consumer).ifPresent(ThrowingConsumer.exceptionLogger(MessageConsumer::close, getLogger(JMSAdapter.class))));
+        sessionList.forEach(ThrowingConsumer.exceptionLogger(Session::close, getLogger(JMSAdapter.class)));
+        Optional.ofNullable(connection).ifPresent(ThrowingConsumer.exceptionLogger(Connection::close, getLogger(JMSAdapter.class)));
 
         registeredListener.clear();
         consumerList.clear();
@@ -257,7 +257,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     {
         if (simulateJMS)
         {
-            JexxaLogger.getLogger(JMSAdapter.class).warn("JMSAdapter is running in simulation mode -> No messages will be received");
+            getLogger(JMSAdapter.class).warn("JMSAdapter is running in simulation mode -> No messages will be received");
             return;
         }
 
@@ -271,7 +271,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
         // NOTE: The exception handler is created after the session is successfully created
         connection.setExceptionListener(exception -> {
-            JexxaLogger.getLogger(JMSAdapter.class).error(exception.getMessage());
+            getLogger(JMSAdapter.class).error(exception.getMessage());
             jmsConnectionExceptionHandler.stopFailover();
             jmsConnectionExceptionHandler.startFailover();
         });
@@ -322,7 +322,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
                     // Wait a while for tasks to respond to being cancelled
                     if ( !executorService.awaitTermination(500, TimeUnit.MILLISECONDS))
                     {
-                        JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error("stopFailover ExecutorService did not terminate.");
+                        getLogger(JMSConnectionExceptionHandler.class).error("stopFailover ExecutorService did not terminate.");
                     }
                 }
             }
@@ -345,7 +345,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         {
             try
             {
-                JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).warn("Try to restart JMS message listener");
+                getLogger(JMSConnectionExceptionHandler.class).warn("Try to restart JMS message listener");
 
                 jmsAdapter.close();
                 jmsAdapter.initConnection();
@@ -354,15 +354,15 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 
                 executorService.shutdown();  //Shutdown service if restart was successful
 
-                JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).warn("Listener successfully restarted with {} consumer", listener.size());
+                getLogger(JMSConnectionExceptionHandler.class).warn("Listener successfully restarted with {} consumer", listener.size());
                 listener.forEach( element ->
-                        JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).warn("Restarted Listener {}", element.getClass().getSimpleName())
+                        getLogger(JMSConnectionExceptionHandler.class).warn("Restarted Listener {}", element.getClass().getSimpleName())
                 );
             }
             catch (JMSException | IllegalStateException e)
             {
-                JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error("Failed to restart JMS Listener");
-                JexxaLogger.getLogger(JMSConnectionExceptionHandler.class).error(e.getMessage());
+                getLogger(JMSConnectionExceptionHandler.class).error("Failed to restart JMS Listener");
+                getLogger(JMSConnectionExceptionHandler.class).error(e.getMessage());
             }
         }
     }
@@ -379,9 +379,9 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
                 .map(JMSConfiguration::destination).toArray()
         );
 
-        JexxaLogger.getLogger(JexxaBanner.class).info("JMS Listening on  : {}", properties.getProperty(JexxaJMSProperties.JNDI_PROVIDER_URL_KEY));
-        JexxaLogger.getLogger(JexxaBanner.class).info("   * JMS-Topics   : {}", topics);
-        JexxaLogger.getLogger(JexxaBanner.class).info("   * JMS-Queues   : {}", queues);
+        getLogger(JexxaBanner.class).info("JMS Listening on  : {}", properties.getProperty(JexxaJMSProperties.JNDI_PROVIDER_URL_KEY));
+        getLogger(JexxaBanner.class).info("   * JMS-Topics   : {}", topics);
+        getLogger(JexxaBanner.class).info("   * JMS-Queues   : {}", queues);
     }
 
 }
