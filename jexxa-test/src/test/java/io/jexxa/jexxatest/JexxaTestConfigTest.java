@@ -12,7 +12,7 @@ import io.jexxa.infrastructure.persistence.objectstore.imdb.IMDBObjectStore;
 import io.jexxa.infrastructure.persistence.objectstore.metadata.MetaTag;
 import io.jexxa.infrastructure.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
-import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
+import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 

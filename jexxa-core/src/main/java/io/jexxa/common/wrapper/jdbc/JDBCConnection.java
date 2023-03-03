@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.common.wrapper.logger.SLF4jLogger.getSLF4JLogger;
+import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
 
 
 public class JDBCConnection implements AutoCloseable
@@ -48,7 +48,7 @@ public class JDBCConnection implements AutoCloseable
     private IsolationLevel isolationLevel;
     private boolean autoCommit = true;
 
-    private static final Logger LOGGER = getSLF4JLogger(JDBCConnection.class);
+    private static final Logger LOGGER = getLogger(JDBCConnection.class);
 
     public JDBCConnection(Properties properties)
     {
@@ -275,7 +275,7 @@ public class JDBCConnection implements AutoCloseable
     public void close()
     {
         Optional.ofNullable(connection)
-                .ifPresent(ThrowingConsumer.exceptionLogger(Connection::close, getSLF4JLogger(JDBCConnection.class)));
+                .ifPresent(ThrowingConsumer.exceptionLogger(Connection::close, getLogger(JDBCConnection.class)));
         connection = null;
     }
 

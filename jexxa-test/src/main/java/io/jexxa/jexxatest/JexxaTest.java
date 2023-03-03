@@ -8,9 +8,9 @@ import io.jexxa.infrastructure.ObjectStoreManager;
 import io.jexxa.infrastructure.persistence.objectstore.imdb.IMDBObjectStore;
 import io.jexxa.infrastructure.RepositoryManager;
 import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
-import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
-import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorderManager;
-import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
+import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorder;
+import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorderManager;
+import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
 
 import java.util.Optional;
 import java.util.Properties;
@@ -18,7 +18,7 @@ import java.util.Properties;
 import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
 
 /**
- * This class supports unit testing of your application core, at least if you use driven adapter strategies
+ * This class supports unit testing of your application core, at least if you use infrastructure strategies
  * provided by Jexxa. To do so, this class performs following steps:
  * <ul>
  * <li> Configuring an IMDB database for repositories </li>

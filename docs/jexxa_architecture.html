@@ -727,8 +727,7 @@ implemented by junior developers.</p>
 <i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
 </td>
 <td class="content">
-Jexxa provides <code>driven adapter strategies</code> so that the implementation of driven adapters is just a simple facade, which maps
-between the API of outbound ports to corresponding API of the strategy.
+Jexxa provides implementation for typical <code>application infrastructure strategies</code> so that the implementation of driven adapters is just a simple facade, which maps between the API of outbound ports to corresponding API of the strategy.
 </td>
 </tr>
 </table>
@@ -820,7 +819,7 @@ especially for the training of new developers. As an example I will use the impl
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>JexxaInfrastructure</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">This package includes the provided driving adapter of Jexxa as well as the driven adapter strategies which simplify the application specific driven adapter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This package includes the provided driving adapter of Jexxa as well as strategies for typical application infrastructure components which simplifies the implementation of application specific driven adapter</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -861,7 +860,7 @@ especially for the training of new developers. As an example I will use the impl
 <p>Jexxa provides implicit constructor injection for your inbound ports which is described in <a href="#_dependency_injection_di">Dependency Injection (DI)</a>.</p>
 </li>
 <li>
-<p>Jexxa also allows instantiating and manage ports yourself using the provided driving adapters and driven adapter strategies.</p>
+<p>Jexxa also allows instantiating and manage ports yourself using the provided driving and driven adapters.</p>
 </li>
 </ul>
 </div></div></td>
@@ -874,7 +873,7 @@ especially for the training of new developers. As an example I will use the impl
 <p>Outbound ports belong to the application core but only as interface. These interfaces are implemented in package <code>Infrastructure</code> by a driving adapter which provides access to a specific technology stack such as a database driver.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Outbound ports are 'just' interfaces that must be defined by your application core. Jexxa provides support to implement these interfaces by so-called <em>driven adapter strategies</em>.</p>
+<p>Outbound ports are 'just' interfaces that must be defined by your application core. Jexxa provides support to implement these interfaces by providing strategies for various <em>application infrastructure patterns</em>.</p>
 </div></div></td>
 </tr>
 </tbody>
@@ -903,7 +902,7 @@ especially for the training of new developers. As an example I will use the impl
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapters</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Driven adapters implement the outbound ports and can be injected into the inbound ports which in turn operates on these interfaces. Typically, they map domain objects to a specific technology stack.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Jexxa provides <em>driven adapter strategies</em> to simplify the development of driven adapters of an application.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jexxa provides strategies providing different implementations of typical <em>application infrastructure patterns</em> to simplify the development of driven adapters of an application.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Port Adapters</p></td>
@@ -951,9 +950,9 @@ especially for the training of new developers. As an example I will use the impl
 </div></div></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapter Strategies</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Driven adapter strategies provide how to map objects from the application core to a specific technology stack. For example if you use a database for persisting your data, the strategy decides the ORM mapping of your objects.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Jexxa provides some <em>driven adapter strategies</em> to simplify development of driven adapters. If such a strategy is suitable for your application, the implementation of a driven adapter is just a facade which maps the interface of the outbound port to the methods of the strategy.</p>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Infrastructure strategies</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Application infrastructure strategies provide how to map objects from the application core to a specific technology stack. For example if you use a database for persisting your data, the strategy decides the ORM mapping of your objects.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jexxa provides implementation of typical application infrastructure patterns to simplify development of driven adapters. If such a strategy is suitable for your application, the implementation of a driven adapter is just a facade which maps the interface of the outbound port to the methods of the strategy.</p>
 <p class="tableblock">Available strategies in Jexxa are based on the standard javax interfaces (e.g. JMS or JDBC) and can be configured via <code>Properties</code>. This allows you to adjust the configuration to your development process. For example, you can easily switch your database technology between in memory or JDBC, or the used URL.</p></td>
 </tr>
 </tbody>
@@ -1374,7 +1373,7 @@ application scenarios Jexxa provides the <code>TransactionalOutboxSender</code>.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-02-19 07:41:50 +0100
+Last updated 2023-03-03 19:38:13 +0100
 </div>
 </div>
 </body>

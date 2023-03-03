@@ -1,4 +1,4 @@
-package io.jexxa.infrastructure.monitor;
+package io.jexxa.infrastructure.healthcheck;
 
 
 import io.jexxa.adapterapi.invocation.InvocationContext;
@@ -7,12 +7,12 @@ import io.jexxa.adapterapi.invocation.monitor.BeforeMonitor;
 import java.time.Duration;
 import java.time.Instant;
 
-public class TimerMonitor extends BeforeMonitor
+public class TimoutIndicator extends BeforeMonitor
 {
     private Instant lastUpdate = Instant.now();
     private final Duration messageTimeout;
 
-    public TimerMonitor(Duration messageTimeout)
+    public TimoutIndicator(Duration messageTimeout)
     {
         this.messageTimeout = messageTimeout;
     }

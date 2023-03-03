@@ -125,8 +125,7 @@ Section <<Inversion of Control (IoC)>> describes the used conventions in detail.
 Driven adapters belong to the infrastructure of an application. Thus, their implementation should be as simple as possible so that they can be
 implemented by junior developers.
 
-IMPORTANT: Jexxa provides `driven adapter strategies` so that the implementation of driven adapters is just a simple facade, which maps
-between the API of outbound ports to corresponding API of the strategy.
+IMPORTANT: Jexxa provides implementation for typical `application infrastructure strategies` so that the implementation of driven adapters is just a simple facade, which maps between the API of outbound ports to corresponding API of the strategy.
 
 This approach seems to be so obvious, so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern
 especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md[BookStore] to see the source code):
@@ -168,7 +167,7 @@ package JexxaCore <<Jexxa>> #DDDDDD {
 package JexxaInfrastructure <<Jexxa>> #DDDDDD {
 [Generic Driving Adapters]  <<Driving Adapter>>
 [Specific Driving Adapters] <<Driving Adapter>>
-[Driven Adapter Strategies] <<Driven Adapter Strategy>>
+[Infrastructure Strategies] <<Application Infrastructure Pattern>>
 }
 
 package ApplicationCore <<Application>> {
@@ -187,7 +186,7 @@ package Infrastructure <<Application>> {
 [Port Adapters] *-right-> [Inbound Ports]
 [Inbound Ports] o-down-> [Outbound Ports]
 [Outbound Ports] <|.. [Driven Adapters]
-[Driven Adapters] o-left-[Driven Adapter Strategies]
+[Driven Adapters] o-left-[Infrastructure Strategies]
 
 [Factory] ..> Infrastructure : create
 [Factory] ..> ApplicationCore : create
@@ -195,7 +194,7 @@ package Infrastructure <<Application>> {
 
 [Generic Driving Adapters] -[hidden]- [Port Adapters]
 [Generic Driving Adapters] -[hidden]- [Specific Driving Adapters]
-[Specific Driving Adapters] -[hidden]- [Driven Adapter Strategies]
+[Specific Driving Adapters] -[hidden]- [Infrastructure Strategies]
 [Port Adapters] -[hidden]- [Driven Adapters]
 
 [Core] -left-> [Factory]
@@ -221,7 +220,7 @@ a|`Infrastructure`
 a| This package includes the glue code to bind your technology-agnostic business application to the package `JexxaInfrastructure`.
 
 a|`JexxaInfrastructure`
-| This package includes the provided driving adapter of Jexxa as well as the driven adapter strategies which simplify the application specific driven adapter
+| This package includes the provided driving adapter of Jexxa as well as strategies for typical application infrastructure components which simplifies the implementation of application specific driven adapter
 
 a|`JexxaCore`
 | This package includes the core of Jexxa and manages the lifecycle of both ports and adapters. The details are described in Section <<Inversion of Control (IoC)>>. The functionality of this package is used via a fluent API within the main method of your application.
@@ -245,13 +244,13 @@ a|Components
 a|`Inbound Ports`
 | Inbound ports belong to the application core and provide use cases that can be started by a driving adapter. Depending on the design of your application core a port might be an interface or a specific implementation of a set of use cases.
 a| * Jexxa provides implicit constructor injection for your inbound ports which is described in <<Dependency Injection (DI)>>.
-* Jexxa also allows instantiating and manage ports yourself using the provided driving adapters and driven adapter strategies.
+* Jexxa also allows instantiating and manage ports yourself using the provided driving and driven adapters.
 
 a|Outbound Ports
 a| Outbound ports belong to the application core but only as interface. These interfaces are implemented in package `Infrastructure` by a driving adapter which provides access to a specific technology stack such as a database driver.
 
 
-a| Outbound ports are 'just' interfaces that must be defined by your application core. Jexxa provides support to implement these interfaces by so-called __driven adapter strategies__.
+a| Outbound ports are 'just' interfaces that must be defined by your application core. Jexxa provides support to implement these interfaces by providing strategies for various __application infrastructure patterns__.
 
 |===
 
@@ -274,7 +273,7 @@ a|Components
 |Driven Adapters
 
 |Driven adapters implement the outbound ports and can be injected into the inbound ports which in turn operates on these interfaces. Typically, they map domain objects to a specific technology stack.
-| Jexxa provides _driven adapter strategies_ to simplify the development of driven adapters of an application.
+| Jexxa provides strategies providing different implementations of typical _application infrastructure patterns_ to simplify the development of driven adapters of an application.
 
 
 
@@ -310,10 +309,10 @@ A __generic__ driving adapter automatically exposes methods from connected inbou
 A __specific__ driving adapter is used if a convention cannot be applied. Instead, you have to implement a configuration within the infrastructure of your application in form of a __port adapter__. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the __port adapter__.
 
 
-|Driven Adapter Strategies
+|Infrastructure strategies
 
-|Driven adapter strategies provide how to map objects from the application core to a specific technology stack. For example if you use a database for persisting your data, the strategy decides the ORM mapping of your objects.
-| Jexxa provides some _driven adapter strategies_ to simplify development of driven adapters. If such a strategy is suitable for your application, the implementation of a driven adapter is just a facade which maps the interface of the outbound port to the methods of the strategy.
+|Application infrastructure strategies provide how to map objects from the application core to a specific technology stack. For example if you use a database for persisting your data, the strategy decides the ORM mapping of your objects.
+| Jexxa provides implementation of typical application infrastructure patterns to simplify development of driven adapters. If such a strategy is suitable for your application, the implementation of a driven adapter is just a facade which maps the interface of the outbound port to the methods of the strategy.
 
 Available strategies in Jexxa are based on the standard javax interfaces (e.g. JMS or JDBC) and can be configured via `Properties`. This allows you to adjust the configuration to your development process. For example, you can easily switch your database technology between in memory or JDBC, or the used URL.
 

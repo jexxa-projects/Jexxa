@@ -1,4 +1,4 @@
-package io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording;
+package io.jexxa.jexxatest.infrastructure.messaging.recording;
 
 import io.jexxa.infrastructure.messaging.MessageProducer;
 import io.jexxa.infrastructure.messaging.MessageSender;

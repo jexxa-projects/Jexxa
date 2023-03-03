@@ -14,7 +14,7 @@ Because your senior and intermediate developers focus on the application core, y
 
 ## Decision
 
-Jexxa provides driven adapter strategies so that the implementation of driven adapters is just a simple facade, which maps between the API of outbound ports to corresponding API of the strategy.
+Jexxa provides typical implementation of application infrastructure patterns via strategies so that the implementation of driven adapters is just a simple facade, which maps between the API of outbound ports to corresponding API of the strategy.
 
 ## Consequences
 

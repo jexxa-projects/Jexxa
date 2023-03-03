@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
-import static io.jexxa.common.wrapper.logger.SLF4jLogger.getSLF4JLogger;
+import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
 
 final class ExceptionFactory implements TypeAdapterFactory
 {
@@ -95,7 +95,7 @@ final class ExceptionFactory implements TypeAdapterFactory
                                 .newInstance(message, new Throwable(cause))
                 );
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                getSLF4JLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
+                getLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
                 return Optional.empty();
             }
         }
@@ -109,7 +109,7 @@ final class ExceptionFactory implements TypeAdapterFactory
                                 .newInstance(message)
                 );
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                getSLF4JLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
+                getLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
                 return Optional.empty();
             }
         }
@@ -123,7 +123,7 @@ final class ExceptionFactory implements TypeAdapterFactory
                                 .newInstance()
                 );
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                getSLF4JLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
+                getLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
                 return Optional.empty();
             }
         }
