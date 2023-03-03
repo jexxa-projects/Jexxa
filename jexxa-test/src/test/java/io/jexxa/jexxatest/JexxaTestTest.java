@@ -10,7 +10,7 @@ import io.jexxa.application.domainservice.NotImplementedService;
 import io.jexxa.application.domainservice.ValidDomainSender;
 import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaAggregateRepositoryImpl;
 import io.jexxa.core.factory.InvalidAdapterException;
-import io.jexxa.pattern.messaging.MessageProducer;
+import io.jexxa.infrastructure.messaging.MessageProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

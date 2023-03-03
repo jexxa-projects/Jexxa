@@ -11,7 +11,7 @@ import io.jexxa.common.wrapper.utils.messaging.TopicListener;
 import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.domain.model.JexxaEntity;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.pattern.persistence.repository.jdbc.JDBCKeyValueRepository;
+import io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

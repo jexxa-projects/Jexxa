@@ -2,7 +2,7 @@ package io.jexxa.common.wrapper.jdbc;
 
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.model.JexxaEntity;
-import io.jexxa.pattern.persistence.repository.jdbc.JDBCKeyValueRepository;
+import io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;

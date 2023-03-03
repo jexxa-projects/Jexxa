@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.pattern.persistence.RepositoryConfig.jdbcRepositoryConfig;
+import static io.jexxa.infrastructure.persistence.RepositoryConfig.jdbcRepositoryConfig;
 import static io.jexxa.common.wrapper.jdbc.JDBCTestDatabase.JDBCTestSchema.DOUBLE_TYPE;
 import static io.jexxa.common.wrapper.jdbc.JDBCTestDatabase.JDBCTestSchema.FLOAT_TYPE;
 import static io.jexxa.common.wrapper.jdbc.JDBCTestDatabase.JDBCTestSchema.INTEGER_TYPE;
@@ -43,7 +43,7 @@ public final class JDBCTestDatabase
         TIMESTAMP_TYPE,
     }
 
-    public static final String JDBC_REPOSITORY_CONFIG = "io.jexxa.api.wrapper.jdbc.JDBCTestDatabase#repositoryConfigJDBC";
+    public static final String JDBC_REPOSITORY_CONFIG = "io.jexxa.common.wrapper.jdbc.JDBCTestDatabase#repositoryConfigJDBC";
 
     @SuppressWarnings("unused")
     public static Stream<Properties> repositoryConfigJDBC() {
