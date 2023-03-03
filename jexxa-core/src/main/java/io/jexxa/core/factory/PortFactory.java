@@ -1,6 +1,6 @@
 package io.jexxa.core.factory;
 
-import io.jexxa.api.wrapper.factory.ClassFactory;
+import io.jexxa.common.wrapper.factory.ClassFactory;
 
 import java.io.Serial;
 import java.lang.annotation.Annotation;

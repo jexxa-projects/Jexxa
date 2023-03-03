@@ -1,13 +1,13 @@
 package io.jexxa.jexxatest;
 
-import io.jexxa.api.annotation.CheckReturnValue;
-import io.jexxa.api.function.ThrowingConsumer;
+import io.jexxa.common.annotation.CheckReturnValue;
+import io.jexxa.common.function.ThrowingConsumer;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.drivenadapter.strategy.MessageSenderManager;
-import io.jexxa.drivenadapter.strategy.ObjectStoreManager;
-import io.jexxa.drivenadapter.strategy.persistence.objectstore.imdb.IMDBObjectStore;
-import io.jexxa.drivenadapter.strategy.RepositoryManager;
-import io.jexxa.drivenadapter.strategy.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.pattern.MessageSenderManager;
+import io.jexxa.pattern.ObjectStoreManager;
+import io.jexxa.pattern.persistence.objectstore.imdb.IMDBObjectStore;
+import io.jexxa.pattern.RepositoryManager;
+import io.jexxa.pattern.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorderManager;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
@@ -15,7 +15,7 @@ import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recordi
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
 
 /**
  * This class supports unit testing of your application core, at least if you use driven adapter strategies

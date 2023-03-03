@@ -2,24 +2,24 @@ package io.jexxa.jexxatest;
 
 import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.domain.model.JexxaValueObject;
-import io.jexxa.drivenadapter.strategy.MessageSenderManager;
-import io.jexxa.drivenadapter.strategy.persistence.objectstore.JexxaObject;
-import io.jexxa.drivenadapter.strategy.ObjectStoreManager;
-import io.jexxa.drivenadapter.strategy.persistence.objectstore.imdb.IMDBObjectStore;
-import io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetaTag;
-import io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetadataSchema;
-import io.jexxa.drivenadapter.strategy.RepositoryManager;
-import io.jexxa.drivenadapter.strategy.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.pattern.MessageSenderManager;
+import io.jexxa.pattern.persistence.objectstore.JexxaObject;
+import io.jexxa.pattern.ObjectStoreManager;
+import io.jexxa.pattern.persistence.objectstore.imdb.IMDBObjectStore;
+import io.jexxa.pattern.persistence.objectstore.metadata.MetaTag;
+import io.jexxa.pattern.persistence.objectstore.metadata.MetadataSchema;
+import io.jexxa.pattern.RepositoryManager;
+import io.jexxa.pattern.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
-import io.jexxa.api.wrapper.jdbc.JexxaJDBCProperties;
-import io.jexxa.utils.properties.JexxaJMSProperties;
+import io.jexxa.common.wrapper.jdbc.JexxaJDBCProperties;
+import io.jexxa.common.JexxaJMSProperties;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetaTags.numericTag;
+import static io.jexxa.pattern.persistence.objectstore.metadata.MetaTags.numericTag;
 import static io.jexxa.jexxatest.JexxaTest.getJexxaTest;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 

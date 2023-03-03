@@ -10,12 +10,12 @@ import io.jexxa.application.domainservice.NotImplementedService;
 import io.jexxa.application.domainservice.ValidDomainSender;
 import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaAggregateRepositoryImpl;
 import io.jexxa.core.factory.InvalidAdapterException;
-import io.jexxa.drivenadapter.strategy.messaging.MessageProducer;
+import io.jexxa.pattern.messaging.MessageProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static io.jexxa.jexxatest.JexxaTest.getJexxaTest;
-import static io.jexxa.api.wrapper.json.JSONManager.getJSONConverter;
+import static io.jexxa.common.wrapper.json.JSONManager.getJSONConverter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

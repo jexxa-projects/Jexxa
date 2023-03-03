@@ -13,8 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static io.jexxa.api.wrapper.json.JSONManager.getJSONConverter;
-import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.wrapper.json.JSONManager.getJSONConverter;
+import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
 
 @SuppressWarnings("unused")
 public abstract class JSONMessageListener implements MessageListener

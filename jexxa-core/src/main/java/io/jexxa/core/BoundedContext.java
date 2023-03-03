@@ -2,7 +2,7 @@ package io.jexxa.core;
 
 import io.jexxa.adapterapi.drivingadapter.Diagnostics;
 import io.jexxa.adapterapi.drivingadapter.HealthCheck;
-import io.jexxa.utils.properties.JexxaCoreProperties;
+import io.jexxa.common.JexxaCoreProperties;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
 
 public final class BoundedContext
 {

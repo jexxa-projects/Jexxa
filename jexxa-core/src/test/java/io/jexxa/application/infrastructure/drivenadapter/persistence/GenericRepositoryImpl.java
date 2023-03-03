@@ -1,7 +1,7 @@
 package io.jexxa.application.infrastructure.drivenadapter.persistence;
 
-import io.jexxa.drivenadapter.strategy.persistence.repository.IRepository;
-import io.jexxa.drivenadapter.strategy.RepositoryManager;
+import io.jexxa.pattern.persistence.repository.IRepository;
+import io.jexxa.pattern.RepositoryManager;
 
 import java.util.List;
 import java.util.Optional;

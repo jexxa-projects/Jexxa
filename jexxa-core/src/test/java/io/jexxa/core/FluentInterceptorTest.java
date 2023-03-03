@@ -5,8 +5,8 @@ import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.annotation.ValidApplicationService;
 import io.jexxa.application.applicationservice.IncrementApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
-import io.jexxa.drivenadapter.strategy.RepositoryManager;
-import io.jexxa.drivenadapter.strategy.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.pattern.RepositoryManager;
+import io.jexxa.pattern.persistence.repository.imdb.IMDBRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

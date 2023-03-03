@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
 
 public abstract class IdempotentListener<T> extends JSONMessageListener
 {

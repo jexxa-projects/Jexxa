@@ -27,8 +27,8 @@ import java.util.Properties;
 import java.util.stream.Stream;
 
 import static io.jexxa.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
-import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
-import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_CONTEXT_VERSION;
+import static io.jexxa.common.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
+import static io.jexxa.common.JexxaCoreProperties.JEXXA_CONTEXT_VERSION;
 import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponse;
 import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponses;
 import static org.eclipse.microprofile.openapi.OASFactory.createComponents;
@@ -41,7 +41,7 @@ import static org.eclipse.microprofile.openapi.OASFactory.createPathItem;
 import static org.eclipse.microprofile.openapi.OASFactory.createPaths;
 import static org.eclipse.microprofile.openapi.OASFactory.createSchema;
 
-import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
 
 public class OpenAPIConvention
 {

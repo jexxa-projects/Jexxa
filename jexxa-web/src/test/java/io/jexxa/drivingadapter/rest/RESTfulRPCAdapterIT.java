@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.jexxa.TestConstants;
-import io.jexxa.api.wrapper.json.JSONManager;
+import io.jexxa.common.wrapper.json.JSONManager;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.application.domain.model.SpecialCasesValueObject;

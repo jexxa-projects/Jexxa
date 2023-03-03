@@ -2,16 +2,16 @@ package io.jexxa.drivingadapter.messaging;
 
 
 import io.jexxa.TestConstants;
+import io.jexxa.common.wrapper.jms.JMSProperties;
+import io.jexxa.common.wrapper.utils.messaging.ConfigurableListener;
+import io.jexxa.common.wrapper.utils.messaging.ITMessageSender;
+import io.jexxa.common.wrapper.utils.messaging.QueueListener;
+import io.jexxa.common.wrapper.utils.messaging.SharedConnectionListener;
+import io.jexxa.common.wrapper.utils.messaging.TopicListener;
 import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.domain.model.JexxaEntity;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.drivenadapter.strategy.persistence.repository.jdbc.JDBCKeyValueRepository;
-import io.jexxa.api.wrapper.utils.messaging.ConfigurableListener;
-import io.jexxa.api.wrapper.utils.messaging.ITMessageSender;
-import io.jexxa.api.wrapper.utils.messaging.QueueListener;
-import io.jexxa.api.wrapper.utils.messaging.SharedConnectionListener;
-import io.jexxa.api.wrapper.utils.messaging.TopicListener;
-import io.jexxa.utils.properties.JexxaJMSProperties;
+import io.jexxa.pattern.persistence.repository.jdbc.JDBCKeyValueRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -23,8 +23,8 @@ import java.time.Duration;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import static io.jexxa.api.wrapper.utils.messaging.TopicListener.TOPIC_DESTINATION;
-import static io.jexxa.utils.properties.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
+import static io.jexxa.common.wrapper.utils.messaging.TopicListener.TOPIC_DESTINATION;
+import static io.jexxa.common.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -230,8 +230,8 @@ class JMSAdapterIT
 
         //2.Arrange invalid properties: Invalid JNDI_FACTORY_KEY
         Properties propertiesInvalidProvider = new Properties();
-        propertiesInvalidProvider.put(JexxaJMSProperties.JNDI_PROVIDER_URL_KEY, "invalid");
-        propertiesInvalidProvider.put(JexxaJMSProperties.JNDI_FACTORY_KEY, DEFAULT_JNDI_FACTORY);
+        propertiesInvalidProvider.put(JMSProperties.JNDI_PROVIDER_URL_KEY, "invalid");
+        propertiesInvalidProvider.put(JMSProperties.JNDI_FACTORY_KEY, DEFAULT_JNDI_FACTORY);
 
         //2.Assert invalid properties: Invalid Driver
         assertThrows(IllegalArgumentException.class, () -> new JDBCKeyValueRepository<>(
@@ -242,8 +242,8 @@ class JMSAdapterIT
 
         //3. Arrange invalid properties: Invalid URL
         Properties propertiesInvalidFactory = new Properties();
-        propertiesInvalidFactory.put(JexxaJMSProperties.JNDI_PROVIDER_URL_KEY, DEFAULT_JNDI_PROVIDER_URL);
-        propertiesInvalidFactory.put(JexxaJMSProperties.JNDI_FACTORY_KEY, "invalid");
+        propertiesInvalidFactory.put(JMSProperties.JNDI_PROVIDER_URL_KEY, DEFAULT_JNDI_PROVIDER_URL);
+        propertiesInvalidFactory.put(JMSProperties.JNDI_FACTORY_KEY, "invalid");
 
         //3.Assert invalid properties: Invalid URL
         assertThrows(IllegalArgumentException.class, () -> new JDBCKeyValueRepository<>(

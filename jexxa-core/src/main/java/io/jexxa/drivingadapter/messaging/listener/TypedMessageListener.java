@@ -2,7 +2,7 @@ package io.jexxa.drivingadapter.messaging.listener;
 
 import java.util.Objects;
 
-import static io.jexxa.api.wrapper.json.JSONManager.getJSONConverter;
+import static io.jexxa.common.wrapper.json.JSONManager.getJSONConverter;
 
 @SuppressWarnings("unused")
 public abstract class TypedMessageListener<T> extends JSONMessageListener

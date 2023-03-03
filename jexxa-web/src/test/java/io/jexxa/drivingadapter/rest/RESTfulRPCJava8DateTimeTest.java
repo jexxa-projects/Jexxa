@@ -1,6 +1,6 @@
 package io.jexxa.drivingadapter.rest;
 
-import io.jexxa.api.wrapper.json.JSONManager;
+import io.jexxa.common.wrapper.json.JSONManager;
 import io.jexxa.application.applicationservice.Java8DateTimeApplicationService;
 import kong.unirest.ObjectMapper;
 import kong.unirest.Unirest;

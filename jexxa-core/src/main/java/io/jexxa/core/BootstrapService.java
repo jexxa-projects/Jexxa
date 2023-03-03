@@ -1,6 +1,6 @@
 package io.jexxa.core;
 
-import io.jexxa.api.annotation.CheckReturnValue;
+import io.jexxa.common.annotation.CheckReturnValue;
 
 import java.util.Objects;
 import java.util.function.Consumer;

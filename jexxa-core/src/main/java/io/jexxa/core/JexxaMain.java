@@ -7,11 +7,11 @@ import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
-import io.jexxa.utils.JexxaBanner;
-import io.jexxa.api.annotation.CheckReturnValue;
-import io.jexxa.api.function.ThrowingConsumer;
-import io.jexxa.utils.properties.JexxaCoreProperties;
-import io.jexxa.utils.properties.PropertiesLoader;
+import io.jexxa.common.JexxaBanner;
+import io.jexxa.common.annotation.CheckReturnValue;
+import io.jexxa.common.function.ThrowingConsumer;
+import io.jexxa.common.JexxaCoreProperties;
+import io.jexxa.common.properties.PropertiesLoader;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -26,8 +26,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
-import static io.jexxa.api.wrapper.logger.SLF4jLogger.getLogger;
-import static io.jexxa.utils.JexxaBanner.addConfigBanner;
+import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.JexxaBanner.addConfigBanner;
 
 /**
  * JexxaMain is the main entry point for your application to use Jexxa. Within each application only a single instance
