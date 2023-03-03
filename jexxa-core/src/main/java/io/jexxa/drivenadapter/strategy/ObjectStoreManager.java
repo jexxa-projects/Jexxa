@@ -1,6 +1,7 @@
-package io.jexxa.drivenadapter.strategy.persistence.objectstore;
+package io.jexxa.drivenadapter.strategy;
 
 
+import io.jexxa.drivenadapter.strategy.persistence.objectstore.IObjectStore;
 import io.jexxa.drivenadapter.strategy.persistence.objectstore.imdb.IMDBObjectStore;
 import io.jexxa.drivenadapter.strategy.persistence.objectstore.jdbc.JDBCObjectStore;
 import io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetadataSchema;

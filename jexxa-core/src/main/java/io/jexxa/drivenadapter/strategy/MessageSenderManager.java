@@ -1,5 +1,6 @@
-package io.jexxa.drivenadapter.strategy.messaging;
+package io.jexxa.drivenadapter.strategy;
 
+import io.jexxa.drivenadapter.strategy.messaging.MessageSender;
 import io.jexxa.drivenadapter.strategy.messaging.logging.MessageLogger;
 import io.jexxa.drivenadapter.strategy.outbox.TransactionalOutboxSender;
 import io.jexxa.utils.JexxaBanner;

@@ -6,7 +6,7 @@ import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.drivenadapter.strategy.messaging.MessageSender;
-import io.jexxa.drivenadapter.strategy.messaging.MessageSenderManager;
+import io.jexxa.drivenadapter.strategy.MessageSenderManager;
 import io.jexxa.drivenadapter.strategy.outbox.TransactionalOutboxSender;
 import io.jexxa.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.api.wrapper.utils.messaging.QueueListener;

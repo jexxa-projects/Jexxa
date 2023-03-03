@@ -1,6 +1,7 @@
 package io.jexxa.drivenadapter.strategy.persistence.repository;
 
 import io.jexxa.application.domain.model.JexxaEntity;
+import io.jexxa.drivenadapter.strategy.RepositoryManager;
 import io.jexxa.drivenadapter.strategy.persistence.RepositoryConfig;
 import io.jexxa.drivenadapter.strategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.drivenadapter.strategy.persistence.repository.jdbc.JDBCKeyValueRepository;

@@ -15,7 +15,7 @@ import io.jexxa.application.infrastructure.drivingadapter.portadapter.ProxyPortA
 import io.jexxa.application.infrastructure.drivingadapter.portadapter.ThrowingPortAdapter;
 import io.jexxa.application.infrastructure.drivingadapter.portadapter.PortAdapter;
 import io.jexxa.core.convention.PortConventionViolation;
-import io.jexxa.drivenadapter.strategy.persistence.repository.RepositoryManager;
+import io.jexxa.drivenadapter.strategy.RepositoryManager;
 import io.jexxa.drivenadapter.strategy.persistence.repository.imdb.IMDBRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

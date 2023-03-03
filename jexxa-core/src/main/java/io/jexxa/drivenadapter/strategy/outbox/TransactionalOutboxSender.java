@@ -3,12 +3,12 @@ package io.jexxa.drivenadapter.strategy.outbox;
 import io.jexxa.adapterapi.JexxaContext;
 import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
-import io.jexxa.drivenadapter.strategy.messaging.MessageSenderManager;
+import io.jexxa.drivenadapter.strategy.MessageSenderManager;
 import io.jexxa.drivenadapter.strategy.messaging.MessageProducer;
 import io.jexxa.drivenadapter.strategy.messaging.MessageSender;
 import io.jexxa.drivenadapter.strategy.messaging.jms.JMSSender;
 import io.jexxa.drivenadapter.strategy.persistence.repository.IRepository;
-import io.jexxa.drivenadapter.strategy.persistence.repository.RepositoryManager;
+import io.jexxa.drivenadapter.strategy.RepositoryManager;
 
 import java.util.Properties;
 import java.util.UUID;

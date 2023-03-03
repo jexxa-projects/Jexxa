@@ -1,10 +1,11 @@
 package io.jexxa.drivenadapter.strategy.persistence.objectstore;
 
 import io.jexxa.TestConstants;
+import io.jexxa.api.wrapper.jdbc.JDBCConnection;
 import io.jexxa.application.domain.model.JexxaValueObject;
+import io.jexxa.drivenadapter.strategy.ObjectStoreManager;
 import io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetaTag;
 import io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetaTags;
-import io.jexxa.api.wrapper.jdbc.JDBCConnection;
 import io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetadataSchema;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,10 +19,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.IntStream;
 
-import static io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetaTags.numericTag;
 import static java.util.Comparator.comparing;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)

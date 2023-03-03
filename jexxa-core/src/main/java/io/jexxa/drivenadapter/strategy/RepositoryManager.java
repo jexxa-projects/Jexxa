@@ -1,7 +1,7 @@
-package io.jexxa.drivenadapter.strategy.persistence.repository;
+package io.jexxa.drivenadapter.strategy;
 
 
-import io.jexxa.drivenadapter.strategy.persistence.objectstore.ObjectStoreManager;
+import io.jexxa.drivenadapter.strategy.persistence.repository.IRepository;
 import io.jexxa.drivenadapter.strategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.drivenadapter.strategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 import io.jexxa.utils.JexxaBanner;

@@ -2,6 +2,7 @@ package io.jexxa.drivenadapter.strategy.persistence.objectstore;
 
 import io.jexxa.application.domain.model.JexxaValueObject;
 import io.jexxa.api.wrapper.jdbc.JDBCConnection;
+import io.jexxa.drivenadapter.strategy.ObjectStoreManager;
 import io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetaTag;
 import io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetadataSchema;
 import org.junit.jupiter.api.BeforeEach;
