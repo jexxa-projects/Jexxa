@@ -6,7 +6,7 @@ import io.jexxa.drivenadapter.strategy.persistence.objectstore.jdbc.JDBCObjectSt
 import io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.utils.JexxaBanner;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.annotations.CheckReturnValue;
+import io.jexxa.api.annotation.CheckReturnValue;
 import io.jexxa.api.wrapper.factory.ClassFactory;
 
 import java.util.HashMap;

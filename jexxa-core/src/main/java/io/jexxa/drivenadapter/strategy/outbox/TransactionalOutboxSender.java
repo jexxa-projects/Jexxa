@@ -9,7 +9,6 @@ import io.jexxa.drivenadapter.strategy.messaging.MessageSender;
 import io.jexxa.drivenadapter.strategy.messaging.jms.JMSSender;
 import io.jexxa.drivenadapter.strategy.persistence.repository.IRepository;
 import io.jexxa.drivenadapter.strategy.persistence.repository.RepositoryManager;
-import io.jexxa.drivingadapter.scheduler.Scheduler;
 import io.jexxa.utils.JexxaLogger;
 
 import java.util.Properties;
@@ -73,7 +72,7 @@ public class TransactionalOutboxSender extends MessageSender {
             }
         } catch (InterruptedException e) {
             executor.shutdownNow();
-            JexxaLogger.getLogger(Scheduler.class).warn("ExecutorService could not be stopped -> Interrupt thread.", e);
+            JexxaLogger.getLogger(TransactionalOutboxSender.class).warn("ExecutorService could not be stopped -> Interrupt thread.", e);
             Thread.currentThread().interrupt();
         }
 

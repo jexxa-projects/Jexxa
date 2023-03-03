@@ -1,6 +1,6 @@
 package io.jexxa.api.wrapper.jdbc;
 
-import io.jexxa.utils.annotations.CheckReturnValue;
+import io.jexxa.api.annotation.CheckReturnValue;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

@@ -9,8 +9,8 @@ import io.jexxa.core.factory.AdapterFactory;
 import io.jexxa.core.factory.PortFactory;
 import io.jexxa.utils.JexxaBanner;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.annotations.CheckReturnValue;
-import io.jexxa.utils.function.ThrowingConsumer;
+import io.jexxa.api.annotation.CheckReturnValue;
+import io.jexxa.api.function.ThrowingConsumer;
 import io.jexxa.utils.properties.JexxaCoreProperties;
 import io.jexxa.utils.properties.PropertiesLoader;
 
@@ -496,7 +496,7 @@ public final class JexxaMain
         @Override
         public void stop()
         {
-            drivingAdapters.forEach(ThrowingConsumer.exceptionLogger(IDrivingAdapter::stop));
+            drivingAdapters.forEach(ThrowingConsumer.exceptionLogger(IDrivingAdapter::stop, JexxaLogger.getLogger(JexxaMain.class)));
         }
 
         @Override

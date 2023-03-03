@@ -10,11 +10,13 @@ import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recordi
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorderManager;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.annotations.CheckReturnValue;
-import io.jexxa.utils.function.ThrowingConsumer;
+import io.jexxa.api.annotation.CheckReturnValue;
+import io.jexxa.api.function.ThrowingConsumer;
 
 import java.util.Optional;
 import java.util.Properties;
+
+import static io.jexxa.utils.JexxaLogger.getLogger;
 
 /**
  * This class supports unit testing of your application core, at least if you use driven adapter strategies
@@ -103,7 +105,7 @@ public class JexxaTest
         var properties = new Properties();
         Optional.ofNullable(JexxaMain.class.getResourceAsStream(JEXXA_TEST_PROPERTIES))
                 .ifPresentOrElse(
-                        ThrowingConsumer.exceptionLogger(properties::load),
+                        ThrowingConsumer.exceptionLogger(properties::load, getLogger(JexxaTest.class)),
                         () -> JexxaLogger.getLogger(JexxaTest.class).warn("Properties file '{}' not found", JEXXA_TEST_PROPERTIES)
                 );
         return properties;

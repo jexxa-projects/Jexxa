@@ -1,6 +1,6 @@
 package io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording;
 
-import io.jexxa.utils.annotations.CheckReturnValue;
+import io.jexxa.api.annotation.CheckReturnValue;
 
 import java.util.ArrayList;
 import java.util.List;

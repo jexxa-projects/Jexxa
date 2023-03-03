@@ -4,7 +4,7 @@ import io.jexxa.TestConstants;
 import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.applicationservice.IncrementApplicationService;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.utils.function.ThrowingConsumer;
+import io.jexxa.api.function.ThrowingConsumer;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

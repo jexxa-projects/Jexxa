@@ -1,4 +1,4 @@
-package io.jexxa.utils.annotations;
+package io.jexxa.api.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

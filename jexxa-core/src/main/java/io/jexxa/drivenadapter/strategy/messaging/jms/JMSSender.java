@@ -1,8 +1,7 @@
 package io.jexxa.drivenadapter.strategy.messaging.jms;
 
 import io.jexxa.drivenadapter.strategy.messaging.MessageSender;
-import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.function.ThrowingConsumer;
+import io.jexxa.api.function.ThrowingConsumer;
 import io.jexxa.utils.properties.JexxaJMSProperties;
 import io.jexxa.utils.properties.Secret;
 
@@ -19,6 +18,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
+
+import static io.jexxa.utils.JexxaLogger.getLogger;
 
 @SuppressWarnings({"unused", "java:S1133"})
 public class JMSSender extends MessageSender implements AutoCloseable
@@ -134,7 +135,7 @@ public class JMSSender extends MessageSender implements AutoCloseable
             // as soon as next message must be sent, and we can handle a temporary error in between sending two messages. If the error still exist, the
             // application will get a RuntimeError
             connection.setExceptionListener( exception -> {
-                JexxaLogger.getLogger(JMSSender.class).error(exception.getMessage());
+                getLogger(JMSSender.class).error(exception.getMessage());
                 jmsSender.close();
             });
 
@@ -154,10 +155,10 @@ public class JMSSender extends MessageSender implements AutoCloseable
     public void close()
     {
         Optional.ofNullable(session)
-                .ifPresent(ThrowingConsumer.exceptionLogger(Session::close));
+                .ifPresent(ThrowingConsumer.exceptionLogger(Session::close, getLogger(JMSSender.class)));
 
         Optional.ofNullable(connection)
-                .ifPresent(ThrowingConsumer.exceptionLogger(Connection::close));
+                .ifPresent(ThrowingConsumer.exceptionLogger(Connection::close, getLogger(JMSSender.class)));
 
         session = null;
         connection = null;

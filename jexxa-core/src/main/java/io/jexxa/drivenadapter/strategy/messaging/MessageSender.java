@@ -1,6 +1,6 @@
 package io.jexxa.drivenadapter.strategy.messaging;
 
-import io.jexxa.utils.annotations.CheckReturnValue;
+import io.jexxa.api.annotation.CheckReturnValue;
 
 import java.util.Properties;
 

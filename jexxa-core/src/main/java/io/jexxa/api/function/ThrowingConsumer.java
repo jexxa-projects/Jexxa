@@ -1,6 +1,7 @@
-package io.jexxa.utils.function;
+package io.jexxa.api.function;
 
 import io.jexxa.utils.JexxaLogger;
+import org.slf4j.Logger;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -30,7 +31,7 @@ public interface ThrowingConsumer<T, E extends Exception> {
 
     @SuppressWarnings("java:S1181") //Catch Throwable without warning
     static <T, E extends Exception> Consumer<T>
-    exceptionLogger(ThrowingConsumer<T, E> throwingConsumer) {
+    exceptionLogger(ThrowingConsumer<T, E> throwingConsumer, Logger logger) {
         return i -> {
             try
             {
@@ -38,7 +39,7 @@ public interface ThrowingConsumer<T, E extends Exception> {
             }
             catch (Exception e)
             {
-                JexxaLogger.getLogger(throwingConsumer.getClass()).error(e.getMessage());
+                logger.error(e.getMessage());
             }
         };
     }
