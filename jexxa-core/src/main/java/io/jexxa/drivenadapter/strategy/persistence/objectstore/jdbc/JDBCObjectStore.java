@@ -53,7 +53,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
         this.aggregateClazz = aggregateClazz;
         this.metaData = metaData;
         this.jdbcSchema = EnumSet.allOf(metaData);
-        this.database = DatabaseManager.getDatabase(properties);
+        this.database = DatabaseManager.getDatabase(properties.getProperty(JexxaJDBCProperties.JEXXA_JDBC_URL));
 
         manageObjectStore(properties);
     }

@@ -5,36 +5,32 @@ import io.jexxa.api.wrapper.jdbc.JDBCConnection;
 import io.jexxa.api.wrapper.jdbc.JDBCQuery;
 import io.jexxa.api.wrapper.jdbc.builder.SQLDataType;
 import io.jexxa.drivenadapter.strategy.persistence.repository.jdbc.JDBCKeyValueRepository;
-import io.jexxa.utils.properties.JexxaJDBCProperties;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.Properties;
 
 public class GenericSQLDatabase implements IDatabase
 {
-    private final Properties properties;
+    private final String connectionURL;
 
-    GenericSQLDatabase(Properties properties)
+    GenericSQLDatabase(String connectionURL)
     {
-        this.properties = properties;
+        this.connectionURL = connectionURL;
     }
 
     private SQLDataType getMaxVarChar() {
-        var jdbcDriver = properties.getProperty(JexxaJDBCProperties.JEXXA_JDBC_URL);
-
-        if ( jdbcDriver.toLowerCase(Locale.ENGLISH).contains("oracle") )
+        if ( connectionURL.toLowerCase(Locale.ENGLISH).contains("oracle") )
         {
             return maxVarChar(4000);
         }
 
-        if ( jdbcDriver.toLowerCase(Locale.ENGLISH).contains("h2") )
+        if ( connectionURL.toLowerCase(Locale.ENGLISH).contains("h2") )
         {
             return SQLDataType.VARCHAR;
         }
 
-        if ( jdbcDriver.toLowerCase(Locale.ENGLISH).contains("mysql") )
+        if ( connectionURL.toLowerCase(Locale.ENGLISH).contains("mysql") )
         {
             return maxVarChar(65535);
         }

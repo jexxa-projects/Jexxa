@@ -1,6 +1,5 @@
 package io.jexxa.api.function;
 
-import io.jexxa.utils.JexxaLogger;
 import org.slf4j.Logger;
 
 import java.util.Collection;
@@ -54,7 +53,6 @@ public interface ThrowingConsumer<T, E extends Exception> {
             catch (Exception e)
             {
                 exceptions.add(e);
-                JexxaLogger.getLogger(throwingConsumer.getClass()).error(e.getMessage());
             }
         };
     }

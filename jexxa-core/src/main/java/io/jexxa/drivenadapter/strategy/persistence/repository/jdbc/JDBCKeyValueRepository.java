@@ -40,7 +40,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
         this.keyFunction = Objects.requireNonNull( keyFunction );
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
-        this.database = DatabaseManager.getDatabase(properties);
+        this.database = DatabaseManager.getDatabase(properties.getProperty(JexxaJDBCProperties.JEXXA_JDBC_URL));
 
         manageDBTable(properties);
     }
@@ -51,7 +51,7 @@ public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRep
 
         this.keyFunction = Objects.requireNonNull( keyFunction );
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
-        this.database = DatabaseManager.getDatabase(properties);
+        this.database = DatabaseManager.getDatabase(properties.getProperty(JexxaJDBCProperties.JEXXA_JDBC_URL));
 
         if ( manageTable )
         {

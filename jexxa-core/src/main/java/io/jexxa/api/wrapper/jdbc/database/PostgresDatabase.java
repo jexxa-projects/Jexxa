@@ -4,12 +4,10 @@ import io.jexxa.api.wrapper.jdbc.JDBCConnection;
 import io.jexxa.api.wrapper.jdbc.builder.SQLDataType;
 import io.jexxa.drivenadapter.strategy.persistence.repository.jdbc.JDBCKeyValueRepository;
 
-import java.util.Properties;
-
 public class PostgresDatabase extends GenericSQLDatabase
 {
-    PostgresDatabase(Properties properties) {
-        super(properties);
+    PostgresDatabase(String connectionURL) {
+        super(connectionURL);
     }
 
     @Override
