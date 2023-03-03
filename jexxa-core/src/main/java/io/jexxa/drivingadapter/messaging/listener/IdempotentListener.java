@@ -31,7 +31,7 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
 
         // If we already processed the ID, we show an info message and return
         String messageID = getMessageHeaderValue(uniqueID);
-        if (processedMessages.contains(messageID)) {
+        if (processedMessages.stream().anyMatch(messageID::equals)) {
             getLogger(getClass()).info("Message with key {} already processed -> Ignore it", messageID);
             return;
         }
