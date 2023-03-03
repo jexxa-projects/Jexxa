@@ -1,8 +1,7 @@
-package io.jexxa.utils.factory;
+package io.jexxa.common.wrapper.factory;
 
 
 import io.jexxa.TestConstants;
-import io.jexxa.common.wrapper.factory.ClassFactory;
 import io.jexxa.application.applicationservice.Java8DateTimeApplicationService;
 import io.jexxa.application.applicationservice.SimpleApplicationService;
 import org.junit.jupiter.api.Assertions;

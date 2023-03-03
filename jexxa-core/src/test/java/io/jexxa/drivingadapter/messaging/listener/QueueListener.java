@@ -1,4 +1,4 @@
-package io.jexxa.common.wrapper.utils.messaging;
+package io.jexxa.drivingadapter.messaging.listener;
 
 import io.jexxa.drivingadapter.messaging.JMSConfiguration;
 

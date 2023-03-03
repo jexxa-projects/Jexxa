@@ -1,8 +1,8 @@
 package io.jexxa.drivingadapter.messaging;
 
 import io.jexxa.core.JexxaMain;
-import io.jexxa.common.wrapper.utils.messaging.ITMessageSender;
-import io.jexxa.common.wrapper.utils.messaging.TopicListener;
+import io.jexxa.drivingadapter.messaging.listener.ITMessageSender;
+import io.jexxa.drivingadapter.messaging.listener.TopicListener;
 import org.junit.jupiter.api.Test;
 
 import javax.jms.Connection;

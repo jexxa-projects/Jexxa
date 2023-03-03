@@ -3,14 +3,14 @@ package io.jexxa.drivingadapter.messaging;
 
 import io.jexxa.TestConstants;
 import io.jexxa.common.wrapper.jms.JMSProperties;
-import io.jexxa.common.wrapper.utils.messaging.ConfigurableListener;
-import io.jexxa.common.wrapper.utils.messaging.ITMessageSender;
-import io.jexxa.common.wrapper.utils.messaging.QueueListener;
-import io.jexxa.common.wrapper.utils.messaging.SharedConnectionListener;
-import io.jexxa.common.wrapper.utils.messaging.TopicListener;
 import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.domain.model.JexxaEntity;
 import io.jexxa.core.JexxaMain;
+import io.jexxa.drivingadapter.messaging.listener.ConfigurableListener;
+import io.jexxa.drivingadapter.messaging.listener.ITMessageSender;
+import io.jexxa.drivingadapter.messaging.listener.QueueListener;
+import io.jexxa.drivingadapter.messaging.listener.SharedConnectionListener;
+import io.jexxa.drivingadapter.messaging.listener.TopicListener;
 import io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -23,7 +23,7 @@ import java.time.Duration;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import static io.jexxa.common.wrapper.utils.messaging.TopicListener.TOPIC_DESTINATION;
+import static io.jexxa.drivingadapter.messaging.listener.TopicListener.TOPIC_DESTINATION;
 import static io.jexxa.common.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;

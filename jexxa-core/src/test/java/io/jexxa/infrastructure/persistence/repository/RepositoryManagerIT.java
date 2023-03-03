@@ -53,7 +53,7 @@ class RepositoryManagerIT
         var postgresProperties = RepositoryConfig.postgresRepositoryConfig("jexxa");
 
         //Act
-        var result =  RepositoryManager.getRepository(JexxaEntity.class,
+        var result = RepositoryManager.getRepository(JexxaEntity.class,
                 JexxaEntity::getKey,
                 postgresProperties);
 

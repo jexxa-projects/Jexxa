@@ -28,8 +28,8 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
-import static io.jexxa.common.wrapper.utils.messaging.QueueListener.QUEUE_DESTINATION;
-import static io.jexxa.common.wrapper.utils.messaging.TopicListener.TOPIC_DESTINATION;
+import static io.jexxa.drivingadapter.messaging.listener.QueueListener.QUEUE_DESTINATION;
+import static io.jexxa.drivingadapter.messaging.listener.TopicListener.TOPIC_DESTINATION;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeout;

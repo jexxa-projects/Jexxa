@@ -4,7 +4,7 @@ import io.jexxa.TestConstants;
 import io.jexxa.application.JexxaTestApplication;
 import io.jexxa.application.applicationservice.IncrementApplicationService;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.common.wrapper.utils.messaging.ITMessageSender;
+import io.jexxa.drivingadapter.messaging.listener.ITMessageSender;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
