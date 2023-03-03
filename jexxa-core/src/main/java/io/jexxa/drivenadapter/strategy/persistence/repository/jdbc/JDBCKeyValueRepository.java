@@ -5,7 +5,7 @@ import io.jexxa.api.wrapper.jdbc.builder.JDBCObject;
 import io.jexxa.api.wrapper.jdbc.database.DatabaseManager;
 import io.jexxa.api.wrapper.jdbc.database.IDatabase;
 import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.properties.JexxaJDBCProperties;
+import io.jexxa.api.wrapper.jdbc.JexxaJDBCProperties;
 import org.slf4j.Logger;
 
 import java.util.List;

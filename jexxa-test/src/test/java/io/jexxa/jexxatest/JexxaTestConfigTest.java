@@ -11,7 +11,7 @@ import io.jexxa.drivenadapter.strategy.persistence.objectstore.metadata.Metadata
 import io.jexxa.drivenadapter.strategy.persistence.repository.RepositoryManager;
 import io.jexxa.drivenadapter.strategy.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
-import io.jexxa.utils.properties.JexxaJDBCProperties;
+import io.jexxa.api.wrapper.jdbc.JexxaJDBCProperties;
 import io.jexxa.utils.properties.JexxaJMSProperties;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;

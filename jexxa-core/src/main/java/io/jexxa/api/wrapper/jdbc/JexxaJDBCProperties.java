@@ -1,4 +1,4 @@
-package io.jexxa.utils.properties;
+package io.jexxa.api.wrapper.jdbc;
 
 public final class JexxaJDBCProperties
 {

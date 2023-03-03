@@ -3,7 +3,6 @@ package io.jexxa.api.wrapper.jdbc;
 import io.jexxa.TestConstants;
 import io.jexxa.application.domain.model.JexxaEntity;
 import io.jexxa.drivenadapter.strategy.persistence.repository.jdbc.JDBCKeyValueRepository;
-import io.jexxa.utils.properties.JexxaJDBCProperties;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;

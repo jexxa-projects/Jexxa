@@ -14,8 +14,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
-import static io.jexxa.utils.properties.JexxaJDBCProperties.JEXXA_JDBC_DRIVER;
-import static io.jexxa.utils.properties.JexxaJDBCProperties.JEXXA_OBJECTSTORE_STRATEGY;
+import static io.jexxa.api.wrapper.jdbc.JexxaJDBCProperties.JEXXA_JDBC_DRIVER;
+import static io.jexxa.api.wrapper.jdbc.JexxaJDBCProperties.JEXXA_OBJECTSTORE_STRATEGY;
 import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_STRATEGY;
 
 

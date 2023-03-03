@@ -4,7 +4,6 @@ import io.jexxa.api.function.ThrowingConsumer;
 import io.jexxa.api.wrapper.jdbc.builder.JDBCCommandBuilder;
 import io.jexxa.api.wrapper.jdbc.builder.JDBCQueryBuilder;
 import io.jexxa.api.wrapper.jdbc.builder.JDBCTableBuilder;
-import io.jexxa.utils.properties.JexxaJDBCProperties;
 import io.jexxa.utils.properties.Secret;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;

@@ -1,6 +1,6 @@
 package io.jexxa.drivenadapter.strategy.persistence;
 
-import io.jexxa.utils.properties.JexxaJDBCProperties;
+import io.jexxa.api.wrapper.jdbc.JexxaJDBCProperties;
 
 import java.util.Properties;
 import java.util.stream.Stream;

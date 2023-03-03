@@ -1,7 +1,5 @@
 package io.jexxa.api.wrapper.jdbc;
 
-import io.jexxa.utils.properties.JexxaJDBCProperties;
-
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;

@@ -8,14 +8,14 @@ import io.jexxa.utils.JexxaBanner;
 import io.jexxa.utils.JexxaLogger;
 import io.jexxa.api.annotation.CheckReturnValue;
 import io.jexxa.api.wrapper.factory.ClassFactory;
-import io.jexxa.utils.properties.JexxaJDBCProperties;
+import io.jexxa.api.wrapper.jdbc.JexxaJDBCProperties;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
-import static io.jexxa.utils.properties.JexxaJDBCProperties.JEXXA_REPOSITORY_STRATEGY;
+import static io.jexxa.api.wrapper.jdbc.JexxaJDBCProperties.JEXXA_REPOSITORY_STRATEGY;
 import static io.jexxa.utils.properties.JexxaJMSProperties.JEXXA_JMS_STRATEGY;
 
 
