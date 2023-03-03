@@ -1,10 +1,9 @@
 package io.jexxa.api.wrapper.jdbc;
 
+import io.jexxa.api.function.ThrowingConsumer;
 import io.jexxa.api.wrapper.jdbc.builder.JDBCCommandBuilder;
 import io.jexxa.api.wrapper.jdbc.builder.JDBCQueryBuilder;
 import io.jexxa.api.wrapper.jdbc.builder.JDBCTableBuilder;
-import io.jexxa.utils.JexxaLogger;
-import io.jexxa.api.function.ThrowingConsumer;
 import io.jexxa.utils.properties.JexxaJDBCProperties;
 import io.jexxa.utils.properties.Secret;
 import org.apache.commons.lang3.Validate;
@@ -18,6 +17,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
+
+import static io.jexxa.api.wrapper.slf4j.SLF4jLogger.getSLF4JLogger;
 
 
 public class JDBCConnection implements AutoCloseable
@@ -48,7 +49,7 @@ public class JDBCConnection implements AutoCloseable
     private IsolationLevel isolationLevel;
     private boolean autoCommit = true;
 
-    private static final Logger LOGGER = JexxaLogger.getLogger(JDBCConnection.class);
+    private static final Logger LOGGER = getSLF4JLogger(JDBCConnection.class);
 
     public JDBCConnection(Properties properties)
     {
@@ -270,7 +271,7 @@ public class JDBCConnection implements AutoCloseable
     public void close()
     {
         Optional.ofNullable(connection)
-                .ifPresent(ThrowingConsumer.exceptionLogger(Connection::close, JexxaLogger.getLogger(JDBCConnection.class)));
+                .ifPresent(ThrowingConsumer.exceptionLogger(Connection::close, getSLF4JLogger(JDBCConnection.class)));
         connection = null;
     }
 

@@ -7,11 +7,12 @@ import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import io.jexxa.utils.JexxaLogger;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
+
+import static io.jexxa.api.wrapper.slf4j.SLF4jLogger.getSLF4JLogger;
 
 final class ExceptionFactory implements TypeAdapterFactory
 {
@@ -94,7 +95,7 @@ final class ExceptionFactory implements TypeAdapterFactory
                                 .newInstance(message, new Throwable(cause))
                 );
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                JexxaLogger.getLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
+                getSLF4JLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
                 return Optional.empty();
             }
         }
@@ -108,7 +109,7 @@ final class ExceptionFactory implements TypeAdapterFactory
                                 .newInstance(message)
                 );
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                JexxaLogger.getLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
+                getSLF4JLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
                 return Optional.empty();
             }
         }
@@ -122,7 +123,7 @@ final class ExceptionFactory implements TypeAdapterFactory
                                 .newInstance()
                 );
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                JexxaLogger.getLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
+                getSLF4JLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
                 return Optional.empty();
             }
         }

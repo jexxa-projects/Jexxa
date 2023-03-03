@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 public final class SLF4jLogger
 {
-    public static Logger getLogger(Class<?> clazz)
+    public static Logger getSLF4JLogger(Class<?> clazz)
     {
         return LoggerFactory.getLogger(clazz);
     }
