@@ -117,6 +117,44 @@ public class JDBCCommandBuilder<T extends Enum<T>> extends JDBCBuilder<T>
         return this;
     }
 
+    //CREATE UNIQUE INDEX JexxaInboundMessage_repository_key ON JexxaInboundMessage (repository_key)
+    public JDBCCommandBuilder<T> createUniqueIndex(String indexName)
+    {
+        getStatementBuilder()
+                .append("CREATE UNIQUE INDEX ")
+                .append(indexName);
+        return this;
+    }
+
+    public JDBCCommandBuilder<T> createIndex(String indexName)
+    {
+        getStatementBuilder()
+                .append("CREATE INDEX ")
+                .append(indexName);
+        return this;
+    }
+
+    public JDBCCommandBuilder<T> on(String table, String... columns)
+    {
+        getStatementBuilder()
+                .append(" ON ")
+                .append(table)
+                .append("(")
+                .append(columns[0]);
+
+        for(var i = 1;  i < columns.length; ++i ) // Handle remaining entries(with leading COMMA)
+        {
+            getStatementBuilder().append( COMMA );
+            getStatementBuilder().append( columns[i] );
+        }
+        getStatementBuilder().append(" ) ");
+
+        return this;
+    }
+
+
+
+
     public JDBCCommandBuilder<T> deleteFrom(T element)
     {
         getStatementBuilder()

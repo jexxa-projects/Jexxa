@@ -1,15 +1,15 @@
 package io.jexxa.infrastructure.persistence.objectstore.jdbc;
 
+import io.jexxa.common.wrapper.jdbc.JexxaJDBCProperties;
+import io.jexxa.common.wrapper.jdbc.builder.JDBCObject;
+import io.jexxa.common.wrapper.jdbc.builder.SQLDataType;
+import io.jexxa.common.wrapper.jdbc.database.DatabaseManager;
+import io.jexxa.common.wrapper.jdbc.database.IDatabase;
 import io.jexxa.infrastructure.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.persistence.objectstore.IStringQuery;
 import io.jexxa.infrastructure.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository;
-import io.jexxa.common.wrapper.jdbc.builder.JDBCObject;
-import io.jexxa.common.wrapper.jdbc.builder.SQLDataType;
-import io.jexxa.common.wrapper.jdbc.database.DatabaseManager;
-import io.jexxa.common.wrapper.jdbc.database.IDatabase;
-import io.jexxa.common.wrapper.jdbc.JexxaJDBCProperties;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -173,6 +173,13 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
 
             command.create().asIgnore();
 
+            var columnName = jdbcSchema.stream().map(Enum::name).toArray(String[]::new);
+
+            getConnection().createCommand(metaData)
+                    .createIndex(aggregateClazz.getSimpleName() + "_object_index" )
+                    .on(aggregateClazz.getSimpleName(), columnName )
+                    .create()
+                    .asIgnore();
         }
         catch (RuntimeException e)
         {
