@@ -6,6 +6,7 @@ import io.jexxa.testapplication.infrastructure.drivenadapter.factory.ValidFactor
 import io.jexxa.testapplication.infrastructure.drivenadapter.factory.ValidPropertiesConstructorServiceImpl;
 import io.jexxa.testapplication.infrastructure.drivingadapter.generic.InvalidDrivingAdapter;
 import io.jexxa.testapplication.infrastructure.drivingadapter.portadapter.PortAdapter;
+import io.jexxa.testapplication.infrastructure.drivingadapter.portadapter.PortAdapterWithProperties;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -39,6 +40,7 @@ class AdapterConventionTest
 
         //Assert all port adapter conventions
         assertTrue(AdapterConvention.isPortAdapter(PortAdapter.class, infrastructure));
+        assertTrue(AdapterConvention.isPortAdapter(PortAdapterWithProperties.class, infrastructure));
         assertFalse(AdapterConvention.isPortAdapter(SimpleApplicationService.class, infrastructure));
     }
 
