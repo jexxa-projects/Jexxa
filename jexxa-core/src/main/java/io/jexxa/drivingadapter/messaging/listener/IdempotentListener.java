@@ -15,13 +15,13 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
 {
     private static final Duration DEFAULT_STORAGE_DURATION = Duration.ofDays(7);
     private static final String DEFAULT_MESSAGE_ID = "domain_event_id";
-    private final IRepository<JexxaInboundMessage, String> messageRepository;
+    private final IRepository<JexxaInboundMessage, ReceivingID> messageRepository;
     private final Class<T> clazz;
 
     protected IdempotentListener(Class<T> clazz, Properties properties)
     {
         this.clazz = Objects.requireNonNull( clazz );
-        messageRepository = RepositoryManager.getRepository(JexxaInboundMessage.class, JexxaInboundMessage::uuid, properties);
+        messageRepository = RepositoryManager.getRepository(JexxaInboundMessage.class, JexxaInboundMessage::receivingID, properties);
     }
     @Override
     public final void onMessage(String message)
@@ -36,14 +36,14 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
         }
 
         // If we already processed the ID, we show an info message and return
-        String messageID = getMessageHeaderValue(uniqueID);
-        if (messageRepository.get(messageID).isPresent()) {
-            getLogger(getClass()).info("Message with key {} already processed -> Ignore it", messageID);
+        var receivingID = new ReceivingID(getMessageHeaderValue(uniqueID), this.getClass().getName());
+        if (messageRepository.get(receivingID).isPresent()) {
+            getLogger(getClass()).info("Message with key {} already processed by {} -> Ignore it", receivingID.uuid, receivingID.className);
             return;
         }
 
         onMessage( fromJson(message, clazz ));
-        messageRepository.add(new JexxaInboundMessage(messageID, Instant.now()));
+        messageRepository.add(new JexxaInboundMessage(receivingID, Instant.now()));
         removeOldMessages();
     }
     public abstract void onMessage(T message);
@@ -90,8 +90,9 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
         messageRepository.get().stream()
                 .filter(element -> Duration.between(Instant.now(),  element.processingTime)
                         .compareTo(getStorageDuration()) >= 0)
-                .forEach(element -> messageRepository.remove(element.uuid()));
+                .forEach(element -> messageRepository.remove(element.receivingID));
     }
 
-    record JexxaInboundMessage(String uuid, Instant processingTime){}
+    record JexxaInboundMessage(ReceivingID receivingID, Instant processingTime){}
+    record ReceivingID(String uuid, String className){}
 }
