@@ -138,6 +138,28 @@ class MessageListenerIT
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
+    @Test
+    void stressTestIdempotentMessaging()
+    {
+        //Arrange
+        int messageCount = 100;
+        MessageSenderManager.setDefaultStrategy(JMSSender.class);
+        var objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
+
+        //Act
+        for (int i = 0; i< messageCount; ++i) {
+            objectUnderTest
+                    .send(message)
+                    .toTopic(TOPIC_DESTINATION)
+                    .addHeader("domain_event_id", UUID.randomUUID().toString())
+                    .asJson();
+        }
+
+
+        //Assert
+        await().atMost(5, TimeUnit.SECONDS).until(() -> idempotentListener.getReceivedMessages().size() == messageCount);
+        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+    }
 
 
     private static class TextMessageListener extends JSONMessageListener

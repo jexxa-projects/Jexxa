@@ -17,6 +17,7 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
     private static final String DEFAULT_MESSAGE_ID = "domain_event_id";
     private final IRepository<JexxaInboundMessage, ReceivingID> messageRepository;
     private final Class<T> clazz;
+    private Instant lastCleanupTime;
 
     protected IdempotentListener(Class<T> clazz, Properties properties)
     {
@@ -87,10 +88,20 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
 
     private void removeOldMessages()
     {
+        //Remove old messages once per day
+        if (lastCleanupTime != null) {
+            var durationSinceLastCheck = Duration.between(lastCleanupTime, Instant.now() );
+            if (durationSinceLastCheck.compareTo(Duration.ofDays(1))<0) {
+                return;
+            }
+        }
+
         messageRepository.get().stream()
-                .filter(element -> Duration.between(Instant.now(),  element.processingTime)
+                .filter(element -> Duration.between( element.processingTime, Instant.now())
                         .compareTo(getStorageDuration()) >= 0)
                 .forEach(element -> messageRepository.remove(element.receivingID));
+
+        lastCleanupTime = Instant.now();
     }
 
     record JexxaInboundMessage(ReceivingID receivingID, Instant processingTime){}
