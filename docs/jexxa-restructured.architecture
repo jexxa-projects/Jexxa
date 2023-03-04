@@ -2,33 +2,23 @@
 <!-- 
 Architecture: jexxa-restructured
 Project: jexxa
-Exported at: 2023-03-03T07:07:05.087006756Z
+Exported at: 2023-03-04T09:27:47.418436515Z
  -->
-<conqat-architecture xmlns="http://conqat.cs.tum.edu/ns/architecture" policy="deny" file-based="true" legacy-code-mapping="false" structure-only="false" finding-creation="violations" scope-include="" scope-exclude="" created-by="michael-repplinger" creation-date="1677821216431" last-modified-by="michael-repplinger" modification-date="1677827224681">
-  <component name="api" dim="140,40" pos="721,21">
-    <code-mapping type="INCLUDE" regex="jexxa\-core/src/main/java/io/jexxa/api/.*" />
+<conqat-architecture xmlns="http://conqat.cs.tum.edu/ns/architecture" policy="deny" file-based="true" legacy-code-mapping="false" structure-only="false" finding-creation="violations" scope-include="" scope-exclude="" created-by="michael-repplinger" creation-date="1677821216431" last-modified-by="michael-repplinger" modification-date="1677922067051">
+  <component name="common" dim="140,40" pos="241,341">
+    <code-mapping type="INCLUDE" regex="jexxa\-core/src/main/java/io/jexxa/common/.*" />
   </component>
-  <component name="core" dim="140,40" pos="381,271">
+  <component name="core" dim="140,40" pos="51,81">
     <code-mapping type="INCLUDE" regex="jexxa\-core/src/main/java/io/jexxa/core/.*" />
   </component>
-  <component name="drivenadapter" dim="140,40" pos="571,271">
-    <code-mapping type="INCLUDE" regex="jexxa\-core/src/main/java/io/jexxa/drivenadapter/.*" />
+  <component name="drivingadapter" dim="140,40" pos="241,81">
+    <code-mapping type="INCLUDE" regex="jexxa\-core/src/main/java/io/jexxa/drivingadapter/.*" />
   </component>
-  <component name="messaging" dim="140,40" pos="851,261">
-    <code-mapping type="INCLUDE" regex="jexxa\-core/src/main/java/io/jexxa/drivingadapter/messaging/.*" />
+  <component name="infrastructure" dim="140,40" pos="391,201">
+    <code-mapping type="INCLUDE" regex="jexxa\-core/src/main/java/io/jexxa/infrastructure/.*" />
   </component>
-  <component name="scheduler" dim="140,40" pos="1031,261">
-    <code-mapping type="INCLUDE" regex="jexxa\-core/src/main/java/io/jexxa/drivingadapter/scheduler/.*" />
-  </component>
-  <component name="utils" dim="140,40" pos="731,411">
-    <code-mapping type="INCLUDE" regex="jexxa\-core/src/main/java/io/jexxa/utils/.*" />
-  </component>
-  <allow source="core" target="api" />
-  <allow source="core" target="utils" />
-  <allow source="drivenadapter" target="api" />
-  <allow source="drivenadapter" target="utils" />
-  <allow source="messaging" target="api" />
-  <allow source="messaging" target="utils" />
-  <allow source="scheduler" target="api" />
-  <allow source="utils" target="api" />
+  <allow source="core" target="common" />
+  <allow source="drivingadapter" target="common" />
+  <allow source="drivingadapter" target="infrastructure" />
+  <allow source="infrastructure" target="common" />
 </conqat-architecture>
