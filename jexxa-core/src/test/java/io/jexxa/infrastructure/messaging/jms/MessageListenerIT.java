@@ -24,6 +24,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
@@ -56,7 +57,7 @@ class MessageListenerIT
         jexxaMain = new JexxaMain(JexxaTestApplication.class);
         jsonMessageListener = new TextMessageListener();
         typedListener = new JexxaValueObjectListener();
-        idempotentListener = new JexxaValueObjectIdempotentListener();
+        idempotentListener = new JexxaValueObjectIdempotentListener(jexxaMain.getProperties());
 
         jexxaMain.bind(JMSAdapter.class).to(typedListener)
                 .bind(JMSAdapter.class).to(idempotentListener)
@@ -193,8 +194,8 @@ class MessageListenerIT
     {
         private final List<JexxaDomainEvent> receivedMessages = new ArrayList<>();
 
-        protected JexxaValueObjectIdempotentListener() {
-            super(JexxaDomainEvent.class);
+        protected JexxaValueObjectIdempotentListener(Properties properties) {
+            super(JexxaDomainEvent.class, properties);
         }
 
         @Override

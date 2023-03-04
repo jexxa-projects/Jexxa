@@ -1,21 +1,27 @@
 package io.jexxa.drivingadapter.messaging.listener;
 
+import io.jexxa.infrastructure.RepositoryManager;
+import io.jexxa.infrastructure.persistence.repository.IRepository;
+
 import javax.jms.JMSException;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Objects;
+import java.util.Properties;
 
 import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
 
 public abstract class IdempotentListener<T> extends JSONMessageListener
 {
+    private static final Duration DEFAULT_STORAGE_DURATION = Duration.ofDays(7);
     private static final String DEFAULT_MESSAGE_ID = "domain_event_id";
-    List<String> processedMessages = new ArrayList<>();
+    private final IRepository<JexxaInboundMessage, String> messageRepository;
     private final Class<T> clazz;
 
-    protected IdempotentListener(Class<T> clazz)
+    protected IdempotentListener(Class<T> clazz, Properties properties)
     {
         this.clazz = Objects.requireNonNull( clazz );
+        messageRepository = RepositoryManager.getRepository(JexxaInboundMessage.class, JexxaInboundMessage::uuid, properties);
     }
     @Override
     public final void onMessage(String message)
@@ -31,13 +37,14 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
 
         // If we already processed the ID, we show an info message and return
         String messageID = getMessageHeaderValue(uniqueID);
-        if (processedMessages.stream().anyMatch(messageID::equals)) {
+        if (messageRepository.get(messageID).isPresent()) {
             getLogger(getClass()).info("Message with key {} already processed -> Ignore it", messageID);
             return;
         }
 
         onMessage( fromJson(message, clazz ));
-        processedMessages.add(messageID);
+        messageRepository.add(new JexxaInboundMessage(messageID, Instant.now()));
+        removeOldMessages();
     }
     public abstract void onMessage(T message);
 
@@ -60,6 +67,11 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
         }
     }
 
+    protected Duration getStorageDuration()
+    {
+        return DEFAULT_STORAGE_DURATION;
+    }
+
     protected String getMessageHeaderValue(String key)
     {
         try {
@@ -72,4 +84,14 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
         }
         return null;
     }
+
+    private void removeOldMessages()
+    {
+        messageRepository.get().stream()
+                .filter(element -> Duration.between(Instant.now(),  element.processingTime)
+                        .compareTo(getStorageDuration()) >= 0)
+                .forEach(element -> messageRepository.remove(element.uuid()));
+    }
+
+    record JexxaInboundMessage(String uuid, Instant processingTime){}
 }
