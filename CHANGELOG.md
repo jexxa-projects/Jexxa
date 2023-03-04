@@ -8,16 +8,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed - Important Information!
 
 - With this major release Jexxa focuses more on typical microservices patterns. To better highlight them, the following changes have been made to the package structures:
-  - `core`: Provides the main entry point for a Jexxa application.
+  - `core`: Provides the main entry point for a Jexxa application
   - `drivingadapter`: Provides ready to use driving adapter to receive and forward incoming requests to the application core 
-  - `infrastructure`: Replaces old `drivenadapterstrategy` and provides implementation of typical application infrastructure patterns that simplify the implementation of driven adapters.
-  - `common`: Provides wrapper to standard java libraries used by Jexxa. Main focus is here to simplify and reduce these APIs by offering methods required by typical microservices. This package is a candidate to be externalized in future major releases.     
+  - `infrastructure`: Replaces old `drivenadapterstrategy` and provides implementation of typical application infrastructure patterns that simplify the implementation of driven adapters
+  - `common`: Provides wrapper to standard java libraries used by Jexxa. Main focus is to simplify and reduce these APIs to the requirements of Jexxa. This package is a candidate to be externalized in future major releases.     
  
 - [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/outbox/TransactionalOutboxSender.java) is now used by default for sending messages.   
 
 - Renamed `Monitors` &rarr; `HealthIndicators` to clarify its responsibility. 
 - Renamed `TimerMonitor` &rarr; `TimroutIndicator` to clarify its responsibility.
-
 
 - Changed HTTP-properties to meet declaration convention: 
   - `io.jexxa.rest.open_api_path` &rarr; `io.jexxa.rest.openapi.path`
@@ -34,6 +33,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - Jexxa-Adapter-API: Removed `InvocationHandler` which is named now `JexxaInvocationHandler` 
   - Jexxa-Core: Removed deprecated `JMXAdapter` and deprecated static properties
   - Jexxa-Web: Removed deprecated static properties 
+
+### Added
+- `ObjectStore`: creates a combined index for all values that can be searched for.   
+
+### Fixed
+- Updated dependencies
 
 ## \[5.7.1] - 2023-02-24
 ### Fixed
