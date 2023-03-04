@@ -1,6 +1,6 @@
 package io.jexxa.drivingadapter.scheduler.portadapter;
 
-import io.jexxa.application.applicationservice.SimpleApplicationService;
+import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 
 public class MissingScheduledAnnotation {
     private final SimpleApplicationService simpleApplicationService;

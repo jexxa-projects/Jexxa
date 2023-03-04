@@ -1,8 +1,8 @@
 package io.jexxa.drivingadapter.rest;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.JexxaTestApplication;
-import io.jexxa.application.applicationservice.IncrementApplicationService;
+import io.jexxa.testapplication.JexxaTestApplication;
+import io.jexxa.testapplication.applicationservice.IncrementApplicationService;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.common.function.ThrowingConsumer;
 import kong.unirest.Unirest;

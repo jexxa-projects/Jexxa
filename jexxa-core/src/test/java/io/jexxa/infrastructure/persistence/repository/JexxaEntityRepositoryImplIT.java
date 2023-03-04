@@ -1,9 +1,9 @@
 package io.jexxa.infrastructure.persistence.repository;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domain.model.JexxaEntity;
-import io.jexxa.application.domain.model.JexxaValueObject;
-import io.jexxa.application.infrastructure.drivenadapter.persistence.JexxaEntityRepositoryImpl;
+import io.jexxa.testapplication.domain.model.JexxaEntity;
+import io.jexxa.testapplication.domain.model.JexxaValueObject;
+import io.jexxa.testapplication.infrastructure.drivenadapter.persistence.JexxaEntityRepositoryImpl;
 import io.jexxa.common.wrapper.jdbc.JDBCTestDatabase;
 import io.jexxa.common.wrapper.jdbc.JDBCConnection;
 import io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository;

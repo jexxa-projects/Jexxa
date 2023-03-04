@@ -1,6 +1,6 @@
 package io.jexxa.infrastructure.persistence.repository;
 
-import io.jexxa.application.domain.model.JexxaEntity;
+import io.jexxa.testapplication.domain.model.JexxaEntity;
 import io.jexxa.infrastructure.RepositoryManager;
 import io.jexxa.infrastructure.persistence.RepositoryConfig;
 import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;

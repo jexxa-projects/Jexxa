@@ -1,8 +1,8 @@
 package io.jexxa.jexxatest.integrationtest.rest;
 
-import io.jexxa.application.applicationservice.SimpleApplicationService;
-import io.jexxa.application.domain.model.JexxaValueObject;
-import io.jexxa.application.domain.model.SpecialCasesValueObject;
+import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
+import io.jexxa.testapplication.domain.model.JexxaValueObject;
+import io.jexxa.testapplication.domain.model.SpecialCasesValueObject;
 import io.jexxa.jexxatest.JexxaIntegrationTest;
 import io.jexxa.jexxatest.application.JexxaITTestApplication;
 import kong.unirest.GenericType;

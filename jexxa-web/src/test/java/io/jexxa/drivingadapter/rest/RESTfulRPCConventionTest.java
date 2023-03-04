@@ -1,7 +1,7 @@
 package io.jexxa.drivingadapter.rest;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.applicationservice.SimpleApplicationService;
+import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

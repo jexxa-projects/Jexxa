@@ -2,7 +2,7 @@ package io.jexxa.infrastructure.persistence.objectstore;
 
 import io.jexxa.TestConstants;
 import io.jexxa.common.wrapper.jdbc.JDBCConnection;
-import io.jexxa.application.domain.model.JexxaValueObject;
+import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import io.jexxa.infrastructure.ObjectStoreManager;
 import io.jexxa.infrastructure.persistence.objectstore.metadata.MetaTag;
 import io.jexxa.infrastructure.persistence.objectstore.metadata.MetaTags;

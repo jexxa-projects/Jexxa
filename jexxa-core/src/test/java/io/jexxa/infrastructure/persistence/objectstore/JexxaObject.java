@@ -1,7 +1,7 @@
 package io.jexxa.infrastructure.persistence.objectstore;
 
-import io.jexxa.application.domain.model.JexxaEntity;
-import io.jexxa.application.domain.model.JexxaValueObject;
+import io.jexxa.testapplication.domain.model.JexxaEntity;
+import io.jexxa.testapplication.domain.model.JexxaValueObject;
 
 import java.util.Objects;
 

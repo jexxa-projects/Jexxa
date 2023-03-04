@@ -2,8 +2,8 @@ package io.jexxa.infrastructure.messaging.jms;
 
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.JexxaTestApplication;
-import io.jexxa.application.domain.model.JexxaValueObject;
+import io.jexxa.testapplication.JexxaTestApplication;
+import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import io.jexxa.common.wrapper.jms.JMSProperties;
 import io.jexxa.drivingadapter.messaging.listener.QueueListener;
 import io.jexxa.drivingadapter.messaging.listener.TopicListener;

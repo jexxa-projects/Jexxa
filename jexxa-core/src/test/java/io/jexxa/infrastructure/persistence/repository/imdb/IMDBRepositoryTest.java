@@ -1,8 +1,8 @@
 package io.jexxa.infrastructure.persistence.repository.imdb;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.domain.model.JexxaEntity;
-import io.jexxa.application.domain.model.JexxaValueObject;
+import io.jexxa.testapplication.domain.model.JexxaEntity;
+import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

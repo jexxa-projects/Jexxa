@@ -2,9 +2,9 @@ package io.jexxa.core.factory;
 
 import io.jexxa.TestConstants;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
-import io.jexxa.application.annotation.UnavailableDuringRuntime;
-import io.jexxa.application.annotation.ValidApplicationService;
-import io.jexxa.application.applicationservice.SimpleApplicationService;
+import io.jexxa.testapplication.annotation.UnavailableDuringRuntime;
+import io.jexxa.testapplication.annotation.ValidApplicationService;
+import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;

@@ -1,7 +1,7 @@
 package io.jexxa.jexxatest;
 
-import io.jexxa.application.JexxaTestApplication;
-import io.jexxa.application.domain.model.JexxaValueObject;
+import io.jexxa.testapplication.JexxaTestApplication;
+import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import io.jexxa.common.wrapper.jdbc.JexxaJDBCProperties;
 import io.jexxa.common.wrapper.jms.JMSProperties;
 import io.jexxa.infrastructure.MessageSenderManager;

@@ -1,6 +1,6 @@
 package io.jexxa.drivingadapter.rest;
 
-import io.jexxa.application.applicationservice.SimpleApplicationService;
+import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 import kong.unirest.Unirest;
 import kong.unirest.apache.ApacheClient;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;

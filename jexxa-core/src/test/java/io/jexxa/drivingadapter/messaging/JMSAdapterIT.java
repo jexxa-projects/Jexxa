@@ -3,8 +3,8 @@ package io.jexxa.drivingadapter.messaging;
 
 import io.jexxa.TestConstants;
 import io.jexxa.common.wrapper.jms.JMSProperties;
-import io.jexxa.application.JexxaTestApplication;
-import io.jexxa.application.domain.model.JexxaEntity;
+import io.jexxa.testapplication.JexxaTestApplication;
+import io.jexxa.testapplication.domain.model.JexxaEntity;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.drivingadapter.messaging.listener.ConfigurableListener;
 import io.jexxa.drivingadapter.messaging.listener.ITMessageSender;

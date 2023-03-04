@@ -1,9 +1,9 @@
 package io.jexxa.infrastructure.messaging.jms;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.JexxaTestApplication;
-import io.jexxa.application.domain.model.JexxaDomainEvent;
-import io.jexxa.application.domain.model.JexxaValueObject;
+import io.jexxa.testapplication.JexxaTestApplication;
+import io.jexxa.testapplication.domain.model.JexxaDomainEvent;
+import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.infrastructure.messaging.MessageSender;
 import io.jexxa.infrastructure.MessageSenderManager;
