@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/outbox/TransactionalOutboxSender.java) is now used by default for sending messages.   
 
 - Renamed `Monitors` &rarr; `HealthIndicators` to clarify its responsibility. 
-- Renamed `TimerMonitor` &rarr; `TimroutIndicator` to clarify its responsibility.
+- Renamed `TimerMonitor` &rarr; `TimeoutIndicator` to clarify its responsibility.
 
 - Changed HTTP-properties to meet declaration convention: 
   - `io.jexxa.rest.open_api_path` &rarr; `io.jexxa.rest.openapi.path`
