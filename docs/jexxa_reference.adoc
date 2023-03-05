@@ -128,7 +128,7 @@ Jexxa assumes following package structure by default, which is quite common in D
 
 === Dependency Injection (DI)
 
-Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support _implicit constructor injection_ as explained here (TODO).
+Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support _implicit constructor injection_ as explained https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di[here].
 
 
 [cols="1,2,2"]
