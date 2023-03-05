@@ -385,3 +385,11 @@ a| Defines if the topic or queue remains if the application is not running.
 |===
 
 TIP: Please check the tutorial https://github.com/jexxa-projects/JexxaTutorials/tree/main/TimeService[`TimeService`] for an example.
+
+==== Predefined `MessageListener`
+
+In addition, Jexxa provides following predefined `MessageListener`for your convenience:
+
+* `JSONMessageListener`: Can be used to receive JSON data. The base class converts the content of a received text- or byte message into JSON and provides additional convenience methods.
+* `TypedMessageListener`: Can be used to automatically deserialize received JSON data into a Java object that is defined within your application.
+* `IdempotentListener`: Ensures that duplicate messages are not forwarded to your application core. For this purpose, the message header must include a unique ID as string. By default, this listener uses the field `domain_event_id` which is also used by the TransactionOutboxSender.

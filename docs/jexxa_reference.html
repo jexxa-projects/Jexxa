@@ -472,7 +472,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_configuration">5. Configuration</a>
 <ul class="sectlevel2">
-<li><a href="#_jmsadapter">5.1. JMSAdapter</a></li>
+<li><a href="#_jmsadapter">5.1. JMSAdapter</a>
+<ul class="sectlevel3">
+<li><a href="#_predefined_messagelistener">5.1.1. Predefined <code>MessageListener</code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1395,13 +1399,32 @@ Please check the tutorial <a href="https://github.com/jexxa-projects/JexxaTutori
 </tr>
 </table>
 </div>
+<div class="sect3">
+<h4 id="_predefined_messagelistener"><a class="anchor" href="#_predefined_messagelistener"></a>5.1.1. Predefined <code>MessageListener</code></h4>
+<div class="paragraph">
+<p>In addition, Jexxa provides following predefined `MessageListener`for your convenience:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>JSONMessageListener</code>: Can be used to receive JSON data. The base class converts the content of a received text- or byte message into JSON and provides additional convenience methods.</p>
+</li>
+<li>
+<p><code>TypedMessageListener</code>: Can be used to automatically deserialize received JSON data into a Java object that is defined within your application.</p>
+</li>
+<li>
+<p><code>IdempotentListener</code>: Ensures that duplicate messages are not forwarded to your application core. For this purpose, the message header must include a unique ID as string. By default, this listener uses the field <code>domain_event_id</code> which is also used by the TransactionOutboxSender.</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-03-05 09:39:35 +0100
+Last updated 2023-03-05 11:05:31 +0100
 </div>
 </div>
 </body>
