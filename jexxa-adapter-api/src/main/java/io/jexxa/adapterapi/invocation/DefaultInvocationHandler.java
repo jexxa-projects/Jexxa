@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("UnusedReturnValue")
-public class DefaultInvocationHandler implements AroundInterceptor, BeforeInterceptor, AfterInterceptor, InvocationHandler, JexxaInvocationHandler {
+public class DefaultInvocationHandler implements AroundInterceptor, BeforeInterceptor, AfterInterceptor, JexxaInvocationHandler {
     private final List<BeforeInterceptor> beforeList = new ArrayList<>();
     private final List<AfterInterceptor> afterList = new ArrayList<>();
     private final List<AroundInterceptor> aroundList = new ArrayList<>();

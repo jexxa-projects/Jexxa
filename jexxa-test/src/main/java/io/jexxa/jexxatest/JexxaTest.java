@@ -1,24 +1,24 @@
 package io.jexxa.jexxatest;
 
+import io.jexxa.common.annotation.CheckReturnValue;
+import io.jexxa.common.function.ThrowingConsumer;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb.IMDBObjectStore;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
-import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorder;
-import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecorderManager;
-import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
-import io.jexxa.utils.JexxaLogger;
-import io.jexxa.utils.annotations.CheckReturnValue;
-import io.jexxa.utils.function.ThrowingConsumer;
+import io.jexxa.infrastructure.MessageSenderManager;
+import io.jexxa.infrastructure.ObjectStoreManager;
+import io.jexxa.infrastructure.persistence.objectstore.imdb.IMDBObjectStore;
+import io.jexxa.infrastructure.RepositoryManager;
+import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorder;
+import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorderManager;
+import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
+import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
+
 /**
- * This class supports unit testing of your application core, at least if you use driven adapter strategies
+ * This class supports unit testing of your application core, at least if you use infrastructure strategies
  * provided by Jexxa. To do so, this class performs following steps:
  * <ul>
  * <li> Configuring an IMDB database for repositories </li>
@@ -32,19 +32,6 @@ public class JexxaTest
     public static final String JEXXA_TEST_PROPERTIES = "/jexxa-test.properties";
 
     private static JexxaMain jexxaMain;
-
-    /**
-     * @deprecated Use method {@link #getJexxaTest} instead
-     */
-    @Deprecated(forRemoval = false)
-    public JexxaTest(JexxaMain jexxaMain)
-    {
-        Objects.requireNonNull(jexxaMain);
-        this.jexxaMain = jexxaMain;
-        jexxaMain.addProperties( loadJexxaTestProperties() );
-
-        initForUnitTests();
-    }
 
     private JexxaTest()
     {
@@ -117,8 +104,8 @@ public class JexxaTest
         var properties = new Properties();
         Optional.ofNullable(JexxaMain.class.getResourceAsStream(JEXXA_TEST_PROPERTIES))
                 .ifPresentOrElse(
-                        ThrowingConsumer.exceptionLogger(properties::load),
-                        () -> JexxaLogger.getLogger(JexxaTest.class).warn("Properties file '{}' not found", JEXXA_TEST_PROPERTIES)
+                        ThrowingConsumer.exceptionLogger(properties::load, getLogger(JexxaTest.class)),
+                        () -> getLogger(JexxaTest.class).warn("Properties file '{}' not found", JEXXA_TEST_PROPERTIES)
                 );
         return properties;
     }

@@ -2,17 +2,17 @@ package io.jexxa.core;
 
 import io.jexxa.adapterapi.invocation.InvocationContext;
 import io.jexxa.adapterapi.invocation.monitor.AroundMonitor;
-import io.jexxa.application.JexxaTestApplication;
-import io.jexxa.application.applicationservice.SimpleApplicationService;
-import io.jexxa.application.infrastructure.drivingadapter.generic.ProxyDrivingAdapter;
-import io.jexxa.application.infrastructure.drivingadapter.portadapter.ProxyPortAdapter;
-import io.jexxa.application.infrastructure.drivingadapter.generic.ProxyAdapter;
+import io.jexxa.testapplication.JexxaTestApplication;
+import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
+import io.jexxa.testapplication.infrastructure.drivingadapter.generic.ProxyDrivingAdapter;
+import io.jexxa.testapplication.infrastructure.drivingadapter.portadapter.ProxyPortAdapter;
+import io.jexxa.testapplication.infrastructure.drivingadapter.generic.ProxyAdapter;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-import static io.jexxa.infrastructure.monitor.Monitors.timerMonitor;
+import static io.jexxa.infrastructure.healthcheck.HealthIndicators.timeoutIndicator;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -31,7 +31,7 @@ class FluentMonitorTest {
         jexxaMain.bind(ProxyDrivingAdapter.class).to(ProxyPortAdapter.class);
 
         //Act
-        jexxaMain.monitor(ProxyPortAdapter.class).with(timerMonitor(maxTimeout));
+        jexxaMain.monitor(ProxyPortAdapter.class).with(timeoutIndicator(maxTimeout));
 
         var firstResult = boundedContext.isHealthy();
 
@@ -55,7 +55,7 @@ class FluentMonitorTest {
 
         var proxyAdapter = new ProxyAdapter();
         proxyAdapter.register(objectUnderTest);
-        jexxaMain.monitor(SimpleApplicationService.class).with(new ExceptionMonitor());
+        jexxaMain.monitor(SimpleApplicationService.class).with(new ExceptionIndicator());
 
         // Act
         assertThrows(NullPointerException.class, () -> proxyAdapter.invoke(objectUnderTest::throwNullPointerException));
@@ -64,7 +64,7 @@ class FluentMonitorTest {
         assertFalse(boundedContext.isHealthy());
     }
 
-    private static class ExceptionMonitor extends AroundMonitor {
+    private static class ExceptionIndicator extends AroundMonitor {
 
         private RuntimeException occurredException;
 

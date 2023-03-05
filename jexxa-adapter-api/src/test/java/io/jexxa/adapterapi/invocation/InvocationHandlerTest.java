@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InvocationHandlerTest {
     private CountingObject objectUnderTest;
-    private InvocationHandler invocationHandler;
+    private JexxaInvocationHandler invocationHandler;
 
     @BeforeEach
     void setUp()

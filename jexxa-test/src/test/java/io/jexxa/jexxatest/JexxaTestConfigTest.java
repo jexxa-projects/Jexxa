@@ -1,25 +1,25 @@
 package io.jexxa.jexxatest;
 
-import io.jexxa.application.JexxaTestApplication;
-import io.jexxa.application.domain.model.JexxaValueObject;
-import io.jexxa.infrastructure.drivenadapterstrategy.messaging.MessageSenderManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.JexxaObject;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.ObjectStoreManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.imdb.IMDBObjectStore;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTag;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetadataSchema;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
-import io.jexxa.jexxatest.infrastructure.drivenadapterstrategy.messaging.recording.MessageRecordingStrategy;
-import io.jexxa.utils.properties.JexxaJDBCProperties;
-import io.jexxa.utils.properties.JexxaJMSProperties;
+import io.jexxa.testapplication.JexxaTestApplication;
+import io.jexxa.testapplication.domain.model.JexxaValueObject;
+import io.jexxa.common.wrapper.jdbc.JexxaJDBCProperties;
+import io.jexxa.common.wrapper.jms.JMSProperties;
+import io.jexxa.infrastructure.MessageSenderManager;
+import io.jexxa.infrastructure.ObjectStoreManager;
+import io.jexxa.infrastructure.RepositoryManager;
+import io.jexxa.infrastructure.persistence.objectstore.JexxaObject;
+import io.jexxa.infrastructure.persistence.objectstore.imdb.IMDBObjectStore;
+import io.jexxa.infrastructure.persistence.objectstore.metadata.MetaTag;
+import io.jexxa.infrastructure.persistence.objectstore.metadata.MetadataSchema;
+import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.infrastructure.drivenadapterstrategy.persistence.objectstore.metadata.MetaTags.numericTag;
+import static io.jexxa.infrastructure.persistence.objectstore.metadata.MetaTags.numericTag;
 import static io.jexxa.jexxatest.JexxaTest.getJexxaTest;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -126,10 +126,10 @@ class JexxaTestConfigTest
     private static Stream<Properties> messageSenderConfig() {
         var jmsProperties = new Properties();
 
-        jmsProperties.put(JexxaJMSProperties.JNDI_FACTORY_KEY, "org.apache.activemq.jndi.ActiveMQInitialContextFactory");
-        jmsProperties.put(JexxaJMSProperties.JNDI_PROVIDER_URL_KEY, "tcp://localhost:61616");
-        jmsProperties.put(JexxaJMSProperties.JNDI_PASSWORD_KEY, ADMIN);
-        jmsProperties.put(JexxaJMSProperties.JNDI_USER_KEY, ADMIN);
+        jmsProperties.put(JMSProperties.JNDI_FACTORY_KEY, "org.apache.activemq.jndi.ActiveMQInitialContextFactory");
+        jmsProperties.put(JMSProperties.JNDI_PROVIDER_URL_KEY, "tcp://localhost:61616");
+        jmsProperties.put(JMSProperties.JNDI_PASSWORD_KEY, ADMIN);
+        jmsProperties.put(JMSProperties.JNDI_USER_KEY, ADMIN);
 
 
         return Stream.of(new Properties(), jmsProperties);

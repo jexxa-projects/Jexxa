@@ -7,14 +7,14 @@ import kong.unirest.Unirest;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.utils.json.JSONManager.getJSONConverter;
+import static io.jexxa.common.wrapper.json.JSONManager.getJSONConverter;
 import static kong.unirest.ContentType.APPLICATION_JSON;
 import static kong.unirest.HeaderNames.CONTENT_TYPE;
 
 public class RESTHandler
 {
     private static final String JEXXA_REST_PORT = "io.jexxa.rest.port";
-    private static final String JEXXA_REST_HTTPS_PORT = "io.jexxa.rest.https_port";
+    private static final String JEXXA_REST_HTTPS_PORT = "io.jexxa.rest.https.port";
 
     private final String restPrefix;
 
@@ -120,7 +120,7 @@ public class RESTHandler
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "java:S112"})
     private void throwCheckedException(HttpResponse<?> httpResponse) throws Exception
     {
         var exceptionWrapper = httpResponse.mapError(ExceptionWrapper.class);

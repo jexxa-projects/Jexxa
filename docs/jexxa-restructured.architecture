@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Architecture: jexxa-restructured
+Project: jexxa
+Exported at: 2023-03-04T09:27:47.418436515Z
+ -->
+<conqat-architecture xmlns="http://conqat.cs.tum.edu/ns/architecture" policy="deny" file-based="true" legacy-code-mapping="false" structure-only="false" finding-creation="violations" scope-include="" scope-exclude="" created-by="michael-repplinger" creation-date="1677821216431" last-modified-by="michael-repplinger" modification-date="1677922067051">
+  <component name="common" dim="140,40" pos="241,341">
+    <code-mapping type="INCLUDE" regex="jexxa\-core/src/main/java/io/jexxa/common/.*" />
+  </component>
+  <component name="core" dim="140,40" pos="51,81">
+    <code-mapping type="INCLUDE" regex="jexxa\-core/src/main/java/io/jexxa/core/.*" />
+  </component>
+  <component name="drivingadapter" dim="140,40" pos="241,81">
+    <code-mapping type="INCLUDE" regex="jexxa\-core/src/main/java/io/jexxa/drivingadapter/.*" />
+  </component>
+  <component name="infrastructure" dim="140,40" pos="391,201">
+    <code-mapping type="INCLUDE" regex="jexxa\-core/src/main/java/io/jexxa/infrastructure/.*" />
+  </component>
+  <allow source="core" target="common" />
+  <allow source="drivingadapter" target="common" />
+  <allow source="drivingadapter" target="infrastructure" />
+  <allow source="infrastructure" target="common" />
+</conqat-architecture>

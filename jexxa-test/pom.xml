@@ -3,7 +3,7 @@
     <parent>
         <artifactId>jexxa</artifactId>
         <groupId>io.jexxa</groupId>
-        <version>5.7.2-SNAPSHOT</version>
+        <version>6.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -60,6 +60,12 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.simple.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgres.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

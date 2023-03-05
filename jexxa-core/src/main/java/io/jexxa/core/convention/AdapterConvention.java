@@ -26,12 +26,24 @@ public final class AdapterConvention
     public static <P> boolean isPortAdapter(Class<P> port, List<String> acceptedInfrastructure)
     {
 
-        return Arrays.stream(port.getConstructors())
+        //Check constructor with one single application/domain service
+        if ( Arrays.stream(port.getConstructors())
                 .filter(constructor -> constructor.getParameterTypes().length == 1)
                 .anyMatch(constructor -> !constructor.getParameterTypes()[0].isInterface())
                 &&
-                isInInfrastructurePackage(port, acceptedInfrastructure);
+                isInInfrastructurePackage(port, acceptedInfrastructure))
+        {
+            return true;
+        }
 
+        //Check constructor with one single application/domain service and a properties argument
+        return Arrays.stream(port.getConstructors())
+                .filter(constructor -> constructor.getParameterTypes().length == 2)
+                .anyMatch(constructor -> !constructor.getParameterTypes()[0].isInterface()
+                        && constructor.getParameterTypes()[1].isAssignableFrom(Properties.class)
+                )
+                &&
+                isInInfrastructurePackage(port, acceptedInfrastructure);
     }
 
     private static <T> boolean isDefaultConstructorAvailable(Class<T> clazz)

@@ -1,12 +1,13 @@
 package io.jexxa.adapterapi.invocation;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class InvocationManager {
-    private static final HashMap<Object, DefaultInvocationHandler> INVOCATION_HANDLER_MAP = new HashMap<>();
+    private static final Map<Object, DefaultInvocationHandler> INVOCATION_HANDLER_MAP = new ConcurrentHashMap<>();
 
 
-    public static InvocationHandler getInvocationHandler(Object object)
+    public static synchronized JexxaInvocationHandler getInvocationHandler(Object object)
     {
         return INVOCATION_HANDLER_MAP.computeIfAbsent(object, key -> createDefaultInvocationHandler());
     }

@@ -1,10 +1,10 @@
 package io.jexxa.core;
 
 import io.jexxa.TestConstants;
-import io.jexxa.application.JexxaTestApplication;
-import io.jexxa.application.applicationservice.InvalidConstructorApplicationService;
-import io.jexxa.application.infrastructure.drivingadapter.generic.InvalidDrivingAdapter;
-import io.jexxa.application.infrastructure.drivingadapter.generic.ProxyDrivingAdapter;
+import io.jexxa.testapplication.JexxaTestApplication;
+import io.jexxa.testapplication.applicationservice.InvalidConstructorApplicationService;
+import io.jexxa.testapplication.infrastructure.drivingadapter.generic.InvalidDrivingAdapter;
+import io.jexxa.testapplication.infrastructure.drivingadapter.generic.ProxyDrivingAdapter;
 import io.jexxa.core.convention.AdapterConventionViolation;
 import io.jexxa.core.convention.PortConventionViolation;
 import org.junit.jupiter.api.Tag;

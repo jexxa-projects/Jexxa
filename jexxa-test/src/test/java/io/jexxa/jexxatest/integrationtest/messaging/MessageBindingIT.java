@@ -1,7 +1,7 @@
 package io.jexxa.jexxatest.integrationtest.messaging;
 
-import io.jexxa.application.domain.model.JexxaValueObject;
-import io.jexxa.infrastructure.drivingadapter.messaging.JMSConfiguration;
+import io.jexxa.testapplication.domain.model.JexxaValueObject;
+import io.jexxa.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.jexxatest.JexxaIntegrationTest;
 import io.jexxa.jexxatest.application.JexxaITTestApplication;
 import org.junit.jupiter.api.AfterAll;
@@ -94,5 +94,4 @@ class MessageBindingIT {
     {
         JEXXA_INTEGRATION_TEST.shutDown();
     }
-
 }

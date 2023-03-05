@@ -1,7 +1,7 @@
 package io.jexxa.core.convention;
 
-import io.jexxa.application.applicationservice.InvalidConstructorApplicationService;
-import io.jexxa.application.domain.model.JexxaEntityRepository;
+import io.jexxa.testapplication.applicationservice.InvalidConstructorApplicationService;
+import io.jexxa.testapplication.domain.model.JexxaEntityRepository;
 import org.junit.jupiter.api.Test;
 
 import java.util.Objects;

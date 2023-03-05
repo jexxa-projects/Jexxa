@@ -444,33 +444,39 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_jexxa_modules">1. Jexxa Modules</a></li>
-<li><a href="#_jexxa_features">2. Jexxa Features</a>
+<li><a href="#_application_development">2. Application Development</a>
 <ul class="sectlevel2">
-<li><a href="#_jexxamain">2.1. JexxaMain</a></li>
-<li><a href="#_boundedcontext">2.2. BoundedContext</a></li>
-<li><a href="#_application_configuration">2.3. Application Configuration</a>
+<li><a href="#_implementing_main">2.1. Implementing <code>main</code></a></li>
+<li><a href="#_implementing_infrastructure_binding">2.2. Implementing Infrastructure Binding</a></li>
+<li><a href="#_boundedcontext">2.3. BoundedContext</a></li>
+</ul>
+</li>
+<li><a href="#_application_configuration">3. Application Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#_properties_files">3.1. Properties files</a></li>
+<li><a href="#_secrets">3.2. Secrets</a></li>
+</ul>
+</li>
+<li><a href="#_conventions">4. Conventions</a>
+<ul class="sectlevel2">
+<li><a href="#_package_structure">4.1. Package Structure</a></li>
+<li><a href="#_dependency_injection_di">4.2. Dependency Injection (DI)</a></li>
+<li><a href="#_json_representation">4.3. JSON representation</a>
 <ul class="sectlevel3">
-<li><a href="#_properties_files">2.3.1. Properties files</a></li>
-<li><a href="#_secrets">2.3.2. Secrets</a></li>
+<li><a href="#_json_representation_of_exceptions">4.3.1. JSON representation of Exceptions</a></li>
+<li><a href="#_json_representation_of_date_and_time">4.3.2. JSON representation of Date and Time</a></li>
 </ul>
 </li>
+<li><a href="#_conventions_of_restfulrpcadapter">4.4. Conventions of RESTfulRPCAdapter</a></li>
 </ul>
 </li>
-<li><a href="#_conventions">3. Conventions</a>
+<li><a href="#_configuration">5. Configuration</a>
 <ul class="sectlevel2">
-<li><a href="#_restfulrpcadapter">3.1. RESTfulRPCAdapter</a></li>
-<li><a href="#_json_representation">3.2. JSON representation</a>
+<li><a href="#_jmsadapter">5.1. JMSAdapter</a>
 <ul class="sectlevel3">
-<li><a href="#_json_representation_of_exceptions">3.2.1. JSON representation of Exceptions</a></li>
-<li><a href="#_json_representation_of_date_and_time">3.2.2. JSON representation of Date and Time</a></li>
+<li><a href="#_predefined_messagelistener">5.1.1. Predefined <code>MessageListener</code></a></li>
 </ul>
 </li>
-<li><a href="#_jmxadapter">3.3. JMXAdapter</a></li>
-</ul>
-</li>
-<li><a href="#_configuration">4. Configuration</a>
-<ul class="sectlevel2">
-<li><a href="#_jmsadapter">4.1. JMSAdapter</a></li>
 </ul>
 </li>
 </ul>
@@ -511,32 +517,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Jexxa-Core</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Provides the core functionality of Jexxa as described in <a href="#_jexxa_features">Jexxa Features</a>. In case you write a new business application, you will need this package.</p>
+<p>Provides the core functionality of Jexxa as described in <a href="#_implementing_main">Implementing <code>main</code></a>. In case you write a new business application, you will need this package.</p>
 </div>
 <div class="paragraph">
-<p>In addition, it provides following driving- and driven-adapter strategies written against Java standard APIs:</p>
+<p>In addition, it provides following sub-packages that can be used by your application:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Driving-Adapter: <code>JMXAdapter</code>, <code>JMSAdapter</code></p>
+<p><code>drivingadapter</code>: Provides ready to use driving adapter to receive and forward incoming requests to the application core.  Included driving adapter in this package are <code>Scheduler</code> and <code>JMSAdapter</code>.</p>
 </li>
 <li>
-<p>Driven-Adapter Strategies: <code>JDBCKeyValueRepository</code>, <code>JDBCObjectStore</code>, <code>JMSSender</code></p>
+<p><code>infrastructure</code>: Provides implementation of typical <a href="https://microservices.io/patterns/">application infrastructure patterns</a> that simplify the implementation of driven adapters. Provided implementations are <code>JDBCKeyValueRepository</code>, <code>JDBCObjectStore</code>, <code>JMSSender</code>, and <code>TransactionalOutboxSender</code></p>
+</li>
+<li>
+<p><code>common</code>: Provides wrapper to standard java libraries used by Jexxa. Main focus is to simplify and reduce these APIs to the requirements of Jexxa.</p>
 </li>
 </ul>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title=":information_source:"></i>
-</td>
-<td class="content">
-In order to use these adapters, you need to bind a concrete implementation of the used API, such as an ActiveMQ client, or a concrete database driver.
-</td>
-</tr>
-</table>
 </div></div></td>
 </tr>
 <tr>
@@ -559,9 +556,7 @@ In order to use these adapters, you need to bind a concrete implementation of th
 <p>Jexxa-Test</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Supports writing unit tests for your business application.
-For all driven adapters stubs are provided so that you can write tests with a clear focus on your business logic.
-No mock framework is required.</p>
+<p>Supports writing unit-, stub-, and integration-tests for your business application.</p>
 </div></div></td>
 </tr>
 </tbody>
@@ -569,56 +564,45 @@ No mock framework is required.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_jexxa_features"><a class="anchor" href="#_jexxa_features"></a>2. Jexxa Features</h2>
+<h2 id="_application_development"><a class="anchor" href="#_application_development"></a>2. Application Development</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>The application development using Jexxa is quite easy. The required steps are described in this section.</p>
+</div>
 <div class="sect2">
-<h3 id="_jexxamain"><a class="anchor" href="#_jexxamain"></a>2.1. JexxaMain</h3>
+<h3 id="_implementing_main"><a class="anchor" href="#_implementing_main"></a>2.1. Implementing <code>main</code></h3>
 <div class="paragraph">
-<p>The <code>JexxaMain</code> class provides a convenient way to bootstrap your application. In contrast to other
-frameworks, Jexxa requires some code to explicitly configure your application for following reason:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Explicitly bind technology stacks (called adapters) to parts of the application core (called ports) so that the entry points of your application core are visible.</p>
-</li>
-<li>
-<p>Fine-grained control of your technology stacks so that they can be exchanged independently without updating the entire framework.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The steps for configuring your application are always similar as you can see in all <a href="https://github.com/jexxa-projects/JexxaTutorials">tutorials</a>:</p>
+<p>The <code>JexxaMain</code> class provides a convenient way to bootstrap your application. Main focus here is to make the entry points of your application core as well as the flow of control visible.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Define packages that include your application core and infrastructure. If you follow the package convention in the tutorials, you do not need to add any packages. Alternatively, you have to use the method <code>JexxaMain.addToApplicationCore()</code> or <code>JexxaMain.addToInfrastructure()</code> to add packages of your application core or infrastructure respectively.</p>
+<p>In <code>main</code> create an instance of <code>JexxaMain</code>.</p>
 </li>
 <li>
-<p>Bind technology stacks to application core with <code>JexxaMain.bind(&lt;DrivingAdapter&gt;.class).to(&lt;port&gt;.class)</code>.</p>
+<p>Bind driving adapters to <code>inbound ports</code> with <code>JexxaMain.bind(&lt;DrivingAdapter&gt;.class).to(&lt;port&gt;.class)</code>.</p>
 </li>
 <li>
-<p>Startup your application using <code>JexxaMain.run()</code>. Please note that this method implements a <strong>fail-fast</strong> approach. If this method
-is successfully executed, your application is up and running. In more detail, a connection to all involved technology stacks such as a database or messaging system is established, all required objects are successfully instantiated in order to execute your business logic. In case of any errors, this method will fail.</p>
+<p>Startup your application using <code>JexxaMain.run()</code>.</p>
 </li>
 </ol>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title=":information_source:"></i>
-</td>
-<td class="content">
-Jexxa provides a reconnection mechanism for all provided driving- and driven-adapter. But this reconnection mechanism is only used after an initial successfully start.
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>A simple example can be seen in tutorial <a href="https://github.com/jexxa-projects/JexxaTutorials/blob/main/HelloJexxa/README.md">HelloJexxa</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_boundedcontext"><a class="anchor" href="#_boundedcontext"></a>2.2. BoundedContext</h3>
+<h3 id="_implementing_infrastructure_binding"><a class="anchor" href="#_implementing_infrastructure_binding"></a>2.2. Implementing Infrastructure Binding</h3>
+<div class="paragraph">
+<p>To implement your outbound ports either by using Jexxa&#8217;s infrastructure components or any other third party library.
+Jexxa provides strategies for persisting or sending data that can be used in the implementation of your outbound ports.</p>
+</div>
+<div class="paragraph">
+<p>A simple example can be seen in tutorial <a href="https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md#3-implement-the-infrastructure">BookStore</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_boundedcontext"><a class="anchor" href="#_boundedcontext"></a>2.3. BoundedContext</h3>
 <div class="paragraph">
 <p>As described in <a href="https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html">architecture of Jexxa</a>, this framework has a strong focus on Domain Driven design. Therefore, each application provides a so called <code>BoundedContext</code> object which provides status information about the running application.</p>
 </div>
@@ -636,13 +620,16 @@ driving adapter.</p>
 could be a <code>TimerMonitor</code> that informs about that no requests have been received for a longer period of time.</p>
 </li>
 <li>
-<p><code>BoundedContext.diagnostics()</code>: This method provides human-readable information from the established monitors.</p>
+<p><code>BoundedContext.diagnostics()</code>: This method provides human-readable information from the established health indicators.</p>
 </li>
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_application_configuration"><a class="anchor" href="#_application_configuration"></a>2.3. Application Configuration</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_application_configuration"><a class="anchor" href="#_application_configuration"></a>3. Application Configuration</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Jexxa allows you to externalize your configuration. This allows you to run the same application in different environments. By default, Jexxa use properties files. In addition, you can set system properties to externalize the configuration. Jexxa considers properties in the following order:</p>
 </div>
@@ -662,8 +649,8 @@ could be a <code>TimerMonitor</code> that informs about that no requests have be
 </li>
 </ol>
 </div>
-<div class="sect3">
-<h4 id="_properties_files"><a class="anchor" href="#_properties_files"></a>2.3.1. Properties files</h4>
+<div class="sect2">
+<h3 id="_properties_files"><a class="anchor" href="#_properties_files"></a>3.1. Properties files</h3>
 <div class="paragraph">
 <p>Jexxa uses a hierarchical approach so that an imported properties file overwrites values in <code>jexxa-application.properties</code>. This allows you to make differences between
 production and other environments more transparent.</p>
@@ -694,8 +681,8 @@ All <a href="https://github.com/jexxa-projects/JexxaTutorials">Jexxa tutorials</
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_secrets"><a class="anchor" href="#_secrets"></a>2.3.2. Secrets</h4>
+<div class="sect2">
+<h3 id="_secrets"><a class="anchor" href="#_secrets"></a>3.2. Secrets</h3>
 <div class="paragraph">
 <p>One of the most crucial aspects with productive systems is the handling of secrets such as usernames, passwords, or private keys. Jexxa addresses this problem with two approaches.</p>
 </div>
@@ -712,15 +699,387 @@ All <a href="https://github.com/jexxa-projects/JexxaTutorials">Jexxa tutorials</
 </div>
 </div>
 </div>
-</div>
 <div class="sect1">
-<h2 id="_conventions"><a class="anchor" href="#_conventions"></a>3. Conventions</h2>
+<h2 id="_conventions"><a class="anchor" href="#_conventions"></a>4. Conventions</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Jexxa defines some conventions for realizing implicit constructor injection which are described <a href="https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di">here</a>. In addition, driving adapter can define their own conventions to automatically expose ports via a specific technology stack. Within Jexxa, these driving adapter are called <code>generic driving adapter</code>. In the rest of this Section you find a description of conventions used by these generic driving adapter.</p>
 </div>
 <div class="sect2">
-<h3 id="_restfulrpcadapter"><a class="anchor" href="#_restfulrpcadapter"></a>3.1. RESTfulRPCAdapter</h3>
+<h3 id="_package_structure"><a class="anchor" href="#_package_structure"></a>4.1. Package Structure</h3>
+<div class="paragraph">
+<p>Jexxa assumes following package structure by default, which is quite common in DDD community:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>applicationservice</code>: Provides interfaces per application scenario</p>
+</li>
+<li>
+<p><code>domainservice</code>: Provides</p>
+</li>
+<li>
+<p><code>domain</code>: Provides the core domain typically grouped by use cases.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>&lt;use case 1&gt;</code>: Each use case consists of the related Aggregates, Repository interfaces, ValueObjects and DomainEvents.</p>
+</li>
+<li>
+<p><code>&#8230;&#8203;</code></p>
+</li>
+<li>
+<p><code>&lt;use case n&gt;</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>infrastructure</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>drivenadapter</code>: Provides the implementation of outbound ports typically with sub packages for each technology stack such as <code>messaging</code> or <code>persistence</code>.</p>
+</li>
+<li>
+<p><code>drivingadapter</code>: Provides the implementation of so-called port adapters outbound ports typically with sub packages for each technology stack such as <code>messaging</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dependency_injection_di"><a class="anchor" href="#_dependency_injection_di"></a>4.2. Dependency Injection (DI)</h3>
+<div class="paragraph">
+<p>Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support <em>implicit constructor injection</em> as explained <a href="https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di">here</a>.</p>
+</div>
+<table id="JexxaConventions" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Conventions used to realize implicit constructor injection.</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Components</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Conventions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Reason</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Inbound Port</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A single public constructor.</p>
+</li>
+<li>
+<p>Parameters of the constructor must be interfaces of required outbound ports.</p>
+</li>
+<li>
+<p>A unique implementation of each interface exists in the search scope of Jexxa. If you do not follow the recommended package structure of Jexxa, you have to define it on a package level by method <code>JexxaMain::addToInfrastructure</code>.</p>
+</li>
+</ol>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Avoids ambiguity when choosing the constructor.</p>
+</li>
+<li>
+<p>Ports should be self-contained as much as possible. Therefore, only outbound ports should be hand in. This ensures that the infrastructure is agnostic to domain logic and knows only the <em>interfaces</em> required by the application core but not any other inner components.</p>
+</li>
+<li>
+<p>Each package should only include a single implementation of a specific interface to achieve the common-closure principle.</p>
+</li>
+</ol>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Outbound Port</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Not applicable</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Outbound ports are interfaces</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapter</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Only a single driven adapter implements a specific outbound port.</p>
+</li>
+<li>
+<p>One of the following constructors must be available (checked in this order):</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Public default constructor</p>
+</li>
+<li>
+<p>Public constructor with a single <code>Properties</code> attribute</p>
+</li>
+<li>
+<p>Public static factory method that gets no parameters and returns the type of the Outbound Port (and not the type of the driven adapter)</p>
+</li>
+<li>
+<p>Public static factory method with a single <code>Properties</code> parameter and returns the type of the outbound port (and not the type of the driven adapter).</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Avoids ambiguity when choosing a Driven Adapter. At the moment you can only limit the search space of driven adapters on a package level.</p>
+</li>
+<li>
+<p>Using constructors or factory methods do not require any special annotations.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title=":information_source:"></i>
+</td>
+<td class="content">
+A driven adapter gets the same <code>Properties</code> object as <code>JexxaMain</code>.
+</td>
+</tr>
+</table>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Port Adapter</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>One of the following constructors must be available (checked in this order):</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A single public constructor with a single attribute. The attribute is the concrete type of concrete port, such as <code>MyDrivingAdapter(ConcretePort conrectePort)</code>.</p>
+</li>
+<li>
+<p>A single public constructor with two attributes. The first attribute is the concrete type of specific port, such as <code>MyDrivingAdapter(ConcretePort conrectePort, Properties properties)</code>.</p>
+</li>
+</ol>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A port adapter is tightly coupled to a specific port. Therefore, it gets its concrete type injected.</p>
+</li>
+</ol>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Driving Adapter</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>One of the following constructors must be available (checked in this order).</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Public Default constructor</p>
+</li>
+<li>
+<p>Public constructor with a single <code>Properties</code> attribute</p>
+</li>
+<li>
+<p>Public static factory method without parameters and returns the type of the driving adapter</p>
+</li>
+<li>
+<p>Public static factory method with a single <code>Properties</code> parameter and returns the type of the requested driving adapter</p>
+</li>
+</ol>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Using constructors or factory methods do not require any special annotations. Using <code>Properties</code> is a standard approach in Java to provide configuration information.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title=":information_source:"></i>
+</td>
+<td class="content">
+A driving adapter gets the same <code>Properties</code> object as <code>JexxaMain</code>.
+</td>
+</tr>
+</table>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title=":information_source:"></i>
+</td>
+<td class="content">
+<code>Constructor vs. static factory method</code>: In most cases implementing a constructor is the preferred approach when realizing an adapter. Using a static factory method
+is only recommended if the adapter needs special or more complex configuration which should be done before creating the adapter itself.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_json_representation"><a class="anchor" href="#_json_representation"></a>4.3. JSON representation</h3>
+<div class="sect3">
+<h4 id="_json_representation_of_exceptions"><a class="anchor" href="#_json_representation_of_exceptions"></a>4.3.1. JSON representation of Exceptions</h4>
+<div class="paragraph">
+<p>In case you (de)serialize an exception, Jexxa (de)serialize following information</p>
+</div>
+<table id="JSON_Representation_EXCEPTIOn" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. Describes the JSON representation of an <code>Exception</code>.</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>JSON value</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Description</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>message</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Includes the message text from the exception, if available.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>cause</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Includes the message information from including <code>cause</code> object, if available.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title=":information_source:"></i>
+</td>
+<td class="content">
+Jexxa does not serialize any other information such as stack trace due to security reason.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_json_representation_of_date_and_time"><a class="anchor" href="#_json_representation_of_date_and_time"></a>4.3.2. JSON representation of Date and Time</h4>
+<div class="paragraph">
+<p>JSON does not specify a specific date representation. JavaScript uses <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a> string format to encode dates as a string, which is a common way to exchange date information between different systems.</p>
+</div>
+<div class="paragraph">
+<p>Java8 introduces a new API for date and time for good reason. Even if there is a reason to use the old API you should not use it as part of your exposed API of the application. These two aspects leads to following design decision:</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
+</td>
+<td class="content">
+<code>RESTfulRPCAdapter</code> supports only Java8 Date API and represents a date as JSON-string in <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a> string format.
+</td>
+</tr>
+</table>
+</div>
+<table id="JSON_Representation_DATE" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. Describes the JSON representation of Java date.</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Java type</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>JSON</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>LocalDate</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Is mapped to a JSON-string representing a date without any time information.</p>
+</div>
+<div class="paragraph">
+<p>Example: "2020-11-29"</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>LocalDateTime</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Is mapped to a JSON-string representing a date including timezone information to avoid confusion within a distributed system.</p>
+</div>
+<div class="paragraph">
+<p>Example: "2020-11-29T06:36:36.978Z"</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>ZonedDateTime</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Is mapped to a JSON-string representing a date with timezone information.</p>
+</div>
+<div class="paragraph">
+<p>Example: "2020-11-29T06:36:36.978Z"</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title=":bulb:"></i>
+</td>
+<td class="content">
+If ou need some example how <code>RESTfulRPCAdapter</code> maps Java&#8217;s Date and Time API to JSON please see <a href="https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java">here</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_conventions_of_restfulrpcadapter"><a class="anchor" href="#_conventions_of_restfulrpcadapter"></a>4.4. Conventions of RESTfulRPCAdapter</h3>
 <div class="paragraph">
 <p>The <code>RESTfulRPCAdapter</code> is a simple RPC mechanism utilizing REST. Based on the <a href="https://martinfowler.com/articles/richardsonMaturityModel.html">REST maturity model</a> from Richardson it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST on a higher maturity level.</p>
 </div>
@@ -740,7 +1099,7 @@ When you start using this adapter, I recommend enabling OpenAPI support at least
 <p>This adapter uses following conventions:</p>
 </div>
 <table id="RESTfulRPCAdapterConvention" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. Describes the conventions used in <code>RESTfulRPCAdapter</code>.</caption>
+<caption class="title">Table 5. Describes the conventions used in <code>RESTfulRPCAdapter</code>.</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 75%;">
@@ -926,214 +1285,10 @@ The order of the attributes in the Json array must match to the order of attribu
 </tbody>
 </table>
 </div>
-<div class="sect2">
-<h3 id="_json_representation"><a class="anchor" href="#_json_representation"></a>3.2. JSON representation</h3>
-<div class="sect3">
-<h4 id="_json_representation_of_exceptions"><a class="anchor" href="#_json_representation_of_exceptions"></a>3.2.1. JSON representation of Exceptions</h4>
-<div class="paragraph">
-<p>In case you (de)serialize an exception, Jexxa (de)serialize following information</p>
-</div>
-<table id="JSON_Representation_EXCEPTIOn" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. Describes the JSON representation of an <code>Exception</code>.</caption>
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>JSON value</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Description</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>message</code></p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Includes the message text from the exception, if available.</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>cause</code></p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Includes the message information from including <code>cause</code> object, if available.</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title=":information_source:"></i>
-</td>
-<td class="content">
-Jexxa does not serialize any other information such as stack trace due to security reason.
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_json_representation_of_date_and_time"><a class="anchor" href="#_json_representation_of_date_and_time"></a>3.2.2. JSON representation of Date and Time</h4>
-<div class="paragraph">
-<p>JSON does not specify a specific date representation. JavaScript uses <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a> string format to encode dates as a string, which is a common way to exchange date information between different systems.</p>
-</div>
-<div class="paragraph">
-<p>Java8 introduces a new API for date and time for good reason. Even if there is a reason to use the old API you should not use it as part of your exposed API of the application. These two aspects leads to following design decision:</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
-</td>
-<td class="content">
-<code>RESTfulRPCAdapter</code> supports only Java8 Date API and represents a date as JSON-string in <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a> string format.
-</td>
-</tr>
-</table>
-</div>
-<table id="JSON_Representation_DATE" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. Describes the JSON representation of Java date.</caption>
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Java type</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>JSON</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>LocalDate</code></p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Is mapped to a JSON-string representing a date without any time information.</p>
-</div>
-<div class="paragraph">
-<p>Example: "2020-11-29"</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>LocalDateTime</code></p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Is mapped to a JSON-string representing a date including timezone information to avoid confusion within a distributed system.</p>
-</div>
-<div class="paragraph">
-<p>Example: "2020-11-29T06:36:36.978Z"</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>ZonedDateTime</code></p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Is mapped to a JSON-string representing a date with timezone information.</p>
-</div>
-<div class="paragraph">
-<p>Example: "2020-11-29T06:36:36.978Z"</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title=":bulb:"></i>
-</td>
-<td class="content">
-If ou need some example how <code>RESTfulRPCAdapter</code> maps Java&#8217;s Date and Time API to JSON please see <a href="https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java">here</a>.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_jmxadapter"><a class="anchor" href="#_jmxadapter"></a>3.3. JMXAdapter</h3>
-<div class="paragraph">
-<p>The <code>JMXAdapter</code> allows to control your application and access all objects that are registered.</p>
-</div>
-<table id="JMXAdapterConvention" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. Describes the conventions used in <code>JMXAdapter</code>.</caption>
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>JMXAdapter</strong></p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>Convention</strong></p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Methods</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>Method must be <code>public</code></p>
-</li>
-<li>
-<p>Method must not be <code>static</code></p>
-</li>
-<li>
-<p>Methods from base class <code>Object</code> are not exposed</p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Method attributes</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>All attributes must be sent as Json object</p>
-</li>
-<li>
-<p>The <code>MBeanParameterInfo</code> includes a Json template for each attribute in its description section. The placeholder for the
-value is marked by <code>&lt;TYPE of value&gt;</code>.<br>
-For example, the Json template for <code>LocalTime</code> looks as follows:<br>
-<code>{"hour":"&lt;byte&gt;","minute":"&lt;byte&gt;","second":"&lt;byte&gt;","nano":"&lt;int&gt;"}</code></p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Return values</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>A return value is sent as Json object</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>4. Configuration</h2>
+<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>5. Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Some driving adapter cannot automatically expose a port via conventions. These driving adapters are called <code>specific driving adapters</code>. A specific driving adapter is required for integrating technology stacks that require a mapping to the interface of a port. Typical examples are mapping a RESTfulHTTP API to the public interface of a java object, or mapping an asynchronous message to a specific method of an object.</p>
@@ -1168,7 +1323,7 @@ For example, the Json template for <code>LocalTime</code> looks as follows:<br>
 </ul>
 </div>
 <div class="sect2">
-<h3 id="_jmsadapter"><a class="anchor" href="#_jmsadapter"></a>4.1. JMSAdapter</h3>
+<h3 id="_jmsadapter"><a class="anchor" href="#_jmsadapter"></a>5.1. JMSAdapter</h3>
 <div class="paragraph">
 <p>When implementing a port adapter for <code>JMSAdapter</code>, you have to implement the <code>MessageListener</code> interface of JMS and annotate the class with <code>@JMSConfiguration</code>.</p>
 </div>
@@ -1214,6 +1369,22 @@ For example, the Json template for <code>LocalTime</code> looks as follows:<br>
 <p>An optional parameter which defines a message selector to filter messages.</p>
 </div></div></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>sharedSubscriptionName</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Defines name of a shared subscription so that multiple instances of your application can process incoming requests</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>durable</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Defines if the topic or queue remains if the application is not running.</p>
+</div></div></td>
+</tr>
 </tbody>
 </table>
 <div class="admonitionblock tip">
@@ -1228,13 +1399,32 @@ Please check the tutorial <a href="https://github.com/jexxa-projects/JexxaTutori
 </tr>
 </table>
 </div>
+<div class="sect3">
+<h4 id="_predefined_messagelistener"><a class="anchor" href="#_predefined_messagelistener"></a>5.1.1. Predefined <code>MessageListener</code></h4>
+<div class="paragraph">
+<p>In addition, Jexxa provides following predefined `MessageListener`for your convenience:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>JSONMessageListener</code>: Can be used to receive JSON data. The base class converts the content of a received text- or byte message into JSON and provides additional convenience methods.</p>
+</li>
+<li>
+<p><code>TypedMessageListener</code>: Can be used to automatically deserialize received JSON data into a Java object that is defined within your application.</p>
+</li>
+<li>
+<p><code>IdempotentListener</code>: Ensures that duplicate messages are not forwarded to your application core. For this purpose, the message header must include a unique ID as string. By default, this listener uses the field <code>domain_event_id</code> which is also used by the TransactionOutboxSender.</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-12-20 06:41:18 +0100
+Last updated 2023-03-05 11:05:31 +0100
 </div>
 </div>
 </body>

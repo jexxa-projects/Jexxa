@@ -27,14 +27,13 @@ a| Jexxa-Adapter-API
 a| Defines the API for driving adapters. In case you need to implement a new driving adapter, you have to use this dependency.
 
 a| Jexxa-Core
-a| Provides the core functionality of Jexxa as described in <<Jexxa Features>>. In case you write a new business application, you will need this package.
+a| Provides the core functionality of Jexxa as described in <<Implementing `main`>>. In case you write a new business application, you will need this package.
 
-In addition, it provides following driving- and driven-adapter strategies written against Java standard APIs:
+In addition, it provides following sub-packages that can be used by your application:
 
-* Driving-Adapter: `JMXAdapter`, `JMSAdapter`
-* Driven-Adapter Strategies: `JDBCKeyValueRepository`, `JDBCObjectStore`, `JMSSender`
-
-NOTE: In order to use these adapters, you need to bind a concrete implementation of the used API, such as an ActiveMQ client, or a concrete database driver.
+* `drivingadapter`: Provides ready to use driving adapter to receive and forward incoming requests to the application core.  Included driving adapter in this package are `Scheduler` and `JMSAdapter`.
+* `infrastructure`: Provides implementation of typical https://microservices.io/patterns/[application infrastructure patterns] that simplify the implementation of driven adapters. Provided implementations are `JDBCKeyValueRepository`, `JDBCObjectStore`, `JMSSender`, and `TransactionalOutboxSender`
+* `common`: Provides wrapper to standard java libraries used by Jexxa. Main focus is to simplify and reduce these APIs to the requirements of Jexxa.
 
 a| Jexxa-Web
 a| Provides driving adapters to access your application via HTTP. The used web-framework is https://javalin.io[javalin] which internally uses jetty.
@@ -42,32 +41,29 @@ a| Provides driving adapters to access your application via HTTP. The used web-f
 * Driving-Adapter: `RESTfulRPCAdapter`
 
 a| Jexxa-Test
-a| Supports writing unit tests for your business application.
-For all driven adapters stubs are provided so that you can write tests with a clear focus on your business logic.
-No mock framework is required.
+a| Supports writing unit-, stub-, and integration-tests for your business application.
 
 |===
-== Jexxa Features
+== Application Development
+The application development using Jexxa is quite easy. The required steps are described in this section.
 
-=== JexxaMain
+=== Implementing `main`
 
-The `JexxaMain` class provides a convenient way to bootstrap your application. In contrast to other
-frameworks, Jexxa requires some code to explicitly configure your application for following reason:
+The `JexxaMain` class provides a convenient way to bootstrap your application. Main focus here is to make the entry points of your application core as well as the flow of control visible.
 
-* Explicitly bind technology stacks (called adapters) to parts of the application core (called ports) so that the entry points of your application core are visible.
-* Fine-grained control of your technology stacks so that they can be exchanged independently without updating the entire framework.
+1. In `main` create an instance of `JexxaMain`.
 
-The steps for configuring your application are always similar as you can see in all https://github.com/jexxa-projects/JexxaTutorials[tutorials]:
+2. Bind driving adapters to `inbound ports` with `JexxaMain.bind(<DrivingAdapter>.class).to(<port>.class)`.
 
+3. Startup your application using `JexxaMain.run()`.
 
-1. Define packages that include your application core and infrastructure. If you follow the package convention in the tutorials, you do not need to add any packages. Alternatively, you have to use the method `JexxaMain.addToApplicationCore()` or `JexxaMain.addToInfrastructure()` to add packages of your application core or infrastructure respectively.
+A simple example can be seen in tutorial https://github.com/jexxa-projects/JexxaTutorials/blob/main/HelloJexxa/README.md[HelloJexxa].
 
-2. Bind technology stacks to application core with `JexxaMain.bind(<DrivingAdapter>.class).to(<port>.class)`.
+=== Implementing Infrastructure Binding
+To implement your outbound ports either by using Jexxa's infrastructure components or any other third party library.
+Jexxa provides strategies for persisting or sending data that can be used in the implementation of your outbound ports.
 
-3. Startup your application using `JexxaMain.run()`. Please note that this method implements a *fail-fast* approach. If this method
-is successfully executed, your application is up and running. In more detail, a connection to all involved technology stacks such as a database or messaging system is established, all required objects are successfully instantiated in order to execute your business logic. In case of any errors, this method will fail.
-
-NOTE: Jexxa provides a reconnection mechanism for all provided driving- and driven-adapter. But this reconnection mechanism is only used after an initial successfully start.
+A simple example can be seen in tutorial https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md#3-implement-the-infrastructure[BookStore].
 
 
 === BoundedContext
@@ -82,10 +78,10 @@ driving adapter.
 2. `BoundedContext.isHealthy()`: Jexxa provides monitoring components which report about the healthy status of the application. A simple example
    could be a `TimerMonitor` that informs about that no requests have been received for a longer period of time.
 
-3. `BoundedContext.diagnostics()`: This method provides human-readable information from the established monitors.
+3. `BoundedContext.diagnostics()`: This method provides human-readable information from the established health indicators.
 
 
-=== Application Configuration
+== Application Configuration
 
 Jexxa allows you to externalize your configuration. This allows you to run the same application in different environments. By default, Jexxa use properties files. In addition, you can set system properties to externalize the configuration. Jexxa considers properties in the following order:
 
@@ -94,7 +90,7 @@ Jexxa allows you to externalize your configuration. This allows you to run the s
 3. Imported properties using parameter `-Dio.jexxa.config.import` from inside or outside the jar archive
 4. Property file `jexxa-application.properties` inside the jar archive
 
-==== Properties files
+=== Properties files
 Jexxa uses a hierarchical approach so that an imported properties file overwrites values in `jexxa-application.properties`. This allows you to make differences between
 production and other environments more transparent.
 
@@ -106,7 +102,7 @@ NOTE: All https://github.com/jexxa-projects/JexxaTutorials[Jexxa tutorials] prov
 
 3. **Local**: Sometimes it is required to run your application without any infrastructure service. For example, this could be required for rapid prototyping.  In this case you can provide a properties file that defines explicit driven adapters or disables the driving adapter.
 
-==== Secrets
+=== Secrets
 One of the most crucial aspects with productive systems is the handling of secrets such as usernames, passwords, or private keys. Jexxa addresses this problem with two approaches.
 
     * First, you can provide all secrets unencrypted as properties which is only recommended for developing on your local machine. For example, you can use `io.jexxa.jdbc.password` to define the password for your JDBC connection.
@@ -116,7 +112,158 @@ One of the most crucial aspects with productive systems is the handling of secre
 
 Jexxa defines some conventions for realizing implicit constructor injection which are described https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di[here]. In addition, driving adapter can define their own conventions to automatically expose ports via a specific technology stack. Within Jexxa, these driving adapter are called `generic driving adapter`. In the rest of this Section you find a description of conventions used by these generic driving adapter.
 
-=== RESTfulRPCAdapter
+=== Package Structure
+Jexxa assumes following package structure by default, which is quite common in DDD community:
+
+*   `applicationservice`: Provides interfaces per application scenario
+*   `domainservice`: Provides
+*   `domain`: Provides the core domain typically grouped by use cases.
+   **   `<use case 1>`: Each use case consists of the related Aggregates, Repository interfaces, ValueObjects and DomainEvents.
+   **   `...`
+   **   `<use case n>`
+
+*   `infrastructure`
+   **   `drivenadapter`: Provides the implementation of outbound ports typically with sub packages for each technology stack such as `messaging` or `persistence`.
+   **   `drivingadapter`: Provides the implementation of so-called port adapters outbound ports typically with sub packages for each technology stack such as `messaging`.
+
+=== Dependency Injection (DI)
+
+Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support _implicit constructor injection_ as explained https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di[here].
+
+
+[cols="1,2,2"]
+[reftext="Table {counter:local-table-number}"]
+.Conventions used to realize implicit constructor injection.
+[[JexxaConventions]]
+|===
+a|Components
+|Conventions
+|Reason
+
+
+a|Inbound Port
+a|
+1. A single public constructor.
+2. Parameters of the constructor must be interfaces of required outbound ports.
+3. A unique implementation of each interface exists in the search scope of Jexxa. If you do not follow the recommended package structure of Jexxa, you have to define it on a package level by method `JexxaMain::addToInfrastructure`.
+
+a|
+1. Avoids ambiguity when choosing the constructor.
+2. Ports should be self-contained as much as possible. Therefore, only outbound ports should be hand in. This ensures that the infrastructure is agnostic to domain logic and knows only the __interfaces__ required by the application core but not any other inner components.
+3. Each package should only include a single implementation of a specific interface to achieve the common-closure principle.
+
+
+a|Outbound Port
+a| Not applicable
+a| Outbound ports are interfaces
+
+
+|Driven Adapter
+
+a| 1. Only a single driven adapter implements a specific outbound port.
+2. One of the following constructors must be available (checked in this order):
+. Public default constructor
+. Public constructor with a single `Properties` attribute
+. Public static factory method that gets no parameters and returns the type of the Outbound Port (and not the type of the driven adapter)
+. Public static factory method with a single `Properties` parameter and returns the type of the outbound port (and not the type of the driven adapter).
+
+a| 1. Avoids ambiguity when choosing a Driven Adapter. At the moment you can only limit the search space of driven adapters on a package level.
+
+2. Using constructors or factory methods do not require any special annotations.
+
+NOTE: A driven adapter gets the same `Properties` object as `JexxaMain`.
+
+
+| Port Adapter
+a|  One of the following constructors must be available (checked in this order):
+
+1. A single public constructor with a single attribute. The attribute is the concrete type of concrete port, such as `MyDrivingAdapter(ConcretePort conrectePort)`.
+
+2. A single public constructor with two attributes. The first attribute is the concrete type of specific port, such as `MyDrivingAdapter(ConcretePort conrectePort, Properties properties)`.
+
+a| 1. A port adapter is tightly coupled to a specific port. Therefore, it gets its concrete type injected.
+
+a| Driving Adapter
+a| One of the following constructors must be available (checked in this order).
+
+. Public Default constructor
+. Public constructor with a single `Properties` attribute
+. Public static factory method without parameters and returns the type of the driving adapter
+. Public static factory method with a single `Properties` parameter and returns the type of the requested driving adapter
+
+
+
+a|
+Using constructors or factory methods do not require any special annotations. Using `Properties` is a standard approach in Java to provide configuration information.
+
+NOTE: A driving adapter gets the same `Properties` object as `JexxaMain`.
+
+
+|===
+
+NOTE: `Constructor vs. static factory method`: In most cases implementing a constructor is the preferred approach when realizing an adapter. Using a static factory method
+is only recommended if the adapter needs special or more complex configuration which should be done before creating the adapter itself.
+
+
+=== JSON representation
+
+==== JSON representation of Exceptions
+
+In case you (de)serialize an exception, Jexxa (de)serialize following information
+
+[cols="1,3"]
+[reftext="Table {counter:local-table-number}"]
+.Describes the JSON representation of an `Exception`.
+[[JSON_Representation_EXCEPTIOn]]
+|===
+a|JSON value
+a|Description
+
+a|`message`
+a| Includes the message text from the exception, if available.
+
+a|`cause`
+a| Includes the message information from including `cause` object, if available.
+|===
+
+NOTE: Jexxa does not serialize any other information such as stack trace due to security reason.
+
+==== JSON representation of Date and Time
+
+JSON does not specify a specific date representation. JavaScript uses https://en.wikipedia.org/wiki/ISO_8601[ISO 8601] string format to encode dates as a string, which is a common way to exchange date information between different systems.
+
+Java8 introduces a new API for date and time for good reason. Even if there is a reason to use the old API you should not use it as part of your exposed API of the application. These two aspects leads to following design decision:
+
+IMPORTANT: `RESTfulRPCAdapter` supports only Java8 Date API and represents a date as JSON-string in https://en.wikipedia.org/wiki/ISO_8601[ISO 8601] string format.
+
+
+[cols="1,3"]
+[reftext="Table {counter:local-table-number}"]
+.Describes the JSON representation of Java date.
+[[JSON_Representation_DATE]]
+|===
+a|Java type
+a|JSON
+
+a|`LocalDate`
+a| Is mapped to a JSON-string representing a date without any time information.
+
+Example: "2020-11-29"
+
+a|`LocalDateTime`
+a| Is mapped to a JSON-string representing a date including timezone information to avoid confusion within a distributed system.
+
+Example: "2020-11-29T06:36:36.978Z"
+
+a|`ZonedDateTime`
+a| Is mapped to a JSON-string representing a date with timezone information.
+
+Example: "2020-11-29T06:36:36.978Z"
+|===
+
+TIP: If ou need some example how `RESTfulRPCAdapter` maps Java's Date and Time API to JSON please see https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java[here].
+
+=== Conventions of RESTfulRPCAdapter
 
 The `RESTfulRPCAdapter` is a simple RPC mechanism utilizing REST. Based on the https://martinfowler.com/articles/richardsonMaturityModel.html[REST maturity model] from Richardson it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST on a higher maturity level.
 
@@ -190,95 +337,6 @@ a|
 
 |===
 
-=== JSON representation
-
-==== JSON representation of Exceptions
-
-In case you (de)serialize an exception, Jexxa (de)serialize following information
-
-[cols="1,3"]
-[reftext="Table {counter:local-table-number}"]
-.Describes the JSON representation of an `Exception`.
-[[JSON_Representation_EXCEPTIOn]]
-|===
-a|JSON value
-a|Description
-
-a|`message`
-a| Includes the message text from the exception, if available.
-
-a|`cause`
-a| Includes the message information from including `cause` object, if available.
-|===
-
-NOTE: Jexxa does not serialize any other information such as stack trace due to security reason.
-
-==== JSON representation of Date and Time
-
-JSON does not specify a specific date representation. JavaScript uses https://en.wikipedia.org/wiki/ISO_8601[ISO 8601] string format to encode dates as a string, which is a common way to exchange date information between different systems.
-
-Java8 introduces a new API for date and time for good reason. Even if there is a reason to use the old API you should not use it as part of your exposed API of the application. These two aspects leads to following design decision:
-
-IMPORTANT: `RESTfulRPCAdapter` supports only Java8 Date API and represents a date as JSON-string in https://en.wikipedia.org/wiki/ISO_8601[ISO 8601] string format.
-
-
-[cols="1,3"]
-[reftext="Table {counter:local-table-number}"]
-.Describes the JSON representation of Java date.
-[[JSON_Representation_DATE]]
-|===
-a|Java type
-a|JSON
-
-a|`LocalDate`
-a| Is mapped to a JSON-string representing a date without any time information.
-
-Example: "2020-11-29"
-
-a|`LocalDateTime`
-a| Is mapped to a JSON-string representing a date including timezone information to avoid confusion within a distributed system.
-
-Example: "2020-11-29T06:36:36.978Z"
-
-a|`ZonedDateTime`
-a| Is mapped to a JSON-string representing a date with timezone information.
-
-Example: "2020-11-29T06:36:36.978Z"
-|===
-
-TIP: If ou need some example how `RESTfulRPCAdapter` maps Java's Date and Time API to JSON please see https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java[here].
-
-=== JMXAdapter
-
-The `JMXAdapter` allows to control your application and access all objects that are registered.
-
-
-[cols="1,3"]
-[reftext="Table {counter:local-table-number}"]
-.Describes the conventions used in `JMXAdapter`.
-[[JMXAdapterConvention]]
-|===
-a|*JMXAdapter*
-a|*Convention*
-
-a| Methods
-a| * Method must be `public`
-* Method must not be `static`
-* Methods from base class `Object` are not exposed
-
-a| Method attributes
-a|
-* All attributes must be sent as Json object
-* The `MBeanParameterInfo` includes a Json template for each attribute in its description section. The placeholder for the
-value is marked by `<TYPE of value>`. +
-For example, the Json template for `LocalTime` looks as follows: +
-`{"hour":"<byte>","minute":"<byte>","second":"<byte>","nano":"<int>"}`
-
-a| Return values
-a| A return value is sent as Json object
-
-
-|===
 
 == Configuration
 
@@ -318,6 +376,20 @@ a| A required parameter which must be either `TOPIC` or `QUEUE` depending on the
 a|`selector`
 a| An optional parameter which defines a message selector to filter messages.
 
+a|`sharedSubscriptionName`
+a| Defines name of a shared subscription so that multiple instances of your application can process incoming requests
+
+a|`durable`
+a| Defines if the topic or queue remains if the application is not running.
+
 |===
 
 TIP: Please check the tutorial https://github.com/jexxa-projects/JexxaTutorials/tree/main/TimeService[`TimeService`] for an example.
+
+==== Predefined `MessageListener`
+
+In addition, Jexxa provides following predefined `MessageListener`for your convenience:
+
+* `JSONMessageListener`: Can be used to receive JSON data. The base class converts the content of a received text- or byte message into JSON and provides additional convenience methods.
+* `TypedMessageListener`: Can be used to automatically deserialize received JSON data into a Java object that is defined within your application.
+* `IdempotentListener`: Ensures that duplicate messages are not forwarded to your application core. For this purpose, the message header must include a unique ID as string. By default, this listener uses the field `domain_event_id` which is also used by the TransactionOutboxSender.

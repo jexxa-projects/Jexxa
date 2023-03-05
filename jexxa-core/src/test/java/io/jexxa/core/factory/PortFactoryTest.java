@@ -1,10 +1,10 @@
 package io.jexxa.core.factory;
 
 
-import io.jexxa.application.applicationservice.ApplicationServiceWithDrivenAdapters;
-import io.jexxa.application.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
-import io.jexxa.application.infrastructure.drivingadapter.portadapter.PortAdapter;
-import io.jexxa.application.infrastructure.drivingadapter.portadapter.ThrowingPortAdapter;
+import io.jexxa.testapplication.applicationservice.ApplicationServiceWithDrivenAdapters;
+import io.jexxa.testapplication.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
+import io.jexxa.testapplication.infrastructure.drivingadapter.portadapter.PortAdapter;
+import io.jexxa.testapplication.infrastructure.drivingadapter.portadapter.ThrowingPortAdapter;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;

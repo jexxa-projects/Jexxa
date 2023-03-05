@@ -1,12 +1,12 @@
 package io.jexxa.core;
 
 import io.jexxa.adapterapi.invocation.InvocationManager;
-import io.jexxa.application.JexxaTestApplication;
-import io.jexxa.application.annotation.ValidApplicationService;
-import io.jexxa.application.applicationservice.IncrementApplicationService;
-import io.jexxa.application.applicationservice.SimpleApplicationService;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.RepositoryManager;
-import io.jexxa.infrastructure.drivenadapterstrategy.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.testapplication.JexxaTestApplication;
+import io.jexxa.testapplication.annotation.ValidApplicationService;
+import io.jexxa.testapplication.applicationservice.IncrementApplicationService;
+import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
+import io.jexxa.infrastructure.RepositoryManager;
+import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
