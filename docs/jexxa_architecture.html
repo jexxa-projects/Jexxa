@@ -781,9 +781,9 @@ especially for the training of new developers. As an example I will use the impl
 </div>
 <div id="JexxaComponents" class="imageblock text-center">
 <div class="content">
-<img src="images/JexxaComponents.svg" alt="JexxaComponents" width="813" height="713">
+<img src="images/JexxaComponents.svg" alt="JexxaComponents" width="869" height="776">
 </div>
-<div class="title">Figure 1. This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages  labeled with <code>&lt;&lt;Jexxa&gt;&gt;</code> and light grey background are provided by Jexxa. Packages labeled with <code>&lt;&lt;Application&gt;&gt;</code> have to be implemented.</div>
+<div class="title">Figure 1. This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages  labeled with <code>&lt;&lt;Jexxa&gt;&gt;</code> and light grey background are provided by Jexxa. Packages labeled with <code>&lt;&lt;Application&gt;&gt;</code> have to be implemented. As you can see, you can define one very fine-grained level which parts of Jexxa you want to use.</div>
 </div>
 <div class="paragraph">
 <p><a href="#JexxaPackagetDescription">Table 1</a> describes the packages of an application based on Jexxa.</p>
@@ -1035,186 +1035,7 @@ especially for the training of new developers. As an example I will use the impl
 </ul>
 </div>
 <div class="paragraph">
-<p>Within Jexxa we use conventions described in <a href="#JexxaConventions">Table 6</a> to explicitly limit the direction of dependencies as described in <a href="#JexxaComponents">Figure 1</a>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.</p>
-</div>
-<table id="JexxaConventions" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. Conventions used to realize implicit constructor injection.</caption>
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 40%;">
-<col style="width: 40%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Components</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Conventions</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Reason</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Driving Adapter</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>One of the following constructors must be available (checked in this order).</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Public Default constructor</p>
-</li>
-<li>
-<p>Public constructor with a single <code>Properties</code> attribute</p>
-</li>
-<li>
-<p>Public static factory method without parameters and returns the type of the driving adapter</p>
-</li>
-<li>
-<p>Public static factory method with a single <code>Properties</code> parameter and returns the type of the requested driving adapter</p>
-</li>
-</ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Using constructors or factory methods do not require any special annotations. Using <code>Properties</code> is a standard approach in Java to provide configuration information.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title=":information_source:"></i>
-</td>
-<td class="content">
-A driving adapter gets the same <code>Properties</code> object as <code>JexxaMain</code>.
-</td>
-</tr>
-</table>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Inbound Port</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>A single public constructor.</p>
-</li>
-<li>
-<p>Parameters of the constructor must be interfaces of required outbound ports.</p>
-</li>
-<li>
-<p>A unique implementation of each interface exists in the search scope of Jexxa. This scope is defined on a package level by method <code>JexxaMain::addToInfrastructure</code>.</p>
-</li>
-</ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Avoids ambiguity when choosing the constructor.</p>
-</li>
-<li>
-<p>Ports should be self-contained as much as possible. Therefore, only outbound ports should be hand in. This ensures that the infrastructure is agnostic to domain logic and knows only the <em>interfaces</em> required by the application core but not any other inner components.</p>
-</li>
-<li>
-<p>Each package should only include a single implementation of a specific interface to achieve the common-closure principle.</p>
-</li>
-</ol>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Outbound Port</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>None</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>None</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapter</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Only a single driven adapter implements a specific outbound port.</p>
-</li>
-<li>
-<p>One of the following constructors must be available (checked in this order):</p>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Public default constructor</p>
-</li>
-<li>
-<p>Public constructor with a single <code>Properties</code> attribute</p>
-</li>
-<li>
-<p>Public static factory method that gets no parameters and returns the type of the Outbound Port (and not the type of the driven adapter)</p>
-</li>
-<li>
-<p>Public static factory method with a single <code>Properties</code> parameter and returns the type of the outbound port (and not the type of the driven adapter).</p>
-</li>
-</ol>
-</div>
-</li>
-</ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Avoids ambiguity when choosing a Driven Adapter. At the moment you can only limit the search space of driven adapters on a package level.</p>
-</li>
-<li>
-<p>Using constructors or factory methods do not require any special annotations.</p>
-</li>
-</ol>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title=":information_source:"></i>
-</td>
-<td class="content">
-A driven adapter gets the same <code>Properties</code> object as <code>JexxaMain</code>.
-</td>
-</tr>
-</table>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Port Adapter</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>A single public constructor with a single attribute. The attribute is the concrete type of specific port.</p>
-</li>
-</ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>A port adapter is tightly coupled to a specific port. Therefore, it gets its concrete type injected.</p>
-</li>
-</ol>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title=":information_source:"></i>
-</td>
-<td class="content">
-<code>Constructor vs. static factory method</code>: In most cases implementing a constructor is the preferred approach when realizing an adapter. Using a static factory method
-is only recommended if the adapter needs special or more complex configuration which should be done before creating the adapter itself.
-</td>
-</tr>
-</table>
+<p>Within Jexxa we use conventions described in <a href="#JexxaConventions">[JexxaConventions]</a> to explicitly limit the direction of dependencies as described in <a href="#JexxaComponents">Figure 1</a>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1250,10 +1071,10 @@ is only recommended if the adapter needs special or more complex configuration w
 <div class="sect3">
 <h4 id="_allocation_scope_of_dependencies"><a class="anchor" href="#_allocation_scope_of_dependencies"></a>5.2.3. Allocation scope of Dependencies</h4>
 <div class="paragraph">
-<p>The allocation scope defines how many instances of components are created by Jexxa. This is described in <a href="#JexxaScope">Table 7</a>.</p>
+<p>The allocation scope defines how many instances of components are created by Jexxa. This is described in <a href="#JexxaScope">Table 6</a>.</p>
 </div>
 <table id="JexxaScope" class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. Allocation scope for the components in a Jexxa application.</caption>
+<caption class="title">Table 6. Allocation scope for the components in a Jexxa application.</caption>
 <colgroup>
 <col style="width: 20%;">
 <col style="width: 40%;">
@@ -1310,7 +1131,7 @@ In case you need a strict control how objects are exposed for example to differe
 <p>The singleton scope supports designing stateless ports which is in general recommended.</p>
 </li>
 <li>
-<p>This is only recommended if your application core cannot fulfill the conventions of Jexxa (see <a href="#JexxaConventions">Table 6</a>).</p>
+<p>This is only recommended if your application core cannot fulfill the conventions of Jexxa (see <a href="#JexxaConventions">[JexxaConventions]</a>).</p>
 </li>
 </ol>
 </div></div></td>
@@ -1373,7 +1194,7 @@ application scenarios Jexxa provides the <code>TransactionalOutboxSender</code>.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-03-03 19:38:13 +0100
+Last updated 2023-03-05 09:35:30 +0100
 </div>
 </div>
 </body>

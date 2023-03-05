@@ -150,7 +150,7 @@ IMPORTANT: <<JexxaComponents>> shows that you can focus on your application core
 
 [plantuml, images/JexxaComponents, svg, align=center]
 [reftext="Figure {counter:local-figure-number}"]
-.This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages  labeled with `\<<Jexxa>>` and light grey background are provided by Jexxa. Packages labeled with `\<<Application>>` have to be implemented.
+.This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages  labeled with `\<<Jexxa>>` and light grey background are provided by Jexxa. Packages labeled with `\<<Application>>` have to be implemented. As you can see, you can define one very fine-grained level which parts of Jexxa you want to use.
 [[JexxaComponents]]
 ....
 @startuml
@@ -158,47 +158,48 @@ skinparam PackagePadding 20
 skinparam linetype ortho
 
 
-package JexxaCore <<Jexxa>> #DDDDDD {
-[Convention] <<Inversion of Control>>
-[Core] <<Jexxa API>>
-[Factory] <<Inversion of Control>>
+together {
+    package JexxaCore <<Jexxa>> #DDDDDD {
+    [Core] <<Jexxa API>>
+    }
+    package DrivingAdapter <<Jexxa>> #DDDDDD {
+    [Generic Driving Adapters]  <<Driving Adapter>>
+    [Specific Driving Adapters] <<Driving Adapter>>
+    }
+
+    package JexxaInfrastructure <<Jexxa>> #DDDDDD {
+    [Infrastructure Strategies] <<Infrastructure Pattern>>
+    }
 }
 
-package JexxaInfrastructure <<Jexxa>> #DDDDDD {
-[Generic Driving Adapters]  <<Driving Adapter>>
-[Specific Driving Adapters] <<Driving Adapter>>
-[Infrastructure Strategies] <<Application Infrastructure Pattern>>
-}
 
-package ApplicationCore <<Application>> {
-[Inbound Ports] <<Port>>
-[Outbound Ports] <<Port>>
-}
+    package ApplicationCore <<Application>> {
+    [Inbound Ports] <<Port>>
+    [Outbound Ports] <<Port>>
+    }
 
-package Infrastructure <<Application>> {
-[Port Adapters] <<Driving Adapter>>
-[Driven Adapters] <<Driven Adapter>>
-}
+    package Infrastructure <<Application>> {
+    [Port Adapters] <<Driving Adapter>>
+    [Driven Adapters] <<Driven Adapter>>
+    }
 
-[Specific Driving Adapters] o-right-> [Port Adapters]
-[Generic Driving Adapters] o-right-> [Inbound Ports]
+[Specific Driving Adapters] o.right. [Port Adapters] : uses
+[Generic Driving Adapters] o.right. [Inbound Ports]  : uses
 
 [Port Adapters] *-right-> [Inbound Ports]
 [Inbound Ports] o-down-> [Outbound Ports]
-[Outbound Ports] <|.. [Driven Adapters]
-[Driven Adapters] o-left-[Infrastructure Strategies]
+[Outbound Ports] <|-- [Driven Adapters]
+[Infrastructure Strategies]  o.right. [Driven Adapters] : uses
 
-[Factory] ..> Infrastructure : create
-[Factory] ..> ApplicationCore : create
-[Factory] ..> JexxaInfrastructure : create
+[Core] ..> DrivingAdapter : create
+[Core] ..> Infrastructure : create
+[Core] ..> ApplicationCore : create
 
-[Generic Driving Adapters] -[hidden]- [Port Adapters]
 [Generic Driving Adapters] -[hidden]- [Specific Driving Adapters]
+[Generic Driving Adapters] -[hidden]- [Inbound Ports]
 [Specific Driving Adapters] -[hidden]- [Infrastructure Strategies]
+[Specific Driving Adapters] -[hidden]- [Port Adapters]
 [Port Adapters] -[hidden]- [Driven Adapters]
-
-[Core] -left-> [Factory]
-[Core] -up-> [Convention]
 
 @enduml
 ....
@@ -359,73 +360,6 @@ Jexxa provides a simple DI mechanism to instantiate inbound ports of a business 
 * No special annotations or configuration files are required so that the application core remains completely decoupled from Jexxa.
 
 Within Jexxa we use conventions described in <<JexxaConventions>> to explicitly limit the direction of dependencies as described in <<JexxaComponents>>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.
-
-[cols="1,2,2"]
-[reftext="Table {counter:local-table-number}"]
-.Conventions used to realize implicit constructor injection.
-[[JexxaConventions]]
-|===
-a|Components
-|Conventions
-|Reason
-
-
-a| Driving Adapter
-a| One of the following constructors must be available (checked in this order).
-
-. Public Default constructor
-. Public constructor with a single `Properties` attribute
-. Public static factory method without parameters and returns the type of the driving adapter
-. Public static factory method with a single `Properties` parameter and returns the type of the requested driving adapter
-
-
-
-a|
-Using constructors or factory methods do not require any special annotations. Using `Properties` is a standard approach in Java to provide configuration information.
-
-NOTE: A driving adapter gets the same `Properties` object as `JexxaMain`.
-
-a|Inbound Port
-a|
-1. A single public constructor.
-2. Parameters of the constructor must be interfaces of required outbound ports.
-3. A unique implementation of each interface exists in the search scope of Jexxa. This scope is defined on a package level by method `JexxaMain::addToInfrastructure`.
-
-a|
-1. Avoids ambiguity when choosing the constructor.
-2. Ports should be self-contained as much as possible. Therefore, only outbound ports should be hand in. This ensures that the infrastructure is agnostic to domain logic and knows only the __interfaces__ required by the application core but not any other inner components.
-3. Each package should only include a single implementation of a specific interface to achieve the common-closure principle.
-
-
-a|Outbound Port
-a| None
-a| None
-
-
-|Driven Adapter
-
-a| 1. Only a single driven adapter implements a specific outbound port.
-2. One of the following constructors must be available (checked in this order):
-. Public default constructor
-. Public constructor with a single `Properties` attribute
-. Public static factory method that gets no parameters and returns the type of the Outbound Port (and not the type of the driven adapter)
-. Public static factory method with a single `Properties` parameter and returns the type of the outbound port (and not the type of the driven adapter).
-
-a| 1. Avoids ambiguity when choosing a Driven Adapter. At the moment you can only limit the search space of driven adapters on a package level.
-
-2. Using constructors or factory methods do not require any special annotations.
-
-NOTE: A driven adapter gets the same `Properties` object as `JexxaMain`.
-
-
-| Port Adapter
-a| 1. A single public constructor with a single attribute. The attribute is the concrete type of specific port.
-a| 1. A port adapter is tightly coupled to a specific port. Therefore, it gets its concrete type injected.
-
-|===
-
-NOTE: `Constructor vs. static factory method`: In most cases implementing a constructor is the preferred approach when realizing an adapter. Using a static factory method
-is only recommended if the adapter needs special or more complex configuration which should be done before creating the adapter itself.
 
 === Scope
 
