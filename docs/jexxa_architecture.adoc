@@ -156,12 +156,13 @@ IMPORTANT: <<JexxaComponents>> shows that you can focus on your application core
 @startuml
 skinparam PackagePadding 20
 skinparam linetype ortho
+skinparam packageStyle frame
 
+package JexxaCore <<Jexxa>> #DDDDDD {
+[Core] <<Jexxa API>>
+}
 
 together {
-    package JexxaCore <<Jexxa>> #DDDDDD {
-    [Core] <<Jexxa API>>
-    }
     package DrivingAdapter <<Jexxa>> #DDDDDD {
     [Generic Driving Adapters]  <<Driving Adapter>>
     [Specific Driving Adapters] <<Driving Adapter>>
@@ -200,6 +201,7 @@ together {
 [Specific Driving Adapters] -[hidden]- [Infrastructure Strategies]
 [Specific Driving Adapters] -[hidden]- [Port Adapters]
 [Port Adapters] -[hidden]- [Driven Adapters]
+
 
 @enduml
 ....
