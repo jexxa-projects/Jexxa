@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[6.0.1] - 2023-03-08
+### Fixed 
+- [#208] Architecture tests know handles anonymous inner classes correctly 
+- Updated dependencies
+
 ## \[6.0.0] - 2023-03-05
 ### Changed - Important Information!
 
@@ -15,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
  
 - [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/outbox/TransactionalOutboxSender.java) is now used by default for sending messages.   
 
+- Renamed `JexxaLogger` &rarr; `SLF4JLogger` to clarify its responsibility.
 - Renamed `Monitors` &rarr; `HealthIndicators` to clarify its responsibility. 
 - Renamed `TimerMonitor` &rarr; `TimeoutIndicator` to clarify its responsibility.
 
@@ -35,6 +41,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - Jexxa-Web: Removed deprecated static properties 
 
 ### Added
+- `IdempotentListener`: Discards duplicate messages based on a unique key in message header
 - `ObjectStore`: creates a combined index for all values that can be searched for.   
 
 ### Fixed
