@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[6.0.2] - 2023-03-08
+### Fixed
+- Fixed Dependency Injection for port adapters that get an additional Properties as 2nd argument, such as IdempotentListener 
+
 ## \[6.0.1] - 2023-03-08
 ### Fixed 
 - [#208] Architecture tests know handles anonymous inner classes correctly 
