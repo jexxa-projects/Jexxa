@@ -54,6 +54,7 @@ public class PatternLanguage extends ProjectContent {
     {
         var annotationRule = classes()
                 .that().resideInAnyPackage(APPLICATIONSERVICE)
+                .and().areNotAnonymousClasses()
                 .should().beAnnotatedWith(ApplicationService.class)
                 .allowEmptyShould(true);
 
@@ -63,6 +64,7 @@ public class PatternLanguage extends ProjectContent {
     protected void validateDomainService()
     {
         var annotationRule = classes().that().resideInAnyPackage(DOMAIN_SERVICE)
+                .and().areNotAnonymousClasses()
                 .should().beAnnotatedWith(InfrastructureService.class)
                 .orShould().beAnnotatedWith(DomainService.class)
                 .allowEmptyShould(true);

@@ -1,11 +1,11 @@
-package io.jexxa.jexxatest.architecture.validapplication.applicationservice;
+package io.jexxa.jexxatest.architecture.validapplication.domainservice;
 
-import io.jexxa.addend.applicationcore.ApplicationService;
+import io.jexxa.addend.applicationcore.DomainService;
 import io.jexxa.jexxatest.architecture.validapplication.domain.valid.ValidEnum;
 
 @SuppressWarnings("unused")
-@ApplicationService
-public class TestApplicationService
+@DomainService
+public class TestDomainService
 {
     //Using enum in switch statement creates anonymous class
     public ValidEnum useEnum(ValidEnum validEnum)
