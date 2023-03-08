@@ -119,15 +119,26 @@ public class PortFactory
      */
     public <T> T newPortAdapterOf(Class<T> portAdapter, Properties properties)
     {
-        var portInstance = getInstanceOf(getPort(portAdapter), properties);
+        var inboundPort = getInstanceOf(getPort(portAdapter), properties);
 
         try {
-            var newPortAdapter = ClassFactory.newInstanceOf(portAdapter, new Object[]{portInstance})
-                .orElseThrow(() -> new MissingAdapterException(portInstance.getClass(), adapterFactory));
-            portAdapterPool.add(newPortAdapter);
-            return newPortAdapter;
-        }
-            catch (ReflectiveOperationException e)
+            //1. Try to create a port Adapter with inboundPort
+            var newPortAdapter = ClassFactory.newInstanceOf(portAdapter, new Object[]{inboundPort});
+
+            //2. Try to create a port Adapter with inboundPort and Propertes
+            if (newPortAdapter.isEmpty())
+            {
+                newPortAdapter = ClassFactory.newInstanceOf(portAdapter, new Object[]{inboundPort, properties});
+            }
+
+            if (newPortAdapter.isEmpty())
+            {
+                throw new MissingAdapterException(portAdapter, adapterFactory);
+            }
+
+            portAdapterPool.add(newPortAdapter.get());
+            return newPortAdapter.get();
+        } catch (ReflectiveOperationException e)
         {
             throw new InvalidPortConfigurationException(portAdapter, e);
         }
@@ -214,7 +225,7 @@ public class PortFactory
     private <T> Class<?> getPort(Class<T> portAdapter)
     {
         return Arrays.stream(portAdapter.getConstructors())
-                .filter(constructor -> constructor.getParameterCount() == 1)
+                .filter(constructor -> constructor.getParameterCount() == 1 || constructor.getParameterCount() == 2)
                 .filter(constructor -> !constructor.getParameterTypes()[0].isInterface())
                 .findFirst()
                 .<Class<?>>map(constructor -> constructor.getParameterTypes()[0])

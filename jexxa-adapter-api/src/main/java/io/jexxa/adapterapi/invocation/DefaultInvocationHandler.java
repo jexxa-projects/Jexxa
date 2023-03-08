@@ -24,7 +24,7 @@ public class DefaultInvocationHandler implements AroundInterceptor, BeforeInterc
     private final List<AfterInterceptor> afterList = new ArrayList<>();
     private final List<AroundInterceptor> aroundList = new ArrayList<>();
 
-    private static final Object GLOBAL_SYNCHRONIZATION_OBJECT = new Object();
+    public static final Object GLOBAL_SYNCHRONIZATION_OBJECT = new Object();
 
     @Override
     public void before(InvocationContext invocationContext)

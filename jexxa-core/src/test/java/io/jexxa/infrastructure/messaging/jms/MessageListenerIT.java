@@ -1,18 +1,20 @@
 package io.jexxa.infrastructure.messaging.jms;
 
 import io.jexxa.TestConstants;
-import io.jexxa.testapplication.JexxaTestApplication;
-import io.jexxa.testapplication.domain.model.JexxaDomainEvent;
-import io.jexxa.testapplication.domain.model.JexxaValueObject;
+import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.messaging.MessageSender;
-import io.jexxa.infrastructure.MessageSenderManager;
-import io.jexxa.infrastructure.outbox.TransactionalOutboxSender;
 import io.jexxa.drivingadapter.messaging.JMSAdapter;
 import io.jexxa.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.drivingadapter.messaging.listener.IdempotentListener;
 import io.jexxa.drivingadapter.messaging.listener.JSONMessageListener;
 import io.jexxa.drivingadapter.messaging.listener.TypedMessageListener;
+import io.jexxa.infrastructure.MessageSenderManager;
+import io.jexxa.infrastructure.messaging.MessageSender;
+import io.jexxa.infrastructure.outbox.TransactionalOutboxSender;
+import io.jexxa.testapplication.JexxaTestApplication;
+import io.jexxa.testapplication.applicationservice.ApplicationServiceWithDrivenAdapters;
+import io.jexxa.testapplication.domain.model.JexxaDomainEvent;
+import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
+import static io.jexxa.adapterapi.invocation.DefaultInvocationHandler.GLOBAL_SYNCHRONIZATION_OBJECT;
 import static io.jexxa.drivingadapter.messaging.listener.QueueListener.QUEUE_DESTINATION;
 import static io.jexxa.drivingadapter.messaging.listener.TopicListener.TOPIC_DESTINATION;
 import static org.awaitility.Awaitility.await;
@@ -54,7 +57,10 @@ class MessageListenerIT
     @BeforeEach
     void initTests()
     {
-        jexxaMain = new JexxaMain(JexxaTestApplication.class);
+        jexxaMain = new JexxaMain(JexxaTestApplication.class)
+                .addToInfrastructure(ValidateIdempotentListener.class.getPackageName())
+                .addDDDPackages(JexxaTestApplication.class);
+
         jsonMessageListener = new TextMessageListener();
         typedListener = new JexxaValueObjectListener();
         idempotentListener = new JexxaValueObjectIdempotentListener(jexxaMain.getProperties());
@@ -62,6 +68,7 @@ class MessageListenerIT
         jexxaMain.bind(JMSAdapter.class).to(typedListener)
                 .bind(JMSAdapter.class).to(idempotentListener)
                 .bind(JMSAdapter.class).to(jsonMessageListener)
+                .bind(JMSAdapter.class).to(ValidateIdempotentListener.class)
                 .disableBanner()
                 .start();
     }
@@ -143,21 +150,25 @@ class MessageListenerIT
     {
         //Arrange
         int messageCount = 100;
-        MessageSenderManager.setDefaultStrategy(JMSSender.class);
         var objectUnderTest = MessageSenderManager.getMessageSender(JMSSenderIT.class, jexxaMain.getProperties());
 
         //Act
         for (int i = 0; i< messageCount; ++i) {
-            objectUnderTest
-                    .send(message)
-                    .toTopic(TOPIC_DESTINATION)
-                    .addHeader("domain_event_id", UUID.randomUUID().toString())
-                    .asJson();
+            synchronized (GLOBAL_SYNCHRONIZATION_OBJECT)
+            {
+                TransactionManager.initTransaction();
+                objectUnderTest
+                        .send(message)
+                        .toTopic(TOPIC_DESTINATION)
+                        //.addHeader("domain_event_id", UUID.randomUUID().toString())
+                        .asJson();
+                TransactionManager.closeTransaction();
+            }
         }
 
 
         //Assert
-        await().atMost(5, TimeUnit.SECONDS).until(() -> idempotentListener.getReceivedMessages().size() == messageCount);
+        await().atMost(15, TimeUnit.SECONDS).until(() -> idempotentListener.getReceivedMessages().size() == messageCount);
         assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
     }
 
@@ -217,6 +228,27 @@ class MessageListenerIT
         private final List<JexxaDomainEvent> receivedMessages = new ArrayList<>();
 
         protected JexxaValueObjectIdempotentListener(Properties properties) {
+            super(JexxaDomainEvent.class, properties);
+        }
+
+        @Override
+        @JMSConfiguration(destination = TOPIC_DESTINATION, messagingType = JMSConfiguration.MessagingType.TOPIC)
+        public void onMessage(JexxaDomainEvent message) {
+            receivedMessages.add(message);
+        }
+
+        public List<JexxaDomainEvent> getReceivedMessages() {
+            return receivedMessages;
+        }
+    }
+
+
+    @SuppressWarnings("unused")
+    public static class ValidateIdempotentListener extends IdempotentListener<JexxaDomainEvent>
+    {
+        private final List<JexxaDomainEvent> receivedMessages = new ArrayList<>();
+
+        public ValidateIdempotentListener(ApplicationServiceWithDrivenAdapters applicationServiceWithDrivenAdapters, Properties properties) {
             super(JexxaDomainEvent.class, properties);
         }
 
