@@ -19,15 +19,7 @@ public class JMSConnection {
         {
             var initialContext = new InitialContext(properties);
             var connectionFactory = (ConnectionFactory) initialContext.lookup("ConnectionFactory");
-            var connection = connectionFactory.createConnection(username.getSecret(), password.getSecret());
-            if (properties.containsKey(JMSProperties.JNDI_CLIENT_ID) &&
-                    properties.getProperty(JMSProperties.JNDI_CLIENT_ID) != null &&
-                    !properties.getProperty(JMSProperties.JNDI_CLIENT_ID).isEmpty() )
-            {
-                connection.setClientID(properties.getProperty(JMSProperties.JNDI_CLIENT_ID));
-            }
-
-            return connection;
+            return connectionFactory.createConnection(username.getSecret(), password.getSecret());
         }
         catch (NamingException e)
         {

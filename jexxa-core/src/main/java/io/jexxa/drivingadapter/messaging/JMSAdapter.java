@@ -232,6 +232,12 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
         try
         {
             connection = createConnection(properties);
+            if (properties.containsKey(JMSProperties.JNDI_CLIENT_ID) &&
+                    properties.getProperty(JMSProperties.JNDI_CLIENT_ID) != null &&
+                    !properties.getProperty(JMSProperties.JNDI_CLIENT_ID).isEmpty() )
+            {
+                connection.setClientID(properties.getProperty(JMSProperties.JNDI_CLIENT_ID));
+            }
 
             // NOTE: The exception handler is created after the session is successfully created
             connection.setExceptionListener(exception -> {
