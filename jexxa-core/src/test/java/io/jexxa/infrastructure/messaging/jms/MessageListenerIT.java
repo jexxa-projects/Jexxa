@@ -12,7 +12,6 @@ import io.jexxa.infrastructure.MessageSenderManager;
 import io.jexxa.infrastructure.messaging.MessageSender;
 import io.jexxa.infrastructure.outbox.TransactionalOutboxSender;
 import io.jexxa.testapplication.JexxaTestApplication;
-import io.jexxa.testapplication.applicationservice.ApplicationServiceWithDrivenAdapters;
 import io.jexxa.testapplication.domain.model.JexxaDomainEvent;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,9 +56,7 @@ class MessageListenerIT
     @BeforeEach
     void initTests()
     {
-        jexxaMain = new JexxaMain(JexxaTestApplication.class)
-                .addToInfrastructure(ValidateIdempotentListener.class.getPackageName())
-                .addDDDPackages(JexxaTestApplication.class);
+        jexxaMain = new JexxaMain(JexxaTestApplication.class);
 
         jsonMessageListener = new TextMessageListener();
         typedListener = new JexxaValueObjectListener();
@@ -68,7 +65,6 @@ class MessageListenerIT
         jexxaMain.bind(JMSAdapter.class).to(typedListener)
                 .bind(JMSAdapter.class).to(idempotentListener)
                 .bind(JMSAdapter.class).to(jsonMessageListener)
-                .bind(JMSAdapter.class).to(ValidateIdempotentListener.class)
                 .disableBanner()
                 .start();
     }
@@ -228,27 +224,6 @@ class MessageListenerIT
         private final List<JexxaDomainEvent> receivedMessages = new ArrayList<>();
 
         protected JexxaValueObjectIdempotentListener(Properties properties) {
-            super(JexxaDomainEvent.class, properties);
-        }
-
-        @Override
-        @JMSConfiguration(destination = TOPIC_DESTINATION, messagingType = JMSConfiguration.MessagingType.TOPIC)
-        public void onMessage(JexxaDomainEvent message) {
-            receivedMessages.add(message);
-        }
-
-        public List<JexxaDomainEvent> getReceivedMessages() {
-            return receivedMessages;
-        }
-    }
-
-
-    @SuppressWarnings("unused")
-    public static class ValidateIdempotentListener extends IdempotentListener<JexxaDomainEvent>
-    {
-        private final List<JexxaDomainEvent> receivedMessages = new ArrayList<>();
-
-        public ValidateIdempotentListener(ApplicationServiceWithDrivenAdapters applicationServiceWithDrivenAdapters, Properties properties) {
             super(JexxaDomainEvent.class, properties);
         }
 

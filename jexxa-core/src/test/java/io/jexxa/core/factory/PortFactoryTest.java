@@ -4,6 +4,7 @@ package io.jexxa.core.factory;
 import io.jexxa.testapplication.applicationservice.ApplicationServiceWithDrivenAdapters;
 import io.jexxa.testapplication.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
 import io.jexxa.testapplication.infrastructure.drivingadapter.portadapter.PortAdapter;
+import io.jexxa.testapplication.infrastructure.drivingadapter.portadapter.PortAdapterWithProperties;
 import io.jexxa.testapplication.infrastructure.drivingadapter.portadapter.ThrowingPortAdapter;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -119,7 +120,7 @@ class PortFactoryTest
 
 
     @Test
-    void getInstanceOfPortAdapter()
+    void getPortAdapter()
     {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
@@ -128,8 +129,8 @@ class PortFactoryTest
                 acceptPackage(JEXXA_APPLICATION_SERVICE);
 
         //Act
-        var first = objectUnderTest.newPortAdapterOf(PortAdapter.class, new Properties());
-        var second = objectUnderTest.newPortAdapterOf(PortAdapter.class, new Properties());
+        var first = objectUnderTest.getPortAdapterOf(PortAdapter.class, new Properties());
+        var second = objectUnderTest.getPortAdapterOf(PortAdapter.class, new Properties());
 
         //Assert that first and second adapter are equal
         assertNotNull(first);
@@ -138,7 +139,7 @@ class PortFactoryTest
     }
 
     @Test
-    void getInstanceOfInvalidPortAdapter()
+    void getInvalidPortAdapter()
     {
         //Arrange
         var drivenAdapterFactory = new AdapterFactory().
@@ -151,5 +152,20 @@ class PortFactoryTest
                 () -> objectUnderTest.newPortAdapterOf(ThrowingPortAdapter.class, new Properties()) );
 
         assertNotNull(exception.getMessage());
+    }
+
+    @Test
+    void getPortAdapterWithProperties()
+    {
+        //Arrange
+        var drivenAdapterFactory = new AdapterFactory().
+                acceptPackage(JEXXA_DRIVEN_ADAPTER);
+        var objectUnderTest = new PortFactory(drivenAdapterFactory).
+                acceptPackage(JEXXA_APPLICATION_SERVICE);
+
+        //Act / Assert
+        var result = objectUnderTest.getPortAdapterOf(PortAdapterWithProperties.class, new Properties());
+
+        assertNotNull(result);
     }
 }
