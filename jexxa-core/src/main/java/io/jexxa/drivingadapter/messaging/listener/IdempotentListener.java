@@ -17,7 +17,7 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
     private static final String DEFAULT_MESSAGE_ID = "domain_event_id";
     private final IRepository<JexxaInboundMessage, ReceivingID> messageRepository;
     private final Class<T> clazz;
-    private Instant lastCleanupTime;
+    private Instant oldestMessage;
 
     protected IdempotentListener(Class<T> clazz, Properties properties)
     {
@@ -88,22 +88,46 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
 
     private void removeOldMessages()
     {
-        //Remove old messages once per day
-        if (lastCleanupTime != null) {
-            var durationSinceLastCheck = Duration.between(lastCleanupTime, Instant.now() );
-            if (durationSinceLastCheck.compareTo(Duration.ofDays(1))<0) {
-                return;
-            }
+        if (!expiredMessageAvailable(oldestMessage))
+        {
+            return;
         }
 
         messageRepository.get().stream()
-                .filter(element -> Duration.between( element.processingTime, Instant.now())
-                        .compareTo(getStorageDuration()) >= 0)
-                .forEach(element -> messageRepository.remove(element.receivingID));
+                .filter(this::toBeRemoved)
+                .forEach(this::removeMessage);
 
-        lastCleanupTime = Instant.now();
+        oldestMessage = messageRepository.get()
+                .stream()
+                .map(JexxaInboundMessage::processingTime)
+                .sorted()
+                .findFirst()
+                .orElse(null);
     }
 
-    record JexxaInboundMessage(ReceivingID receivingID, Instant processingTime){}
+    private boolean expiredMessageAvailable(Instant oldestMessage)
+    {
+        if (oldestMessage == null)
+        {
+            return true;
+        }
+
+        return Duration.between( oldestMessage, Instant.now() ).compareTo(getStorageDuration()) > 0;
+    }
+
+    private boolean toBeRemoved(JexxaInboundMessage jexxaInboundMessage)
+    {
+        return Duration
+                .between( jexxaInboundMessage.processingTime, Instant.now())
+                .compareTo(getStorageDuration()) >= 0;
+    }
+
+    private void removeMessage(JexxaInboundMessage jexxaInboundMessage)
+    {
+        messageRepository.remove(jexxaInboundMessage.receivingID);
+    }
+
+    record JexxaInboundMessage(ReceivingID receivingID, Instant processingTime) {}
     record ReceivingID(String uuid, String className){}
+
 }
