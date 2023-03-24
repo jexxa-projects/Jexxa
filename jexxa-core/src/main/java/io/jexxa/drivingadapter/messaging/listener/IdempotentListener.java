@@ -1,5 +1,6 @@
 package io.jexxa.drivingadapter.messaging.listener;
 
+import io.jexxa.common.wrapper.logger.SLF4jLogger;
 import io.jexxa.infrastructure.RepositoryManager;
 import io.jexxa.infrastructure.persistence.repository.IRepository;
 
@@ -124,7 +125,19 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
 
     private void removeMessage(JexxaInboundMessage jexxaInboundMessage)
     {
-        messageRepository.remove(jexxaInboundMessage.receivingID);
+        try {
+            messageRepository.remove(jexxaInboundMessage.receivingID);
+        } catch (RuntimeException e)
+        {
+            // If we use this listener in a sharedSubscription it could happen that a remove fails
+            // Since we are potentially in a transaction, throwing an exception could roll back a successfully executed command
+            // Therefore, we just show error messages, if old message is 10x older than the expiration time.
+            if (Duration.between( jexxaInboundMessage.processingTime, Instant.now())
+                    .compareTo(getStorageDuration().multipliedBy(10)) >=0)
+            {
+                SLF4jLogger.getLogger(getClass()).warn("Could not cleanup inbound messages. There exist messages that are >= 10x older than the allowed storage duration!");
+            }
+        }
     }
 
     record JexxaInboundMessage(ReceivingID receivingID, Instant processingTime) {}
