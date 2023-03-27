@@ -82,7 +82,7 @@
     <commons.lang3.version>3.12.0</commons.lang3.version>
     <jackson.core.version>2.14.2</jackson.core.version>
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
-    <smallrye.openapi.core.version>3.3.0</smallrye.openapi.core.version>
+    <smallrye.openapi.core.version>3.3.1</smallrye.openapi.core.version>
 
 
     <!-- version of test dependencies -->
