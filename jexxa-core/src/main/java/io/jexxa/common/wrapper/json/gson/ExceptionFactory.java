@@ -68,10 +68,11 @@ final class ExceptionFactory implements TypeAdapterFactory
                 String name = reader.nextName();
                 if ("cause".equals(name)) {
                     cause = reader.nextString();
-                }
-
-                if ("message".equals(name)) {
+                } else if ("message".equals(name)) {
                     message = reader.nextString();
+                } else {
+                    getLogger(ExceptionTypeAdapter.class).warn("Unhandled element `{}` in exception {}", name, rawType.getSimpleName());
+                    reader.skipValue();
                 }
             }
             reader.endObject();
