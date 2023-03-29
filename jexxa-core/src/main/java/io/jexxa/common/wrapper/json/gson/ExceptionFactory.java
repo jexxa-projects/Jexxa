@@ -16,9 +16,6 @@ import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
 
 final class ExceptionFactory implements TypeAdapterFactory
 {
-    private static final String EXCEPTION_CONVENTION_WARNING = "Exception {} does not provide a recommended constructor such as {}(String message, Throwable cause)";
-
-
     static void registerExceptionAdapter(GsonBuilder gsonBuilder)
     {
         gsonBuilder.registerTypeAdapterFactory(new ExceptionFactory());
@@ -84,7 +81,10 @@ final class ExceptionFactory implements TypeAdapterFactory
                return tryCreateException(message,cause)
                        .or(() -> tryCreateException(message))
                        .or(this::tryCreateException)
-                       .orElseThrow(() -> new IOException("Invalid Exception: The expected exception "+ rawType.getSimpleName() + " does not provide a suitable constructor such as " + rawType.getSimpleName() + "(String message, Throwable cause)"));
+                       .orElseThrow(() -> new IOException("Invalid Exception: The expected exception "+ rawType.getSimpleName() + " does not provide a suitable constructor such as " +
+                               rawType.getSimpleName() + "() or" +
+                               rawType.getSimpleName() + "(String message) or" +
+                               rawType.getSimpleName() + "(String message, Throwable cause)"));
         }
 
         private Optional<T> tryCreateException(String message, String cause)
@@ -96,7 +96,6 @@ final class ExceptionFactory implements TypeAdapterFactory
                                 .newInstance(message, new Throwable(cause))
                 );
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                getLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
                 return Optional.empty();
             }
         }
@@ -110,7 +109,6 @@ final class ExceptionFactory implements TypeAdapterFactory
                                 .newInstance(message)
                 );
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                getLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
                 return Optional.empty();
             }
         }
@@ -124,7 +122,6 @@ final class ExceptionFactory implements TypeAdapterFactory
                                 .newInstance()
                 );
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                getLogger(ExceptionTypeAdapter.class).warn(EXCEPTION_CONVENTION_WARNING, rawType.getSimpleName(), rawType.getSimpleName());
                 return Optional.empty();
             }
         }
