@@ -220,7 +220,7 @@ a|`ApplicationCore`
 | This package includes your technology-agnostic business application, that is or will be implemented by the developing team.
 
 a|`Infrastructure`
-a| This package includes the glue code to bind your technology-agnostic business application to the package `Jexxa-Infrastructure` ir any other third part library.
+a| This package includes the glue code implemented by your developing team. It binds your technology-agnostic business application to concrete technology stacks. If you use `Jexxa-Infrastructure` this glue code is an ultra-thin facade.
 
 a|`Jexxa-Infrastructure`
 | This package provides implementation of so-called __application infrastructure patterns__ such as transactional outbox or messaging. These components are typically used to implement the application specific `Infrastructure`. Jexxa provides unified access to these components by utilizing the strategy pattern.
@@ -233,7 +233,7 @@ a| This package includes the core of Jexxa and is responsible for binding the fr
 
 * Bind driving adapter to the application core, or in more detail to the `Inbound Ports` and validate conventions as described in <<Dependency Injection (DI)>>.
 
-* Manages the lifecycle of both ports and adapters. The details are described in Section <<Inversion of Control (IoC)>>.
+* Manages the lifecycle of all components. The details are described in Section <<Inversion of Control (IoC)>>.
 
 |===
 
@@ -357,7 +357,6 @@ a| Jexxa provides a fast fail approach regarding conventions. The conventions ar
 
 == Inversion of Control (IoC)
 
-=== Dependency Injection (DI)
 === Dependency Injection (DI)
 
 Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support _implicit constructor injection_ for following reason:

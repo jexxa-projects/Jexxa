@@ -464,17 +464,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_inversion_of_control_ioc">5. Inversion of Control (IoC)</a>
 <ul class="sectlevel2">
 <li><a href="#_dependency_injection_di">5.1. Dependency Injection (DI)</a></li>
-<li><a href="#_dependency_injection_di_2">5.2. Dependency Injection (DI)</a></li>
-<li><a href="#_scope">5.3. Scope</a>
+<li><a href="#_scope">5.2. Scope</a>
 <ul class="sectlevel3">
-<li><a href="#_visibility_of_ports_and_adapters">5.3.1. Visibility of Ports and Adapters</a></li>
-<li><a href="#_threading">5.3.2. Threading</a></li>
-<li><a href="#_allocation_scope_of_dependencies">5.3.3. Allocation scope of Dependencies</a></li>
+<li><a href="#_visibility_of_ports_and_adapters">5.2.1. Visibility of Ports and Adapters</a></li>
+<li><a href="#_threading">5.2.2. Threading</a></li>
+<li><a href="#_allocation_scope_of_dependencies">5.2.3. Allocation scope of Dependencies</a></li>
 </ul>
 </li>
-<li><a href="#_transactions">5.4. Transactions</a>
+<li><a href="#_transactions">5.3. Transactions</a>
 <ul class="sectlevel3">
-<li><a href="#_transaction_outbox_pattern">5.4.1. Transaction Outbox Pattern</a></li>
+<li><a href="#_transaction_outbox_pattern">5.3.1. Transaction Outbox Pattern</a></li>
 </ul>
 </li>
 </ul>
@@ -813,7 +812,7 @@ especially for the training of new developers. As an example I will use the impl
 <p><code>Infrastructure</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>This package includes the glue code to bind your technology-agnostic business application to the package <code>Jexxa-Infrastructure</code> ir any other third part library.</p>
+<p>This package includes the glue code implemented by your developing team. It binds your technology-agnostic business application to concrete technology stacks. If you use <code>Jexxa-Infrastructure</code> this glue code is an ultra-thin facade.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -841,7 +840,7 @@ especially for the training of new developers. As an example I will use the impl
 <p>Bind driving adapter to the application core, or in more detail to the <code>Inbound Ports</code> and validate conventions as described in <a href="#_dependency_injection_di">Dependency Injection (DI)</a>.</p>
 </li>
 <li>
-<p>Manages the lifecycle of both ports and adapters. The details are described in Section <a href="#_inversion_of_control_ioc">Inversion of Control (IoC)</a>.</p>
+<p>Manages the lifecycle of all components. The details are described in Section <a href="#_inversion_of_control_ioc">Inversion of Control (IoC)</a>.</p>
 </li>
 </ul>
 </div></div></td>
@@ -1037,10 +1036,6 @@ especially for the training of new developers. As an example I will use the impl
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_dependency_injection_di"><a class="anchor" href="#_dependency_injection_di"></a>5.1. Dependency Injection (DI)</h3>
-
-</div>
-<div class="sect2">
-<h3 id="_dependency_injection_di_2"><a class="anchor" href="#_dependency_injection_di_2"></a>5.2. Dependency Injection (DI)</h3>
 <div class="paragraph">
 <p>Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support <em>implicit constructor injection</em> for following reason:</p>
 </div>
@@ -1062,18 +1057,18 @@ especially for the training of new developers. As an example I will use the impl
 </div>
 </div>
 <div class="sect2">
-<h3 id="_scope"><a class="anchor" href="#_scope"></a>5.3. Scope</h3>
+<h3 id="_scope"><a class="anchor" href="#_scope"></a>5.2. Scope</h3>
 <div class="paragraph">
 <p>Jexxa provides some simple mechanisms to define and control the scopes of ports and adapters which are described in this section.</p>
 </div>
 <div class="sect3">
-<h4 id="_visibility_of_ports_and_adapters"><a class="anchor" href="#_visibility_of_ports_and_adapters"></a>5.3.1. Visibility of Ports and Adapters</h4>
+<h4 id="_visibility_of_ports_and_adapters"><a class="anchor" href="#_visibility_of_ports_and_adapters"></a>5.2.1. Visibility of Ports and Adapters</h4>
 <div class="paragraph">
 <p>By default, you have to tell Jexxa the location of your driven adapter and ports on a package level so that they can be created by Jexxa&#8217;s DI mechanism. This allows an application to specify used ports and adapters on a very fine-grained level.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_threading"><a class="anchor" href="#_threading"></a>5.3.2. Threading</h4>
+<h4 id="_threading"><a class="anchor" href="#_threading"></a>5.2.2. Threading</h4>
 <div class="paragraph">
 <p>Currently, Jexxa ensures that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to following reasons:</p>
 </div>
@@ -1092,7 +1087,7 @@ especially for the training of new developers. As an example I will use the impl
 </div>
 </div>
 <div class="sect3">
-<h4 id="_allocation_scope_of_dependencies"><a class="anchor" href="#_allocation_scope_of_dependencies"></a>5.3.3. Allocation scope of Dependencies</h4>
+<h4 id="_allocation_scope_of_dependencies"><a class="anchor" href="#_allocation_scope_of_dependencies"></a>5.2.3. Allocation scope of Dependencies</h4>
 <div class="paragraph">
 <p>The allocation scope defines how many instances of components are created by Jexxa. This is described in <a href="#JexxaScope">Table 6</a>.</p>
 </div>
@@ -1195,7 +1190,7 @@ of interceptors. Since treating Port Adapter is singleton reduces overall comple
 </div>
 </div>
 <div class="sect2">
-<h3 id="_transactions"><a class="anchor" href="#_transactions"></a>5.4. Transactions</h3>
+<h3 id="_transactions"><a class="anchor" href="#_transactions"></a>5.3. Transactions</h3>
 <div class="paragraph">
 <p>Jexxa does not support any two-phase commit protocol for distributed transaction as required when using multiple driven
 adapters in a single use case. Traditional enterprise frameworks for example often spawn (by default) a transaction
@@ -1203,7 +1198,7 @@ between the used technology stacks. Main reason was that multiple centralized da
 even accessed by different applications. Within a microservice, such an approach is an anti-pattern and should be avoided.</p>
 </div>
 <div class="sect3">
-<h4 id="_transaction_outbox_pattern"><a class="anchor" href="#_transaction_outbox_pattern"></a>5.4.1. Transaction Outbox Pattern</h4>
+<h4 id="_transaction_outbox_pattern"><a class="anchor" href="#_transaction_outbox_pattern"></a>5.3.1. Transaction Outbox Pattern</h4>
 <div class="paragraph">
 <p>Instead, a typical business operation reads and updates its own database and publishes at most a domain event. On a technical
 layer, you can then use the <a href="https://microservices.io/patterns/data/transactional-outbox.html">transactional outbox pattern</a>
@@ -1217,7 +1212,7 @@ application scenarios Jexxa provides the <code>TransactionalOutboxSender</code>.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-04-01 08:04:01 +0200
+Last updated 2023-04-01 09:52:02 +0200
 </div>
 </div>
 </body>
