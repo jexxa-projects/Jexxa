@@ -457,23 +457,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_package_applicationcore">4.1. Package <code>ApplicationCore</code></a></li>
 <li><a href="#_package_infrastructure">4.2. Package <code>Infrastructure</code></a></li>
-<li><a href="#_package_jexxainfrastructure">4.3. Package <code>JexxaInfrastructure</code></a></li>
-<li><a href="#_package_jexxacore">4.4. Package <code>JexxaCore</code></a></li>
+<li><a href="#_package_jexxa_infrastructure">4.3. Package <code>Jexxa-Infrastructure</code></a></li>
+<li><a href="#_package_jexxa_core">4.4. Package <code>Jexxa-Core</code></a></li>
 </ul>
 </li>
 <li><a href="#_inversion_of_control_ioc">5. Inversion of Control (IoC)</a>
 <ul class="sectlevel2">
 <li><a href="#_dependency_injection_di">5.1. Dependency Injection (DI)</a></li>
-<li><a href="#_scope">5.2. Scope</a>
+<li><a href="#_dependency_injection_di_2">5.2. Dependency Injection (DI)</a></li>
+<li><a href="#_scope">5.3. Scope</a>
 <ul class="sectlevel3">
-<li><a href="#_visibility_of_ports_and_adapters">5.2.1. Visibility of Ports and Adapters</a></li>
-<li><a href="#_threading">5.2.2. Threading</a></li>
-<li><a href="#_allocation_scope_of_dependencies">5.2.3. Allocation scope of Dependencies</a></li>
+<li><a href="#_visibility_of_ports_and_adapters">5.3.1. Visibility of Ports and Adapters</a></li>
+<li><a href="#_threading">5.3.2. Threading</a></li>
+<li><a href="#_allocation_scope_of_dependencies">5.3.3. Allocation scope of Dependencies</a></li>
 </ul>
 </li>
-<li><a href="#_transactions">5.3. Transactions</a>
+<li><a href="#_transactions">5.4. Transactions</a>
 <ul class="sectlevel3">
-<li><a href="#_transaction_outbox_pattern">5.3.1. Transaction Outbox Pattern</a></li>
+<li><a href="#_transaction_outbox_pattern">5.4.1. Transaction Outbox Pattern</a></li>
 </ul>
 </li>
 </ul>
@@ -762,7 +763,7 @@ especially for the training of new developers. As an example I will use the impl
 <h2 id="_general_building_blocks"><a class="anchor" href="#_general_building_blocks"></a>4. General Building Blocks</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application built on Jexxa provides components that belong either to the <em>application core</em> or to the  <em>infrastructure</em>. The <em>application core</em> includes the business logic, whereas the <em>infrastructure</em> provides the required technology stacks.</p>
+<p>Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application built on Jexxa provides components that belong either to the <em>application core</em> or to the  <em>infrastructure</em>. The <em>application core</em> includes the business logic, whereas the <em>infrastructure</em> of an application binds required technology components to the application core.</p>
 </div>
 <div class="paragraph">
 <p><a href="#JexxaComponents">Figure 1</a> shows the separation of a Jexxa application into packages, the included components, and the relationship of the components among each other.</p>
@@ -783,7 +784,7 @@ especially for the training of new developers. As an example I will use the impl
 <div class="content">
 <img src="images/JexxaComponents.svg" alt="JexxaComponents" width="843" height="800">
 </div>
-<div class="title">Figure 1. This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages  labeled with <code>&lt;&lt;Jexxa&gt;&gt;</code> and light grey background are provided by Jexxa. Packages labeled with <code>&lt;&lt;Application&gt;&gt;</code> have to be implemented. As you can see, you can define one very fine-grained level which parts of Jexxa you want to use.</div>
+<div class="title">Figure 1. This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages  labeled with <code>&lt;&lt;Jexxa&gt;&gt;</code> and light grey background are provided by Jexxa. Packages labeled with <code>&lt;&lt;Application&gt;&gt;</code> have to be implemented. As you can see, you can define on a very fine-grained level which parts of Jexxa you want to use.</div>
 </div>
 <div class="paragraph">
 <p><a href="#JexxaPackagetDescription">Table 1</a> describes the packages of an application based on Jexxa.</p>
@@ -805,27 +806,45 @@ especially for the training of new developers. As an example I will use the impl
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>ApplicationCore</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">This package includes your technology-agnostic business application.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This package includes your technology-agnostic business application, that is or will be implemented by the developing team.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>Infrastructure</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>This package includes the glue code to bind your technology-agnostic business application to the package <code>JexxaInfrastructure</code>.</p>
+<p>This package includes the glue code to bind your technology-agnostic business application to the package <code>Jexxa-Infrastructure</code> ir any other third part library.</p>
 </div></div></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>JexxaInfrastructure</code></p>
+<p><code>Jexxa-Infrastructure</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This package provides implementation of so-called <em>application infrastructure patterns</em> such as transactional outbox or messaging. These components are typically used to implement the application specific <code>Infrastructure</code>. Jexxa provides unified access to these components by utilizing the strategy pattern.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>Jexxa-DrivingAdapter</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">This package includes the provided driving adapter of Jexxa as well as strategies for typical application infrastructure components which simplifies the implementation of application specific driven adapter</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>JexxaCore</code></p>
+<p><code>Jexxa-Core</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">This package includes the core of Jexxa and manages the lifecycle of both ports and adapters. The details are described in Section <a href="#_inversion_of_control_ioc">Inversion of Control (IoC)</a>. The functionality of this package is used via a fluent API within the main method of your application.</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>This package includes the core of Jexxa and is responsible for binding the framework to the application. The functionality of this package is used via a fluent API within the main method of your application. In more detail, it provides following functionality:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Bind driving adapter to the application core, or in more detail to the <code>Inbound Ports</code> and validate conventions as described in <a href="#_dependency_injection_di">Dependency Injection (DI)</a>.</p>
+</li>
+<li>
+<p>Manages the lifecycle of both ports and adapters. The details are described in Section <a href="#_inversion_of_control_ioc">Inversion of Control (IoC)</a>.</p>
+</li>
+</ul>
+</div></div></td>
 </tr>
 </tbody>
 </table>
@@ -867,7 +886,7 @@ especially for the training of new developers. As an example I will use the impl
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Outbound Ports</p>
+<p><code>Outbound Ports</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>Outbound ports belong to the application core but only as interface. These interfaces are implemented in package <code>Infrastructure</code> by a driving adapter which provides access to a specific technology stack such as a database driver.</p>
@@ -913,9 +932,9 @@ especially for the training of new developers. As an example I will use the impl
 </table>
 </div>
 <div class="sect2">
-<h3 id="_package_jexxainfrastructure"><a class="anchor" href="#_package_jexxainfrastructure"></a>4.3. Package <code>JexxaInfrastructure</code></h3>
+<h3 id="_package_jexxa_infrastructure"><a class="anchor" href="#_package_jexxa_infrastructure"></a>4.3. Package <code>Jexxa-Infrastructure</code></h3>
 <div class="paragraph">
-<p>The components of <code>JexxaInfrastructure</code> are:</p>
+<p>The components of <code>Jexxa-Infrastructure</code> are:</p>
 </div>
 <table id="JexxaComponentDescription" class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 4. Describes the components of package <code>JexxaInfrastructure</code>.</caption>
@@ -959,7 +978,7 @@ especially for the training of new developers. As an example I will use the impl
 </table>
 </div>
 <div class="sect2">
-<h3 id="_package_jexxacore"><a class="anchor" href="#_package_jexxacore"></a>4.4. Package <code>JexxaCore</code></h3>
+<h3 id="_package_jexxa_core"><a class="anchor" href="#_package_jexxa_core"></a>4.4. Package <code>Jexxa-Core</code></h3>
 <table id="JexxaCoreComponentDescription" class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 5. Describes the components of package <code>JexxaCore</code>.</caption>
 <colgroup>
@@ -1018,6 +1037,10 @@ especially for the training of new developers. As an example I will use the impl
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_dependency_injection_di"><a class="anchor" href="#_dependency_injection_di"></a>5.1. Dependency Injection (DI)</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_dependency_injection_di_2"><a class="anchor" href="#_dependency_injection_di_2"></a>5.2. Dependency Injection (DI)</h3>
 <div class="paragraph">
 <p>Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support <em>implicit constructor injection</em> for following reason:</p>
 </div>
@@ -1035,22 +1058,22 @@ especially for the training of new developers. As an example I will use the impl
 </ul>
 </div>
 <div class="paragraph">
-<p>Within Jexxa we use conventions described in <a href="#JexxaConventions">[JexxaConventions]</a> to explicitly limit the direction of dependencies as described in <a href="#JexxaComponents">Figure 1</a>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.</p>
+<p>Within Jexxa we use conventions described in <a href="https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_conventions">JexxaConventions</a> to explicitly limit the direction of dependencies as described in <a href="#JexxaComponents">Figure 1</a>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_scope"><a class="anchor" href="#_scope"></a>5.2. Scope</h3>
+<h3 id="_scope"><a class="anchor" href="#_scope"></a>5.3. Scope</h3>
 <div class="paragraph">
 <p>Jexxa provides some simple mechanisms to define and control the scopes of ports and adapters which are described in this section.</p>
 </div>
 <div class="sect3">
-<h4 id="_visibility_of_ports_and_adapters"><a class="anchor" href="#_visibility_of_ports_and_adapters"></a>5.2.1. Visibility of Ports and Adapters</h4>
+<h4 id="_visibility_of_ports_and_adapters"><a class="anchor" href="#_visibility_of_ports_and_adapters"></a>5.3.1. Visibility of Ports and Adapters</h4>
 <div class="paragraph">
 <p>By default, you have to tell Jexxa the location of your driven adapter and ports on a package level so that they can be created by Jexxa&#8217;s DI mechanism. This allows an application to specify used ports and adapters on a very fine-grained level.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_threading"><a class="anchor" href="#_threading"></a>5.2.2. Threading</h4>
+<h4 id="_threading"><a class="anchor" href="#_threading"></a>5.3.2. Threading</h4>
 <div class="paragraph">
 <p>Currently, Jexxa ensures that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to following reasons:</p>
 </div>
@@ -1069,7 +1092,7 @@ especially for the training of new developers. As an example I will use the impl
 </div>
 </div>
 <div class="sect3">
-<h4 id="_allocation_scope_of_dependencies"><a class="anchor" href="#_allocation_scope_of_dependencies"></a>5.2.3. Allocation scope of Dependencies</h4>
+<h4 id="_allocation_scope_of_dependencies"><a class="anchor" href="#_allocation_scope_of_dependencies"></a>5.3.3. Allocation scope of Dependencies</h4>
 <div class="paragraph">
 <p>The allocation scope defines how many instances of components are created by Jexxa. This is described in <a href="#JexxaScope">Table 6</a>.</p>
 </div>
@@ -1131,7 +1154,7 @@ In case you need a strict control how objects are exposed for example to differe
 <p>The singleton scope supports designing stateless ports which is in general recommended.</p>
 </li>
 <li>
-<p>This is only recommended if your application core cannot fulfill the conventions of Jexxa (see <a href="#JexxaConventions">[JexxaConventions]</a>).</p>
+<p>This is only recommended if your application core cannot fulfill the conventions of Jexxa (see <a href="https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_conventions">JexxaConventions</a>).</p>
 </li>
 </ol>
 </div></div></td>
@@ -1172,7 +1195,7 @@ of interceptors. Since treating Port Adapter is singleton reduces overall comple
 </div>
 </div>
 <div class="sect2">
-<h3 id="_transactions"><a class="anchor" href="#_transactions"></a>5.3. Transactions</h3>
+<h3 id="_transactions"><a class="anchor" href="#_transactions"></a>5.4. Transactions</h3>
 <div class="paragraph">
 <p>Jexxa does not support any two-phase commit protocol for distributed transaction as required when using multiple driven
 adapters in a single use case. Traditional enterprise frameworks for example often spawn (by default) a transaction
@@ -1180,7 +1203,7 @@ between the used technology stacks. Main reason was that multiple centralized da
 even accessed by different applications. Within a microservice, such an approach is an anti-pattern and should be avoided.</p>
 </div>
 <div class="sect3">
-<h4 id="_transaction_outbox_pattern"><a class="anchor" href="#_transaction_outbox_pattern"></a>5.3.1. Transaction Outbox Pattern</h4>
+<h4 id="_transaction_outbox_pattern"><a class="anchor" href="#_transaction_outbox_pattern"></a>5.4.1. Transaction Outbox Pattern</h4>
 <div class="paragraph">
 <p>Instead, a typical business operation reads and updates its own database and publishes at most a domain event. On a technical
 layer, you can then use the <a href="https://microservices.io/patterns/data/transactional-outbox.html">transactional outbox pattern</a>
@@ -1194,7 +1217,7 @@ application scenarios Jexxa provides the <code>TransactionalOutboxSender</code>.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-03-05 14:57:57 +0100
+Last updated 2023-04-01 08:04:01 +0200
 </div>
 </div>
 </body>

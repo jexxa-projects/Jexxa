@@ -140,7 +140,7 @@ As soon as your junior developers feel that they are not challenged with impleme
 
 == General Building Blocks
 
-Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application built on Jexxa provides components that belong either to the __application core__ or to the  __infrastructure__. The __application core__ includes the business logic, whereas the __infrastructure__ provides the required technology stacks.
+Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application built on Jexxa provides components that belong either to the __application core__ or to the  __infrastructure__. The __application core__ includes the business logic, whereas the __infrastructure__ of an application binds required technology components to the application core.
 
 
 <<JexxaComponents>> shows the separation of a Jexxa application into packages, the included components, and the relationship of the components among each other.
@@ -150,7 +150,7 @@ IMPORTANT: <<JexxaComponents>> shows that you can focus on your application core
 
 [plantuml, images/JexxaComponents, svg, align=center]
 [reftext="Figure {counter:local-figure-number}"]
-.This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages  labeled with `\<<Jexxa>>` and light grey background are provided by Jexxa. Packages labeled with `\<<Application>>` have to be implemented. As you can see, you can define one very fine-grained level which parts of Jexxa you want to use.
+.This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages  labeled with `\<<Jexxa>>` and light grey background are provided by Jexxa. Packages labeled with `\<<Application>>` have to be implemented. As you can see, you can define on a very fine-grained level which parts of Jexxa you want to use.
 [[JexxaComponents]]
 ....
 @startuml
@@ -158,17 +158,17 @@ skinparam PackagePadding 20
 skinparam linetype ortho
 skinparam packageStyle frame
 
-package JexxaCore <<Jexxa>> #DDDDDD {
+package Jexxa-Core <<Jexxa>> #DDDDDD {
 [Core] <<Jexxa API>>
 }
 
 together {
-    package DrivingAdapter <<Jexxa>> #DDDDDD {
+    package "Jexxa-DrivingAdapter" as JexxaDrivingAdapter <<Jexxa>> #DDDDDD {
     [Generic Driving Adapters]  <<Driving Adapter>>
     [Specific Driving Adapters] <<Driving Adapter>>
     }
 
-    package JexxaInfrastructure <<Jexxa>> #DDDDDD {
+    package Jexxa-Infrastructure <<Jexxa>> #DDDDDD {
     [Infrastructure Strategies] <<Infrastructure Pattern>>
     }
 }
@@ -192,7 +192,7 @@ together {
 [Outbound Ports] <|-- [Driven Adapters]
 [Infrastructure Strategies]  o.right. [Driven Adapters] : uses
 
-[Core] ..> DrivingAdapter : create
+[Core] ..> JexxaDrivingAdapter : create
 [Core] ..> Infrastructure : create
 [Core] ..> ApplicationCore : create
 
@@ -217,17 +217,23 @@ a|Package
 |Description
 
 a|`ApplicationCore`
-| This package includes your technology-agnostic business application.
+| This package includes your technology-agnostic business application, that is or will be implemented by the developing team.
 
 a|`Infrastructure`
-a| This package includes the glue code to bind your technology-agnostic business application to the package `JexxaInfrastructure`.
+a| This package includes the glue code to bind your technology-agnostic business application to the package `Jexxa-Infrastructure` ir any other third part library.
 
-a|`JexxaInfrastructure`
+a|`Jexxa-Infrastructure`
+| This package provides implementation of so-called __application infrastructure patterns__ such as transactional outbox or messaging. These components are typically used to implement the application specific `Infrastructure`. Jexxa provides unified access to these components by utilizing the strategy pattern.
+
+a|`Jexxa-DrivingAdapter`
 | This package includes the provided driving adapter of Jexxa as well as strategies for typical application infrastructure components which simplifies the implementation of application specific driven adapter
 
-a|`JexxaCore`
-| This package includes the core of Jexxa and manages the lifecycle of both ports and adapters. The details are described in Section <<Inversion of Control (IoC)>>. The functionality of this package is used via a fluent API within the main method of your application.
+a|`Jexxa-Core`
+a| This package includes the core of Jexxa and is responsible for binding the framework to the application. The functionality of this package is used via a fluent API within the main method of your application. In more detail, it provides following functionality:
 
+* Bind driving adapter to the application core, or in more detail to the `Inbound Ports` and validate conventions as described in <<Dependency Injection (DI)>>.
+
+* Manages the lifecycle of both ports and adapters. The details are described in Section <<Inversion of Control (IoC)>>.
 
 |===
 
@@ -249,7 +255,7 @@ a|`Inbound Ports`
 a| * Jexxa provides implicit constructor injection for your inbound ports which is described in <<Dependency Injection (DI)>>.
 * Jexxa also allows instantiating and manage ports yourself using the provided driving and driven adapters.
 
-a|Outbound Ports
+a|`Outbound Ports`
 a| Outbound ports belong to the application core but only as interface. These interfaces are implemented in package `Infrastructure` by a driving adapter which provides access to a specific technology stack such as a database driver.
 
 
@@ -290,8 +296,8 @@ a|Components
 
 
 
-=== Package `JexxaInfrastructure`
-The components of `JexxaInfrastructure` are:
+=== Package `Jexxa-Infrastructure`
+The components of `Jexxa-Infrastructure` are:
 
 [cols="1,2,2"]
 [reftext="Table {counter:local-table-number}"]
@@ -323,7 +329,7 @@ Available strategies in Jexxa are based on the standard javax interfaces (e.g. J
 
 
 
-=== Package `JexxaCore`
+=== Package `Jexxa-Core`
 
 [cols="1,2,2"]
 [reftext="Table {counter:local-table-number}"]
@@ -352,6 +358,7 @@ a| Jexxa provides a fast fail approach regarding conventions. The conventions ar
 == Inversion of Control (IoC)
 
 === Dependency Injection (DI)
+=== Dependency Injection (DI)
 
 Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support _implicit constructor injection_ for following reason:
 
@@ -361,7 +368,7 @@ Jexxa provides a simple DI mechanism to instantiate inbound ports of a business 
 
 * No special annotations or configuration files are required so that the application core remains completely decoupled from Jexxa.
 
-Within Jexxa we use conventions described in <<JexxaConventions>> to explicitly limit the direction of dependencies as described in <<JexxaComponents>>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.
+Within Jexxa we use conventions described in https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_conventions[JexxaConventions] to explicitly limit the direction of dependencies as described in <<JexxaComponents>>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.
 
 === Scope
 
@@ -408,7 +415,7 @@ a|
 
 a|
 1. The singleton scope supports designing stateless ports which is in general recommended.
-2. This is only recommended if your application core cannot fulfill the conventions of Jexxa (see <<JexxaConventions>>).
+2. This is only recommended if your application core cannot fulfill the conventions of Jexxa (see https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_conventions[JexxaConventions]).
 
 a|Outbound Port
 a| None
