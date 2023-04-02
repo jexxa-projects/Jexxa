@@ -28,7 +28,7 @@ Even though Jexxa is used within lightweight business applications and microserv
 
 * _Inversion of Control_(IoC): Find the required degree of IoC for your software projects. Control aspects that are technically required but not important for your business application should be hidden by a framework. The remaining required aspects should be explicitly represented.
 
-* _Simplicity_: Be aware of what technology stacks you really need to realize the customers' use cases. Usually they are much less than expected. Keep different technology stacks loosely coupled to facilitate their exchange. Finally, prefer a convention over configuration approach to standardize the integration of technology stacks and to reduce the complexity of their configuration.
+* _Simplicity_: Be aware of what technology stacks you really need to realize the customers' use cases. Usually they are much less than expected. Keep different technology stacks loosely coupled to facilitate their exchange and, even more important, to keep them up-to-date. Finally, prefer a convention over configuration approach to standardize the integration of technology stacks and to reduce the complexity of their configuration.
 
 Even if you use real powerful frameworks for good reason within your application I hope that you find Jexxa helpful in some way.
 
@@ -37,7 +37,9 @@ The main motivation to develop this framework comes from experiences with develo
 
 Existing frameworks such as the https://spring.io[Spring Framework] or https://jakarta.ee[Jakarta] provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into the application core.
 
-When developing applications with a high durability as used in production, financial or insurance sector, it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers shall only use standard language features. Available frameworks shall be used to attach the latest technology stacks to the application core.
+IMPORTANT: When developing applications with a high durability as used in production, financial or insurance sector, it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. This is the fundament for the development of evolvable systems.
+
+Within the application core, developers shall only use standard language features. Available frameworks shall be used to attach the latest technology stacks to the application core.
 
 Applications without well-defined boundaries between technology stacks and application core become difficult to maintain because changes on one side could (and in reality will) affect the other side. Typical symptoms are:
 
