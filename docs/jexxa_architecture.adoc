@@ -70,7 +70,7 @@ business domain to a suitable application core.
 * The intermediate developers then support the implementation of the application core.
 
 * Because your senior and intermediate developers focus on the application core, your junior developers must focus on the technology stack.
-Therefore, your technology stack should be as simple as possible and not an `egg-laying wool-milk sow`.
+Therefore, your technology stack  or the integration of these should be as simple as possible. The easiest way to achieve this is to use very simple frameworks instead of general purpose frameworks
 
 
 IMPORTANT: Using a lightweight framework ensures that junior developers get the time to learn the craftsmanship of software development, methods of software
@@ -106,12 +106,12 @@ IMPORTANT: Jexxa provides a super simple https://github.com/jexxa-projects/Jexxa
 Together with the ability of an explicit binding on an object level, this supports following use cases:
 
 * Students can support your teams with the evaluation and integration of new technology stacks as part of their bachelor or master thesis.
-* The possibility to bind driving adapter on an object level allows for the integration and migration of dedicated technology stacks.
+* The possibility to bind driving adapter on an object level allows for the integration, updating, and migration of dedicated technology stacks.
 
 === IoC without annotations
 
 Like any other framework, Jexxa takes control about part of your application core. Especially in Java this is often done with framework specific
-annotations. The downside is that these annotations tightly couple your application core to a specific technology stack.
+annotations. The downside is that these annotations tightly couple your application core to a specific technology stack. Of course an experienced developer would introduce a facade but this is often seen as boilerplate code for inexperienced developers.
 
 Based on my experience, I can only recommend annotations within the application core for the following reasons:
 
@@ -130,7 +130,7 @@ implemented by junior developers.
 IMPORTANT: Jexxa provides implementation for typical `application infrastructure strategies` so that the implementation of driven adapters is just a simple facade, which maps between the API of outbound ports to corresponding API of the strategy.
 
 This approach seems to be so obvious, so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern
-especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md[BookStore] to see the source code):
+especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md#3-implement-the-infrastructure[BookStore] to see the source code):
 
 * Regarding your business domain, your junior developers will learn at least the name of the most important business objects, because `Aggregates` include the business logic of this domain.
 * From a software engineering point of view your junior developer gets familiar with the strategy design pattern.
@@ -377,7 +377,7 @@ Jexxa provides some simple mechanisms to define and control the scopes of ports 
 
 ==== Visibility of Ports and Adapters
 
-By default, you have to tell Jexxa the location of your driven adapter and ports on a package level so that they can be created by Jexxa's DI mechanism. This allows an application to specify used ports and adapters on a very fine-grained level.
+Jexxa assumes a default package structure so that it knows which parts belong to the application core and infrastructure. This is required to validate the separation of these two parts and to create them by Jexxa's DI mechanism. The default package structure as well how to adjust them to your needs is described in https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_package_structure[reference documentation].
 
 ==== Threading
 Currently, Jexxa ensures that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to following reasons:

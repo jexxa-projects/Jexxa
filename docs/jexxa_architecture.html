@@ -516,7 +516,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><em>Inversion of Control</em>(IoC): Find the required degree of IoC for your software projects. Control aspects that are technically required but not important for your business application should be hidden by a framework. The remaining required aspects should be explicitly represented.</p>
 </li>
 <li>
-<p><em>Simplicity</em>: Be aware of what technology stacks you really need to realize the customers' use cases. Usually they are much less than expected. Keep different technology stacks loosely coupled to facilitate their exchange. Finally, prefer a convention over configuration approach to standardize the integration of technology stacks and to reduce the complexity of their configuration.</p>
+<p><em>Simplicity</em>: Be aware of what technology stacks you really need to realize the customers' use cases. Usually they are much less than expected. Keep different technology stacks loosely coupled to facilitate their exchange and, even more important, to keep them up-to-date. Finally, prefer a convention over configuration approach to standardize the integration of technology stacks and to reduce the complexity of their configuration.</p>
 </li>
 </ul>
 </div>
@@ -534,8 +534,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>Existing frameworks such as the <a href="https://spring.io">Spring Framework</a> or <a href="https://jakarta.ee">Jakarta</a> provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into the application core.</p>
 </div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
+</td>
+<td class="content">
+When developing applications with a high durability as used in production, financial or insurance sector, it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. This is the fundament for the development of evolvable systems.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>When developing applications with a high durability as used in production, financial or insurance sector, it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. Within the application core, developers shall only use standard language features. Available frameworks shall be used to attach the latest technology stacks to the application core.</p>
+<p>Within the application core, developers shall only use standard language features. Available frameworks shall be used to attach the latest technology stacks to the application core.</p>
 </div>
 <div class="paragraph">
 <p>Applications without well-defined boundaries between technology stacks and application core become difficult to maintain because changes on one side could (and in reality will) affect the other side. Typical symptoms are:</p>
@@ -595,7 +607,7 @@ business domain to a suitable application core.</p>
 </li>
 <li>
 <p>Because your senior and intermediate developers focus on the application core, your junior developers must focus on the technology stack.
-Therefore, your technology stack should be as simple as possible and not an <code>egg-laying wool-milk sow</code>.</p>
+Therefore, your technology stack  or the integration of these should be as simple as possible. The easiest way to achieve this is to use very simple frameworks instead of general purpose frameworks</p>
 </li>
 </ul>
 </div>
@@ -674,7 +686,7 @@ Jexxa provides a super simple <a href="https://github.com/jexxa-projects/Jexxa/b
 <p>Students can support your teams with the evaluation and integration of new technology stacks as part of their bachelor or master thesis.</p>
 </li>
 <li>
-<p>The possibility to bind driving adapter on an object level allows for the integration and migration of dedicated technology stacks.</p>
+<p>The possibility to bind driving adapter on an object level allows for the integration, updating, and migration of dedicated technology stacks.</p>
 </li>
 </ul>
 </div>
@@ -683,7 +695,7 @@ Jexxa provides a super simple <a href="https://github.com/jexxa-projects/Jexxa/b
 <h3 id="_ioc_without_annotations"><a class="anchor" href="#_ioc_without_annotations"></a>3.3. IoC without annotations</h3>
 <div class="paragraph">
 <p>Like any other framework, Jexxa takes control about part of your application core. Especially in Java this is often done with framework specific
-annotations. The downside is that these annotations tightly couple your application core to a specific technology stack.</p>
+annotations. The downside is that these annotations tightly couple your application core to a specific technology stack. Of course an experienced developer would introduce a facade but this is often seen as boilerplate code for inexperienced developers.</p>
 </div>
 <div class="paragraph">
 <p>Based on my experience, I can only recommend annotations within the application core for the following reasons:</p>
@@ -734,7 +746,7 @@ Jexxa provides implementation for typical <code>application infrastructure strat
 </div>
 <div class="paragraph">
 <p>This approach seems to be so obvious, so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern
-especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial <a href="https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md">BookStore</a> to see the source code):</p>
+especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial <a href="https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md#3-implement-the-infrastructure">BookStore</a> to see the source code):</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1064,7 +1076,7 @@ especially for the training of new developers. As an example I will use the impl
 <div class="sect3">
 <h4 id="_visibility_of_ports_and_adapters"><a class="anchor" href="#_visibility_of_ports_and_adapters"></a>5.2.1. Visibility of Ports and Adapters</h4>
 <div class="paragraph">
-<p>By default, you have to tell Jexxa the location of your driven adapter and ports on a package level so that they can be created by Jexxa&#8217;s DI mechanism. This allows an application to specify used ports and adapters on a very fine-grained level.</p>
+<p>Jexxa assumes a default package structure so that it knows which parts belong to the application core and infrastructure. This is required to validate the separation of these two parts and to create them by Jexxa&#8217;s DI mechanism. The default package structure as well how to adjust them to your needs is described in <a href="https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_package_structure">reference documentation</a>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1212,7 +1224,7 @@ application scenarios Jexxa provides the <code>TransactionalOutboxSender</code>.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-04-01 09:52:02 +0200
+Last updated 2023-04-02 09:28:39 +0200
 </div>
 </div>
 </body>

@@ -749,6 +749,18 @@ All <a href="https://github.com/jexxa-projects/JexxaTutorials">Jexxa tutorials</
 </li>
 </ul>
 </div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
+</td>
+<td class="content">
+If you want to use your own package structure you have to tell Jexxa which parts belong to the application core and which one to the infrastructure. For this purpose, you can use methods <code>JexxaMain::addToApplicationCore</code> or  <code>JexxaMain::addToInfrastructure</code> respectively.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_dependency_injection_di"><a class="anchor" href="#_dependency_injection_di"></a>4.2. Dependency Injection (DI)</h3>
@@ -783,7 +795,7 @@ All <a href="https://github.com/jexxa-projects/JexxaTutorials">Jexxa tutorials</
 <p>Parameters of the constructor must be interfaces of required outbound ports.</p>
 </li>
 <li>
-<p>A unique implementation of each interface exists in the search scope of Jexxa. If you do not follow the recommended package structure of Jexxa, you have to define it on a package level by method <code>JexxaMain::addToInfrastructure</code>.</p>
+<p>A unique implementation of each interface exists in the <code>infrastructure</code> of your application.</p>
 </li>
 </ol>
 </div></div></td>
@@ -1424,7 +1436,7 @@ Please check the tutorial <a href="https://github.com/jexxa-projects/JexxaTutori
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-03-05 11:05:31 +0100
+Last updated 2023-04-02 09:23:29 +0200
 </div>
 </div>
 </body>

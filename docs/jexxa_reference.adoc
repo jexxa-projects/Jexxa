@@ -126,6 +126,8 @@ Jexxa assumes following package structure by default, which is quite common in D
    **   `drivenadapter`: Provides the implementation of outbound ports typically with sub packages for each technology stack such as `messaging` or `persistence`.
    **   `drivingadapter`: Provides the implementation of so-called port adapters outbound ports typically with sub packages for each technology stack such as `messaging`.
 
+IMPORTANT: If you want to use your own package structure you have to tell Jexxa which parts belong to the application core and which one to the infrastructure. For this purpose, you can use methods `JexxaMain::addToApplicationCore` or  `JexxaMain::addToInfrastructure` respectively.
+
 === Dependency Injection (DI)
 
 Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support _implicit constructor injection_ as explained https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_dependency_injection_di[here].
@@ -145,7 +147,7 @@ a|Inbound Port
 a|
 1. A single public constructor.
 2. Parameters of the constructor must be interfaces of required outbound ports.
-3. A unique implementation of each interface exists in the search scope of Jexxa. If you do not follow the recommended package structure of Jexxa, you have to define it on a package level by method `JexxaMain::addToInfrastructure`.
+3. A unique implementation of each interface exists in the `infrastructure` of your application.
 
 a|
 1. Avoids ambiguity when choosing the constructor.
