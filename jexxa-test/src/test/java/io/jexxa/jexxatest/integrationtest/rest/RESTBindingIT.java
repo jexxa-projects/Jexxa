@@ -1,10 +1,10 @@
 package io.jexxa.jexxatest.integrationtest.rest;
 
+import io.jexxa.jexxatest.JexxaIntegrationTest;
+import io.jexxa.jexxatest.application.JexxaITTestApplication;
 import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import io.jexxa.testapplication.domain.model.SpecialCasesValueObject;
-import io.jexxa.jexxatest.JexxaIntegrationTest;
-import io.jexxa.jexxatest.application.JexxaITTestApplication;
 import kong.unirest.GenericType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;

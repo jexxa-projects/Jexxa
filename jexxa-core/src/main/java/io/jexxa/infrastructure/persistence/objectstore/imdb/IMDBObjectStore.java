@@ -2,10 +2,10 @@ package io.jexxa.infrastructure.persistence.objectstore.imdb;
 
 import io.jexxa.infrastructure.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.persistence.objectstore.IObjectStore;
-import io.jexxa.infrastructure.persistence.objectstore.metadata.NumericTag;
-import io.jexxa.infrastructure.persistence.objectstore.metadata.StringTag;
 import io.jexxa.infrastructure.persistence.objectstore.IStringQuery;
 import io.jexxa.infrastructure.persistence.objectstore.metadata.MetadataSchema;
+import io.jexxa.infrastructure.persistence.objectstore.metadata.NumericTag;
+import io.jexxa.infrastructure.persistence.objectstore.metadata.StringTag;
 import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
 
 import java.util.EnumSet;

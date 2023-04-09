@@ -1,13 +1,13 @@
 package io.jexxa.infrastructure;
 
 
+import io.jexxa.common.JexxaBanner;
+import io.jexxa.common.annotation.CheckReturnValue;
+import io.jexxa.common.wrapper.factory.ClassFactory;
 import io.jexxa.infrastructure.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.persistence.objectstore.imdb.IMDBObjectStore;
 import io.jexxa.infrastructure.persistence.objectstore.jdbc.JDBCObjectStore;
 import io.jexxa.infrastructure.persistence.objectstore.metadata.MetadataSchema;
-import io.jexxa.common.JexxaBanner;
-import io.jexxa.common.annotation.CheckReturnValue;
-import io.jexxa.common.wrapper.factory.ClassFactory;
 
 import java.util.HashMap;
 import java.util.Map;

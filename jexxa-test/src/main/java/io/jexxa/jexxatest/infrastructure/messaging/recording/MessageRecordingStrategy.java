@@ -1,8 +1,8 @@
 package io.jexxa.jexxatest.infrastructure.messaging.recording;
 
+import io.jexxa.common.annotation.CheckReturnValue;
 import io.jexxa.infrastructure.messaging.MessageProducer;
 import io.jexxa.infrastructure.messaging.MessageSender;
-import io.jexxa.common.annotation.CheckReturnValue;
 
 import java.util.Objects;
 import java.util.Properties;

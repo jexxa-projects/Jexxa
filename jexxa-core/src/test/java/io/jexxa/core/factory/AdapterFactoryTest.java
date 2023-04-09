@@ -2,12 +2,12 @@ package io.jexxa.core.factory;
 
 
 import io.jexxa.TestConstants;
-import io.jexxa.testapplication.domainservice.ValidDefaultConstructorService;
-import io.jexxa.testapplication.domainservice.ValidFactoryMethodService;
+import io.jexxa.testapplication.domainservice.InvalidPropertiesService;
 import io.jexxa.testapplication.domainservice.NotImplementedService;
 import io.jexxa.testapplication.domainservice.NotUniqueService;
+import io.jexxa.testapplication.domainservice.ValidDefaultConstructorService;
+import io.jexxa.testapplication.domainservice.ValidFactoryMethodService;
 import io.jexxa.testapplication.domainservice.ValidPropertiesConstructorService;
-import io.jexxa.testapplication.domainservice.InvalidPropertiesService;
 import io.jexxa.testapplication.infrastructure.drivenadapter.factory.ValidDefaultConstructorServiceImpl;
 import io.jexxa.testapplication.infrastructure.drivenadapter.factory.ValidPropertiesConstructorServiceImpl;
 import org.junit.jupiter.api.BeforeAll;

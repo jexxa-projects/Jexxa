@@ -1,10 +1,10 @@
 package io.jexxa.drivingadapter.rest;
 
 import io.jexxa.TestConstants;
+import io.jexxa.common.function.ThrowingConsumer;
+import io.jexxa.core.JexxaMain;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.applicationservice.IncrementApplicationService;
-import io.jexxa.core.JexxaMain;
-import io.jexxa.common.function.ThrowingConsumer;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

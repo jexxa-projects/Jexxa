@@ -1,11 +1,11 @@
 package io.jexxa.infrastructure.persistence.objectstore.jdbc;
 
+import io.jexxa.common.wrapper.jdbc.JDBCConnection;
+import io.jexxa.common.wrapper.jdbc.builder.SQLOrder;
 import io.jexxa.infrastructure.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.persistence.objectstore.metadata.MetaTag;
 import io.jexxa.infrastructure.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository;
-import io.jexxa.common.wrapper.jdbc.JDBCConnection;
-import io.jexxa.common.wrapper.jdbc.builder.SQLOrder;
 
 import java.util.List;
 import java.util.Objects;

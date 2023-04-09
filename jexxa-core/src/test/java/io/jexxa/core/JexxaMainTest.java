@@ -1,6 +1,9 @@
 package io.jexxa.core;
 
 
+import io.jexxa.core.convention.PortConventionViolation;
+import io.jexxa.infrastructure.RepositoryManager;
+import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.annotation.InvalidApplicationService;
 import io.jexxa.testapplication.annotation.ValidApplicationService;
@@ -11,12 +14,9 @@ import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 import io.jexxa.testapplication.domain.model.JexxaEntityRepository;
 import io.jexxa.testapplication.domainservice.BootstrapJexxaEntities;
 import io.jexxa.testapplication.infrastructure.drivingadapter.generic.ProxyDrivingAdapter;
+import io.jexxa.testapplication.infrastructure.drivingadapter.portadapter.PortAdapter;
 import io.jexxa.testapplication.infrastructure.drivingadapter.portadapter.ProxyPortAdapter;
 import io.jexxa.testapplication.infrastructure.drivingadapter.portadapter.ThrowingPortAdapter;
-import io.jexxa.testapplication.infrastructure.drivingadapter.portadapter.PortAdapter;
-import io.jexxa.core.convention.PortConventionViolation;
-import io.jexxa.infrastructure.RepositoryManager;
-import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;

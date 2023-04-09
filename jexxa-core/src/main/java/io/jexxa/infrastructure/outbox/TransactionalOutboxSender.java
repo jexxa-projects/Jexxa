@@ -4,11 +4,11 @@ import io.jexxa.adapterapi.JexxaContext;
 import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
 import io.jexxa.infrastructure.MessageSenderManager;
+import io.jexxa.infrastructure.RepositoryManager;
 import io.jexxa.infrastructure.messaging.MessageProducer;
 import io.jexxa.infrastructure.messaging.MessageSender;
 import io.jexxa.infrastructure.messaging.jms.JMSSender;
 import io.jexxa.infrastructure.persistence.repository.IRepository;
-import io.jexxa.infrastructure.RepositoryManager;
 
 import java.util.Properties;
 import java.util.UUID;

@@ -4,9 +4,9 @@ import io.jexxa.adapterapi.invocation.InvocationContext;
 import io.jexxa.adapterapi.invocation.monitor.AroundMonitor;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
+import io.jexxa.testapplication.infrastructure.drivingadapter.generic.ProxyAdapter;
 import io.jexxa.testapplication.infrastructure.drivingadapter.generic.ProxyDrivingAdapter;
 import io.jexxa.testapplication.infrastructure.drivingadapter.portadapter.ProxyPortAdapter;
-import io.jexxa.testapplication.infrastructure.drivingadapter.generic.ProxyAdapter;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;

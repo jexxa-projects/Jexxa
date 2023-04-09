@@ -2,16 +2,16 @@ package io.jexxa.infrastructure.messaging.jms;
 
 
 import io.jexxa.TestConstants;
-import io.jexxa.testapplication.JexxaTestApplication;
-import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import io.jexxa.common.wrapper.jms.JMSProperties;
-import io.jexxa.drivingadapter.messaging.listener.QueueListener;
-import io.jexxa.drivingadapter.messaging.listener.TopicListener;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.drivingadapter.messaging.JMSAdapter;
+import io.jexxa.drivingadapter.messaging.listener.QueueListener;
+import io.jexxa.drivingadapter.messaging.listener.TopicListener;
 import io.jexxa.infrastructure.MessageSenderManager;
 import io.jexxa.infrastructure.messaging.MessageSender;
 import io.jexxa.infrastructure.outbox.TransactionalOutboxSender;
+import io.jexxa.testapplication.JexxaTestApplication;
+import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

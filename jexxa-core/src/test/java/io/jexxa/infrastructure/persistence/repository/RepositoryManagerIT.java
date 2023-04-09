@@ -1,10 +1,10 @@
 package io.jexxa.infrastructure.persistence.repository;
 
-import io.jexxa.testapplication.domain.model.JexxaEntity;
 import io.jexxa.infrastructure.RepositoryManager;
 import io.jexxa.infrastructure.persistence.RepositoryConfig;
 import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository;
+import io.jexxa.testapplication.domain.model.JexxaEntity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

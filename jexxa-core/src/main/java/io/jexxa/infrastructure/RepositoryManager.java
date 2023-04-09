@@ -1,22 +1,22 @@
 package io.jexxa.infrastructure;
 
 
-import io.jexxa.infrastructure.persistence.repository.IRepository;
-import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
-import io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository;
 import io.jexxa.common.JexxaBanner;
 import io.jexxa.common.annotation.CheckReturnValue;
 import io.jexxa.common.wrapper.factory.ClassFactory;
 import io.jexxa.common.wrapper.jdbc.JexxaJDBCProperties;
+import io.jexxa.infrastructure.persistence.repository.IRepository;
+import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
+import static io.jexxa.common.JexxaJMSProperties.JEXXA_JMS_STRATEGY;
 import static io.jexxa.common.wrapper.jdbc.JexxaJDBCProperties.JEXXA_REPOSITORY_STRATEGY;
 import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
-import static io.jexxa.common.JexxaJMSProperties.JEXXA_JMS_STRATEGY;
 
 
 public final class RepositoryManager

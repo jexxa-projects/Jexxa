@@ -1,12 +1,12 @@
 package io.jexxa.drivingadapter.scheduler;
 
-import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.drivingadapter.scheduler.portadapter.FixedDelayIncrementer;
 import io.jexxa.drivingadapter.scheduler.portadapter.FixedRateIncrementer;
 import io.jexxa.drivingadapter.scheduler.portadapter.InvalidScheduledAnnotation;
 import io.jexxa.drivingadapter.scheduler.portadapter.MissingScheduledAnnotation;
 import io.jexxa.drivingadapter.scheduler.portadapter.MultipleIncrementer;
+import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -3,9 +3,9 @@ package io.jexxa.drivingadapter.messaging;
 
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
+import io.jexxa.common.JexxaBanner;
 import io.jexxa.common.function.ThrowingConsumer;
 import io.jexxa.common.wrapper.jms.JMSProperties;
-import io.jexxa.common.JexxaBanner;
 import org.apache.commons.lang3.Validate;
 
 import javax.jms.Connection;
@@ -26,9 +26,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static io.jexxa.common.JexxaJMSProperties.JEXXA_JMS_SIMULATE;
 import static io.jexxa.common.wrapper.jms.JMSConnection.createConnection;
 import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
-import static io.jexxa.common.JexxaJMSProperties.JEXXA_JMS_SIMULATE;
 
 public class JMSAdapter implements AutoCloseable, IDrivingAdapter
 {

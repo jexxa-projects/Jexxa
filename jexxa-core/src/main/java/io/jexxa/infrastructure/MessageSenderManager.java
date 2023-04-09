@@ -1,21 +1,22 @@
 package io.jexxa.infrastructure;
 
-import io.jexxa.infrastructure.messaging.MessageSender;
-import io.jexxa.infrastructure.messaging.logging.MessageLogger;
-import io.jexxa.infrastructure.outbox.TransactionalOutboxSender;
 import io.jexxa.common.JexxaBanner;
 import io.jexxa.common.annotation.CheckReturnValue;
 import io.jexxa.common.wrapper.factory.ClassFactory;
+import io.jexxa.infrastructure.messaging.MessageSender;
+import io.jexxa.infrastructure.messaging.logging.MessageLogger;
+import io.jexxa.infrastructure.outbox.TransactionalOutboxSender;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
+import static io.jexxa.common.JexxaBanner.addConfigBanner;
+import static io.jexxa.common.JexxaJMSProperties.JEXXA_JMS_SIMULATE;
+import static io.jexxa.common.JexxaJMSProperties.JEXXA_JMS_STRATEGY;
 import static io.jexxa.common.wrapper.jms.JMSProperties.JNDI_FACTORY_KEY;
 import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
-import static io.jexxa.common.JexxaBanner.addConfigBanner;
-import static io.jexxa.common.JexxaJMSProperties.*;
 
 public final class MessageSenderManager
 {

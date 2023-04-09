@@ -1,10 +1,10 @@
 package io.jexxa.infrastructure.persistence.repository.jdbc;
 
-import io.jexxa.infrastructure.persistence.repository.IRepository;
+import io.jexxa.common.wrapper.jdbc.JexxaJDBCProperties;
 import io.jexxa.common.wrapper.jdbc.builder.JDBCObject;
 import io.jexxa.common.wrapper.jdbc.database.DatabaseManager;
 import io.jexxa.common.wrapper.jdbc.database.IDatabase;
-import io.jexxa.common.wrapper.jdbc.JexxaJDBCProperties;
+import io.jexxa.infrastructure.persistence.repository.IRepository;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -15,10 +15,10 @@ import java.util.function.Function;
 
 import static io.jexxa.common.wrapper.jdbc.builder.JDBCTableBuilder.SQLConstraint.PRIMARY_KEY;
 import static io.jexxa.common.wrapper.jdbc.builder.SQLDataType.JSONB;
+import static io.jexxa.common.wrapper.json.JSONManager.getJSONConverter;
 import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
 import static io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_KEY;
 import static io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository.KeyValueSchema.REPOSITORY_VALUE;
-import static io.jexxa.common.wrapper.json.JSONManager.getJSONConverter;
 
 public class JDBCKeyValueRepository<T, K> extends JDBCRepository implements IRepository<T, K>
 {

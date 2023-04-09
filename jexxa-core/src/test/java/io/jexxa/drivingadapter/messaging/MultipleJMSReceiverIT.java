@@ -1,10 +1,10 @@
 package io.jexxa.drivingadapter.messaging;
 
 import io.jexxa.TestConstants;
-import io.jexxa.testapplication.JexxaTestApplication;
-import io.jexxa.testapplication.applicationservice.IncrementApplicationService;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.drivingadapter.messaging.listener.ITMessageSender;
+import io.jexxa.testapplication.JexxaTestApplication;
+import io.jexxa.testapplication.applicationservice.IncrementApplicationService;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 

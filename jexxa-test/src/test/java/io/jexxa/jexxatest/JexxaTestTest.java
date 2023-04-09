@@ -1,5 +1,7 @@
 package io.jexxa.jexxatest;
 
+import io.jexxa.core.factory.InvalidAdapterException;
+import io.jexxa.infrastructure.messaging.MessageProducer;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
 import io.jexxa.testapplication.domain.model.JexxaAggregateRepository;
@@ -9,13 +11,11 @@ import io.jexxa.testapplication.domainservice.InvalidConstructorParameterService
 import io.jexxa.testapplication.domainservice.NotImplementedService;
 import io.jexxa.testapplication.domainservice.ValidDomainSender;
 import io.jexxa.testapplication.infrastructure.drivenadapter.persistence.JexxaAggregateRepositoryImpl;
-import io.jexxa.core.factory.InvalidAdapterException;
-import io.jexxa.infrastructure.messaging.MessageProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static io.jexxa.jexxatest.JexxaTest.getJexxaTest;
 import static io.jexxa.common.wrapper.json.JSONManager.getJSONConverter;
+import static io.jexxa.jexxatest.JexxaTest.getJexxaTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

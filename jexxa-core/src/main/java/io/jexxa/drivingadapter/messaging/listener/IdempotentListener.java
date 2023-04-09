@@ -1,6 +1,5 @@
 package io.jexxa.drivingadapter.messaging.listener;
 
-import io.jexxa.common.wrapper.logger.SLF4jLogger;
 import io.jexxa.infrastructure.RepositoryManager;
 import io.jexxa.infrastructure.persistence.repository.IRepository;
 
@@ -135,7 +134,7 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
             if (Duration.between( jexxaInboundMessage.processingTime, Instant.now())
                     .compareTo(getStorageDuration().multipliedBy(10)) >=0)
             {
-                SLF4jLogger.getLogger(getClass()).warn("Could not cleanup inbound messages. There exist messages that are >= 10x older than the allowed storage duration!");
+                getLogger(getClass()).warn("Could not cleanup inbound messages. There exist messages that are >= 10x older than the allowed storage duration!");
             }
         }
     }

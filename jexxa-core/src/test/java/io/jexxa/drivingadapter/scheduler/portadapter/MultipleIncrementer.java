@@ -1,8 +1,8 @@
 package io.jexxa.drivingadapter.scheduler.portadapter;
 
+import io.jexxa.drivingadapter.scheduler.Scheduled;
 import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
-import io.jexxa.drivingadapter.scheduler.Scheduled;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 

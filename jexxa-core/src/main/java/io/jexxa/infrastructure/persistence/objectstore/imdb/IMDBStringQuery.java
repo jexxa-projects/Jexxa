@@ -1,7 +1,7 @@
 package io.jexxa.infrastructure.persistence.objectstore.imdb;
 
-import io.jexxa.infrastructure.persistence.objectstore.metadata.StringTag;
 import io.jexxa.infrastructure.persistence.objectstore.IStringQuery;
+import io.jexxa.infrastructure.persistence.objectstore.metadata.StringTag;
 
 import java.util.Comparator;
 import java.util.List;

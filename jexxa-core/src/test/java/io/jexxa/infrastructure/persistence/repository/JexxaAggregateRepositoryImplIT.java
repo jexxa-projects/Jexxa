@@ -1,12 +1,12 @@
 package io.jexxa.infrastructure.persistence.repository;
 
 import io.jexxa.TestConstants;
+import io.jexxa.common.wrapper.jdbc.JDBCConnection;
+import io.jexxa.common.wrapper.jdbc.JDBCTestDatabase;
+import io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository;
 import io.jexxa.testapplication.domain.model.JexxaAggregate;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import io.jexxa.testapplication.infrastructure.drivenadapter.persistence.JexxaAggregateRepositoryImpl;
-import io.jexxa.common.wrapper.jdbc.JDBCTestDatabase;
-import io.jexxa.common.wrapper.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.parallel.Execution;

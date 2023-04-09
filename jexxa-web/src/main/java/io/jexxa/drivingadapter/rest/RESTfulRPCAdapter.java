@@ -13,11 +13,11 @@ import io.javalin.util.JavalinLogger;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
-import io.jexxa.drivingadapter.rest.openapi.OpenAPIConvention;
-import io.jexxa.common.wrapper.json.JSONConverter;
-import io.jexxa.common.wrapper.json.JSONManager;
 import io.jexxa.common.JexxaBanner;
 import io.jexxa.common.properties.Secret;
+import io.jexxa.common.wrapper.json.JSONConverter;
+import io.jexxa.common.wrapper.json.JSONManager;
+import io.jexxa.drivingadapter.rest.openapi.OpenAPIConvention;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.SecureRequestCustomizer;
@@ -38,8 +38,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
 import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
 
 
 public final class RESTfulRPCAdapter implements IDrivingAdapter

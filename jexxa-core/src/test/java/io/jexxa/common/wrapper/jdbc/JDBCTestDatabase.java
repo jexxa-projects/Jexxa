@@ -10,7 +10,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.infrastructure.persistence.RepositoryConfig.jdbcRepositoryConfig;
 import static io.jexxa.common.wrapper.jdbc.JDBCTestDatabase.JDBCTestSchema.DOUBLE_TYPE;
 import static io.jexxa.common.wrapper.jdbc.JDBCTestDatabase.JDBCTestSchema.FLOAT_TYPE;
 import static io.jexxa.common.wrapper.jdbc.JDBCTestDatabase.JDBCTestSchema.INTEGER_TYPE;
@@ -18,6 +17,7 @@ import static io.jexxa.common.wrapper.jdbc.JDBCTestDatabase.JDBCTestSchema.NUMER
 import static io.jexxa.common.wrapper.jdbc.JDBCTestDatabase.JDBCTestSchema.REPOSITORY_KEY;
 import static io.jexxa.common.wrapper.jdbc.JDBCTestDatabase.JDBCTestSchema.STRING_TYPE;
 import static io.jexxa.common.wrapper.jdbc.JDBCTestDatabase.JDBCTestSchema.TIMESTAMP_TYPE;
+import static io.jexxa.infrastructure.persistence.RepositoryConfig.jdbcRepositoryConfig;
 
 public final class JDBCTestDatabase
 {

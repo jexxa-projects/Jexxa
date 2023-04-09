@@ -1,10 +1,10 @@
 package io.jexxa.common.wrapper.jdbc;
 
 import io.jexxa.common.function.ThrowingConsumer;
+import io.jexxa.common.properties.Secret;
 import io.jexxa.common.wrapper.jdbc.builder.JDBCCommandBuilder;
 import io.jexxa.common.wrapper.jdbc.builder.JDBCQueryBuilder;
 import io.jexxa.common.wrapper.jdbc.builder.JDBCTableBuilder;
-import io.jexxa.common.properties.Secret;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 
