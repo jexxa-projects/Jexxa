@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[6.0.4] - 2023-04-09
+### Fixed
+- Improved warning and error handling and messaging.
+- Updated dependencies
+
 ## \[6.0.3] - 2023-03-21
 ### Fixed
 - Fixed cleanup of expired messages in IdempotentListener under heavy message load (one message each msec).
