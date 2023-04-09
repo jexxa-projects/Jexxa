@@ -87,7 +87,7 @@ class JMSSenderIT
 
         assertDoesNotThrow(() -> (TextMessage)topicListener.getMessages().get(0));
 
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+        assertTimeout(Duration.ofSeconds(5), jexxaMain::stop);
     }
 
 
@@ -110,7 +110,7 @@ class JMSSenderIT
         await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
         assertDoesNotThrow(() -> (TextMessage)queueListener.getMessages().get(0));
 
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+        assertTimeout(Duration.ofSeconds(5), jexxaMain::stop);
     }
 
     @ParameterizedTest
@@ -132,7 +132,7 @@ class JMSSenderIT
         await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
         assertDoesNotThrow(() -> (TextMessage)queueListener.getMessages().get(0));
 
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+        assertTimeout(Duration.ofSeconds(5), jexxaMain::stop);
     }
 
 
@@ -155,7 +155,7 @@ class JMSSenderIT
         await().atMost(1, TimeUnit.SECONDS).until(() -> !topicListener.getMessages().isEmpty());
 
         assertDoesNotThrow(() -> (BytesMessage)topicListener.getMessages().get(0));
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+        assertTimeout(Duration.ofSeconds(5), jexxaMain::stop);
     }
 
     @ParameterizedTest
@@ -177,7 +177,7 @@ class JMSSenderIT
         await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
 
         assertDoesNotThrow(() -> (BytesMessage)queueListener.getMessages().get(0));
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+        assertTimeout(Duration.ofSeconds(5), jexxaMain::stop);
     }
 
     @Test
@@ -205,7 +205,7 @@ class JMSSenderIT
         await().atMost(1, TimeUnit.SECONDS).until(() -> queueListener.getMessages().size() >= 2);
         assertDoesNotThrow(() -> (TextMessage)queueListener.getMessages().get(0));
 
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+        assertTimeout(Duration.ofSeconds(5), jexxaMain::stop);
     }
 
     @Test
@@ -231,7 +231,7 @@ class JMSSenderIT
         await().atMost(1, TimeUnit.SECONDS).until(() -> !queueListener.getMessages().isEmpty());
 
         assertDoesNotThrow(() -> (BytesMessage)queueListener.getMessages().get(0));
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+        assertTimeout(Duration.ofSeconds(5), jexxaMain::stop);
     }
 
     private void simulateConnectionException(Connection connection) throws JMSException

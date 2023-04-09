@@ -91,7 +91,7 @@ class MessageListenerIT
         //Assert
         await().atMost(1, TimeUnit.SECONDS).until(() -> jsonMessageListener.getTextMessage() != null);
 
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+        assertTimeout(Duration.ofSeconds(5), jexxaMain::stop);
     }
 
     @ParameterizedTest
@@ -111,7 +111,7 @@ class MessageListenerIT
         //Assert
         await().atMost(1, TimeUnit.SECONDS).until(() -> typedListener.getJexxaValueObject() != null);
         assertEquals(message, typedListener.getJexxaValueObject());
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+        assertTimeout(Duration.ofSeconds(5), jexxaMain::stop);
     }
 
     @Test
@@ -138,7 +138,7 @@ class MessageListenerIT
         //Assert - 2 Messages must be received from jsonMessageListener but only one from idempotentListener due to same ID
         await().atMost(2, TimeUnit.SECONDS).until(() -> jsonMessageListener.getReceivedMessages().size() == 2);
         assertEquals(1, idempotentListener.getReceivedMessages().size());
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+        assertTimeout(Duration.ofSeconds(5), jexxaMain::stop);
     }
 
     @Test
@@ -165,7 +165,7 @@ class MessageListenerIT
 
         //Assert
         await().atMost(15, TimeUnit.SECONDS).until(() -> idempotentListener.getReceivedMessages().size() == messageCount);
-        assertTimeout(Duration.ofSeconds(1), jexxaMain::stop);
+        assertTimeout(Duration.ofSeconds(15), jexxaMain::stop);
     }
 
 

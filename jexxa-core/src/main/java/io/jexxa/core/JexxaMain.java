@@ -3,6 +3,7 @@ package io.jexxa.core;
 import io.jexxa.adapterapi.JexxaContext;
 import io.jexxa.adapterapi.drivingadapter.HealthCheck;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
 import io.jexxa.common.JexxaBanner;
 import io.jexxa.common.JexxaCoreProperties;
 import io.jexxa.common.annotation.CheckReturnValue;
@@ -26,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
+import static io.jexxa.adapterapi.invocation.DefaultInvocationHandler.GLOBAL_SYNCHRONIZATION_OBJECT;
 import static io.jexxa.common.JexxaBanner.addConfigBanner;
 import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
 
@@ -340,14 +342,23 @@ public final class JexxaMain
     @SuppressWarnings("java:S2629")
     public void stop()
     {
-        if ( boundedContext.isRunning() )
-        {
-            boundedContext.stop();
-            compositeDrivingAdapter.stop();
-            getLogger(JexxaMain.class).info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
+        synchronized (GLOBAL_SYNCHRONIZATION_OBJECT) {
+            try {
+                TransactionManager.initTransaction();
+                if (boundedContext.isRunning()) {
+                    boundedContext.stop();
+                    compositeDrivingAdapter.stop();
+                    getLogger(JexxaMain.class).info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
+                }
+                executorService.shutdown();
+                JexxaContext.cleanup();
+                TransactionManager.closeTransaction();
+            } catch (RuntimeException e) {
+                TransactionManager.rollback();
+                TransactionManager.closeTransaction();
+                throw new IllegalStateException("Could not proper stop JexxaMain. ", e);
+            }
         }
-        executorService.shutdown();
-        JexxaContext.cleanup();
     }
 
     @SuppressWarnings("UnusedReturnValue")

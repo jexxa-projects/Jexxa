@@ -13,10 +13,10 @@ import javax.jms.MessageListener;
 import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
-import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 @Tag(TestConstants.INTEGRATION_TEST)
@@ -58,7 +58,7 @@ class MultipleJMSReceiverIT
         }
         List<Integer> expectedResult = IntStream.rangeClosed(1, MAX_COUNTER)
                 .boxed()
-                .collect(toList());
+                .toList();
 
         jexxaMain.start();
 
@@ -66,9 +66,11 @@ class MultipleJMSReceiverIT
         assertTimeout(Duration.ofSeconds(10), () -> incrementService(jexxaMain.getProperties()));
 
         //Assert
-        jexxaMain.stop();
+        await().atMost(5, TimeUnit.SECONDS)
+                .pollInterval(200, TimeUnit.MILLISECONDS)
+                .until( () -> expectedResult.equals( incrementApplicationService.getUsedCounter()) );
 
-        assertEquals(expectedResult, incrementApplicationService.getUsedCounter());
+        jexxaMain.stop();
     }
 
     private void incrementService(Properties properties)
