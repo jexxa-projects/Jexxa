@@ -1,7 +1,6 @@
 package io.jexxa.common.wrapper.jdbc;
 
 import io.jexxa.TestConstants;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -56,12 +55,12 @@ class JDBCFluentAPIIT
         assertDoesNotThrow(() -> queryNonNullString.asString().flatMap(Optional::stream).findFirst().orElseThrow());
         assertDoesNotThrow(() -> queryNonNullTimestamp.asTimestamp().flatMap(Optional::stream).findFirst().orElseThrow());
 
-        Assertions.assertEquals(JDBCTestDatabase.TEST_INT_VALUE, queryNonNullInteger.asInt().findFirst().orElseThrow() );
-        Assertions.assertEquals(JDBCTestDatabase.TEST_NUMERIC_VALUE, queryNonNullNumeric.asNumeric().flatMap(Optional::stream).findFirst().orElseThrow() );
-        Assertions.assertEquals(JDBCTestDatabase.TEST_FLOAT_VALUE, queryNonNullFloat.asFloat().findFirst().orElseThrow() );
-        Assertions.assertEquals(JDBCTestDatabase.TEST_DOUBLE_VALUE, queryNonNullDouble.asDouble().findFirst().orElseThrow() );
-        Assertions.assertEquals(JDBCTestDatabase.TEST_STRING, queryNonNullString.asString().flatMap(Optional::stream).findFirst().orElseThrow());
-        Assertions.assertEquals(JDBCTestDatabase.TEST_TIMESTAMP, queryNonNullTimestamp.asTimestamp().flatMap(Optional::stream).findFirst().orElseThrow());
+        assertEquals(JDBCTestDatabase.TEST_INT_VALUE, queryNonNullInteger.asInt().findFirst().orElseThrow() );
+        assertEquals(JDBCTestDatabase.TEST_NUMERIC_VALUE, queryNonNullNumeric.asNumeric().flatMap(Optional::stream).findFirst().orElseThrow() );
+        assertEquals(JDBCTestDatabase.TEST_FLOAT_VALUE, queryNonNullFloat.asFloat().findFirst().orElseThrow() );
+        assertEquals(JDBCTestDatabase.TEST_DOUBLE_VALUE, queryNonNullDouble.asDouble().findFirst().orElseThrow() );
+        assertEquals(JDBCTestDatabase.TEST_STRING, queryNonNullString.asString().flatMap(Optional::stream).findFirst().orElseThrow());
+        assertEquals(JDBCTestDatabase.TEST_TIMESTAMP, queryNonNullTimestamp.asTimestamp().flatMap(Optional::stream).findFirst().orElseThrow());
 
     }
 

@@ -3,7 +3,6 @@ package io.jexxa.common.wrapper.jdbc;
 import io.jexxa.TestConstants;
 import io.jexxa.common.wrapper.jdbc.builder.JDBCObject;
 import io.jexxa.common.wrapper.jdbc.builder.SQLDataType;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -11,6 +10,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Properties;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
@@ -39,7 +41,7 @@ class JDBCCommandIT
             deleteAllRowsQuery.asUpdate();
 
             //Assert
-            Assertions.assertTrue(validateNoEntriesQuery.isEmpty());
+            assertTrue(validateNoEntriesQuery.isEmpty());
         }
     }
 
@@ -68,7 +70,7 @@ class JDBCCommandIT
             updateQuery.asUpdate();
 
             //Assert
-            Assertions.assertEquals(1, validateUpdate.asString().count());
+            assertEquals(1, validateUpdate.asString().count());
         }
     }
 }

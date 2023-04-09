@@ -1,5 +1,7 @@
 package io.jexxa.jexxatest;
 
+import io.jexxa.testapplication.JexxaTestApplication;
+import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import io.jexxa.common.wrapper.jdbc.JexxaJDBCProperties;
 import io.jexxa.common.wrapper.jms.JMSProperties;
 import io.jexxa.infrastructure.MessageSenderManager;
@@ -11,8 +13,6 @@ import io.jexxa.infrastructure.persistence.objectstore.metadata.MetaTag;
 import io.jexxa.infrastructure.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
-import io.jexxa.testapplication.JexxaTestApplication;
-import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
