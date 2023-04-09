@@ -156,7 +156,7 @@ class MessageListenerIT
                 objectUnderTest
                         .send(message)
                         .toTopic(TOPIC_DESTINATION)
-                        //.addHeader("domain_event_id", UUID.randomUUID().toString())
+                        .addHeader("domain_event_id", UUID.randomUUID().toString())
                         .asJson();
                 TransactionManager.closeTransaction();
             }
