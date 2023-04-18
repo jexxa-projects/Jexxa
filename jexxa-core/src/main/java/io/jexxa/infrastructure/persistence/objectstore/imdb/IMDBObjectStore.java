@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure.persistence.objectstore.imdb;
 
+import io.jexxa.common.wrapper.json.JSONManager;
 import io.jexxa.infrastructure.persistence.objectstore.INumericQuery;
 import io.jexxa.infrastructure.persistence.objectstore.IObjectStore;
 import io.jexxa.infrastructure.persistence.objectstore.IStringQuery;
@@ -9,9 +10,11 @@ import io.jexxa.infrastructure.persistence.objectstore.metadata.StringTag;
 import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
 
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("rawtypes")
 public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataSchema>  extends IMDBRepository<T, K> implements IObjectStore<T, K, M>
@@ -41,7 +44,7 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataSchema>  extends 
         //noinspection unchecked
         NumericTag<T, S> numericTag = (NumericTag) metaTag.getTag();
 
-        return new IMDBNumericQuery<>(getOwnAggregateMap(), numericTag, queryType);
+        return new IMDBNumericQuery<>(getConvertedAggregateMap(), numericTag, queryType);
     }
 
     @Override
@@ -56,7 +59,16 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataSchema>  extends 
         //noinspection unchecked
         StringTag<T, S> stringTag = (StringTag) metaTag.getTag();
 
-        return new IMDBStringQuery<>(getOwnAggregateMap(), stringTag, queryType);
+        return new IMDBStringQuery<>(getConvertedAggregateMap(), stringTag, queryType);
+    }
+
+
+    private Map<K, T> getConvertedAggregateMap()
+    {
+        return getOwnAggregateMap()
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> JSONManager.getJSONConverter().fromJson(entry.getValue(), getAggregateClazz())));
     }
 
 }

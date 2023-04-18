@@ -3,7 +3,6 @@ package io.jexxa.infrastructure.persistence.repository.imdb;
 import io.jexxa.common.wrapper.json.JSONManager;
 import io.jexxa.infrastructure.persistence.repository.IRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -16,11 +15,11 @@ import java.util.function.Function;
 public class IMDBRepository<T, K>  implements IRepository<T, K>
 {
     // Each IMDB repository is represented by a map for a specific type.
-    private static final Map< Class<?>, Map<?,?>> REPOSITORY_MAP = new ConcurrentHashMap<>();
+    private static final Map< Class<?>, Map<?,String>> REPOSITORY_MAP = new ConcurrentHashMap<>();
     private static final Map< Class<?>, IMDBRepository<?,?> > IMDB_REPOSITORY_MAP = new ConcurrentHashMap<>();
 
 
-    private Map<K, T> aggregateMap;
+    private Map<K, String> aggregateMap;
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
 
@@ -46,6 +45,8 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
                     + ": An object with given key "
                     + keyAsString
                     + " does not exists");
+        } else {
+            getOwnAggregateMap().put(keyFunction.apply(aggregate), JSONManager.getJSONConverter().toJson(aggregate));
         }
     }
 
@@ -80,23 +81,30 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
                     + keyAsString
                     + " already exists");
         }
-        getOwnAggregateMap().put(keyFunction.apply(aggregate), aggregate);
+        getOwnAggregateMap().put(keyFunction.apply(aggregate), JSONManager.getJSONConverter().toJson(aggregate));
     }
 
     @Override
     public Optional<T> get(K primaryKey)
     {
-        return Optional.ofNullable(getOwnAggregateMap().get( primaryKey));
+        if (getOwnAggregateMap().containsKey(primaryKey)) {
+            return Optional.of(JSONManager.getJSONConverter().fromJson(getOwnAggregateMap().get(primaryKey), aggregateClazz));
+        }
+        return Optional.empty();
     }
 
 
     @Override
     public List<T> get()
     {
-        return new ArrayList<>(getOwnAggregateMap().values());
+        return getOwnAggregateMap()
+                .values()
+                .stream()
+                .map( element -> JSONManager.getJSONConverter().fromJson(element, aggregateClazz))
+                .toList();
     }
 
-    protected final Map<K, T> getOwnAggregateMap()
+    protected final Map<K, String> getOwnAggregateMap()
     {
         if ( aggregateMap == null ) {
             aggregateMap = getAggregateMap(aggregateClazz);
@@ -119,14 +127,20 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     }
 
     @SuppressWarnings("unchecked")
-    private static synchronized <T, K> Map<T, K> getAggregateMap(Class<?> aggregateClazz)
+    private static synchronized <T> Map<T, String> getAggregateMap(Class<?> aggregateClazz)
     {
-        return (Map<T, K>)REPOSITORY_MAP.computeIfAbsent(aggregateClazz, element -> new ConcurrentHashMap<T,K>());
+        return (Map<T, String>)REPOSITORY_MAP.computeIfAbsent(aggregateClazz, element -> new ConcurrentHashMap<T,String>());
     }
 
     protected void resetIMDBInstance()
     {
         aggregateMap = null;
     }
+
+    protected Class<T> getAggregateClazz()
+    {
+        return aggregateClazz;
+    }
+
 
 }

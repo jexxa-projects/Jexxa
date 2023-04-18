@@ -149,6 +149,26 @@ class JexxaEntityRepositoryImplIT
         objectUnderTest.get().forEach(element -> assertEquals(aggregateValue, element.getInternalValue()));
     }
 
+    @ParameterizedTest
+    @MethodSource(ALL_REPOSITORY_CONFIGS)
+    void changeAggregateOnlyAfterUpdate(Properties repositoryProperties)
+    {
+        //Arrange
+        dropTable(repositoryProperties);
+        var objectUnderTest = new JexxaEntityRepositoryImpl(repositoryProperties);
+        objectUnderTest.removeAll();
+        aggregateList.forEach(objectUnderTest::add);
+
+        int aggregateValue = 42;
+        aggregateList.forEach(element -> element.setInternalValue(aggregateValue));
+
+        //Act
+        var result = objectUnderTest.get();
+
+        //Assert internal value is correctly set
+        result.forEach( element -> assertEquals(0, element.getInternalValue()) );
+    }
+
     @SuppressWarnings("unused")
     static Stream<Properties> repositoryConfig()
     {
