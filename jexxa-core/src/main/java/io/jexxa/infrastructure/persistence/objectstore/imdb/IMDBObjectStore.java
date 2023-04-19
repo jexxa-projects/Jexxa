@@ -44,7 +44,7 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataSchema>  extends 
         //noinspection unchecked
         NumericTag<T, S> numericTag = (NumericTag) metaTag.getTag();
 
-        return new IMDBNumericQuery<>(getConvertedAggregateMap(), numericTag, queryType);
+        return new IMDBNumericQuery<>(this, numericTag, queryType);
     }
 
     @Override
@@ -59,11 +59,11 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataSchema>  extends 
         //noinspection unchecked
         StringTag<T, S> stringTag = (StringTag) metaTag.getTag();
 
-        return new IMDBStringQuery<>(getConvertedAggregateMap(), stringTag, queryType);
+        return new IMDBStringQuery<>(this, stringTag, queryType);
     }
 
 
-    private Map<K, T> getConvertedAggregateMap()
+    Map<K, T> getAggregates()
     {
         return getOwnAggregateMap()
                 .entrySet()

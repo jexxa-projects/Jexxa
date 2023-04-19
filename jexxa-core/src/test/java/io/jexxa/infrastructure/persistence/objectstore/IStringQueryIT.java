@@ -189,6 +189,22 @@ class IStringQueryIT
         assertEquals(expectedDescendingOrderLimit, descendingResultLimit);
     }
 
+    @ParameterizedTest
+    @MethodSource(REPOSITORY_CONFIG)
+    void testQueryUsesLatestData(Properties properties) {
+        //Arrange
+        initObjectStore(properties);
+        objectStore.removeAll();
+
+        //Act
+        var objectUnderTest = objectStore.getStringQuery(JexxaObjectSchema.STRING_OBJECT, String.class);
+        testData.forEach(objectStore::add);
+        var result = objectUnderTest.getAscending();
+
+        //Assert
+        assertEquals(testData.size(), result.size());
+    }
+
     void initObjectStore(Properties properties)
     {
         if (!properties.isEmpty())

@@ -11,16 +11,16 @@ import java.util.Objects;
 class IMDBNumericQuery<T, K, S> implements INumericQuery<T, S>
 {
     private final NumericTag<T, S> numericTag;
-    private final Map<K, T> internalMap;
+    private final IMDBObjectStore<T, K, ?> objectStore;
 
     private Map<K, T> getOwnAggregateMap()
     {
-        return internalMap;
+        return objectStore.getAggregates();
     }
 
-    IMDBNumericQuery(Map<K, T> internalMap, NumericTag<T, S> numericTag, Class<S> queryType)
+    IMDBNumericQuery(IMDBObjectStore<T, K, ?> objectStore, NumericTag<T, S> numericTag, Class<S> queryType)
     {
-        this.internalMap = internalMap;
+        this.objectStore = objectStore;
         this.numericTag = numericTag;
         Objects.requireNonNull( queryType );//Type required for java type inference
     }

@@ -11,16 +11,15 @@ import java.util.Objects;
 class IMDBStringQuery<T, K, S> implements IStringQuery<T, S>
 {
     private final StringTag<T, S> stringTag;
-    private final Map<K, T> internalMap;
-
+    private final IMDBObjectStore<T, K, ?> objectStore;
     private Map<K, T> getOwnAggregateMap()
     {
-        return internalMap;
+        return objectStore.getAggregates();
     }
 
-    IMDBStringQuery(Map<K, T> internalMap, StringTag<T, S> stringTag, Class<S> queryType)
+    IMDBStringQuery(IMDBObjectStore<T, K, ?> objectStore, StringTag<T, S> stringTag, Class<S> queryType)
     {
-        this.internalMap = internalMap;
+        this.objectStore = objectStore;
         this.stringTag = stringTag;
         Objects.requireNonNull( queryType );//Type required for java type inference
     }
