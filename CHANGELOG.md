@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[6.0.5] - 2023-04-19
+### Fixed
+- Fixed IMDB Repository implementation so that changes on aggregates are only stores if `update()` is called.
+- Updated dependencies
+
 ## \[6.0.4] - 2023-04-09
 ### Fixed
 - Improved warning and error handling and messaging.
