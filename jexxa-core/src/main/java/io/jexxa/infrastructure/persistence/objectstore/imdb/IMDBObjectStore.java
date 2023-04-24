@@ -65,7 +65,8 @@ public class IMDBObjectStore<T, K, M extends Enum<M> & MetadataSchema>  extends 
 
     Map<K, T> getAggregates()
     {
-        return getOwnAggregateMap()
+        Map<K, String> myggregateMap = getAggregateMap(getAggregateClazz());
+        return myggregateMap
                 .entrySet()
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> JSONManager.getJSONConverter().fromJson(entry.getValue(), getAggregateClazz())));

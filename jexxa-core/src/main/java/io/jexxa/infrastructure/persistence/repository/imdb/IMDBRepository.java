@@ -18,8 +18,6 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     private static final Map< Class<?>, Map<?,String>> REPOSITORY_MAP = new ConcurrentHashMap<>();
     private static final Map< Class<?>, IMDBRepository<?,?> > IMDB_REPOSITORY_MAP = new ConcurrentHashMap<>();
 
-
-    private Map<K, String> aggregateMap;
     private final Function<T,K> keyFunction;
     private final Class<T> aggregateClazz;
 
@@ -29,15 +27,13 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
         this.aggregateClazz = Objects.requireNonNull(aggregateClazz);
         this.keyFunction = Objects.requireNonNull(keyFunction);
         IMDB_REPOSITORY_MAP.put(aggregateClazz, this);
-
-        aggregateMap = getOwnAggregateMap();
     }
 
     @Override
     public void update(T aggregate)
     {
         Objects.requireNonNull(aggregate);
-        if (! getOwnAggregateMap().containsKey( keyFunction.apply(aggregate)))
+        if (! getAggregateMap(aggregateClazz).containsKey( keyFunction.apply(aggregate)))
         {
             var keyAsString = keyFunction.apply(aggregate).getClass().getSimpleName()
                     + JSONManager.getJSONConverter().toJson(keyFunction.apply(aggregate));
@@ -46,14 +42,14 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
                     + keyAsString
                     + " does not exists");
         } else {
-            getOwnAggregateMap().put(keyFunction.apply(aggregate), JSONManager.getJSONConverter().toJson(aggregate));
+            getAggregateMap(aggregateClazz).put(keyFunction.apply(aggregate), JSONManager.getJSONConverter().toJson(aggregate));
         }
     }
 
     @Override
     public void remove(K key)
     {
-        if ( getOwnAggregateMap().remove( key ) == null)
+        if ( getAggregateMap(aggregateClazz).remove( key ) == null)
         {
             var keyAsString = key.getClass().getSimpleName() + JSONManager.getJSONConverter().toJson(key);
             throw new IllegalArgumentException(IMDBRepository.class.getSimpleName()
@@ -66,13 +62,13 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     @Override
     public void removeAll()
     {
-        getOwnAggregateMap().clear();
+        getAggregateMap(aggregateClazz).clear();
     }
 
     @Override
     public void add(T aggregate)
     {
-        if (getOwnAggregateMap().containsKey( keyFunction.apply(aggregate)))
+        if (getAggregateMap(aggregateClazz).containsKey( keyFunction.apply(aggregate)))
         {
             var keyAsString = keyFunction.apply(aggregate).getClass().getSimpleName()
                     + JSONManager.getJSONConverter().toJson(keyFunction.apply(aggregate));
@@ -81,14 +77,14 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
                     + keyAsString
                     + " already exists");
         }
-        getOwnAggregateMap().put(keyFunction.apply(aggregate), JSONManager.getJSONConverter().toJson(aggregate));
+        getAggregateMap(aggregateClazz).put(keyFunction.apply(aggregate), JSONManager.getJSONConverter().toJson(aggregate));
     }
 
     @Override
     public Optional<T> get(K primaryKey)
     {
-        if (getOwnAggregateMap().containsKey(primaryKey)) {
-            return Optional.of(JSONManager.getJSONConverter().fromJson(getOwnAggregateMap().get(primaryKey), aggregateClazz));
+        if (getAggregateMap(aggregateClazz).containsKey(primaryKey)) {
+            return Optional.of(JSONManager.getJSONConverter().fromJson(getAggregateMap(aggregateClazz).get(primaryKey), aggregateClazz));
         }
         return Optional.empty();
     }
@@ -97,20 +93,11 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     @Override
     public List<T> get()
     {
-        return getOwnAggregateMap()
+        return getAggregateMap(aggregateClazz)
                 .values()
                 .stream()
                 .map( element -> JSONManager.getJSONConverter().fromJson(element, aggregateClazz))
                 .toList();
-    }
-
-    protected final Map<K, String> getOwnAggregateMap()
-    {
-        if ( aggregateMap == null ) {
-            aggregateMap = getAggregateMap(aggregateClazz);
-        }
-
-        return aggregateMap;
     }
 
     /**
@@ -121,20 +108,14 @@ public class IMDBRepository<T, K>  implements IRepository<T, K>
     public static synchronized void clear()
     {
         IMDB_REPOSITORY_MAP.forEach( (aggregateType, repository) -> repository.removeAll() );
-        IMDB_REPOSITORY_MAP.forEach( (aggregateType, repository) -> repository.resetIMDBInstance() );
         REPOSITORY_MAP.forEach( (aggregateType, imdbMap) -> imdbMap.clear() );
         REPOSITORY_MAP.clear();
     }
 
     @SuppressWarnings("unchecked")
-    private static synchronized <T> Map<T, String> getAggregateMap(Class<?> aggregateClazz)
+    protected static synchronized <T> Map<T, String> getAggregateMap(Class<?> aggregateClazz)
     {
         return (Map<T, String>)REPOSITORY_MAP.computeIfAbsent(aggregateClazz, element -> new ConcurrentHashMap<T,String>());
-    }
-
-    protected void resetIMDBInstance()
-    {
-        aggregateMap = null;
     }
 
     protected Class<T> getAggregateClazz()
