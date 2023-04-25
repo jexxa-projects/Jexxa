@@ -8,14 +8,20 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Function;
 
-public class GenericRepositoryImpl<Aggregate, AggregateID>
+/**
+ * Generic implementation of a Repository including typical methods
+ *
+ * @param <A> represents the type of the Aggregate
+ * @param <I> represents the type of the AggregateID
+ */
+public class GenericRepositoryImpl<A, I>
 {
 
-    private final Function<Aggregate, AggregateID> keyFunction;
-    private final IRepository<Aggregate, AggregateID> repository;
+    private final Function<A, I> keyFunction;
+    private final IRepository<A, I> repository;
 
-    public GenericRepositoryImpl(Class<Aggregate> aggregateClass,
-                                 Function<Aggregate, AggregateID> keyFunction,
+    public GenericRepositoryImpl(Class<A> aggregateClass,
+                                 Function<A, I> keyFunction,
                                  Properties properties)
     {
         this.keyFunction = keyFunction;
@@ -25,33 +31,33 @@ public class GenericRepositoryImpl<Aggregate, AggregateID>
                 properties);
     }
 
-    public void add(Aggregate jexxaEntity)
+    public void add(A jexxaEntity)
     {
         repository.add(jexxaEntity);
     }
 
-    public Aggregate get(AggregateID aggregateID)
+    public A get(I aggregateID)
     {
         return repository.get(aggregateID).orElseThrow();
     }
 
     @SuppressWarnings("unused")
-    public Optional<Aggregate> find(AggregateID aggregateID)
+    public Optional<A> find(I aggregateID)
     {
         return repository.get(aggregateID);
     }
 
-    public List<Aggregate> get()
+    public List<A> get()
     {
         return repository.get();
     }
 
-    public void update(Aggregate aggregate)
+    public void update(A aggregate)
     {
         repository.update(aggregate);
     }
 
-    public void remove(Aggregate aggregate)
+    public void remove(A aggregate)
     {
         repository.remove(keyFunction.apply(aggregate));
     }
