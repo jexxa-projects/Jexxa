@@ -21,6 +21,7 @@ import java.util.stream.IntStream;
 
 import static java.util.Comparator.comparing;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
@@ -83,7 +84,7 @@ class IObjectStoreIT
         testData.forEach(objectUnderTest::add);
 
         //Assert
-        Assertions.assertEquals(TEST_DATA_SIZE, objectUnderTest.get().size());
+        assertEquals(TEST_DATA_SIZE, objectUnderTest.get().size());
     }
 
     @ParameterizedTest
@@ -97,7 +98,7 @@ class IObjectStoreIT
         objectUnderTest.removeAll();
 
         //Assert
-        Assertions.assertEquals(0, objectUnderTest.get().size());
+        assertEquals(0, objectUnderTest.get().size());
     }
 
     @ParameterizedTest
@@ -116,8 +117,8 @@ class IObjectStoreIT
         objectUnderTest.remove(elementToRemove);
 
         //Assert
-        Assertions.assertTrue(objectUnderTest.get(elementToRemove).isEmpty());
-        Assertions.assertEquals(TEST_DATA_SIZE - 1 , objectUnderTest.get().size());
+        assertTrue(objectUnderTest.get(elementToRemove).isEmpty());
+        assertEquals(TEST_DATA_SIZE - 1 , objectUnderTest.get().size());
     }
 
     @ParameterizedTest
@@ -148,7 +149,7 @@ class IObjectStoreIT
         var result = objectUnderTest.get(testData.get(0).getKey());
 
         //Assert
-        Assertions.assertTrue(result.isPresent());
+        assertTrue(result.isPresent());
     }
 
     @ParameterizedTest
@@ -164,7 +165,7 @@ class IObjectStoreIT
         var result = objectUnderTest.get();
 
         //Assert
-        Assertions.assertTrue(result.stream().allMatch(element -> element.getInternalValue() == TEST_DATA_SIZE));
+        assertTrue(result.stream().allMatch(element -> element.getInternalValue() == TEST_DATA_SIZE));
     }
 
     void initObjectStore(Properties properties)
