@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[6.0.6] - 2023-05-01
+### Fixed
+- JexxaTest: Jexxa's dependency injection and manual injection in unit tests can now be used in mixed mode and JexxaTest correctly cleans up `IMDRepository` when used.  
+- Updated dependencies
+
 ## \[6.0.5] - 2023-04-19
 ### Fixed
 - Fixed IMDB Repository implementation so that changes on aggregates are only stores if `update()` is called.
