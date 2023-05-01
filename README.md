@@ -7,9 +7,11 @@
  ![Java CI](https://github.com/jexxa-projects/Jexxa/workflows/Java%20CI/badge.svg)
 
 # Jexxa - A Ports and Adapters Framework for Java
-Jexxa is a lightweight framework to implement durable business applications based on a [ports and adapters](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/) architecture (aka _hexagonal architecture_). Following the UNIX philosophy `do one thing and do it well`, Jexxa is no general purpose framework such as Spring or Jakarta EE. 
+Jexxa is a lightweight framework to implement durable business applications based on a *ports and adapters* (aka _hexagonal_) architecture. *Ports and adapters* is a typical architecture style to structure microservices around your core business domains. 
 
-Goal of this framework is to support the development of _durable_ business applications in conjunction with Domain Driven Design as good as possible. Therefore, Jexxa stresses the following aspects in particular:
+Goal of this framework is to support the development of _durable_ business applications in conjunction with Domain Driven Design as good as possible. 
+Following the UNIX philosophy `do one thing and do it well`, Jexxa is no general purpose framework such as Spring or Jakarta EE.
+Therefore, Jexxa stresses the following aspects in particular:
 
 *   **Technology-agnostic**: The framework is designed to avoid technology-specific dependencies in business applications. See [here](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_ioc_without_annotations) for more information.
 *   **Visible flow of control**: Simplified navigation through your business application. Checkout [this tutorial](https://github.com/jexxa-projects/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md) for more information.
