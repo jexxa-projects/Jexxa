@@ -51,7 +51,7 @@ public class AdapterFactory
             {
                 adapterInstance = ClassFactory.newInstanceOf(adapterInterface, adapterImpl);
             }
-            return adapterInterface.cast(adapterInstance.orElseThrow(() -> new InvalidAdapterException(adapterImpl)));
+            return adapterInterface.cast(adapterInstance.orElseThrow(() -> new InvalidAdapterException(adapterImpl, "No suitable public constructor or public factory method available!")));
         }
         catch (ReflectiveOperationException e)
         {
@@ -83,7 +83,7 @@ public class AdapterFactory
                 return newInstanceOf(adapterInterface);
             }
 
-            return adapterInterface.cast(adapterInstance.orElseThrow(() -> new InvalidAdapterException(adapterImpl)));
+            return adapterInterface.cast(adapterInstance.orElseThrow(() -> new InvalidAdapterException(adapterImpl, "No suitable public constructor or public factory method available!")));
 
         }
         catch (ReflectiveOperationException e)
