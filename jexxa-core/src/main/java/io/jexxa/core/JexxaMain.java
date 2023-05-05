@@ -546,6 +546,7 @@ public final class JexxaMain
             }
 
             getLogger(JexxaMain.class).error("Could not startup Jexxa! {}", errorMessage);
+            getLogger(JexxaMain.class).debug("Stack Trace: ", e);
 
             jexxaMain.stop();
         }

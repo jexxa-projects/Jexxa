@@ -242,6 +242,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             // NOTE: The exception handler is created after the session is successfully created
             connection.setExceptionListener(exception -> {
                 getLogger(JMSAdapter.class).error(exception.getMessage());
+                getLogger(JMSAdapter.class).debug("Stack trace: ", exception);
                 jmsConnectionExceptionHandler.stopFailover();
                 jmsConnectionExceptionHandler.startFailover();
             });
@@ -338,6 +339,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
             {
                 getLogger(JMSConnectionExceptionHandler.class).error("Failed to restart JMS Listener");
                 getLogger(JMSConnectionExceptionHandler.class).error(e.getMessage());
+                getLogger(JMSConnectionExceptionHandler.class).debug("Exception: ", e);
             }
         }
     }

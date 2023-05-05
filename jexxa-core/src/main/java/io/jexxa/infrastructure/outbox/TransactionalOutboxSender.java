@@ -101,9 +101,11 @@ public class TransactionalOutboxSender extends MessageSender {
         } catch (InvocationTargetRuntimeException e)
         {
             getLogger(getClass()).warn("Could not send outbox messages. Reason: {}", e.getTargetException().getMessage());
+            getLogger(getClass()).debug("Stack Trace", e);
         } catch (Throwable e)
         {
             getLogger(getClass()).error("{} occurred in transactionalSend. Reason: {}", e.getClass().getSimpleName(), e.getMessage());
+            getLogger(getClass()).debug("Stack Trace", e);
         }
     }
 
