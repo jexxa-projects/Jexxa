@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[6.0.7] - 2023-05-09
+### Fixed
+- In debug mode complete stack trace is written to logger  
+- Clarified error message in case no public constructor of factory method is available 
+- Updated dependencies 
+
 ## \[6.0.6] - 2023-05-01
 ### Fixed
 - JexxaTest: Jexxa's dependency injection and manual injection in unit tests can now be used in mixed mode and JexxaTest correctly cleans up `IMDRepository` when used.  
