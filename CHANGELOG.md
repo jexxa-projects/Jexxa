@@ -4,7 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[6.0.7] - 2023-05-09
+## \[6.0.8] - 2023-05-28
+### Fixed
+- Updated dependencies
+
 ### Fixed
 - In debug mode complete stack trace is written to logger  
 - Clarified error message in case no public constructor of factory method is available 
