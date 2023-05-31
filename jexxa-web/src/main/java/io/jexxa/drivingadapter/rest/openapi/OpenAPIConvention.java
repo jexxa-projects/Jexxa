@@ -84,6 +84,7 @@ public class OpenAPIConvention
                                     .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_BAD_REQUEST), createAPIResponseForException())
                     )
                     .description(method.getName())
+                    .summary(method.getName())
                     .addTag(method.getDeclaringClass().getSimpleName());
 
             createRequestBody(method).ifPresent(operation::requestBody);
@@ -116,6 +117,7 @@ public class OpenAPIConvention
                                     .addAPIResponse(String.valueOf(HttpURLConnection.HTTP_BAD_REQUEST), createAPIResponseForException())
                     )
                     .description(method.getName())
+                    .summary(method.getName())
                     .addTag(method.getDeclaringClass().getSimpleName());
 
             createRequestBody(method).ifPresent(operation::requestBody);
