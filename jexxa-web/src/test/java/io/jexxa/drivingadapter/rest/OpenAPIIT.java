@@ -159,6 +159,59 @@ class OpenAPIIT
         assertEquals(resTfulRPCConvention.getGETCommands().size(), getResults.size());
     }
 
+    @ParameterizedTest
+    @MethodSource("applicationServiceConfig")
+    void testPostMethodDescription(Object applicationService)
+    {
+        //Arrange
+        objectUnderTest.register(applicationService);
+        objectUnderTest.start();
+
+        JsonObject openAPI = Unirest.get(OPENAPI_PATH)
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(JsonObject.class).getBody();
+
+        var firstPostResult = deepSearchKeys(openAPI, "post").stream().findFirst().orElseThrow();
+
+        //Act
+        var operationID = deepSearchKeys(firstPostResult, "operationId").stream().findFirst().orElseThrow().getAsString();
+        var description = deepSearchKeys(firstPostResult, "description").stream().findFirst().orElseThrow().getAsString();
+        var summary = deepSearchKeys(firstPostResult, "summary").stream().findFirst().orElseThrow().getAsString();
+        var tags = deepSearchKeys(firstPostResult, "tags").stream().findFirst().orElseThrow().getAsJsonArray();
+
+        //Assert -- POST mapping
+        assertFalse(operationID.isEmpty());
+        assertEquals(operationID, description);
+        assertEquals(operationID, summary);
+        assertFalse(tags.isEmpty());
+    }
+
+    @ParameterizedTest
+    @MethodSource("applicationServiceConfig")
+    void testGetMethodDescription(Object applicationService)
+    {
+        //Arrange
+        objectUnderTest.register(applicationService);
+        objectUnderTest.start();
+
+        JsonObject openAPI = Unirest.get(OPENAPI_PATH)
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(JsonObject.class).getBody();
+
+        var firstPostResult = deepSearchKeys(openAPI, "get").stream().findFirst().orElseThrow();
+
+        //Act
+        var operationID = deepSearchKeys(firstPostResult, "operationId").stream().findFirst().orElseThrow().getAsString();
+        var description = deepSearchKeys(firstPostResult, "description").stream().findFirst().orElseThrow().getAsString();
+        var summary = deepSearchKeys(firstPostResult, "summary").stream().findFirst().orElseThrow().getAsString();
+        var tags = deepSearchKeys(firstPostResult, "tags").stream().findFirst().orElseThrow().getAsJsonArray();
+
+        //Assert -- POST mapping
+        assertFalse(operationID.isEmpty());
+        assertEquals(operationID, description);
+        assertEquals(operationID, summary);
+        assertFalse(tags.isEmpty());
+    }
     private List<JsonElement> deepSearchKeys(JsonElement jsonElement, String key)
     {
         List<JsonElement> result = new ArrayList<>();
