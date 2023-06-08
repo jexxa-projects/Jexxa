@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import io.jexxa.TestConstants;
 import io.jexxa.common.wrapper.json.JSONManager;
 import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
+import io.jexxa.testapplication.domain.model.JexxaRecord;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import io.jexxa.testapplication.domain.model.SpecialCasesValueObject;
 import kong.unirest.GenericType;
@@ -170,6 +171,28 @@ class RESTfulRPCAdapterIT
         assertEquals(newValue.getValue(), newResult.intValue());
     }
 
+    @Test // RPC call test: void setSimpleValueObject(SimpleValueObject(44))
+    void testPOSTCommandWithRecordList()
+    {
+        //Arrange
+        var newValue = List.of(new JexxaRecord("JexxaRecord1"), new JexxaRecord("JexxaRecord2"), new JexxaRecord("JexxaRecord3"));
+
+        //Act
+        var response = Unirest.post(REST_PATH + "setJexxaRecordList")
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
+                .body(newValue)
+                .asJson();
+
+        //Assert
+        var newResult = Unirest.get(REST_PATH + "getJexxaRecordList")
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
+                .asObject(new GenericType<List<JexxaRecord>>() {
+                }).getBody();
+
+        assertTrue(response.isSuccess());
+        assertEquals(newValue, simpleApplicationService.getJexxaRecordList());
+        assertEquals(newValue, newResult);
+    }
     @Test  // RPC call test: void setMessages(List<String>)
     void testPOSTCommandWithList()
     {

@@ -1,6 +1,7 @@
 package io.jexxa.testapplication.applicationservice;
 
 
+import io.jexxa.common.wrapper.logger.SLF4jLogger;
 import io.jexxa.testapplication.annotation.ValidApplicationService;
 import io.jexxa.testapplication.domain.model.JexxaRecord;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
@@ -17,6 +18,7 @@ public class SimpleApplicationService
     private int firstValue;
     private List<String> messages = new ArrayList<>();
     private List<JexxaValueObject> valueObjects = new ArrayList<>();
+    private List<JexxaRecord> recordList = new ArrayList<>();
 
     public static class SimpleApplicationException extends Exception
     {
@@ -117,7 +119,18 @@ public class SimpleApplicationService
 
     public JexxaRecord getJexxaRecord()
     {
-        return  new JexxaRecord(new String[0]);
+        return  new JexxaRecord("");
+    }
+
+    public List<JexxaRecord> getJexxaRecordList()
+    {
+        return  recordList;
+    }
+
+    public void setJexxaRecordList(List<JexxaRecord> recordList)
+    {
+        recordList.forEach(element -> SLF4jLogger.getLogger(SimpleApplicationService.class).info(element.jexxaRecord()));
+        this.recordList = recordList;
     }
 
     /** The following static methods should NOT be offered by any DrivingAdapter according to our conventions  */

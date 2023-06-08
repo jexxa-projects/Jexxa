@@ -375,7 +375,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
             if (method.getParameterCount() > 1) {
                 return readArray(jsonElement.getAsJsonArray(), method);
             } else {
-                return new Object[]{jsonConverter.fromJson(jsonString, method.getParameterTypes()[0])};
+                return new Object[]{jsonConverter.fromJson(jsonString, method.getGenericParameterTypes()[0])};
             }
         }
         catch (IllegalArgumentException e)  {
@@ -403,7 +403,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
             throw new IllegalArgumentException("Invalid Number of parameters for method " + method.getName());
         }
 
-        Class<?>[] parameterTypes = method.getParameterTypes();
+        var parameterTypes = method.getGenericParameterTypes();
         var paramArray = new Object[parameterTypes.length];
 
         for (var i = 0; i < parameterTypes.length; ++i)
