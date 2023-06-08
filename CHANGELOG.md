@@ -52,7 +52,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[6.0.1] - 2023-03-08
 ### Fixed 
-- [#208] Architecture tests know handles anonymous inner classes correctly 
+- [#208] (https://github.com/jexxa-projects/Jexxa/issues/208)Architecture tests know handles anonymous inner classes correctly 
 - Updated dependencies
 
 ## \[6.0.0] - 2023-03-05
@@ -100,7 +100,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[5.7.0] - 2023-02-19
 ### Added
-- [ #186 ] Jexxa-Core: Added support for transactional outbox pattern for sending JMS messages, called [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/outbox/TransactionalOutboxSender.java). By default, the old [`JMSSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/messaging/jms/JMSSender.java) is still used. See [here](jexxa-core/src/test/java/io/jexxa/infrastructure/messaging/jms/JMSSenderIT.java) how to enable the new message sender.    
+- [ #186 ](https://github.com/jexxa-projects/Jexxa/issues/186) Jexxa-Core: Added support for transactional outbox pattern for sending JMS messages, called [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/outbox/TransactionalOutboxSender.java). By default, the old [`JMSSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/messaging/jms/JMSSender.java) is still used. See [here](jexxa-core/src/test/java/io/jexxa/infrastructure/messaging/jms/JMSSenderIT.java) how to enable the new message sender.    
 
 ### Changed
 - Jexxa-Core: Declared driving adapter `JMXAdapter` as deprecated since it is no longer used in any project.
@@ -116,7 +116,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[5.6.1] - 2023-01-26
 
 ### Fixed
-- [ #185 ] Architecture test PortsAndAdapters fails on valid setup
+- [ #185 ](https://github.com/jexxa-projects/Jexxa/issues/185) Architecture test PortsAndAdapters fails on valid setup
 - Interceptors work correctly with methods using abstract parameters
 - Updated dependencies
 
