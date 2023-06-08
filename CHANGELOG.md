@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[6.1.1] - 2023-06-08
+### Fixed
+- [ #252 ] RESTFulRPCAdapter does not deserialize generics of records correctly 
+- Updated dependencies
+
 ## \[6.1.0] - 2023-06-01
 ### Added
 -   `RESTFullRPCAdapter`: Automatically generated OpenAPI specification now sets the operationID as description and summary as requested in #244. In addition, the class name of a method is set as tag to support grouping of methods
