@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[6.1.1] - 2023-06-08
 ### Fixed
-- [ #252 ] RESTFulRPCAdapter does not deserialize generics of records correctly 
+- [ #252 ](https://github.com/jexxa-projects/Jexxa/issues/252) RESTFulRPCAdapter does not deserialize generics of records correctly 
 - Updated dependencies
 
 ## \[6.1.0] - 2023-06-01
