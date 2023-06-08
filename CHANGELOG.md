@@ -52,7 +52,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[6.0.1] - 2023-03-08
 ### Fixed 
-- [#208] (https://github.com/jexxa-projects/Jexxa/issues/208)Architecture tests know handles anonymous inner classes correctly 
+- [#208](https://github.com/jexxa-projects/Jexxa/issues/208)Architecture tests know handles anonymous inner classes correctly 
 - Updated dependencies
 
 ## \[6.0.0] - 2023-03-05
