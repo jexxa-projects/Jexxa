@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[6.1.2] - 2023-06-20
+### Fixed
+- Updated dependencies
+
 ## \[6.1.1] - 2023-06-08
 ### Fixed
 - [ #252 ](https://github.com/jexxa-projects/Jexxa/issues/252) RESTFulRPCAdapter does not deserialize generics of records correctly 
