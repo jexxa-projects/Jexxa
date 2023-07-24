@@ -89,7 +89,7 @@
     <postgres.version>42.6.0</postgres.version>
     <unirest.java.version>3.14.5</unirest.java.version>
     <junit.platform.launcher.version>1.10.0</junit.platform.launcher.version>
-    <junit.jupiter.engine.version>5.9.3</junit.jupiter.engine.version>
+    <junit.jupiter.engine.version>5.10.0</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.9.3</junit.jupiter.params.version>
     <slf4j.simple.version>2.0.7</slf4j.simple.version>
     <awaitility.version>4.2.0</awaitility.version>
