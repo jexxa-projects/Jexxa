@@ -78,7 +78,7 @@
     <javax.jms.version>2.0.1</javax.jms.version>
     <slf4j.api.version>2.0.7</slf4j.api.version>
     <gson.version>2.10.1</gson.version>
-    <commons.lang3.version>3.12.0</commons.lang3.version>
+    <commons.lang3.version>3.13.0</commons.lang3.version>
     <jackson.core.version>2.15.2</jackson.core.version>
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
     <smallrye.openapi.core.version>3.4.0</smallrye.openapi.core.version>
