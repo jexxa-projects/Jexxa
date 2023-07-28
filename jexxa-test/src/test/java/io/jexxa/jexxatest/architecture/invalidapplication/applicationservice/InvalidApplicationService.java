@@ -8,6 +8,8 @@ import io.jexxa.jexxatest.architecture.invalidapplication.domain.invalid.Invalid
 public class InvalidApplicationService
 {
     private final InvalidRepository invalidRepository;
+    @SuppressWarnings("FieldCanBeLocal")
+    private InvalidAggregate invalidAggregate;
 
     public InvalidApplicationService(InvalidRepository invalidRepository)
     {
@@ -17,6 +19,11 @@ public class InvalidApplicationService
     public InvalidAggregate get(InvalidValueObject invalidValueObject)
     {
         return invalidRepository.get(invalidValueObject);
+    }
+
+    public void get(InvalidAggregate invalidAggregate)
+    {
+        this.invalidAggregate = invalidAggregate;
     }
 
 }

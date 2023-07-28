@@ -54,6 +54,11 @@ class ArchitectureTest {
     void validateInvalidAggregates()
     {
         var objectUnderTest = new AggregateRules(InvalidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS);
+
+        assertThrows(AssertionError.class, objectUnderTest::validateOnlyAggregatesHaveAggregatesAsFields);
+        assertThrows(AssertionError.class, objectUnderTest::validateOnlyAggregatesAndNestedClassesAreMutable);
+        assertThrows(AssertionError.class, objectUnderTest::validateOnlyRepositoriesAcceptAggregates);
+        assertThrows(AssertionError.class, objectUnderTest::validateReturnAggregates);
         assertThrows(AssertionError.class, objectUnderTest::validate);
     }
 }
