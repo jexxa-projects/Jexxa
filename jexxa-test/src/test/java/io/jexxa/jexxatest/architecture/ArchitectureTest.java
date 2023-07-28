@@ -59,6 +59,7 @@ class ArchitectureTest {
         assertThrows(AssertionError.class, objectUnderTest::validateOnlyAggregatesAndNestedClassesAreMutable);
         assertThrows(AssertionError.class, objectUnderTest::validateOnlyRepositoriesAcceptAggregates);
         assertThrows(AssertionError.class, objectUnderTest::validateReturnAggregates);
+        assertThrows(AssertionError.class, objectUnderTest::validateAggregateID);
         assertThrows(AssertionError.class, objectUnderTest::validate);
     }
 }

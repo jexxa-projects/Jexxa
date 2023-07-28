@@ -19,4 +19,9 @@ public class ValidAggregate {
         return validValueObjectA;
     }
 
+    public void domainLogic()
+    {
+        // Empty implementation because method is used to validate architecture rules
+    }
+
 }

@@ -2,13 +2,18 @@ package io.jexxa.jexxatest.architecture;
 
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.core.importer.ImportOption;
 import io.jexxa.addend.applicationcore.Aggregate;
+import io.jexxa.addend.applicationcore.AggregateID;
 import io.jexxa.addend.applicationcore.Repository;
 
 import java.util.List;
 
+import static com.tngtech.archunit.base.DescribedPredicate.describe;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAnyPackage;
+import static com.tngtech.archunit.lang.conditions.ArchConditions.have;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noFields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noMethods;
@@ -54,6 +59,7 @@ public class AggregateRules extends ProjectContent {
         validateOnlyAggregatesAndNestedClassesAreMutable();
         validateOnlyRepositoriesAcceptAggregates();
         validateReturnAggregates();
+        validateAggregateID();
     }
 
     protected void validateReturnAggregates()
@@ -80,6 +86,18 @@ public class AggregateRules extends ProjectContent {
                 .because("Aggregates contain the business logic and can only be accepted by a Repository!");
 
         invalidReturnType.check(importedClasses());
+    }
+
+    protected void validateAggregateID(){
+        var aggregateID = classes().that().areAnnotatedWith(Aggregate.class)
+                .should(have(describe("TEST" , javaClass ->
+                        javaClass.getMethods().stream().filter(thatIsAnnotatedWithAggregateID()).count() == 1
+                )))
+                .allowEmptyShould(false)
+                .because("Aggregate must provide a public method that is annotated with AggregateID");
+
+        aggregateID.check(importedClasses());
+
     }
 
 
@@ -121,6 +139,15 @@ public class AggregateRules extends ProjectContent {
             @Override
             public boolean test(JavaClass javaClass) {
                 return javaClass.isAnnotatedWith(Aggregate.class);
+            }
+        };
+    }
+
+    private static DescribedPredicate<JavaMethod> thatIsAnnotatedWithAggregateID() {
+        return new DescribedPredicate<>("Aggregate has no method that is annotated with AggregateID") {
+            @Override
+            public boolean test(JavaMethod javaMethod) {
+                return javaMethod.isAnnotatedWith(AggregateID.class);
             }
         };
     }
