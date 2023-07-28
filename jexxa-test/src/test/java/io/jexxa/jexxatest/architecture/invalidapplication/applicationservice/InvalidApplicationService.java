@@ -2,7 +2,9 @@ package io.jexxa.jexxatest.architecture.invalidapplication.applicationservice;
 
 import io.jexxa.jexxatest.architecture.invalidapplication.domain.invalid.InvalidAggregate;
 import io.jexxa.jexxatest.architecture.invalidapplication.domain.invalid.InvalidRepository;
-import io.jexxa.jexxatest.architecture.invalidapplication.domain.invalid.InvalidValueObject;
+
+import java.util.List;
+
 @SuppressWarnings("unused")
 
 public class InvalidApplicationService
@@ -16,9 +18,9 @@ public class InvalidApplicationService
         this.invalidRepository = invalidRepository;
     }
 
-    public InvalidAggregate get(InvalidValueObject invalidValueObject)
+    public List<InvalidAggregate> get()
     {
-        return invalidRepository.get(invalidValueObject);
+        return invalidRepository.get();
     }
 
     public void get(InvalidAggregate invalidAggregate)

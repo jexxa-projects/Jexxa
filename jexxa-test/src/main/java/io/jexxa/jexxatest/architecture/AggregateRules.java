@@ -4,10 +4,14 @@ import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.core.importer.ImportOption;
+import com.tngtech.archunit.lang.ArchCondition;
+import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.SimpleConditionEvent;
 import io.jexxa.addend.applicationcore.Aggregate;
 import io.jexxa.addend.applicationcore.AggregateID;
 import io.jexxa.addend.applicationcore.Repository;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import static com.tngtech.archunit.base.DescribedPredicate.describe;
@@ -17,6 +21,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noFields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noMethods;
+import static io.jexxa.jexxatest.architecture.AggregateRules.GenericWithAggregate.returnGenericWithAggregate;
 import static io.jexxa.jexxatest.architecture.PackageName.APPLICATIONSERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_SERVICE;
@@ -64,12 +69,18 @@ public class AggregateRules extends ProjectContent {
 
     protected void validateReturnAggregates()
     {
+        var aggregates = importedClasses().stream()
+                .filter( element -> element.isAnnotatedWith(Aggregate.class)).map(JavaClass::reflect)
+                .map(Class::getTypeName)
+                .toList();
+
         var invalidReturnType = noMethods().that()
                 .arePublic().and()
                 .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_SERVICE, DOMAIN))
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Aggregate.class)
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Repository.class)
                 .should().haveRawReturnType(thatIsAnnotatedWithAggregate())
+                .orShould(returnGenericWithAggregate(aggregates))
                 .allowEmptyShould(true)
                 .because("Aggregates contain the business logic and can only be returned by an aggregate or a repository!");
 
@@ -138,7 +149,7 @@ public class AggregateRules extends ProjectContent {
         return new DescribedPredicate<>("one parameter of type is an Aggregate") {
             @Override
             public boolean test(JavaClass javaClass) {
-                return javaClass.isAnnotatedWith(Aggregate.class);
+                return javaClass.isAnnotatedWith(Aggregate.class) ;
             }
         };
     }
@@ -150,5 +161,30 @@ public class AggregateRules extends ProjectContent {
                 return javaMethod.isAnnotatedWith(AggregateID.class);
             }
         };
+    }
+
+    static class GenericWithAggregate extends ArchCondition<JavaMethod>
+    {
+        private final List<String> aggregates;
+        public GenericWithAggregate(List<String> aggregates) {
+            super("Returns a generic type including an Aggregate", (Object) null);
+            this.aggregates = aggregates;
+        }
+        @Override
+        public void check(JavaMethod item, ConditionEvents events) {
+            var genericReturnType = item.reflect().getGenericReturnType();
+            if (genericReturnType instanceof ParameterizedType parameterizedType) {
+                for (int i = 0; i < parameterizedType.getActualTypeArguments().length; ++i) {
+                    if (aggregates.contains(parameterizedType.getActualTypeArguments()[0].getTypeName())) {
+                        events.add(new SimpleConditionEvent(item, true, "Returns a generic type including an Aggregate"));
+                    }
+                }
+            }
+        }
+
+        public static GenericWithAggregate returnGenericWithAggregate(List<String> aggregates)
+        {
+            return new GenericWithAggregate(aggregates);
+        }
     }
 }
