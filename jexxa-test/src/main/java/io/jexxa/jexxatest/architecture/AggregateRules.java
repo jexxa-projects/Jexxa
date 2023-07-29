@@ -103,7 +103,7 @@ public class AggregateRules extends ProjectContent {
 
     protected void validateAggregateID(){
         var aggregateID = classes().that().areAnnotatedWith(Aggregate.class)
-                .should(have(describe("TEST" , javaClass ->
+                .should(have(describe("Annotation @AggregateID" , javaClass ->
                         javaClass.getMethods().stream().filter(thatIsAnnotatedWithAggregateID()).count() == 1
                 )))
                 .allowEmptyShould(false)
