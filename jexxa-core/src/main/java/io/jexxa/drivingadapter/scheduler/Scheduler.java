@@ -2,6 +2,8 @@ package io.jexxa.drivingadapter.scheduler;
 
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
+import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
+import io.jexxa.common.wrapper.logger.SLF4jLogger;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -32,24 +34,41 @@ public class Scheduler implements IDrivingAdapter
 
     private void registerScheduledMethods(Object port, List<Method> scheduledMethods)
     {
-        var invocationHandler = InvocationManager.getInvocationHandler(port);
         scheduledMethods.forEach( method ->
         {
             var schedulerConfiguration = method.getAnnotation(Scheduled.class);
             if (schedulerConfiguration.fixedRate() >= 0) {
                 executorService.scheduleAtFixedRate(
-                        () -> invocationHandler.invoke(method, port, new Object[0]),
+                        () -> invoke(method, port),
                         schedulerConfiguration.initialDelay(),
                         schedulerConfiguration.fixedRate(),
                         schedulerConfiguration.timeUnit());
             } else {
                 executorService.scheduleWithFixedDelay(
-                        () -> invocationHandler.invoke(method, port, new Object[0]),
+                        () -> invoke(method, port),
                         schedulerConfiguration.initialDelay(),
                         schedulerConfiguration.fixedDelay(),
                         schedulerConfiguration.timeUnit());
             }
         });
+    }
+
+    private void invoke(Method method, Object port )
+    {
+        var invocationHandler = InvocationManager.getInvocationHandler(port);
+
+        try {
+            invocationHandler.invoke(method, port, new Object[0]);
+        }
+        catch (InvocationTargetRuntimeException e) {
+            SLF4jLogger.getLogger(port.getClass()).error(e.getTargetException().getMessage());
+            SLF4jLogger.getLogger(port.getClass()).debug(e.getTargetException().getMessage(), e.getTargetException());
+        }
+        catch (Exception e)
+        {
+            SLF4jLogger.getLogger(port.getClass()).error(e.getMessage());
+            SLF4jLogger.getLogger(port.getClass()).info(e.getMessage(), e);
+        }
     }
 
     @Override

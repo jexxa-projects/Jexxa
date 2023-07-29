@@ -6,6 +6,7 @@ import io.jexxa.drivingadapter.scheduler.portadapter.FixedRateIncrementer;
 import io.jexxa.drivingadapter.scheduler.portadapter.InvalidScheduledAnnotation;
 import io.jexxa.drivingadapter.scheduler.portadapter.MissingScheduledAnnotation;
 import io.jexxa.drivingadapter.scheduler.portadapter.MultipleIncrementer;
+import io.jexxa.drivingadapter.scheduler.portadapter.ThrowingIncrementer;
 import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -102,5 +103,21 @@ class SchedulerTest {
         assertThrows( IllegalArgumentException.class,  () -> drivingAdapter.to(InvalidScheduledAnnotation.class));
     }
 
+    @Test
+    void testThrowingScheduler()
+    {
+        //Arrange
+        jexxaMain.bind(Scheduler.class).to(ThrowingIncrementer.class);
 
+        //Act
+        jexxaMain.start();
+
+        //Assert that simple value is incremented > 100 within 5 seconds
+        await()
+                .atMost(5, TimeUnit.SECONDS)
+                .pollDelay(50, MILLISECONDS)
+                .until(() -> jexxaMain.getInstanceOfPort(SimpleApplicationService.class).getSimpleValue() > 100);
+
+        jexxaMain.stop();
+    }
 }
