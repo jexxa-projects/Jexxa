@@ -13,6 +13,8 @@ import io.jexxa.addend.applicationcore.Repository;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.tngtech.archunit.base.DescribedPredicate.describe;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAnyPackage;
@@ -72,7 +74,7 @@ public class AggregateRules extends ProjectContent {
         var aggregates = importedClasses().stream()
                 .filter( element -> element.isAnnotatedWith(Aggregate.class)).map(JavaClass::reflect)
                 .map(Class::getTypeName)
-                .toList();
+                .collect(Collectors.toSet());
 
         var invalidReturnType = noMethods().that()
                 .arePublic().and()
@@ -165,8 +167,8 @@ public class AggregateRules extends ProjectContent {
 
     static class GenericWithAggregate extends ArchCondition<JavaMethod>
     {
-        private final List<String> aggregates;
-        public GenericWithAggregate(List<String> aggregates) {
+        private final Set<String> aggregates;
+        public GenericWithAggregate(Set<String> aggregates) {
             super("Returns a generic type including an Aggregate", (Object) null);
             this.aggregates = aggregates;
         }
@@ -182,7 +184,7 @@ public class AggregateRules extends ProjectContent {
             }
         }
 
-        public static GenericWithAggregate returnGenericWithAggregate(List<String> aggregates)
+        public static GenericWithAggregate returnGenericWithAggregate(Set<String> aggregates)
         {
             return new GenericWithAggregate(aggregates);
         }
