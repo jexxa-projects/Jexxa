@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[6.1.4] - 2023-07-dd
+### Fixed
+- Jexxa-Test: 
+  - Architecture tests now fail if an Aggregate is not annotated with @AggregateID
+  - Architecture tests now fail if an Application-, or DomainService return generics including Aggregates
+  
+- Updated dependencies
+
 ## \[6.1.3] - 2023-07-07
 ### Fixed
 - Updated dependencies
