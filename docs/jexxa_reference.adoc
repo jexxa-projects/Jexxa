@@ -116,7 +116,7 @@ Jexxa defines some conventions for realizing implicit constructor injection whic
 Jexxa assumes following package structure by default, which is quite common in DDD community:
 
 *   `applicationservice`: Provides interfaces per application scenario
-*   `domainservice`: Provides
+*   `domainservice`: Provides specialized domain logic that cannot be attributed to a single entity or value object within the domain.
 *   `domain`: Provides the core domain typically grouped by use cases.
    **   `<use case 1>`: Each use case consists of the related Aggregates, Repository interfaces, ValueObjects and DomainEvents.
    **   `...`
