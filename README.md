@@ -29,7 +29,7 @@ In addition, Jexxa offers following production-proven features:
 
 *   Documentation: 
     *   [Tutorials](https://github.com/jexxa-projects/JexxaTutorials) show typical use cases
-    *   [A template](https://github.com/jexxa-projects/JexxaTemplate) for your first Jexxa application
+    *   [A template](https://github.com/jexxa-projects/JexxaArchetype) for your first Jexxa application
     *   [Reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html) when you develop with Jexxa
     *   [Architecture of Jexxa](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html) to get a deep insight into Jexxa
     *   [Build Jexxa](docs/BUILD.md) in case you want to contribute 
