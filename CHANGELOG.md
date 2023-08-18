@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[6.1.5] - 2023-08-18
+### Fixed
+- Jexxa-Test: 
+  - Architecture tests for Aggregates no longer fail if no Aggregate is included in the project  
+
+- Updated dependencies
+
 ## \[6.1.4] - 2023-07-29
 ### Fixed
 - Jexxa-Core: 
