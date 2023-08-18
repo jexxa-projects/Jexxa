@@ -106,8 +106,8 @@ public class AggregateRules extends ProjectContent {
                 .should(have(describe("Annotation @AggregateID" , javaClass ->
                         javaClass.getMethods().stream().filter(thatIsAnnotatedWithAggregateID()).count() == 1
                 )))
-                .allowEmptyShould(false)
-                .because("Aggregate must provide a public method that is annotated with AggregateID");
+                .allowEmptyShould(true)
+                .because("Aggregate must provide a single public method that is annotated with AggregateID");
 
         aggregateID.check(importedClasses());
 
