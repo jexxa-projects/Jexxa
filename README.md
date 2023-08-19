@@ -6,22 +6,20 @@
  ![Java CI](https://github.com/jexxa-projects/Jexxa/workflows/Java%20CI/badge.svg)
 
 # Jexxa - A Ports and Adapters Framework for Java
-Jexxa is a lightweight framework to implement durable business applications based on a *ports and adapters* (aka _hexagonal_) architecture. *Ports and adapters* is a typical architecture style to structure microservices around your core business domains. 
+Jexxa is a lightweight framework to simplify the implementation of durable business applications using Domain Driven Design. It is no general purpose framework such as Spring. Instead, it focuses on the separation of your bounded contexts using microservices with a *ports and adapters* (aka _hexagonal_) architecture. 
 
-Goal of this framework is to support the development of _durable_ business applications in conjunction with Domain Driven Design as good as possible. 
-Following the UNIX philosophy `do one thing and do it well`, Jexxa is no general purpose framework such as Spring or Jakarta EE.
-Therefore, Jexxa stresses the following aspects in particular:
+Jexxa stresses the following aspects in particular:
 
-*   **Technology-agnostic**: The framework is designed to avoid technology-specific dependencies in business applications. See [here](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_ioc_without_annotations) for more information.
+*   **Technology-agnostic**: The framework is designed to avoid technology-specific dependencies in your domain core. See [here](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_ioc_without_annotations) for more information.
 *   **Visible flow of control**: Simplified navigation through your business application. Checkout [this tutorial](https://github.com/jexxa-projects/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md) for more information.
 *   **Aligned team development**: The framework is tailored to the _needs and development of teams_ developing business applications. See [Jexxa's General Design Decisions](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_general_design_decisions) for more information. 
 
 In addition, Jexxa offers following production-proven features:    
 
-*   Integrated most common driving adapters: RMI over REST, and JMS. 
-*   Integrated strategies for most common driven adapters: JDBC, in memory DB (IMDB), and JMS.
+*   Integrated driving and driven adapters: RMI over REST, JMS, JDBC, in memory DB (IMDB).
+*   Integrated resilient microservice patterns such as transactional outbox. 
 *   Integrated stubs to write unit-tests without mock frameworks.
-*   Integrated resilient microservice patterns such as transactional outbox sender.
+sender.
 
 ## General information
 
