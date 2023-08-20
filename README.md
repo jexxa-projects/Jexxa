@@ -19,7 +19,7 @@ In addition, Jexxa offers the following production-proven features:
 *   Integrated driving and driven adapters: RMI over REST, JMS, JDBC, in memory DB (IMDB).
 *   Integrated resilient microservice patterns such as transactional outbox. 
 *   Integrated stubs to write unit-tests without mock frameworks.
-sender.
+
 
 ## General information
 
