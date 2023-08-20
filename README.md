@@ -5,7 +5,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jexxa-projects_Jexxa&metric=alert_status)](https://sonarcloud.io/summary/overall?id=jexxa-projects_Jexxa)
  ![Java CI](https://github.com/jexxa-projects/Jexxa/workflows/Java%20CI/badge.svg)
 
-# Jexxa - A Ports and Adapters Framework for Java
+# Jexxa—A Ports and Adapters Framework for Java
 Jexxa is a lightweight framework to simplify the implementation of durable business applications using Domain Driven Design. It is no general purpose framework such as Spring. Instead, it focuses on the separation of your bounded contexts using microservices with a *ports and adapters* (aka _hexagonal_) architecture. 
 
 Jexxa stresses the following aspects in particular:
@@ -14,7 +14,7 @@ Jexxa stresses the following aspects in particular:
 *   **Visible flow of control**: Simplified navigation through your business application. Checkout [this tutorial](https://github.com/jexxa-projects/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md) for more information.
 *   **Aligned team development**: The framework is tailored to the _needs and development of teams_ developing business applications. See [Jexxa's General Design Decisions](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_general_design_decisions) for more information. 
 
-In addition, Jexxa offers following production-proven features:    
+In addition, Jexxa offers the following production-proven features:    
 
 *   Integrated driving and driven adapters: RMI over REST, JMS, JDBC, in memory DB (IMDB).
 *   Integrated resilient microservice patterns such as transactional outbox. 
@@ -99,7 +99,8 @@ compile "org.slf4j:slf4j-simple:2.0.7"
 
 ### Configure your Jexxa application  
 
-By default, a Jexxa application looks for the following properties file. For more information please refer to the 
+By default, a Jexxa application looks for the following properties file.
+For more information, please refer to the 
 [reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_application_configuration). 
 
 ```maven
