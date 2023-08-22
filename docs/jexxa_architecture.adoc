@@ -65,7 +65,7 @@ best, costs can be reduced.
 
 This actually leads to a rather obvious conclusion about team structures within developing teams, which in my experience is often ignored:
 
-* Senior developers should focus on the application core. By working with the business experts, they can learn sufficient domain knowledge to map the
+* Senior developers should focus on the application core. By working with the domain experts, they can learn sufficient domain knowledge to map the
 business domain to a suitable application core.
 
 * The intermediate developers then support the implementation of the application core.
@@ -91,7 +91,7 @@ pattern or a Fluent API. Design aspects that should be hidden in the business ap
 ===  Visible flow of control
 
 Most today's frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency
-and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and adapters architecture. This might be obvious to incoming synchronous calls (RMI), but can be hard to see for incoming asynchronous messaging.
+and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and adapters architecture. For incoming synchronous calls (RMI), the flow of control may still be obvious, but can be difficult to detect for incoming asynchronous messages.
 
 IMPORTANT: Jexxa uses explicit binding for the driving adapter together with implicit constructor injection to make the flow of control visible. So the main method represents the unique starting point for the flow of control of your application.
 
@@ -99,7 +99,9 @@ Please refer to the following https://github.com/jexxa-projects/JexxaTutorials/b
 
 === Simple Interface for Driving Adapters
 
-One of the key aspects for durable software systems is the ability to add specific technology stacks through a unified API.
+One of the key aspects for durable software systems is the ability to add new technology stacks through a unified API.
+In this context, the term _new_ means not only a new kind of technology,
+but more importantly, a newer version of an already used technology with breaking changes.
 
 IMPORTANT: Jexxa provides a super simple https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-adapter-api/src/main/java/io/jexxa/adapterapi/drivingadapter/IDrivingAdapter.java[API] that allows for the integration of arbitrary technology stacks as driving adapters.
 
