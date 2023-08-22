@@ -1,4 +1,4 @@
-= Jexxa - A hexagonal software architecture for your application
+= Jexxa—A hexagonal software architecture for your application
 :source-highlighter: coderay
 :toc:
 :toclevels: 4
@@ -15,27 +15,28 @@
 //Hinweis: Die counter:local-table-number und counter:local-figure-number werden verwendet, damit im Fliesstext als Referenz die Nummer der Tabelle bzw. Abbildung angezeigt wird, also z.B. "wie in Abbildung 5 zu sehen ist."
 
 == Vision
-Jexxa is a lightweight framework to implement business applications based on a https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/[ports and adapters] architecture. It allows for easily connecting technology stacks, called adapters, to interfaces of a technology-agnostic application core which are called ports. For this purpose Jexxa offers:
+Jexxa is a lightweight framework to implement business applications based on a https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/[ports and adapters] architecture. It allows for easily connecting technology stacks, called adapters, to interfaces of a technology-agnostic application core which are called ports. For this purpose, Jexxa offers:
 
 * A fluent API to connect available adapters to your application core
 * Explicit binding between ports and adapters to make the flow of control visible
 * A lightweight core which manages the lifecycle of both ports and adapters
 * A Super simple API to integrate arbitrary technology stacks as adapters
 
-Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus, especially on following principles:
+Even though Jexxa is used within lightweight business applications and microservices, it has a strong educational focus, especially on the following principles:
 
-* _Dependency Inversion_: Get an idea how to strictly separate between technology stacks and domain logic on a code basis which is essential for durable business applications.
+* _Dependency Inversion_: Get an idea how to strictly separate between technology stacks and domain logic on a code basis, which is essential for durable business applications.
 
 * _Inversion of Control_(IoC): Find the required degree of IoC for your software projects. Control aspects that are technically required but not important for your business application should be hidden by a framework. The remaining required aspects should be explicitly represented.
 
 * _Simplicity_: Be aware of what technology stacks you really need to realize the customers' use cases. Usually they are much less than expected. Keep different technology stacks loosely coupled to facilitate their exchange and, even more important, to keep them up-to-date. Finally, prefer a convention over configuration approach to standardize the integration of technology stacks and to reduce the complexity of their configuration.
 
-Even if you use real powerful frameworks for good reason within your application I hope that you find Jexxa helpful in some way.
+Even if you use real powerful frameworks for good reason within your application, I hope that you find Jexxa helpful in some ways.
 
 == Motivation
 The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for an application.
 
-Existing frameworks such as the https://spring.io[Spring Framework] or https://jakarta.ee[Jakarta] provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into the application core.
+Existing frameworks such as the https://spring.io[Spring Framework] or https://jakarta.ee[Jakarta] provide powerful features and greatly support the development of complex business applications. On the other side, developers can unintentionally misuse these frameworks from an architectural point of view.
+It is very difficult to maintain applications over several decades, especially when such frameworks find their way into the application core.
 
 IMPORTANT: When developing applications with a high durability as used in production, financial or insurance sector, it is highly recommended using an architecture with a strict focus on separating technology stacks from the application core, such as ports and adapters. This is the fundament for the development of evolvable systems.
 
@@ -43,11 +44,11 @@ Within the application core, developers shall only use standard language feature
 
 Applications without well-defined boundaries between technology stacks and application core become difficult to maintain because changes on one side could (and in reality will) affect the other side. Typical symptoms are:
 
-* Updating to a newer version of a technology stack is difficult or even impossible so that it is much safer to use the old one. Of course new developed applications use this old version as well because your team 'trusts' it, and you avoid maintaining a zoo of different versions.
+* Updating to a newer version of a technology stack is difficult or even impossible so that it is much safer to use the old one. Of course, new developed applications use this old version as well because your team 'trusts' it, and you avoid maintaining a zoo of different versions.
 
-* Adding or replacing a technology stack is difficult or even impossible, so a disruptive technology will cause your application core to become legacy as well. A common example are database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs -> relational DBs -> a zoo of NoSQL DBs. Because database technologies can become crucial for your business, your company employs senior-grade developers who have deep knowledge of both legacy and new technology stacks and synchronize your business data.
+* Adding or replacing a technology stack is difficult or even impossible, so a disruptive technology will cause your application core to become legacy as well. A common example is database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs ->relational DBs ->a zoo of NoSQL DBs. Because database technologies can become crucial for your business, your company employs senior-grade developers who have deep knowledge of both legacy and new technology stacks and synchronize your business data.
 
-* Changes on the application core itself takes much longer time as in the beginning. In the end you need senior developers who have a deep understanding of the specific business domain, the used technology stacks and the convoluted structures of the entire application.
+* Changes on the application core itself take much longer time as in the beginning. In the end, you need senior developers who have a deep understanding of the specific business domain, the used technology stacks and the convoluted structures of the entire application.
 
 * In the long term, such structural issues could (and in reality will) affect your enterprise architecture, so neighboring systems need to be aware of and take special actions for legacy systems.
 
@@ -58,7 +59,7 @@ IMPORTANT: All considerations and design decisions were made in the context of d
 In contrast to technology companies, the focus of business software development at companies from the production,
 finance or insurance sectors is generally not on the technical side. The big challenge for software developers is
 to understand the business domain and how to achieve added value for the customer. The essence of this knowledge is
-then written in a domain specific software in order to increase the value for the company and customers. Typically,
+then written in domain-specific software in order to increase the value for the company and customers. Typically,
 the use of technology stacks itself does not add value as long as the business domain itself is not changed. At
 best, costs can be reduced.
 
@@ -77,7 +78,7 @@ IMPORTANT: Using a lightweight framework ensures that junior developers get the 
 architecture and the domain language step by step from the intermediate and senior developers.
 
 Unfortunately, I have often experienced in the past companies expect a graduate or junior developer to already know the craftsmanship of software
-engineering, and methods of software architecture so that they only need to learn a business domain. Finally, he or she has applied for the position
+engineering and methods of software architecture so that they only need to learn a business domain. Finally, he or she has applied for the position
 of a full-stack developer...
 
 
@@ -94,28 +95,27 @@ and rebuild the application. Unfortunately, you hide the flow of control which m
 
 IMPORTANT: Jexxa uses explicit binding for the driving adapter together with implicit constructor injection to make the flow of control visible. So the main method represents the unique starting point for the flow of control of your application.
 
-Please refer to following https://github.com/jexxa-projects/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md[tutorial] for more information.
+Please refer to the following https://github.com/jexxa-projects/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md[tutorial] for more information.
 
 === Simple Interface for Driving Adapters
 
-One of the key aspects for durable software systems is the ability to use arbitrary technology stacks which do not exist at the point in time the
-application was developed.
+One of the key aspects for durable software systems is the ability to add specific technology stacks through a unified API.
 
 IMPORTANT: Jexxa provides a super simple https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-adapter-api/src/main/java/io/jexxa/adapterapi/drivingadapter/IDrivingAdapter.java[API] that allows for the integration of arbitrary technology stacks as driving adapters.
 
-Together with the ability of an explicit binding on an object level, this supports following use cases:
+Together with the ability of an explicit binding on an object level, this supports the following use cases:
 
 * Students can support your teams with the evaluation and integration of new technology stacks as part of their bachelor or master thesis.
 * The possibility to bind driving adapter on an object level allows for the integration, updating, and migration of dedicated technology stacks.
 
 === IoC without annotations
 
-Like any other framework, Jexxa takes control about part of your application core. Especially in Java this is often done with framework specific
-annotations. The downside is that these annotations tightly couple your application core to a specific technology stack. Of course an experienced developer would introduce a facade but this is often seen as boilerplate code for inexperienced developers.
+Like any other framework, Jexxa takes control of part of your application core. Especially in Java, this is often done with framework-specific
+annotations. The downside is that these annotations tightly couple your application core to a specific technology stack. Of course, an experienced developer would introduce a facade, but this is often seen as boilerplate code for inexperienced developers.
 
 Based on my experience, I can only recommend annotations within the application core for the following reasons:
 
-* Use of annotations as metadata, e.g. to annotate your classes with the used pattern language of your application core.
+* Use of annotations as metadata, e.g., to annotate your classes with the used pattern language of your application core.
 * Use annotations for cross-cutting concerns on a homeopathic level. This can be useful to make the domain language more explicit  by hiding methods such as equals and hash code.
 
 IMPORTANT: Jexxa does not use annotations for all IoC aspects such as dependency injection. Instead, conventions are used.
@@ -129,12 +129,12 @@ implemented by junior developers.
 
 IMPORTANT: Jexxa provides implementation for typical `application infrastructure strategies` so that the implementation of driven adapters is just a simple facade, which maps between the API of outbound ports to corresponding API of the strategy.
 
-This approach seems to be so obvious, so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern
-especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md#3-implement-the-infrastructure[BookStore] to see the source code):
+This approach seems to be so obvious, so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern,
+especially for the training of new developers. As an example, I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md#3-implement-the-infrastructure[BookStore] to see the source code):
 
 * Regarding your business domain, your junior developers will learn at least the name of the most important business objects, because `Aggregates` include the business logic of this domain.
-* From a software engineering point of view your junior developer gets familiar with the strategy design pattern.
-* From an architectural point of view your junior developer gets familiar with the principal of dependency inversion.
+* From a software engineering point of view, your junior developer gets familiar with the strategy design pattern.
+* From an architectural point of view, your junior developer gets familiar with the principal of dependency inversion.
 * Finally, your developers learn that they can persist data within a database without thinking about the database layout. Using a strategy pattern instead makes the database to a plugin.
 
 As soon as your junior developers feel that they are not challenged with implementing driven adapters, give them one of the above points to study.
@@ -142,7 +142,7 @@ As soon as your junior developers feel that they are not challenged with impleme
 
 == General Building Blocks
 
-Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application built on Jexxa provides components that belong either to the __application core__ or to the  __infrastructure__. The __application core__ includes the business logic, whereas the __infrastructure__ of an application binds required technology components to the application core.
+Jexxa has a strong focus on Domain Driven Design and uses a lot of terminologies from its strategic and tactical design. An application built on Jexxa provides components that belong either to the __application core__ or to the  __infrastructure__. The __application core__ includes the business logic, whereas the __infrastructure__ of an application binds required technology components to the application core.
 
 
 <<JexxaComponents>> shows the separation of a Jexxa application into packages, the included components, and the relationship of the components among each other.
@@ -166,7 +166,7 @@ package Jexxa-Core <<Jexxa>> #DDDDDD {
 
 together {
     package "Jexxa-DrivingAdapter" as JexxaDrivingAdapter <<Jexxa>> #DDDDDD {
-    [Generic Driving Adapters]  <<Driving Adapter>>
+    [Generic Driving Adapters] <<Driving Adapter>>
     [Specific Driving Adapters] <<Driving Adapter>>
     }
 
@@ -228,10 +228,10 @@ a|`Jexxa-Infrastructure`
 | This package provides implementation of so-called __application infrastructure patterns__ such as transactional outbox or messaging. These components are typically used to implement the application specific `Infrastructure`. Jexxa provides unified access to these components by utilizing the strategy pattern.
 
 a|`Jexxa-DrivingAdapter`
-| This package includes the provided driving adapter of Jexxa as well as strategies for typical application infrastructure components which simplifies the implementation of application specific driven adapter
+| This package includes the provided driving adapter of Jexxa as well as strategies for typical application infrastructure components, which simplifies the implementation of application-specific driven adapter
 
 a|`Jexxa-Core`
-a| This package includes the core of Jexxa and is responsible for binding the framework to the application. The functionality of this package is used via a fluent API within the main method of your application. In more detail, it provides following functionality:
+a| This package includes the core of Jexxa and is responsible for binding the framework to the application. The functionality of this package is used via a fluent API within the main method of your application. In more detail, it provides the following functionality:
 
 * Bind driving adapter to the application core, or in more detail to the `Inbound Ports` and validate conventions as described in <<Dependency Injection (DI)>>.
 
@@ -253,7 +253,7 @@ a|Components
 
 
 a|`Inbound Ports`
-| Inbound ports belong to the application core and provide use cases that can be started by a driving adapter. Depending on the design of your application core a port might be an interface or a specific implementation of a set of use cases.
+| Inbound ports belong to the application core and provide use cases that can be started by a driving adapter. Depending on the design of your application core, a port might be an interface or a specific implementation of a set of use cases.
 a| * Jexxa provides implicit constructor injection for your inbound ports which is described in <<Dependency Injection (DI)>>.
 * Jexxa also allows instantiating and manage ports yourself using the provided driving and driven adapters.
 
@@ -283,14 +283,14 @@ a|Components
 
 |Driven Adapters
 
-|Driven adapters implement the outbound ports and can be injected into the inbound ports which in turn operates on these interfaces. Typically, they map domain objects to a specific technology stack.
+|Driven adapters implement the outbound ports and can be injected into the inbound ports which in turn operate on these interfaces. Typically, they map domain objects to a specific technology stack.
 | Jexxa provides strategies providing different implementations of typical _application infrastructure patterns_ to simplify the development of driven adapters of an application.
 
 
 
 | Port Adapters
 
-| Port adapters enable mapping between different representational styles of a specific port. For example this is required if a port should be exposed via a RESTful API. A port adapter belongs to the infrastructure of the application and is bound to a __specific driving adapter__.
+| Port adapters enable mapping between different representational styles of a specific port. For example, this is required if a port should be exposed via a RESTful API. A port adapter belongs to the infrastructure of the application and is bound to a __specific driving adapter__.
 | Providing receiving driving adapters that simplify the development of the port adapters.
 
 
@@ -315,17 +315,17 @@ a| Generic/Specific Driving Adapters
 a| Driving adapters belong to the infrastructure and receive commands from a specific client such as a UI or a console and forwards them to connected ports.
 a| Jexxa provides a convention and configuration approach for driving adapters.
 
-A __generic__ driving adapter automatically exposes methods from connected inbound ports by using a convention. For example this can be used for an RPC mechanism.
+A __generic__ driving adapter automatically exposes methods from connected inbound ports by using a convention. For example, this can be used for an RPC mechanism.
 
-A __specific__ driving adapter is used if a convention cannot be applied. Instead, you have to implement a configuration within the infrastructure of your application in form of a __port adapter__. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the __port adapter__.
+A __specific__ driving adapter is used if a convention cannot be applied. Instead, you have to implement a configuration within the infrastructure of your application by using a __port adapter__. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example, this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the __port adapter__.
 
 
 |Infrastructure strategies
 
-|Application infrastructure strategies provide how to map objects from the application core to a specific technology stack. For example if you use a database for persisting your data, the strategy decides the ORM mapping of your objects.
-| Jexxa provides implementation of typical application infrastructure patterns to simplify development of driven adapters. If such a strategy is suitable for your application, the implementation of a driven adapter is just a facade which maps the interface of the outbound port to the methods of the strategy.
+|Application infrastructure strategies provide how to map objects from the application core to a specific technology stack. For example, if you use a database for persisting your data, the strategy decides the ORM mapping of your objects.
+| Jexxa provides implementation of typical application infrastructure patterns to simplify development of driven adapters. If such a strategy is suitable for your application, the implementation of a driven adapter is just a facade that maps the interface of the outbound port to the methods of the strategy.
 
-Available strategies in Jexxa are based on the standard javax interfaces (e.g. JMS or JDBC) and can be configured via `Properties`. This allows you to adjust the configuration to your development process. For example, you can easily switch your database technology between in memory or JDBC, or the used URL.
+Available strategies in Jexxa are based on the standard javax interfaces (e.g., JMS or JDBC) and can be configured via `Properties`. This allows you to adjust the configuration to your development process. For example, you can easily switch your database technology between in memory or JDBC, or the used URL.
 
 |===
 
@@ -361,7 +361,7 @@ a| Jexxa provides a fast fail approach regarding conventions. The conventions ar
 
 === Dependency Injection (DI)
 
-Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support _implicit constructor injection_ for following reason:
+Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support _implicit constructor injection_ for the following reason:
 
 * Constructor injection ensures that the dependencies required for the object to function properly are available immediately after creating the object.
 
@@ -369,7 +369,7 @@ Jexxa provides a simple DI mechanism to instantiate inbound ports of a business 
 
 * No special annotations or configuration files are required so that the application core remains completely decoupled from Jexxa.
 
-Within Jexxa we use conventions described in https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_conventions[JexxaConventions] to explicitly limit the direction of dependencies as described in <<JexxaComponents>>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.
+Within Jexxa we use conventions described in https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_conventions[JexxaConventions] to explicitly limit the direction of dependencies as described in <<JexxaComponents>>. Compared to other frameworks, these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.
 
 === Scope
 
@@ -380,9 +380,9 @@ Jexxa provides some simple mechanisms to define and control the scopes of ports 
 Jexxa assumes a default package structure so that it knows which parts belong to the application core and infrastructure. This is required to validate the separation of these two parts and to create them by Jexxa's DI mechanism. The default package structure as well how to adjust them to your needs is described in https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_package_structure[reference documentation].
 
 ==== Threading
-Currently, Jexxa ensures that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to following reasons:
+Currently, Jexxa ensures that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to the following reasons:
 
-* Multi threading is typically essential within technology stacks and not within the application core itself.
+* Multi-threading is typically essential within technology stacks and not within the application core itself.
 * When you start developing your application, you have typically only a limited number of users.
 * When your application becomes a huge success and must scale to a lot of users, you should scale it by running multiple instances of the application. Today's container solutions offer a much better scaling and managing approach.
 
@@ -405,17 +405,17 @@ a| Is managed as singleton and reused when it is bind to different ports.
 a|
 Simplifies managing technical resources like network ports or IP addresses.
 
-NOTE: In case you need a strict control how objects are exposed for example to different IP addresses, you have to use a specific driving adapter combined with port-adapter.
+NOTE: In case you need a strict control on how objects are exposed, for example, to different IP addresses, you have to use a specific driving adapter combined with port-adapter.
 
 a|Inbound Port
 a|
 1. Inbound ports created by Jexxa are managed as singleton and reused if they are connected to different driving adapters.
 
-2. Inbound ports created by the application can be bound to adapters. In this case the application has full control of the number of instances.
+2. Inbound ports created by the application can be bound to adapters. In this case, the application has full control of the number of instances.
 
 
 a|
-1. The singleton scope supports designing stateless ports which is in general recommended.
+1. The singleton scope supports designing stateless ports which are in general recommended.
 2. This is only recommended if your application core cannot fulfill the conventions of Jexxa (see https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_conventions[JexxaConventions]).
 
 a|Outbound Port
@@ -425,16 +425,16 @@ a| None
 
 |Driven Adapter
 
-a| Is managed as singleton and reused when it is injected into different ports.
+a| It Is managed as a singleton and reused when it is injected into different ports.
 a|
-The singleton scope supports designing stateless outbound ports which is in general recommended.
+The singleton scope supports designing stateless outbound ports which are in general recommended.
 
 
 | Port Adapter
 a| Since Jexxa version 4.0.0 is managed as singleton and reused when it is bind to different ports.
 a| The initial assumption of fine-grained control of how a driving adapter should be exposed was not required until now.
-In addition, it should be treated with explicit different types. On the other hand singleton management simplifies the usage
-of interceptors. Since treating Port Adapter is singleton reduces overall complexity, this behaviour was introduced with version >= 4.0.0
+In addition, it should be treated with explicit different types. On the other hand, singleton management simplifies the usage
+of interceptors. Therefore, we introduce this change with version 4.0.0
 |===
 
 === Transactions

@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.18">
-<title>Jexxa - A hexagonal software architecture for your application</title>
+<meta name="generator" content="Asciidoctor 2.0.20">
+<title>Jexxa—A hexagonal software architecture for your application</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -208,13 +208,10 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
 .admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
 .exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
-.exampleblock>.content>:first-child{margin-top:0}
-.exampleblock>.content>:last-child{margin-bottom:0}
 .sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
-.sidebarblock>:first-child{margin-top:0}
-.sidebarblock>:last-child{margin-bottom:0}
 .sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
-.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
 .literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
 @media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
 @media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
@@ -393,7 +390,7 @@ b.conum *{color:inherit!important}
 dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
 h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
 p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content,span.alt,summary{font-size:1.0625rem}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
 p{margin-bottom:1.25rem}
 .sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
 .exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
@@ -439,7 +436,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article">
 <div id="header">
-<h1>Jexxa - A hexagonal software architecture for your application</h1>
+<h1>Jexxa—A hexagonal software architecture for your application</h1>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -486,7 +483,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_vision"><a class="anchor" href="#_vision"></a>1. Vision</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Jexxa is a lightweight framework to implement business applications based on a <a href="https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/">ports and adapters</a> architecture. It allows for easily connecting technology stacks, called adapters, to interfaces of a technology-agnostic application core which are called ports. For this purpose Jexxa offers:</p>
+<p>Jexxa is a lightweight framework to implement business applications based on a <a href="https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/">ports and adapters</a> architecture. It allows for easily connecting technology stacks, called adapters, to interfaces of a technology-agnostic application core which are called ports. For this purpose, Jexxa offers:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -505,12 +502,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div>
 <div class="paragraph">
-<p>Even though Jexxa is used within lightweight business applications and microservices it has a strong educational focus, especially on following principles:</p>
+<p>Even though Jexxa is used within lightweight business applications and microservices, it has a strong educational focus, especially on the following principles:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><em>Dependency Inversion</em>: Get an idea how to strictly separate between technology stacks and domain logic on a code basis which is essential for durable business applications.</p>
+<p><em>Dependency Inversion</em>: Get an idea how to strictly separate between technology stacks and domain logic on a code basis, which is essential for durable business applications.</p>
 </li>
 <li>
 <p><em>Inversion of Control</em>(IoC): Find the required degree of IoC for your software projects. Control aspects that are technically required but not important for your business application should be hidden by a framework. The remaining required aspects should be explicitly represented.</p>
@@ -521,7 +518,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div>
 <div class="paragraph">
-<p>Even if you use real powerful frameworks for good reason within your application I hope that you find Jexxa helpful in some way.</p>
+<p>Even if you use real powerful frameworks for good reason within your application, I hope that you find Jexxa helpful in some ways.</p>
 </div>
 </div>
 </div>
@@ -532,7 +529,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>The main motivation to develop this framework comes from experiences with developing and maintaining durable software systems running up to 40 years. Here, the role of a sustainable software architecture becomes an important part to support and guide the developer team which is currently responsible for an application.</p>
 </div>
 <div class="paragraph">
-<p>Existing frameworks such as the <a href="https://spring.io">Spring Framework</a> or <a href="https://jakarta.ee">Jakarta</a> provide powerful features and greatly support development of complex business applications. On the other side, these frameworks can unintentionally be misused by developers from an architectural point of view. It is very difficult to maintain applications over several decades, especially when such frameworks find their way into the application core.</p>
+<p>Existing frameworks such as the <a href="https://spring.io">Spring Framework</a> or <a href="https://jakarta.ee">Jakarta</a> provide powerful features and greatly support the development of complex business applications. On the other side, developers can unintentionally misuse these frameworks from an architectural point of view.
+It is very difficult to maintain applications over several decades, especially when such frameworks find their way into the application core.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -555,13 +553,13 @@ When developing applications with a high durability as used in production, finan
 <div class="ulist">
 <ul>
 <li>
-<p>Updating to a newer version of a technology stack is difficult or even impossible so that it is much safer to use the old one. Of course new developed applications use this old version as well because your team 'trusts' it, and you avoid maintaining a zoo of different versions.</p>
+<p>Updating to a newer version of a technology stack is difficult or even impossible so that it is much safer to use the old one. Of course, new developed applications use this old version as well because your team 'trusts' it, and you avoid maintaining a zoo of different versions.</p>
 </li>
 <li>
-<p>Adding or replacing a technology stack is difficult or even impossible, so a disruptive technology will cause your application core to become legacy as well. A common example are database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs &#8594; relational DBs &#8594; a zoo of NoSQL DBs. Because database technologies can become crucial for your business, your company employs senior-grade developers who have deep knowledge of both legacy and new technology stacks and synchronize your business data.</p>
+<p>Adding or replacing a technology stack is difficult or even impossible, so a disruptive technology will cause your application core to become legacy as well. A common example is database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs &#8594;relational DBs &#8594;a zoo of NoSQL DBs. Because database technologies can become crucial for your business, your company employs senior-grade developers who have deep knowledge of both legacy and new technology stacks and synchronize your business data.</p>
 </li>
 <li>
-<p>Changes on the application core itself takes much longer time as in the beginning. In the end you need senior developers who have a deep understanding of the specific business domain, the used technology stacks and the convoluted structures of the entire application.</p>
+<p>Changes on the application core itself take much longer time as in the beginning. In the end, you need senior developers who have a deep understanding of the specific business domain, the used technology stacks and the convoluted structures of the entire application.</p>
 </li>
 <li>
 <p>In the long term, such structural issues could (and in reality will) affect your enterprise architecture, so neighboring systems need to be aware of and take special actions for legacy systems.</p>
@@ -589,7 +587,7 @@ All considerations and design decisions were made in the context of durable busi
 <p>In contrast to technology companies, the focus of business software development at companies from the production,
 finance or insurance sectors is generally not on the technical side. The big challenge for software developers is
 to understand the business domain and how to achieve added value for the customer. The essence of this knowledge is
-then written in a domain specific software in order to increase the value for the company and customers. Typically,
+then written in domain-specific software in order to increase the value for the company and customers. Typically,
 the use of technology stacks itself does not add value as long as the business domain itself is not changed. At
 best, costs can be reduced.</p>
 </div>
@@ -626,7 +624,7 @@ architecture and the domain language step by step from the intermediate and seni
 </div>
 <div class="paragraph">
 <p>Unfortunately, I have often experienced in the past companies expect a graduate or junior developer to already know the craftsmanship of software
-engineering, and methods of software architecture so that they only need to learn a business domain. Finally, he or she has applied for the position
+engineering and methods of software architecture so that they only need to learn a business domain. Finally, he or she has applied for the position
 of a full-stack developer&#8230;&#8203;</p>
 </div>
 <div class="paragraph">
@@ -656,14 +654,13 @@ Jexxa uses explicit binding for the driving adapter together with implicit const
 </table>
 </div>
 <div class="paragraph">
-<p>Please refer to following <a href="https://github.com/jexxa-projects/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md">tutorial</a> for more information.</p>
+<p>Please refer to the following <a href="https://github.com/jexxa-projects/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md">tutorial</a> for more information.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_simple_interface_for_driving_adapters"><a class="anchor" href="#_simple_interface_for_driving_adapters"></a>3.2. Simple Interface for Driving Adapters</h3>
 <div class="paragraph">
-<p>One of the key aspects for durable software systems is the ability to use arbitrary technology stacks which do not exist at the point in time the
-application was developed.</p>
+<p>One of the key aspects for durable software systems is the ability to add specific technology stacks through a unified API.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -678,7 +675,7 @@ Jexxa provides a super simple <a href="https://github.com/jexxa-projects/Jexxa/b
 </table>
 </div>
 <div class="paragraph">
-<p>Together with the ability of an explicit binding on an object level, this supports following use cases:</p>
+<p>Together with the ability of an explicit binding on an object level, this supports the following use cases:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -694,8 +691,8 @@ Jexxa provides a super simple <a href="https://github.com/jexxa-projects/Jexxa/b
 <div class="sect2">
 <h3 id="_ioc_without_annotations"><a class="anchor" href="#_ioc_without_annotations"></a>3.3. IoC without annotations</h3>
 <div class="paragraph">
-<p>Like any other framework, Jexxa takes control about part of your application core. Especially in Java this is often done with framework specific
-annotations. The downside is that these annotations tightly couple your application core to a specific technology stack. Of course an experienced developer would introduce a facade but this is often seen as boilerplate code for inexperienced developers.</p>
+<p>Like any other framework, Jexxa takes control of part of your application core. Especially in Java, this is often done with framework-specific
+annotations. The downside is that these annotations tightly couple your application core to a specific technology stack. Of course, an experienced developer would introduce a facade, but this is often seen as boilerplate code for inexperienced developers.</p>
 </div>
 <div class="paragraph">
 <p>Based on my experience, I can only recommend annotations within the application core for the following reasons:</p>
@@ -703,7 +700,7 @@ annotations. The downside is that these annotations tightly couple your applicat
 <div class="ulist">
 <ul>
 <li>
-<p>Use of annotations as metadata, e.g. to annotate your classes with the used pattern language of your application core.</p>
+<p>Use of annotations as metadata, e.g., to annotate your classes with the used pattern language of your application core.</p>
 </li>
 <li>
 <p>Use annotations for cross-cutting concerns on a homeopathic level. This can be useful to make the domain language more explicit  by hiding methods such as equals and hash code.</p>
@@ -745,8 +742,8 @@ Jexxa provides implementation for typical <code>application infrastructure strat
 </table>
 </div>
 <div class="paragraph">
-<p>This approach seems to be so obvious, so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern
-especially for the training of new developers. As an example I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial <a href="https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md#3-implement-the-infrastructure">BookStore</a> to see the source code):</p>
+<p>This approach seems to be so obvious, so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern,
+especially for the training of new developers. As an example, I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial <a href="https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md#3-implement-the-infrastructure">BookStore</a> to see the source code):</p>
 </div>
 <div class="ulist">
 <ul>
@@ -754,10 +751,10 @@ especially for the training of new developers. As an example I will use the impl
 <p>Regarding your business domain, your junior developers will learn at least the name of the most important business objects, because <code>Aggregates</code> include the business logic of this domain.</p>
 </li>
 <li>
-<p>From a software engineering point of view your junior developer gets familiar with the strategy design pattern.</p>
+<p>From a software engineering point of view, your junior developer gets familiar with the strategy design pattern.</p>
 </li>
 <li>
-<p>From an architectural point of view your junior developer gets familiar with the principal of dependency inversion.</p>
+<p>From an architectural point of view, your junior developer gets familiar with the principal of dependency inversion.</p>
 </li>
 <li>
 <p>Finally, your developers learn that they can persist data within a database without thinking about the database layout. Using a strategy pattern instead makes the database to a plugin.</p>
@@ -774,7 +771,7 @@ especially for the training of new developers. As an example I will use the impl
 <h2 id="_general_building_blocks"><a class="anchor" href="#_general_building_blocks"></a>4. General Building Blocks</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Jexxa has a strong focus on Domain Driven Design and uses a lot of terminology from its strategic and tactical design. An application built on Jexxa provides components that belong either to the <em>application core</em> or to the  <em>infrastructure</em>. The <em>application core</em> includes the business logic, whereas the <em>infrastructure</em> of an application binds required technology components to the application core.</p>
+<p>Jexxa has a strong focus on Domain Driven Design and uses a lot of terminologies from its strategic and tactical design. An application built on Jexxa provides components that belong either to the <em>application core</em> or to the  <em>infrastructure</em>. The <em>application core</em> includes the business logic, whereas the <em>infrastructure</em> of an application binds required technology components to the application core.</p>
 </div>
 <div class="paragraph">
 <p><a href="#JexxaComponents">Figure 1</a> shows the separation of a Jexxa application into packages, the included components, and the relationship of the components among each other.</p>
@@ -793,7 +790,7 @@ especially for the training of new developers. As an example I will use the impl
 </div>
 <div id="JexxaComponents" class="imageblock text-center">
 <div class="content">
-<img src="images/JexxaComponents.svg" alt="JexxaComponents" width="843" height="800">
+<img src="images/JexxaComponents.svg" alt="JexxaComponents" width="827" height="784">
 </div>
 <div class="title">Figure 1. This figure shows the separation of a typical Jexxa application into packages, the included components, and the relationship of the components among each other. Packages  labeled with <code>&lt;&lt;Jexxa&gt;&gt;</code> and light grey background are provided by Jexxa. Packages labeled with <code>&lt;&lt;Application&gt;&gt;</code> have to be implemented. As you can see, you can define on a very fine-grained level which parts of Jexxa you want to use.</div>
 </div>
@@ -837,14 +834,14 @@ especially for the training of new developers. As an example I will use the impl
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>Jexxa-DrivingAdapter</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">This package includes the provided driving adapter of Jexxa as well as strategies for typical application infrastructure components which simplifies the implementation of application specific driven adapter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This package includes the provided driving adapter of Jexxa as well as strategies for typical application infrastructure components, which simplifies the implementation of application-specific driven adapter</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>Jexxa-Core</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>This package includes the core of Jexxa and is responsible for binding the framework to the application. The functionality of this package is used via a fluent API within the main method of your application. In more detail, it provides following functionality:</p>
+<p>This package includes the core of Jexxa and is responsible for binding the framework to the application. The functionality of this package is used via a fluent API within the main method of your application. In more detail, it provides the following functionality:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -883,7 +880,7 @@ especially for the training of new developers. As an example I will use the impl
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>Inbound Ports</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Inbound ports belong to the application core and provide use cases that can be started by a driving adapter. Depending on the design of your application core a port might be an interface or a specific implementation of a set of use cases.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Inbound ports belong to the application core and provide use cases that can be started by a driving adapter. Depending on the design of your application core, a port might be an interface or a specific implementation of a set of use cases.</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
 <ul>
 <li>
@@ -931,12 +928,12 @@ especially for the training of new developers. As an example I will use the impl
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapters</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Driven adapters implement the outbound ports and can be injected into the inbound ports which in turn operates on these interfaces. Typically, they map domain objects to a specific technology stack.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Driven adapters implement the outbound ports and can be injected into the inbound ports which in turn operate on these interfaces. Typically, they map domain objects to a specific technology stack.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Jexxa provides strategies providing different implementations of typical <em>application infrastructure patterns</em> to simplify the development of driven adapters of an application.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Port Adapters</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Port adapters enable mapping between different representational styles of a specific port. For example this is required if a port should be exposed via a RESTful API. A port adapter belongs to the infrastructure of the application and is bound to a <em>specific driving adapter</em>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Port adapters enable mapping between different representational styles of a specific port. For example, this is required if a port should be exposed via a RESTful API. A port adapter belongs to the infrastructure of the application and is bound to a <em>specific driving adapter</em>.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Providing receiving driving adapters that simplify the development of the port adapters.</p></td>
 </tr>
 </tbody>
@@ -973,17 +970,17 @@ especially for the training of new developers. As an example I will use the impl
 <p>Jexxa provides a convention and configuration approach for driving adapters.</p>
 </div>
 <div class="paragraph">
-<p>A <em>generic</em> driving adapter automatically exposes methods from connected inbound ports by using a convention. For example this can be used for an RPC mechanism.</p>
+<p>A <em>generic</em> driving adapter automatically exposes methods from connected inbound ports by using a convention. For example, this can be used for an RPC mechanism.</p>
 </div>
 <div class="paragraph">
-<p>A <em>specific</em> driving adapter is used if a convention cannot be applied. Instead, you have to implement a configuration within the infrastructure of your application in form of a <em>port adapter</em>. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the <em>port adapter</em>.</p>
+<p>A <em>specific</em> driving adapter is used if a convention cannot be applied. Instead, you have to implement a configuration within the infrastructure of your application by using a <em>port adapter</em>. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example, this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the <em>port adapter</em>.</p>
 </div></div></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Infrastructure strategies</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Application infrastructure strategies provide how to map objects from the application core to a specific technology stack. For example if you use a database for persisting your data, the strategy decides the ORM mapping of your objects.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Jexxa provides implementation of typical application infrastructure patterns to simplify development of driven adapters. If such a strategy is suitable for your application, the implementation of a driven adapter is just a facade which maps the interface of the outbound port to the methods of the strategy.</p>
-<p class="tableblock">Available strategies in Jexxa are based on the standard javax interfaces (e.g. JMS or JDBC) and can be configured via <code>Properties</code>. This allows you to adjust the configuration to your development process. For example, you can easily switch your database technology between in memory or JDBC, or the used URL.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Application infrastructure strategies provide how to map objects from the application core to a specific technology stack. For example, if you use a database for persisting your data, the strategy decides the ORM mapping of your objects.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jexxa provides implementation of typical application infrastructure patterns to simplify development of driven adapters. If such a strategy is suitable for your application, the implementation of a driven adapter is just a facade that maps the interface of the outbound port to the methods of the strategy.</p>
+<p class="tableblock">Available strategies in Jexxa are based on the standard javax interfaces (e.g., JMS or JDBC) and can be configured via <code>Properties</code>. This allows you to adjust the configuration to your development process. For example, you can easily switch your database technology between in memory or JDBC, or the used URL.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1049,7 +1046,7 @@ especially for the training of new developers. As an example I will use the impl
 <div class="sect2">
 <h3 id="_dependency_injection_di"><a class="anchor" href="#_dependency_injection_di"></a>5.1. Dependency Injection (DI)</h3>
 <div class="paragraph">
-<p>Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support <em>implicit constructor injection</em> for following reason:</p>
+<p>Jexxa provides a simple DI mechanism to instantiate inbound ports of a business application and to inject required dependencies. Within Jexxa we only support <em>implicit constructor injection</em> for the following reason:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1065,7 +1062,7 @@ especially for the training of new developers. As an example I will use the impl
 </ul>
 </div>
 <div class="paragraph">
-<p>Within Jexxa we use conventions described in <a href="https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_conventions">JexxaConventions</a> to explicitly limit the direction of dependencies as described in <a href="#JexxaComponents">Figure 1</a>. Compared to other frameworks these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.</p>
+<p>Within Jexxa we use conventions described in <a href="https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_conventions">JexxaConventions</a> to explicitly limit the direction of dependencies as described in <a href="#JexxaComponents">Figure 1</a>. Compared to other frameworks, these limitations could be considered puristic. However, they provide good guard rails to clarify the single responsibility of your ports.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1082,12 +1079,12 @@ especially for the training of new developers. As an example I will use the impl
 <div class="sect3">
 <h4 id="_threading"><a class="anchor" href="#_threading"></a>5.2.2. Threading</h4>
 <div class="paragraph">
-<p>Currently, Jexxa ensures that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to following reasons:</p>
+<p>Currently, Jexxa ensures that only a single thread is active within the application core. This greatly simplifies the development of the application core itself. Furthermore, this approach should be sufficient due to the following reasons:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Multi threading is typically essential within technology stacks and not within the application core itself.</p>
+<p>Multi-threading is typically essential within technology stacks and not within the application core itself.</p>
 </li>
 <li>
 <p>When you start developing your application, you have typically only a limited number of users.</p>
@@ -1135,7 +1132,7 @@ especially for the training of new developers. As an example I will use the impl
 <i class="fa icon-note" title=":information_source:"></i>
 </td>
 <td class="content">
-In case you need a strict control how objects are exposed for example to different IP addresses, you have to use a specific driving adapter combined with port-adapter.
+In case you need a strict control on how objects are exposed, for example, to different IP addresses, you have to use a specific driving adapter combined with port-adapter.
 </td>
 </tr>
 </table>
@@ -1151,14 +1148,14 @@ In case you need a strict control how objects are exposed for example to differe
 <p>Inbound ports created by Jexxa are managed as singleton and reused if they are connected to different driving adapters.</p>
 </li>
 <li>
-<p>Inbound ports created by the application can be bound to adapters. In this case the application has full control of the number of instances.</p>
+<p>Inbound ports created by the application can be bound to adapters. In this case, the application has full control of the number of instances.</p>
 </li>
 </ol>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>The singleton scope supports designing stateless ports which is in general recommended.</p>
+<p>The singleton scope supports designing stateless ports which are in general recommended.</p>
 </li>
 <li>
 <p>This is only recommended if your application core cannot fulfill the conventions of Jexxa (see <a href="https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_conventions">JexxaConventions</a>).</p>
@@ -1180,10 +1177,10 @@ In case you need a strict control how objects are exposed for example to differe
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Driven Adapter</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Is managed as singleton and reused when it is injected into different ports.</p>
+<p>It Is managed as a singleton and reused when it is injected into different ports.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>The singleton scope supports designing stateless outbound ports which is in general recommended.</p>
+<p>The singleton scope supports designing stateless outbound ports which are in general recommended.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -1193,8 +1190,8 @@ In case you need a strict control how objects are exposed for example to differe
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>The initial assumption of fine-grained control of how a driving adapter should be exposed was not required until now.
-In addition, it should be treated with explicit different types. On the other hand singleton management simplifies the usage
-of interceptors. Since treating Port Adapter is singleton reduces overall complexity, this behaviour was introduced with version &gt;= 4.0.0</p>
+In addition, it should be treated with explicit different types. On the other hand, singleton management simplifies the usage
+of interceptors. Therefore, we introduce this change with version 4.0.0</p>
 </div></div></td>
 </tr>
 </tbody>
@@ -1224,7 +1221,7 @@ application scenarios Jexxa provides the <code>TransactionalOutboxSender</code>.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-04-02 09:28:39 +0200
+Last updated 2023-08-22 11:16:24 +0200
 </div>
 </div>
 </body>
