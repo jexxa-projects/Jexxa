@@ -115,6 +115,7 @@ annotations. The downside is that these annotations tightly couple your applicat
 
 Based on my experience, I can only recommend annotations within the application core for the following reasons:
 
+* Use of Java build-in annotations, such as ``@Deprecated``.
 * Use of annotations as metadata, e.g., to annotate your classes with the used pattern language of your application core.
 * Use annotations for cross-cutting concerns on a homeopathic level. This can be useful to make the domain language more explicit  by hiding methods such as equals and hash code.
 
