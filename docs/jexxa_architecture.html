@@ -445,8 +445,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_general_design_decisions">3. General Design Decisions</a>
 <ul class="sectlevel2">
 <li><a href="#_visible_flow_of_control">3.1. Visible flow of control</a></li>
-<li><a href="#_simple_interface_for_driving_adapters">3.2. Simple Interface for Driving Adapters</a></li>
-<li><a href="#_ioc_without_annotations">3.3. IoC without annotations</a></li>
+<li><a href="#_ioc_without_annotations">3.2. IoC without annotations</a></li>
+<li><a href="#_simple_interface_for_driving_adapters">3.3. Simple Interface for Driving Adapters</a></li>
 <li><a href="#_strategy_pattern_for_driven_adapters">3.4. Strategy pattern for Driven Adapters</a></li>
 </ul>
 </li>
@@ -648,7 +648,7 @@ and rebuild the application. Unfortunately, you hide the flow of control which m
 <i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
 </td>
 <td class="content">
-Jexxa uses explicit binding for the driving adapter together with implicit constructor injection to make the flow of control visible. So the main method represents the unique starting point for the flow of control of your application.
+Jexxa uses explicit binding for all driving adapters together with implicit constructor injection to make the flow of control visible. The binding happens in the main-method so that it represents the unique starting point for the flow of control of your application.
 </td>
 </tr>
 </table>
@@ -658,11 +658,50 @@ Jexxa uses explicit binding for the driving adapter together with implicit const
 </div>
 </div>
 <div class="sect2">
-<h3 id="_simple_interface_for_driving_adapters"><a class="anchor" href="#_simple_interface_for_driving_adapters"></a>3.2. Simple Interface for Driving Adapters</h3>
+<h3 id="_ioc_without_annotations"><a class="anchor" href="#_ioc_without_annotations"></a>3.2. IoC without annotations</h3>
 <div class="paragraph">
-<p>One of the key aspects for durable software systems is the ability to add new technology stacks through a unified API.
+<p>Like any other framework, Jexxa takes control of part of your application core. Especially in Java, this is often done with framework-specific
+annotations. The downside is that these annotations tightly couple your application core to a specific technology stack. Of course, an experienced developer would introduce a facade, but this is often seen as boilerplate code for inexperienced developers.</p>
+</div>
+<div class="paragraph">
+<p>Based on my experience, I can only recommend annotations within the application core for the following reasons:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Use of Java build-in annotations, such as <code>@Deprecated</code>.</p>
+</li>
+<li>
+<p>Use of annotations as metadata, e.g., to annotate your classes with the used pattern language of your application core.</p>
+</li>
+<li>
+<p>Use annotations for cross-cutting concerns on a homeopathic level. This can be useful to make the domain language more explicit by hiding methods such as equals and hash code.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
+</td>
+<td class="content">
+Jexxa does not use annotations for all IoC aspects such as dependency injection. Instead, conventions are used.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Section <a href="#_inversion_of_control_ioc">Inversion of Control (IoC)</a> describes the used conventions in detail.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_simple_interface_for_driving_adapters"><a class="anchor" href="#_simple_interface_for_driving_adapters"></a>3.3. Simple Interface for Driving Adapters</h3>
+<div class="paragraph">
+<p>One of the key aspects for durable software systems is the ability to add new technology stacks.
 In this context, the term <em>new</em> means not only a new kind of technology,
-but more importantly, a newer version of an already used technology with breaking changes.</p>
+but more importantly, a newer version of an already used technology with breaking changes.
+In such a case, it often makes more sense to provide a new implementation.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -685,54 +724,16 @@ Jexxa provides a super simple <a href="https://github.com/jexxa-projects/Jexxa/b
 <p>Students can support your teams with the evaluation and integration of new technology stacks as part of their bachelor or master thesis.</p>
 </li>
 <li>
-<p>The possibility to bind driving adapter on an object level allows for the integration, updating, and migration of dedicated technology stacks.</p>
+<p>The possibility to bind driving adapter on an object level allows for the integration, updating, and migration of dedicated technology stacks in the smallest possible steps.</p>
 </li>
 </ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_ioc_without_annotations"><a class="anchor" href="#_ioc_without_annotations"></a>3.3. IoC without annotations</h3>
-<div class="paragraph">
-<p>Like any other framework, Jexxa takes control of part of your application core. Especially in Java, this is often done with framework-specific
-annotations. The downside is that these annotations tightly couple your application core to a specific technology stack. Of course, an experienced developer would introduce a facade, but this is often seen as boilerplate code for inexperienced developers.</p>
-</div>
-<div class="paragraph">
-<p>Based on my experience, I can only recommend annotations within the application core for the following reasons:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Use of Java build-in annotations, such as <code>@Deprecated</code>.</p>
-</li>
-<li>
-<p>Use of annotations as metadata, e.g., to annotate your classes with the used pattern language of your application core.</p>
-</li>
-<li>
-<p>Use annotations for cross-cutting concerns on a homeopathic level. This can be useful to make the domain language more explicit  by hiding methods such as equals and hash code.</p>
-</li>
-</ul>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
-</td>
-<td class="content">
-Jexxa does not use annotations for all IoC aspects such as dependency injection. Instead, conventions are used.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Section <a href="#_inversion_of_control_ioc">Inversion of Control (IoC)</a> describes the used conventions in detail.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_strategy_pattern_for_driven_adapters"><a class="anchor" href="#_strategy_pattern_for_driven_adapters"></a>3.4. Strategy pattern for Driven Adapters</h3>
 <div class="paragraph">
-<p>Driven adapters belong to the infrastructure of an application. Thus, their implementation should be as simple as possible so that they can be
-implemented by junior developers.</p>
+<p>Driven adapters belong to the infrastructure of an application. Thus, their implementation should also be as simple as possible so that they can be
+implemented by junior developers. Since the interface of a driven adapter belongs to the application core, Jexxa cannot provide an API. Instead, it provides so-called <code>application infrastructure strategies</code> to simplify the implementation of a driven adapter.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -747,8 +748,9 @@ Jexxa provides implementation for typical <code>application infrastructure strat
 </table>
 </div>
 <div class="paragraph">
-<p>This approach seems to be so obvious, so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern,
-especially for the training of new developers. As an example, I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial <a href="https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md#3-implement-the-infrastructure">BookStore</a> to see the source code):</p>
+<p>This approach also enables you to train your junior developers.
+As an example, I will use the implementation of a repository in the sense of DDD,
+which manages so-called aggregates (please refer to tutorial <a href="https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md#3-implement-the-infrastructure">BookStore</a> to see the source code):</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1226,7 +1228,7 @@ application scenarios Jexxa provides the <code>TransactionalOutboxSender</code>.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-22 17:23:41 +0200
+Last updated 2023-08-23 08:14:45 +0200
 </div>
 </div>
 </body>

@@ -93,22 +93,10 @@ pattern or a Fluent API. Design aspects that should be hidden in the business ap
 Most today's frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency
 and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and adapters architecture. For incoming synchronous calls (RMI), the flow of control may still be obvious, but can be difficult to detect for incoming asynchronous messages.
 
-IMPORTANT: Jexxa uses explicit binding for the driving adapter together with implicit constructor injection to make the flow of control visible. So the main method represents the unique starting point for the flow of control of your application.
+IMPORTANT: Jexxa uses explicit binding for all driving adapters together with implicit constructor injection to make the flow of control visible. The binding happens in the main-method so that it represents the unique starting point for the flow of control of your application.
 
 Please refer to the following https://github.com/jexxa-projects/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md[tutorial] for more information.
 
-=== Simple Interface for Driving Adapters
-
-One of the key aspects for durable software systems is the ability to add new technology stacks through a unified API.
-In this context, the term _new_ means not only a new kind of technology,
-but more importantly, a newer version of an already used technology with breaking changes.
-
-IMPORTANT: Jexxa provides a super simple https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-adapter-api/src/main/java/io/jexxa/adapterapi/drivingadapter/IDrivingAdapter.java[API] that allows for the integration of arbitrary technology stacks as driving adapters.
-
-Together with the ability of an explicit binding on an object level, this supports the following use cases:
-
-* Students can support your teams with the evaluation and integration of new technology stacks as part of their bachelor or master thesis.
-* The possibility to bind driving adapter on an object level allows for the integration, updating, and migration of dedicated technology stacks.
 
 === IoC without annotations
 
@@ -119,21 +107,36 @@ Based on my experience, I can only recommend annotations within the application 
 
 * Use of Java build-in annotations, such as ``@Deprecated``.
 * Use of annotations as metadata, e.g., to annotate your classes with the used pattern language of your application core.
-* Use annotations for cross-cutting concerns on a homeopathic level. This can be useful to make the domain language more explicit  by hiding methods such as equals and hash code.
+* Use annotations for cross-cutting concerns on a homeopathic level. This can be useful to make the domain language more explicit by hiding methods such as equals and hash code.
 
 IMPORTANT: Jexxa does not use annotations for all IoC aspects such as dependency injection. Instead, conventions are used.
 
 Section <<Inversion of Control (IoC)>> describes the used conventions in detail.
 
+=== Simple Interface for Driving Adapters
+
+One of the key aspects for durable software systems is the ability to add new technology stacks.
+In this context, the term _new_ means not only a new kind of technology,
+but more importantly, a newer version of an already used technology with breaking changes.
+In such a case, it often makes more sense to provide a new implementation.
+
+IMPORTANT: Jexxa provides a super simple https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-adapter-api/src/main/java/io/jexxa/adapterapi/drivingadapter/IDrivingAdapter.java[API] that allows for the integration of arbitrary technology stacks as driving adapters.
+
+Together with the ability of an explicit binding on an object level, this supports the following use cases:
+
+* Students can support your teams with the evaluation and integration of new technology stacks as part of their bachelor or master thesis.
+* The possibility to bind driving adapter on an object level allows for the integration, updating, and migration of dedicated technology stacks in the smallest possible steps.
+
 === Strategy pattern for Driven Adapters
 
-Driven adapters belong to the infrastructure of an application. Thus, their implementation should be as simple as possible so that they can be
-implemented by junior developers.
+Driven adapters belong to the infrastructure of an application. Thus, their implementation should also be as simple as possible so that they can be
+implemented by junior developers. Since the interface of a driven adapter belongs to the application core, Jexxa cannot provide an API. Instead, it provides so-called `application infrastructure strategies` to simplify the implementation of a driven adapter.
 
 IMPORTANT: Jexxa provides implementation for typical `application infrastructure strategies` so that the implementation of driven adapters is just a simple facade, which maps between the API of outbound ports to corresponding API of the strategy.
 
-This approach seems to be so obvious, so we directly agree. Therefore, I would like to explain the most important advantages of using the strategy pattern,
-especially for the training of new developers. As an example, I will use the implementation of a repository in the sense of DDD, which manages so-called aggregates (please refer to tutorial https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md#3-implement-the-infrastructure[BookStore] to see the source code):
+This approach also enables you to train your junior developers.
+As an example, I will use the implementation of a repository in the sense of DDD,
+which manages so-called aggregates (please refer to tutorial https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README.md#3-implement-the-infrastructure[BookStore] to see the source code):
 
 * Regarding your business domain, your junior developers will learn at least the name of the most important business objects, because `Aggregates` include the business logic of this domain.
 * From a software engineering point of view, your junior developer gets familiar with the strategy design pattern.
