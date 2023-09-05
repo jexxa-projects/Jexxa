@@ -453,8 +453,13 @@ public final class JexxaMain
 
     <T> void addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
     {
-        var instance = portFactory.getInstanceOf(bootstrapService, properties);
-        initFunction.accept(instance);
+        if (bootstrapService.isInterface()) {
+            var instance = drivenAdapterFactory.getInstanceOf(bootstrapService, properties);
+            initFunction.accept(instance);
+        } else {
+            var instance = portFactory.getInstanceOf(bootstrapService, properties);
+            initFunction.accept(instance);
+        }
     }
 
 
