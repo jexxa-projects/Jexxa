@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[6.1.6] - 2023-09-05
+### Fixed
+- Jexxa-Core:
+    - Outbound-Ports are now correctly created when used as `bootstrap`service.  
+
+- Updated dependencies
+
 ## \[6.1.5] - 2023-08-18
 ### Fixed
 - Jexxa-Test: 

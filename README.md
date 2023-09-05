@@ -79,7 +79,7 @@ Maven:
     <dependency>
        <groupId>io.jexxa</groupId>
        <artifactId>jexxa-web</artifactId>
-       <version>6.1.5</version>
+       <version>6.1.6</version>
     </dependency>
     
     <dependency>
@@ -93,7 +93,7 @@ Maven:
 Gradle:
 
 ```groovy
-compile "io.jexxa:jexxa-web:6.1.5"
+compile "io.jexxa:jexxa-web:6.1.6"
 compile "org.slf4j:slf4j-simple:2.0.9"
 ``` 
 
