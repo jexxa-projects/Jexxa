@@ -261,12 +261,17 @@ public class OpenAPIConvention
 
         if (components.getSchemas() == null || !components.getSchemas().containsKey(clazz.getSimpleName()))
         {
-            var schema = createSchema();
-            schema.setType(Schema.SchemaType.OBJECT);
-            Stream.of(clazz.getDeclaredFields())
-                    .filter(element -> !Modifier.isStatic(element.getModifiers()))
-                    .forEach(element -> schema.addProperty(element.getName(), createComponentSchema(element.getType(), element.getGenericType())));
-            components.addSchema(clazz.getSimpleName(), schema);
+            if (clazz.isEnum())
+            {
+                components.addSchema(clazz.getSimpleName(), createSchemaEnum(clazz));
+            } else {
+                var schema = createSchema();
+                schema.setType(Schema.SchemaType.OBJECT);
+                Stream.of(clazz.getDeclaredFields())
+                        .filter(element -> !Modifier.isStatic(element.getModifiers()))
+                        .forEach(element -> schema.addProperty(element.getName(), createComponentSchema(element.getType(), element.getGenericType())));
+                components.addSchema(clazz.getSimpleName(), schema);
+            }
         }
     }
 
@@ -300,6 +305,12 @@ public class OpenAPIConvention
             ));
 
         return schema;
+    }
+
+    private Schema createSchemaEnum(Class<?> clazz) {
+        var enumSchema = createSchema().type(Schema.SchemaType.STRING);
+        Stream.of(clazz.getEnumConstants()).forEach( element -> enumSchema.addEnumeration(element.toString()));
+        return enumSchema;
     }
 
     private static Schema createSchemaBaseType(Class<?> clazz)

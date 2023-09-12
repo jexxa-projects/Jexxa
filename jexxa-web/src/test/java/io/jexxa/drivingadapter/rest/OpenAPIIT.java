@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import io.jexxa.TestConstants;
 import io.jexxa.testapplication.applicationservice.Java8DateTimeApplicationService;
 import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
+import io.jexxa.testapplication.domain.model.JexxaEnum;
 import io.jexxa.testapplication.domain.model.SpecialCasesValueObject;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
@@ -29,6 +30,7 @@ import static io.jexxa.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @Tag(TestConstants.INTEGRATION_TEST)
@@ -79,6 +81,7 @@ class OpenAPIIT
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
 
+
         //Assert - Fields of basic openAPI structure
         assertNotNull(result);
 
@@ -109,6 +112,30 @@ class OpenAPIIT
         assertNotNull(result);
         assertFalse(deepSearchKeys(result,"nullValue").isEmpty());
         assertFalse(deepSearchKeys(result,"valueWithoutGetter").isEmpty());
+    }
+
+    @Test
+    void testEnum()
+    {
+        //Arrange -> Nothing to do
+        //Arrange
+        objectUnderTest.register(new SimpleApplicationService());
+        objectUnderTest.start();
+        //Act
+        JsonObject response = Unirest.get(OPENAPI_PATH)
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(JsonObject.class).getBody();
+
+        var result = response
+                .get("components").getAsJsonObject()
+                .get("schemas").getAsJsonObject()
+                .get(JexxaEnum.class.getSimpleName()).getAsJsonObject();
+
+        //Assert - Fields of basic openAPI structure
+        assertNotNull(result);
+        assertTrue(result.toString().contains(JexxaEnum.ENUM_VALUE1.name()));
+        assertTrue(result.toString().contains(JexxaEnum.ENUM_VALUE2.name()));
+        assertTrue(result.toString().contains(JexxaEnum.ENUM_VALUE3.name()));
     }
 
 

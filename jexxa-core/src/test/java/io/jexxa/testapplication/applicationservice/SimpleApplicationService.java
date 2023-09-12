@@ -3,6 +3,7 @@ package io.jexxa.testapplication.applicationservice;
 
 import io.jexxa.common.wrapper.logger.SLF4jLogger;
 import io.jexxa.testapplication.annotation.ValidApplicationService;
+import io.jexxa.testapplication.domain.model.JexxaEnum;
 import io.jexxa.testapplication.domain.model.JexxaRecord;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import io.jexxa.testapplication.domain.model.SpecialCasesValueObject;
@@ -19,6 +20,8 @@ public class SimpleApplicationService
     private List<String> messages = new ArrayList<>();
     private List<JexxaValueObject> valueObjects = new ArrayList<>();
     private List<JexxaRecord> recordList = new ArrayList<>();
+
+    private JexxaEnum jexxaEnum = JexxaEnum.ENUM_VALUE1;
 
     public static class SimpleApplicationException extends Exception
     {
@@ -55,6 +58,16 @@ public class SimpleApplicationService
     public void throwExceptionTest() throws SimpleApplicationException
     {
         throw new SimpleApplicationException("TestException");
+    }
+
+    public void setEnumValue(JexxaEnum jexxaEnum)
+    {
+        this.jexxaEnum = jexxaEnum;
+    }
+
+    public JexxaEnum getEnumValue()
+    {
+        return jexxaEnum;
     }
 
     @SuppressWarnings("DataFlowIssue") // Because this method should caus a NullPointerException for testing purpose
