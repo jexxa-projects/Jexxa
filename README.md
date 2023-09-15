@@ -3,8 +3,8 @@
 [![CodeQL](https://github.com/jexxa-projects/Jexxa/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jexxa-projects/Jexxa/actions/workflows/codeql-analysis.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b6c1680824ef4ac5914c40073242dc86)](https://www.codacy.com/gh/repplix/Jexxa/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=repplix/Jexxa&amp;utm_campaign=Badge_Grade)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jexxa-projects_Jexxa&metric=alert_status)](https://sonarcloud.io/summary/overall?id=jexxa-projects_Jexxa)
- ![Java CI](https://github.com/jexxa-projects/Jexxa/workflows/Java%20CI/badge.svg)
-
+ [![Java 17 LTS CI](https://github.com/jexxa-projects/Jexxa/actions/workflows/maven.yml/badge.svg)](https://github.com/jexxa-projects/Jexxa/actions/workflows/maven.yml)
+ 
 # Jexxa—A Ports and Adapters Framework for Java
 Jexxa is a lightweight framework to simplify the implementation of durable business applications using Domain Driven Design. It is no general purpose framework such as Spring. Instead, it focuses on the separation of your bounded contexts using microservices with a *ports and adapters* (aka _hexagonal_) architecture. 
 
