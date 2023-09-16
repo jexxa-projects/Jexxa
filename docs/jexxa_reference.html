@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.18">
+<meta name="generator" content="Asciidoctor 2.0.20">
 <title>Jexxa - Reference Guide</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -208,13 +208,10 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
 .admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
 .exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
-.exampleblock>.content>:first-child{margin-top:0}
-.exampleblock>.content>:last-child{margin-bottom:0}
 .sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
-.sidebarblock>:first-child{margin-top:0}
-.sidebarblock>:last-child{margin-bottom:0}
 .sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
-.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
 .literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
 @media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
 @media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
@@ -393,7 +390,7 @@ b.conum *{color:inherit!important}
 dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
 h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
 p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content,span.alt,summary{font-size:1.0625rem}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
 p{margin-bottom:1.25rem}
 .sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
 .exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
@@ -1093,7 +1090,7 @@ If ou need some example how <code>RESTfulRPCAdapter</code> maps Java&#8217;s Dat
 <div class="sect2">
 <h3 id="_conventions_of_restfulrpcadapter"><a class="anchor" href="#_conventions_of_restfulrpcadapter"></a>4.4. Conventions of RESTfulRPCAdapter</h3>
 <div class="paragraph">
-<p>The <code>RESTfulRPCAdapter</code> is a simple RPC mechanism utilizing REST. Based on the <a href="https://martinfowler.com/articles/richardsonMaturityModel.html">REST maturity model</a> from Richardson it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST on a higher maturity level.</p>
+<p>The <code>RESTfulRPCAdapter</code> is a simple RPC mechanism utilizing REST. Based on the <a href="https://martinfowler.com/articles/richardsonMaturityModel.html">REST maturity model</a> from Richardson it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST at a higher maturity level.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -1108,7 +1105,7 @@ When you start using this adapter, I recommend enabling OpenAPI support at least
 </table>
 </div>
 <div class="paragraph">
-<p>This adapter uses following conventions:</p>
+<p>This adapter uses the following conventions:</p>
 </div>
 <table id="RESTfulRPCAdapterConvention" class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 5. Describes the conventions used in <code>RESTfulRPCAdapter</code>.</caption>
@@ -1149,7 +1146,7 @@ When you start using this adapter, I recommend enabling OpenAPI support at least
 <i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
 </td>
 <td class="content">
-<div class="title">This implies following consequences:</div>
+<div class="title">This implies the following consequences:</div>
 <div class="ulist">
 <ul>
 <li>
@@ -1173,7 +1170,7 @@ When you start using this adapter, I recommend enabling OpenAPI support at least
 <p>HTTP-GET</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>All public non-static Methods of an object are exposed via HTTP GET if following conditions are fulfilled:</p>
+<p>All public non-static Methods of an object are exposed via HTTP GET if the following conditions are fulfilled:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1222,24 +1219,22 @@ When you start using this adapter, I recommend enabling OpenAPI support at least
 <p>Json object in case of a single attribute.</p>
 </li>
 <li>
-<p>Json array for multiple attributes.</p>
+<p>For multiple attribues to approaches are possible:</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Json array for multiple attributes. The order of the attributes in the Json array must match to the order of attributes of the method!</p>
+</li>
+<li>
+<p>A single Json object including the parameters with key <code>arg0</code> to <code>argN</code></p>
+</li>
+</ol>
+</div>
 </li>
 <li>
 <p>All attributes are treated as <code>in</code> values in terms of RPC. This means that they are not included in the HTML response.</p>
 </li>
 </ul>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title=":heavy_exclamation_mark:"></i>
-</td>
-<td class="content">
-The order of the attributes in the Json array must match to the order of attributes of the method!
-</td>
-</tr>
-</table>
 </div></div></td>
 </tr>
 <tr>
@@ -1436,7 +1431,7 @@ Please check the tutorial <a href="https://github.com/jexxa-projects/JexxaTutori
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-04-02 09:23:29 +0200
+Last updated 2023-09-16 17:49:11 +0200
 </div>
 </div>
 </body>
