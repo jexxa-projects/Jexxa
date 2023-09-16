@@ -94,6 +94,13 @@ public class SimpleApplicationService
         setSimpleValue(second.getValue());
     }
 
+    public void setSimpleValueTwice(int first, int second)
+    {
+        setSimpleValue(first);
+        setSimpleValue(second);
+    }
+
+
     public void addMessage(String message)
     {
         messages.add(message);

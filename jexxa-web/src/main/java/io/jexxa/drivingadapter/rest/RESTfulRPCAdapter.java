@@ -16,7 +16,6 @@ import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
 import io.jexxa.common.JexxaBanner;
 import io.jexxa.common.properties.Secret;
 import io.jexxa.common.wrapper.json.JSONConverter;
-import io.jexxa.common.wrapper.json.JSONManager;
 import io.jexxa.drivingadapter.rest.openapi.OpenAPIConvention;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -38,13 +37,14 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
+import static io.jexxa.common.wrapper.json.JSONManager.getJSONConverter;
 import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
 import static io.jexxa.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
 
 
 public final class RESTfulRPCAdapter implements IDrivingAdapter
 {
-    private final JSONConverter jsonConverter = JSONManager.getJSONConverter();
+    private final JSONConverter jsonConverter = getJSONConverter();
     private final Properties properties;
     private Javalin javalin;
     private Server server;
@@ -345,6 +345,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     private void invokeMethod(Object object, RESTfulRPCConvention.RESTfulRPCMethod method, Context httpContext )
     {
         Object[] methodParameters = deserializeParameters(httpContext.body(), method.method());
+
         var invocationHandler = InvocationManager.getInvocationHandler(object);
 
 
@@ -352,7 +353,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
                 invocationHandler.invoke(method.method(), object, methodParameters)
         );
 
-        //At the moment we do not handle any credentials
+        //At the moment, we do not handle any credentials
         httpContext.header("Access-Control-Allow-Origin", "*");
         httpContext.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
@@ -371,11 +372,19 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
 
             var jsonElement = JsonParser.parseString(jsonString);
 
-            // In case we have more than one attribute, we assume a JSonArray
-            if (method.getParameterCount() > 1) {
-                return readArray(jsonElement.getAsJsonArray(), method);
-            } else {
+            // Handle 1 parameter
+            if (method.getParameterCount() == 1)
+            {
                 return new Object[]{jsonConverter.fromJson(jsonString, method.getGenericParameterTypes()[0])};
+            }
+
+            // In case we have more than one attribute, check if we have JSonArray representation or Arg-representation
+            if (method.getParameterCount() > 1 && jsonElement.isJsonArray()) {
+                return readArray(jsonElement.getAsJsonArray(), method);
+            } else if (jsonElement.isJsonObject()){
+                return readArgParameter(jsonElement.getAsJsonObject(), method);
+            } else {
+                throw new IllegalArgumentException("Invalid JSON request for method " + method.getName() + ". JSON request: " + jsonString);
             }
         }
         catch (IllegalArgumentException e)  {
@@ -389,6 +398,16 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
                 throw new IllegalArgumentException("Could not deserialize attributes for method " + method.getName() + " Reason: " + e.getMessage(), e );
             }
         }
+    }
+
+    private Object[] readArgParameter(JsonObject jsonObject, Method method) {
+        var result = new Object[method.getParameterCount()];
+
+        for (int i = 0; i < method.getParameterCount(); ++i)
+        {
+            result[i] = getJSONConverter().fromJson(jsonObject.get("arg"+i).toString(), method.getGenericParameterTypes()[i]);
+        }
+        return result;
     }
 
     private Object[] readArray(JsonElement jsonElement, Method method)
@@ -520,13 +539,13 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         @NotNull
         @Override
         public String toJsonString(@NotNull Object obj, @NotNull Type targetClass) {
-            return JSONManager.getJSONConverter().toJson(obj);
+            return getJSONConverter().toJson(obj);
         }
 
         @NotNull
         @Override
         public  <T> T fromJsonString(@NotNull String json, @NotNull Type targetClass) {
-            return JSONManager.getJSONConverter().fromJson(json, targetClass);
+            return getJSONConverter().fromJson(json, targetClass);
         }
     }
 }

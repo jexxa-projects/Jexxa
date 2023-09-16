@@ -20,7 +20,6 @@ import java.net.HttpURLConnection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Properties;
@@ -184,17 +183,19 @@ public class OpenAPIConvention
                     .example(createExample(method.getParameterTypes()[0], method.getGenericParameterTypes()[0]));
 
             requestBody.content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
-        }  else if ( method.getParameterCount() > 1 )
+        }
+
+        if ( method.getParameterCount() > 1 )
         {
+            var mediaType = createMediaType();
+
             var schema = createSchema();
-            var example = new ArrayList<>(method.getParameterCount());
-            for (var i = 0; i < method.getParameterTypes().length; ++i)
-            {
-                schema.addAnyOf(createReferenceSchema(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]));
-                example.add( createExample(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]));
+            for (var i = 0; i < method.getParameterTypes().length; ++i) {
+                var argSchema = createReferenceSchema(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]);
+                argSchema.setExample(createExample(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]));
+                schema.addProperty("arg"+ i, argSchema);
             }
-            var mediaType = createMediaType().schema(schema);
-            mediaType.setExample(example);
+            mediaType.setSchema(schema);
             requestBody.content(createContent().addMediaType(APPLICATION_TYPE_JSON, mediaType));
         }
 
@@ -359,6 +360,16 @@ public class OpenAPIConvention
             return "2022-11-13T06:08:41Z";
         }
 
+        if (clazz.isEnum())
+        {
+            if (clazz.getEnumConstants().length >0)
+            {
+                return clazz.getEnumConstants()[0].toString();
+            }
+
+            return null;
+        }
+
         if ( isCollection(clazz) && genericType != null)
         {
             var returnValue = new Object[1];
@@ -368,6 +379,7 @@ public class OpenAPIConvention
 
         return null;
     }
+
     private static boolean isInteger(Class<?> clazz)
     {
         return clazz.equals(Short.class) ||

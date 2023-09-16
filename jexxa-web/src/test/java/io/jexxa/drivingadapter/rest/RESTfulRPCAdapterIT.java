@@ -4,13 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.jexxa.TestConstants;
-import io.jexxa.common.wrapper.json.JSONManager;
 import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 import io.jexxa.testapplication.domain.model.JexxaRecord;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import io.jexxa.testapplication.domain.model.SpecialCasesValueObject;
 import kong.unirest.GenericType;
 import kong.unirest.Unirest;
+import kong.unirest.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -21,6 +21,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.util.List;
 import java.util.Properties;
 
+import static io.jexxa.common.wrapper.json.JSONManager.getJSONConverter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -261,6 +262,55 @@ class RESTfulRPCAdapterIT
         assertEquals(paramList[1].getValue(), newResult.intValue());
     }
 
+    @Test // RPC call test: void setSimpleValueObjectTwice(SimpleValueObject(44), SimpleValueObject(88)) in Arg-mode 'arg0, arg1'
+    void testPOSTCommandWithTwoObjectsArgMode()
+    {
+        //Arrange
+        var paramList = new JexxaValueObject[]{new JexxaValueObject(44), new JexxaValueObject(88)};
+
+        var bodyParam = new JSONObject();
+        bodyParam.put("arg0", new JSONObject(paramList[0]));
+        bodyParam.put("arg1", new JSONObject(paramList[1]));
+
+        //Act
+        var response = Unirest.post(REST_PATH + "setSimpleValueObjectTwice")
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
+                .body(bodyParam)
+                .asEmpty();
+
+        //Assert
+        Integer newResult = Unirest.get(REST_PATH + METHOD_GET_SIMPLE_VALUE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
+                .asObject(Integer.class).getBody();
+
+        assertTrue(response.isSuccess());
+        assertEquals(paramList[1].getValue(), simpleApplicationService.getSimpleValueObject().getValue());
+        assertEquals(paramList[1].getValue(), newResult.intValue());
+    }
+
+    @Test // RPC call test: void setSimpleValueTwice(44, 88) in Arg-mode 'arg0, arg1'
+    void testPOSTCommandWithTwoPrimitivesArgMode()
+    {
+        //Arrange
+        var bodyParam = new JSONObject();
+        bodyParam.put("arg0", 44);
+        bodyParam.put("arg1", 88);
+
+        //Act
+        var response = Unirest.post(REST_PATH + "setSimpleValueTwice")
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
+                .body(bodyParam)
+                .asEmpty();
+
+        //Assert
+        Integer newResult = Unirest.get(REST_PATH + METHOD_GET_SIMPLE_VALUE)
+                .header(RESTConstants.CONTENT_TYPE, RESTConstants.APPLICATION_TYPE)
+                .asObject(Integer.class).getBody();
+
+        assertTrue(response.isSuccess());
+        assertEquals(88, newResult);
+    }
+
     @Test // RPC call test:  int setGetSimpleValue(44)
     void testPOSTCommandWithReturnValue()
     {
@@ -305,7 +355,7 @@ class RESTfulRPCAdapterIT
         var jsonString = error.get("Exception").getAsString();
 
         assertThrows(SimpleApplicationService.SimpleApplicationException.class, () -> {
-            throw JSONManager.getJSONConverter().fromJson(jsonString, SimpleApplicationService.SimpleApplicationException.class);
+            throw getJSONConverter().fromJson(jsonString, SimpleApplicationService.SimpleApplicationException.class);
         });
     }
 
@@ -329,7 +379,7 @@ class RESTfulRPCAdapterIT
     void testGETCommandWithNullPointerException()
     {
         //Arrange
-        var gson = JSONManager.getJSONConverter();
+        var gson = getJSONConverter();
 
         //Act
         var response = Unirest.get(REST_PATH + "throwNullPointerException")
