@@ -68,6 +68,7 @@ public class GsonConverter implements JSONConverter
     private static GsonBuilder getGsonBuilder()
     {
         var gsonBuilder = new GsonBuilder();
+        gsonBuilder.enableComplexMapKeySerialization();
         registerDateTimeAdapter(gsonBuilder);
         ExceptionFactory.registerExceptionAdapter(gsonBuilder);
         return gsonBuilder;

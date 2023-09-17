@@ -1,5 +1,6 @@
 package io.jexxa.common.wrapper.json;
 
+import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -43,6 +44,23 @@ class JSonRecordTest
         //Act
         var serializedObject = getJSONConverter().toJson(objectUnderTest);
         var result = getJSONConverter().fromJson(serializedObject, RecordWithMapOfRecord.class);
+
+        //Assert
+        assertEquals(objectUnderTest, result);
+    }
+
+    @Test
+    void testComplexMapKeySerialization()
+    {
+        //Arrange
+        var type = new TypeToken<HashMap<SimpleRecord, SimpleRecord>>(){}.getType();
+        HashMap<SimpleRecord, SimpleRecord> objectUnderTest = new HashMap<>();
+        objectUnderTest.put(new SimpleRecord("simpleRecord1"), new SimpleRecord("simpleRecord1"));
+        objectUnderTest.put(new SimpleRecord("simpleRecord2"), new SimpleRecord("simpleRecord2"));
+
+        //Act
+        var serializedObject = getJSONConverter().toJson(objectUnderTest);
+        var result = getJSONConverter().fromJson(serializedObject, type);
 
         //Assert
         assertEquals(objectUnderTest, result);
