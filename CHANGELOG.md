@@ -4,12 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[6.2.0] - 2023-09-dd
+## \[6.2.0] - 2023-09-17
 ### Added 
 - Jexxa-Web: 
   - Possibility to pass method parameters as a single JSONObject. The parameters of the method are added with key `arg0` to `argN`. See [description for HTML `Request: Method attributes`](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_conventions_of_restfulrpcadapter) for more information. 
 
 ### Fixed
+- Jexxa-Core:
+  - Serialization of complex keys in Map 
 - Jexxa-Web:
     - Enums are not correctly described in OpenAPI specification 
     - Methods with multiple parameters are now described with key `arg0` to `argN`
