@@ -5,7 +5,7 @@
   <parent>
     <artifactId>jexxa</artifactId>
     <groupId>io.jexxa</groupId>
-    <version>6.2.0-SNAPSHOT</version>
+    <version>6.2.0</version>
   </parent>
 
   <artifactId>jexxa-core</artifactId>
@@ -20,7 +20,7 @@
   </licenses>
 
   <properties>
-    <jexxa.adapter.api.version>4.2.0-SNAPSHOT</jexxa.adapter.api.version>
+    <jexxa.adapter.api.version>4.2.0</jexxa.adapter.api.version>
     <sonar.projectKey>repplix_Jexxa</sonar.projectKey>
   </properties>
 
