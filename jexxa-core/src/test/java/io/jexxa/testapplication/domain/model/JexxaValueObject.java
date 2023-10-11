@@ -22,6 +22,7 @@ public class JexxaValueObject
         return valueInPercent;
     }
 
+    @Override
     public boolean equals(Object other)
     {
         if (this == other)

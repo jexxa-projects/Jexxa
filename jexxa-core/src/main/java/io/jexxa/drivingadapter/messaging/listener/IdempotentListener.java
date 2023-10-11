@@ -47,6 +47,7 @@ public abstract class IdempotentListener<T> extends JSONMessageListener
         messageRepository.add(new JexxaInboundMessage(receivingID, Instant.now()));
         removeOldMessages();
     }
+
     public abstract void onMessage(T message);
 
     protected String uniqueID()

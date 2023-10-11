@@ -34,6 +34,7 @@ public class PatternLanguage extends ProjectContent {
         super(project,importOption);
     }
 
+    @Override
     public void validate()
     {
         validateApplicationService();

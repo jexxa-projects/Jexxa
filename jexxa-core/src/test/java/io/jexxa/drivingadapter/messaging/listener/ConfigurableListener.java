@@ -19,6 +19,8 @@ public class ConfigurableListener implements MessageListener
         this.topicDestination = topicDestination;
         this.messagingType = messagingType;
     }
+
+    @Override
     public void onMessage(Message message)
     {
         messageList.add(message);

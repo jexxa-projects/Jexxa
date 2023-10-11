@@ -541,6 +541,7 @@ public final class JexxaMain
 
     record JexxaExceptionHandler(JexxaMain jexxaMain) implements Thread.UncaughtExceptionHandler {
 
+        @Override
         public void uncaughtException(Thread t, Throwable e) {
             var errorMessage = getOutputMessage(e);
             //Show startup banner if enabled and jexxa not started in order to
