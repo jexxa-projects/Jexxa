@@ -20,6 +20,8 @@ public class JMSListener extends JSONMessageListener implements MessageListener 
         this.topicDestination = topicDestination;
         this.messagingType = messagingType;
     }
+
+    @Override
     public void onMessage(String message)
     {
         messageList.add(message);
