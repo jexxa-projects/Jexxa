@@ -42,6 +42,7 @@ public class MethodInvocationContext extends InvocationContext {
         return method;
     }
 
+    @Override
     public Object[] getArgs() {
         return args;
     }
