@@ -57,6 +57,7 @@ public class JMSAdapter implements AutoCloseable, IDrivingAdapter
     }
 
 
+    @Override
     public void start()
     {
         try

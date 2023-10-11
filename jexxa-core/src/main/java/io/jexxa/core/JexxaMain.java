@@ -343,20 +343,22 @@ public final class JexxaMain
     public void stop()
     {
         synchronized (GLOBAL_SYNCHRONIZATION_OBJECT) {
-            try {
-                TransactionManager.initTransaction();
-                if (boundedContext.isRunning()) {
-                    boundedContext.stop();
-                    compositeDrivingAdapter.stop();
-                    getLogger(JexxaMain.class).info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
+            synchronized (boundedContext){
+                try {
+                    TransactionManager.initTransaction();
+                    if (boundedContext.isRunning()) {
+                        boundedContext.stop();
+                        compositeDrivingAdapter.stop();
+                        getLogger(JexxaMain.class).info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
+                    }
+                    executorService.shutdown();
+                    JexxaContext.cleanup();
+                    TransactionManager.closeTransaction();
+                } catch (RuntimeException e) {
+                    TransactionManager.rollback();
+                    TransactionManager.closeTransaction();
+                    throw new IllegalStateException("Could not proper stop JexxaMain. ", e);
                 }
-                executorService.shutdown();
-                JexxaContext.cleanup();
-                TransactionManager.closeTransaction();
-            } catch (RuntimeException e) {
-                TransactionManager.rollback();
-                TransactionManager.closeTransaction();
-                throw new IllegalStateException("Could not proper stop JexxaMain. ", e);
             }
         }
     }
@@ -453,13 +455,13 @@ public final class JexxaMain
 
     <T> void addBootstrapService(Class<T> bootstrapService, Consumer<T> initFunction)
     {
+        T instance;
         if (bootstrapService.isInterface()) {
-            var instance = drivenAdapterFactory.getInstanceOf(bootstrapService, properties);
-            initFunction.accept(instance);
+            instance = drivenAdapterFactory.getInstanceOf(bootstrapService, properties);
         } else {
-            var instance = portFactory.getInstanceOf(bootstrapService, properties);
-            initFunction.accept(instance);
+            instance = portFactory.getInstanceOf(bootstrapService, properties);
         }
+        initFunction.accept(instance);
     }
 
 

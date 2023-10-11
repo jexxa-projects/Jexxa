@@ -27,16 +27,18 @@ public class JMSListener extends JSONMessageListener implements MessageListener 
         messageList.add(message);
     }
 
+    @Override
     public List<String> getAll()
     {
         return messageList;
     }
 
+    @Override
     public void clear()
     {
         messageList.clear();
     }
-
+    @Override
     public <T> T pop(Class<T> clazz)
     {
         if (messageList.isEmpty())
@@ -47,6 +49,7 @@ public class JMSListener extends JSONMessageListener implements MessageListener 
         return fromJson( messageList.remove(0), clazz);
     }
 
+    @Override
     public JMSListener awaitMessage(int timeout, TimeUnit timeUnit)
     {
         await().atMost(timeout, timeUnit)

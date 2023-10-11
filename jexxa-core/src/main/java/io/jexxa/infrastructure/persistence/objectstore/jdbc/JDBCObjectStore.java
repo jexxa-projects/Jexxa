@@ -117,6 +117,7 @@ public class JDBCObjectStore<T,K, M extends Enum<M> & MetadataSchema> extends JD
     }
 
 
+    @Override
     public <S> INumericQuery<T, S> getNumericQuery(M metaTag, Class<S> queryType)
     {
         if (!jdbcSchema.contains(metaTag))

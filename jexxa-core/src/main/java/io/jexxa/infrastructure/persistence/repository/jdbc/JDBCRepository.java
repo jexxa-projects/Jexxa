@@ -30,16 +30,19 @@ public abstract class JDBCRepository implements TransactionHandler {
     {
         return JDBCConnectionPool.getConnection(properties, this);
     }
+    @Override
     public void initTransaction()
     {
         getConnection().disableAutoCommit();
     }
+    @Override
     public void closeTransaction()
     {
         getConnection().commit();
         getConnection().enableAutoCommit();
     }
 
+    @Override
     public void rollback()
     {
         try {
