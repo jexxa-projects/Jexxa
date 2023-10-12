@@ -90,6 +90,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         return RPC_ADAPTER_MAP.get(properties);
     }
 
+    @Override
     public void register(Object object)
     {
         Objects.requireNonNull(object);

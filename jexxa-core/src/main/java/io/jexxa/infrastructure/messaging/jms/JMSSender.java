@@ -32,6 +32,7 @@ public class JMSSender extends MessageSender implements AutoCloseable
         Objects.requireNonNull(getConnection()); //Try to create a connection to ensure fail fast
     }
 
+    @Override
     protected void sendToTopic(String message, String topicName, Properties messageProperties, MessageType messageType)
     {
         try
@@ -49,6 +50,7 @@ public class JMSSender extends MessageSender implements AutoCloseable
         }
     }
 
+    @Override
     protected void sendToQueue(String message, String queueName, Properties messageProperties, MessageType messageType)
     {
         try

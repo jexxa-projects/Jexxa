@@ -38,6 +38,7 @@ public class MethodInvocationContext extends InvocationContext {
         }
     }
 
+    @Override
     public Method getMethod() {
         return method;
     }
@@ -47,6 +48,7 @@ public class MethodInvocationContext extends InvocationContext {
         return args;
     }
 
+    @Override
     public Object getReturnValue() {
         return returnValue;
     }

@@ -23,6 +23,7 @@ final class ExceptionFactory implements TypeAdapterFactory
 
 
     @SuppressWarnings("unchecked")
+    @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken)
     {
         // If the class that type token represents is a subclass of Base

@@ -60,6 +60,7 @@ public class AggregateRules extends ProjectContent {
     }
 
 
+    @Override
     public void validate()
     {
         validateOnlyAggregatesHaveAggregatesAsFields();

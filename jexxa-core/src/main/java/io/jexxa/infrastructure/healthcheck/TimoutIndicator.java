@@ -17,6 +17,7 @@ public class TimoutIndicator extends BeforeMonitor
         this.messageTimeout = messageTimeout;
     }
 
+    @Override
     public void before(InvocationContext invocationContext)
     {
         lastUpdate = Instant.now();

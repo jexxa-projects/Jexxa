@@ -62,7 +62,7 @@ public class ITMessageSender implements AutoCloseable
             getLogger(getClass()).error(e.getMessage());
         }
     }
-
+    @Override
     public void close()
     {
         Optional.ofNullable(session)

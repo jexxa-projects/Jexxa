@@ -54,6 +54,7 @@ public class JexxaValueObject
     }
 
 
+    @Override
     public int hashCode()
     {
         return value; 

@@ -68,6 +68,7 @@ public class PortsAndAdapters extends ProjectContent {
         return this;
     }
 
+    @Override
     public void validate()
     {
         validatePortsAndAdapters();

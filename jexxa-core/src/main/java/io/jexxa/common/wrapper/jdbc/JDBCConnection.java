@@ -272,6 +272,7 @@ public class JDBCConnection implements AutoCloseable
         return getConnection().prepareStatement(sqlStatement);
     }
 
+    @Override
     public void close()
     {
         Optional.ofNullable(connection)
