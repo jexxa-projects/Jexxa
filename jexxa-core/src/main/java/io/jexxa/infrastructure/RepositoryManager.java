@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
-import static io.jexxa.common.JexxaJMSProperties.JEXXA_JMS_STRATEGY;
 import static io.jexxa.common.wrapper.jdbc.JexxaJDBCProperties.JEXXA_REPOSITORY_STRATEGY;
 import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
 
@@ -115,7 +114,7 @@ public final class RepositoryManager
             try {
                 return Class.forName(properties.getProperty(JEXXA_REPOSITORY_STRATEGY));
             } catch (ClassNotFoundException e) {
-                getLogger(ObjectStoreManager.class).warn("Unknown or invalid repository {} -> Ignore setting", properties.getProperty(JEXXA_JMS_STRATEGY));
+                getLogger(ObjectStoreManager.class).warn("Unknown or invalid repository {} -> Ignore setting", properties.getProperty(JEXXA_REPOSITORY_STRATEGY));
             }
         }
         // 4. If a JDBC driver is stated in Properties => Use JDBCKeyValueRepository
