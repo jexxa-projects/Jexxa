@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
-import static io.jexxa.common.JexxaJMSProperties.JEXXA_JMS_STRATEGY;
 import static io.jexxa.common.wrapper.jdbc.JexxaJDBCProperties.JEXXA_JDBC_DRIVER;
 import static io.jexxa.common.wrapper.jdbc.JexxaJDBCProperties.JEXXA_OBJECTSTORE_STRATEGY;
 import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
@@ -119,7 +118,7 @@ public final class ObjectStoreManager
             try {
                 return Class.forName(properties.getProperty(JEXXA_OBJECTSTORE_STRATEGY));
             } catch (ClassNotFoundException e) {
-                getLogger(ObjectStoreManager.class).warn("Unknown or invalid object store {} -> Ignore setting", properties.getProperty(JEXXA_JMS_STRATEGY));
+                getLogger(ObjectStoreManager.class).warn("Unknown or invalid object store {} -> Ignore setting", properties.getProperty(JEXXA_OBJECTSTORE_STRATEGY));
             }
         }
 
