@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[6.2.2] - 2023-10-26
+### Fixed
+- Updated dependencies
+- Fixed issues reported by CodeQL
+
 ## \[6.2.1] - 2023-10-05
 ### Fixed
 - Updated dependencies
