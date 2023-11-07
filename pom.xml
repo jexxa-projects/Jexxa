@@ -49,7 +49,7 @@
     <maven.reports.plugin>3.4.5</maven.reports.plugin>
     <maven.enforcer.plugin>3.4.1</maven.enforcer.plugin>
     <maven.javadoc.plugin>3.6.2</maven.javadoc.plugin>
-    <maven.templating.plugin>1.0.0</maven.templating.plugin>
+    <maven.templating.plugin>3.0.0</maven.templating.plugin>
     <maven.versions.plugin>2.16.1</maven.versions.plugin>
     <project.scm.id>github-Jexxa</project.scm.id>
 
