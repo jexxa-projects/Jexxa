@@ -34,6 +34,7 @@ In addition, Jexxa offers the following production-proven features:
 
 *   Related Projects
     *   [Addend - Annotations for Domain Driven Design](https://github.com/jexxa-projects/Addend)
+    *   [JLegMed - Connect the Past with the Future](https://github.com/jexxa-projects/JLegMed)
 ## Built With
 
 Apart from some other great open source libraries, Jexxa mainly utilises the following libraries and frameworks:
@@ -79,7 +80,7 @@ Maven:
     <dependency>
        <groupId>io.jexxa</groupId>
        <artifactId>jexxa-web</artifactId>
-       <version>6.2.2</version>
+       <version>6.2.3</version>
     </dependency>
     
     <dependency>
@@ -93,7 +94,7 @@ Maven:
 Gradle:
 
 ```groovy
-compile "io.jexxa:jexxa-web:6.2.2"
+compile "io.jexxa:jexxa-web:6.2.3"
 compile "org.slf4j:slf4j-simple:2.0.9"
 ``` 
 
