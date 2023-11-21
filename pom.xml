@@ -86,7 +86,7 @@
 
     <!-- version of test dependencies -->
     <activemq.artemis.client.version>2.31.2</activemq.artemis.client.version>
-    <postgres.version>42.6.0</postgres.version>
+    <postgres.version>42.7.0</postgres.version>
     <unirest.java.version>3.14.5</unirest.java.version>
     <junit.platform.launcher.version>1.10.1</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.10.1</junit.jupiter.engine.version>
