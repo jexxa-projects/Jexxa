@@ -95,7 +95,7 @@ public class JexxaTest
         ObjectStoreManager.setDefaultStrategy(IMDBObjectStore.class);
         MessageSenderManager.setDefaultStrategy(MessageRecordingStrategy.class);
 
-        IMDBRepository.clear();
+        IMDBRepository.clear(); //Note: This clears IMDBRepository and IMDBObjectStore because IMDBObjectStore extends IMDBRepository and uses its internal data structure
         MessageRecorderManager.clear();
     }
 
