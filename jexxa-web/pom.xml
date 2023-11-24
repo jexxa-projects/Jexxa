@@ -40,20 +40,8 @@
       <version>${javalin.version}</version>
       <scope>compile</scope>
       <!-- Manual fix for sec issue in 11.0.15 introduced by javalin -->
-      <exclusions>
-        <exclusion>
-          <groupId>org.eclipse.jetty</groupId>
-          <artifactId>jetty-xml</artifactId>
-        </exclusion>
-        </exclusions>
     </dependency>
 
-    <!-- Manual fix for sec issue in 11.0.15 introduced by javalin -->
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-xml</artifactId>
-      <version>11.0.18</version>
-    </dependency>
 
     <dependency>
       <groupId>io.smallrye</groupId>

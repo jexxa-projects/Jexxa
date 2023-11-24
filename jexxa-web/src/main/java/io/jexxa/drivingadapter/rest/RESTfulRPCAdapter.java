@@ -48,7 +48,6 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     private final JSONConverter jsonConverter = getJSONConverter();
     private final Properties properties;
     private Javalin javalin;
-    private Server server;
     private ServerConnector sslConnector;
     private ServerConnector httpConnector;
     private OpenAPIConvention openAPIConvention;
@@ -458,7 +457,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     }
 
     private void getJavalinConfig(JavalinConfig javalinConfig) {
-        javalinConfig.jetty.server(this::getServer);
+        javalinConfig.jetty.modifyServer(this::configureServer);
 
         javalinConfig.showJavalinBanner = false;
         javalinConfig.jsonMapper(new JexxaJSONMapper());
@@ -472,43 +471,44 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
             javalinConfig.staticFiles.add(properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT), location);
         }
 
-        javalinConfig.plugins.enableCors(cors -> cors.add(CorsPluginConfig::anyHost));
+        javalinConfig.bundledPlugins.enableCors(cors -> cors.addRule(CorsPluginConfig.CorsRule::anyHost));
     }
 
-    private Server getServer()
-    {
-        if ( server == null )
+
+
+        void configureServer(Server server)
         {
-            server = new Server();
-            if (isHTTPEnabled())
+            if ( server != null )
             {
-                httpConnector = new ServerConnector(server);
-                httpConnector.setHost(getHostname());
-                httpConnector.setPort(getHTTPPortFromProperties());
-                server.addConnector(httpConnector);
+                if (isHTTPEnabled())
+                {
+                    httpConnector = new ServerConnector(server);
+                    httpConnector.setHost(getHostname());
+                    httpConnector.setPort(getHTTPPortFromProperties());
+                    server.addConnector(httpConnector);
+                }
+
+                if (isHTTPSEnabled())
+                {
+                    HttpConfiguration httpsConfig = new HttpConfiguration();
+                    httpsConfig.setSendServerVersion(false);
+                    httpsConfig.setRequestHeaderSize(512 * 1024);
+                    httpsConfig.setResponseHeaderSize(512 * 1024);
+
+                    SecureRequestCustomizer src = new SecureRequestCustomizer();
+                    src.setSniHostCheck(false);
+                    httpsConfig.addCustomizer(src);
+
+                    sslConnector = new ServerConnector(server, getSslContextFactory(), new HttpConnectionFactory(httpsConfig));
+                    sslConnector.setHost(getHostname());
+                    sslConnector.setPort(getHTTPSPortFromProperties());
+
+                    server.addConnector(sslConnector);
+                }
             }
 
-            if (isHTTPSEnabled())
-            {
-                HttpConfiguration httpsConfig = new HttpConfiguration();
-                httpsConfig.setSendServerVersion(false);
-                httpsConfig.setRequestHeaderSize(512 * 1024);
-                httpsConfig.setResponseHeaderSize(512 * 1024);
-
-                SecureRequestCustomizer src = new SecureRequestCustomizer();
-                src.setSniHostCheck(false);
-                httpsConfig.addCustomizer(src);
-
-                sslConnector = new ServerConnector(server, getSslContextFactory(), new HttpConnectionFactory(httpsConfig));
-                sslConnector.setHost(getHostname());
-                sslConnector.setPort(getHTTPSPortFromProperties());
-
-                server.addConnector(sslConnector);
-            }
-        }
-
-        return server;
     }
+
 
     private SslContextFactory.Server getSslContextFactory()
     {
