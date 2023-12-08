@@ -8,7 +8,7 @@ import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetadataSc
 import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.common.facade.jdbc.JDBCProperties;
 import io.jexxa.common.facade.jms.JMSProperties;
-import io.jexxa.infrastructure.persistence.objectstore.JexxaObject;
+import io.jexxa.testapplication.domain.model.JexxaObject;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
 
