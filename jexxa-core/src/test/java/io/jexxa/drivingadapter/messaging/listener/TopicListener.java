@@ -1,6 +1,6 @@
 package io.jexxa.drivingadapter.messaging.listener;
 
-import io.jexxa.drivingadapter.messaging.JMSConfiguration;
+import io.jexxa.common.drivingadapter.messaging.jms.JMSConfiguration;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;

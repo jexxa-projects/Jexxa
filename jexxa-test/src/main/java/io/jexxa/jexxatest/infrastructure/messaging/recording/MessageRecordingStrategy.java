@@ -1,8 +1,9 @@
 package io.jexxa.jexxatest.infrastructure.messaging.recording;
 
 import io.jexxa.common.annotation.CheckReturnValue;
-import io.jexxa.infrastructure.messaging.MessageProducer;
-import io.jexxa.infrastructure.messaging.MessageSender;
+import io.jexxa.common.drivenadapter.messaging.DestinationType;
+import io.jexxa.common.drivenadapter.messaging.MessageBuilder;
+import io.jexxa.common.drivenadapter.messaging.MessageSender;
 
 import java.util.Objects;
 import java.util.Properties;
@@ -14,7 +15,7 @@ public class MessageRecordingStrategy extends MessageSender
 
     @CheckReturnValue
     @Override
-    public <T> MessageProducer send(T message)
+    public <T> MessageBuilder send(T message)
     {
         Objects.requireNonNull(message);
 
@@ -25,7 +26,7 @@ public class MessageRecordingStrategy extends MessageSender
 
         currentMessage = message;
         messageRecorder = MessageRecorderManager.getMessageRecorder(callerClass);
-        return new RecordableMessageProducer(message, this);
+        return new RecordableMessageBuilder(message, this);
     }
 
     @Override
@@ -34,7 +35,7 @@ public class MessageRecordingStrategy extends MessageSender
         messageRecorder.put(new RecordedMessage(
                 currentMessage,
                 message,
-                MessageProducer.DestinationType.QUEUE,
+                DestinationType.QUEUE,
                 destination,
                 messageProperties,
                 messageType)
@@ -47,16 +48,16 @@ public class MessageRecordingStrategy extends MessageSender
         messageRecorder.put(new RecordedMessage(
                 currentMessage,
                 message,
-                MessageProducer.DestinationType.TOPIC,
+                DestinationType.TOPIC,
                 destination,
                 messageProperties,
                 messageType)
         );
     }
 
-    private static class RecordableMessageProducer extends MessageProducer
+    private static class RecordableMessageBuilder extends MessageBuilder
     {
-        protected <T> RecordableMessageProducer(T message, MessageRecordingStrategy jmsSender)
+        protected <T> RecordableMessageBuilder(T message, MessageRecordingStrategy jmsSender)
         {
             super(message, jmsSender, MessageType.TEXT_MESSAGE);
         }

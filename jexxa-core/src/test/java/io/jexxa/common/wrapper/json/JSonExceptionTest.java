@@ -1,6 +1,8 @@
 package io.jexxa.common.wrapper.json;
 
 import com.google.gson.Gson;
+import io.jexxa.common.facade.json.JSONConverter;
+import io.jexxa.common.facade.json.JSONManager;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

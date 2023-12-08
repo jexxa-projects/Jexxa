@@ -2,15 +2,17 @@ package io.jexxa.infrastructure.messaging.jms;
 
 import io.jexxa.TestConstants;
 import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
+import io.jexxa.common.drivenadapter.messaging.MessageSender;
+import io.jexxa.common.drivenadapter.messaging.MessageSenderManager;
+import io.jexxa.common.drivenadapter.messaging.jms.JMSSender;
+import io.jexxa.common.drivenadapter.outbox.TransactionalOutboxSender;
+import io.jexxa.common.drivingadapter.messaging.jms.JMSAdapter;
+import io.jexxa.common.drivingadapter.messaging.jms.JMSConfiguration;
+import io.jexxa.common.drivingadapter.messaging.jms.idempotent.IdempotentListener;
+import io.jexxa.common.drivingadapter.messaging.jms.listener.JSONMessageListener;
+import io.jexxa.common.drivingadapter.messaging.jms.listener.TypedMessageListener;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.drivingadapter.messaging.JMSAdapter;
-import io.jexxa.drivingadapter.messaging.JMSConfiguration;
-import io.jexxa.drivingadapter.messaging.listener.IdempotentListener;
-import io.jexxa.drivingadapter.messaging.listener.JSONMessageListener;
-import io.jexxa.drivingadapter.messaging.listener.TypedMessageListener;
-import io.jexxa.infrastructure.MessageSenderManager;
-import io.jexxa.infrastructure.messaging.MessageSender;
-import io.jexxa.infrastructure.outbox.TransactionalOutboxSender;
+
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.domain.model.JexxaDomainEvent;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;

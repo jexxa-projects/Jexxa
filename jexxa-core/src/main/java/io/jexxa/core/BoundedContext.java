@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
+
 
 public final class BoundedContext
 {

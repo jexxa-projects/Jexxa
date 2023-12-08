@@ -1,6 +1,7 @@
 package io.jexxa.infrastructure.persistence.repository.imdb;
 
 import io.jexxa.TestConstants;
+import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.testapplication.domain.model.JexxaEntity;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +46,7 @@ class IMDBRepositoryTest
 
         //Assert
         assertEquals(aggregate, objectUnderTest.get(aggregate.getKey()).orElse(null));
-        assertTrue(objectUnderTest.get().size() > 0);
+        assertFalse(objectUnderTest.get().isEmpty());
     }
 
     @Test

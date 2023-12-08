@@ -7,7 +7,7 @@ import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
 import io.jexxa.common.JexxaBanner;
 import io.jexxa.common.JexxaCoreProperties;
 import io.jexxa.common.annotation.CheckReturnValue;
-import io.jexxa.common.function.ThrowingConsumer;
+import io.jexxa.common.facade.utils.function.ThrowingConsumer;
 import io.jexxa.common.properties.PropertiesLoader;
 import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
@@ -29,7 +29,7 @@ import java.util.function.Consumer;
 
 import static io.jexxa.adapterapi.invocation.DefaultInvocationHandler.GLOBAL_SYNCHRONIZATION_OBJECT;
 import static io.jexxa.common.JexxaBanner.addConfigBanner;
-import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
 
 /**
  * JexxaMain is the main entry point for your application to use Jexxa. Within each application only a single instance
@@ -97,7 +97,7 @@ public final class JexxaMain
         this.properties = propertiesLoader.createJexxaProperties(applicationProperties);
         this.properties.put(JexxaCoreProperties.JEXXA_CONTEXT_NAME, context.getSimpleName());
 
-        this.addToInfrastructure("io.jexxa.infrastructure.drivingadapter");
+        this.addToInfrastructure("io.jexxa.common.drivingadapter");
         this.addDDDPackages(context);
 
         //Create BoundedContext

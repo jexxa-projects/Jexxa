@@ -1,9 +1,11 @@
 package io.jexxa.infrastructure.persistence.objectstore;
 
-import io.jexxa.common.wrapper.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.ObjectStoreManager;
-import io.jexxa.infrastructure.persistence.objectstore.metadata.MetaTag;
-import io.jexxa.infrastructure.persistence.objectstore.metadata.MetadataSchema;
+
+import io.jexxa.common.drivenadapter.persistence.ObjectStoreManager;
+import io.jexxa.common.drivenadapter.persistence.objectstore.IObjectStore;
+import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTag;
+import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetadataSchema;
+import io.jexxa.common.facade.jdbc.JDBCConnection;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,8 +17,8 @@ import java.util.Properties;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTags.numericTag;
 import static io.jexxa.infrastructure.persistence.objectstore.ObjectStoreTestDatabase.REPOSITORY_CONFIG;
-import static io.jexxa.infrastructure.persistence.objectstore.metadata.MetaTags.numericTag;
 import static java.util.Comparator.comparing;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

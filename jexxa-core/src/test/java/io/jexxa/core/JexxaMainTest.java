@@ -1,9 +1,9 @@
 package io.jexxa.core;
 
 
+import io.jexxa.common.drivenadapter.persistence.RepositoryManager;
+import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.core.convention.PortConventionViolation;
-import io.jexxa.infrastructure.RepositoryManager;
-import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.annotation.InvalidApplicationService;
 import io.jexxa.testapplication.annotation.ValidApplicationService;
@@ -226,7 +226,6 @@ class JexxaMainTest
         //Assert
         assertTrue(portFactory.isAvailable(SimpleApplicationService.class));
     }
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void getInstanceOfInvalidPort()
     {

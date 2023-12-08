@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 
 import static io.jexxa.common.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
 import static io.jexxa.common.JexxaCoreProperties.JEXXA_CONTEXT_VERSION;
-import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
 import static io.jexxa.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
 import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponse;
 import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponses;

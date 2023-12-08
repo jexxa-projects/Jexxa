@@ -14,9 +14,9 @@ import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
 import io.jexxa.common.JexxaBanner;
+import io.jexxa.common.facade.json.JSONConverter;
+import io.jexxa.common.facade.logger.SLF4jLogger;
 import io.jexxa.common.properties.Secret;
-import io.jexxa.common.wrapper.json.JSONConverter;
-import io.jexxa.common.wrapper.logger.SLF4jLogger;
 import io.jexxa.drivingadapter.rest.openapi.OpenAPIConvention;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -38,8 +38,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.common.wrapper.json.JSONManager.getJSONConverter;
-import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.facade.json.JSONManager.getJSONConverter;
+import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
 import static io.jexxa.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
 
 

@@ -1,17 +1,17 @@
 package io.jexxa.jexxatest;
 
+import io.jexxa.common.drivenadapter.messaging.MessageSenderManager;
+import io.jexxa.common.drivenadapter.persistence.ObjectStoreManager;
+import io.jexxa.common.drivenadapter.persistence.objectstore.imdb.IMDBObjectStore;
+import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTag;
+import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetadataSchema;
+import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.common.facade.jdbc.JDBCProperties;
+import io.jexxa.common.facade.jms.JMSProperties;
+import io.jexxa.infrastructure.persistence.objectstore.JexxaObject;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
-import io.jexxa.common.wrapper.jdbc.JexxaJDBCProperties;
-import io.jexxa.common.wrapper.jms.JMSProperties;
-import io.jexxa.infrastructure.MessageSenderManager;
-import io.jexxa.infrastructure.ObjectStoreManager;
-import io.jexxa.infrastructure.RepositoryManager;
-import io.jexxa.infrastructure.persistence.objectstore.JexxaObject;
-import io.jexxa.infrastructure.persistence.objectstore.imdb.IMDBObjectStore;
-import io.jexxa.infrastructure.persistence.objectstore.metadata.MetaTag;
-import io.jexxa.infrastructure.persistence.objectstore.metadata.MetadataSchema;
-import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
+
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -19,7 +19,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.infrastructure.persistence.objectstore.metadata.MetaTags.numericTag;
+import static io.jexxa.common.drivenadapter.persistence.RepositoryManager.getRepository;
+import static io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTags.numericTag;
 import static io.jexxa.jexxatest.JexxaTest.getJexxaTest;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -39,7 +40,7 @@ class JexxaTestConfigTest
     {
         //Arrange
         getJexxaTest(JexxaTestApplication.class);
-        var repository = RepositoryManager.getRepository(JexxaObject.class, JexxaObject::getKey, properties);
+        var repository = getRepository(JexxaObject.class, JexxaObject::getKey, properties);
 
         //Act / Assert : Since we initialized JexxaTest, we should always get an IMDBRepository, independent of the Properties
         assertDoesNotThrow(() -> (IMDBRepository<JexxaObject, JexxaValueObject>) repository );
@@ -105,19 +106,19 @@ class JexxaTestConfigTest
     @SuppressWarnings("unused")
     private static Stream<Properties> repositoryConfig() {
         var postgresProperties = new Properties();
-        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_PASSWORD, ADMIN);
-        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_USERNAME, POSTGRES_USER);
-        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_URL, "jdbc:postgresql://localhost:5432/objectstore");
-        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
+        postgresProperties.put(JDBCProperties.JDBC_DRIVER, "org.postgresql.Driver");
+        postgresProperties.put(JDBCProperties.JDBC_PASSWORD, ADMIN);
+        postgresProperties.put(JDBCProperties.JDBC_USERNAME, POSTGRES_USER);
+        postgresProperties.put(JDBCProperties.JDBC_URL, "jdbc:postgresql://localhost:5432/objectstore");
+        postgresProperties.put(JDBCProperties.JDBC_AUTOCREATE_TABLE, "true");
+        postgresProperties.put(JDBCProperties.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
 
         var h2Properties = new Properties();
-        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_DRIVER, "org.h2.Driver");
-        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_PASSWORD, ADMIN);
-        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_USERNAME, ADMIN);
-        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_URL, "jdbc:h2:mem:ComparableRepositoryTest;DB_CLOSE_DELAY=-1");
-        h2Properties.put(JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE, "true");
+        h2Properties.put(JDBCProperties.JDBC_DRIVER, "org.h2.Driver");
+        h2Properties.put(JDBCProperties.JDBC_PASSWORD, ADMIN);
+        h2Properties.put(JDBCProperties.JDBC_USERNAME, ADMIN);
+        h2Properties.put(JDBCProperties.JDBC_URL, "jdbc:h2:mem:ComparableRepositoryTest;DB_CLOSE_DELAY=-1");
+        h2Properties.put(JDBCProperties.JDBC_AUTOCREATE_TABLE, "true");
 
         return Stream.of(new Properties(), postgresProperties, h2Properties);
     }

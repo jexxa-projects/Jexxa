@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.function.Consumer;
 
-import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
 
 public final class JexxaBanner
 {

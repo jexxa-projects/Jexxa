@@ -1,4 +1,4 @@
-package io.jexxa.common.wrapper.jdbc;
+package io.jexxa.common;
 
 public final class JexxaJDBCProperties
 {
@@ -25,4 +25,3 @@ public final class JexxaJDBCProperties
     }
 
 }
-

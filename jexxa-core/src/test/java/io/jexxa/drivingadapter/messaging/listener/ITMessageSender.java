@@ -1,7 +1,8 @@
 package io.jexxa.drivingadapter.messaging.listener;
 
-import io.jexxa.common.function.ThrowingConsumer;
-import io.jexxa.drivingadapter.messaging.JMSConfiguration;
+
+import io.jexxa.common.drivingadapter.messaging.jms.JMSConfiguration;
+import io.jexxa.common.facade.utils.function.ThrowingConsumer;
 
 import javax.jms.Connection;
 import javax.jms.DeliveryMode;
@@ -13,7 +14,7 @@ import javax.jms.TextMessage;
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.common.wrapper.jms.JMSConnection.createConnection;
+import static io.jexxa.common.facade.jms.JMSConnection.createConnection;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class ITMessageSender implements AutoCloseable

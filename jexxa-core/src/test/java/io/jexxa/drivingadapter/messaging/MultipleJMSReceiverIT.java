@@ -1,6 +1,8 @@
 package io.jexxa.drivingadapter.messaging;
 
 import io.jexxa.TestConstants;
+import io.jexxa.common.drivingadapter.messaging.jms.JMSAdapter;
+import io.jexxa.common.drivingadapter.messaging.jms.JMSConfiguration;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.drivingadapter.messaging.listener.ITMessageSender;
 import io.jexxa.testapplication.JexxaTestApplication;

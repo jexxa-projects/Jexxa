@@ -1,11 +1,13 @@
 package io.jexxa.infrastructure.persistence.objectstore;
 
 import io.jexxa.TestConstants;
-import io.jexxa.common.wrapper.jdbc.JDBCConnection;
-import io.jexxa.infrastructure.ObjectStoreManager;
-import io.jexxa.infrastructure.persistence.objectstore.metadata.MetaTag;
-import io.jexxa.infrastructure.persistence.objectstore.metadata.MetaTags;
-import io.jexxa.infrastructure.persistence.objectstore.metadata.MetadataSchema;
+
+import io.jexxa.common.drivenadapter.persistence.ObjectStoreManager;
+import io.jexxa.common.drivenadapter.persistence.objectstore.IObjectStore;
+import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTag;
+import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTags;
+import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetadataSchema;
+import io.jexxa.common.facade.jdbc.JDBCConnection;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;

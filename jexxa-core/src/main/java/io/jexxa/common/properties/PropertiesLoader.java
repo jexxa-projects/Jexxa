@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static io.jexxa.common.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
 import static io.jexxa.common.JexxaCoreProperties.JEXXA_USER_TIMEZONE;
-import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
 
 public class PropertiesLoader {
     private final Class<?> context;

@@ -1,5 +1,6 @@
 package io.jexxa.infrastructure;
 
+import io.jexxa.common.drivenadapter.messaging.MessageSenderManager;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;

@@ -1,7 +1,8 @@
 package io.jexxa.common.wrapper.jdbc;
 
 import io.jexxa.TestConstants;
-import io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository;
+import io.jexxa.common.JexxaJDBCProperties;
+import io.jexxa.common.drivenadapter.persistence.repository.jdbc.JDBCKeyValueRepository;
 import io.jexxa.testapplication.domain.model.JexxaEntity;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

@@ -1,11 +1,13 @@
 package io.jexxa.infrastructure.messaging;
 
+import io.jexxa.common.drivenadapter.messaging.DestinationType;
+import io.jexxa.common.drivenadapter.messaging.MessageSender;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import org.junit.jupiter.api.Test;
 
 import java.util.Properties;
 
-import static io.jexxa.common.wrapper.json.JSONManager.getJSONConverter;
+import static io.jexxa.common.facade.json.JSONManager.getJSONConverter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,7 +29,7 @@ class MessageProducerTest
 
         //Assertions
         assertNotNull(localMessageSender.getMessage());
-        assertEquals(MessageProducer.DestinationType.QUEUE, localMessageSender.getDestinationType());
+        assertEquals(DestinationType.QUEUE, localMessageSender.getDestinationType());
 
         assertEquals(testData.toString(), localMessageSender.getMessage());
     }
@@ -46,7 +48,7 @@ class MessageProducerTest
 
         //Assertions
         assertNotNull(localMessageSender.getMessage());
-        assertEquals(MessageProducer.DestinationType.QUEUE, localMessageSender.getDestinationType());
+        assertEquals(DestinationType.QUEUE, localMessageSender.getDestinationType());
 
         assertEquals(getJSONConverter().toJson(testData), localMessageSender.getMessage());
     }
@@ -67,20 +69,20 @@ class MessageProducerTest
     private static class LocalMessageSender extends MessageSender
     {
         private String message;
-        private MessageProducer.DestinationType destinationType = null;
+        private DestinationType destinationType = null;
 
         @Override
         protected void sendToQueue(String message, String destination, Properties messageProperties, MessageType messageType)
         {
             this.message = message;
-            this.destinationType = MessageProducer.DestinationType.QUEUE;
+            this.destinationType = DestinationType.QUEUE;
         }
 
         @Override
         protected void sendToTopic(String message, String destination, Properties messageProperties, MessageType messageType)
         {
             this.message = message;
-            this.destinationType = MessageProducer.DestinationType.TOPIC;
+            this.destinationType = DestinationType.TOPIC;
         }
 
         String getMessage()
@@ -88,7 +90,7 @@ class MessageProducerTest
             return message;
         }
 
-        MessageProducer.DestinationType getDestinationType()
+        DestinationType getDestinationType()
         {
             return destinationType;
         }

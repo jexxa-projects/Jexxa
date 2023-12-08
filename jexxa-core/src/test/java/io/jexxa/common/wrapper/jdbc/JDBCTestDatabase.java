@@ -1,7 +1,9 @@
 package io.jexxa.common.wrapper.jdbc;
 
-import io.jexxa.common.wrapper.jdbc.builder.JDBCTableBuilder;
-import io.jexxa.common.wrapper.jdbc.builder.SQLDataType;
+
+import io.jexxa.common.facade.jdbc.JDBCConnection;
+import io.jexxa.common.facade.jdbc.builder.JDBCTableBuilder;
+import io.jexxa.common.facade.jdbc.builder.SQLDataType;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -53,7 +55,7 @@ public final class JDBCTestDatabase
 
     static JDBCConnection setupDatabase(Properties properties)
     {
-        var jdbcConnection = new JDBCConnection(properties);
+        var jdbcConnection = new JDBCConnection(properties );
         dropTable(jdbcConnection);
         autocreateTable(jdbcConnection);
         insertTestData(jdbcConnection);

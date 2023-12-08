@@ -1,7 +1,6 @@
 package io.jexxa.drivingadapter.rest;
 
 import io.jexxa.TestConstants;
-import io.jexxa.common.function.ThrowingConsumer;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.applicationservice.IncrementApplicationService;
@@ -16,6 +15,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static io.jexxa.common.facade.utils.function.ThrowingConsumer.exceptionCollector;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -60,7 +60,7 @@ class MultipleRESTClientsIT
         //Act
         clientPool.forEach(Thread::start);
 
-        clientPool.forEach(ThrowingConsumer.exceptionCollector(Thread::join, exceptionList));
+        clientPool.forEach(exceptionCollector(Thread::join, exceptionList));
 
 
         //Assert

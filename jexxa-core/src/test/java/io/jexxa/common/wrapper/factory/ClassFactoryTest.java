@@ -2,6 +2,7 @@ package io.jexxa.common.wrapper.factory;
 
 
 import io.jexxa.TestConstants;
+import io.jexxa.common.facade.factory.ClassFactory;
 import io.jexxa.testapplication.applicationservice.Java8DateTimeApplicationService;
 import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.jexxa.common.function.ThrowingConsumer.exceptionCollector;
+import static io.jexxa.common.facade.utils.function.ThrowingConsumer.exceptionCollector;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

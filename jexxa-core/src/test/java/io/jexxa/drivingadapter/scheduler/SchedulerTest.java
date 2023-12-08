@@ -1,5 +1,6 @@
 package io.jexxa.drivingadapter.scheduler;
 
+import io.jexxa.common.drivingadapter.scheduler.Scheduler;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.drivingadapter.scheduler.portadapter.FixedDelayIncrementer;
 import io.jexxa.drivingadapter.scheduler.portadapter.FixedRateIncrementer;

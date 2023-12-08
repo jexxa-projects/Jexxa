@@ -53,6 +53,12 @@
       <version>${commons.lang3.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>io.jexxa.common</groupId>
+      <artifactId>common-adapters</artifactId>
+      <version>${jexxa.common.adapters.version}</version>
+    </dependency>
+
     <!-- API dependency for Logging -->
     <dependency>
       <groupId>org.slf4j</groupId>

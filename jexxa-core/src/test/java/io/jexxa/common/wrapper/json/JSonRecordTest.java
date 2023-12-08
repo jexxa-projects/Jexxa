@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.jexxa.common.wrapper.json.JSONManager.getJSONConverter;
+import static io.jexxa.common.facade.json.JSONManager.getJSONConverter;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

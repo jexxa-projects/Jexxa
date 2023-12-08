@@ -1,9 +1,10 @@
 package io.jexxa.jexxatest.integrationtest.messaging;
 
-import io.jexxa.drivingadapter.messaging.JMSAdapter;
-import io.jexxa.drivingadapter.messaging.JMSConfiguration;
-import io.jexxa.infrastructure.MessageSenderManager;
-import io.jexxa.infrastructure.messaging.MessageSender;
+
+import io.jexxa.common.drivenadapter.messaging.MessageSender;
+import io.jexxa.common.drivenadapter.messaging.MessageSenderManager;
+import io.jexxa.common.drivingadapter.messaging.jms.JMSAdapter;
+import io.jexxa.common.drivingadapter.messaging.jms.JMSConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;

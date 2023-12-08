@@ -1,7 +1,9 @@
 package io.jexxa.common.wrapper.jdbc;
 
 import io.jexxa.TestConstants;
-import io.jexxa.infrastructure.persistence.repository.jdbc.JDBCKeyValueRepository;
+import io.jexxa.common.drivenadapter.persistence.repository.jdbc.JDBCKeyValueRepository;
+import io.jexxa.common.facade.jdbc.JDBCConnection;
+import io.jexxa.common.facade.utils.properties.PropertiesUtils;
 import io.jexxa.testapplication.domain.model.JexxaEntity;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +37,7 @@ class JDBCKeyValueRepositoryIT
         var properties = new Properties();
         properties.load(getClass().getResourceAsStream(JEXXA_APPLICATION_PROPERTIES));
 
-        try (JDBCConnection connection = new JDBCConnection(properties) )
+        try (JDBCConnection connection = new JDBCConnection(PropertiesUtils.getSubset(properties, "io.jexxa") ))
         {
             connection.createTableCommand(JDBCKeyValueRepository.KeyValueSchema.class)
                     .dropTableIfExists(JexxaEntity.class)
@@ -45,7 +47,7 @@ class JDBCKeyValueRepositoryIT
         objectUnderTest = new JDBCKeyValueRepository<>(
                 JexxaEntity.class,
                 JexxaEntity::getKey,
-                properties
+                PropertiesUtils.getSubset(properties, "io.jexxa")
         );
     }
 
