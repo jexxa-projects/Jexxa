@@ -1,6 +1,6 @@
 package io.jexxa.jexxatest;
 
-import io.jexxa.common.annotation.CheckReturnValue;
+import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
 import io.jexxa.common.drivenadapter.messaging.MessageSenderManager;
 import io.jexxa.common.drivenadapter.persistence.ObjectStoreManager;
 import io.jexxa.common.drivenadapter.persistence.RepositoryManager;

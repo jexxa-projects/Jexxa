@@ -8,11 +8,10 @@ import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetadataSc
 import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.common.facade.jdbc.JDBCProperties;
 import io.jexxa.common.facade.jms.JMSProperties;
-import io.jexxa.testapplication.domain.model.JexxaObject;
-import io.jexxa.testapplication.JexxaTestApplication;
-import io.jexxa.testapplication.domain.model.JexxaValueObject;
-
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
+import io.jexxa.testapplication.JexxaTestApplication;
+import io.jexxa.testapplication.domain.model.JexxaAggregate;
+import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -40,10 +39,10 @@ class JexxaTestConfigTest
     {
         //Arrange
         getJexxaTest(JexxaTestApplication.class);
-        var repository = getRepository(JexxaObject.class, JexxaObject::getKey, properties);
+        var repository = getRepository(JexxaAggregate.class, JexxaAggregate::getKey, properties);
 
-        //Act / Assert : Since we initialized JexxaTest, we should always get an IMDBRepository, independent of the Properties
-        assertDoesNotThrow(() -> (IMDBRepository<JexxaObject, JexxaValueObject>) repository );
+        //Act / Assert: Since we initialized JexxaTest, we should always get an IMDBRepository, independent of the Properties
+        assertDoesNotThrow(() -> (IMDBRepository<JexxaAggregate, JexxaValueObject>) repository );
     }
 
     @ParameterizedTest
@@ -52,10 +51,10 @@ class JexxaTestConfigTest
     {
         //Arrange
         getJexxaTest(JexxaTestApplication.class);
-        var objectStore = ObjectStoreManager.getObjectStore(JexxaObject.class, JexxaObject::getKey, JexxaObjectSchema.class, properties);
+        var objectStore = ObjectStoreManager.getObjectStore(JexxaAggregate.class, JexxaAggregate::getKey, JexxaAggregateSchema.class, properties);
 
-        //Act / Assert : Since we initialized JexxaTest, we should always get an IMDBObjectStore, independent of the Properties
-        assertDoesNotThrow(() -> (IMDBObjectStore<JexxaObject, JexxaValueObject, JexxaObjectSchema>) objectStore );
+        //Act / Assert: Since we initialized JexxaTest, we should always get an IMDBObjectStore, independent of the Properties
+        assertDoesNotThrow(() -> (IMDBObjectStore<JexxaAggregate, JexxaValueObject, JexxaAggregateSchema>) objectStore );
     }
 
     @ParameterizedTest
@@ -66,7 +65,7 @@ class JexxaTestConfigTest
         getJexxaTest(JexxaTestApplication.class);
         var messageSender = MessageSenderManager.getMessageSender(JexxaTestConfigTest.class, properties);
 
-        //Act / Assert : Since we initialized JexxaTest, we should always get an MessageRecordingStrategy, independent of the Properties
+        //Act / Assert: Since we initialized JexxaTest, we should always get a MessageRecordingStrategy, independent of the Properties
         assertDoesNotThrow(() -> (MessageRecordingStrategy) messageSender );
     }
 
@@ -77,26 +76,26 @@ class JexxaTestConfigTest
      * - Enum name is used for the name of the row so that there is a direct mapping between the strategy and the database
      * - Adding a new strategy in code after initial usage requires that the database is extended in some woy
      */
-    private enum JexxaObjectSchema implements MetadataSchema
+    private enum JexxaAggregateSchema implements MetadataSchema
     {
         @SuppressWarnings("unused")
-        INT_VALUE(numericTag(JexxaObject::getInternalValue)),
+        INT_VALUE(numericTag(JexxaAggregate::getInternalValue)),
         @SuppressWarnings("unused")
-        VALUE_OBJECT(numericTag(JexxaObject::getKey, JexxaValueObject::getValue));
+        VALUE_OBJECT(numericTag(JexxaAggregate::getKey, JexxaValueObject::getValue));
 
         /**
          *  Defines the constructor of the enum. Following code is equal for all object stores.
          */
-        private final MetaTag<JexxaObject, ?, ? > metaTag;
+        private final MetaTag<JexxaAggregate, ?, ? > metaTag;
 
-        JexxaObjectSchema(MetaTag<JexxaObject,?, ?> metaTag)
+        JexxaAggregateSchema(MetaTag<JexxaAggregate,?, ?> metaTag)
         {
             this.metaTag = metaTag;
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public MetaTag<JexxaObject, ?, ?> getTag()
+        public MetaTag<JexxaAggregate, ?, ?> getTag()
         {
             return metaTag;
         }
@@ -105,6 +104,10 @@ class JexxaTestConfigTest
 
     @SuppressWarnings("unused")
     private static Stream<Properties> repositoryConfig() {
+        return Stream.of(new Properties(), getPostgresProperties(), getH2Properties());
+    }
+
+    private static Properties getPostgresProperties() {
         var postgresProperties = new Properties();
         postgresProperties.put(JDBCProperties.JDBC_DRIVER, "org.postgresql.Driver");
         postgresProperties.put(JDBCProperties.JDBC_PASSWORD, ADMIN);
@@ -112,15 +115,17 @@ class JexxaTestConfigTest
         postgresProperties.put(JDBCProperties.JDBC_URL, "jdbc:postgresql://localhost:5432/objectstore");
         postgresProperties.put(JDBCProperties.JDBC_AUTOCREATE_TABLE, "true");
         postgresProperties.put(JDBCProperties.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
+        return postgresProperties;
+    }
 
+    private static Properties getH2Properties() {
         var h2Properties = new Properties();
         h2Properties.put(JDBCProperties.JDBC_DRIVER, "org.h2.Driver");
         h2Properties.put(JDBCProperties.JDBC_PASSWORD, ADMIN);
         h2Properties.put(JDBCProperties.JDBC_USERNAME, ADMIN);
         h2Properties.put(JDBCProperties.JDBC_URL, "jdbc:h2:mem:ComparableRepositoryTest;DB_CLOSE_DELAY=-1");
         h2Properties.put(JDBCProperties.JDBC_AUTOCREATE_TABLE, "true");
-
-        return Stream.of(new Properties(), postgresProperties, h2Properties);
+        return h2Properties;
     }
 
     @SuppressWarnings("unused")

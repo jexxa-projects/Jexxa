@@ -16,7 +16,7 @@ import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
 import io.jexxa.common.JexxaBanner;
 import io.jexxa.common.facade.json.JSONConverter;
 import io.jexxa.common.facade.logger.SLF4jLogger;
-import io.jexxa.common.properties.Secret;
+import io.jexxa.common.facade.utils.properties.Secret;
 import io.jexxa.drivingadapter.rest.openapi.OpenAPIConvention;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;

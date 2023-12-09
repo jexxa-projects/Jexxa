@@ -1,6 +1,6 @@
 package io.jexxa.jexxatest.infrastructure.messaging.recording;
 
-import io.jexxa.common.annotation.CheckReturnValue;
+import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
 import io.jexxa.common.drivenadapter.messaging.DestinationType;
 import io.jexxa.common.drivenadapter.messaging.MessageBuilder;
 import io.jexxa.common.drivenadapter.messaging.MessageSender;

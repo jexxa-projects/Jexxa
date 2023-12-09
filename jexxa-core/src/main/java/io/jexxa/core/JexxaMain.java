@@ -6,7 +6,7 @@ import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
 import io.jexxa.common.JexxaBanner;
 import io.jexxa.common.JexxaCoreProperties;
-import io.jexxa.common.annotation.CheckReturnValue;
+import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
 import io.jexxa.common.facade.utils.function.ThrowingConsumer;
 import io.jexxa.common.properties.PropertiesLoader;
 import io.jexxa.core.convention.AdapterConvention;
