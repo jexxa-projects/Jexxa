@@ -546,7 +546,6 @@
   </distributionManagement>
 
   <modules>
-    <module>jexxa-adapter-api</module>
     <module>jexxa-core</module>
     <module>jexxa-web</module>
     <module>jexxa-test</module>

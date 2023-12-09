@@ -26,14 +26,6 @@
 
 
   <dependencies>
-    <!-- internal dependencies for Jexxa core -->
-    <dependency>
-      <groupId>io.jexxa</groupId>
-      <artifactId>jexxa-adapter-api</artifactId>
-      <version>${jexxa.adapter.api.version}</version>
-      <scope>compile</scope>
-    </dependency>
-
     <!-- external dependencies for Jexxa core -->
     <dependency>
       <groupId>io.github.classgraph</groupId>
