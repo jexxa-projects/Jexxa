@@ -1,11 +1,11 @@
-package io.jexxa.common;
+package io.jexxa.properties;
 
 public final class JexxaCoreProperties
 {
-    /** Define an additional import file that is loaded. Default value is empty.  */
+    /** Define an additional import file that is loaded. The Default value is empty.  */
     public static final String JEXXA_CONFIG_IMPORT =  "io.jexxa.config.import";
 
-    /** Define the name of the bounded context. Default value is the name of the main class of an application   */
+    /** Define the name of the bounded context. The Default value is the name of the main class of an application   */
     public static final String JEXXA_CONTEXT_NAME =  "io.jexxa.context.name";
 
     /** Defines the version number of the context. This is typically set via maven */

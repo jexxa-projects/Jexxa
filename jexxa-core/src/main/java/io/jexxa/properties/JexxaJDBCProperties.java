@@ -1,5 +1,6 @@
-package io.jexxa.common;
+package io.jexxa.properties;
 
+@SuppressWarnings("unused")
 public final class JexxaJDBCProperties
 {
     public static final String JEXXA_JDBC_FILE_USERNAME = "io.jexxa.jdbc.file.username";
@@ -21,7 +22,6 @@ public final class JexxaJDBCProperties
 
     private JexxaJDBCProperties()
     {
-        //private constructor
     }
 
 }

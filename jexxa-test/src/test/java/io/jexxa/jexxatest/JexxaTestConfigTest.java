@@ -6,7 +6,6 @@ import io.jexxa.common.drivenadapter.persistence.objectstore.imdb.IMDBObjectStor
 import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTag;
 import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
-import io.jexxa.common.facade.jdbc.JDBCProperties;
 import io.jexxa.common.facade.jms.JMSProperties;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
 import io.jexxa.testapplication.JexxaTestApplication;
@@ -18,6 +17,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Properties;
 import java.util.stream.Stream;
 
+import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_DATABASE;
+import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE;
+import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_DRIVER;
+import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_PASSWORD;
+import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_URL;
+import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_USERNAME;
 import static io.jexxa.common.drivenadapter.persistence.RepositoryManager.getRepository;
 import static io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTags.numericTag;
 import static io.jexxa.jexxatest.JexxaTest.getJexxaTest;
@@ -109,22 +114,22 @@ class JexxaTestConfigTest
 
     private static Properties getPostgresProperties() {
         var postgresProperties = new Properties();
-        postgresProperties.put(JDBCProperties.JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JDBCProperties.JDBC_PASSWORD, ADMIN);
-        postgresProperties.put(JDBCProperties.JDBC_USERNAME, POSTGRES_USER);
-        postgresProperties.put(JDBCProperties.JDBC_URL, "jdbc:postgresql://localhost:5432/objectstore");
-        postgresProperties.put(JDBCProperties.JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JDBCProperties.JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
+        postgresProperties.put(JEXXA_JDBC_DRIVER, "org.postgresql.Driver");
+        postgresProperties.put(JEXXA_JDBC_PASSWORD, ADMIN);
+        postgresProperties.put(JEXXA_JDBC_USERNAME, POSTGRES_USER);
+        postgresProperties.put(JEXXA_JDBC_URL, "jdbc:postgresql://localhost:5432/objectstore");
+        postgresProperties.put(JEXXA_JDBC_AUTOCREATE_TABLE, "true");
+        postgresProperties.put(JEXXA_JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
         return postgresProperties;
     }
 
     private static Properties getH2Properties() {
         var h2Properties = new Properties();
-        h2Properties.put(JDBCProperties.JDBC_DRIVER, "org.h2.Driver");
-        h2Properties.put(JDBCProperties.JDBC_PASSWORD, ADMIN);
-        h2Properties.put(JDBCProperties.JDBC_USERNAME, ADMIN);
-        h2Properties.put(JDBCProperties.JDBC_URL, "jdbc:h2:mem:ComparableRepositoryTest;DB_CLOSE_DELAY=-1");
-        h2Properties.put(JDBCProperties.JDBC_AUTOCREATE_TABLE, "true");
+        h2Properties.put(JEXXA_JDBC_DRIVER, "org.h2.Driver");
+        h2Properties.put(JEXXA_JDBC_PASSWORD, ADMIN);
+        h2Properties.put(JEXXA_JDBC_USERNAME, ADMIN);
+        h2Properties.put(JEXXA_JDBC_URL, "jdbc:h2:mem:ComparableRepositoryTest;DB_CLOSE_DELAY=-1");
+        h2Properties.put(JEXXA_JDBC_AUTOCREATE_TABLE, "true");
         return h2Properties;
     }
 

@@ -74,7 +74,7 @@
 
     <!-- version of compile dependencies -->
     <classgraph.version>4.8.165</classgraph.version>
-    <jexxa.common.adapters.version>0.3.0</jexxa.common.adapters.version>
+    <jexxa.common.adapters.version>0.4.0</jexxa.common.adapters.version>
     <javalin.version>5.6.3</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
     <slf4j.api.version>2.0.9</slf4j.api.version>

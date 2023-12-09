@@ -4,11 +4,12 @@ import io.jexxa.adapterapi.JexxaContext;
 import io.jexxa.adapterapi.drivingadapter.HealthCheck;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
-import io.jexxa.common.JexxaBanner;
-import io.jexxa.common.JexxaCoreProperties;
+import io.jexxa.properties.JexxaCoreProperties;
+import io.jexxa.common.facade.jdbc.JDBCProperties;
+import io.jexxa.common.facade.logger.ApplicationBanner;
 import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
 import io.jexxa.common.facade.utils.function.ThrowingConsumer;
-import io.jexxa.common.properties.PropertiesLoader;
+import io.jexxa.properties.PropertiesLoader;
 import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
@@ -28,7 +29,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 import static io.jexxa.adapterapi.invocation.DefaultInvocationHandler.GLOBAL_SYNCHRONIZATION_OBJECT;
-import static io.jexxa.common.JexxaBanner.addConfigBanner;
+import static io.jexxa.common.facade.logger.ApplicationBanner.addConfigBanner;
 import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
 
 /**
@@ -91,11 +92,12 @@ public final class JexxaMain
         Objects.requireNonNull(context);
         JexxaContext.init();
 
-        // Handle properties in following forder:
+        // Handle properties in the following order:
         // 0. Add default JEXXA_CONTEXT_MAIN
         this.propertiesLoader = new PropertiesLoader(context);
         this.properties = propertiesLoader.createJexxaProperties(applicationProperties);
         this.properties.put(JexxaCoreProperties.JEXXA_CONTEXT_NAME, context.getSimpleName());
+        JDBCProperties.prefix("io.jexxa.");
 
         this.addToInfrastructure("io.jexxa.common.drivingadapter");
         this.addDDDPackages(context);
@@ -311,7 +313,7 @@ public final class JexxaMain
 
         if (enableBanner)
         {
-            JexxaBanner.show(getProperties());
+            ApplicationBanner.show(getProperties());
         }
 
         compositeDrivingAdapter.start();
@@ -325,11 +327,11 @@ public final class JexxaMain
     @SuppressWarnings("java:S2629")
     void printStartupInfo(Properties properties)
     {
-        getLogger(JexxaBanner.class).info( "Jexxa Version                  : {}", getBoundedContext().jexxaVersion() );
-        getLogger(JexxaBanner.class).info( "Context Version                : {}", getBoundedContext().contextVersion() );
+        getLogger(ApplicationBanner.class).info( "Jexxa Version                  : {}", getBoundedContext().jexxaVersion() );
+        getLogger(ApplicationBanner.class).info( "Context Version                : {}", getBoundedContext().contextVersion() );
 
-        getLogger(JexxaBanner.class).info( "Used Driving Adapter           : {}", Arrays.toString(compositeDrivingAdapter.adapterNames().toArray()));
-        getLogger(JexxaBanner.class).info( "Used Properties Files          : {}", Arrays.toString(propertiesLoader.getPropertiesFiles().toArray()));
+        getLogger(ApplicationBanner.class).info( "Used Driving Adapter           : {}", Arrays.toString(compositeDrivingAdapter.adapterNames().toArray()));
+        getLogger(ApplicationBanner.class).info( "Used Properties Files          : {}", Arrays.toString(propertiesLoader.getPropertiesFiles().toArray()));
     }
 
     @SuppressWarnings("java:S2629")
@@ -550,7 +552,7 @@ public final class JexxaMain
             if ( jexxaMain.enableBanner &&
                 !jexxaMain.getBoundedContext().isRunning())
             {
-                JexxaBanner.show(jexxaMain.getProperties());
+                ApplicationBanner.show(jexxaMain.getProperties());
             }
 
             getLogger(JexxaMain.class).error("Could not startup Jexxa! {}", errorMessage);

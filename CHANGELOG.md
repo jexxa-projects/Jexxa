@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
  
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+## \[7.0.0] - 2023-mm-dd
+### Changes
+- Static imports 
+  - `io.jexxa.infrastructure.MessageSenderManager` -> `io.jexxa.common.drivenadapter.messaging.MessageSenderManager`
+  - `io.jexxa.infrastructure.ObjectStoreManager` -> `io.jexxa.common.drivenadapter.persistence.ObjectStoreManager` 
+  - `io.jexxa.infrastructure.RepositoryManager` -> `io.jexxa.common.drivenadapter.persistence.RepositoryManager`
+- Package structure
+  - `io.jexxa.infrastructure` -> `io.jexxa.common.drivenadapter`
+  - `ìo.jexxa.drivingadapter.messaging` -> `io.jexxa.common.drivingadapter.messaging.jms`
+  - `io.jexxa.common.wrapper` -> `io.jexxa.common.facade`
 
 ## \[6.2.3] - 2023-11-12
 ### Fixed

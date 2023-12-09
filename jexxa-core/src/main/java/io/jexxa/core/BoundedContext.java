@@ -2,7 +2,7 @@ package io.jexxa.core;
 
 import io.jexxa.adapterapi.drivingadapter.Diagnostics;
 import io.jexxa.adapterapi.drivingadapter.HealthCheck;
-import io.jexxa.common.JexxaCoreProperties;
+import io.jexxa.properties.JexxaCoreProperties;
 
 import java.time.Clock;
 import java.time.Duration;

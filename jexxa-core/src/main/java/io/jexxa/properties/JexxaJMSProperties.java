@@ -1,4 +1,4 @@
-package io.jexxa.common;
+package io.jexxa.properties;
 
 public final class JexxaJMSProperties {
     public static final String JEXXA_JMS_STRATEGY = "io.jexxa.jms.strategy";

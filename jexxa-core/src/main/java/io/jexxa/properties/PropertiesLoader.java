@@ -1,6 +1,4 @@
-package io.jexxa.common.properties;
-
-import io.jexxa.common.JexxaCoreProperties;
+package io.jexxa.properties;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,8 +10,6 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import static io.jexxa.common.JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES;
-import static io.jexxa.common.JexxaCoreProperties.JEXXA_USER_TIMEZONE;
 import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
 
 public class PropertiesLoader {
@@ -51,9 +47,9 @@ public class PropertiesLoader {
     }
 
     private void setSystemProperties(Properties properties) {
-        if (properties.containsKey(JEXXA_USER_TIMEZONE))
+        if (properties.containsKey(JexxaCoreProperties.JEXXA_USER_TIMEZONE))
         {
-            System.getProperties().setProperty("user.timezone", properties.getProperty(JEXXA_USER_TIMEZONE));
+            System.getProperties().setProperty("user.timezone", properties.getProperty(JexxaCoreProperties.JEXXA_USER_TIMEZONE));
         }
     }
 
@@ -62,16 +58,16 @@ public class PropertiesLoader {
     }
 
     private void loadJexxaApplicationProperties(Properties properties) {
-        try ( InputStream inputStream = PropertiesLoader.class.getResourceAsStream(JEXXA_APPLICATION_PROPERTIES) )
+        try ( InputStream inputStream = PropertiesLoader.class.getResourceAsStream(JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES) )
         {
             if (inputStream != null) {
                 properties.load(inputStream);
-                propertiesFiles.add(JEXXA_APPLICATION_PROPERTIES);
+                propertiesFiles.add(JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES);
             } else {
-                getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JEXXA_APPLICATION_PROPERTIES);
+                getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES);
             }
         } catch ( IOException e ) {
-            getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JEXXA_APPLICATION_PROPERTIES);
+            getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES);
         }
     }
 

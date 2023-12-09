@@ -13,8 +13,9 @@ import io.javalin.util.JavalinLogger;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
-import io.jexxa.common.JexxaBanner;
+
 import io.jexxa.common.facade.json.JSONConverter;
+import io.jexxa.common.facade.logger.ApplicationBanner;
 import io.jexxa.common.facade.logger.SLF4jLogger;
 import io.jexxa.common.facade.utils.properties.Secret;
 import io.jexxa.drivingadapter.rest.openapi.OpenAPIConvention;
@@ -74,7 +75,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
 
         registerExceptionHandler();
 
-        JexxaBanner.addAccessBanner(this::bannerInformation);
+        ApplicationBanner.addAccessBanner(this::bannerInformation);
     }
 
     public static RESTfulRPCAdapter createAdapter(Properties properties)
@@ -213,20 +214,20 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     {
         // Print Listening ports
         if (isHTTPEnabled() ) {
-            getLogger(JexxaBanner.class).info("Listening on: {}", "http://" + getHostname() + ":" + getHTTPPort()  );
+            getLogger(ApplicationBanner.class).info("Listening on: {}", "http://" + getHostname() + ":" + getHTTPPort()  );
         }
 
         if (isHTTPSEnabled() ) {
-            getLogger(JexxaBanner.class).info("Listening on: {}", "https://" + getHostname() + ":" + getHTTPSPort() );
+            getLogger(ApplicationBanner.class).info("Listening on: {}", "https://" + getHostname() + ":" + getHTTPSPort() );
         }
 
         // Print OPENAPI links
         if (isHTTPEnabled()) {
-            openAPIConvention.getPath().ifPresent(path -> getLogger(JexxaBanner.class).info("OpenAPI available at: {}"
+            openAPIConvention.getPath().ifPresent(path -> getLogger(ApplicationBanner.class).info("OpenAPI available at: {}"
                     , "http://" + getHostname() + ":" + getHTTPPort() +  path ) );
         }
         if (isHTTPSEnabled()) {
-            openAPIConvention.getPath().ifPresent(path -> getLogger(JexxaBanner.class).info("OpenAPI available at: {}"
+            openAPIConvention.getPath().ifPresent(path -> getLogger(ApplicationBanner.class).info("OpenAPI available at: {}"
                     , "https://" + getHostname() + ":" + getHTTPSPort() + path ) );
         }
     }
