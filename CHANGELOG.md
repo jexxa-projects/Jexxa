@@ -132,7 +132,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - `infrastructure`: Replaces old `drivenadapterstrategy` and provides implementation of typical application infrastructure patterns that simplify the implementation of driven adapters
   - `common`: Provides wrapper to standard java libraries used by Jexxa. Main focus is to simplify and reduce these APIs to the requirements of Jexxa. This package is a candidate to be externalized in future major releases.     
  
-- [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/outbox/TransactionalOutboxSender.java) is now used by default for sending messages.   
+- `TransactionalOutboxSender` is now used by default for sending messages.   
 
 - Renamed `JexxaLogger` &rarr; `SLF4JLogger` to clarify its responsibility.
 - Renamed `Monitors` &rarr; `HealthIndicators` to clarify its responsibility. 
@@ -164,11 +164,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[5.7.1] - 2023-02-24
 ### Fixed
 - Updated dependencies
-- [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/outbox/TransactionalOutboxSender.java) initiates sending of messages directly after storing messages so that no additional delay occurs 
+- `TransactionalOutboxSender` initiates sending of messages directly after storing messages so that no additional delay occurs 
 
 ## \[5.7.0] - 2023-02-19
 ### Added
-- [ #186 ](https://github.com/jexxa-projects/Jexxa/issues/186) Jexxa-Core: Added support for transactional outbox pattern for sending JMS messages, called [`TransactionalOutboxSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/outbox/TransactionalOutboxSender.java). By default, the old [`JMSSender`](jexxa-core/src/main/java/io/jexxa/infrastructure/messaging/jms/JMSSender.java) is still used. See [here](jexxa-core/src/test/java/io/jexxa/infrastructure/messaging/jms/JMSSenderIT.java) how to enable the new message sender.    
+- [ #186 ](https://github.com/jexxa-projects/Jexxa/issues/186) Jexxa-Core: Added support for a transactional outbox pattern for sending JMS messages, called `TransactionalOutboxSender`. By default, the old `JMSSender` is still used. 
 
 ### Changed
 - Jexxa-Core: Declared driving adapter `JMXAdapter` as deprecated since it is no longer used in any project.
@@ -193,7 +193,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Jexxa-Core: Improved API for bootstrapping classes in main() that need no initialization method. See [here](https://github.com/jexxa-projects/JexxaTemplate) for more information. 
   
-- Jexxa-Core: JMSConfiguration can be provided by a method of the message listener. This allows to implement configurable message listener. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-core/src/test/java/io/jexxa/infrastructure/utils/messaging/ConfigurableListener.java) for an example.  
+- Jexxa-Core: JMSConfiguration can be provided by a method of the message listener. This allows implementing configurable message listener. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-core/src/test/java/io/jexxa/infrastructure/utils/messaging/ConfigurableListener.java) for an example.  
 
 - Jexxa-Test: Provided convenience classes for implementing integration tests. For detailed information and example look [here](https://github.com/jexxa-projects/JexxaTemplate).
 
@@ -409,8 +409,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Jexxa-Core: Added possibility to load Properties file defined by `JEXXA_CONFIG_IMPORT`
 
 - Jexxa-Core/Jexxa-Web: Added files that provide all properties used by Jexxa: 
-  - [JexxaCoreProperties](./jexxa-core/src/main/java/io/jexxa/common/JexxaCoreProperties.java)
-  - [JexxaJDBCProperties](./jexxa-core/src/main/java/io/jexxa/common/wrapper/jdbc/JexxaJDBCProperties.java)
+  - [JexxaCoreProperties](./jexxa-core/src/main/java/io/jexxa/properties/JexxaCoreProperties.java)
+  - [JexxaJDBCProperties](./jexxa-core/src/main/java/io/jexxa/properties/JexxaJDBCProperties.java)
   - [JexxaWebProperties](./jexxa-web/src/main/java/io/jexxa/drivingadapter/rest/JexxaWebProperties.java)
 
 - Jexxa-Adapter-API: Added possibility to set interceptor between `DrivingAdapters` and `InboundPorts`
