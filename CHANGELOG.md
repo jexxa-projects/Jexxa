@@ -90,13 +90,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Updated dependencies
 
 ### Fixed
-- In debug mode complete stack trace is written to logger  
+- In debug mode, complete stack trace is written to logger  
 - Clarified error message in case no public constructor of factory method is available 
 - Updated dependencies 
 
 ## \[6.0.6] - 2023-05-01
 ### Fixed
-- JexxaTest: Jexxa's dependency injection and manual injection in unit tests can now be used in mixed mode and JexxaTest correctly cleans up `IMDRepository` when used.  
+- JexxaTest: Jexxa's dependency injection and manual injection in unit tests can now be used in mixed mode, and JexxaTest correctly cleans up `IMDRepository` when used.  
 - Updated dependencies
 
 ## \[6.0.5] - 2023-04-19
@@ -111,12 +111,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[6.0.3] - 2023-03-21
 ### Fixed
-- Fixed cleanup of expired messages in IdempotentListener under heavy message load (one message each msec).
+- Fixed cleanup of expired messages in IdempotentListener under a heavy message load (one message each msec).
 - Updated dependencies 
 
 ## \[6.0.2] - 2023-03-08
 ### Fixed
-- Fixed Dependency Injection for port adapters that get an additional Properties as 2nd argument, such as IdempotentListener 
+- Fixed Dependency Injection for port adapters that get additional Properties as second argument, such as IdempotentListener 
 
 ## \[6.0.1] - 2023-03-08
 ### Fixed 
@@ -124,13 +124,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Updated dependencies
 
 ## \[6.0.0] - 2023-03-05
-### Changed - Important Information!
+### Changed—Important Information!
 
-- With this major release Jexxa focuses more on typical microservices patterns. To better highlight them, the following changes have been made to the package structures:
+- With this major release, Jexxa focuses more on typical microservices patterns. To better highlight them, the following changes have been made to the package structures:
   - `core`: Provides the main entry point for a Jexxa application
-  - `drivingadapter`: Provides ready to use driving adapter to receive and forward incoming requests to the application core 
+  - `drivingadapter`: Provides ready-to-use driving adapter to receive and forward incoming requests to the application core 
   - `infrastructure`: Replaces old `drivenadapterstrategy` and provides implementation of typical application infrastructure patterns that simplify the implementation of driven adapters
-  - `common`: Provides wrapper to standard java libraries used by Jexxa. Main focus is to simplify and reduce these APIs to the requirements of Jexxa. This package is a candidate to be externalized in future major releases.     
+  - `common`: Provides wrapper to standard java libraries used by Jexxa. The main focus is to simplify and reduce these APIs to the requirements of Jexxa. This package is a candidate to be externalized in future major releases.     
  
 - `TransactionalOutboxSender` is now used by default for sending messages.   
 
@@ -195,7 +195,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   
 - Jexxa-Core: JMSConfiguration can be provided by a method of the message listener. This allows implementing configurable message listener. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-core/src/test/java/io/jexxa/infrastructure/utils/messaging/ConfigurableListener.java) for an example.  
 
-- Jexxa-Test: Provided convenience classes for implementing integration tests. For detailed information and example look [here](https://github.com/jexxa-projects/JexxaTemplate).
+- Jexxa-Test: Provided convenience classes for implementing integration tests. For detailed information and example, look [here](https://github.com/jexxa-projects/JexxaTemplate).
 
 ### Changed
 - Jexxa-Core: static definitions of JMS properties are now provided via `JexxaJMSProperties` for unification reason. The old properties provided in `JMSAdapter` are declared deprecated.
@@ -226,7 +226,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Jexxa-Core: Provide possibility to configure `user.timezone` via jexxa-application.properties value `io.jexxa.user.timezone`. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information
 
 ### Changed
-- [Issue #142](https://github.com/jexxa-projects/Jexxa/issues/140) Jexxa-Web : Updated from javalin4 to javalin5. This required to reimplement OpenAPI functionality because javalin5 no longer supports a Java-DSL to provide OpenAPI information. Even though the public API of Jexxa-Web is not changed we decided to increment minor version due to the re-implementation of OpenAPI 
+- [Issue #142](https://github.com/jexxa-projects/Jexxa/issues/140) Jexxa-Web: Updated from javalin4 to javalin5. This required reimplementing OpenAPI functionality because javalin5 no longer supports a Java-DSL to provide OpenAPI information. Even though the public API of Jexxa-Web is not changed we decided to increment minor version due to the re-implementation of OpenAPI 
 
 ### Fixed
 - Updated dependencies
@@ -242,7 +242,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[5.3.1] - 2022-10-27
 ### Fixed
-- Explicitly define latest gson version as dependency for jexxa-web. This ensures that maven will use this version within your application because it is the shortest path as transitive dependency. In case your application uses an older gson version (also as transitive dependency), you could get an IllegalAccessException because deserialization of a Java record fails.  
+- Explicitly define one latest gson version as dependency for jexxa-web. This ensures that maven will use this version within your application because it is the shortest path as a transitive dependency. In case your application uses an older gson version (also as transitive dependency), you could get an IllegalAccessException because deserialization of a Java record fails.  
 
 - Updated dependencies
 
@@ -251,7 +251,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Jexxa-Test: Possibility to define one stubs for your tests
 
 ### Changed
-- Jexxa now uses (de)serialization methods for Java records provided in latest GSon library
+- Jexxa now uses (de)serialization methods for Java records provided in the latest GSon library
 
 ### Fixed
 - Updated dependencies 
@@ -284,8 +284,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[5.1.0] - 2022-08-15
 ### Added
 - Jexxa-Test: 
-  - Added static method getJexxaTest which also instantiates JexxaMain. This ensures that all driven adapter are correctly configured before any method on JexxaMain is called  
-  - Added rules to validate architecture of your application. 
+  - Added static method `getJexxaTest, which also instantiates JexxaMain. This ensures that all driven adapters are correctly configured before any method on JexxaMain is called  
+  - Added rules to validate the architecture of your application. 
   - See [JexxaTemplate](https://github.com/jexxa-projects/JexxaTemplate) for more information
 
 ### Fixed
@@ -302,8 +302,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## \[5.0.0] - 2022-06-17
-### Changed - Important Information!
-- With this major release Jexxa supports only Java versions >=17.
+### Changed—Important Information!
+- With this major release, Jexxa supports only Java versions >=17.
 - See [JexxaTemplate](https://github.com/jexxa-projects/JexxaTemplate) or [JexxaTutorials](https://github.com/jexxa-projects/JexxaTutorials) for examples.
 
 - Jexxa-Core:
@@ -320,7 +320,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Properties: 
   - Driven-Adapter-Strategies can now be defined in the properties files. 
   - In general, Jexxa applications have up to three different configurations (at max): 
-    - jexxa-application.properties: Is automatically load and should include your production settings
+    - jexxa-application.properties: Is automatically loaded and should include your production settings
     - jexxa-test.properties: Overwrites all production settings for local testing
     - jexxa-local.properties: Overwrites all production settings so that the application can run without an infrastructure. This is only recommended for demo purpose or rapid prototyping. 
     - Please refer to [reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_application_configuration) for more information.
@@ -352,7 +352,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[4.1.5] - 2022-04-26
 ### Changed 
-- Minor and patch numbers of jexxa-adapter-api are now kept in sync with other jexxa-versions. This should avoid confusions about compatible version numbers 
+- Minor and patch numbers of jexxa-adapter-api are now kept in sync with other jexxa-versions. This should avoid confusion about compatible version numbers 
 
 ### Fixed
 - Updated dependencies
@@ -395,7 +395,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Corrected handling of Port-Adapter as singleton instances 
 
 ## \[4.0.0] - 2022-01-28
-### Changed - Important Information!
+### Changed—Important Information!
 - Jexxa-Core: Major changes to the persistence layer, which prevent downgrading applications to older Jexxa versions
     - `JDBCKeyValueRepository` and `JDBCObjectStore` use now `JSONB` format if a Postgres DB is used. Existing database are automatically converted to `JSONB`
     - `JDBCKeyValueRepository` and `JDBCObjectStore` use now column name `REGISTRY_KEY` and `REGISTRY_VALUE` instead `KEY` and `VALUE`. This avoids conflicts with reserved SQL statements. Existing database are automatically updated.
@@ -428,10 +428,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Jexxa-Core/web: Added new properties to read credentials from files.
   See [jexxa-application.properties](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information.
 
-- Jexxa-Core/web: Added new properties to automatically load version information of applications from build system.
+- Jexxa-Core/web: Added new properties to automatically load version information of applications from a build system.
   See [jexxa-application.properties](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information.
 
-- Jexxa-Core: JSon serializer allows now to read a Type in addition to Clazz and to read from a `Reader`
+- Jexxa-Core: JSon serializer allows now reading a Type in addition to Clazz and reading from a `Reader`
 
 ### Changed
 - Reference guide: Updated description of application configuration  
@@ -462,14 +462,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[3.1.1] - 2021-08-23
 ### Fixed
--   JexxaTest: Corrected default configuration for ObjectStore so that IMDBObjectStore is used in case of unit tests.
+-   JexxaTest: Corrected default configuration for ObjectStore so that IMDBObjectStore is used for unit tests.
 
 ### Changed
 -   Updated dependencies
 
 ## \[3.1.0] - 2021-08-14
 ### Added 
--   Added ObjectStore which provides sophisticated API for querying managed objects. See tutorial [Contract Management](https://github.com/jexxa-projects/Jexxa/blob/master/tutorials/ContractManagement/README.md)  
+-   Added `ObjectStore` which provides sophisticated API for querying managed objects. See tutorial [Contract Management](https://github.com/jexxa-projects/Jexxa/blob/master/tutorials/ContractManagement/README.md)  
 
 ### Changed
 -   Default port for tutorials from 7000 -> 7500 because macOS Monterey uses port 7000 for its control center
@@ -489,7 +489,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[3.0.4] - 2021-06-18
 ### Fixed
--   JexxaMain: If a specific driving adapter is bound to a port adapter Jexxa ensured that the specific driving adapter is instantiated only once. Without this fix it could happen that a specific driving adapter is instantiated multiple times. In case the specific driving adapter uses resources such as a port this led to an exception.
+-   JexxaMain: If a specific driving adapter is bound to a port adapter, Jexxa ensures that the specific driving adapter is instantiated only once. Without this fix, it could happen that a specific driving adapter is instantiated multiple times. In case the specific driving adapter uses resources such as a port, this led to an exception.
 
 ### Changed
 -   Updated dependencies on patch level
@@ -506,18 +506,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -   Fixed fast fail approach in JexxaMain::bindToAnnotation. Now, this method directly fails if any inbound port cannot be created.
 
 ### Added
--   New Tutorial [BookstoreJ16](https://github.com/jexxa-projects/JexxaTutorials/tree/main/BookStoreJ16/README.md) which shows how to use Java records with Jexxa
+-   New Tutorial [`BookstoreJ16`](https://github.com/jexxa-projects/JexxaTutorials/tree/main/BookStoreJ16/README.md) which shows how to use Java records with Jexxa
 
 ## \[3.0.1] - 2021-04-18
 ### Fixed
 -   `JSONManager`: 
-    -   Bugfix for Java 16+: Added default serializer/deserializer for Java8-time classes, because they are strong encapsulated since Java 16. The added serializer/deserializer avoid an `IllegalAccessException` when they are serialized to/from Json.
+    -   Bugfix for Java 16+: Added default serializer/deserializer for Java8-time classes, because they are strongly encapsulated since Java 16. The added serializer/deserializer avoid an `IllegalAccessException` when they are serialized to/from Json.
 -   Fixed issues from static code analysis tool codacy 
 -   Updated dependencies on patch level 
 
 ## \[3.0.0] - 2021-04-03
 ### Changed
--   Introduced new package Jexxa-Web which includes all web specific plugins such as `RESTfulRPCAdapter`. See [reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_jexxa_modules) for more information. If your application uses this adapter, you have now to add dependency `jexxa-web`. See tutorial [HelloJexxa](https://github.com/jexxa-projects/JexxaTutorials/tree/main/HelloJexxa/README.md) for an example.  
+-   Introduced new package Jexxa-Web, which includes all web-specific plugins, such as `RESTfulRPCAdapter`. See [reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_jexxa_modules) for more information. If your application uses this adapter, you have now to add dependency `jexxa-web`. See tutorial [HelloJexxa](https://github.com/jexxa-projects/JexxaTutorials/tree/main/HelloJexxa/README.md) for an example.  
 -   Removed all methods and constants that were declared deprecated in 2.x
 
 ### Fixed
@@ -568,7 +568,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     -   Added abstract base class `JDBCRepository` for implementing specific repository
     -   Added wrapper classes `JDBCQuery` and `JDBCCommand` for reading and executing commands using Java streams.
 
--   New Tutorial [TimeService - Flow Of Control](https://github.com/jexxa-projects/JexxaTutorials/tree/main/TimeService/README-FlowOfControl.md)
+-   New Tutorial [TimeService—Flow Of Control](https://github.com/jexxa-projects/JexxaTutorials/tree/main/TimeService/README-FlowOfControl.md)
 
 ### Changed
 -   Updated dependencies
@@ -583,15 +583,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     -   Corrected schema creation of data types including Java8 date/time types
 
 ### Added 
--   New Tutorial [TimeService - Flow Of Control](https://github.com/jexxa-projects/JexxaTutorials/tree/main/TimeService/README-FlowOfControl.md)
+-   New Tutorial [TimeService—Flow Of Control](https://github.com/jexxa-projects/JexxaTutorials/tree/main/TimeService/README-FlowOfControl.md)
 
 ### Changed
 -   Updated dependencies on minor level
 
 ## \[2.6.1] - 2020-12-12
 ### Fixed
--   `JDBCKeyValueRepository`: Fixed reconnection on lost JDBC connection for example if database closes connection after some time
--   `JMSAdapter`: Fixes reconnection if entire Session object becomes invalid. Typically, this should only happen if you restart your messaging system.   
+-   `JDBCKeyValueRepository`: Fixed reconnection on lost JDBC connection, for example, if a database closes connection after some time
+-   `JMSAdapter`: Fixes reconnection if the entire Session object becomes invalid. Typically, this should only happen if you restart your messaging system.   
 
 ### Changed
 -   Updated dependencies
@@ -605,7 +605,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -   DrivenAdapterStrategies:
     -   Set methods getInstance() of all Manager singletons to deprecate
     -   Added static methods to get/set strategie instances
-    -   Updated all tutorials to use these new methods    
+    -   Update all tutorials to use these new methods    
 
 ### Changed
 -   Updated dependencies
@@ -615,7 +615,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 -   RESTfulRPCAdapter: 
     -   Corrected handling of Java8 Date API so that a date is handled as a string which is conformed to ISO 8601
-    -   Added tests that show how to use this from a client side. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-core/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java) for more information.       
+    -   Added tests that show how to use this from the client side. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-core/src/test/java/io/jexxa/infrastructure/drivingadapter/rest/RESTfulRPCJava8DateTimeTest.java) for more information.       
     
 ### Changed
 -   Updated dependencies 
@@ -636,13 +636,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 -   OpenAPI-Support in `RESTfulRPCAdapter`: 
     -   Array-types are now correctly handled as method attributes
-    -   Corrected handling of abstract and interface parameters. For these parameters no example object can be set.           
+    -   Corrected handling of abstract and interface parameters. For these parameters, no example object can be set.           
     -   Set application type to `application/json` in all cases
     
 -   `RESTfulRPCAdapter`: 
     -   Static methods are no longer exposed
     -   Only a single instance of a `RESTfulRPCAdapter` per Properties can be created 
-    -   Fixed error message so that correct host and port is stated in exception if binding fails
+    -   Fixed error message so that the correct host and port is stated in exception if binding fails
  
 -   `JMXAdapter`:       
     -   Static methods are no longer exposed
@@ -661,7 +661,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -   Added a [reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html).   
   
 ### Fixed
--   `IMDBRepository`: When reset all IMDBRepositories, the internal reference to specific map is also reset. This allows reusing references to IRepository instances.  
+-   `IMDBRepository`: When reset all IMDBRepositories, the internal reference to a specific map is also reset. This allows reusing references to IRepository instances.  
 
 -   `RESTfulRPCAdapter`: Public static methods are no longer exposed.  
 
@@ -688,15 +688,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[2.4.0] - 2020-09-27
 ### Added
 -   New driven adapter strategy `MessageLogger` which writes messages to a logger
--   New module `jexxa-test` which simplifies writing unit tests. `jexxa-test` automatically provides stubs for application specific driven adapters as soon as they use Jexxa's drivenadapter strategies. See tutorial [`BookStore`](https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore) for example.  
+-   New module `jexxa-test` which simplifies writing unit tests. `jexxa-test` automatically provides stubs for application-specific driven adapters as soon as they use Jexxa's drivenadapter strategies. See tutorial [`BookStore`](https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore) for example.  
 
 ### Changed
 -   Updated dependencies  
 
 ## \[2.3.2] - 2020-09-23
 ### Fixed
--   `JMSAdapter`: Correctly cleanup internal data structure in case of reconnect. This avoids registering objects multiple 
-times in case of reconnect.
+-   `JMSAdapter`: Correctly cleanup internal data structure in case of reconnecting. This avoids registering objects multiple 
+times in case of reconnecting.
 
 ## \[2.3.1] - 2020-09-20
 ### Fixed
@@ -710,8 +710,8 @@ times in case of reconnect.
 ### Added
 -   [Issue #6](https://github.com/jexxa-projects/Jexxa/issues/6) Added HTTPS support in RESTfulRPCAdapter (see [jexxa-application.properties](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information).                                             
 ### Fixed
--   [Issue #5](https://github.com/jexxa-projects/Jexxa/issues/5) Avoid warn a message "Uncaught Exception Handler already set" with JUnit 
--   Fixed Issue with including correct jexxa-application.properties in tutorials jar with all dependencies. Switched from jar-plugin to maven-shade plugin to define correct jexxa-application.properties.   
+-   [Issue #5](https://github.com/jexxa-projects/Jexxa/issues/5) Avoid a warning message "Uncaught Exception Handler already set" with JUnit 
+-   Fixed Issue with including correct jexxa-application.properties in tutorial jar with all dependencies. Switched from jar-plugin to maven-shade plugin to define correct jexxa-application.properties.   
 
 ### Changed
 -   Removed deprecated Jexxa's old JMS API integration 
