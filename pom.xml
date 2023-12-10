@@ -5,7 +5,7 @@
 
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa</artifactId>
-  <version>7.0.0-beta.1</version>
+  <version>7.0.0-beta.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <!-- Project Information -->
