@@ -4,6 +4,7 @@ import io.jexxa.adapterapi.JexxaContext;
 import io.jexxa.adapterapi.drivingadapter.HealthCheck;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
+import io.jexxa.common.facade.jms.JMSProperties;
 import io.jexxa.properties.JexxaCoreProperties;
 import io.jexxa.common.facade.jdbc.JDBCProperties;
 import io.jexxa.common.facade.logger.ApplicationBanner;
@@ -39,7 +40,7 @@ import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
  * In order to control your application (start / shutdown) from within your application and also from outside
  * JexxaMain provides a so called {@link BoundedContext}.
  * <p>
- * To see how to use this class please refer to the tutorials.
+ * To see how to use this class, please refer to the tutorials.
  */
 @SuppressWarnings("unused")
 public final class JexxaMain
@@ -47,8 +48,6 @@ public final class JexxaMain
     private static final String DRIVEN_ADAPTER_PACKAGE = ".infrastructure.drivenadapter";
     private static final String DRIVING_ADAPTER_PACKAGE = ".infrastructure.drivingadapter";
     private static final String DOMAIN_SERVICE = ".domainservice";
-    private static final String DOMAIN_PROCESS_SERVICE = ".domainprocessservice";
-    private static final String DOMAIN_WORKFLOW = ".domainworkflow";
     private static final String APPLICATION_SERVICE = ".applicationservice";
 
     private final CompositeDrivingAdapter compositeDrivingAdapter = new CompositeDrivingAdapter();
@@ -66,9 +65,9 @@ public final class JexxaMain
 
     /**
      * Creates the JexxaMain instance for your application with given context name.
-     * In addition, the properties file jexxa-application.properties is load if available in class path.
+     * In addition, the properties file jexxa-application.properties is loaded if available in a class path.
      * <p>
-     * Note: When a driving or driven adapter is created, it gets the properties read from properties file.
+     * Note: When a driving or driven adapter is created, it gets the properties read from the properties file.
      *
      * @param context Name of the BoundedContext. Typically, you should use the name of your application.
      */
@@ -79,9 +78,9 @@ public final class JexxaMain
     /**
      * Creates the JexxaMain instance for your application with given context name.
      * <p>
-     * Note: The file jexxa-application.properties is loaded if available in class path. Then the
+     * Note: The file jexxa-application.properties is loaded if available in a class path. Then the
      * properties are extended by the given properties object. So if you define the same properties in
-     * jexxa-application.properties and the given properties object, the one from properties object is used.
+     * jexxa-application.properties and the given properties object, the one from properties-object is used.
      *
      * @param context Type of the BoundedContext. Typically, you should use the name of your application.
      * @param applicationProperties Properties that are defined by your application.
@@ -98,9 +97,10 @@ public final class JexxaMain
         this.properties = propertiesLoader.createJexxaProperties(applicationProperties);
         this.properties.put(JexxaCoreProperties.JEXXA_CONTEXT_NAME, context.getSimpleName());
         JDBCProperties.prefix("io.jexxa.");
+        JMSProperties.prefix("io.jexxa.");
 
         this.addToInfrastructure("io.jexxa.common.drivingadapter");
-        this.addDDDPackages(context);
+        this.addDefaultPackages(context);
 
         //Create BoundedContext
         this.boundedContext = new BoundedContext(this.properties.getProperty(JexxaCoreProperties.JEXXA_CONTEXT_NAME), this);
@@ -122,14 +122,13 @@ public final class JexxaMain
     }
 
     /**
-     * This method adds default package structure as recommended by Jexxa. In case you use your own package structure
+     * This method adds the default package structure as recommended by Jexxa. In case you use your own package structure
      * see {@link #addToInfrastructure(String)} and {@link #addToApplicationCore(String)}.
      * The default structure added to {@link #addToApplicationCore(String)} is:
      *
      * <ul>
      *     <li>&lt;Root-Package&gt;.applicationservice</li>
      *     <li>&lt;Root-Package&gt;.domainservice</li>
-     *     <li>&lt;Root-Package&gt;.domainprocessservice</li>
      * </ul>
      * The default structure which is added to {@link #addToInfrastructure(String)} is:
      *
@@ -141,13 +140,11 @@ public final class JexxaMain
      * @param mainApplication which is located at the root package. From this package name the remaining packages are added
      * @return JexxaMain object to call additional methods
      */
-    public JexxaMain addDDDPackages(Class<?> mainApplication)
+    public JexxaMain addDefaultPackages(Class<?> mainApplication)
     {
         addToInfrastructure( mainApplication.getPackageName() + DRIVEN_ADAPTER_PACKAGE);
         addToInfrastructure( mainApplication.getPackageName() + DRIVING_ADAPTER_PACKAGE);
         addToApplicationCore( mainApplication.getPackageName() + DOMAIN_SERVICE);
-        addToApplicationCore( mainApplication.getPackageName() + DOMAIN_PROCESS_SERVICE);
-        addToApplicationCore( mainApplication.getPackageName() + DOMAIN_WORKFLOW);
         addToApplicationCore( mainApplication.getPackageName() + APPLICATION_SERVICE);
 
         return this;
@@ -262,11 +259,11 @@ public final class JexxaMain
     }
 
     /**
-     * Returns an instance of a Port and creates one if it not already exist.
+     * Returns an instance of a Port and creates one if it not already exists.
      *
-     * @param port Class information of the port. In case of an interface Jexxa tries to create an outbound port otherwise an inbound port
+     * @param port Class information of the port. In the case of an interface, Jexxa tries to create an outbound port otherwise an inbound port
      * @param <T> Type of the port.
-     * @return Instance of requested port. If an instance already exist it is returned otherwise a new one is created.
+     * @return Instance of requested port. If an instance already exists, it is returned; otherwise a new one is created.
      */
     @CheckReturnValue
     public <T> T getInstanceOfPort(Class<T> port)
@@ -507,7 +504,7 @@ public final class JexxaMain
             }
             catch (RuntimeException e)
             {
-                //In case of any error we stop ALL driving adapter for proper cleanup and rethrow the exception
+                //In case of any error, we stop ALL driving adapter for proper cleanup and rethrow the exception
                 stop();
                 throw e;
             }
