@@ -65,7 +65,8 @@ public final class BoundedContext
     }
 
     /**
-     * Returns true if all HealthChecks returns true. If at least one HealthCheck return false, this method returns false as well
+     * Returns true if all HealthChecks returns true.
+     * If at least one HealthCheck returns false, this method returns false as well
      *
      * @return True if all HealthChecks return true, otherwise false.
      */

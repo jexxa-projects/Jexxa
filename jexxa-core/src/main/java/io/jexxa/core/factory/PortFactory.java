@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 /**
- * This class is responsible for creating instances of ports or a wrapper for a port including all required parameter.
+ * This class is responsible for creating instances of ports or a wrapper for a port including all required parameters.
  * <p>
  * Conventions for ports
  * <ol>
@@ -63,10 +63,10 @@ public class PortFactory
     }
 
     /**
-     * Check if an inbound port including all required driven-adapter can be created
+     * Check if an inbound port including all required driven-adapters can be created
      *
      * @param inboundPort type of the port to check if it is in general available
-     * @return true in case a constructor fulfilling conventions is available, otherwise false
+     * @return true in case constructor fulfilling all conventions, otherwise false
      */
     public boolean isAvailable(Class<?> inboundPort)
     {
@@ -76,7 +76,7 @@ public class PortFactory
 
     /**
      * Checks if an instance of given inbound port was already created using this method and returns this instance.
-     * Only if no instance was created so far using this method a new one is created.
+     * Only if no instance was created so far using this method, a new one is created.
      *
      * @see #newInstanceOf(Class, Properties)
      * @param inboundPort type of the inbound port
@@ -106,11 +106,12 @@ public class PortFactory
     }
 
     /**
-     * This method creates a new instance of a so called port-adapter including the managed port. A port-adapter typically
-     * performs a specific mapping from a generic driving adapter, such as JMS, to a specific type of port.
+     * This method creates a new instance of a so-called port-adapter including the managed port.
+     * A port-adapter typically performs a specific mapping from a generic driving adapter,
+     * such as JMS, to a specific type of port.
      * <p>
      *
-     * Note: The port is created using {@link #getInstanceOf(Class, Properties)}*
+     * Note: The port is created using {@link #getInstanceOf(Class, Properties)}
      *
      * @param portAdapter type of the port-adapter. Note: This method expects that the port-adapter has a single constructor
      *                    which takes exactly one port as argument.
@@ -126,7 +127,7 @@ public class PortFactory
             //1. Try to create a port Adapter with inboundPort
             var newPortAdapter = ClassFactory.newInstanceOf(portAdapter, new Object[]{inboundPort});
 
-            //2. Try to create a port Adapter with inboundPort and Propertes
+            //2. Try to create a port Adapter with inboundPort and Properties
             if (newPortAdapter.isEmpty())
             {
                 newPortAdapter = ClassFactory.newInstanceOf(portAdapter, new Object[]{inboundPort, properties});
@@ -217,11 +218,13 @@ public class PortFactory
     }
 
     /**
-     * Returns the port that is required by given port-adapter which is by convention the first and only parameter of th constructor
+     * Returns the port required by given port-adapter which is by convention the first and
+     * only parameter of the constructor
      *
      * @param portAdapter Class information of the portAdapter
      * @param <T> type of the portAdapter
-     * @return Class information of the port that is used by this port-adapter which is by convention the first and only parameter of th constructor
+     * @return Class information of the port that is used by this port-adapter which is by convention
+     * the first and only parameter of the constructor
      */
     private <T> Class<?> getPort(Class<T> portAdapter)
     {

@@ -110,7 +110,7 @@ public final class JexxaMain
     }
 
     /**
-     * Adds a package that is searched by Jexxa's dependency injection mechanism for creating infrastructure
+     * Adds a package searched by Jexxa's dependency injection mechanism for creating infrastructure
      * objects such as driven adapters.
      * @param packageName name of the package
      * @return JexxaMain object to call additional methods
@@ -151,7 +151,7 @@ public final class JexxaMain
     }
 
     /**
-     * Adds a package that is searched by Jexxa's dependency injection mechanism for creating objects of the
+     * Adds a package searched by Jexxa's dependency injection mechanism for creating objects of the
      * application core such as in- and outbound ports.
      *
      * @param packageName name of the package
@@ -382,7 +382,7 @@ public final class JexxaMain
     }
 
     /**
-     * Registers a driven adapter that is then injected inbound ports if its interface is requested.
+     * Registers a driven adapter to be used as inbound port if its interface is requested.
      * <p>
      * Note: This method is typically only required if you need to define the created instances explicitly,
      * such as defining stubs in unit tests.
@@ -545,7 +545,7 @@ public final class JexxaMain
         @Override
         public void uncaughtException(Thread t, Throwable e) {
             var errorMessage = getOutputMessage(e);
-            //Show startup banner if enabled and jexxa not started in order to
+            //Show startup banner if enabled and jexxa fast fail approach avoids starting the application
             if ( jexxaMain.enableBanner &&
                 !jexxaMain.getBoundedContext().isRunning())
             {

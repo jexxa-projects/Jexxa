@@ -7,7 +7,7 @@ public final class PortConvention
 
     /**
      * Validates if given clazz matches the convention of a port.
-     * If one of the conventions are not matched an exception is thrown:
+     * If one of the conventions is not matched, an exception is thrown:
      * <t>
      *     <li>
      *         Exactly one public constructor.

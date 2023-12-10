@@ -169,7 +169,7 @@ class JexxaMainTest
     void bindToMultiplePortAdapterOfSameType()
     {
         //Arrange
-        var expectedDrivingAdapterInstanceCount = 1; // Since DrivingAdapter are treated as singletons we expect 1 instance
+        var expectedDrivingAdapterInstanceCount = 1; // Since DrivingAdapter are treated as singletons, we expect 1 instance
         var expectedProxyAdapterInstanceCount = 1;   // Since PortAdapter are treated as singletons we expect 1 instance
         ProxyDrivingAdapter.resetInstanceCount();
         ProxyPortAdapter.resetInstanceCount();

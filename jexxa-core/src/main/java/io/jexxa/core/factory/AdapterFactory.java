@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 /**
- * Creates all kind of adapters (driving and driven) which fulfill one of the following conventions:
+ * Creates all kinds of adapters (driving and driven) which fulfill one of the following conventions:
  * <ol>
  *   <li>Public Default constructor available</li>
  *   <li>Public constructor with one Properties as attribute is available</li>
@@ -43,10 +43,10 @@ public class AdapterFactory
 
         try
         {
-            //Apply 1. convention and try to use default constructor
+            // Apply the 1st convention and try to use default constructor
             var adapterInstance = ClassFactory.newInstanceOf(adapterImpl);
 
-            //Apply 2. convention and try to use a factory method
+            // Apply the 2nd convention and try to use a factory method
             if (adapterInstance.isEmpty())
             {
                 adapterInstance = ClassFactory.newInstanceOf(adapterInterface, adapterImpl);
@@ -68,10 +68,10 @@ public class AdapterFactory
 
         try
         {
-            //Apply 1. convention and try to use a constructor accepting properties
+            // Apply the 1st convention and try to use a constructor accepting properties
             var adapterInstance = ClassFactory.newInstanceOf(adapterImpl, new Object[]{properties});
 
-            //Apply 2. convention and try to use a factory method accepting properties
+            // Apply the 2nd convention and try to use a factory method accepting properties
             if (adapterInstance.isEmpty())
             {
                 adapterInstance = ClassFactory.newInstanceOf(adapterInterface, adapterImpl, new Object[]{properties});
@@ -122,8 +122,9 @@ public class AdapterFactory
 
 
     /**
-     * Returns a class which implements given interface type. In case given type is not an interface the given type is returned
-     **
+     * Returns a class which implements a given interface type.
+     * In case a given type is not an interface, the given type is returned
+     *
      * @param adapterInterface class of the interface for which an implementation is required
      * @param <T> Type information of the given interface
      * @return 1. Given interface type if interfaceType is not an interface. 2. An implementation of the interface if available
@@ -137,7 +138,7 @@ public class AdapterFactory
 
         var implementationList = dependencyScanner.getClassesImplementing(adapterInterface);
 
-        if (implementationList.size() > 1) // If more than one implementation is available our convention is violated
+        if (implementationList.size() > 1) // If more than one implementation is available, our convention is violated
         {
             throw new AmbiguousAdapterException(adapterInterface, implementationList);
         }

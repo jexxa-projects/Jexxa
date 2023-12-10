@@ -25,7 +25,7 @@ public class PropertiesLoader {
         properties.clear();
         propertiesFiles.clear();
 
-        // Handle properties in following forder:
+        // Handle properties in the following forder:
         // 0. Add default JEXXA_CONTEXT_MAIN
         this.properties.put(JexxaCoreProperties.JEXXA_CONTEXT_NAME, context.getSimpleName());
 
@@ -83,7 +83,7 @@ public class PropertiesLoader {
     }
 
     public void importProperties(String resource) {
-        //1. try to import properties as Resource from inside the jar
+        //1st try to import properties as Resource from inside the jar
         try (InputStream resourceStream = PropertiesLoader.class.getResourceAsStream(resource)) {
             if (resourceStream != null) {
                 properties.load(resourceStream);
@@ -92,7 +92,7 @@ public class PropertiesLoader {
                 throw new FileNotFoundException(resource);
             }
         } catch (IOException e) {
-            //2. try to import properties from outside the jar
+            //2nd try to import properties from outside the jar
             try (FileInputStream file = new FileInputStream(resource)) {
                 properties.load(file);
                 propertiesFiles.add(resource);
