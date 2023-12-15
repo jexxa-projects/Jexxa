@@ -1,7 +1,7 @@
 package io.jexxa.testapplication.applicationservice;
 
 
-import io.jexxa.common.wrapper.logger.SLF4jLogger;
+import io.jexxa.common.facade.logger.SLF4jLogger;
 import io.jexxa.testapplication.annotation.ValidApplicationService;
 import io.jexxa.testapplication.domain.model.JexxaEnum;
 import io.jexxa.testapplication.domain.model.JexxaRecord;

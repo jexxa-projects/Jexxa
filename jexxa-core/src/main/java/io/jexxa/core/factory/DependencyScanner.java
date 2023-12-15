@@ -19,7 +19,7 @@ final class DependencyScanner
     DependencyScanner acceptPackage(String packageName)
     {
         acceptedPackages.add(packageName);
-        scanResult = null; //Reset scan result so that it is recreated with new white listed packages
+        scanResult = null; //Reset scan result so that it is recreated with new accepted packages
         return this;
     }
 

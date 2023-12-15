@@ -1,9 +1,9 @@
 package io.jexxa.core;
 
 
+import io.jexxa.common.drivenadapter.persistence.RepositoryManager;
+import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.core.convention.PortConventionViolation;
-import io.jexxa.infrastructure.RepositoryManager;
-import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.annotation.InvalidApplicationService;
 import io.jexxa.testapplication.annotation.ValidApplicationService;
@@ -169,7 +169,7 @@ class JexxaMainTest
     void bindToMultiplePortAdapterOfSameType()
     {
         //Arrange
-        var expectedDrivingAdapterInstanceCount = 1; // Since DrivingAdapter are treated as singletons we expect 1 instance
+        var expectedDrivingAdapterInstanceCount = 1; // Since DrivingAdapter are treated as singletons, we expect 1 instance
         var expectedProxyAdapterInstanceCount = 1;   // Since PortAdapter are treated as singletons we expect 1 instance
         ProxyDrivingAdapter.resetInstanceCount();
         ProxyPortAdapter.resetInstanceCount();
@@ -226,7 +226,6 @@ class JexxaMainTest
         //Assert
         assertTrue(portFactory.isAvailable(SimpleApplicationService.class));
     }
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void getInstanceOfInvalidPort()
     {
@@ -261,14 +260,13 @@ class JexxaMainTest
     @Test
     void testAddDDDPackages() {
         //Act
-        var result = objectUnderTest.addDDDPackages(JexxaMainTest.class);
+        var result = objectUnderTest.addDefaultPackages(JexxaMainTest.class);
 
         //Assert
         assertEquals(objectUnderTest, result);
 
         assertTrue(objectUnderTest.getApplicationCore().contains( JexxaMainTest.class.getPackageName() + ".applicationservice"));
         assertTrue(objectUnderTest.getApplicationCore().contains( JexxaMainTest.class.getPackageName() + ".domainservice"));
-        assertTrue(objectUnderTest.getApplicationCore().contains( JexxaMainTest.class.getPackageName() + ".domainprocessservice"));
 
         assertTrue(objectUnderTest.getInfrastructure().contains( JexxaMainTest.class.getPackageName() + ".infrastructure.drivenadapter"));
         assertTrue(objectUnderTest.getInfrastructure().contains( JexxaMainTest.class.getPackageName() + ".infrastructure.drivingadapter"));

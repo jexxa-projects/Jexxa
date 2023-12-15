@@ -36,7 +36,7 @@ public final class AdapterConvention
             return true;
         }
 
-        //Check constructor with one single application/domain service and a properties argument
+        //Check constructor with one single application/domain service and a properties-parameter
         return Arrays.stream(port.getConstructors())
                 .filter(constructor -> constructor.getParameterTypes().length == 2)
                 .anyMatch(constructor -> !constructor.getParameterTypes()[0].isInterface()
@@ -55,7 +55,7 @@ public final class AdapterConvention
         }
         catch (NoSuchMethodException | SecurityException ignored)
         {
-            //If exception is thrown just go on to check if other type of constructor are available
+            //If exception is thrown go on to check if another suitable constructor is available
         }
 
         return false;
@@ -70,7 +70,7 @@ public final class AdapterConvention
         }
         catch (NoSuchMethodException | SecurityException ignored)
         {
-            //If exception is thrown just go on to check if other type of constructor are available
+            //If exception is thrown go on to check if another suitable constructor is available
         }
         return false;
     }

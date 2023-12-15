@@ -1,6 +1,6 @@
 package io.jexxa.core;
 
-import io.jexxa.common.annotation.CheckReturnValue;
+import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
 
 import java.util.Objects;
 import java.util.function.Consumer;

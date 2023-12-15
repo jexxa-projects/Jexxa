@@ -2,7 +2,7 @@ package io.jexxa.core;
 
 import io.jexxa.adapterapi.drivingadapter.Diagnostics;
 import io.jexxa.adapterapi.drivingadapter.HealthCheck;
-import io.jexxa.common.JexxaCoreProperties;
+import io.jexxa.properties.JexxaCoreProperties;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
+
 
 public final class BoundedContext
 {
@@ -64,7 +65,8 @@ public final class BoundedContext
     }
 
     /**
-     * Returns true if all HealthChecks returns true. If at least one HealthCheck return false, this method returns false as well
+     * Returns true if all HealthChecks returns true.
+     * If at least one HealthCheck returns false, this method returns false as well
      *
      * @return True if all HealthChecks return true, otherwise false.
      */
