@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[6.2.4] - 2023-12-15
+### Fixed
+- Updated dependencies
+- Log-messages in architecture-tests so that the name of the failed method is added 
+
 ## \[6.2.3] - 2023-11-12
 ### Fixed
 - Updated dependencies
