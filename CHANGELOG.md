@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - `ìo.jexxa.drivingadapter.messaging` -> `io.jexxa.common.drivingadapter.messaging.jms`
   - `io.jexxa.common.wrapper` -> `io.jexxa.common.facade`
 
+## \[6.2.4] - 2023-12-15
+### Fixed
+- Updated dependencies
+- Log-messages in architecture-tests so that the name of the failed method is added 
+
 ## \[6.2.3] - 2023-11-12
 ### Fixed
 - Updated dependencies

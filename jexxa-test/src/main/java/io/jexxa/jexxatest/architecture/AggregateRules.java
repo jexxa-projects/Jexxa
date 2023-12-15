@@ -179,7 +179,7 @@ public class AggregateRules extends ProjectContent {
             if (genericReturnType instanceof ParameterizedType parameterizedType) {
                 for (int i = 0; i < parameterizedType.getActualTypeArguments().length; ++i) {
                     if (aggregates.contains(parameterizedType.getActualTypeArguments()[0].getTypeName())) {
-                        events.add(new SimpleConditionEvent(item, true, "Returns a generic type including an Aggregate"));
+                        events.add(new SimpleConditionEvent(item, true, "Method " +  item.getFullName() + " returns a generic type including an Aggregate"));
                     }
                 }
             }
