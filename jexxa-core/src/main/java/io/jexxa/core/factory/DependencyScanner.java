@@ -2,7 +2,6 @@ package io.jexxa.core.factory;
 
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
-import org.apache.commons.lang3.Validate;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
@@ -50,7 +49,10 @@ final class DependencyScanner
 
     private void validateRetentionRuntime(final Class<? extends Annotation> annotation) {
         Objects.requireNonNull(annotation.getAnnotation(Retention.class), "Annotation must be declared with '@Retention(RUNTIME)'" );
-        Validate.isTrue(annotation.getAnnotation(Retention.class).value().equals(RetentionPolicy.RUNTIME), "Annotation must be declared with '@Retention(RUNTIME)");
+        if (!annotation.getAnnotation(Retention.class).value().equals(RetentionPolicy.RUNTIME))
+        {
+            throw new IllegalArgumentException("Annotation must be declared with '@Retention(RUNTIME)");
+        }
     }
 
     private ScanResult getScanResult()
