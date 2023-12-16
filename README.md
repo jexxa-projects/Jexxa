@@ -1,4 +1,4 @@
-![Maven Central](https://img.shields.io/maven-central/v/io.jexxa/jexxa?versionPrefix=6) [![Maven Central](https://img.shields.io/maven-central/v/io.jexxa/jexxa)](https://maven-badges.herokuapp.com/maven-central/io.jexxa/jexxa/)
+[![Maven Central](https://img.shields.io/maven-central/v/io.jexxa/jexxa)](https://maven-badges.herokuapp.com/maven-central/io.jexxa/jexxa/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 [![CodeQL](https://github.com/jexxa-projects/Jexxa/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jexxa-projects/Jexxa/actions/workflows/codeql-analysis.yml)
@@ -81,7 +81,7 @@ Maven:
     <dependency>
        <groupId>io.jexxa</groupId>
        <artifactId>jexxa-web</artifactId>
-       <version>6.2.4</version>
+       <version>7.0.0</version>
     </dependency>
     
     <dependency>
@@ -95,7 +95,7 @@ Maven:
 Gradle:
 
 ```groovy
-compile "io.jexxa:jexxa-web:6.2.4"
+compile "io.jexxa:jexxa-web:7.0.0"
 compile "org.slf4j:slf4j-simple:2.0.9"
 ``` 
 
