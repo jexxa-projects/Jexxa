@@ -273,7 +273,9 @@ TIP: If ou need some example how `RESTfulRPCAdapter` maps Java's Date and Time A
 
 === Conventions of RESTfulRPCAdapter
 
-The `RESTfulRPCAdapter` is a simple RPC mechanism utilizing REST. Based on the https://martinfowler.com/articles/richardsonMaturityModel.html[REST maturity model] from Richardson, it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST at a higher maturity level.
+The `RESTfulRPCAdapter` is a simple RPC mechanism utilizing REST. Based on the https://martinfowler.com/articles/richardsonMaturityModel.html[REST maturity model] from Richardson, it is REST on level 0.
+So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any web mechanisms.
+When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST at a higher maturity level.
 
 [TIP]
 When you start using this adapter, I recommend enabling OpenAPI support at least during development as described https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README-OPENAPI.md[here]. It simplifies understanding the REST API.
@@ -322,8 +324,8 @@ a| Content-type: application/json
 a| HTML Request: Method attributes
 a|
 * Json object in case of a single attribute.
-* For multiple attribues to approaches are possible:
-   1. Json array for multiple attributes. The order of the attributes in the Json array must match to the order of attributes of the method!
+* For multiple attributes to approaches are possible:
+   1. Json array for multiple attributes. The order of the attributes in the json array must match the order of the attributes in the method.
    2. A single Json object including the parameters with key `arg0` to `argN`
 * All attributes are treated as `in` values in terms of RPC. This means that they are not included in the HTML response.
 
