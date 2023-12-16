@@ -14,15 +14,17 @@ Because your senior and intermediate developers focus on the application core, y
 
 ## Decision
 
-Jexxa provides typical implementation of application infrastructure patterns via strategies so that the implementation of driven adapters is just a simple facade, which maps between the API of outbound ports to corresponding API of the strategy.
+Jexxa provides typical implementation of application infrastructure patterns via strategies
+so that the implementation of driven adapters is just a simple facade, 
+which maps between the API of outbound ports to the corresponding API of the strategy.
 
 ## Consequences
 
 * Regarding your business domain, your junior developers will learn at least the name of the most important business objects, because Aggregates include the business logic of this domain.
 
-* From a software engineering point of view your junior developer gets familiar with the strategy design pattern.
+* From a software engineering point of view, your junior developer gets familiar with the strategy design pattern.
 
-* From an architectural point of view your junior developer gets familiar with the principal of dependency inversion.
+* From an architectural point of view, your junior developer gets familiar with the principal of dependency inversion.
 
 * Finally, your developers learn that they can persist data within a database without thinking about the database layout. Using a strategy pattern instead makes the database to a plugin.
 

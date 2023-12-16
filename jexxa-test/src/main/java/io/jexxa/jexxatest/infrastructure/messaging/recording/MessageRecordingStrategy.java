@@ -19,7 +19,7 @@ public class MessageRecordingStrategy extends MessageSender
     {
         Objects.requireNonNull(message);
 
-        //Get caller object of this class. Here we assume that it is the implementation of a driven adapter
+        //Get a caller object of this class. Here we assume that it is the implementation of a driven adapter
         var walker = StackWalker
                 .getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
         Class<?> callerClass = walker.getCallerClass();

@@ -23,20 +23,18 @@ Jexxa is split into some modules so that you can define the dependencies of your
 a|*Module*
 a|*Description*
 
-a| Jexxa-Adapter-API
-a| Defines the API for driving adapters. In case you need to implement a new driving adapter, you have to use this dependency.
 
 a| Jexxa-Core
 a| Provides the core functionality of Jexxa as described in <<Implementing `main`>>. In case you write a new business application, you will need this package.
 
-In addition, it provides following sub-packages that can be used by your application:
+In addition, it provides the following sub-packages that can be used by your application:
 
-* `drivingadapter`: Provides ready to use driving adapter to receive and forward incoming requests to the application core.  Included driving adapter in this package are `Scheduler` and `JMSAdapter`.
+* `drivingadapter`: Provides ready-to-use driving adapter to receive and forward incoming requests to the application core.  Included driving adapter in this package are `Scheduler` and `JMSAdapter`.
 * `infrastructure`: Provides implementation of typical https://microservices.io/patterns/[application infrastructure patterns] that simplify the implementation of driven adapters. Provided implementations are `JDBCKeyValueRepository`, `JDBCObjectStore`, `JMSSender`, and `TransactionalOutboxSender`
-* `common`: Provides wrapper to standard java libraries used by Jexxa. Main focus is to simplify and reduce these APIs to the requirements of Jexxa.
+* `common`: Provides wrapper to standard java libraries used by Jexxa. The Main focus is to simplify and reduce these APIs to the requirements of Jexxa.
 
 a| Jexxa-Web
-a| Provides driving adapters to access your application via HTTP. The used web-framework is https://javalin.io[javalin] which internally uses jetty.
+a| Provides driving adapters to access your application via HTTP. The used web-framework is https://javalin.io[javalin], that internally uses jetty.
 
 * Driving-Adapter: `RESTfulRPCAdapter`
 
@@ -49,7 +47,8 @@ The application development using Jexxa is quite easy. The required steps are de
 
 === Implementing `main`
 
-The `JexxaMain` class provides a convenient way to bootstrap your application. Main focus here is to make the entry points of your application core as well as the flow of control visible.
+The `JexxaMain` class provides a convenient way to bootstrap your application.
+The main focus here is to make the entry points of your application core as well as the flow of control visible.
 
 1. In `main` create an instance of `JexxaMain`.
 
@@ -68,7 +67,10 @@ A simple example can be seen in tutorial https://github.com/jexxa-projects/Jexxa
 
 === BoundedContext
 
-As described in https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html[architecture of Jexxa], this framework has a strong focus on Domain Driven design. Therefore, each application provides a so called `BoundedContext` object which provides status information about the running application.
+As described in https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html[the architecture of Jexxa],
+this framework has a strong focus on Domain-Driven Design.
+Therefore, each application provides a so called `BoundedContext` object
+which provides status information about the running application.
 
 So this object provides important information for your ops-team. Therefore, it is recommended to expose this class by any
 driving adapter.
@@ -83,7 +85,11 @@ driving adapter.
 
 == Application Configuration
 
-Jexxa allows you to externalize your configuration. This allows you to run the same application in different environments. By default, Jexxa use properties files. In addition, you can set system properties to externalize the configuration. Jexxa considers properties in the following order:
+Jexxa allows you to externalize your configuration.
+This allows you to run the same application in different environments.
+By default, Jexxa uses properties files.
+In addition, you can set system properties to externalize the configuration.
+Jexxa considers properties in the following order:
 
 1. Properties directly passed to `JexxaMain`
 2. Java System properties (`System.getProperties()`)
@@ -267,7 +273,7 @@ TIP: If ou need some example how `RESTfulRPCAdapter` maps Java's Date and Time A
 
 === Conventions of RESTfulRPCAdapter
 
-The `RESTfulRPCAdapter` is a simple RPC mechanism utilizing REST. Based on the https://martinfowler.com/articles/richardsonMaturityModel.html[REST maturity model] from Richardson it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST at a higher maturity level.
+The `RESTfulRPCAdapter` is a simple RPC mechanism utilizing REST. Based on the https://martinfowler.com/articles/richardsonMaturityModel.html[REST maturity model] from Richardson, it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST at a higher maturity level.
 
 [TIP]
 When you start using this adapter, I recommend enabling OpenAPI support at least during development as described https://github.com/jexxa-projects/JexxaTutorials/blob/main/BookStore/README-OPENAPI.md[here]. It simplifies understanding the REST API.
@@ -330,7 +336,7 @@ a|
 a| HTML Response: Exception
 a|
 * HTTP status code: 400
-* Return value as a single Json object including following properties:
+* Return value as a single Json object including the following properties:
 ** `ExceptionType`: Full type name of the exception.
 ** `Exception`: Json representation of the exception.
 
@@ -360,7 +366,7 @@ To describe the mapping of the port adapter within Jexxa, we recommend using Jav
 
 When implementing a port adapter for `JMSAdapter`, you have to implement the `MessageListener` interface of JMS and annotate the class with `@JMSConfiguration`.
 
-Here you have to provide following information:
+Here you have to provide the following information:
 
 [cols="1,3"]
 [reftext="Table {counter:local-table-number}"]
@@ -391,7 +397,7 @@ TIP: Please check the tutorial https://github.com/jexxa-projects/JexxaTutorials/
 
 ==== Predefined `MessageListener`
 
-In addition, Jexxa provides following predefined `MessageListener`for your convenience:
+In addition, Jexxa provides the following predefined `MessageListener`for your convenience:
 
 * `JSONMessageListener`: Can be used to receive JSON data. The base class converts the content of a received text- or byte message into JSON and provides additional convenience methods.
 * `TypedMessageListener`: Can be used to automatically deserialize received JSON data into a Java object that is defined within your application.

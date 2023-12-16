@@ -28,7 +28,7 @@ Even though Jexxa is used within lightweight business applications and microserv
 
 * _Inversion of Control_(IoC): Find the required degree of IoC for your software projects. Control aspects that are technically required but not important for your business application should be hidden by a framework. The remaining required aspects should be explicitly represented.
 
-* _Simplicity_: Be aware of what technology stacks you really need to realize the customers' use cases. Usually they are much less than expected. Keep different technology stacks loosely coupled to facilitate their exchange and, even more important, to keep them up-to-date. Finally, prefer a convention over configuration approach to standardize the integration of technology stacks and to reduce the complexity of their configuration.
+* _Simplicity_: Be aware of what technology stacks you really need to realize the customers' use cases. Usually they are much less than expected. Keep different technology stacks loosely coupled to facilitate their exchange and, even more important, to keep them up to date. Finally, prefer a convention over configuration approach to standardize the integration of technology stacks and to reduce the complexity of their configuration.
 
 Even if you use real powerful frameworks for good reason within your application, I hope that you find Jexxa helpful in some ways.
 
@@ -42,15 +42,15 @@ IMPORTANT: When developing applications with a high durability as used in produc
 
 Within the application core, developers shall only use standard language features. Available frameworks shall be used to attach the latest technology stacks to the application core.
 
-Applications without well-defined boundaries between technology stacks and application core become difficult to maintain because changes on one side could (and in reality will) affect the other side. Typical symptoms are:
+Applications without well-defined boundaries between technology stacks and application core become difficult to maintain because changes on one side could (and, in reality, will) affect the other side. Typical symptoms are:
 
-* Updating to a newer version of a technology stack is difficult or even impossible so that it is much safer to use the old one. Of course, new developed applications use this old version as well because your team 'trusts' it, and you avoid maintaining a zoo of different versions.
+* Updating to a newer version of a technology stack is challenging or even impossible so that it is much safer to use the old one. Of course, new developed applications use this old version as well because your team 'trusts' it, and you avoid maintaining a zoo of different versions.
 
-* Adding or replacing a technology stack is difficult or even impossible, so a disruptive technology will cause your application core to become legacy as well. A common example is database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs ->relational DBs ->a zoo of NoSQL DBs. Because database technologies can become crucial for your business, your company employs senior-grade developers who have deep knowledge of both legacy and new technology stacks and synchronize your business data.
+* Adding or replacing a technology stack is challenging or even impossible, so a disruptive technology will cause your application core to become legacy as well. A common example is database technologies that have typically found their way into companies in the following chronological order: Hierarchical DBs ->relational DBs ->a zoo of NoSQL DBs. Because database technologies can become crucial for your business, your company employs senior-grade developers who have deep knowledge of both legacy and new technology stacks and synchronize your business data.
 
 * Changes on the application core itself take much longer time as in the beginning. In the end, you need senior developers who have a deep understanding of the specific business domain, the used technology stacks and the convoluted structures of the entire application.
 
-* In the long term, such structural issues could (and in reality will) affect your enterprise architecture, so neighboring systems need to be aware of and take special actions for legacy systems.
+* In the long term, such structural issues could (and, in reality, will) affect your enterprise architecture, so neighboring systems need to be aware of and take special actions for legacy systems.
 
 == General Design Decisions
 
@@ -59,7 +59,7 @@ IMPORTANT: All considerations and design decisions were made in the context of d
 In contrast to technology companies, the focus of business software development at companies from the production,
 finance or insurance sectors is generally not on the technical side. The big challenge for software developers is
 to understand the business domain and how to achieve added value for the customer. The essence of this knowledge is
-then written in domain-specific software in order to increase the value for the company and customers. Typically,
+then written in domain-specific software to increase the value for the company and customers. Typically,
 the use of technology stacks itself does not add value as long as the business domain itself is not changed. At
 best, costs can be reduced.
 
@@ -71,7 +71,7 @@ business domain to a suitable application core.
 * The intermediate developers then support the implementation of the application core.
 
 * Because your senior and intermediate developers focus on the application core, your junior developers must focus on the technology stack.
-Therefore, your technology stack  or the integration of these should be as simple as possible. The easiest way to achieve this is to use very simple frameworks instead of general purpose frameworks
+Therefore, your technology stack  or the integration of these should be as simple as possible. The easiest way to achieve this is to use very lightweight frameworks instead of general purpose frameworks
 
 
 IMPORTANT: Using a lightweight framework ensures that junior developers get the time to learn the craftsmanship of software development, methods of software
@@ -91,7 +91,7 @@ pattern or a Fluent API. Design aspects that should be hidden in the business ap
 ===  Visible flow of control
 
 Most today's frameworks bind technology stacks automatically to your application core. If at all, you have to add a new dependency
-and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and adapters architecture. For incoming synchronous calls (RMI), the flow of control may still be obvious, but can be difficult to detect for incoming asynchronous messages.
+and rebuild the application. Unfortunately, you hide the flow of control which makes it harder for beginners to understand an application which is based on a ports and adapters architecture. For incoming synchronous calls (RMI), the flow of control may still be obvious, but can be hard to detect for incoming asynchronous messages.
 
 IMPORTANT: Jexxa uses explicit binding for all driving adapters together with implicit constructor injection to make the flow of control visible. The binding happens in the main-method so that it represents the unique starting point for the flow of control of your application.
 
@@ -353,7 +353,7 @@ a| This component includes class `JexxaMain` which is the entry point in the mai
 a| `JexxaMain` provides a fluent API to explicitly show the binding of technology stacks to your inbound ports. In addition, it provides a `BoundedContext` which allows to control your application in your environment.
 
 a| Factory
-a| Instantiates ports and adapters and manages their life cycle.
+a| Instantiates ports and adapters and manage their life cycle.
 a| Jexxa supports implicit constructor injection which is described in <<Dependency Injection (DI)>>.
 
 a| Convention
@@ -406,7 +406,7 @@ a|Components
 
 
 a| Driving Adapter
-a| Is managed as singleton and reused when it is bind to different ports.
+a| Managed as singleton and reused when it is bind to different ports.
 
 a|
 Simplifies managing technical resources like network ports or IP addresses.

@@ -21,12 +21,12 @@ import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
 
 /**
  * This class supports unit testing of your application core, at least if you use infrastructure strategies
- * provided by Jexxa. To do so, this class performs following steps:
+ * provided by Jexxa. To do so, this class performs the following steps:
  * <ul>
  * <li> Configuring an IMDB database for repositories </li>
  * <li> Configuring a message recorder for sending messages </li>
  * </ul>
- * An example how to use this class can be found in tutorial <a href="https://github.com/jexxa-projects/Jexxa/tree/master/tutorials/BookStore">Bookstore</a>
+ * An example of how to use this class can be found in tutorial <a href="https://github.com/jexxa-projects/Jexxa/tree/master/tutorials/BookStore">Bookstore</a>
  *
  */
 public class JexxaTest

@@ -10,7 +10,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.library.Architectures.onionArchitecture;
 
 /**
- * These tests validate the access direction af an onion architecture which is as follows:
+ * These tests validate the access direction of an onion architecture which is as follows:
  *
  * @startuml
  *

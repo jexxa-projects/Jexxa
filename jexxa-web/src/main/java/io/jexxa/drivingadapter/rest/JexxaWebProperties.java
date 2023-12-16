@@ -38,7 +38,7 @@ public final class JexxaWebProperties
     public static final String JEXXA_REST_OPEN_API_PATH = "io.jexxa.rest.openapi.path";
 
     /**
-     * Defines the directory path to the static files provided via http(s) included into the jar
+     * Defines the directory path to the static files provided via http(s) included in the jar
      */
     public static final String JEXXA_REST_STATIC_FILES_ROOT = "io.jexxa.rest.static.files.root";
 

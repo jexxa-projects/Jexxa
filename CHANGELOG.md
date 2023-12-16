@@ -3,16 +3,25 @@ All notable changes to this project will be documented in this file.
  
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
-## \[7.0.0-beta.1] - 2023-12-11
-### Changed—Important Information!
-- Static imports 
-  - `io.jexxa.infrastructure.MessageSenderManager` -> `io.jexxa.common.drivenadapter.messaging.MessageSenderManager`
-  - `io.jexxa.infrastructure.ObjectStoreManager` -> `io.jexxa.common.drivenadapter.persistence.ObjectStoreManager` 
-  - `io.jexxa.infrastructure.RepositoryManager` -> `io.jexxa.common.drivenadapter.persistence.RepositoryManager`
+
+## \[7.0.0] - 2023-12-dd
+## Changed
+- Jexxa now utilises [Jexxa-Adapters](https://github.com/jexxa-projects/JexxaAdapters) as underlying technology stack. This enables to focus Jexxa more on its API and simplifies reusing technology stacks in other projects.
+- For jexxa based applications, you typically only need to adjust the imports as described in the migration notes below.  
+
+### Migration notes from 6.x.x -> 7.x.x!
+To simplify migration, you have to adjust the following imports: 
+- Static imports
+    - `io.jexxa.infrastructure.MessageSenderManager` -> `io.jexxa.common.drivenadapter.messaging.MessageSenderManager`
+    - `io.jexxa.infrastructure.ObjectStoreManager` -> `io.jexxa.common.drivenadapter.persistence.ObjectStoreManager`
+    - `io.jexxa.infrastructure.RepositoryManager` -> `io.jexxa.common.drivenadapter.persistence.RepositoryManager`
 - Package structure
-  - `io.jexxa.infrastructure` -> `io.jexxa.common.drivenadapter`
-  - `ìo.jexxa.drivingadapter.messaging` -> `io.jexxa.common.drivingadapter.messaging.jms`
-  - `io.jexxa.common.wrapper` -> `io.jexxa.common.facade`
+    - `io.jexxa.infrastructure` -> `io.jexxa.common.drivenadapter`
+    - `io.jexxa.drivingadapter.messaging` -> `io.jexxa.common.drivingadapter.messaging.jms`
+    - `io.jexxa.drivingadapter.scheduler` -> `io.jexxa.common.drivingadapter.scheduler`
+    - `io.jexxa.common.wrapper` -> `io.jexxa.common.facade`
+    - `io.jexxa.common.drivenadapter.healthcheck` -> `io.jexxa.common.healthcheck`
+
 
 ## \[6.2.4] - 2023-12-15
 ### Fixed
@@ -523,7 +532,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[3.0.0] - 2021-04-03
 ### Changed
 -   Introduced new package Jexxa-Web, which includes all web-specific plugins, such as `RESTfulRPCAdapter`. See [reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_jexxa_modules) for more information. If your application uses this adapter, you have now to add dependency `jexxa-web`. See tutorial [HelloJexxa](https://github.com/jexxa-projects/JexxaTutorials/tree/main/HelloJexxa/README.md) for an example.  
--   Removed all methods and constants that were declared deprecated in 2.x
+-   Removed all methods and constants declared deprecated in 2.x
 
 ### Fixed
 -   `RESTfulRPCAdapter`: 
@@ -775,7 +784,7 @@ times in case of reconnecting.
 -   Improved the documentation of Jexxa (see [Architecture of Jexxa](https://jexxa-projects.github.io/Jexxa/jexxa.html)) 
 
 ### Changed
--   Split Jexxa into Jexxa-Core and Jexxa-Adapter-API projects in order to avoid direct dependencies to new driving adapter 
+-   Split Jexxa into Jexxa-Core and Jexxa-Adapter-API projects to avoid direct dependencies to new driving adapter 
 -   Moved CompositeDrivingAdapter as inner class of JexxaMain because it is only used there   
 
 -   Naming convention for generic driving adapter: 
