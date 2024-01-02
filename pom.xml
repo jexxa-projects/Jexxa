@@ -36,13 +36,13 @@
     <!--version of  maven plugins  -->
     <gpg.plugin.version>3.1.0</gpg.plugin.version>
     <maven.clean.plugin>3.3.2</maven.clean.plugin>
-    <maven.compiler.plugin>3.11.0</maven.compiler.plugin>
+    <maven.compiler.plugin>3.12.1</maven.compiler.plugin>
     <maven.deploy.plugin>3.1.1</maven.deploy.plugin>
     <maven.failsafe.plugin>3.2.3</maven.failsafe.plugin>
     <maven.install.plugin>3.1.1</maven.install.plugin>
     <maven.jar.plugin>3.3.0</maven.jar.plugin>
     <maven.resources.plugin>3.3.1</maven.resources.plugin>
-    <maven.site.plugin>4.0.0-M12</maven.site.plugin>
+    <maven.site.plugin>4.0.0-M13</maven.site.plugin>
     <maven.surefire.plugin>3.2.3</maven.surefire.plugin>
     <maven.release.plugin>3.0.1</maven.release.plugin>
     <maven.jacoco.plugin>0.8.11</maven.jacoco.plugin>
@@ -80,7 +80,7 @@
     <slf4j.api.version>2.0.9</slf4j.api.version>
     <gson.version>2.10.1</gson.version>
     <commons.lang3.version>3.14.0</commons.lang3.version>
-    <jackson.core.version>2.16.0</jackson.core.version>
+    <jackson.core.version>2.16.1</jackson.core.version>
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
     <smallrye.openapi.core.version>3.7.0</smallrye.openapi.core.version>
 
@@ -92,7 +92,7 @@
     <junit.platform.launcher.version>1.10.1</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.10.1</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.10.1</junit.jupiter.params.version>
-    <slf4j.simple.version>2.0.9</slf4j.simple.version>
+    <slf4j.simple.version>2.0.10</slf4j.simple.version>
     <awaitility.version>4.2.0</awaitility.version>
     <archunit.version>1.2.1</archunit.version>
     <addend.version>2.0.0</addend.version>
