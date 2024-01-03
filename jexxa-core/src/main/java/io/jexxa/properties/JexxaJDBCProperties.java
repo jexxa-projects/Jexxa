@@ -22,6 +22,7 @@ public final class JexxaJDBCProperties
 
     private JexxaJDBCProperties()
     {
+        //Private constructor
     }
 
 }
