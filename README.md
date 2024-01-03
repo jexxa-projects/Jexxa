@@ -26,7 +26,7 @@ In addition, Jexxa offers the following production-proven features:
 
 *   Supported Java environments: ![Java](https://img.shields.io/badge/JDK-Java17+-blue.svg)
 
-*   Documentation: 
+*   Ecosystem: 
     *   [Tutorials](https://github.com/jexxa-projects/JexxaTutorials) show typical use cases
     *   [A template](https://github.com/jexxa-projects/JexxaArchetypes) for your first Jexxa application
     *   [Reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html) when you develop with Jexxa
