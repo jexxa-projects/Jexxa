@@ -373,12 +373,32 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         result.ifPresent(httpContext::json);
     }
 
+    boolean methodIsNonParameterized(String jsonString, Method method)
+    {
+        return jsonString == null
+                || jsonString.isEmpty()
+                || method.getParameterCount() == 0;
+    }
+
+    boolean methodHasSingleParameter(Method method)
+    {
+        return method.getParameterCount() == 1;
+    }
+
+    boolean methodHasParameterInArrayStyle(JsonElement jsonElement, Method method)
+    {
+        return method.getParameterCount() > 1 && jsonElement.isJsonArray();
+    }
+
+    boolean methodHasParameterInArgStyle(JsonElement jsonElement, Method method)
+    {
+        return method.getParameterCount() > 1 && jsonElement.isJsonObject();
+    }
+
     private Object[] deserializeParameters(String jsonString, Method method)
     {
         try {
-            if ( jsonString == null
-                    || jsonString.isEmpty()
-                    || method.getParameterCount() == 0)
+            if ( methodIsNonParameterized(jsonString, method) )
             {
                 return new Object[]{};
             }
@@ -386,22 +406,19 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
             var jsonElement = JsonParser.parseString(jsonString);
 
             // Handle 1 parameter
-            if (method.getParameterCount() == 1)
-            {
+            if ( methodHasSingleParameter(method) )            {
                 return new Object[]{jsonConverter.fromJson(jsonString, method.getGenericParameterTypes()[0])};
             }
 
-            // In case we have more than one attribute, check if we have JSonArray representation or Arg-representation
-            if (method.getParameterCount() > 1 && jsonElement.isJsonArray()) {
+            // In case we have more than one attribute, check if we have JSonArray representation
+            if (methodHasParameterInArrayStyle(jsonElement, method)) {
                 return readArray(jsonElement.getAsJsonArray(), method);
-            } else if (jsonElement.isJsonObject()){
-                return readArgParameter(jsonElement.getAsJsonObject(), method);
-            } else {
-                throw new IllegalArgumentException("Invalid JSON request for method " + method.getName() + ". JSON request: " + jsonString);
             }
-        }
-        catch (IllegalArgumentException e)  {
-            throw e;
+
+            // ... or Arg-representation
+            if (methodHasParameterInArgStyle(jsonElement, method)) {
+                return readArgParameter(jsonElement.getAsJsonObject(), method);
+            }
         }
         catch (RuntimeException e)  {
             if (e.getCause() != null && e.getCause().getMessage() != null)
@@ -411,6 +428,8 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
                 throw new IllegalArgumentException("Could not deserialize attributes for method " + method.getName() + " Reason: " + e.getMessage(), e );
             }
         }
+
+        throw new IllegalArgumentException("Invalid JSON request for method " + method.getName() + ". JSON request: " + jsonString);
     }
 
     private Object[] readArgParameter(JsonObject jsonObject, Method method) {
