@@ -95,8 +95,8 @@ Maven:
 Gradle:
 
 ```groovy
-compile "io.jexxa:jexxa-web:7.0.0"
-compile "org.slf4j:slf4j-simple:2.0.9"
+compile "io.jexxa:jexxa-web:7.0.1"
+compile "org.slf4j:slf4j-simple:2.0.10"
 ``` 
 
 ### Configure your Jexxa application  
