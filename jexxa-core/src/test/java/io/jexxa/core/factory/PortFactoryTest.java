@@ -112,7 +112,7 @@ class PortFactoryTest
         var first = objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
         var second = objectUnderTest.getInstanceOf(ApplicationServiceWithDrivenAdapters.class, new Properties());
 
-        //Assert that first and second adapter are equal
+        //Assert that the first and second adapter is equal
         assertNotNull(first);
         assertNotNull(second);
         assertEquals(first, second);
@@ -132,7 +132,7 @@ class PortFactoryTest
         var first = objectUnderTest.getPortAdapterOf(PortAdapter.class, new Properties());
         var second = objectUnderTest.getPortAdapterOf(PortAdapter.class, new Properties());
 
-        //Assert that first and second adapter are equal
+        //Assert that first and second adapter is equal
         assertNotNull(first);
         assertNotNull(second);
         assertEquals(first.getPort(), second.getPort());

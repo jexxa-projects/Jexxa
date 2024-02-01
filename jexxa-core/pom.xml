@@ -5,7 +5,7 @@
   <parent>
     <artifactId>jexxa</artifactId>
     <groupId>io.jexxa</groupId>
-    <version>6.2.4-SNAPSHOT</version>
+    <version>7.0.2-SNAPSHOT</version>
   </parent>
 
   <artifactId>jexxa-core</artifactId>
@@ -26,14 +26,6 @@
 
 
   <dependencies>
-    <!-- internal dependencies for Jexxa core -->
-    <dependency>
-      <groupId>io.jexxa</groupId>
-      <artifactId>jexxa-adapter-api</artifactId>
-      <version>${jexxa.adapter.api.version}</version>
-      <scope>compile</scope>
-    </dependency>
-
     <!-- external dependencies for Jexxa core -->
     <dependency>
       <groupId>io.github.classgraph</groupId>
@@ -41,31 +33,11 @@
       <version>${classgraph.version}</version>
       <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>${gson.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>${commons.lang3.version}</version>
-    </dependency>
 
-    <!-- API dependency for Logging -->
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.api.version}</version>
-    </dependency>
-
-    <!-- API dependency for JMSAdapter -->
-    <dependency>
-      <groupId>javax.jms</groupId>
-      <artifactId>javax.jms-api</artifactId>
-      <version>${javax.jms.version}</version>
-      <scope>compile</scope>
+      <groupId>io.jexxa.common</groupId>
+      <artifactId>common-adapters</artifactId>
+      <version>${jexxa.common.adapters.version}</version>
     </dependency>
 
     <!-- dependencies for tests -->
@@ -104,21 +76,6 @@
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>${postgres.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>2.2.224</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- dependencies for tests with ActiveMQ -->
-    <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>artemis-jms-client</artifactId>
-      <version>${activemq.artemis.client.version}</version>
       <scope>test</scope>
     </dependency>
 

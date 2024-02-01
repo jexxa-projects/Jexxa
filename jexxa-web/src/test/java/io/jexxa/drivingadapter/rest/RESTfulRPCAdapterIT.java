@@ -21,7 +21,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.util.List;
 import java.util.Properties;
 
-import static io.jexxa.common.wrapper.json.JSONManager.getJSONConverter;
+import static io.jexxa.common.facade.json.JSONManager.getJSONConverter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;

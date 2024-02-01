@@ -13,10 +13,11 @@ import io.javalin.util.JavalinLogger;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
-import io.jexxa.common.JexxaBanner;
-import io.jexxa.common.properties.Secret;
-import io.jexxa.common.wrapper.json.JSONConverter;
-import io.jexxa.common.wrapper.logger.SLF4jLogger;
+
+import io.jexxa.common.facade.json.JSONConverter;
+import io.jexxa.common.facade.logger.ApplicationBanner;
+import io.jexxa.common.facade.logger.SLF4jLogger;
+import io.jexxa.common.facade.utils.properties.Secret;
 import io.jexxa.drivingadapter.rest.openapi.OpenAPIConvention;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -38,8 +39,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.common.wrapper.json.JSONManager.getJSONConverter;
-import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.facade.json.JSONManager.getJSONConverter;
+import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
 import static io.jexxa.drivingadapter.rest.RESTfulRPCConvention.createRPCConvention;
 
 
@@ -73,7 +74,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
 
         registerExceptionHandler();
 
-        JexxaBanner.addAccessBanner(this::bannerInformation);
+        ApplicationBanner.addAccessBanner(this::bannerInformation);
     }
 
     public static RESTfulRPCAdapter createAdapter(Properties properties)
@@ -212,20 +213,20 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     {
         // Print Listening ports
         if (isHTTPEnabled() ) {
-            getLogger(JexxaBanner.class).info("Listening on: {}", "http://" + getHostname() + ":" + getHTTPPort()  );
+            getLogger(ApplicationBanner.class).info("Listening on: {}", "http://" + getHostname() + ":" + getHTTPPort()  );
         }
 
         if (isHTTPSEnabled() ) {
-            getLogger(JexxaBanner.class).info("Listening on: {}", "https://" + getHostname() + ":" + getHTTPSPort() );
+            getLogger(ApplicationBanner.class).info("Listening on: {}", "https://" + getHostname() + ":" + getHTTPSPort() );
         }
 
         // Print OPENAPI links
         if (isHTTPEnabled()) {
-            openAPIConvention.getPath().ifPresent(path -> getLogger(JexxaBanner.class).info("OpenAPI available at: {}"
+            openAPIConvention.getPath().ifPresent(path -> getLogger(ApplicationBanner.class).info("OpenAPI available at: {}"
                     , "http://" + getHostname() + ":" + getHTTPPort() +  path ) );
         }
         if (isHTTPSEnabled()) {
-            openAPIConvention.getPath().ifPresent(path -> getLogger(JexxaBanner.class).info("OpenAPI available at: {}"
+            openAPIConvention.getPath().ifPresent(path -> getLogger(ApplicationBanner.class).info("OpenAPI available at: {}"
                     , "https://" + getHostname() + ":" + getHTTPSPort() + path ) );
         }
     }
@@ -371,12 +372,32 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         result.ifPresent(httpContext::json);
     }
 
+    boolean methodIsNonParameterized(String jsonString, Method method)
+    {
+        return jsonString == null
+                || jsonString.isEmpty()
+                || method.getParameterCount() == 0;
+    }
+
+    boolean methodHasSingleParameter(Method method)
+    {
+        return method.getParameterCount() == 1;
+    }
+
+    boolean methodHasParameterInArrayStyle(JsonElement jsonElement, Method method)
+    {
+        return method.getParameterCount() > 1 && jsonElement.isJsonArray();
+    }
+
+    boolean methodHasParameterInArgStyle(JsonElement jsonElement, Method method)
+    {
+        return method.getParameterCount() > 1 && jsonElement.isJsonObject();
+    }
+
     private Object[] deserializeParameters(String jsonString, Method method)
     {
         try {
-            if ( jsonString == null
-                    || jsonString.isEmpty()
-                    || method.getParameterCount() == 0)
+            if ( methodIsNonParameterized(jsonString, method) )
             {
                 return new Object[]{};
             }
@@ -384,22 +405,19 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
             var jsonElement = JsonParser.parseString(jsonString);
 
             // Handle 1 parameter
-            if (method.getParameterCount() == 1)
-            {
+            if ( methodHasSingleParameter(method) )            {
                 return new Object[]{jsonConverter.fromJson(jsonString, method.getGenericParameterTypes()[0])};
             }
 
-            // In case we have more than one attribute, check if we have JSonArray representation or Arg-representation
-            if (method.getParameterCount() > 1 && jsonElement.isJsonArray()) {
+            // In case we have more than one attribute, check if we have JSonArray representation
+            if (methodHasParameterInArrayStyle(jsonElement, method)) {
                 return readArray(jsonElement.getAsJsonArray(), method);
-            } else if (jsonElement.isJsonObject()){
-                return readArgParameter(jsonElement.getAsJsonObject(), method);
-            } else {
-                throw new IllegalArgumentException("Invalid JSON request for method " + method.getName() + ". JSON request: " + jsonString);
             }
-        }
-        catch (IllegalArgumentException e)  {
-            throw e;
+
+            // ... or Arg-representation
+            if (methodHasParameterInArgStyle(jsonElement, method)) {
+                return readArgParameter(jsonElement.getAsJsonObject(), method);
+            }
         }
         catch (RuntimeException e)  {
             if (e.getCause() != null && e.getCause().getMessage() != null)
@@ -409,6 +427,8 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
                 throw new IllegalArgumentException("Could not deserialize attributes for method " + method.getName() + " Reason: " + e.getMessage(), e );
             }
         }
+
+        throw new IllegalArgumentException("Invalid JSON request for method " + method.getName() + ". JSON request: " + jsonString);
     }
 
     private Object[] readArgParameter(JsonObject jsonObject, Method method) {

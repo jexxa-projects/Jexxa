@@ -1,7 +1,7 @@
 package io.jexxa.jexxatest.infrastructure.messaging.recording;
 
-import io.jexxa.infrastructure.messaging.MessageProducer;
-import io.jexxa.infrastructure.messaging.MessageSender;
+import io.jexxa.common.drivenadapter.messaging.DestinationType;
+import io.jexxa.common.drivenadapter.messaging.MessageSender;
 
 import java.util.Properties;
 
@@ -10,7 +10,7 @@ import java.util.Properties;
  */
 public record RecordedMessage(Object message,
                               String serializedMessage,
-                              MessageProducer.DestinationType destinationType,
+                              DestinationType destinationType,
                               String destinationName,
                               Properties messageProperties,
                               MessageSender.MessageType messageType)

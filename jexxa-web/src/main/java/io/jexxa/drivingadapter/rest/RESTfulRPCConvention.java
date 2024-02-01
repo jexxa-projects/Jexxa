@@ -18,7 +18,7 @@ import java.util.List;
  *  <br>
  * Example URI: <a href="http://localhost:7500/MyApplicationService/myMethod">http://localhost:7500/MyApplicationService/myMethod</a>
  *  <br>
- *  This implies following conventions:
+ *  This implies the following conventions:
  *  <ul>
  *  <li> Simple name of a class must be unique within a single application </li>
  *  <li> Each class must have unique method names. Any method overloading is not supported </li>
@@ -107,8 +107,8 @@ class RESTfulRPCConvention
 
         publicMethods.forEach(element -> methodNames.add(generateURI(element)));
 
-        // Make a unique list (by converting it into an HashSet) and compare its size with size of publicMethods.
-        // If it is not equal URIs are not unique
+        // Make a unique list (by converting it into a HashSet) and compare its size with size of publicMethods.
+        // If it is not equal, URIs are not unique
         List<String> uniqueNames = new ArrayList<>( new HashSet<>(methodNames) );
 
         if (uniqueNames.size() != methodNames.size() ) {

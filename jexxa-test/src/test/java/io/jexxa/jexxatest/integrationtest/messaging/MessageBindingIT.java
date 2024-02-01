@@ -1,7 +1,7 @@
 package io.jexxa.jexxatest.integrationtest.messaging;
 
+import io.jexxa.common.drivingadapter.messaging.jms.JMSConfiguration;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
-import io.jexxa.drivingadapter.messaging.JMSConfiguration;
 import io.jexxa.jexxatest.JexxaIntegrationTest;
 import io.jexxa.jexxatest.application.JexxaITTestApplication;
 import org.junit.jupiter.api.AfterAll;

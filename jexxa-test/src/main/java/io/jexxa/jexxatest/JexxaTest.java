@@ -1,13 +1,14 @@
 package io.jexxa.jexxatest;
 
-import io.jexxa.common.annotation.CheckReturnValue;
-import io.jexxa.common.function.ThrowingConsumer;
+import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
+import io.jexxa.common.drivenadapter.messaging.MessageSenderManager;
+import io.jexxa.common.drivenadapter.persistence.ObjectStoreManager;
+import io.jexxa.common.drivenadapter.persistence.RepositoryManager;
+import io.jexxa.common.drivenadapter.persistence.objectstore.imdb.IMDBObjectStore;
+import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.common.facade.utils.function.ThrowingConsumer;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.infrastructure.MessageSenderManager;
-import io.jexxa.infrastructure.ObjectStoreManager;
-import io.jexxa.infrastructure.RepositoryManager;
-import io.jexxa.infrastructure.persistence.objectstore.imdb.IMDBObjectStore;
-import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
+
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorder;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorderManager;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
@@ -15,16 +16,17 @@ import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStr
 import java.util.Optional;
 import java.util.Properties;
 
-import static io.jexxa.common.wrapper.logger.SLF4jLogger.getLogger;
+import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
+
 
 /**
  * This class supports unit testing of your application core, at least if you use infrastructure strategies
- * provided by Jexxa. To do so, this class performs following steps:
+ * provided by Jexxa. To do so, this class performs the following steps:
  * <ul>
  * <li> Configuring an IMDB database for repositories </li>
  * <li> Configuring a message recorder for sending messages </li>
  * </ul>
- * An example how to use this class can be found in tutorial <a href="https://github.com/jexxa-projects/Jexxa/tree/master/tutorials/BookStore">Bookstore</a>
+ * An example of how to use this class can be found in tutorial <a href="https://github.com/jexxa-projects/Jexxa/tree/master/tutorials/BookStore">Bookstore</a>
  *
  */
 public class JexxaTest

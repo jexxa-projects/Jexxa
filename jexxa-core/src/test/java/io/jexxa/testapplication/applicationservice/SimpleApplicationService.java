@@ -1,7 +1,7 @@
 package io.jexxa.testapplication.applicationservice;
 
 
-import io.jexxa.common.wrapper.logger.SLF4jLogger;
+import io.jexxa.common.facade.logger.SLF4jLogger;
 import io.jexxa.testapplication.annotation.ValidApplicationService;
 import io.jexxa.testapplication.domain.model.JexxaEnum;
 import io.jexxa.testapplication.domain.model.JexxaRecord;
@@ -153,7 +153,7 @@ public class SimpleApplicationService
         this.recordList = recordList;
     }
 
-    /** The following static methods should NOT be offered by any DrivingAdapter according to our conventions  */
+    /** Any DrivingAdapter should NOT offer the following static methods according to our conventions  */
     public static SpecialCasesValueObject testStaticGetMethod()
     {
         throw new IllegalArgumentException("Method testStaticGetMethod should not be available or called" );

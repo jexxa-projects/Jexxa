@@ -1,4 +1,5 @@
-[![Maven Central](https://img.shields.io/maven-central/v/io.jexxa/jexxa)](https://maven-badges.herokuapp.com/maven-central/io.jexxa/jexxa/) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Maven Central](https://img.shields.io/maven-central/v/io.jexxa/jexxa)](https://maven-badges.herokuapp.com/maven-central/io.jexxa/jexxa/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 [![CodeQL](https://github.com/jexxa-projects/Jexxa/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jexxa-projects/Jexxa/actions/workflows/codeql-analysis.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b6c1680824ef4ac5914c40073242dc86)](https://www.codacy.com/gh/repplix/Jexxa/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=repplix/Jexxa&amp;utm_campaign=Badge_Grade)
@@ -25,7 +26,7 @@ In addition, Jexxa offers the following production-proven features:
 
 *   Supported Java environments: ![Java](https://img.shields.io/badge/JDK-Java17+-blue.svg)
 
-*   Documentation: 
+*   Ecosystem: 
     *   [Tutorials](https://github.com/jexxa-projects/JexxaTutorials) show typical use cases
     *   [A template](https://github.com/jexxa-projects/JexxaArchetypes) for your first Jexxa application
     *   [Reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html) when you develop with Jexxa
@@ -80,13 +81,13 @@ Maven:
     <dependency>
        <groupId>io.jexxa</groupId>
        <artifactId>jexxa-web</artifactId>
-       <version>6.2.3</version>
+       <version>7.0.1</version>
     </dependency>
     
     <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-simple</artifactId>
-        <version>2.0.9</version>
+        <version>2.0.10</version>
     </dependency>
 </dependencies>
 ```
@@ -94,8 +95,8 @@ Maven:
 Gradle:
 
 ```groovy
-compile "io.jexxa:jexxa-web:6.2.3"
-compile "org.slf4j:slf4j-simple:2.0.9"
+compile "io.jexxa:jexxa-web:7.0.1"
+compile "org.slf4j:slf4j-simple:2.0.10"
 ``` 
 
 ### Configure your Jexxa application  
@@ -118,4 +119,6 @@ Please make sure to update tests as appropriate.
 
 ## Copyright and license
 
-Code and documentation copyright 2020–2023 Michael Repplinger. Code released under the [Apache 2.0 License](LICENSE). Docs released under [Creative Commons](https://creativecommons.org/licenses/by/3.0/).
+Code and documentation copyright 2020–2024 Michael Repplinger.
+Code released under the [Apache 2.0 License](LICENSE)(see [TLDR legal](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0)) for details).
+Docs released under [Creative Commons](https://creativecommons.org/licenses/by/4.0/).

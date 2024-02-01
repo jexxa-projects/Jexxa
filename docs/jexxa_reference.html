@@ -433,6 +433,118 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+/*! Asciidoctor Tabs | Copyright (c) 2018-present Dan Allen | MIT License */
+.tabs {
+    margin-bottom: 1.25em;
+}
+
+.tablist > ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tablist > ul li {
+    align-items: center;
+    background-color: #fff;
+    cursor: pointer;
+    display: flex;
+    font-weight: bold;
+    line-height: 1.5;
+    padding: 0.25em 1em;
+    position: relative;
+}
+
+.tablist > ul li:focus-visible {
+    outline: none;
+}
+
+.tablist.ulist,
+.tablist.ulist > ul li {
+    margin: 0;
+}
+
+.tablist.ulist > ul li + li {
+    margin-left: 0.25em;
+}
+
+.tabs .tablist li::after {
+    content: "";
+    display: block;
+    height: 1px;
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+}
+
+.tabs.is-loading .tablist li:not(:first-child),
+.tabs:not(.is-loading) .tablist li:not(.is-selected) {
+    background-color: #f5f5f5;
+}
+
+.tabs.is-loading .tablist li:first-child::after,
+.tabs:not(.is-loading) .tablist li.is-selected::after {
+    background-color: #fff;
+}
+
+/*
+.tabs:not(.is-loading) .tablist li,
+.tabs:not(.is-loading) .tablist li::after {
+  transition: background-color 200ms ease-in-out;
+}
+*/
+
+.tablist > ul p {
+    line-height: inherit;
+    margin: 0;
+}
+
+.tabpanel {
+    background-color: #fff;
+    padding: 1.25em;
+}
+
+.tablist > ul li,
+.tabpanel {
+    border: 1px solid #dcdcdc;
+}
+
+.tablist > ul li {
+    border-bottom: 0;
+}
+
+.tabs.is-loading .tabpanel + .tabpanel,
+.tabs:not(.is-loading) .tabpanel.is-hidden {
+    display: none;
+}
+
+.tabpanel > :first-child {
+    margin-top: 0;
+}
+
+/* #content is a signature of the Asciidoctor standalone HTML output */
+#content .tabpanel > :last-child,
+#content .tabpanel > :last-child > :last-child,
+#content .tabpanel > :last-child > :last-child > li:last-child > :last-child {
+    margin-bottom: 0;
+}
+
+.tablecontainer {
+    overflow-x: auto;
+}
+
+#content .tablecontainer {
+    margin-bottom: 1.25em;
+}
+
+#content .tablecontainer > table.tableblock {
+    margin-bottom: 0;
+}
+</style>
 </head>
 <body class="article">
 <div id="header">
@@ -503,32 +615,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Jexxa-Adapter-API</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Defines the API for driving adapters. In case you need to implement a new driving adapter, you have to use this dependency.</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>Jexxa-Core</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>Provides the core functionality of Jexxa as described in <a href="#_implementing_main">Implementing <code>main</code></a>. In case you write a new business application, you will need this package.</p>
 </div>
 <div class="paragraph">
-<p>In addition, it provides following sub-packages that can be used by your application:</p>
+<p>In addition, it provides the following sub-packages that can be used by your application:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>drivingadapter</code>: Provides ready to use driving adapter to receive and forward incoming requests to the application core.  Included driving adapter in this package are <code>Scheduler</code> and <code>JMSAdapter</code>.</p>
+<p><code>drivingadapter</code>: Provides ready-to-use driving adapter to receive and forward incoming requests to the application core.  Included driving adapter in this package are <code>Scheduler</code> and <code>JMSAdapter</code>.</p>
 </li>
 <li>
 <p><code>infrastructure</code>: Provides implementation of typical <a href="https://microservices.io/patterns/">application infrastructure patterns</a> that simplify the implementation of driven adapters. Provided implementations are <code>JDBCKeyValueRepository</code>, <code>JDBCObjectStore</code>, <code>JMSSender</code>, and <code>TransactionalOutboxSender</code></p>
 </li>
 <li>
-<p><code>common</code>: Provides wrapper to standard java libraries used by Jexxa. Main focus is to simplify and reduce these APIs to the requirements of Jexxa.</p>
+<p><code>common</code>: Provides wrapper to standard java libraries used by Jexxa. The Main focus is to simplify and reduce these APIs to the requirements of Jexxa.</p>
 </li>
 </ul>
 </div></div></td>
@@ -538,7 +642,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Jexxa-Web</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Provides driving adapters to access your application via HTTP. The used web-framework is <a href="https://javalin.io">javalin</a> which internally uses jetty.</p>
+<p>Provides driving adapters to access your application via HTTP. The used web-framework is <a href="https://javalin.io">javalin</a>, that internally uses jetty.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -569,7 +673,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect2">
 <h3 id="_implementing_main"><a class="anchor" href="#_implementing_main"></a>2.1. Implementing <code>main</code></h3>
 <div class="paragraph">
-<p>The <code>JexxaMain</code> class provides a convenient way to bootstrap your application. Main focus here is to make the entry points of your application core as well as the flow of control visible.</p>
+<p>The <code>JexxaMain</code> class provides a convenient way to bootstrap your application.
+The main focus here is to make the entry points of your application core as well as the flow of control visible.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -601,7 +706,10 @@ Jexxa provides strategies for persisting or sending data that can be used in the
 <div class="sect2">
 <h3 id="_boundedcontext"><a class="anchor" href="#_boundedcontext"></a>2.3. BoundedContext</h3>
 <div class="paragraph">
-<p>As described in <a href="https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html">architecture of Jexxa</a>, this framework has a strong focus on Domain Driven design. Therefore, each application provides a so called <code>BoundedContext</code> object which provides status information about the running application.</p>
+<p>As described in <a href="https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html">the architecture of Jexxa</a>,
+this framework has a strong focus on Domain-Driven Design.
+Therefore, each application provides a so called <code>BoundedContext</code> object
+which provides status information about the running application.</p>
 </div>
 <div class="paragraph">
 <p>So this object provides important information for your ops-team. Therefore, it is recommended to expose this class by any
@@ -628,7 +736,11 @@ could be a <code>TimerMonitor</code> that informs about that no requests have be
 <h2 id="_application_configuration"><a class="anchor" href="#_application_configuration"></a>3. Application Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Jexxa allows you to externalize your configuration. This allows you to run the same application in different environments. By default, Jexxa use properties files. In addition, you can set system properties to externalize the configuration. Jexxa considers properties in the following order:</p>
+<p>Jexxa allows you to externalize your configuration.
+This allows you to run the same application in different environments.
+By default, Jexxa uses properties files.
+In addition, you can set system properties to externalize the configuration.
+Jexxa considers properties in the following order:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1090,7 +1202,7 @@ If ou need some example how <code>RESTfulRPCAdapter</code> maps Java&#8217;s Dat
 <div class="sect2">
 <h3 id="_conventions_of_restfulrpcadapter"><a class="anchor" href="#_conventions_of_restfulrpcadapter"></a>4.4. Conventions of RESTfulRPCAdapter</h3>
 <div class="paragraph">
-<p>The <code>RESTfulRPCAdapter</code> is a simple RPC mechanism utilizing REST. Based on the <a href="https://martinfowler.com/articles/richardsonMaturityModel.html">REST maturity model</a> from Richardson it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST at a higher maturity level.</p>
+<p>The <code>RESTfulRPCAdapter</code> is a simple RPC mechanism utilizing REST. Based on the <a href="https://martinfowler.com/articles/richardsonMaturityModel.html">REST maturity model</a> from Richardson, it is REST on level 0. So this adapter is using HTTP as a transport mechanism for remote interactions, but without using any of the mechanisms of the web. When you start developing a new durable business application, this should be sufficient in most cases. Only when the partitioning of the business domain to the application core is stable, you should think about how to offer it via  REST at a higher maturity level.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -1262,7 +1374,7 @@ When you start using this adapter, I recommend enabling OpenAPI support at least
 <p>HTTP status code: 400</p>
 </li>
 <li>
-<p>Return value as a single Json object including following properties:</p>
+<p>Return value as a single Json object including the following properties:</p>
 <div class="ulist">
 <ul>
 <li>
@@ -1335,7 +1447,7 @@ When you start using this adapter, I recommend enabling OpenAPI support at least
 <p>When implementing a port adapter for <code>JMSAdapter</code>, you have to implement the <code>MessageListener</code> interface of JMS and annotate the class with <code>@JMSConfiguration</code>.</p>
 </div>
 <div class="paragraph">
-<p>Here you have to provide following information:</p>
+<p>Here you have to provide the following information:</p>
 </div>
 <table id="JMSAdapterConfiguration" class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 6. Describes the configuration used in <code>JMSAdapter</code>.</caption>
@@ -1409,7 +1521,7 @@ Please check the tutorial <a href="https://github.com/jexxa-projects/JexxaTutori
 <div class="sect3">
 <h4 id="_predefined_messagelistener"><a class="anchor" href="#_predefined_messagelistener"></a>5.1.1. Predefined <code>MessageListener</code></h4>
 <div class="paragraph">
-<p>In addition, Jexxa provides following predefined `MessageListener`for your convenience:</p>
+<p>In addition, Jexxa provides the following predefined `MessageListener`for your convenience:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1431,8 +1543,137 @@ Please check the tutorial <a href="https://github.com/jexxa-projects/JexxaTutori
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-09-16 17:49:11 +0200
+Last updated 2023-12-16 08:26:12 +0100
 </div>
 </div>
+<script>
+;(function () { /*! Asciidoctor Tabs | Copyright (c) 2018-present Dan Allen | MIT License */
+  'use strict'
+
+  var config = (document.currentScript || {}).dataset || {}
+  var forEach = Array.prototype.forEach
+
+  init(document.querySelectorAll('.tabs'))
+
+  function init (tabsBlocks) {
+    if (!tabsBlocks.length) return
+    forEach.call(tabsBlocks, function (tabs) {
+      var syncIds = tabs.classList.contains('is-sync') ? {} : undefined
+      var tablist = tabs.querySelector('.tablist ul')
+      tablist.setAttribute('role', 'tablist')
+      var start
+      forEach.call(tablist.querySelectorAll('li'), function (tab, idx) {
+        tab.tabIndex = -1
+        tab.setAttribute('role', tab.classList.add('tab') || 'tab')
+        var id, anchor, syncId
+        if (!(id = tab.id) && (anchor = tab.querySelector('a[id]'))) {
+          id = tab.id = anchor.parentNode.removeChild(anchor).id
+        }
+        var panel = id && tabs.querySelector('.tabpanel[aria-labelledby~="' + id + '"]')
+        if (!panel) return idx ? undefined : toggleSelected(tab, true) // invalid state
+        syncIds && (((syncId = tab.textContent.trim()) in syncIds) ? (syncId = undefined) : true) &&
+        (syncIds[(tab.dataset.syncId = syncId)] = tab)
+        idx || (syncIds && (start = { tab: tab, panel: panel })) ? toggleHidden(panel, true) : toggleSelected(tab, true)
+        tab.setAttribute('aria-controls', panel.id)
+        panel.setAttribute('role', 'tabpanel')
+        var onClick = syncId === undefined ? activateTab : activateTabSync
+        tab.addEventListener('click', onClick.bind({ tabs: tabs, tab: tab, panel: panel }))
+      })
+      if (!tabs.closest('.tabpanel')) {
+        forEach.call(tabs.querySelectorAll('.tabpanel table.tableblock'), function (table) {
+          var container = Object.assign(document.createElement('div'), { className: 'tablecontainer' })
+          table.parentNode.insertBefore(container, table).appendChild(table)
+        })
+      }
+      if (start) {
+        var syncGroupId
+        for (var i = 0, lst = tabs.classList, len = lst.length, className; i !== len; i++) {
+          if (!(className = lst.item(i)).startsWith('data-sync-group-id=')) continue
+          tabs.dataset.syncGroupId = syncGroupId = lst.remove(className) || className.slice(19).replace(/\u00a0/g, ' ')
+          break
+        }
+        if (syncGroupId === undefined) tabs.dataset.syncGroupId = syncGroupId = Object.keys(syncIds).sort().join('|')
+        var preferredSyncId = 'syncStorageKey' in config &&
+          window[(config.syncStorageScope || 'local') + 'Storage'].getItem(config.syncStorageKey + '-' + syncGroupId)
+        var tab = preferredSyncId && syncIds[preferredSyncId]
+        tab && Object.assign(start, { tab: tab, panel: document.getElementById(tab.getAttribute('aria-controls')) })
+        toggleSelected(start.tab, true) || toggleHidden(start.panel, false)
+      }
+    })
+    onHashChange()
+    toggleClassOnEach(tabsBlocks, 'is-loading', 'remove')
+    window.setTimeout(toggleClassOnEach.bind(null, tabsBlocks, 'is-loaded', 'add'), 0)
+    window.addEventListener('hashchange', onHashChange)
+  }
+
+  function activateTab (e) {
+    var tab = this.tab
+    var tabs = this.tabs || (this.tabs = tab.closest('.tabs'))
+    var panel = this.panel || (this.panel = document.getElementById(tab.getAttribute('aria-controls')))
+    querySelectorWithSiblings(tabs, '.tablist .tab', 'tab').forEach(function (el) {
+      toggleSelected(el, el === tab)
+    })
+    querySelectorWithSiblings(tabs, '.tabpanel', 'tabpanel').forEach(function (el) {
+      toggleHidden(el, el !== panel)
+    })
+    if (!this.isSync && 'syncStorageKey' in config && 'syncGroupId' in tabs.dataset) {
+      var storageKey = config.syncStorageKey + '-' + tabs.dataset.syncGroupId
+      window[(config.syncStorageScope || 'local') + 'Storage'].setItem(storageKey, tab.dataset.syncId)
+    }
+    if (!e) return
+    var loc = window.location
+    var hashIdx = loc.hash ? loc.href.indexOf('#') : -1
+    if (~hashIdx) window.history.replaceState(null, '', loc.href.slice(0, hashIdx))
+    e.preventDefault()
+  }
+
+  function activateTabSync (e) {
+    activateTab.call(this, e)
+    var thisTabs = this.tabs
+    var thisTab = this.tab
+    var initialY = thisTabs.getBoundingClientRect().y
+    forEach.call(document.querySelectorAll('.tabs'), function (tabs) {
+      if (tabs === thisTabs || tabs.dataset.syncGroupId !== thisTabs.dataset.syncGroupId) return
+      querySelectorWithSiblings(tabs, '.tablist .tab', 'tab').forEach(function (tab) {
+        if (tab.dataset.syncId === thisTab.dataset.syncId) activateTab.call({ tabs: tabs, tab: tab, isSync: true })
+      })
+    })
+    var shiftedBy = thisTabs.getBoundingClientRect().y - initialY
+    if (shiftedBy && (shiftedBy = Math.round(shiftedBy))) window.scrollBy({ top: shiftedBy, behavior: 'instant' })
+  }
+
+  function querySelectorWithSiblings (scope, selector, siblingClass) {
+    var el = scope.querySelector(selector)
+    if (!el) return []
+    var result = [el]
+    while ((el = el.nextElementSibling) && el.classList.contains(siblingClass)) result.push(el)
+    return result
+  }
+
+  function toggleClassOnEach (elements, className, method) {
+    forEach.call(elements, function (el) {
+      el.classList[method](className)
+    })
+  }
+
+  function toggleHidden (el, state) {
+    el.classList[(el.hidden = state) ? 'add' : 'remove']('is-hidden')
+  }
+
+  function toggleSelected (el, state) {
+    el.setAttribute('aria-selected', '' + state)
+    el.classList[state ? 'add' : 'remove']('is-selected')
+    el.tabIndex = state ? 0 : -1
+  }
+
+  function onHashChange () {
+    var id = window.location.hash.slice(1)
+    if (!id) return
+    var tab = document.getElementById(~id.indexOf('%') ? decodeURIComponent(id) : id)
+    if (!(tab && tab.classList.contains('tab'))) return
+    'syncId' in tab.dataset ? activateTabSync.call({ tab: tab }) : activateTab.call({ tab: tab })
+  }
+})()
+</script>
 </body>
 </html>

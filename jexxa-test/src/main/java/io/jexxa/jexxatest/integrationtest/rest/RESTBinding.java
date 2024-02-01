@@ -1,6 +1,6 @@
 package io.jexxa.jexxatest.integrationtest.rest;
 
-import io.jexxa.common.wrapper.json.JSONManager;
+import io.jexxa.common.facade.json.JSONManager;
 import io.jexxa.core.BoundedContext;
 import kong.unirest.GenericType;
 import kong.unirest.ObjectMapper;

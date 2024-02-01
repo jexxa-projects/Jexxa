@@ -25,6 +25,6 @@ Most frameworks use annotations here, but the developer must be aware of them.
 ## Consequences
 
 * The main method includes some boilerplate code to bind required driving adapters to the application core.
-* The Constructor of inbound ports only accept interfaces which are considered as outbound ports. Thus, the 
+* The constructor of inbound ports only accepts interfaces which are considered as outbound ports. Thus, the 
   implementation of an inbound port has to instantiate all required business objects by itself. Only outbound ports 
   are injected. 

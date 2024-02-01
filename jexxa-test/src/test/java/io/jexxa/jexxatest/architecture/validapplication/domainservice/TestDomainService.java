@@ -7,7 +7,7 @@ import io.jexxa.jexxatest.architecture.validapplication.domain.valid.ValidEnum;
 @DomainService
 public class TestDomainService
 {
-    //Using enum in switch statement creates anonymous class
+    //Using enum in a switch statement creates anonymous class
     public ValidEnum useEnum(ValidEnum validEnum)
     {
         return switch (validEnum) {

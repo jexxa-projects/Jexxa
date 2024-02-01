@@ -1,8 +1,8 @@
 package io.jexxa.core;
 
 import io.jexxa.adapterapi.invocation.InvocationManager;
-import io.jexxa.infrastructure.RepositoryManager;
-import io.jexxa.infrastructure.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.common.drivenadapter.persistence.RepositoryManager;
+import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.annotation.ValidApplicationService;
 import io.jexxa.testapplication.applicationservice.IncrementApplicationService;
