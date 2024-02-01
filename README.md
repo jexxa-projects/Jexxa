@@ -81,13 +81,13 @@ Maven:
     <dependency>
        <groupId>io.jexxa</groupId>
        <artifactId>jexxa-web</artifactId>
-       <version>7.0.1</version>
+       <version>7.0.2</version>
     </dependency>
     
     <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-simple</artifactId>
-        <version>2.0.10</version>
+        <version>2.0.11</version>
     </dependency>
 </dependencies>
 ```
