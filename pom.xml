@@ -96,10 +96,6 @@
     <archunit.version>1.2.1</archunit.version>
     <addend.version>2.0.1</addend.version>
 
-    <!-- version of maven dependencies for tutorials -->
-    <aspectj.maven.plugin.version>1.12.6</aspectj.maven.plugin.version>
-    <maven.jib.plugin>3.2.0</maven.jib.plugin>
-    <maven.shade.plugin>3.5.1</maven.shade.plugin>
   </properties>
 
   <build>
@@ -168,11 +164,6 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>${maven.enforcer.plugin}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-shade-plugin</artifactId>
-          <version>${maven.shade.plugin}</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -387,11 +378,6 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <configuration>
-              <excludes>
-                <exclude>io.jexxa.tutorials.*</exclude>
-              </excludes>
-            </configuration>
 
             <executions>
               <!--
