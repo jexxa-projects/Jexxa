@@ -1,12 +1,13 @@
 package io.jexxa.testapplication.infrastructure.drivenadapter.persistence;
 
-import io.jexxa.common.drivenadapter.persistence.RepositoryManager;
 import io.jexxa.common.drivenadapter.persistence.repository.IRepository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Function;
+
+import static io.jexxa.common.drivenadapter.persistence.RepositoryFactory.createRepository;
 
 /**
  * Generic implementation of a Repository including typical methods
@@ -25,7 +26,7 @@ public class GenericRepositoryImpl<A, I>
                                  Properties properties)
     {
         this.keyFunction = keyFunction;
-        this.repository = RepositoryManager.getRepository(
+        this.repository = createRepository(
                 aggregateClass,
                 keyFunction,
                 properties);

@@ -1,7 +1,5 @@
 package io.jexxa.jexxatest;
 
-import io.jexxa.common.drivenadapter.messaging.MessageSenderManager;
-import io.jexxa.common.drivenadapter.persistence.ObjectStoreManager;
 import io.jexxa.common.drivenadapter.persistence.objectstore.imdb.IMDBObjectStore;
 import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTag;
 import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetadataSchema;
@@ -17,15 +15,17 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Properties;
 import java.util.stream.Stream;
 
+import static io.jexxa.common.drivenadapter.messaging.MessageSenderFactory.createMessageSender;
+import static io.jexxa.common.drivenadapter.persistence.ObjectStoreFactory.createObjectStore;
+import static io.jexxa.common.drivenadapter.persistence.RepositoryFactory.createRepository;
+import static io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTags.numericTag;
+import static io.jexxa.jexxatest.JexxaTest.getJexxaTest;
 import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_DATABASE;
 import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE;
 import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_DRIVER;
 import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_PASSWORD;
 import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_URL;
 import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_USERNAME;
-import static io.jexxa.common.drivenadapter.persistence.RepositoryManager.getRepository;
-import static io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTags.numericTag;
-import static io.jexxa.jexxatest.JexxaTest.getJexxaTest;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class JexxaTestConfigTest
@@ -44,7 +44,7 @@ class JexxaTestConfigTest
     {
         //Arrange
         getJexxaTest(JexxaTestApplication.class);
-        var repository = getRepository(JexxaAggregate.class, JexxaAggregate::getKey, properties);
+        var repository = createRepository(JexxaAggregate.class, JexxaAggregate::getKey, properties);
 
         //Act / Assert: Since we initialized JexxaTest, we should always get an IMDBRepository, independent of the Properties
         assertDoesNotThrow(() -> (IMDBRepository<JexxaAggregate, JexxaValueObject>) repository );
@@ -56,7 +56,7 @@ class JexxaTestConfigTest
     {
         //Arrange
         getJexxaTest(JexxaTestApplication.class);
-        var objectStore = ObjectStoreManager.getObjectStore(JexxaAggregate.class, JexxaAggregate::getKey, JexxaAggregateSchema.class, properties);
+        var objectStore = createObjectStore(JexxaAggregate.class, JexxaAggregate::getKey, JexxaAggregateSchema.class, properties);
 
         //Act / Assert: Since we initialized JexxaTest, we should always get an IMDBObjectStore, independent of the Properties
         assertDoesNotThrow(() -> (IMDBObjectStore<JexxaAggregate, JexxaValueObject, JexxaAggregateSchema>) objectStore );
@@ -68,7 +68,7 @@ class JexxaTestConfigTest
     {
         //Arrange
         getJexxaTest(JexxaTestApplication.class);
-        var messageSender = MessageSenderManager.getMessageSender(JexxaTestConfigTest.class, properties);
+        var messageSender = createMessageSender(JexxaTestConfigTest.class, properties);
 
         //Act / Assert: Since we initialized JexxaTest, we should always get a MessageRecordingStrategy, independent of the Properties
         assertDoesNotThrow(() -> (MessageRecordingStrategy) messageSender );

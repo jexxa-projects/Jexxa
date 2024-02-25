@@ -1,7 +1,6 @@
 package io.jexxa.core;
 
 
-import io.jexxa.common.drivenadapter.persistence.RepositoryManager;
 import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.core.convention.PortConventionViolation;
 import io.jexxa.testapplication.JexxaTestApplication;
@@ -27,6 +26,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.util.concurrent.TimeUnit;
 
 import static io.jexxa.TestConstants.UNIT_TEST;
+import static io.jexxa.common.drivenadapter.persistence.RepositoryFactory.setDefaultRepository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -43,7 +43,7 @@ class JexxaMainTest
     @BeforeEach
     void initTests()
     {
-        RepositoryManager.setDefaultStrategy(IMDBRepository.class);
+        setDefaultRepository(IMDBRepository.class);
         objectUnderTest = new JexxaMain(JexxaTestApplication.class);
         objectUnderTest.logUnhealthyDiagnostics(1, TimeUnit.SECONDS)
                 .disableBanner();
@@ -203,7 +203,7 @@ class JexxaMainTest
     void bootstrapService()
     {
         //Arrange
-        RepositoryManager.setDefaultStrategy(IMDBRepository.class);
+        setDefaultRepository(IMDBRepository.class);
 
         //Act
         objectUnderTest.bootstrap(BootstrapJexxaEntities.class).with(BootstrapJexxaEntities::initDomainData);
@@ -218,7 +218,7 @@ class JexxaMainTest
     void bootstrapAnnotation()
     {
         //Arrange
-        RepositoryManager.setDefaultStrategy(IMDBRepository.class);
+        setDefaultRepository(IMDBRepository.class);
 
         //Act
         var portFactory = objectUnderTest.bootstrapAnnotation(ValidApplicationService.class).getPortFactory();

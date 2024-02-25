@@ -1,7 +1,6 @@
 package io.jexxa.core;
 
 import io.jexxa.adapterapi.invocation.InvocationManager;
-import io.jexxa.common.drivenadapter.persistence.RepositoryManager;
 import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.annotation.ValidApplicationService;
@@ -10,6 +9,7 @@ import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static io.jexxa.common.drivenadapter.persistence.RepositoryFactory.setDefaultRepository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FluentInterceptorTest
@@ -85,7 +85,7 @@ class FluentInterceptorTest
     void testLoggingInterceptorWithAnnotation()
     {
         //Arrange
-        RepositoryManager.setDefaultStrategy(IMDBRepository.class);
+        setDefaultRepository(IMDBRepository.class);
         objectUnderTest = new JexxaMain(JexxaTestApplication.class);
 
         var targetObject = objectUnderTest.getInstanceOfPort(SimpleApplicationService.class);

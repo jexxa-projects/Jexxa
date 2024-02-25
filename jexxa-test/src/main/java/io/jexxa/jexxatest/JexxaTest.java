@@ -1,14 +1,10 @@
 package io.jexxa.jexxatest;
 
-import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
-import io.jexxa.common.drivenadapter.messaging.MessageSenderManager;
-import io.jexxa.common.drivenadapter.persistence.ObjectStoreManager;
-import io.jexxa.common.drivenadapter.persistence.RepositoryManager;
 import io.jexxa.common.drivenadapter.persistence.objectstore.imdb.IMDBObjectStore;
 import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
 import io.jexxa.common.facade.utils.function.ThrowingConsumer;
 import io.jexxa.core.JexxaMain;
-
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorder;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorderManager;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
@@ -16,6 +12,9 @@ import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStr
 import java.util.Optional;
 import java.util.Properties;
 
+import static io.jexxa.common.drivenadapter.messaging.MessageSenderFactory.setDefaultMessageSender;
+import static io.jexxa.common.drivenadapter.persistence.ObjectStoreFactory.setDefaultObjectStore;
+import static io.jexxa.common.drivenadapter.persistence.RepositoryFactory.setDefaultRepository;
 import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
 
 
@@ -93,9 +92,9 @@ public class JexxaTest
 
     private void initForUnitTests( )
     {
-        RepositoryManager.setDefaultStrategy(IMDBRepository.class);
-        ObjectStoreManager.setDefaultStrategy(IMDBObjectStore.class);
-        MessageSenderManager.setDefaultStrategy(MessageRecordingStrategy.class);
+        setDefaultRepository(IMDBRepository.class);
+        setDefaultObjectStore(IMDBObjectStore.class);
+        setDefaultMessageSender(MessageRecordingStrategy.class);
 
         IMDBRepository.clear(); //Note: This clears IMDBRepository and IMDBObjectStore because IMDBObjectStore extends IMDBRepository and uses its internal data structure
         MessageRecorderManager.clear();

@@ -1,11 +1,12 @@
 package io.jexxa.testapplication.infrastructure.drivenadapter.messaging;
 
 import io.jexxa.common.drivenadapter.messaging.MessageSender;
-import io.jexxa.common.drivenadapter.messaging.MessageSenderManager;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import io.jexxa.testapplication.domainservice.ValidDomainSender;
 
 import java.util.Properties;
+
+import static io.jexxa.common.drivenadapter.messaging.MessageSenderFactory.createMessageSender;
 
 @SuppressWarnings("unused")
 public class ValidDomainSenderImpl implements ValidDomainSender
@@ -17,7 +18,7 @@ public class ValidDomainSenderImpl implements ValidDomainSender
 
     public ValidDomainSenderImpl(Properties properties)
     {
-        this.messageSender = MessageSenderManager.getMessageSender(ValidDomainSenderImpl.class, properties);
+        this.messageSender = createMessageSender(ValidDomainSenderImpl.class, properties);
     }
 
     @Override
