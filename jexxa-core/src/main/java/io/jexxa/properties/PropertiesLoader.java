@@ -1,5 +1,9 @@
 package io.jexxa.properties;
 
+import io.jexxa.common.drivenadapter.outbox.TransactionalOutboxProperties;
+import io.jexxa.common.facade.jdbc.JDBCProperties;
+import io.jexxa.common.facade.jms.JMSProperties;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,15 +14,22 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import static io.jexxa.common.drivenadapter.outbox.TransactionalOutboxProperties.outboxTable;
 import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
 
 public class PropertiesLoader {
+    private static final String JEXXA_PREFIX = "io.jexxa.";
+
     private final Class<?> context;
     final Properties properties = new Properties();
     private final List<String> propertiesFiles = new ArrayList<>();
 
     public PropertiesLoader(Class<?> context) {
         this.context = Objects.requireNonNull(context);
+        JDBCProperties.prefix(JEXXA_PREFIX);
+        JMSProperties.prefix(JEXXA_PREFIX);
+        TransactionalOutboxProperties.prefix(JEXXA_PREFIX);
+
     }
 
     public Properties createJexxaProperties(Properties applicationProperties) {
@@ -43,6 +54,9 @@ public class PropertiesLoader {
         //5. set system properties
         setSystemProperties(properties);
 
+        //6. set outbox sender table
+        setOutboxSenderTable(properties);
+
         return removeEmptyValues(properties);
     }
 
@@ -50,6 +64,12 @@ public class PropertiesLoader {
         if (properties.containsKey(JexxaCoreProperties.JEXXA_USER_TIMEZONE))
         {
             System.getProperties().setProperty("user.timezone", properties.getProperty(JexxaCoreProperties.JEXXA_USER_TIMEZONE));
+        }
+    }
+
+    private void setOutboxSenderTable(Properties properties) {
+        if (!properties.containsKey(outboxTable())) {
+            properties.put(outboxTable(),"jexxa_outbox_sender_table");
         }
     }
 

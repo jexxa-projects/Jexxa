@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 import static io.jexxa.common.drivenadapter.messaging.MessageSenderFactory.setDefaultMessageSender;
+import static io.jexxa.common.drivenadapter.outbox.TransactionalOutboxProperties.outboxTable;
 import static io.jexxa.common.drivenadapter.persistence.ObjectStoreFactory.setDefaultObjectStore;
 import static io.jexxa.common.drivenadapter.persistence.RepositoryFactory.setDefaultRepository;
 import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
@@ -116,6 +117,10 @@ public class JexxaTest
                         ThrowingConsumer.exceptionLogger(properties::load, getLogger(JexxaTest.class)),
                         () -> getLogger(JexxaTest.class).warn("Properties file '{}' not found", JEXXA_TEST_PROPERTIES)
                 );
+        if (!properties.containsKey(outboxTable())) {
+            properties.put(outboxTable(),"jexxa_test_outbox_sender_table");
+        }
+
         return properties;
     }
 }
