@@ -69,7 +69,7 @@ public class PropertiesLoader {
 
     private void setOutboxSenderTable(Properties properties) {
         if (!properties.containsKey(outboxTable())) {
-            properties.put(outboxTable(),"jexxa_outbox_sender_table");
+            properties.put(outboxTable(),"jexxaoutboxmessage");
         }
     }
 

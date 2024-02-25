@@ -118,7 +118,7 @@ public class JexxaTest
                         () -> getLogger(JexxaTest.class).warn("Properties file '{}' not found", JEXXA_TEST_PROPERTIES)
                 );
         if (!properties.containsKey(outboxTable())) {
-            properties.put(outboxTable(),"jexxa_test_outbox_sender_table");
+            properties.put(outboxTable(),"jexxaoutboxmessage_test");
         }
 
         return properties;
