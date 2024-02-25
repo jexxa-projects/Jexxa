@@ -4,6 +4,7 @@ import io.jexxa.adapterapi.JexxaContext;
 import io.jexxa.adapterapi.drivingadapter.HealthCheck;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
+import io.jexxa.common.drivenadapter.outbox.TransactionalOutboxProperties;
 import io.jexxa.common.facade.jms.JMSProperties;
 import io.jexxa.properties.JexxaCoreProperties;
 import io.jexxa.common.facade.jdbc.JDBCProperties;
@@ -45,6 +46,7 @@ import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
 @SuppressWarnings("unused")
 public final class JexxaMain
 {
+    private static final String JEXXA_PREFIX = "io.jexxa.";
     private static final String DRIVEN_ADAPTER_PACKAGE = ".infrastructure.drivenadapter";
     private static final String DRIVING_ADAPTER_PACKAGE = ".infrastructure.drivingadapter";
     private static final String DOMAIN_SERVICE = ".domainservice";
@@ -96,8 +98,9 @@ public final class JexxaMain
         this.propertiesLoader = new PropertiesLoader(context);
         this.properties = propertiesLoader.createJexxaProperties(applicationProperties);
         this.properties.put(JexxaCoreProperties.JEXXA_CONTEXT_NAME, context.getSimpleName());
-        JDBCProperties.prefix("io.jexxa.");
-        JMSProperties.prefix("io.jexxa.");
+        JDBCProperties.prefix(JEXXA_PREFIX);
+        JMSProperties.prefix(JEXXA_PREFIX);
+        TransactionalOutboxProperties.prefix(JEXXA_PREFIX);
 
         this.addToInfrastructure("io.jexxa.common.drivingadapter");
         this.addDefaultPackages(context);
