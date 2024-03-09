@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[7.1.1] - 2024-03-09
+### Fixed
+- Updated dependencies
+ 
 ## \[7.1.0] - 2024-02-25
 ### Added
 * `TransactionalOutboxSender`: Possibility to define db table of `TransactionalOutboxSender` via `io.jexxa.outbox.table`. By default, Jexxa uses `jexxa_outbox_sender_table` and JexxaTest `jexxa_test_outbox_sender_table`
