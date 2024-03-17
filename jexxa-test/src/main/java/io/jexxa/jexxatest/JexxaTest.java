@@ -1,8 +1,5 @@
 package io.jexxa.jexxatest;
 
-import io.jexxa.common.drivenadapter.messaging.MessageSenderManager;
-import io.jexxa.common.drivenadapter.persistence.ObjectStoreManager;
-import io.jexxa.common.drivenadapter.persistence.RepositoryManager;
 import io.jexxa.common.drivenadapter.persistence.objectstore.imdb.IMDBObjectStore;
 import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
@@ -99,11 +96,6 @@ public class JexxaTest
         setDefaultRepository(IMDBRepository.class);
         setDefaultObjectStore(IMDBObjectStore.class);
         setDefaultMessageSender(MessageRecordingStrategy.class);
-
-        //Must still be called as long as JexxxaAdapters offers these methods for compatibility reasons
-        MessageSenderManager.setDefaultStrategy(MessageRecordingStrategy.class);
-        RepositoryManager.setDefaultStrategy(IMDBRepository.class);
-        ObjectStoreManager.setDefaultStrategy(IMDBObjectStore.class);
 
         IMDBRepository.clear(); //Note: This clears IMDBRepository and IMDBObjectStore because IMDBObjectStore extends IMDBRepository and uses its internal data structure
         MessageRecorderManager.clear();
