@@ -48,7 +48,7 @@
     <maven.jacoco.plugin>0.8.12</maven.jacoco.plugin>
     <maven.reports.plugin>3.5.0</maven.reports.plugin>
     <maven.enforcer.plugin>3.5.0</maven.enforcer.plugin>
-    <maven.javadoc.plugin>3.6.3</maven.javadoc.plugin>
+    <maven.javadoc.plugin>3.7.0</maven.javadoc.plugin>
     <maven.templating.plugin>3.0.0</maven.templating.plugin>
     <maven.versions.plugin>2.16.2</maven.versions.plugin>
     <project.scm.id>github-Jexxa</project.scm.id>
