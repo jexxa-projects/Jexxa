@@ -1,9 +1,10 @@
 package io.jexxa.drivingadapter.rest.openapi;
 
 
+import io.smallrye.config.SmallRyeConfig;
+import io.smallrye.openapi.api.SmallRyeOpenAPI;
 import io.smallrye.openapi.api.models.parameters.RequestBodyImpl;
-import io.smallrye.openapi.runtime.io.Format;
-import io.smallrye.openapi.runtime.io.OpenApiSerializer;
+import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.openapi.models.Components;
 import org.eclipse.microprofile.openapi.models.OpenAPI;
 import org.eclipse.microprofile.openapi.models.media.Schema;
@@ -11,12 +12,7 @@ import org.eclipse.microprofile.openapi.models.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.models.responses.APIResponse;
 import org.eclipse.microprofile.openapi.models.servers.Server;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Parameter;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.net.HttpURLConnection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,11 +20,11 @@ import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
+import static io.jexxa.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
 import static io.jexxa.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_SERVERS;
 import static io.jexxa.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
 import static io.jexxa.properties.JexxaCoreProperties.JEXXA_CONTEXT_VERSION;
-import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
-import static io.jexxa.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
 import static org.eclipse.microprofile.openapi.OASFactory.*;
 
 public class OpenAPIConvention
@@ -131,8 +127,12 @@ public class OpenAPIConvention
 
     public String getOpenAPI() {
         try {
-            return OpenApiSerializer.serialize(openAPI, Format.JSON);
-        } catch (IOException e) {
+            return SmallRyeOpenAPI.builder()
+                    .withInitialModel(openAPI)
+                    .withConfig(ConfigProvider.getConfig().unwrap(SmallRyeConfig.class))
+                    .build()
+                    .toJSON();
+        } catch (Exception e) {
             throw new IllegalStateException(e);
         }
     }

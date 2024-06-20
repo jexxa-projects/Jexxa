@@ -85,8 +85,6 @@ class OpenAPIIT
         //Assert - Fields of basic openAPI structure
         assertNotNull(result);
 
-        System.out.println(result);
-
         assertNotNull(result.get("openapi"));
         assertNotNull(result.get("info"));
         assertNotNull(result.get("paths"));
@@ -105,6 +103,8 @@ class OpenAPIIT
         JsonObject response = Unirest.get(OPENAPI_PATH)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
+
+        System.out.println(response);
 
         var result = response
                 .get("components").getAsJsonObject()
