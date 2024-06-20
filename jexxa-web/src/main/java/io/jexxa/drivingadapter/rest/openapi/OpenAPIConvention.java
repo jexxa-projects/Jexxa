@@ -9,6 +9,7 @@ import org.eclipse.microprofile.openapi.models.OpenAPI;
 import org.eclipse.microprofile.openapi.models.media.Schema;
 import org.eclipse.microprofile.openapi.models.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.models.responses.APIResponse;
+import org.eclipse.microprofile.openapi.models.servers.Server;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -20,26 +21,15 @@ import java.net.HttpURLConnection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Stream;
 
+import static io.jexxa.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_SERVERS;
 import static io.jexxa.properties.JexxaCoreProperties.JEXXA_CONTEXT_NAME;
 import static io.jexxa.properties.JexxaCoreProperties.JEXXA_CONTEXT_VERSION;
 import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
 import static io.jexxa.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
-import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponse;
-import static org.eclipse.microprofile.openapi.OASFactory.createAPIResponses;
-import static org.eclipse.microprofile.openapi.OASFactory.createComponents;
-import static org.eclipse.microprofile.openapi.OASFactory.createContent;
-import static org.eclipse.microprofile.openapi.OASFactory.createInfo;
-import static org.eclipse.microprofile.openapi.OASFactory.createMediaType;
-import static org.eclipse.microprofile.openapi.OASFactory.createOpenAPI;
-import static org.eclipse.microprofile.openapi.OASFactory.createOperation;
-import static org.eclipse.microprofile.openapi.OASFactory.createPathItem;
-import static org.eclipse.microprofile.openapi.OASFactory.createPaths;
-import static org.eclipse.microprofile.openapi.OASFactory.createSchema;
+import static org.eclipse.microprofile.openapi.OASFactory.*;
 
 public class OpenAPIConvention
 {
@@ -64,6 +54,7 @@ public class OpenAPIConvention
                                 .description("Auto generated OpenAPI for " + properties.getProperty(JEXXA_CONTEXT_NAME, "Unknown Context"))
                                 .version(properties.getProperty(JEXXA_CONTEXT_VERSION, "1.0"))
                 )
+                .servers( createServers() )
                 .paths(
                         createPaths()
                 ).components(components);
@@ -144,6 +135,19 @@ public class OpenAPIConvention
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    protected List<Server> createServers(){
+
+        var server = properties.getProperty(JEXXA_REST_OPEN_API_SERVERS, "");
+        if (server.isEmpty())
+        {
+            return new ArrayList<>();
+        }
+
+        return Arrays.stream(server.split(","))
+                .map( element -> createServer().url(element)).
+                toList();
     }
 
     public Optional<String> getPath()

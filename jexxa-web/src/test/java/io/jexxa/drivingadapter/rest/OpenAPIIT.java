@@ -23,8 +23,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_OPEN_API_PATH;
-import static io.jexxa.drivingadapter.rest.JexxaWebProperties.JEXXA_REST_PORT;
+import static io.jexxa.drivingadapter.rest.JexxaWebProperties.*;
 import static io.jexxa.drivingadapter.rest.RESTConstants.APPLICATION_TYPE;
 import static io.jexxa.drivingadapter.rest.RESTConstants.CONTENT_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -55,6 +54,7 @@ class OpenAPIIT
         properties.put(JexxaWebProperties.JEXXA_REST_HOST, defaultHost);
         properties.put(JEXXA_REST_PORT, Integer.toString(defaultPort));
         properties.put(JEXXA_REST_OPEN_API_PATH, "swagger-docs");
+        properties.put(JEXXA_REST_OPEN_API_SERVERS, "/test-url");
 
         objectUnderTest = RESTfulRPCAdapter.createAdapter(properties);
     }
@@ -85,9 +85,12 @@ class OpenAPIIT
         //Assert - Fields of basic openAPI structure
         assertNotNull(result);
 
+        System.out.println(result);
+
         assertNotNull(result.get("openapi"));
         assertNotNull(result.get("info"));
         assertNotNull(result.get("paths"));
+        assertNotNull(result.get("servers"));
     }
 
 
