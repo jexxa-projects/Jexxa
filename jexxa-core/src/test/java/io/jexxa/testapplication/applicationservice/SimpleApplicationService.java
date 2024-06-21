@@ -5,6 +5,7 @@ import io.jexxa.common.facade.logger.SLF4jLogger;
 import io.jexxa.testapplication.annotation.ValidApplicationService;
 import io.jexxa.testapplication.domain.model.JexxaEnum;
 import io.jexxa.testapplication.domain.model.JexxaRecord;
+import io.jexxa.testapplication.domain.model.JexxaRecordComparable;
 import io.jexxa.testapplication.domain.model.JexxaValueObject;
 import io.jexxa.testapplication.domain.model.SpecialCasesValueObject;
 
@@ -135,6 +136,16 @@ public class SimpleApplicationService
     public SpecialCasesValueObject getSpecialCasesValueObject()
     {
         return  SpecialCasesValueObject.SPECIAL_CASES_VALUE_OBJECT;
+    }
+
+    public List<JexxaRecordComparable> getJexxaRecordComparableList()
+    {
+        return List.of(new JexxaRecordComparable(42));
+    }
+
+    public JexxaRecordComparable getJexxaRecordComparable()
+    {
+        return  new JexxaRecordComparable(42);
     }
 
     public JexxaRecord getJexxaRecord()

@@ -6,6 +6,7 @@ import io.jexxa.TestConstants;
 import io.jexxa.testapplication.applicationservice.Java8DateTimeApplicationService;
 import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 import io.jexxa.testapplication.domain.model.JexxaEnum;
+import io.jexxa.testapplication.domain.model.JexxaRecordComparable;
 import io.jexxa.testapplication.domain.model.SpecialCasesValueObject;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.AfterEach;
@@ -139,6 +140,29 @@ class OpenAPIIT
         assertTrue(result.toString().contains(JexxaEnum.ENUM_VALUE1.name()));
         assertTrue(result.toString().contains(JexxaEnum.ENUM_VALUE2.name()));
         assertTrue(result.toString().contains(JexxaEnum.ENUM_VALUE3.name()));
+    }
+
+    @Test
+    void testRecordComparable()
+    {
+        //Arrange -> Nothing to do
+        //Arrange
+        objectUnderTest.register(new SimpleApplicationService());
+        objectUnderTest.start();
+        //Act
+        JsonObject response = Unirest.get(OPENAPI_PATH)
+                .header(CONTENT_TYPE, APPLICATION_TYPE)
+                .asObject(JsonObject.class).getBody();
+
+        var result = response
+                .get("components").getAsJsonObject()
+                .get("schemas").getAsJsonObject()
+                .get(JexxaRecordComparable.class.getSimpleName()).getAsJsonObject();
+
+        System.out.println(result);
+
+        //Assert - Fields of basic openAPI structure
+        assertNotNull(result);
     }
 
 
