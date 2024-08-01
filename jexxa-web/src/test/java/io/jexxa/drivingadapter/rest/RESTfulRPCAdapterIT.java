@@ -94,10 +94,10 @@ class RESTfulRPCAdapterIT
     void testWithRandomPort()
     {
         //Arrange
-        Properties properties = new Properties();
-        properties.setProperty(JexxaWebProperties.JEXXA_REST_PORT, String.valueOf(0));
+        Properties propertiesWithRandomPort = new Properties();
+        propertiesWithRandomPort.setProperty(JexxaWebProperties.JEXXA_REST_PORT, String.valueOf(0));
 
-        var secondAdapter = RESTfulRPCAdapter.createAdapter(properties);
+        var secondAdapter = RESTfulRPCAdapter.createAdapter(propertiesWithRandomPort);
         secondAdapter.register(simpleApplicationService);
         secondAdapter.start();
         var secondRestPath = "http://localhost:" + secondAdapter.getHTTPPort() + "/SimpleApplicationService/";
@@ -121,10 +121,10 @@ class RESTfulRPCAdapterIT
     void testUnsetProperties()
     {
         //Arrange
-        var properties = new Properties();
+        var invalidProperties = new Properties();
 
         //Act and Assert
-        assertThrows(IllegalArgumentException.class, () -> RESTfulRPCAdapter.createAdapter(properties));
+        assertThrows(IllegalArgumentException.class, () -> RESTfulRPCAdapter.createAdapter(invalidProperties));
     }
 
 
