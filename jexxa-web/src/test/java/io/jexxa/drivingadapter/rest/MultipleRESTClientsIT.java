@@ -16,7 +16,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static io.jexxa.common.facade.utils.function.ThrowingConsumer.exceptionCollector;
-import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -49,7 +48,7 @@ class MultipleRESTClientsIT
         applicationService.setMaxCounter(MAX_COUNTER);
         List<Integer> expectedResult = IntStream.rangeClosed(1, MAX_COUNTER)
                 .boxed()
-                .collect(toList());
+                .toList();
 
         var clientPool = Stream.generate(() -> new Thread(this::incrementService))
                 .limit(MAX_THREADS)
