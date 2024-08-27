@@ -38,7 +38,7 @@
     <maven.clean.plugin>3.4.0</maven.clean.plugin>
     <maven.compiler.plugin>3.13.0</maven.compiler.plugin>
     <maven.deploy.plugin>3.1.3</maven.deploy.plugin>
-    <maven.failsafe.plugin>3.4.0</maven.failsafe.plugin>
+    <maven.failsafe.plugin>3.5.0</maven.failsafe.plugin>
     <maven.install.plugin>3.1.3</maven.install.plugin>
     <maven.jar.plugin>3.4.2</maven.jar.plugin>
     <maven.resources.plugin>3.3.1</maven.resources.plugin>
