@@ -89,7 +89,7 @@
     <activemq.artemis.client.version>2.37.0</activemq.artemis.client.version>
     <postgres.version>42.7.4</postgres.version>
     <unirest.java.version>3.14.5</unirest.java.version>
-    <junit.platform.launcher.version>1.11.0</junit.platform.launcher.version>
+    <junit.platform.launcher.version>1.11.1</junit.platform.launcher.version>
     <junit.jupiter.engine.version>5.11.0</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.11.0</junit.jupiter.params.version>
     <slf4j.simple.version>2.0.16</slf4j.simple.version>
