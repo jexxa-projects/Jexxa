@@ -105,8 +105,6 @@ class OpenAPIIT
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
 
-        System.out.println(response);
-
         var result = response
                 .get("components").getAsJsonObject()
                 .get("schemas").getAsJsonObject()
@@ -158,8 +156,6 @@ class OpenAPIIT
                 .get("components").getAsJsonObject()
                 .get("schemas").getAsJsonObject()
                 .get(JexxaRecordComparable.class.getSimpleName()).getAsJsonObject();
-
-        System.out.println(result);
 
         //Assert - Fields of basic openAPI structure
         assertNotNull(result);
@@ -228,10 +224,10 @@ class OpenAPIIT
         var firstPostResult = deepSearchKeys(openAPI, "post").stream().findFirst().orElseThrow();
 
         //Act
-        var operationID = deepSearchKeys(firstPostResult, "operationId").stream().findFirst().orElseThrow().getAsString();
-        var description = deepSearchKeys(firstPostResult, "description").stream().findFirst().orElseThrow().getAsString();
-        var summary = deepSearchKeys(firstPostResult, "summary").stream().findFirst().orElseThrow().getAsString();
-        var tags = deepSearchKeys(firstPostResult, "tags").stream().findFirst().orElseThrow().getAsJsonArray();
+        var operationID = searchEntry(firstPostResult, "operationId").stream().findFirst().orElseThrow().getAsString();
+        var description = searchEntry(firstPostResult, "description").stream().findFirst().orElseThrow().getAsString();
+        var summary = searchEntry(firstPostResult, "summary").stream().findFirst().orElseThrow().getAsString();
+        var tags = searchEntry(firstPostResult, "tags").stream().findFirst().orElseThrow().getAsJsonArray();
 
         //Assert -- POST mapping
         assertFalse(operationID.isEmpty());
@@ -255,10 +251,10 @@ class OpenAPIIT
         var firstPostResult = deepSearchKeys(openAPI, "get").stream().findFirst().orElseThrow();
 
         //Act
-        var operationID = deepSearchKeys(firstPostResult, "operationId").stream().findFirst().orElseThrow().getAsString();
-        var description = deepSearchKeys(firstPostResult, "description").stream().findFirst().orElseThrow().getAsString();
-        var summary = deepSearchKeys(firstPostResult, "summary").stream().findFirst().orElseThrow().getAsString();
-        var tags = deepSearchKeys(firstPostResult, "tags").stream().findFirst().orElseThrow().getAsJsonArray();
+        var operationID = searchEntry(firstPostResult, "operationId").stream().findFirst().orElseThrow().getAsString();
+        var description = searchEntry(firstPostResult, "description").stream().findFirst().orElseThrow().getAsString();
+        var summary = searchEntry(firstPostResult, "summary").stream().findFirst().orElseThrow().getAsString();
+        var tags = searchEntry(firstPostResult, "tags").stream().findFirst().orElseThrow().getAsJsonArray();
 
         //Assert -- POST mapping
         assertFalse(operationID.isEmpty());
@@ -287,6 +283,25 @@ class OpenAPIIT
                 deepSearchKeys( element.getValue(), key, result);
             });
         }
+    }
+
+    private List<JsonElement> searchEntry(JsonElement jsonElement, String key)
+    {
+        List<JsonElement> result = new ArrayList<>();
+        Objects.requireNonNull(jsonElement);
+
+        if ( jsonElement.isJsonObject() )
+        {
+            jsonElement
+                    .getAsJsonObject()
+                    .entrySet()
+                    .stream()
+                    .filter( entry -> entry.getKey().equals(key))
+                    .findFirst()
+                    .ifPresent(stringJsonElementEntry -> result.add(stringJsonElementEntry.getValue()));
+
+        }
+        return result;
     }
 
 }

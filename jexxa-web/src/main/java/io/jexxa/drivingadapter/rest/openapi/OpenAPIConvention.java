@@ -3,8 +3,8 @@ package io.jexxa.drivingadapter.rest.openapi;
 
 import io.smallrye.config.SmallRyeConfig;
 import io.smallrye.openapi.api.SmallRyeOpenAPI;
-import io.smallrye.openapi.api.models.parameters.RequestBodyImpl;
 import org.eclipse.microprofile.config.ConfigProvider;
+import org.eclipse.microprofile.openapi.OASFactory;
 import org.eclipse.microprofile.openapi.models.Components;
 import org.eclipse.microprofile.openapi.models.OpenAPI;
 import org.eclipse.microprofile.openapi.models.media.Schema;
@@ -177,7 +177,7 @@ public class OpenAPIConvention
             return Optional.empty();
         }
 
-        var requestBody = new RequestBodyImpl();
+        var requestBody = OASFactory.createRequestBody();
         requestBody.setRequired(true);
 
         if (method.getParameterCount()  == 1 )
@@ -196,7 +196,7 @@ public class OpenAPIConvention
             var schema = createSchema();
             for (var i = 0; i < method.getParameterTypes().length; ++i) {
                 var argSchema = createReferenceSchema(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]);
-                argSchema.setExample(createExample(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]));
+                argSchema.setExamples(createExample(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]));
                 schema.addProperty("arg"+ i, argSchema);
             }
             mediaType.setSchema(schema);
@@ -245,14 +245,14 @@ public class OpenAPIConvention
         {
             if (genericType != null ) {
                 return createSchema()
-                        .type(Schema.SchemaType.ARRAY)
+                        .type(List.of(Schema.SchemaType.ARRAY))
                         .items(createReferenceSchema(extractTypeFromCollection(clazz, genericType), null));
             }
-            return createSchema().type(Schema.SchemaType.ARRAY);
+            return createSchema().type(List.of(Schema.SchemaType.ARRAY));
         }
 
         return createSchema()
-                .type(Schema.SchemaType.OBJECT)
+                .type(List.of(Schema.SchemaType.OBJECT))
                 .ref(clazz.getSimpleName());
     }
 
@@ -271,7 +271,7 @@ public class OpenAPIConvention
                 components.addSchema(clazz.getSimpleName(), createSchemaEnum(clazz));
             } else {
                 var schema = createSchema();
-                schema.setType(Schema.SchemaType.OBJECT);
+                schema.setType(List.of(Schema.SchemaType.OBJECT));
                 Stream.of(clazz.getDeclaredFields())
                         .filter(element -> !Modifier.isStatic(element.getModifiers()))
                         .forEach(element -> schema.addProperty(element.getName(), createComponentSchema(element.getType(), element.getGenericType())));
@@ -293,16 +293,16 @@ public class OpenAPIConvention
                 createComponentSchema(extractTypeFromCollection(clazz, genericType), null);
                 var extractedType = extractTypeFromCollection(clazz, genericType);
                 if (isBaseType(extractedType)) {
-                    return createSchema().type(Schema.SchemaType.ARRAY).items(createSchemaBaseType(extractedType));
+                    return createSchema().type(List.of(Schema.SchemaType.ARRAY)).items(createSchemaBaseType(extractedType));
                 } else {
-                    return createSchema().type(Schema.SchemaType.ARRAY).ref(extractedType.getSimpleName());
+                    return createSchema().type(List.of(Schema.SchemaType.ARRAY)).ref(extractedType.getSimpleName());
                 }
             }
-            return createSchema().type(Schema.SchemaType.ARRAY);
+            return createSchema().type(List.of(Schema.SchemaType.ARRAY));
         }
 
         var schema = createSchema();
-        schema.setType(Schema.SchemaType.OBJECT);
+        schema.setType(List.of(Schema.SchemaType.OBJECT));
         Stream.of(clazz.getDeclaredFields())
             .filter(element -> !Modifier.isStatic(element.getModifiers()))
             .forEach(element -> schema.addProperty(element.getName(),
@@ -313,7 +313,7 @@ public class OpenAPIConvention
     }
 
     private Schema createSchemaEnum(Class<?> clazz) {
-        var enumSchema = createSchema().type(Schema.SchemaType.STRING);
+        var enumSchema = createSchema().type(List.of(Schema.SchemaType.STRING));
         Stream.of(clazz.getEnumConstants()).forEach( element -> enumSchema.addEnumeration(element.toString()));
         return enumSchema;
     }
@@ -322,66 +322,66 @@ public class OpenAPIConvention
     {
         if ( isInteger(clazz) )
         {
-            return createSchema().type(Schema.SchemaType.INTEGER);
+            return createSchema().type(List.of(Schema.SchemaType.INTEGER));
         }
 
         if ( isNumber(clazz) )
         {
-            return createSchema().type(Schema.SchemaType.NUMBER);
+            return createSchema().type(List.of(Schema.SchemaType.NUMBER));
         }
 
         if ( isBoolean(clazz) )
         {
-            return createSchema().type(Schema.SchemaType.BOOLEAN);
+            return createSchema().type(List.of(Schema.SchemaType.BOOLEAN));
         }
 
         if ( isString(clazz) || isJava8Date(clazz))
         {
-            return createSchema().type(Schema.SchemaType.STRING);
+            return createSchema().type(List.of(Schema.SchemaType.STRING));
         }
 
         throw new IllegalArgumentException("Given Class " + clazz.getSimpleName() + " is not a base type");
     }
 
-    private Object createExample(Class<?> clazz, Type genericType)
+    private List<Object> createExample(Class<?> clazz, Type genericType)
     {
         if ( isInteger(clazz) || isNumber(clazz))
         {
-            return 0;
+            return List.of(0);
         }
 
         if ( isBoolean(clazz) )
         {
-            return true;
+            return List.of(true);
         }
 
         if ( isString(clazz))
         {
-            return "";
+            return List.of("");
         }
         if ( isJava8Date(clazz))
         {
-            return "2022-11-13T06:08:41Z";
+            return List.of("2022-11-13T06:08:41Z");
         }
 
         if (clazz.isEnum())
         {
             if (clazz.getEnumConstants().length >0)
             {
-                return clazz.getEnumConstants()[0].toString();
+                return List.of(clazz.getEnumConstants()[0].toString());
             }
 
-            return null;
+            return Collections.emptyList();
         }
 
         if ( isCollection(clazz) && genericType != null)
         {
             var returnValue = new Object[1];
             returnValue[0] = createExample(extractTypeFromCollection(clazz, genericType), genericType);
-            return returnValue;
+            return List.of(returnValue);
         }
 
-        return null;
+        return Collections.emptyList();
     }
 
     private static boolean isInteger(Class<?> clazz)
