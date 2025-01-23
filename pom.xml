@@ -81,7 +81,7 @@
     <commons.lang3.version>3.14.0</commons.lang3.version>
     <jackson.core.version>2.17.1</jackson.core.version>
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
-    <smallrye.openapi.core.version>4.0.6</smallrye.openapi.core.version>
+    <smallrye.openapi.core.version>4.0.7</smallrye.openapi.core.version>
     <smallrye.config.core.version>3.11.1</smallrye.config.core.version>
 
 
