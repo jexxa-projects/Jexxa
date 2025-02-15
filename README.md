@@ -119,6 +119,6 @@ Please make sure to update tests as appropriate.
 
 ## Copyright and license
 
-Code and documentation copyright 2020–2024 Michael Repplinger.
+Code and documentation copyright 2020–2025 Michael Repplinger.
 Code released under the [Apache 2.0 License](LICENSE)(see [TLDR legal](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0)) for details).
 Docs released under [Creative Commons](https://creativecommons.org/licenses/by/4.0/).
