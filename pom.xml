@@ -93,7 +93,7 @@
     <junit.jupiter.engine.version>5.11.4</junit.jupiter.engine.version>
     <junit.jupiter.params.version>5.11.4</junit.jupiter.params.version>
     <slf4j.simple.version>2.0.16</slf4j.simple.version>
-    <awaitility.version>4.2.2</awaitility.version>
+    <awaitility.version>4.3.0</awaitility.version>
     <archunit.version>1.4.0</archunit.version>
     <addend.version>2.0.2</addend.version>
 
