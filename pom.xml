@@ -77,7 +77,7 @@
     <jexxa.common.adapters.version>2.1.4</jexxa.common.adapters.version>
     <javalin.version>6.5.0</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
-    <gson.version>2.12.1</gson.version>
+    <gson.version>2.13.0</gson.version>
     <commons.lang3.version>3.14.0</commons.lang3.version>
     <jackson.core.version>2.17.1</jackson.core.version>
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
