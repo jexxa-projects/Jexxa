@@ -94,7 +94,7 @@
     <junit.jupiter.params.version>5.12.2</junit.jupiter.params.version>
     <slf4j.simple.version>2.0.17</slf4j.simple.version>
     <awaitility.version>4.3.0</awaitility.version>
-    <archunit.version>1.4.0</archunit.version>
+    <archunit.version>1.4.1</archunit.version>
     <addend.version>2.0.2</addend.version>
 
   </properties>
