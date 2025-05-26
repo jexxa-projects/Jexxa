@@ -52,6 +52,7 @@
     <maven.templating.plugin>3.0.0</maven.templating.plugin>
     <maven.versions.plugin>2.18.0</maven.versions.plugin>
     <project.scm.id>github-Jexxa</project.scm.id>
+    <maven.central.publishing.plugin>0.7.0</maven.central.publishing.plugin>
 
     <!--information for filtered sources  -->
     <build.timestamp>${maven.build.timestamp}</build.timestamp>
@@ -352,6 +353,16 @@
           </nonFilteredFileExtensions>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <version>${maven.central.publishing.plugin}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <publishingServerId>central</publishingServerId>
+          <autoPublish>true</autoPublish>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -515,21 +526,6 @@
       </build>
     </profile>
   </profiles>
-
-  <distributionManagement>
-    <snapshotRepository>
-      <id>oss.sonatype.org</id>
-      <name>Jexxa snapshot</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-      <uniqueVersion>true</uniqueVersion>
-    </snapshotRepository>
-    <repository>
-      <id>oss.sonatype.org</id>
-      <name>Jexxa Maven Packages</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-      <uniqueVersion>true</uniqueVersion>
-    </repository>
-  </distributionManagement>
 
   <modules>
     <module>jexxa-core</module>
