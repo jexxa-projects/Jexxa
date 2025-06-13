@@ -83,7 +83,7 @@
     <jackson.core.version>2.17.1</jackson.core.version>
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
     <smallrye.openapi.core.version>4.1.1</smallrye.openapi.core.version>
-    <smallrye.config.core.version>3.13.1</smallrye.config.core.version>
+    <smallrye.config.core.version>3.13.2</smallrye.config.core.version>
 
 
     <!-- version of test dependencies -->
