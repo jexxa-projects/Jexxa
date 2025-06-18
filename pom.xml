@@ -52,7 +52,7 @@
     <maven.templating.plugin>3.0.0</maven.templating.plugin>
     <maven.versions.plugin>2.18.0</maven.versions.plugin>
     <project.scm.id>github-Jexxa</project.scm.id>
-    <maven.central.publishing.plugin>0.7.0</maven.central.publishing.plugin>
+    <maven.central.publishing.plugin>0.8.0</maven.central.publishing.plugin>
 
     <!--information for filtered sources  -->
     <build.timestamp>${maven.build.timestamp}</build.timestamp>
