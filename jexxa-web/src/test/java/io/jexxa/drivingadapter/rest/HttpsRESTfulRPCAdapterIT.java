@@ -31,9 +31,9 @@ class HttpsRESTfulRPCAdapterIT
     private final SimpleApplicationService simpleApplicationService = new SimpleApplicationService();
 
     @SuppressWarnings("unused")
-    // Run the tests with Port 0 (random port and port 8080)
+    // Run the tests with Port 0 (random port and port 8090)
     static Stream<Integer> httpsPorts() {
-        return Stream.of(0,8081);
+        return Stream.of(0,8090);
     }
 
     @BeforeEach
