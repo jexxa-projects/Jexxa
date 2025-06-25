@@ -5,7 +5,7 @@
   <parent>
     <artifactId>jexxa</artifactId>
     <groupId>io.jexxa</groupId>
-    <version>8.1.11</version>
+    <version>8.1.12-SNAPSHOT</version>
   </parent>
 
   <artifactId>jexxa-web</artifactId>
