@@ -34,7 +34,7 @@
 
   <properties>
     <!--version of  maven plugins  -->
-    <gpg.plugin.version>3.2.7</gpg.plugin.version>
+    <gpg.plugin.version>3.2.8</gpg.plugin.version>
     <maven.clean.plugin>3.5.0</maven.clean.plugin>
     <maven.compiler.plugin>3.14.0</maven.compiler.plugin>
     <maven.deploy.plugin>3.1.4</maven.deploy.plugin>
