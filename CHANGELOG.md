@@ -4,9 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[8.1.14] - 2025-07-13
+### Fixed
+- JexxaTest: Yet another fix so that registered test-specific stubs are now correctly reset in previous and succeeding tests
+
 ## \[8.1.13] - 2025-07-13
 ### Fixed
-- JexxaTest: Registered test-specific stubs are now correctly reset in all cases 
+- JexxaTest: Registered test-specific stubs are now correctly reset in succeeding tests
 
 ## \[8.1.12] - 2025-07-13
 ### Fixed
