@@ -182,6 +182,12 @@ public final class JexxaMain
         return new DrivingAdapter<>(clazz, this);
     }
 
+    public void clearObjectPools()
+    {
+        drivenAdapterFactory.clear();
+        drivenAdapterFactory.clear();
+    }
+
     @CheckReturnValue
     public <T> FluentInterceptor intercept(Class<T> clazz)
     {

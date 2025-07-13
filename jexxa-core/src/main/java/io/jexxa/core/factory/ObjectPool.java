@@ -21,4 +21,9 @@ class ObjectPool
                 .map(clazz::cast);
     }
 
+    void clear()
+    {
+        objectSet.clear();
+    }
+
 }

@@ -9,6 +9,7 @@ import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorder;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorderManager;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -34,7 +35,6 @@ public class JexxaTest
     public static final String JEXXA_TEST_PROPERTIES = "/jexxa-test.properties";
 
     private static JexxaMain jexxaMain;
-    private static boolean reinitJexxaMain = false;
 
     private JexxaTest()
     {
@@ -45,7 +45,7 @@ public class JexxaTest
 
     public static synchronized <T> JexxaTest getJexxaTest(Class<T> jexxaApplication)
     {
-        if (jexxaMain == null || reinitJexxaMain) {
+        if (jexxaMain == null ) {
             jexxaMain = new JexxaMain(jexxaApplication);
         }
         return new JexxaTest();
@@ -83,9 +83,17 @@ public class JexxaTest
     @SuppressWarnings({"unused","java:S2696"} )
     public <T> void registerStub(Class<T> outboundPort)
     {
+        jexxaMain.clearObjectPools();
         jexxaMain.registerDrivenAdapter(outboundPort);
-        reinitJexxaMain = true;
     }
+
+    @SuppressWarnings({"unused","java:S2696"} )
+    public <T> void registerStubs(List<Class<T>> outboundPorts)
+    {
+        jexxaMain.clearObjectPools();
+        outboundPorts.forEach(jexxaMain::registerDrivenAdapter);
+    }
+
 
     @CheckReturnValue
     public Properties getProperties()

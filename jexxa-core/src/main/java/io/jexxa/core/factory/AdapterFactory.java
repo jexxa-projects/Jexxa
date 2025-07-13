@@ -151,4 +151,9 @@ public class AdapterFactory
         return Optional.of(implementationList.get(0));
     }
 
+    public void clear()
+    {
+        objectPool.clear();
+    }
+
 }
