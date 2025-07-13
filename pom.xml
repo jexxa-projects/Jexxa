@@ -5,7 +5,7 @@
 
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa</artifactId>
-  <version>8.1.12</version>
+  <version>8.1.13-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <!-- Project Information -->
@@ -29,7 +29,7 @@
     <connection>scm:git:https://github.com/jexxa-projects/Jexxa.git</connection>
     <url>https://github.com/jexxa-projects/Jexxa</url>
     <developerConnection>scm:git:https://github.com/jexxa-projects/Jexxa.git</developerConnection>
-    <tag>jexxa-8.1.12</tag>
+    <tag>jexxa-8.0.1</tag>
   </scm>
 
   <properties>
