@@ -185,7 +185,8 @@ public final class JexxaMain
     public void clearObjectPools()
     {
         drivenAdapterFactory.clear();
-        drivenAdapterFactory.clear();
+        drivingAdapterFactory.clear();
+        portFactory.clear();
     }
 
     @CheckReturnValue

@@ -35,6 +35,7 @@ public class JexxaTest
     public static final String JEXXA_TEST_PROPERTIES = "/jexxa-test.properties";
 
     private static JexxaMain jexxaMain;
+    private static boolean reinitJexxaMain = false;
 
     private JexxaTest()
     {
@@ -45,7 +46,7 @@ public class JexxaTest
 
     public static synchronized <T> JexxaTest getJexxaTest(Class<T> jexxaApplication)
     {
-        if (jexxaMain == null ) {
+        if (jexxaMain == null || reinitJexxaMain) {
             jexxaMain = new JexxaMain(jexxaApplication);
         }
         return new JexxaTest();
@@ -85,6 +86,7 @@ public class JexxaTest
     {
         jexxaMain.clearObjectPools();
         jexxaMain.registerDrivenAdapter(outboundPort);
+        reinitJexxaMain = true;
     }
 
     @SuppressWarnings({"unused","java:S2696"} )
@@ -92,6 +94,7 @@ public class JexxaTest
     {
         jexxaMain.clearObjectPools();
         outboundPorts.forEach(jexxaMain::registerDrivenAdapter);
+        reinitJexxaMain = true;
     }
 
 

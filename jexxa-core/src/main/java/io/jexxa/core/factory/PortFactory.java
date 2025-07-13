@@ -145,6 +145,13 @@ public class PortFactory
             throw new InvalidPortConfigurationException(portAdapter, e);
         }
     }
+
+    public void clear()
+    {
+        objectPool.clear();
+        portAdapterPool.clear();
+    }
+
     public <T> T getPortAdapterOf(Class<T> portAdapter, Properties properties)
     {
         var existingInstance = portAdapterPool.getInstance(portAdapter);
