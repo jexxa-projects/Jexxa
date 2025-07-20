@@ -5,91 +5,66 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b6c1680824ef4ac5914c40073242dc86)](https://www.codacy.com/gh/repplix/Jexxa/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=repplix/Jexxa&amp;utm_campaign=Badge_Grade)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jexxa-projects_Jexxa&metric=alert_status)](https://sonarcloud.io/summary/overall?id=jexxa-projects_Jexxa)
  [![Java 17 LTS CI](https://github.com/jexxa-projects/Jexxa/actions/workflows/maven.yml/badge.svg)](https://github.com/jexxa-projects/Jexxa/actions/workflows/maven.yml)
- 
-# Jexxa—A Ports and Adapters Framework for Java
-Jexxa is a lightweight framework to simplify the implementation of durable business applications using Domain Driven Design. It is no general purpose framework such as Spring. Instead, it focuses on the separation of your bounded contexts using microservices with a *ports and adapters* (aka _hexagonal_) architecture. 
-
-Jexxa stresses the following aspects in particular:
-
-*   **Technology-agnostic**: The framework is designed to avoid technology-specific dependencies in your domain core. See [here](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_ioc_without_annotations) for more information.
-*   **Visible flow of control**: Simplified navigation through your business application. Checkout [this tutorial](https://github.com/jexxa-projects/JexxaTutorials/blob/main/TimeService/README-FlowOfControl.md) for more information.
-*   **Aligned team development**: The framework is tailored to the _needs and development of teams_ developing business applications. See [Jexxa's General Design Decisions](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html#_general_design_decisions) for more information. 
-
-In addition, Jexxa offers the following production-proven features:    
-
-*   Integrated driving and driven adapters: RMI over REST, JMS, JDBC, in memory DB (IMDB).
-*   Integrated resilient microservice patterns such as transactional outbox. 
-*   Integrated architectural tests to validate ports and adapters rules, pattern consistency, and pattern language.
 
 
-## General information
+# 🧩 Jexxa — A Ports & Adapters Framework for Java
 
-*   Supported Java environments: ![Java](https://img.shields.io/badge/JDK-Java17+-blue.svg)
+**Jexxa** is a lightweight, opinionated framework to build durable, modular, and testable business applications using **Domain-Driven Design** and **Hexagonal Architecture** (Ports & Adapters).
 
-*   Ecosystem: 
-    *   [Tutorials](https://github.com/jexxa-projects/JexxaTutorials) show typical use cases
-    *   [A template](https://github.com/jexxa-projects/JexxaArchetypes) for your first Jexxa application
-    *   [Reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html) when you develop with Jexxa
-    *   [Architecture of Jexxa](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html) to get a deep insight into Jexxa
-    *   [Build Jexxa](docs/BUILD.md) in case you want to contribute 
+> ⚠️ Jexxa is not a general-purpose framework like Spring — it’s focused solely on the business layer and clear system boundaries.
 
-*   Related Projects
-    *   [Addend - Annotations for Domain Driven Design](https://github.com/jexxa-projects/Addend)
-    *   [JLegMed - Connect the Past with the Future](https://github.com/jexxa-projects/JLegMed)
-## Built With
 
-Apart from some other great open source libraries, Jexxa mainly utilises the following libraries and frameworks:
+## 🚀 Key Features
 
-*   [ClassGraph](https://github.com/classgraph/classgraph)
-*   [javalin](http://javalin.io/)
+- **Technology-Agnostic Core** — Clean separation of domain logic and infrastructure
+- **Visible Control Flow** — Clear orchestration of application logic
+- **Team-Friendly Design** — Scales well with cross-functional DDD teams
+- **Built-In Adapters** — REST (RMI-style), JMS, JDBC, in-memory DB
+- **Resilient Microservice Patterns** — Includes transactional outbox & architecture validation
 
-## Quickstart
+➡️ [Explore the Architecture](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html)
+## 📋 Requirements
 
-### Start programming 
+- Java **17 or higher**
+- Maven-compatible IDE (e.g., IntelliJ IDEA, Eclipse)
 
-Below, you see a simple ``Hello World`` example that is described in detail [here](https://github.com/jexxa-projects/JexxaTutorials/tree/main/HelloJexxa):  
+## 🛠️ Quickstart
 
-```java     
-public final class HelloJexxa
-{
-    // Our business logic ;-)
-    public String greetings()                 { return "Hello Jexxa"; }
+### Hello World Example
 
-    public static void main(String[] args)    {
-        //Create your jexxaMain for this application
+```java
+public final class HelloJexxa {
+    public String greetings() {
+        return "Hello Jexxa";
+    }
+
+    public static void main(String[] args) {
         var jexxaMain = new JexxaMain(HelloJexxa.class);
 
         jexxaMain
-                // Bind a REST adapter to expose parts of the application
-                // Get greetings: http://localhost:7501/HelloJexxa/greetings
-                .bind(RESTfulRPCAdapter.class).to(HelloJexxa.class)  
-                  
-                // Run Jexxa and all bindings until Ctrl-C is pressed
-                .run();
+            .bind(RESTfulRPCAdapter.class).to(HelloJexxa.class)
+            .run();
     }
 }
-```    
+```
+* Access endpoint: http://localhost:7501/HelloJexxa/greetings
+* See full example: [HelloJexxa Tutorial](ttps://github.com/jexxa-projects/JexxaTutorials/tree/main/HelloJexxa):
+
 
 ### Add Dependencies
-Whenever possible, Jexxa is developed against standard APIs. This allows a business application to use the preferred
-technology stacks. Therefore, our `HelloJexxa` application needs two dependencies: `jexxa-web` and a logger that fulfills
-your requirements, such as `slf4j-simple`. 
 
-Maven:
+Maven
 ```xml
-<dependencies>
-    <dependency>
-       <groupId>io.jexxa</groupId>
-       <artifactId>jexxa-web</artifactId>
-       <version>8.1.14</version>
-    </dependency>
-    
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>2.0.17</version>
-    </dependency>
-</dependencies>
+<dependency>
+    <groupId>io.jexxa</groupId>
+    <artifactId>jexxa-web</artifactId>
+    <version>8.1.14</version>
+</dependency>
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-simple</artifactId>
+    <version>2.0.17</version>
+</dependency>
 ```
 
 Gradle:
@@ -98,27 +73,40 @@ Gradle:
 compile "io.jexxa:jexxa-web:8.1.14"
 compile "org.slf4j:slf4j-simple:2.0.17"
 ``` 
+## ⚙️ Configuration
+Jexxa expects the following configuration file in the classpath:
 
-### Configure your Jexxa application  
+* View [example configuration](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties).
+* [Configuration Reference](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_application_configuration).
 
-By default, a Jexxa application looks for the following properties file.
-For more information, please refer to the 
-[reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_application_configuration). 
 
-```maven
-resources/jexxa-application.properties
-```                                   
+## 📚 Ecosystem & Docs
+*   [Jexxa-Tutorials](https://github.com/jexxa-projects/JexxaTutorials) — Sample projects and usage patterns
+*   [JexxaArchetypes](https://github.com/jexxa-projects/JexxaArchetypes) — Maven archetypes for quick start
+*   [Reference guide](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html)
+*   [Architecture Overview](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html)
+*   [Build Instructions](docs/BUILD.md)
 
-Available properties are described [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties).
+## 🧩 Related Projects
 
-## Contributing
+* [Addend — Domain annotations for DDD](https://github.com/jexxa-projects/Addend)
+* [JLegMed — Semantic bridging of legacy and modern systems](https://github.com/jexxa-projects/JLegMed)
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-Please make sure to update tests as appropriate.
+## 🔨 Built With
+*   [ClassGraph](https://github.com/classgraph/classgraph)
+*   [javalin](http://javalin.io/)
 
-## Copyright and license
+## 🤝 Contributing
 
-Code and documentation copyright 2020–2025 Michael Repplinger.
-Code released under the [Apache 2.0 License](LICENSE)(see [TLDR legal](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0)) for details).
-Docs released under [Creative Commons](https://creativecommons.org/licenses/by/4.0/).
+We ❤️ contributions!
+
+If you want to propose changes or features:
+* Open an issue to start a discussion
+* Submit a PR with tests and updated documentation
+* Questions or suggestions? Open an issue or start a GitHub Discussion
+
+## 📜 License
+* Source code: [Apache 2.0 License](LICENSE) - see [TLDR legal](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))
+* Documentation: [Creative Commons](https://creativecommons.org/licenses/by/4.0/)
+* ©️ 2020–2025 Michael Repplinger
