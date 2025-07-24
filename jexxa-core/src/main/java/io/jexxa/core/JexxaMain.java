@@ -4,6 +4,7 @@ import io.jexxa.adapterapi.JexxaContext;
 import io.jexxa.adapterapi.drivingadapter.HealthCheck;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
+import io.jexxa.common.facade.jdbc.JDBCConnectionPool;
 import io.jexxa.common.facade.logger.ApplicationBanner;
 import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
 import io.jexxa.common.facade.utils.function.ThrowingConsumer;
@@ -35,7 +36,7 @@ import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
  * JexxaMain is the main entry point for your application to use Jexxa. Within each application only a single instance
  * of this class must exist.
  * <p>
- * In order to control your application (start / shutdown) from within your application and also from outside
+ * To control your application (start / shutdown) from within your application and also from outside,
  * JexxaMain provides a so called {@link BoundedContext}.
  * <p>
  * To see how to use this class, please refer to the tutorials.
@@ -62,7 +63,7 @@ public final class JexxaMain
     private boolean enableBanner = true;
 
     /**
-     * Creates the JexxaMain instance for your application with given context name.
+     * Creates the JexxaMain instance for your application with the given context name.
      * In addition, the properties file jexxa-application.properties is loaded if available in a class path.
      * <p>
      * Note: When a driving or driven adapter is created, it gets the properties read from the properties file.
@@ -74,11 +75,11 @@ public final class JexxaMain
         this(context, System.getProperties());
     }
     /**
-     * Creates the JexxaMain instance for your application with given context name.
+     * Creates the JexxaMain instance for your application with the given context name.
      * <p>
      * Note: The file jexxa-application.properties is loaded if available in a class path. Then the
      * properties are extended by the given properties object. So if you define the same properties in
-     * jexxa-application.properties and the given properties object, the one from properties-object is used.
+     * jexxa-application.properties and the given properties object, the one from the properties-object is used.
      *
      * @param context Type of the BoundedContext. Typically, you should use the name of your application.
      * @param applicationProperties Properties that are defined by your application.
@@ -88,6 +89,9 @@ public final class JexxaMain
         Objects.requireNonNull(applicationProperties);
         Objects.requireNonNull(context);
         JexxaContext.init();
+
+        //We enable connection sharing since Jexxa allows only a single thread in the backend
+        JDBCConnectionPool.enableConnectionSharing();
 
         // Handle properties in the following order:
         // 0. Add default JEXXA_CONTEXT_MAIN
@@ -266,7 +270,7 @@ public final class JexxaMain
      *
      * @param port Class information of the port. In the case of an interface, Jexxa tries to create an outbound port otherwise an inbound port
      * @param <T> Type of the port.
-     * @return Instance of requested port. If an instance already exists, it is returned; otherwise a new one is created.
+     * @return Instance of the requested port. If an instance already exists, it is returned; otherwise a new one is created.
      */
     @CheckReturnValue
     public <T> T getInstanceOfPort(Class<T> port)
@@ -385,7 +389,7 @@ public final class JexxaMain
     }
 
     /**
-     * Registers a driven adapter to be used as inbound port if its interface is requested.
+     * Registers a driven adapter to be used as an inbound port if its interface is requested.
      * <p>
      * Note: This method is typically only required if you need to define the created instances explicitly,
      * such as defining stubs in unit tests.
@@ -493,7 +497,7 @@ public final class JexxaMain
 
     /**
      * CompositeDrivingAdapter starts all registered IDrivingAdapter
-     * In case of a failure starting a single IDrivingAdapter all registered and already started IDrivingAdapter are stopped
+     * In case of a failure, all registered and already started IDrivingAdapter are stopped
      */
     static class CompositeDrivingAdapter implements IDrivingAdapter
     {
