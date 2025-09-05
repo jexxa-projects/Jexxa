@@ -50,7 +50,7 @@
     <maven.enforcer.plugin>3.6.1</maven.enforcer.plugin>
     <maven.javadoc.plugin>3.11.3</maven.javadoc.plugin>
     <maven.templating.plugin>3.0.0</maven.templating.plugin>
-    <maven.versions.plugin>2.18.0</maven.versions.plugin>
+    <maven.versions.plugin>2.19.0</maven.versions.plugin>
     <project.scm.id>github-Jexxa</project.scm.id>
     <maven.central.publishing.plugin>0.8.0</maven.central.publishing.plugin>
 
