@@ -3,6 +3,7 @@ package io.jexxa.properties;
 import io.jexxa.common.drivenadapter.outbox.TransactionalOutboxProperties;
 import io.jexxa.common.facade.jdbc.JDBCProperties;
 import io.jexxa.common.facade.jms.JMSProperties;
+import io.jexxa.common.facade.s3.S3Properties;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,6 +30,7 @@ public class PropertiesLoader {
         JDBCProperties.prefix(JEXXA_PREFIX);
         JMSProperties.prefix(JEXXA_PREFIX);
         TransactionalOutboxProperties.prefix(JEXXA_PREFIX);
+        S3Properties.prefix(JEXXA_PREFIX);
 
     }
 
