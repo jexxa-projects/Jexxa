@@ -19,7 +19,7 @@
 - **Technology-Agnostic Core** — Clean separation of domain logic and infrastructure
 - **Visible Control Flow** — Clear orchestration of application logic
 - **Team-Friendly Design** — Scales well with cross-functional DDD teams
-- **Built-In Adapters** — REST (RMI-style), JMS, JDBC, in-memory DB
+- **Built-In Adapters** — REST (RMI-style), JMS, JDBC, in-memory DB, S3-Storage
 - **Resilient Microservice Patterns** — Includes transactional outbox & architecture validation
 
 ➡️ [Explore the Architecture](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html)
@@ -38,7 +38,7 @@ public final class HelloJexxa {
         return "Hello Jexxa";
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         var jexxaMain = new JexxaMain(HelloJexxa.class);
 
         jexxaMain
@@ -58,7 +58,7 @@ Maven
 <dependency>
     <groupId>io.jexxa</groupId>
     <artifactId>jexxa-web</artifactId>
-    <version>8.1.15</version>
+    <version>8.2.0</version>
 </dependency>
 <dependency>
     <groupId>org.slf4j</groupId>
@@ -70,7 +70,7 @@ Maven
 Gradle:
 
 ```groovy
-compile "io.jexxa:jexxa-web:8.1.15"
+compile "io.jexxa:jexxa-web:8.2.0"
 compile "org.slf4j:slf4j-simple:2.0.17"
 ``` 
 ## ⚙️ Configuration
