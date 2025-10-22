@@ -4,7 +4,6 @@ import io.jexxa.common.drivenadapter.persistence.objectstore.imdb.IMDBObjectStor
 import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTag;
 import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetadataSchema;
 import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
-import io.jexxa.common.facade.jms.JMSProperties;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.domain.model.JexxaAggregate;
@@ -19,13 +18,18 @@ import static io.jexxa.common.drivenadapter.messaging.MessageSenderFactory.creat
 import static io.jexxa.common.drivenadapter.persistence.ObjectStoreFactory.createObjectStore;
 import static io.jexxa.common.drivenadapter.persistence.RepositoryFactory.createRepository;
 import static io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTags.numericTag;
+import static io.jexxa.common.facade.jdbc.JDBCProperties.jdbcAutocreateDatabase;
+import static io.jexxa.common.facade.jdbc.JDBCProperties.jdbcAutocreateTable;
+import static io.jexxa.common.facade.jdbc.JDBCProperties.jdbcDriver;
+import static io.jexxa.common.facade.jdbc.JDBCProperties.jdbcPassword;
+import static io.jexxa.common.facade.jdbc.JDBCProperties.jdbcUrl;
+import static io.jexxa.common.facade.jdbc.JDBCProperties.jdbcUsername;
+import static io.jexxa.common.facade.jms.JMSProperties.jndiFactoryKey;
+import static io.jexxa.common.facade.jms.JMSProperties.jndiPasswordKey;
+import static io.jexxa.common.facade.jms.JMSProperties.jndiProviderUrlKey;
+import static io.jexxa.common.facade.jms.JMSProperties.jndiUserKey;
 import static io.jexxa.jexxatest.JexxaTest.getJexxaTest;
-import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_DATABASE;
-import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_AUTOCREATE_TABLE;
-import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_DRIVER;
-import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_PASSWORD;
-import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_URL;
-import static io.jexxa.properties.JexxaJDBCProperties.JEXXA_JDBC_USERNAME;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class JexxaTestConfigTest
@@ -114,22 +118,22 @@ class JexxaTestConfigTest
 
     private static Properties getPostgresProperties() {
         var postgresProperties = new Properties();
-        postgresProperties.put(JEXXA_JDBC_DRIVER, "org.postgresql.Driver");
-        postgresProperties.put(JEXXA_JDBC_PASSWORD, ADMIN);
-        postgresProperties.put(JEXXA_JDBC_USERNAME, POSTGRES_USER);
-        postgresProperties.put(JEXXA_JDBC_URL, "jdbc:postgresql://localhost:5432/objectstore");
-        postgresProperties.put(JEXXA_JDBC_AUTOCREATE_TABLE, "true");
-        postgresProperties.put(JEXXA_JDBC_AUTOCREATE_DATABASE, "jdbc:postgresql://localhost:5432/postgres");
+        postgresProperties.put(jdbcDriver(), "org.postgresql.Driver");
+        postgresProperties.put(jdbcPassword(), ADMIN);
+        postgresProperties.put(jdbcUsername(), POSTGRES_USER);
+        postgresProperties.put(jdbcUrl(), "jdbc:postgresql://localhost:5432/objectstore");
+        postgresProperties.put(jdbcAutocreateTable(), "true");
+        postgresProperties.put(jdbcAutocreateDatabase(), "jdbc:postgresql://localhost:5432/postgres");
         return postgresProperties;
     }
 
     private static Properties getH2Properties() {
         var h2Properties = new Properties();
-        h2Properties.put(JEXXA_JDBC_DRIVER, "org.h2.Driver");
-        h2Properties.put(JEXXA_JDBC_PASSWORD, ADMIN);
-        h2Properties.put(JEXXA_JDBC_USERNAME, ADMIN);
-        h2Properties.put(JEXXA_JDBC_URL, "jdbc:h2:mem:ComparableRepositoryTest;DB_CLOSE_DELAY=-1");
-        h2Properties.put(JEXXA_JDBC_AUTOCREATE_TABLE, "true");
+        h2Properties.put(jdbcDriver(), "org.h2.Driver");
+        h2Properties.put(jdbcPassword(), ADMIN);
+        h2Properties.put(jdbcUsername(), ADMIN);
+        h2Properties.put(jdbcUrl(), "jdbc:h2:mem:ComparableRepositoryTest;DB_CLOSE_DELAY=-1");
+        h2Properties.put(jdbcAutocreateTable(), "true");
         return h2Properties;
     }
 
@@ -137,10 +141,10 @@ class JexxaTestConfigTest
     private static Stream<Properties> messageSenderConfig() {
         var jmsProperties = new Properties();
 
-        jmsProperties.put(JMSProperties.JNDI_FACTORY_KEY, "org.apache.activemq.jndi.ActiveMQInitialContextFactory");
-        jmsProperties.put(JMSProperties.JNDI_PROVIDER_URL_KEY, "tcp://localhost:61616");
-        jmsProperties.put(JMSProperties.JNDI_PASSWORD_KEY, ADMIN);
-        jmsProperties.put(JMSProperties.JNDI_USER_KEY, ADMIN);
+        jmsProperties.put(jndiFactoryKey(), "org.apache.activemq.jndi.ActiveMQInitialContextFactory");
+        jmsProperties.put(jndiProviderUrlKey(), "tcp://localhost:61616");
+        jmsProperties.put(jndiPasswordKey(), ADMIN);
+        jmsProperties.put(jndiUserKey(), ADMIN);
 
 
         return Stream.of(new Properties(), jmsProperties);

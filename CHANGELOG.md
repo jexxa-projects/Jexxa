@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[9.0.0] - 2025-10-18
+### Changed
+- Only support for Java >= 25 
+- All properties (including for JMS) must start with `io.jexxa.`
+
+
+
 ## \[8.2.0] - 2025-10-18
 ### Added
 - Repository and object store now support S3-storage (introduced with the update to common-adapters 2.6.0)
