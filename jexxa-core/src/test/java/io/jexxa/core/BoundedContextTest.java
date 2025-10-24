@@ -64,7 +64,7 @@ class BoundedContextTest
         //Assert
         assertTrue(objectUnderTest.isHealthy());
         assertEquals(1, objectUnderTest.diagnostics().size());
-        assertTrue(objectUnderTest.diagnostics().get(0).isHealthy());
+        assertTrue(objectUnderTest.diagnostics().getFirst().isHealthy());
     }
 
     @Test

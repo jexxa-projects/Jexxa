@@ -46,7 +46,7 @@ public class JMSListener extends JSONMessageListener implements MessageListener 
             return null;
         }
 
-        return fromJson( messageList.remove(0), clazz);
+        return fromJson( messageList.removeFirst(), clazz);
     }
 
     @Override
