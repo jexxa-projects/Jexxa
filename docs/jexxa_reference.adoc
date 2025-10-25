@@ -366,7 +366,7 @@ To describe the mapping of the port adapter within Jexxa, we recommend using Jav
 
 === JMSAdapter
 
-When implementing a port adapter for `JMSAdapter`, you have to implement the `MessageListener` interface of JMS and annotate the class with `@JMSConfiguration`.
+When implementing a port adapter for `JMSAdapter`, you have to implement the `Listener` interface of JMS and annotate the class with `@JMSConfiguration`.
 
 Here you have to provide the following information:
 

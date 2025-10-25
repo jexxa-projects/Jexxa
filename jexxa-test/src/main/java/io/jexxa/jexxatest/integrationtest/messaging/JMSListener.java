@@ -3,6 +3,7 @@ package io.jexxa.jexxatest.integrationtest.messaging;
 import io.jexxa.common.drivingadapter.messaging.jms.DefaultJMSConfiguration;
 import io.jexxa.common.drivingadapter.messaging.jms.JMSConfiguration;
 import io.jexxa.common.drivingadapter.messaging.jms.listener.JSONMessageListener;
+import io.jexxa.jexxatest.integrationtest.Listener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.await;
 
-public class JMSListener extends JSONMessageListener implements MessageListener  {
+public class JMSListener extends JSONMessageListener implements Listener {
     private final List<String> messageList = new ArrayList<>();
     private final String topicDestination;
     private final JMSConfiguration.MessagingType messagingType;
