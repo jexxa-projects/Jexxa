@@ -5,13 +5,14 @@ import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
 import io.jexxa.common.facade.utils.function.ThrowingConsumer;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorder;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorderManager;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static io.jexxa.common.drivenadapter.messaging.MessageSenderFactory.setDefaultMessageSender;
 import static io.jexxa.common.drivenadapter.outbox.TransactionalOutboxProperties.outboxTable;
@@ -69,12 +70,23 @@ public class JexxaTest
         return jexxaMain.getInstanceOfPort(inboundPort);
     }
 
+
     @CheckReturnValue
-    public <T> MessageRecorder getMessageRecorder(Class<T> outboundPort)
+    public <T> DomainEventRecorder<T> getDomainEventRecorder(Class<T> domainEventClass, BiConsumer<Class<T>, Consumer<T>> subscription)
     {
-        var realImplementation = jexxaMain.getInstanceOfPort(outboundPort);
-        return  MessageRecorderManager.getMessageRecorder(realImplementation.getClass());
+        var domainEventRecorder = new DomainEventRecorder<T>();
+        subscription.accept(domainEventClass, domainEventRecorder::receive);
+        return  domainEventRecorder;
     }
+
+    @CheckReturnValue
+    public DomainEventRecorder<Object> getDomainEventRecorder(Consumer<Consumer<Object>> subscription)
+    {
+        var domainEventRecorder = new DomainEventRecorder<Object>();
+        subscription.accept(domainEventRecorder::receive);
+        return  domainEventRecorder;
+    }
+
 
     public JexxaMain getJexxaMain()
     {
