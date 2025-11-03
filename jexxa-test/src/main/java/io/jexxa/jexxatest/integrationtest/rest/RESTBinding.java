@@ -22,11 +22,11 @@ public class RESTBinding implements AutoCloseable
     {
         Unirest.config().setObjectMapper(new UnirestObjectMapper());
         this.properties = properties;
-
+        var boundedContext = new BoundedContextHandler(properties, BoundedContext.class);
         await().atMost(10, TimeUnit.SECONDS)
                 .pollDelay(100, TimeUnit.MILLISECONDS)
                 .ignoreException(UnirestException.class)
-                .until(() -> getBoundedContext().isRunning());
+                .until(boundedContext::isRunning);
     }
 
     public RESTHandler getRESTHandler(Class<?> endpoint)
