@@ -82,7 +82,7 @@ public class JexxaTest
     @CheckReturnValue
     public DomainEventRecorder<Object> getDomainEventRecorder(Consumer<Consumer<Object>> subscription)
     {
-        var domainEventRecorder = new DomainEventRecorder<Object>();
+        var domainEventRecorder = new DomainEventRecorder<>();
         subscription.accept(domainEventRecorder::receive);
         return  domainEventRecorder;
     }
