@@ -5,18 +5,28 @@ import io.jexxa.core.BoundedContext;
 import kong.unirest.GenericType;
 import kong.unirest.ObjectMapper;
 import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
 
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
-public class RESTBinding
+import static org.awaitility.Awaitility.await;
+
+public class RESTBinding implements AutoCloseable
 {
 
     private final Properties properties;
 
-    public RESTBinding(Properties properties)
+    @SuppressWarnings("java:S1172")
+    public RESTBinding(Class<?> ignoredApplication, Properties properties)
     {
         Unirest.config().setObjectMapper(new UnirestObjectMapper());
         this.properties = properties;
+
+        await().atMost(10, TimeUnit.SECONDS)
+                .pollDelay(100, TimeUnit.MILLISECONDS)
+                .ignoreException(UnirestException.class)
+                .until(() -> getBoundedContext().isRunning());
     }
 
     public RESTHandler getRESTHandler(Class<?> endpoint)
@@ -27,6 +37,11 @@ public class RESTBinding
     public BoundedContextHandler getBoundedContext()
     {
         return new BoundedContextHandler(properties, BoundedContext.class);
+    }
+
+    @Override
+    public void close()   {
+        // Nothing to implement here
     }
 
     private static class UnirestObjectMapper implements ObjectMapper

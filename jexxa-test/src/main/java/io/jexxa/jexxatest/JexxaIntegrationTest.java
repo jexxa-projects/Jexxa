@@ -1,28 +1,22 @@
 package io.jexxa.jexxatest;
 
+import io.jexxa.common.facade.logger.SLF4jLogger;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.jexxatest.integrationtest.messaging.JMSBinding;
-import io.jexxa.jexxatest.integrationtest.rest.RESTBinding;
 import kong.unirest.Unirest;
-import kong.unirest.UnirestException;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import static io.jexxa.jexxatest.JexxaTest.loadJexxaTestProperties;
-import static org.awaitility.Awaitility.await;
 
 public class JexxaIntegrationTest
 {
     private final Properties properties;
     private final Class<?> application;
-    private RESTBinding restBinding;
-    private JMSBinding messageBinding;
     private final JexxaMain jexxaMain;
-    private final Map<Class<?>, Object> bindingMap = new HashMap<>();
+    private final Map<Class<?>, AutoCloseable> bindingMap = new HashMap<>();
 
     public JexxaIntegrationTest(Class<?> application)
     {
@@ -32,32 +26,7 @@ public class JexxaIntegrationTest
         this.properties = jexxaMain.getProperties();
     }
 
-    public RESTBinding getRESTBinding()
-    {
-        if (restBinding == null)
-        {
-            restBinding = new RESTBinding(getProperties());
-            await().atMost(10, TimeUnit.SECONDS)
-                    .pollDelay(100, TimeUnit.MILLISECONDS)
-                    .ignoreException(UnirestException.class)
-                    .until(() -> restBinding.getBoundedContext().isRunning());
-        }
-
-        return restBinding;
-    }
-
-    @Deprecated
-    public JMSBinding getMessageBinding()
-    {
-        if (messageBinding == null)
-        {
-            messageBinding = new JMSBinding(application, getProperties());
-        }
-
-        return messageBinding;
-    }
-
-    public <T> T getBinding(Class<T> bindingClazz)
+    public <T  extends AutoCloseable> T getBinding(Class<T> bindingClazz)
     {
         bindingMap.putIfAbsent(bindingClazz, createInstance(bindingClazz, application, properties));
         return bindingClazz.cast(bindingMap.get(bindingClazz));
@@ -69,13 +38,19 @@ public class JexxaIntegrationTest
 
     public void shutDown()
     {
-        if (messageBinding != null)
-        {
-            messageBinding.close();
-        }
+        bindingMap.values().forEach(this::close);
         bindingMap.clear();
         Unirest.shutDown();
         jexxaMain.stop();
+    }
+
+    private void close(AutoCloseable autoCloseable)
+    {
+        try{
+            autoCloseable.close();
+        } catch (Exception e){
+            SLF4jLogger.getLogger(JexxaIntegrationTest.class).error("Could not close Binding {}", e.getMessage());
+        }
     }
 
     private static <T> T createInstance(Class<T> clazz, Class<?> targetClass, Properties props) {
