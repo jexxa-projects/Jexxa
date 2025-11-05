@@ -53,7 +53,7 @@ public final class AdapterConvention
             clazz.getConstructor();
             return true; //Default constructor available
         }
-        catch (NoSuchMethodException | SecurityException ignored)
+        catch (NoSuchMethodException | SecurityException _)
         {
             //If exception is thrown go on to check if another suitable constructor is available
         }
@@ -68,7 +68,7 @@ public final class AdapterConvention
             clazz.getConstructor(Properties.class);
             return true; //Constructor with Properties argument available
         }
-        catch (NoSuchMethodException | SecurityException ignored)
+        catch (NoSuchMethodException | SecurityException _)
         {
             //If exception is thrown go on to check if another suitable constructor is available
         }

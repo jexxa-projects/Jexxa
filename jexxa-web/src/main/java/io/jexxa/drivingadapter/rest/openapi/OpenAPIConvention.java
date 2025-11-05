@@ -80,7 +80,7 @@ public class OpenAPIConvention
             );
 
             addComponents(method);
-        } catch (ClassCastException e)
+        } catch (ClassCastException _)
         {
                 getLogger(OpenAPIConvention.class).error("Could not generate OpenAPI for method {}::{}. Please check attributes and return type.", method.getDeclaringClass().getName(),  method.getName());
         }
@@ -113,7 +113,7 @@ public class OpenAPIConvention
             );
 
             addComponents(method);
-        } catch (ClassCastException e)
+        } catch (ClassCastException _)
         {
             getLogger(OpenAPIConvention.class).error("Could not generate OpenAPI for method {}::{}. Please check attributes and return type.", method.getDeclaringClass().getName(),  method.getName());
         }

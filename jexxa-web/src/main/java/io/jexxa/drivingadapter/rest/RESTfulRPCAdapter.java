@@ -191,7 +191,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     {
         try {
             return Integer.parseInt(properties.getProperty(JexxaWebProperties.JEXXA_REST_PORT, "0"));
-        } catch (NumberFormatException e)  {
+        } catch (NumberFormatException _)  {
             SLF4jLogger.getLogger(RESTfulRPCAdapter.class).error("Invalid integer format used for http-port");
             return 0;
         }
@@ -201,7 +201,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     {
         try {
         return Integer.parseInt(properties.getProperty(JexxaWebProperties.JEXXA_REST_HTTPS_PORT, "0"));
-        } catch (NumberFormatException e)  {
+        } catch (NumberFormatException _)  {
             SLF4jLogger.getLogger(RESTfulRPCAdapter.class).error("Invalid integer format used for http-port");
             return 0;
         }
@@ -296,7 +296,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     private void internalHandleException(Throwable targetException, Context ctx)
     {
         if ( targetException != null ) {
-            targetException.getStackTrace(); // Ensures that stack trace is filled in
+            targetException.getStackTrace(); // Ensures that the stack trace is filled in
             var ctxMethod = ctx.method();
             var ctxBody = ctx.body();
             var ctxPath = ctx.path();
@@ -319,7 +319,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     {
         try {
             return jsonConverter.toJson(e);
-        } catch (RuntimeException re){
+        } catch (RuntimeException _){
             return jsonConverter.toJson(new IllegalArgumentException(e.getMessage()));
         }
     }

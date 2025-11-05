@@ -83,7 +83,7 @@ public class PropertiesLoader {
             } else {
                 getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES);
             }
-        } catch ( IOException e ) {
+        } catch ( IOException _ ) {
             getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES);
         }
     }
@@ -108,7 +108,7 @@ public class PropertiesLoader {
             } else {
                 throw new FileNotFoundException(resource);
             }
-        } catch (IOException e) {
+        } catch (IOException _) {
             //2nd try to import properties from outside the jar
             try (FileInputStream file = new FileInputStream(resource)) {
                 properties.load(file);
