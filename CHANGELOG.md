@@ -4,12 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[9.0.0] - 2025-MM-DD - UNRELEASED
+## \[9.0.0] - 2025-11-09
 ### Changed
 - Only support for Java >= 25 
 - All properties (including for JMS) must start with `io.jexxa.`
+- Removed all deprecated methods/classes
 
-
+### Fixed
+- Updated dependencies
 
 ## \[8.2.0] - 2025-10-18
 ### Added
