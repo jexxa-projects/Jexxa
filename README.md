@@ -4,7 +4,7 @@
 [![CodeQL](https://github.com/jexxa-projects/Jexxa/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jexxa-projects/Jexxa/actions/workflows/codeql-analysis.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b6c1680824ef4ac5914c40073242dc86)](https://www.codacy.com/gh/repplix/Jexxa/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=repplix/Jexxa&amp;utm_campaign=Badge_Grade)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jexxa-projects_Jexxa&metric=alert_status)](https://sonarcloud.io/summary/overall?id=jexxa-projects_Jexxa)
- [![Java 17 LTS CI](https://github.com/jexxa-projects/Jexxa/actions/workflows/maven.yml/badge.svg)](https://github.com/jexxa-projects/Jexxa/actions/workflows/maven.yml)
+ [![Java 25 LTS CI](https://github.com/jexxa-projects/Jexxa/actions/workflows/maven.yml/badge.svg)](https://github.com/jexxa-projects/Jexxa/actions/workflows/maven.yml)
 
 
 # 🧩 Jexxa — A Ports & Adapters Framework for Java
@@ -25,7 +25,7 @@
 ➡️ [Explore the Architecture](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html)
 ## 📋 Requirements
 
-- Java **17 or higher**
+- Java **25 or higher**
 - Maven-compatible IDE (e.g., IntelliJ IDEA, Eclipse)
 
 ## 🛠️ Quickstart
@@ -58,7 +58,7 @@ Maven
 <dependency>
     <groupId>io.jexxa</groupId>
     <artifactId>jexxa-web</artifactId>
-    <version>8.2.0</version>
+    <version>9.0.0</version>
 </dependency>
 <dependency>
     <groupId>org.slf4j</groupId>
@@ -70,7 +70,7 @@ Maven
 Gradle:
 
 ```groovy
-compile "io.jexxa:jexxa-web:8.2.0"
+compile "io.jexxa:jexxa-web:9.0.0"
 compile "org.slf4j:slf4j-simple:2.0.17"
 ``` 
 ## ⚙️ Configuration
