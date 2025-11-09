@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
-import static io.jexxa.adapterapi.invocation.DefaultInvocationHandler.GLOBAL_SYNCHRONIZATION_OBJECT;
+import static io.jexxa.adapterapi.invocation.InvocationManager.getInvocationHandler;
 import static io.jexxa.common.facade.logger.ApplicationBanner.addConfigBanner;
 import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
 
@@ -348,23 +348,25 @@ public final class JexxaMain
     @SuppressWarnings("java:S2629")
     public void stop()
     {
-        synchronized (GLOBAL_SYNCHRONIZATION_OBJECT) {
-            synchronized (boundedContext){
-                try {
-                    TransactionManager.initTransaction();
-                    if (boundedContext.isRunning()) {
-                        boundedContext.stop();
-                        compositeDrivingAdapter.stop();
-                        getLogger(JexxaMain.class).info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
-                    }
-                    executorService.shutdown();
-                    JexxaContext.cleanup();
-                    TransactionManager.closeTransaction();
-                } catch (RuntimeException e) {
-                    TransactionManager.rollback();
-                    TransactionManager.closeTransaction();
-                    throw new IllegalStateException("Could not proper stop JexxaMain. ", e);
+        getInvocationHandler(this).invoke(this, this::synchronizedStop);
+    }
+
+    private void synchronizedStop(){
+        synchronized (boundedContext){
+            try {
+                TransactionManager.initTransaction();
+                if (boundedContext.isRunning()) {
+                    boundedContext.stop();
+                    compositeDrivingAdapter.stop();
+                    getLogger(JexxaMain.class).info("BoundedContext '{}' successfully stopped", getBoundedContext().contextName());
                 }
+                executorService.shutdown();
+                JexxaContext.cleanup();
+                TransactionManager.closeTransaction();
+            } catch (RuntimeException e) {
+                TransactionManager.rollback();
+                TransactionManager.closeTransaction();
+                throw new IllegalStateException("Could not proper stop JexxaMain. ", e);
             }
         }
     }

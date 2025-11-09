@@ -1,24 +1,22 @@
 package io.jexxa.jexxatest;
 
+import io.jexxa.common.facade.logger.SLF4jLogger;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.jexxatest.integrationtest.messaging.MessageBinding;
-import io.jexxa.jexxatest.integrationtest.rest.RESTBinding;
 import kong.unirest.Unirest;
-import kong.unirest.UnirestException;
 
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import static io.jexxa.jexxatest.JexxaTest.loadJexxaTestProperties;
-import static org.awaitility.Awaitility.await;
 
 public class JexxaIntegrationTest
 {
     private final Properties properties;
     private final Class<?> application;
-    private RESTBinding restBinding;
-    private MessageBinding messageBinding;
     private final JexxaMain jexxaMain;
+    private final Map<Class<?>, AutoCloseable> bindingMap = new HashMap<>();
 
     public JexxaIntegrationTest(Class<?> application)
     {
@@ -28,28 +26,10 @@ public class JexxaIntegrationTest
         this.properties = jexxaMain.getProperties();
     }
 
-    public RESTBinding getRESTBinding()
+    public <T  extends AutoCloseable> T getBinding(Class<T> bindingClazz)
     {
-        if (restBinding == null)
-        {
-            restBinding = new RESTBinding(getProperties());
-            await().atMost(10, TimeUnit.SECONDS)
-                    .pollDelay(100, TimeUnit.MILLISECONDS)
-                    .ignoreException(UnirestException.class)
-                    .until(() -> restBinding.getBoundedContext().isRunning());
-        }
-
-        return restBinding;
-    }
-
-    public MessageBinding getMessageBinding()
-    {
-        if (messageBinding == null)
-        {
-            messageBinding = new MessageBinding(application, getProperties());
-        }
-
-        return messageBinding;
+        bindingMap.putIfAbsent(bindingClazz, createInstance(bindingClazz, application, properties));
+        return bindingClazz.cast(bindingMap.get(bindingClazz));
     }
 
     public Properties getProperties() {
@@ -58,11 +38,34 @@ public class JexxaIntegrationTest
 
     public void shutDown()
     {
-        if (messageBinding != null)
-        {
-            messageBinding.close();
-        }
+        bindingMap.values().forEach(this::close);
+        bindingMap.clear();
         Unirest.shutDown();
         jexxaMain.stop();
+    }
+
+    private void close(AutoCloseable autoCloseable)
+    {
+        try{
+            autoCloseable.close();
+        } catch (Exception e){
+            SLF4jLogger.getLogger(JexxaIntegrationTest.class).error("Could not close Binding {}", e.getMessage());
+        }
+    }
+
+    private static <T> T createInstance(Class<T> clazz, Class<?> targetClass, Properties props) {
+        try {
+            // Suche den Konstruktor (Class, Properties)
+            Constructor<T> constructor = clazz.getConstructor(Class.class, Properties.class);
+
+            // Erzeuge Instanz
+            return constructor.newInstance(targetClass, props);
+
+        } catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException("Class " + clazz.getName() +
+                    " does not provide a constructor of (Class, Properties).", e);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Given properties can not be used to create " + clazz.getName(), e);
+        }
     }
 }

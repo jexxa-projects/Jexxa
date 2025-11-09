@@ -3,7 +3,7 @@ package io.jexxa.testapplication;
 import io.jexxa.core.JexxaMain;
 
 public final class JexxaTestApplication {
-    public static void main(String[] args)
+    static void main()
     {
         var jexxaMain = new JexxaMain(JexxaTestApplication.class);
 

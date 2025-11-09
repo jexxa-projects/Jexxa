@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[9.0.0] - 2025-MM-DD - UNRELEASED
+### Changed
+- Only support for Java >= 25 
+- All properties (including for JMS) must start with `io.jexxa.`
+
+
+
 ## \[8.2.0] - 2025-10-18
 ### Added
 - Repository and object store now support S3-storage (introduced with the update to common-adapters 2.6.0)
@@ -77,7 +84,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## \[8.1.0] - 2024-06-21
 ### Added
 - Jexxa-Web: 
-  - Added `io.jexxa.rest.openapi.servers` to define open-api servers in a comma separated list  
+  - Added `io.jexxa.rest.openapi.servers` to define open-api servers in a comma-separated list  
 
 ### Fixed
 - Updated dependencies
@@ -134,8 +141,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[7.0.0] - 2023-12-16
 ## Changed
-- Jexxa now utilises [Jexxa-Adapters](https://github.com/jexxa-projects/JexxaAdapters) as underlying technology stack. This enables to focus Jexxa more on its API and simplifies reusing technology stacks in other projects.
-- For jexxa based applications, you typically only need to adjust the imports as described in the migration notes below.  
+- Jexxa now utilises [Jexxa-Adapters](https://github.com/jexxa-projects/JexxaAdapters) as the underlying technology stack. This enables to focus Jexxa more on its API and simplifies reusing technology stacks in other projects.
+- For jexxa-based applications, you typically only need to adjust the imports as described in the migration notes below.  
 
 ### Migration notes from 6.x.x -> 7.x.x!
 To simplify migration, you have to adjust the following imports: 
@@ -178,7 +185,7 @@ To simplify migration, you have to adjust the following imports:
 - Jexxa-Core:
   - Serialization of complex keys in Map 
 - Jexxa-Web:
-    - Enums are not correctly described in OpenAPI specification 
+    - Enums are not correctly described in the OpenAPI specification 
     - Methods with multiple parameters are now described with key `arg0` to `argN`
   
 ## \[6.1.6] - 2023-09-05
@@ -221,7 +228,7 @@ To simplify migration, you have to adjust the following imports:
 
 ## \[6.1.0] - 2023-06-01
 ### Added
--   `RESTFullRPCAdapter`: Automatically generated OpenAPI specification now sets the operationID as description and summary as requested in #244. In addition, the class name of a method is set as tag to support grouping of methods
+-   `RESTFullRPCAdapter`: Automatically generated OpenAPI specification now sets the operationID as description and summary as requested in #244. In addition, the class name of a method is set as a tag to support grouping of methods
 
 ### Fixed
 - Updated dependencies
@@ -232,8 +239,8 @@ To simplify migration, you have to adjust the following imports:
 - Updated dependencies
 
 ### Fixed
-- In debug mode, complete stack trace is written to logger  
-- Clarified error message in case no public constructor of factory method is available 
+- In debug mode, a complete stack trace is written to the logger  
+- Clarified error message in case no public constructor of a factory method is available 
 - Updated dependencies 
 
 ## \[6.0.6] - 2023-05-01
@@ -262,7 +269,7 @@ To simplify migration, you have to adjust the following imports:
 
 ## \[6.0.1] - 2023-03-08
 ### Fixed 
-- [#208](https://github.com/jexxa-projects/Jexxa/issues/208)Architecture tests know handles anonymous inner classes correctly 
+- [#208](https://github.com/jexxa-projects/Jexxa/issues/208)Architecture tests know to handle anonymous inner classes correctly 
 - Updated dependencies
 
 ## \[6.0.0] - 2023-03-05
@@ -280,12 +287,12 @@ To simplify migration, you have to adjust the following imports:
 - Renamed `Monitors` &rarr; `HealthIndicators` to clarify its responsibility. 
 - Renamed `TimerMonitor` &rarr; `TimeoutIndicator` to clarify its responsibility.
 
-- Changed HTTP-properties to meet declaration convention: 
+- Changed HTTP properties to meet the declaration convention: 
   - `io.jexxa.rest.open_api_path` &rarr; `io.jexxa.rest.openapi.path`
   - `io.jexxa.rest.static_files_root` &rarr; `io.jexxa.rest.static.files.root`
   - `io.jexxa.rest.static_files_external` &rarr; `io.jexxa.rest.static.files.external` 
 
-- Changed HTTPS-properties to meet declaration convention:
+- Changed HTTPS properties to meet the declaration convention:
   - `io.jexxa.rest.https_port` &rarr; `io.jexxa.rest.https.port`
   - `io.jexxa.rest.keystore_password` &rarr; `io.jexxa.rest.keystore.password`
   - `io.jexxa.rest.file.keystore_password` &rarr; `io.jexxa.rest.keystore.file.password`
@@ -335,9 +342,9 @@ To simplify migration, you have to adjust the following imports:
 ### Added
 - Jexxa-Core: Improved API for bootstrapping classes in main() that need no initialization method. See [here](https://github.com/jexxa-projects/JexxaTemplate) for more information. 
   
-- Jexxa-Core: JMSConfiguration can be provided by a method of the message listener. This allows implementing configurable message listener. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-core/src/test/java/io/jexxa/infrastructure/utils/messaging/ConfigurableListener.java) for an example.  
+- Jexxa-Core: JMSConfiguration can be provided by a method of the message listener. This allows implementing a configurable message listener. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-core/src/test/java/io/jexxa/infrastructure/utils/messaging/ConfigurableListener.java) for an example.  
 
-- Jexxa-Test: Provided convenience classes for implementing integration tests. For detailed information and example, look [here](https://github.com/jexxa-projects/JexxaTemplate).
+- Jexxa-Test: Provided convenience classes for implementing integration tests. For detailed information and examples, look [here](https://github.com/jexxa-projects/JexxaTemplate).
 
 ### Changed
 - Jexxa-Core: static definitions of JMS properties are now provided via `JexxaJMSProperties` for unification reason. The old properties provided in `JMSAdapter` are declared deprecated.
@@ -376,7 +383,7 @@ To simplify migration, you have to adjust the following imports:
 
 ## \[5.4.0] - 2022-11-05
 ### Added
-- Jexxa-Core: Added new driving adapter `Scheduler` which allows to call methods on a fixed rate or fixed delay as described in [issue #140](https://github.com/jexxa-projects/Jexxa/issues/140). See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more some examples hwo to use it. 
+- Jexxa-Core: Added new driving adapter `Scheduler` which allows calling methods on a fixed rate or fixed delay as described in [issue #140](https://github.com/jexxa-projects/Jexxa/issues/140). See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more some examples hwo to use it. 
 
 ### Fixed
 - Updated dependencies
@@ -384,7 +391,7 @@ To simplify migration, you have to adjust the following imports:
 
 ## \[5.3.1] - 2022-10-27
 ### Fixed
-- Explicitly define one latest gson version as dependency for jexxa-web. This ensures that maven will use this version within your application because it is the shortest path as a transitive dependency. In case your application uses an older gson version (also as transitive dependency), you could get an IllegalAccessException because deserialization of a Java record fails.  
+- Explicitly define one latest gson version as a dependency for jexxa-web. This ensures that maven will use this version within your application because it is the shortest path as a transitive dependency. In case your application uses an older gson version (also as transitive dependency), you could get an IllegalAccessException because deserialization of a Java record fails.  
 
 - Updated dependencies
 
@@ -417,7 +424,7 @@ To simplify migration, you have to adjust the following imports:
 
 ## \[5.1.2] - 2022-09-10
 ### Fixed
-- JSon Deserialization of java-records including generic types like a list. 
+- JSON Deserialization of java-records including generic types like a list. 
 
 ## \[5.1.1] - 2022-09-07
 ### Fixed
@@ -431,7 +438,7 @@ To simplify migration, you have to adjust the following imports:
   - See [JexxaTemplate](https://github.com/jexxa-projects/JexxaTemplate) for more information
 
 ### Fixed
-- Jexxa-Core: If deserialization of record fails, the exception from the canonical constructor is forwarded (if available). 
+- Jexxa-Core: If deserialization of `record` type fails, the exception from the canonical constructor is forwarded (if available). 
 
 ## \[5.0.2] - 2022-08-05
 ### Fixed
@@ -512,7 +519,7 @@ To simplify migration, you have to adjust the following imports:
 
 ## \[4.1.2] - 2022-02-27
 ### Fixed
-- Fixed json (de-)serialization of exceptions for Java >=16. The new implementation does not collide with the sealed classes/packages in `java.lang` and `java.io`.  
+- Fixed JSON (de-)serialization of exceptions for Java >=16. The new implementation does not collide with the sealed classes/packages in `java.lang` and `java.io`.  
 - Updated dependencies
 
 ## \[4.1.1] - 2022-02-20
@@ -527,20 +534,20 @@ To simplify migration, you have to adjust the following imports:
 ### Added 
 - Jexxa-Core: 
   - Monitor classes to observe driving adapter
-  - Extended BoundedContext to query health status based on HealthChecks  
+  - Extended BoundedContext to query health status based on health checks  
   
 ### Changed 
 - Updated dependencies
 
 ### Fixed
-- Corrected implementation of addDDDPackages so that package for driven adapter is included
+- Corrected implementation of addDDDPackages so that the package for driven adapter is included
 - Corrected handling of Port-Adapter as singleton instances 
 
 ## \[4.0.0] - 2022-01-28
 ### Changed—Important Information!
 - Jexxa-Core: Major changes to the persistence layer, which prevent downgrading applications to older Jexxa versions
     - `JDBCKeyValueRepository` and `JDBCObjectStore` use now `JSONB` format if a Postgres DB is used. Existing database are automatically converted to `JSONB`
-    - `JDBCKeyValueRepository` and `JDBCObjectStore` use now column name `REGISTRY_KEY` and `REGISTRY_VALUE` instead `KEY` and `VALUE`. This avoids conflicts with reserved SQL statements. Existing database are automatically updated.
+    - `JDBCKeyValueRepository` and `JDBCObjectStore` use now column name `REGISTRY_KEY` and `REGISTRY_VALUE` instead `KEY` and `VALUE`. This avoids conflicts with reserved SQL statements. Existing databases are automatically updated.
     - `Repository` related interfaces and classes were moved from `...persistence` into sub-package `...persistence.repository` -> You have to update your imports in your application
 
 - Jexxa-Core: Removed all components declared as deprecated
@@ -548,7 +555,7 @@ To simplify migration, you have to adjust the following imports:
 - Updated dependencies
 
 ### Added
-- Jexxa-Core: Added possibility to load Properties file defined by `JEXXA_CONFIG_IMPORT`
+- Jexxa-Core: Added possibility to load a Properties file defined by `JEXXA_CONFIG_IMPORT`
 
 - Jexxa-Core/Jexxa-Web: Added files that provide all properties used by Jexxa: 
   - [JexxaCoreProperties](./jexxa-core/src/main/java/io/jexxa/properties/JexxaCoreProperties.java)
@@ -573,7 +580,7 @@ To simplify migration, you have to adjust the following imports:
 - Jexxa-Core/web: Added new properties to automatically load version information of applications from a build system.
   See [jexxa-application.properties](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information.
 
-- Jexxa-Core: JSon serializer allows now reading a Type in addition to Clazz and reading from a `Reader`
+- Jexxa-Core: JSON serializer allows now reading a Type in addition to Clazz and reading from a `Reader`
 
 ### Changed
 - Reference guide: Updated description of application configuration  
@@ -614,7 +621,7 @@ To simplify migration, you have to adjust the following imports:
 -   Added `ObjectStore` which provides sophisticated API for querying managed objects. See tutorial [Contract Management](https://github.com/jexxa-projects/Jexxa/blob/master/tutorials/ContractManagement/README.md)  
 
 ### Changed
--   Default port for tutorials from 7000 -> 7500 because macOS Monterey uses port 7000 for its control center
+-   Default port for tutorials from 7000 → 7500 because macOS Monterey uses port 7000 for its control center
 -   Updated dependencies 
 
 ## \[3.0.6] - 2021-07-13
@@ -634,18 +641,18 @@ To simplify migration, you have to adjust the following imports:
 -   JexxaMain: If a specific driving adapter is bound to a port adapter, Jexxa ensures that the specific driving adapter is instantiated only once. Without this fix, it could happen that a specific driving adapter is instantiated multiple times. In case the specific driving adapter uses resources such as a port, this led to an exception.
 
 ### Changed
--   Updated dependencies on patch level
+-   Updated dependencies on the patch level
 
 ## \[3.0.3] - 2021-06-05
 ### Fixed
 -   Corrected javadoc und README files  
 
 ### Changed
--   Updated dependencies on patch level
+-   Updated dependencies on the patch level
 
 ## \[3.0.2] - 2021-05-08
 ### Fixed
--   Fixed fast fail approach in JexxaMain::bindToAnnotation. Now, this method directly fails if any inbound port cannot be created.
+-   Fixed the fast fail approach in JexxaMain::bindToAnnotation. Now, this method directly fails if any inbound port cannot be created.
 
 ### Added
 -   New Tutorial [`BookstoreJ16`](https://github.com/jexxa-projects/JexxaTutorials/tree/main/BookStoreJ16/README.md) which shows how to use Java records with Jexxa
@@ -653,9 +660,9 @@ To simplify migration, you have to adjust the following imports:
 ## \[3.0.1] - 2021-04-18
 ### Fixed
 -   `JSONManager`: 
-    -   Bugfix for Java 16+: Added default serializer/deserializer for Java8-time classes, because they are strongly encapsulated since Java 16. The added serializer/deserializer avoid an `IllegalAccessException` when they are serialized to/from Json.
+    -   Bugfix for Java 16+: Added default serializer/deserializer for Java8-time classes because they are strongly encapsulated since Java 16. The added serializer/deserializer avoid an `IllegalAccessException` when they are serialized to/from JSON.
 -   Fixed issues from static code analysis tool codacy 
--   Updated dependencies on patch level 
+-   Updated dependencies on the patch level 
 
 ## \[3.0.0] - 2021-04-03
 ### Changed
@@ -682,7 +689,7 @@ To simplify migration, you have to adjust the following imports:
     -   Using SQL Builder also prevents any SQL injection issues
 
 ### Fixed
--   Corrected handling of Java8 Date API so that a date is handled as a string conform to ISO 8601. See [here](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_json_representation_of_date) for more information. Affected adapter are: 
+-   Corrected handling of Java8 Date API so that a date is handled as a string conforming to ISO 8601. See [here](https://jexxa-projects.github.io/Jexxa/jexxa_reference.html#_json_representation_of_date) for more information. Affected adapter are: 
     -   `JDBCKeyValueRepository`   
     -   `JMSSender`
     -   `JSONMessageListener`:
@@ -784,7 +791,7 @@ To simplify migration, you have to adjust the following imports:
 -   `RESTfulRPCAdapter`: 
     -   Static methods are no longer exposed
     -   Only a single instance of a `RESTfulRPCAdapter` per Properties can be created 
-    -   Fixed error message so that the correct host and port is stated in exception if binding fails
+    -   Fixed the error message so that the correct host and port are stated in exception if binding fails
  
 -   `JMXAdapter`:       
     -   Static methods are no longer exposed
@@ -853,7 +860,7 @@ times in case of reconnecting.
 -   [Issue #6](https://github.com/jexxa-projects/Jexxa/issues/6) Added HTTPS support in RESTfulRPCAdapter (see [jexxa-application.properties](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information).                                             
 ### Fixed
 -   [Issue #5](https://github.com/jexxa-projects/Jexxa/issues/5) Avoid a warning message "Uncaught Exception Handler already set" with JUnit 
--   Fixed Issue with including correct jexxa-application.properties in tutorial jar with all dependencies. Switched from jar-plugin to maven-shade plugin to define correct jexxa-application.properties.   
+-   Fixed the Issue with including the correct jexxa-application.properties in the tutorial jar with all dependencies. Switched from jar-plugin to maven-shade plugin to define the correct jexxa-application.properties.   
 
 ### Changed
 -   Removed deprecated Jexxa's old JMS API integration 
@@ -865,7 +872,7 @@ times in case of reconnecting.
 -   Annotation @CheckReturnValue to fluent API for better IDE support 
       
 ### Fixed
--   Fixed fast fail approach in JexxaMain::start. Now, this method directly fails if any driving adapter throws an exception during its start method.  
+-   Fixed the fast fail approach in JexxaMain::start. Now, this method directly fails if any driving adapter throws an exception during its start method.  
 -   Correctly set package which is scanned for inbound ports in tutorial BookStoreJ 
 
 ### Changed
@@ -874,9 +881,9 @@ times in case of reconnecting.
 
 ## \[2.2.0] - 2020-07-25
 ### Added                                       
--   Added new fluent API for sending JMS messages  
+-   Added a new fluent API for sending JMS messages  
 
--   Added MessageSenderManager to configure default message strategy for the application
+-   Added MessageSenderManager to configure the default message strategy for the application
       
 ### Fixed
 -   JexxaMain::getInstanceOfPort validates port conventions to throw a meaningful exception 
@@ -889,7 +896,7 @@ times in case of reconnecting.
 -   Added tutorials to show usage of Jexxa      
 
 ### Fixed
--   Fixed json template for base types in JMX parameter info     
+-   Fixed JSON template for base types in JMX parameter info     
 
 ### Changed
 -   Updated dependencies 
@@ -912,16 +919,16 @@ times in case of reconnecting.
 -   Improved the documentation of Jexxa (see [Architecture of Jexxa](https://jexxa-projects.github.io/Jexxa/jexxa.html)) 
 
 ### Changed
--   Split Jexxa into Jexxa-Core and Jexxa-Adapter-API projects to avoid direct dependencies to new driving adapter 
--   Moved CompositeDrivingAdapter as inner class of JexxaMain because it is only used there   
+-   Split Jexxa into Jexxa-Core and Jexxa-Adapter-API projects to avoid direct dependencies to the new driving adapter 
+-   Moved CompositeDrivingAdapter as an inner class of JexxaMain because it is only used there   
 
 -   Naming convention for generic driving adapter: 
-    -   Class name of the adapter itself ends with `Adapter` 
-    -   Class name of the convention ends with `Convention`  
+    -   The class name of the adapter itself ends with `Adapter` 
+    -   The class name of the convention ends with `Convention`  
 
--   Naming convention for specific driving adapter: 
-    -   Class name of the adapter itself ends with `Adapter` 
-    -   Class name of the configuration ends with `Configuration`  
+-   Naming convention for a specific driving adapter: 
+    -   The class name of the adapter itself ends with `Adapter` 
+    -   The class name of the configuration ends with `Configuration`  
 
 -   Updated dependencies 
 
@@ -962,7 +969,7 @@ times in case of reconnecting.
  
 ### Added
 -   Fluent API for application developer to bind adapter to ports 
--   Dependency injection of driven adapter into application core (without using annotations in application core)   
+-   Dependency injection of driven adapter into the application core (without using annotations in application core)   
 -   Driven adapter for JDBC, IMDB, and JMS
 -   Driving adapter for JMX
    

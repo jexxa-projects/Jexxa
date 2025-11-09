@@ -13,15 +13,15 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class MessageBindingIT {
+class JMSBindingIT {
 
     private static final JexxaIntegrationTest JEXXA_INTEGRATION_TEST = new JexxaIntegrationTest(JexxaITTestApplication.class);
-    private static MessageBinding objectUnderTest;
+    private static JMSBinding objectUnderTest;
 
     @BeforeAll
     static void initBeforeAll()
     {
-        objectUnderTest = JEXXA_INTEGRATION_TEST.getMessageBinding();
+        objectUnderTest = JEXXA_INTEGRATION_TEST.getBinding(JMSBinding.class);
     }
 
     @Test
@@ -29,8 +29,8 @@ class MessageBindingIT {
     {
         //Arrange
         var testTopic = "TestTopic";
-        var messageSender = objectUnderTest.getMessageSender();
-        var messageListener = objectUnderTest.getMessageListener(testTopic, JMSConfiguration.MessagingType.TOPIC);
+        var messageSender = objectUnderTest.getSender();
+        var messageListener = objectUnderTest.getListener(testTopic, JMSConfiguration.MessagingType.TOPIC);
 
         //Act
         messageSender.send(new JexxaValueObject(42)).toTopic(testTopic).asJson();
@@ -45,13 +45,13 @@ class MessageBindingIT {
     }
 
     @Test
-    void testRegisterMessageListener()
+    void testRegisterListener()
     {
         //Arrange
         var testTopic = "TestTopic";
-        var messageSender = objectUnderTest.getMessageSender();
+        var messageSender = objectUnderTest.getSender();
         var messageListener = new JMSListener(testTopic, JMSConfiguration.MessagingType.TOPIC);
-        objectUnderTest.registerMessageListener(messageListener);
+        objectUnderTest.registerListener(messageListener);
 
         //Act
         messageSender.send(new JexxaValueObject(42)).toTopic(testTopic).asJson();
@@ -70,8 +70,8 @@ class MessageBindingIT {
     {
         //Arrange
         var testTopic = "TestTopic";
-        var messageSender = objectUnderTest.getMessageSender();
-        var messageListener = objectUnderTest.getMessageListener(testTopic, JMSConfiguration.MessagingType.TOPIC);
+        var messageSender = objectUnderTest.getSender();
+        var messageListener = objectUnderTest.getListener(testTopic, JMSConfiguration.MessagingType.TOPIC);
 
         //Act
         messageSender.send(new JexxaValueObject(42)).toTopic(testTopic).asJson();

@@ -1,9 +1,8 @@
 package io.jexxa.properties;
 
-import io.jexxa.common.drivenadapter.outbox.TransactionalOutboxProperties;
-import io.jexxa.common.facade.jdbc.JDBCProperties;
-import io.jexxa.common.facade.jms.JMSProperties;
-import io.jexxa.common.facade.s3.S3Properties;
+
+
+import io.jexxa.common.facade.utils.properties.PropertiesPrefix;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,11 +26,7 @@ public class PropertiesLoader {
 
     public PropertiesLoader(Class<?> context) {
         this.context = Objects.requireNonNull(context);
-        JDBCProperties.prefix(JEXXA_PREFIX);
-        JMSProperties.prefix(JEXXA_PREFIX);
-        TransactionalOutboxProperties.prefix(JEXXA_PREFIX);
-        S3Properties.prefix(JEXXA_PREFIX);
-
+        PropertiesPrefix.globalPrefix(JEXXA_PREFIX);
     }
 
     public Properties createJexxaProperties(Properties applicationProperties) {
@@ -88,7 +83,7 @@ public class PropertiesLoader {
             } else {
                 getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES);
             }
-        } catch ( IOException e ) {
+        } catch ( IOException _ ) {
             getLogger(PropertiesLoader.class).warn("Default properties file {} not available", JexxaCoreProperties.JEXXA_APPLICATION_PROPERTIES);
         }
     }
@@ -113,7 +108,7 @@ public class PropertiesLoader {
             } else {
                 throw new FileNotFoundException(resource);
             }
-        } catch (IOException e) {
+        } catch (IOException _) {
             //2nd try to import properties from outside the jar
             try (FileInputStream file = new FileInputStream(resource)) {
                 properties.load(file);

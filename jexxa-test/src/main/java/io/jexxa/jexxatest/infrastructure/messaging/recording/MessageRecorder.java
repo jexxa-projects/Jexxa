@@ -28,8 +28,8 @@ public class MessageRecorder
             return Optional.empty();
         }
 
-        var latestElement = recordedMessageList.get(0);
-        recordedMessageList.remove(0);
+        var latestElement = recordedMessageList.getFirst();
+        recordedMessageList.removeFirst();
         return Optional.ofNullable(latestElement);
     }
 

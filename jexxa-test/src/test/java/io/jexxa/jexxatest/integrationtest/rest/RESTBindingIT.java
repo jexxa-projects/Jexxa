@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -22,16 +23,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class RESTBindingIT {
     private static final JexxaIntegrationTest JEXXA_INTEGRATION_TEST = new JexxaIntegrationTest(JexxaITTestApplication.class);
     private static RESTBinding objectUnderTest;
+    private static ExecutorService executorService;
 
     @BeforeAll
     static void initBeforeAll()
     {
         //Start the application
-        var result = Executors.newSingleThreadExecutor();
-        result.execute(RESTBindingIT::runApplication);
+        executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(RESTBindingIT::runApplication);
 
         //Connect the integration test to the application
-        objectUnderTest = JEXXA_INTEGRATION_TEST.getRESTBinding();
+        objectUnderTest = JEXXA_INTEGRATION_TEST.getBinding(RESTBinding.class);
+    }
+
+    @AfterAll
+    static void afterAll()
+    {
+        //Stop executor
+        executorService.shutdown();
+        executorService.close();
     }
 
     @Test

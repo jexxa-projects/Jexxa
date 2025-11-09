@@ -148,7 +148,7 @@ public class AdapterFactory
             return Optional.empty();
         }
 
-        return Optional.of(implementationList.get(0));
+        return Optional.of(implementationList.getFirst());
     }
 
     public void clear()
