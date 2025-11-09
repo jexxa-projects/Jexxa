@@ -82,17 +82,17 @@
     <commons.lang3.version>3.14.0</commons.lang3.version>
     <jackson.core.version>2.17.1</jackson.core.version>
     <jackson.jsonschema.version>1.0.39</jackson.jsonschema.version>
-    <smallrye.openapi.core.version>4.2.0</smallrye.openapi.core.version>
+    <smallrye.openapi.core.version>4.2.1</smallrye.openapi.core.version>
     <smallrye.config.core.version>3.14.1</smallrye.config.core.version>
 
 
     <!-- version of test dependencies -->
-    <activemq.artemis.client.version>2.43.0</activemq.artemis.client.version>
+    <activemq.artemis.client.version>2.44.0</activemq.artemis.client.version>
     <postgres.version>42.7.8</postgres.version>
     <unirest.java.version>3.14.5</unirest.java.version>
-    <junit.platform.launcher.version>6.0.0</junit.platform.launcher.version>
-    <junit.jupiter.engine.version>6.0.0</junit.jupiter.engine.version>
-    <junit.jupiter.params.version>6.0.0</junit.jupiter.params.version>
+    <junit.platform.launcher.version>6.0.1</junit.platform.launcher.version>
+    <junit.jupiter.engine.version>6.0.1</junit.jupiter.engine.version>
+    <junit.jupiter.params.version>6.0.1</junit.jupiter.params.version>
     <slf4j.simple.version>2.0.17</slf4j.simple.version>
     <awaitility.version>4.3.0</awaitility.version>
     <archunit.version>1.4.1</archunit.version>
