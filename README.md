@@ -48,7 +48,7 @@ public final class HelloJexxa {
 }
 ```
 * Access endpoint: http://localhost:7501/HelloJexxa/greetings
-* See full example: [HelloJexxa Tutorial](ttps://github.com/jexxa-projects/JexxaTutorials/tree/main/HelloJexxa):
+* See full example: [HelloJexxa Tutorial](https://github.com/jexxa-projects/JexxaTutorials/tree/main/HelloJexxa):
 
 
 ### Add Dependencies
