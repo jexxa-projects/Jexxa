@@ -377,7 +377,7 @@ To simplify migration, you have to adjust the following imports:
 - Jexxa-Core: Provide possibility to configure `user.timezone` via jexxa-application.properties value `io.jexxa.user.timezone`. See [here](https://github.com/jexxa-projects/Jexxa/blob/master/jexxa-web/src/test/resources/jexxa-application.properties) for more information
 
 ### Changed
-- [Issue #142](https://github.com/jexxa-projects/Jexxa/issues/140) Jexxa-Web: Updated from javalin4 to javalin5. This required reimplementing OpenAPI functionality because javalin5 no longer supports a Java-DSL to provide OpenAPI information. Even though the public API of Jexxa-Web is not changed we decided to increment minor version due to the re-implementation of OpenAPI 
+- [Issue #142](https://github.com/jexxa-projects/Jexxa/issues/140) Jexxa-Web: Updated from javalin4 to javalin5. This required reimplementing OpenAPI functionality because javalin5 no longer supports a Java-DSL to provide OpenAPI information. Even though the public API of Jexxa-Web is not changed, we decided to increment the minor version due to the re-implementation of OpenAPI 
 
 ### Fixed
 - Updated dependencies
@@ -846,7 +846,7 @@ To simplify migration, you have to adjust the following imports:
 
 ## \[2.3.2] - 2020-09-23
 ### Fixed
--   `JMSAdapter`: Correctly cleanup internal data structure in case of reconnecting. This avoids registering objects multiple 
+-   `JMSAdapter`: Correctly clean up internal data structure in case of reconnecting. This avoids registering objects multiple 
 times in case of reconnecting.
 
 ## \[2.3.1] - 2020-09-20
@@ -961,7 +961,7 @@ times in case of reconnecting.
  
 ### Changed
 -   Changed groupID from io.ddd.jexxa into io.jexxa 
--   Code cleanup found by static code analysis with Teamscale
+-   Code cleanup found by static code analysis with TeamScale
 -   Updated README
 
 ### Fixed
@@ -971,7 +971,7 @@ times in case of reconnecting.
  
 ### Added
 -   Fluent API for application developer to bind adapter to ports 
--   Dependency injection of driven adapter into the application core (without using annotations in application core)   
+-   Dependency injection of driven adapter into the application core (without using annotations in the application core)   
 -   Driven adapter for JDBC, IMDB, and JMS
 -   Driving adapter for JMX
    
@@ -982,7 +982,7 @@ times in case of reconnecting.
 ## \[1.2] - 2020-03-18
  
 ### Fixed
--   Javadoc issues during release build  
+-   Javadoc issues during the release build  
  
 ## \[1.1] - 2020-03-18
  
