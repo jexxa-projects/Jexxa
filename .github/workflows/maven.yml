@@ -53,7 +53,8 @@ jobs:
     - name: Maven build
       run: mvn -B clean install
 
-    - name: sonarqube update
+    - name: SonarQube Scan
+      run: mvn sonar:sonar
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: mvn -Dsonar.login=${{ secrets.SONAR_TOKEN }} sonar:sonar
+        SONAR_TOKEN:
+          ${{ secrets.SONAR_TOKEN }}
