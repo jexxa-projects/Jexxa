@@ -20,7 +20,9 @@
 - **Visible Control Flow** — Clear orchestration of application logic
 - **Team-Friendly Design** — Scales well with cross-functional DDD teams
 - **Built-In Adapters** — REST (RMI-style), JMS, JDBC, in-memory DB, S3-Storage
-- **Resilient Microservice Patterns** — Includes transactional outbox & architecture validation
+- **Resilient Microservice Patterns** — Includes transactional outbox, fail-fast startup combined with controlled retry strategies
+- **Architecture Validation & Governance**
+  — Enforces architectural rules and prevents erosion through automated validation
 
 ➡️ [Explore the Architecture](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html)
 ## 📋 Requirements
@@ -58,7 +60,7 @@ Maven
 <dependency>
     <groupId>io.jexxa</groupId>
     <artifactId>jexxa-web</artifactId>
-    <version>9.0.0</version>
+    <version>9.0.1</version>
 </dependency>
 <dependency>
     <groupId>org.slf4j</groupId>
@@ -70,7 +72,7 @@ Maven
 Gradle:
 
 ```groovy
-compile "io.jexxa:jexxa-web:9.0.0"
+compile "io.jexxa:jexxa-web:9.0.1"
 compile "org.slf4j:slf4j-simple:2.0.17"
 ``` 
 ## ⚙️ Configuration
