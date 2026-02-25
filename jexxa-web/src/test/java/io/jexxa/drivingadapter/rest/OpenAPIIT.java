@@ -174,6 +174,7 @@ class OpenAPIIT
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
 
+        System.out.println(openAPI.toString());
         //Act
         var result = deepSearchKeys(openAPI, "content");
 

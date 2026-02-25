@@ -13,7 +13,6 @@ import io.javalin.util.JavalinLogger;
 import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapterapi.invocation.InvocationManager;
 import io.jexxa.adapterapi.invocation.InvocationTargetRuntimeException;
-
 import io.jexxa.common.facade.json.JSONConverter;
 import io.jexxa.common.facade.logger.ApplicationBanner;
 import io.jexxa.common.facade.logger.SLF4jLogger;
@@ -33,7 +32,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -54,6 +55,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     private OpenAPIConvention openAPIConvention;
 
     private static final Map<Properties, RESTfulRPCAdapter> RPC_ADAPTER_MAP = new HashMap<>();
+    private final List<Object> registeredObjects = new ArrayList<>();
 
     private RESTfulRPCAdapter(Properties properties)
     {
@@ -69,10 +71,6 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         }
 
         openAPIConvention = new OpenAPIConvention(properties);
-
-        setupJavalin();
-
-        registerExceptionHandler();
 
         ApplicationBanner.addAccessBanner(this::bannerInformation);
     }
@@ -95,8 +93,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     public void register(Object object)
     {
         Objects.requireNonNull(object);
-        registerGETMethods(object);
-        registerPOSTMethods(object);
+        registeredObjects.add(object);
     }
 
 
@@ -105,6 +102,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     {
         try
         {
+            setupJavalin();
             javalin.start();
         } catch (RuntimeException e)
         {
@@ -244,15 +242,15 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
      * </pre>
      *
      */
-    private void registerExceptionHandler()
+    private void registerExceptionHandler(JavalinConfig config)
     {
         //Exception Handler for thrown Exception from methods
-        javalin.exception(InvocationTargetException.class, (e, ctx) ->  handleTargetException(e.getTargetException(), ctx));
-        javalin.exception(InvocationTargetRuntimeException.class, (e, ctx) ->  handleTargetException(e.getTargetException(), ctx));
-        javalin.exception(IllegalArgumentException.class, this::handleTargetException);
-        javalin.exception(RuntimeException.class, this::handleRuntimeException);
+        config.routes.exception(InvocationTargetException.class, (e, ctx) ->  handleTargetException(e.getTargetException(), ctx));
+        config.routes.exception(InvocationTargetRuntimeException.class, (e, ctx) ->  handleTargetException(e.getTargetException(), ctx));
+        config.routes.exception(IllegalArgumentException.class, this::handleTargetException);
+        config.routes.exception(RuntimeException.class, this::handleRuntimeException);
 
-        javalin.error(404, this::handleResourceNotFound);
+        config.routes.error(404, this::handleResourceNotFound);
     }
 
     private void handleResourceNotFound(Context ctx)
@@ -324,32 +322,38 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         }
     }
 
-    private void registerGETMethods(Object object)
+    private void registerGETMethods(JavalinConfig config)
     {
-        var getCommands = createRPCConvention(object).getGETCommands();
+        for (Object object : registeredObjects)
+        {
+            var getCommands = createRPCConvention(object).getGETCommands();
 
-        getCommands.forEach(
-                method -> javalin.get(
-                        method.resourcePath(),
-                        httpCtx -> invokeMethod(object, method, httpCtx)
-                )
-        );
+            getCommands.forEach(
+                    method -> config.routes.get(
+                            method.resourcePath(),
+                            httpCtx -> invokeMethod(object, method, httpCtx)
+                    )
+            );
 
-        getCommands.forEach( method -> openAPIConvention.documentGET(method.method(), method.resourcePath()));
+            getCommands.forEach( method -> openAPIConvention.documentGET(method.method(), method.resourcePath()));
+
+        }
     }
 
-    private void registerPOSTMethods(Object object)
+    private void registerPOSTMethods(JavalinConfig config)
     {
-        var postCommands = createRPCConvention(object).getPOSTCommands();
+        for (Object object : registeredObjects) {
+            var postCommands = createRPCConvention(object).getPOSTCommands();
 
-        postCommands.forEach(
-                method -> javalin.post(
-                        method.resourcePath(),
-                        httpCtx -> invokeMethod(object, method, httpCtx)
-                )
-        );
+            postCommands.forEach(
+                    method -> config.routes.post(
+                            method.resourcePath(),
+                            httpCtx -> invokeMethod(object, method, httpCtx)
+                    )
+            );
 
-        postCommands.forEach( method -> openAPIConvention.documentPOST(method.method(), method.resourcePath()));
+            postCommands.forEach(method -> openAPIConvention.documentPOST(method.method(), method.resourcePath()));
+        }
     }
 
 
@@ -466,20 +470,29 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
 
     private void setupJavalin()
     {
-        this.javalin = Javalin.create(this::getJavalinConfig);
+        this.javalin = Javalin.create(config ->
+        {
+            getJavalinConfig(config);
+            registerOpenAPI(config);
+            registerGETMethods(config);
+            registerPOSTMethods(config);
+            registerExceptionHandler(config);
+        });
 
+    }
+
+    private void registerOpenAPI(JavalinConfig config)
+    {
         var openAPIPath = properties.getProperty(JexxaWebProperties.JEXXA_REST_OPEN_API_PATH);
         if (openAPIPath != null && !openAPIPath.isEmpty()) {
             openAPIConvention = new OpenAPIConvention(properties);
-            javalin.get(openAPIPath, httpCtx -> httpCtx.result(openAPIConvention.getOpenAPI()));
+            config.routes.get(openAPIPath, httpCtx -> httpCtx.result(openAPIConvention.getOpenAPI()));
         }
-
     }
 
     private void getJavalinConfig(JavalinConfig javalinConfig) {
         javalinConfig.jetty.modifyServer(this::configureServer);
 
-        javalinConfig.showJavalinBanner = false;
         javalinConfig.jsonMapper(new JexxaJSONMapper());
         Location location = Location.CLASSPATH;
 
@@ -493,7 +506,6 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
 
         javalinConfig.bundledPlugins.enableCors(cors -> cors.addRule(CorsPluginConfig.CorsRule::anyHost));
     }
-
 
 
         void configureServer(Server server)
