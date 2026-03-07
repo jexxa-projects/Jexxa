@@ -52,8 +52,21 @@
       <groupId>io.smallrye</groupId>
       <artifactId>smallrye-open-api-core</artifactId>
       <version>${smallrye.openapi.core.version}</version>
-    </dependency>
+    <exclusions>
+      <exclusion>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+      </exclusion>
 
+    </exclusions>
+  </dependency>
+
+  <dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-core</artifactId>
+    <version>${jackson.core.version}</version>
+    <scope>compile</scope>
+  </dependency>
 
 
     <!-- dependencies for tests -->
