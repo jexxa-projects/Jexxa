@@ -27,7 +27,6 @@ class DrivingAdapterTest
         assertThrows(PortConventionViolation.class, () -> drivingAdapter.to(InvalidConstructorApplicationService.class));
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void throwOnInvalidAdapterConvention()
     {
