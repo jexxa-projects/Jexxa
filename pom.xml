@@ -53,7 +53,7 @@
     <maven.versions.plugin>2.21.0</maven.versions.plugin>
     <project.scm.id>github-Jexxa</project.scm.id>
     <maven.central.publishing.plugin>0.10.0</maven.central.publishing.plugin>
-    <maven.sonar.plugin>5.5.0.6356</maven.sonar.plugin>
+    <maven.sonar.plugin>5.6.0.6792</maven.sonar.plugin>
 
     <!--information for filtered sources  -->
     <build.timestamp>${maven.build.timestamp}</build.timestamp>
