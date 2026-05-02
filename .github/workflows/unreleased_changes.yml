@@ -3,7 +3,7 @@ name: Maintain Unreleased Changes
 on:
   push:
     branches:
-      - main
+      - master
   workflow_call:
 
 jobs:
