@@ -25,7 +25,7 @@ jobs:
 
       # Ensures that no unreleased changes are missed when multiple instances of this workflow are triggered at the same time
       - name: Pull latest changes
-        run: git fetch origin main && git rebase origin/main
+        run: git fetch origin master && git rebase origin/master
 
       - name: Create log file with unreleased changes
         uses: orhun/git-cliff-action@v4
@@ -40,6 +40,6 @@ jobs:
       - name: Commit UNRELEASED_CHANGES.md
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          branch: main
+          branch: master
           commit_message: 'chore(doc): maintain UNRELEASED_CHANGES.md'
           file_pattern: UNRELEASED_CHANGES.md
