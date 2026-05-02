@@ -1,0 +1,45 @@
+name: Maintain Unreleased Changes
+
+on:
+  push:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  unreleased_changes:
+    name: Maintain Unreleased Changes
+    runs-on: ubuntu-latest
+
+    # Prevents merge conflicts by cancelling duplicate executions of this job
+    concurrency: unreleased_changes
+
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the added or changed files to the repository
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      # Ensures that no unreleased changes are missed when multiple instances of this workflow are triggered at the same time
+      - name: Pull latest changes
+        run: git fetch origin main && git rebase origin/main
+
+      - name: Create log file with unreleased changes
+        uses: orhun/git-cliff-action@v4
+        id: git-cliff
+        with:
+          config: .github/workflows/config/cliff.toml
+          args: -v --unreleased --strip header
+        env:
+          OUTPUT: UNRELEASED_CHANGES.md
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Wichtig für Repo-Metadaten
+
+      - name: Commit UNRELEASED_CHANGES.md
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          branch: main
+          commit_message: 'chore(doc): maintain UNRELEASED_CHANGES.md'
+          file_pattern: UNRELEASED_CHANGES.md
