@@ -21,11 +21,15 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          # Enables compiling the changelog when creating the new release by fetching the commit-history
           fetch-depth: 0
 
       # Ensures that no unreleased changes are missed when multiple instances of this workflow are triggered at the same time
       - name: Pull latest changes
-        run: git fetch origin master && git rebase origin/master
+        env:
+          USERNAME: 'Pull_Action_User'
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: git pull origin main -r -X theirs
 
       - name: Create log file with unreleased changes
         uses: orhun/git-cliff-action@v4
@@ -35,7 +39,6 @@ jobs:
           args: -v --unreleased --strip header
         env:
           OUTPUT: UNRELEASED_CHANGES.md
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Wichtig für Repo-Metadaten
 
       - name: Commit UNRELEASED_CHANGES.md
         uses: stefanzweifel/git-auto-commit-action@v7
