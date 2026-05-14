@@ -29,7 +29,7 @@ jobs:
         env:
           USERNAME: 'Pull_Action_User'
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: git pull origin main -r -X theirs
+        run: git pull origin master -r -X theirs
 
       - name: Create log file with unreleased changes
         uses: orhun/git-cliff-action@v4
