@@ -42,7 +42,10 @@ class RESTBindingIT {
         //Stop executor
         executorService.shutdown();
         executorService.close();
+        JexxaITTestApplication.shutDown();
+        JEXXA_INTEGRATION_TEST.shutDown();
     }
+
 
     @Test
     void testBoundedContextHandler()
@@ -211,10 +214,5 @@ class RESTBindingIT {
     }
 
 
-    @AfterAll
-    static void tearDown()
-    {
-        JexxaITTestApplication.shutDown();
-        JEXXA_INTEGRATION_TEST.shutDown();
-    }
+
 }
