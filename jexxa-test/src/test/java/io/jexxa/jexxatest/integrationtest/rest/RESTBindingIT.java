@@ -37,7 +37,7 @@ class RESTBindingIT {
     }
 
     @AfterAll
-    static void afterAll()
+    static void cleanupAfterAll()
     {
         //Stop executor
         executorService.shutdown();
