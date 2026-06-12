@@ -431,10 +431,6 @@ class RESTfulRPCAdapterIT
         assertTrue(response.isSuccess());
     }
 
-    @AfterEach
-    void tearDown()
-    {
-        objectUnderTest.stop();
-    }
+
 
 }
