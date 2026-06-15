@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Merge me!
         if: ${{ github.event.workflow_run.conclusion == 'success' }}
-        uses: ridedott/merge-me-action@2b8669129b305a6878a134dedbc14c45909a75f8
+        uses: ridedott/merge-me-action@1a20708b403609c1a17624bd1ad5772cb631ed49
         with:
           GITHUB_TOKEN: ${{ secrets.MERGE_ME_SECRET }}
           PRESET: DEPENDABOT_MINOR
