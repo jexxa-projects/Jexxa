@@ -19,7 +19,7 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           # Enables compiling the changelog when creating the new release by fetching the commit-history
           fetch-depth: 0
