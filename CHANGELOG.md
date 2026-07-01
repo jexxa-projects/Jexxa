@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[9.0.9] - 2026-07-01
+### Fixed
+- Updated dependencies
+- *(test)* Proper test naming so that annotation and method name have different names - ([f1388e1](https://github.com/jexxa-projects/Jexxa/commit/f1388e1e89c8984f1b8f25020b6384848cadd6e7))
+- *(test)* Removed second afterEach method - ([bafa481](https://github.com/jexxa-projects/Jexxa/commit/bafa481eecddaeb03825ce882c5a5ec23c477643))
+- *(test)* Removed second afterAll method - ([b49ebea](https://github.com/jexxa-projects/Jexxa/commit/b49ebead42b70c020e9a9fe3bdd6fabfbfb002b3))
+- *(test)* Corrected order for terminating tested components - ([13a6e59](https://github.com/jexxa-projects/Jexxa/commit/13a6e5952d50b058f514404049ca4f9e1f2351ac))
+
 ## \[9.0.8] - 2026-06-12
 ### Fixed
 - Updated dependencies
