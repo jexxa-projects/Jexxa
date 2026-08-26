@@ -171,14 +171,12 @@ package Jexxa-Core <<Jexxa>> #DDDDDD {
 }
 
 together {
-    package "Jexxa-DrivingAdapter" as JexxaDrivingAdapter <<Jexxa>> #DDDDDD {
+    package "Jexxa-Adapters" as JexxaAdapters <<Jexxa>> #DDDDDD {
     [Generic Driving Adapters] <<Driving Adapter>>
     [Specific Driving Adapters] <<Driving Adapter>>
+    [Driven Adapter Strategies] <<Driven Adapter>>
     }
 
-    package Jexxa-Infrastructure <<Jexxa>> #DDDDDD {
-    [Infrastructure Strategies] <<Infrastructure Pattern>>
-    }
 }
 
 
@@ -198,15 +196,15 @@ together {
 [Port Adapters] *-right-> [Inbound Ports]
 [Inbound Ports] o-down-> [Outbound Ports]
 [Outbound Ports] <|-- [Driven Adapters]
-[Infrastructure Strategies]  o.right. [Driven Adapters] : uses
+[Driven Adapter Strategies]  o.right. [Driven Adapters] : uses
 
-[Core] ..> JexxaDrivingAdapter : create
+[Core] ..> JexxaAdapters : create
 [Core] ..> Infrastructure : create
 [Core] ..> ApplicationCore : create
 
 [Generic Driving Adapters] -[hidden]- [Specific Driving Adapters]
 [Generic Driving Adapters] -[hidden]- [Inbound Ports]
-[Specific Driving Adapters] -[hidden]- [Infrastructure Strategies]
+[Specific Driving Adapters] -[hidden]- [Driven Adapter Strategies]
 [Specific Driving Adapters] -[hidden]- [Port Adapters]
 [Port Adapters] -[hidden]- [Driven Adapters]
 
@@ -230,7 +228,7 @@ a|`ApplicationCore`
 a|`Infrastructure`
 a| This package includes the glue code implemented by your developing team. It binds your technology-agnostic business application to concrete technology stacks. If you use `Jexxa-Infrastructure` this glue code is an ultra-thin facade.
 
-a|`Jexxa-Infrastructure`
+a|`Jexxa-Adapters`
 | This package provides implementation of so-called __application infrastructure patterns__ such as transactional outbox or messaging. These components are typically used to implement the application specific `Infrastructure`. Jexxa provides unified access to these components by utilizing the strategy pattern.
 
 a|`Jexxa-DrivingAdapter`
@@ -326,7 +324,7 @@ A __generic__ driving adapter automatically exposes methods from connected inbou
 A __specific__ driving adapter is used if a convention cannot be applied. Instead, you have to implement a configuration within the infrastructure of your application by using a __port adapter__. The port adapter is connected to the specific driving adapter and performs the mapping to expose a port. For example, this is required for RESTfulHTTP. Typically, a specific driving adapter queries the configuration via annotations used in the __port adapter__.
 
 
-|Infrastructure strategies
+|Driven Adapter Strategies
 
 |Application infrastructure strategies provide how to map objects from the application core to a specific technology stack. For example, if you use a database for persisting your data, the strategy decides the ORM mapping of your objects.
 | Jexxa provides implementation of typical application infrastructure patterns to simplify development of driven adapters. If such a strategy is suitable for your application, the implementation of a driven adapter is just a facade that maps the interface of the outbound port to the methods of the strategy.
