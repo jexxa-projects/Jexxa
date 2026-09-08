@@ -75,20 +75,20 @@ Maven
 <dependency>
     <groupId>io.jexxa</groupId>
     <artifactId>jexxa-web</artifactId>
-    <version>9.0.13</version>
+    <version>9.0.14</version>
 </dependency>
 <dependency>
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-simple</artifactId>
-    <version>2.0.18</version>
+    <version>2.0.19</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation "io.jexxa:jexxa-web:9.0.13"
-implementation "org.slf4j:slf4j-simple:2.0.18"
+implementation "io.jexxa:jexxa-web:9.0.14"
+implementation "org.slf4j:slf4j-simple:2.0.19"
 ``` 
 ## ⚙️ Configuration
 Jexxa expects the following configuration file in the classpath:

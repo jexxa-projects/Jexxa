@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[9.0.13] - 2026-09-08
+### Fixed
+- Updated dependencies
+- *(deps-dev)* Bump org.apache.activemq:artemis-jms-client - ([627e830](https://github.com/jexxa-projects/Jexxa/commit/627e8308eb65a1e17b870c4cf080b3ca3c8c5b09))
+- *(deps-dev)* Bump org.sonarsource.scanner.maven:sonar-maven-plugin - ([789a722](https://github.com/jexxa-projects/Jexxa/commit/789a722c013a505c4344b978e60420a9fd7a744c))
+
 ## \[9.0.13] - 2026-08-23
 ### Fixed
 - Updated dependencies
