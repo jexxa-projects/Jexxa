@@ -40,6 +40,14 @@ Despite operating in different worlds, both environments share the exact same so
 *   **Infrastructure Independence:** Technologies change, but your domain logic shouldn't. Jexxa’s Ports and Adapters pattern allows you to swap out underlying infrastructure without touching a single line of your core business code.
 *   **Long-Term Maintainability:** By removing technical boilerplate, Jexxa allows software architects to focus strictly on domain-driven design (DDD), ensuring the codebase remains clean, testable, and maintainable for years to come.
 
+## 🌱 Open Source & Commercial Services
+
+**Jexxa is and will remain open source.** Commercial services are optional, and using the project does not require a commercial agreement.
+
+For organizations adopting Jexxa, [MCR Intelligence](https://mcr-intelligence.de) offers commercial consulting and implementation support for domain-driven architecture and integration into existing system landscapes.
+
+The project is freely available to the community; professional services provide dedicated assistance for your organization's specific needs.
+
 ## 📋 Requirements
 
 - Java **25 or higher**
