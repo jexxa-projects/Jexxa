@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## \[9.0.14] - 2026-09-26
+### Fixed
+- Updated dependencies
+- *(deps-dev)* Bump org.apache.activemq:artemis-jms-client - ([97bbf8a](https://github.com/jexxa-projects/Jexxa/commit/97bbf8aedb48dfed693f1b1869e4568f1c079536))
+- *(deps-dev)* Bump org.codehaus.mojo:versions-maven-plugin - ([544baf9](https://github.com/jexxa-projects/Jexxa/commit/544baf9c2edfa1cb62a211faab034b7b789fc5fd))
+- *(deps-dev)* Bump org.apache.maven.plugins:maven-install-plugin - ([d6094cb](https://github.com/jexxa-projects/Jexxa/commit/d6094cb8d0fb9c2c699aed9443bbcc97ae99c248))
+- *(deps-dev)* Bump org.apache.maven.plugins:maven-deploy-plugin - ([0bf1295](https://github.com/jexxa-projects/Jexxa/commit/0bf1295ebcef3d2be91344a5391c69b9a3094eb1))
+
 ## \[9.0.13] - 2026-09-08
 ### Fixed
 - Updated dependencies
