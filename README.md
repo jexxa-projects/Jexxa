@@ -44,7 +44,7 @@ Despite operating in different worlds, both environments share the exact same so
 
 **Jexxa is and will remain open source.** Commercial services are optional, and using the project does not require a commercial agreement.
 
-For organizations adopting Jexxa, [MCR Intelligence](https://mcr-intelligence.de) offers commercial consulting and implementation support for domain-driven architecture and integration into existing system landscapes.
+For organizations adopting Jexxa, [MCR Industrial Intelligence](https://mcr-intelligence.de) offers commercial consulting and implementation support for domain-driven architecture and integration into existing system landscapes.
 
 The project is freely available to the community; professional services provide dedicated assistance for your organization's specific needs.
 
