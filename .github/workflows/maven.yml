@@ -26,20 +26,14 @@ jobs:
         ports:
           - 61616:61616
         env:
-          AMQ_USER: admin
-          AMQ_PASSWORD: admin
           AMQ_EXTRA_ARGS: --relax-jolokia
           ARTEMIS_USER: admin
           ARTEMIS_PASSWORD: admin
 
       postgres:
-        # Docker Hub image
         image: postgres
-        # setup default ports
         ports:
-          # Opens tcp port 5432 on the host and service container
           - 5432:5432
-        # setup default user for testing
         env:
           POSTGRES_PASSWORD: admin
           POSTGRES_USER: postgres
