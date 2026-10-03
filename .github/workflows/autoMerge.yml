@@ -1,22 +1,30 @@
-name: Merge me!
+name: Dependabot Auto-Merge
 
 on:
-  workflow_run:
-    types:
-      - completed
-    workflows:
-      - 'Java Support Matrix'
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
-  merge-me:
-    name: Merge me!
-
+  dependabot:
     runs-on: ubuntu-latest
-
+    # Stellt sicher, dass das Skript nur für Dependabot läuft
+    if: github.actor == 'dependabot[bot]'
     steps:
-      - name: Merge me!
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
-        uses: ridedott/merge-me-action@98f5cf6a9f7c0ebef4a253f9dffe6530e2c1bd7c
+      # 1. Metadaten des PRs auslesen (um Versionen zu prüfen)
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
         with:
-          GITHUB_TOKEN: ${{ secrets.MERGE_ME_SECRET }}
-          PRESET: DEPENDABOT_MINOR
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      # 2. Auto-Merge aktivieren, wenn es sich um Minor oder Patch handelt
+      - name: Enable auto-merge for Dependabot PRs
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
