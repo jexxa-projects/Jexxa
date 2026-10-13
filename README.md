@@ -13,7 +13,7 @@
 > ⚠️ Jexxa is not a general-purpose framework like Spring — it’s focused solely on the business layer and clear system boundaries.
 
 ## TL;DR
-If you prefer code over architecture, start with the [HelloJexxa](https://github.com/jexxa-projects/Jexxa#%EF%B8%8F-quickstart).
+If you prefer code over architecture, start with the [HelloJexxa](https://github.com/jexxa-projects/Jexxa#-requirements).
 
 ## Why Jexxa?
 
