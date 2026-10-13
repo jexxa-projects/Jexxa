@@ -12,6 +12,24 @@
 
 > ⚠️ Jexxa is not a general-purpose framework like Spring — it’s focused solely on the business layer and clear system boundaries.
 
+## TL;DR
+If you prefer code over architecture, start with the [HelloJexxa](#-quickstart).
+
+## Why Jexxa?
+
+Business software often lives much longer than the technologies used to build it.
+Databases change. Messaging systems change. Cloud providers change.
+Your domain knowledge should not.
+
+Jexxa helps teams build applications where:
+
+- Business logic remains technology-independent.
+- Domain models stay clean and maintainable.
+- Infrastructure can evolve without impacting core business code.
+- Architectural boundaries remain visible and enforceable.
+- Development teams can collaborate effectively using DDD principles.
+
+---
 
 ## 🚀 Key Features
 
@@ -19,6 +37,7 @@
 - **Visible Control Flow** — Clear orchestration of application logic
 - **Team-Friendly Design** — Scales well with cross-functional DDD teams
 - **Built-In Adapters** — REST (RMI-style), JMS, JDBC, in-memory DB, S3-Storage
+- **Event Streaming Support** — Apache Kafka and Kafka-compatible platforms support through the [ESPAdapters](https://github.com/jexxa-projects/ESPAdapters) project
 - **Resilient Microservice Patterns** — Includes transactional outbox, fail-fast startup combined with controlled retry strategies
 - **Architecture Validation & Governance**
   — Enforces architectural rules and prevents erosion through automated validation
