@@ -29,7 +29,6 @@ Jexxa helps teams build applications where:
 - Architectural boundaries remain visible and enforceable.
 - Development teams can collaborate effectively using DDD principles.
 
----
 
 ## 🚀 Key Features
 
