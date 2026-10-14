@@ -141,9 +141,9 @@ flowchart LR
     DOMAIN ~~~ KAFKA
 
 %% Die Pfeile werden von rechts nach links geschrieben, zeigen also nach links zum Core:
-    JDBC -.-> |implements| DOMAIN
-    JMS -.-> |implements| DOMAIN
-    KAFKA -.-> |implements| DOMAIN
+    JDBC -.->  DOMAIN
+    JMS -.->  DOMAIN
+    KAFKA -.-> DOMAIN
 
 ```
 
