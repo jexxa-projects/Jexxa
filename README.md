@@ -38,7 +38,6 @@ Maven:
     <artifactId>jexxa-web</artifactId>
     <version>9.1.0</version> <!-- latest version: see Maven Central badge above -->
 </dependency>
-
 <dependency>
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-simple</artifactId>
@@ -112,11 +111,12 @@ Jexxa reads `jexxa-application.properties` from the classpath.
 ### Architecture at a glance
 
 ```mermaid
+%%{init: {'flowchart': {'rankSpacing': 30, 'nodeSpacing': 20}}}%%
 flowchart LR
     subgraph Driving["Driving adapters"]
-        REST["REST (RMI style)"]
+        REST["REST \n(RMI style)"]
         JMS_IN["JMS"]
-        KAFKA_IN["Kafka (ESPAdapters)"]
+        KAFKA_IN["Kafka \n(ESPAdapters)"]
     end
 
     subgraph Core["Business core"]
@@ -126,9 +126,9 @@ flowchart LR
     end
 
     subgraph Driven["Driven adapters"]
-        JDBC["JDBC / in-memory DB / S3"]
+        JDBC["JDBC / IMDB / S3"]
         JMS["JMS "]
-        KAFKA["Kafka (ESPAdapters)"]
+        KAFKA["Kafka \n(ESPAdapters)"]
     end
 
     REST --> APP
@@ -144,7 +144,6 @@ flowchart LR
     JDBC -.-> |implements| DOMAIN
     JMS -.-> |implements| DOMAIN
     KAFKA -.-> |implements| DOMAIN
-
 
 ```
 
