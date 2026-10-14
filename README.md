@@ -141,9 +141,15 @@ flowchart LR
     DOMAIN ~~~ KAFKA
 
 %% Die Pfeile werden von rechts nach links geschrieben, zeigen also nach links zum Core:
-    JDBC -.->  DOMAIN
-    JMS -.->  DOMAIN
-    KAFKA -.-> DOMAIN
+    JDBC -.-> |implements| DOMAIN
+    JMS -.-> |implements| DOMAIN
+    KAFKA -.-> |implements| DOMAIN
+
+%% --- UNSICHTBARER PUFFER FÜR GITHUB ---
+    SPACER[" "]
+KAFKA ~~~ SPACER
+style SPACER fill:none,stroke:none,color:none
+
 
 ```
 
