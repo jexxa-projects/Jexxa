@@ -43,6 +43,19 @@ Jexxa helps teams build applications where:
 
 ➡️ [Explore the Architecture](https://jexxa-projects.github.io/Jexxa/jexxa_architecture.html)
 
+## 🌍 Real-World Context 
+
+Jexxa was created to support business applications with long life cycles and complex integration
+requirements. The architectural principles behind Jexxa have been applied in industrial production environments since
+2020, including systems supporting blast furnace, steelworks, and rolling mill processes. 
+
+These environments require software that remains maintainable for decades while integrating both legacy
+systems and modern cloud-native technologies.
+
+## 📈 Ecosystem Adoption
+Jexxa is part of the broader Jexxa Projects ecosystem. According to package download telemetry, artifacts from the ecosystem have been downloaded by hundreds of organizations worldwide across industries such as cybersecurity, Saas, fintech, analytics, and industrial manufacturing. 
+
+These organizations face different business challenges but share a common need: __preserving valuable business__
 
 ## 🏛️ Enterprise-Grade & Field-Tested
 
