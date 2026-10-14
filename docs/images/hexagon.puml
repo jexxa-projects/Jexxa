@@ -1,0 +1,49 @@
+@startuml
+skinparam componentStyle uml2
+skinparam ranksep 40
+skinparam nodesep 20
+left to right direction
+
+' Farbdefinitionen für die sauberere Optik
+skinparam rectangle {
+    BackgroundColor<<Driving>> #EBF3F9
+    BorderColor<<Driving>> #2B579A
+    BackgroundColor<<Core>> #F4F9EB
+    BorderColor<<Core>> #578A1D
+    BackgroundColor<<Driven>> #FAF3EB
+    BorderColor<<Driven>> #D2691E
+}
+
+skinparam component {
+    BackgroundColor #White
+    BorderColor #666666
+}
+
+rectangle "Driving adapters" as Driving <<Driving>> {
+    component "REST (RMI style)" as REST
+    component "JMS" as JMS_IN
+    component "Kafka (ESPAdapters)" as KAFKA_IN
+}
+
+rectangle "Business core" as Core <<Core>> {
+    component "Application layer" as APP
+    component "Domain model\nincl. driven ports (interfaces)" as DOMAIN
+    APP --> DOMAIN
+}
+
+rectangle "Driven adapters" as Driven <<Driven>> {
+    component "JDBC / in-memory DB / S3" as JDBC
+    component "JMS " as JMS
+    component "Kafka (ESPAdapters)" as KAFKA
+}
+
+' Verbindungen von Driving zu Core (Beschriftung angepasst auf "triggers")
+REST --> APP : triggers
+JMS_IN --> APP : triggers
+KAFKA_IN --> APP : triggers
+
+' Verbindungen von Driven zu Core
+JDBC .up.> DOMAIN : implements
+JMS .up.> DOMAIN : implements
+KAFKA .up.> DOMAIN : implements
+@enduml
