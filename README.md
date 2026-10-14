@@ -118,22 +118,34 @@ flowchart LR
         JMS_IN["JMS"]
         KAFKA_IN["Kafka (ESPAdapters)"]
     end
+
     subgraph Core["Business core"]
         APP["Application layer"]
         DOMAIN["Domain model<br/>incl. driven ports (interfaces)"]
         APP --> DOMAIN
     end
+
     subgraph Driven["Driven adapters"]
         JDBC["JDBC / in-memory DB / S3"]
         JMS["JMS "]
         KAFKA["Kafka (ESPAdapters)"]
     end
+
     REST --> APP
     JMS_IN --> APP
     KAFKA_IN --> APP
-    DOMAIN <-.- |implements| JDBC
-    DOMAIN <-.- |implements| JMS
-    DOMAIN <-.- |implements| KAFKA
+
+%% Unsichtbare Linien halten die "Driven"-Boxen rechts fest:
+    DOMAIN ~~~ JDBC
+    DOMAIN ~~~ JMS
+    DOMAIN ~~~ KAFKA
+
+%% Die Pfeile werden von rechts nach links geschrieben, zeigen also nach links zum Core:
+    JDBC -.-> |implements| DOMAIN
+    JMS -.-> |implements| DOMAIN
+    KAFKA -.-> |implements| DOMAIN
+
+
 ```
 
 All arrows show source-code dependencies: every adapter depends on the business core, never the other way round (dependency inversion).
