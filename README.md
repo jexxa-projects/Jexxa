@@ -36,7 +36,7 @@ Maven:
 <dependency>
     <groupId>io.jexxa</groupId>
     <artifactId>jexxa-web</artifactId>
-    <version>9.1.0</version> <!-- latest version: see Maven Central badge above -->
+    <version>9.1.0</version> 
 </dependency>
 <dependency>
     <groupId>org.slf4j</groupId>
