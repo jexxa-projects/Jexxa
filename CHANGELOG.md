@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## \[9.1.0] - 2026-10-14
+### Added
+- Architecture validation allows interfaces with nested domain events now. This allows to support and validate 'functional' DDD style. 
+
+### Fixed
+- Updated dependencies
+- *(deps-dev)* Bump org.codehaus.mojo:versions-maven-plugin ([#772](https://github.com/jexxa-projects/Jexxa/issues/772)) - ([6ba0d5a](https://github.com/jexxa-projects/Jexxa/commit/6ba0d5aa95231120885f5ae6b9983e5cf33bed41))
+- *(deps-dev)* Bump org.sonatype.central:central-publishing-maven-plugin ([#774](https://github.com/jexxa-projects/Jexxa/issues/774)) - ([0c7eca1](https://github.com/jexxa-projects/Jexxa/commit/0c7eca199a8fbf0dfedf00ee34e21e83fba5196b))
+
+
 ## \[9.0.14] - 2026-09-26
 ### Fixed
 - Updated dependencies
