@@ -47,8 +47,13 @@ class ArchitectureTest {
     void validateInvalidPatternLanguage()
     {
         var objectUnderTest = new PatternLanguage(InvalidApplication.class, ImportOption.Predefined.ONLY_INCLUDE_TESTS);
-        assertThrows(AssertionError.class, objectUnderTest::validate);
+
+        assertThrows(AssertionError.class, objectUnderTest::validateApplicationService);
+        assertThrows(AssertionError.class, objectUnderTest::validateDomainEventMustBeRecord);
+        assertThrows(AssertionError.class, objectUnderTest::validateDrivingAdapter);
+
     }
+
 
     @Test
     void validateInvalidAggregates()

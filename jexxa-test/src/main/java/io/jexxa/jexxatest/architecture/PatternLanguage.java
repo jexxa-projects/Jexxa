@@ -1,6 +1,10 @@
 package io.jexxa.jexxatest.architecture;
 
+import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.importer.ImportOption;
+import com.tngtech.archunit.lang.ArchCondition;
+import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.SimpleConditionEvent;
 import io.jexxa.addend.applicationcore.Aggregate;
 import io.jexxa.addend.applicationcore.AggregateFactory;
 import io.jexxa.addend.applicationcore.ApplicationService;
@@ -14,6 +18,9 @@ import io.jexxa.addend.applicationcore.ValueObject;
 import io.jexxa.addend.applicationcore.ValueObjectFactory;
 import io.jexxa.addend.infrastructure.DrivenAdapter;
 import io.jexxa.addend.infrastructure.DrivingAdapter;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static io.jexxa.jexxatest.architecture.PackageName.APPLICATIONSERVICE;
@@ -148,14 +155,50 @@ public class PatternLanguage extends ProjectContent {
         recordRule.check(importedClasses());
     }
 
-    protected void validateDomainEventMustBeRecord()
-    {
-        var recordRule = classes()
+    protected void validateDomainEventMustBeRecord() {
+         classes()
                 .that().areAnnotatedWith(DomainEvent.class)
-                .should().beRecords()
-                .allowEmptyShould(true);
+                .should(beRecordsOrValidInterfacesWithAnnotatedRecords())
+                .allowEmptyShould(true)
+                .check(importedClasses());
+    }
 
-        recordRule.check(importedClasses());
+    private ArchCondition<JavaClass> beRecordsOrValidInterfacesWithAnnotatedRecords() {
+        return new ArchCondition<>("be records or interfaces whose nested records are also annotated with @DomainEvent") {
+            @Override
+            public void check(JavaClass javaClass, ConditionEvents events) {
+                if (javaClass.isInterface()) {
+                    validateInterfaceContainer(javaClass, events);
+                } else {
+                    validateClassIsRecord(javaClass, events);
+                }
+            }
+        };
+    }
+
+    private void validateInterfaceContainer(JavaClass javaClass, ConditionEvents events) {
+        List<Class<?>> nestedRecords = Arrays.stream(javaClass.reflect().getDeclaredClasses())
+                .filter(Class::isRecord)
+                .toList();
+
+        boolean hasNoRecords = nestedRecords.isEmpty();
+        boolean hasUnannotatedRecords = nestedRecords.stream()
+                .anyMatch(foundRecord -> !foundRecord.isAnnotationPresent(DomainEvent.class));
+
+        if (hasNoRecords || hasUnannotatedRecords) {
+            String message = String.format(
+                    "Interface %s carries @DomainEvent, but is invalid: All nested records inside its body must also be explicitly annotated with @DomainEvent!",
+                    javaClass.getName()
+            );
+            events.add(SimpleConditionEvent.violated(javaClass, message));
+        }
+    }
+
+    private void validateClassIsRecord(JavaClass javaClass, ConditionEvents events) {
+        if (!javaClass.isRecord()) {
+            String message = String.format("Class %s is annotated with @DomainEvent but is NOT a record!", javaClass.getName());
+            events.add(SimpleConditionEvent.violated(javaClass, message));
+        }
     }
 
 }
