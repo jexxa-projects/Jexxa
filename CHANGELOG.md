@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## \[9.1.1] - 2026-10-17
+### Fixed
+- Fix uber-jar creation in jexxa-core by restricting shade plugin [#779](https://github.com/jexxa-projects/Jexxa/pull/779). This Fixes [#778](https://github.com/jexxa-projects/Jexxa/issues/778)
+
 ## \[9.1.0] - 2026-10-14
 ### Added
 - Architecture validation allows interfaces with nested domain events now. This allows to support and validate 'functional' DDD style. 
