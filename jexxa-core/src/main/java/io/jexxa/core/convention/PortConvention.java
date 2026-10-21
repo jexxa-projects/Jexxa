@@ -1,6 +1,8 @@
 package io.jexxa.core.convention;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public final class PortConvention
 {
@@ -22,24 +24,28 @@ public final class PortConvention
      */
     public static <T> void validate(Class<T> clazz)
     {
-        if ( clazz.getConstructors().length == 0)
-        {
-            throw new PortConventionViolation("No public constructor available for Port : " + clazz.getName());
-        }
+        validate(clazz, Collections.emptyList());
+    }
 
-        if ( clazz.getConstructors().length > 1)
-        {
-            throw new PortConventionViolation("More than one public constructor available for Port : " + clazz.getName());
-        }
+    public static void validate(Class<?> clazz, List<String> outboundPorts) {
+        // 1. Konstruktor-Anzahl per Switch Expression validieren
+        var constructor = switch (clazz.getConstructors().length) {
+            case 1 -> clazz.getConstructors()[0];
+            case 0 -> throw new PortConventionViolation("No public constructor available for Port: " + clazz.getName());
+            default -> throw new PortConventionViolation("More than one public constructor available for Port: " + clazz.getName());
+        };
 
-        var nonInterfaceAttribute =
-                Arrays.stream(clazz.getConstructors()[0].getParameterTypes())
-                .filter(attribute -> !attribute.isInterface())
-                .findAny();
+        // 2. Erlaubte Packages prüfen
+        boolean invalidParameterExists = Arrays.stream(constructor.getParameterTypes())
+                .filter(param -> !param.isInterface())
+                .map(Class::getPackageName)
+                .anyMatch(pkg -> outboundPorts.stream().noneMatch(allowed -> pkg.equals(allowed) || pkg.startsWith(allowed + ".")));
 
-        if (nonInterfaceAttribute.isPresent())
-        {
-            throw new PortConventionViolation(clazz);
+        if (invalidParameterExists) {
+            throw new PortConventionViolation(
+                    String.format("Non-interface parameter in constructor of Port '%s' is not part of the allowed outbound ports packages: %s",
+                            clazz.getName(), outboundPorts)
+            );
         }
     }
 

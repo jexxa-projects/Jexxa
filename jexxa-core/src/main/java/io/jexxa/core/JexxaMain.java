@@ -172,7 +172,7 @@ public final class JexxaMain
     public JexxaMain bootstrapAnnotation(Class<? extends Annotation> annotation)
     {
         var inboundPorts = portFactory.getAnnotatedPorts(annotation);
-        inboundPorts.forEach(PortConvention::validate);
+        inboundPorts.forEach( element -> PortConvention.validate(element, portFactory.getAcceptPackages()));
 
         inboundPorts
                 .forEach(element -> portFactory.getInstanceOf(element, properties));
@@ -447,7 +447,7 @@ public final class JexxaMain
         var drivingAdapter = drivingAdapterFactory.getInstanceOf(adapter, properties);
 
         var inboundPorts = portFactory.getAnnotatedPorts(portAnnotation);
-        inboundPorts.forEach(PortConvention::validate);
+        inboundPorts.forEach( element -> PortConvention.validate( element, portFactory.getAcceptPackages()));
 
         inboundPorts.stream()
                 .map(element -> portFactory.getInstanceOf(element, properties))
@@ -475,7 +475,7 @@ public final class JexxaMain
 
     private <T> T getInstanceOfInboundPort(Class<T> port)
     {
-        PortConvention.validate(port);
+        PortConvention.validate(port, portFactory.getAcceptPackages());
         return port.cast(portFactory.getInstanceOf(port, properties));
     }
 

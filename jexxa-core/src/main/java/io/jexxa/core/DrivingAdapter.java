@@ -43,7 +43,7 @@ public final class  DrivingAdapter<T extends IDrivingAdapter>
             return jexxaMain;
         }
 
-        PortConvention.validate(port);
+        PortConvention.validate(port, jexxaMain.getApplicationCore());
 
         jexxaMain.bindToPort(drivingAdapterClass, port);
 

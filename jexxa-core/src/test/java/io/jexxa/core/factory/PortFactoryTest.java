@@ -1,6 +1,7 @@
 package io.jexxa.core.factory;
 
 
+import io.jexxa.testapplication.applicationservice.ApplicationServiceWithDomainService;
 import io.jexxa.testapplication.applicationservice.ApplicationServiceWithDrivenAdapters;
 import io.jexxa.testapplication.applicationservice.ApplicationServiceWithInvalidDrivenAdapters;
 import io.jexxa.testapplication.infrastructure.drivingadapter.portadapter.PortAdapter;
@@ -43,6 +44,24 @@ class PortFactoryTest
 
         //Assert
         assertTrue(result);
+    }
+
+    @Test
+    void createPortWithDomainService()
+    {
+        //Arrange
+        var drivenAdapterFactory = new AdapterFactory().
+                acceptPackage(JEXXA_DRIVEN_ADAPTER);
+        var objectUnderTest = new PortFactory(drivenAdapterFactory)
+                .acceptPackage(JEXXA_APPLICATION_SERVICE).acceptPackage(JEXXA_DOMAIN_SERVICE);
+
+        //Act
+        boolean result = objectUnderTest.isAvailable(ApplicationServiceWithDomainService.class);
+        var instance =  objectUnderTest.getInstanceOf(ApplicationServiceWithDomainService.class, new Properties());
+
+        //Assert
+        assertTrue(result);
+        assertNotNull(instance);
     }
 
     @Test
