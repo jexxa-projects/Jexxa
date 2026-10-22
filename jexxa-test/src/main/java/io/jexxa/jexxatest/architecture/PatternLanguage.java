@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static io.jexxa.jexxatest.architecture.PackageName.APPLICATION;
 import static io.jexxa.jexxatest.architecture.PackageName.APPLICATIONSERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_SERVICE;
@@ -61,9 +62,10 @@ public class PatternLanguage extends ProjectContent {
     protected void validateApplicationService()
     {
         var annotationRule = classes()
-                .that().resideInAnyPackage(APPLICATIONSERVICE)
+                .that().resideInAnyPackage(APPLICATION, APPLICATIONSERVICE)
                 .and().areNotAnonymousClasses()
                 .should().beAnnotatedWith(ApplicationService.class)
+                .orShould().beAnnotatedWith(InfrastructureService.class)
                 .allowEmptyShould(true);
 
         annotationRule.check(importedClasses());

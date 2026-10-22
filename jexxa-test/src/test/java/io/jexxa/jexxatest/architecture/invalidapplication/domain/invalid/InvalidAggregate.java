@@ -1,7 +1,7 @@
 package io.jexxa.jexxatest.architecture.invalidapplication.domain.invalid;
 
 import io.jexxa.addend.applicationcore.Aggregate;
-import io.jexxa.jexxatest.architecture.validapplication.applicationservice.TestApplicationService;
+import io.jexxa.jexxatest.architecture.validapplication.application.TestApplicationService;
 
 @SuppressWarnings("unused")
 @Aggregate

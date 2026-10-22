@@ -51,7 +51,12 @@ public class PortsAndAdapters extends ProjectContent {
         this.onionArchitecture = onionArchitecture()
                 .domainModels(project().getPackage().getName() + ".domain..")
                 .domainServices(project().getPackage().getName() +".domainservice..")
-                .applicationServices(project().getPackage().getName() + ".applicationservice..");
+                .applicationServices(project().getPackage().getName() + ".applicationservice..",
+                        project().getPackage().getName() +".application..")
+                .adapter(
+                        "bootstrap",
+                        project().getPackageName() + ".infrastructure.bootstrap.."
+                );
 
         this.onionArchitecture.allowEmptyShould(true);
     }
@@ -64,7 +69,20 @@ public class PortsAndAdapters extends ProjectContent {
 
     public PortsAndAdapters addDrivingAdapterPackage(String drivingAdapterPackage)
     {
-        onionArchitecture.adapter("drivingAdapter." + drivingAdapterPackage, project().getPackageName() + ".infrastructure.drivingadapter." + drivingAdapterPackage + "..");
+        onionArchitecture.adapter(
+                "drivingAdapter." + drivingAdapterPackage,
+                project().getPackageName() + ".infrastructure.drivingadapter." + drivingAdapterPackage + "..");
+        return this;
+    }
+
+    public PortsAndAdapters addBootstrapAdapterPackage(String bootstrapAdapterPackage)
+    {
+        onionArchitecture.adapter(
+                "bootstrap." + bootstrapAdapterPackage,
+                project().getPackageName()
+                        + ".infrastructure.bootstrap."
+                        + bootstrapAdapterPackage + ".."
+        );
         return this;
     }
 

@@ -1,7 +1,7 @@
 package io.jexxa.jexxatest.architecture.validapplication.infrastructure.drivingadapter.rest;
 
 import io.jexxa.addend.infrastructure.DrivingAdapter;
-import io.jexxa.jexxatest.architecture.validapplication.applicationservice.TestApplicationService;
+import io.jexxa.jexxatest.architecture.validapplication.application.TestApplicationService;
 
 @SuppressWarnings("unused")
 @DrivingAdapter

@@ -24,6 +24,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noFields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noMethods;
 import static io.jexxa.jexxatest.architecture.AggregateRules.GenericWithAggregate.returnGenericWithAggregate;
+import static io.jexxa.jexxatest.architecture.PackageName.APPLICATION;
 import static io.jexxa.jexxatest.architecture.PackageName.APPLICATIONSERVICE;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN;
 import static io.jexxa.jexxatest.architecture.PackageName.DOMAIN_SERVICE;
@@ -79,7 +80,7 @@ public class AggregateRules extends ProjectContent {
 
         var invalidReturnType = noMethods().that()
                 .arePublic().and()
-                .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_SERVICE, DOMAIN))
+                .areDeclaredInClassesThat(resideInAnyPackage(APPLICATION, APPLICATIONSERVICE, DOMAIN_SERVICE, DOMAIN))
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Aggregate.class)
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Repository.class)
                 .should().haveRawReturnType(thatIsAnnotatedWithAggregate())
@@ -93,7 +94,7 @@ public class AggregateRules extends ProjectContent {
     protected void validateOnlyRepositoriesAcceptAggregates() {
         var invalidReturnType = noMethods().that()
                 .arePublic().and()
-                .areDeclaredInClassesThat(resideInAnyPackage(APPLICATIONSERVICE, DOMAIN, DOMAIN_SERVICE))
+                .areDeclaredInClassesThat(resideInAnyPackage(APPLICATION, APPLICATIONSERVICE, DOMAIN, DOMAIN_SERVICE))
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Repository.class)
                 .should().haveRawParameterTypes(thatAreAggregates())
                 .allowEmptyShould(true)
@@ -130,7 +131,7 @@ public class AggregateRules extends ProjectContent {
 
     protected void validateOnlyAggregatesHaveAggregatesAsFields() {
         var invalidReturnType = noFields().that().areDeclaredInClassesThat()
-                .resideInAnyPackage(APPLICATIONSERVICE, DOMAIN_SERVICE, DOMAIN)
+                .resideInAnyPackage(APPLICATION, APPLICATIONSERVICE, DOMAIN_SERVICE, DOMAIN)
                 .and().areDeclaredInClassesThat().areNotAnnotatedWith(Aggregate.class)
                 .should().haveRawType(thatIsAnnotatedWithAggregate())
                 .allowEmptyShould(true)

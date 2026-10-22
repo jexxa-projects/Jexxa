@@ -1,4 +1,4 @@
-package io.jexxa.jexxatest.architecture.invalidapplication.applicationservice;
+package io.jexxa.jexxatest.architecture.invalidapplication.application;
 
 import io.jexxa.jexxatest.architecture.invalidapplication.domain.invalid.InvalidAggregate;
 import io.jexxa.jexxatest.architecture.invalidapplication.domain.invalid.InvalidRepository;
@@ -6,7 +6,6 @@ import io.jexxa.jexxatest.architecture.invalidapplication.domain.invalid.Invalid
 import java.util.List;
 
 @SuppressWarnings("unused")
-
 public class InvalidApplicationService
 {
     private final InvalidRepository invalidRepository;

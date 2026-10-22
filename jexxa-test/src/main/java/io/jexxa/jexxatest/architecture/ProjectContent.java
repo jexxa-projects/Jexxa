@@ -21,6 +21,7 @@ public abstract class ProjectContent
                         project.getPackageName()+ ".domain..",
                         project.getPackageName()+ ".domainservice..",
                         project.getPackageName()+ ".applicationservice..",
+                        project.getPackageName()+ ".application..",
                         project.getPackageName()+ ".infrastructure.." );
     }
 

@@ -7,6 +7,7 @@ package io.jexxa.jexxatest.architecture;
  */
 final class PackageName
 {
+    public static final String APPLICATION = "..application..";
     public static final String APPLICATIONSERVICE = "..applicationservice..";
     public static final String DOMAIN_SERVICE = "..domainservice..";
     public static final String DOMAIN = "..domain..";

@@ -1,4 +1,4 @@
-package io.jexxa.jexxatest.architecture.validapplication.applicationservice;
+package io.jexxa.jexxatest.architecture.validapplication.application;
 
 import io.jexxa.addend.applicationcore.ApplicationService;
 import io.jexxa.jexxatest.architecture.validapplication.domain.valid.ValidAggregate;
