@@ -9,6 +9,6 @@ public class BootstrapService
 {
     public BootstrapService(ValidRepository validRepository)
     {
-        ValidRepository validRepository1 = Objects.requireNonNull(validRepository);
+        Objects.requireNonNull(validRepository);
     }
 }
