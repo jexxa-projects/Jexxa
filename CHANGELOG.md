@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## \[9.2.0] - 2026-xx-xx
+- Jexxa-Test: Extended Onion Architecture validation to explicitly support bootstrap services as a separate infrastructure adapter layer. 
+  - Bootstrap services can now depend on application services and domain abstractions, including repositories, without violating the architecture rules. 
+  - Added support for validating bootstrap components located in infrastructure.bootstrap, keeping them separate from driving and driven adapters.
+
+### Fixed
+- Updated dependencies
+
 ## \[9.1.1] - 2026-10-17
 ### Fixed
 - Fix uber-jar creation in jexxa-core by restricting shade plugin [#779](https://github.com/jexxa-projects/Jexxa/pull/779). This Fixes [#778](https://github.com/jexxa-projects/Jexxa/issues/778)
