@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
 import io.javalin.http.Context;
+import io.javalin.http.staticfiles.JavalinStaticResourceHandler;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.json.JsonMapper;
 import io.javalin.plugin.bundled.CorsPluginConfig;
@@ -124,7 +125,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     {
         RPC_ADAPTER_MAP.remove(properties);
 
-        javalin.stop();
+        Optional.ofNullable(javalin).ifPresent(Javalin::stop);
         Optional.ofNullable(httpConnector).ifPresent(ServerConnector::close);
         Optional.ofNullable(sslConnector).ifPresent(ServerConnector::close);
     }
@@ -200,7 +201,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         try {
         return Integer.parseInt(properties.getProperty(JexxaWebProperties.JEXXA_REST_HTTPS_PORT, "0"));
         } catch (NumberFormatException _)  {
-            SLF4jLogger.getLogger(RESTfulRPCAdapter.class).error("Invalid integer format used for http-port");
+            SLF4jLogger.getLogger(RESTfulRPCAdapter.class).error("Invalid integer format used for https-port");
             return 0;
         }
     }
@@ -220,11 +221,11 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
 
         // Print OPENAPI links
         if (isHTTPEnabled()) {
-            openAPIConvention.getPath().ifPresent(path -> getLogger(ApplicationBanner.class).info("OpenAPI available at: {}"
+            openAPIConvention.getPath().ifPresent(path -> getLogger(ApplicationBanner.class).info("OpenAPI available via HTTP at: {}"
                     , "http://" + getHostname() + ":" + getHTTPPort() +  path ) );
         }
         if (isHTTPSEnabled()) {
-            openAPIConvention.getPath().ifPresent(path -> getLogger(ApplicationBanner.class).info("OpenAPI available at: {}"
+            openAPIConvention.getPath().ifPresent(path -> getLogger(ApplicationBanner.class).info("OpenAPI available via HTTPS at: {}"
                     , "https://" + getHostname() + ":" + getHTTPSPort() + path ) );
         }
     }
@@ -448,7 +449,7 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
     private Object[] readArray(JsonElement jsonElement, Method method)
     {
         if (!jsonElement.isJsonArray()) {
-            throw new IllegalArgumentException("Multiple method attributes musst be passed inside a JSonArray");
+            throw new IllegalArgumentException("Multiple method attributes must be passed inside a JSonArray");
         }
         var jsonArray = jsonElement.getAsJsonArray();
 
@@ -490,23 +491,34 @@ public final class RESTfulRPCAdapter implements IDrivingAdapter
         }
     }
 
+
     private void getJavalinConfig(JavalinConfig javalinConfig) {
         javalinConfig.jetty.modifyServer(this::configureServer);
 
         javalinConfig.jsonMapper(new JexxaJSONMapper());
+
+        // Use Javalin's own resource handler instead of Jetty
+        javalinConfig.resourceHandler(new JavalinStaticResourceHandler());
+
         Location location = Location.CLASSPATH;
 
-        if (properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_EXTERNAL, "false").equalsIgnoreCase("true")) {
+        if (properties.getProperty(
+                JexxaWebProperties.JEXXA_REST_STATIC_FILES_EXTERNAL,
+                "false").equalsIgnoreCase("true")) {
             location = Location.EXTERNAL;
         }
 
         if (properties.containsKey(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT)) {
-            javalinConfig.staticFiles.add(properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT), location);
+            javalinConfig.staticFiles.add(
+                    properties.getProperty(JexxaWebProperties.JEXXA_REST_STATIC_FILES_ROOT),
+                    location
+            );
         }
 
-        javalinConfig.bundledPlugins.enableCors(cors -> cors.addRule(CorsPluginConfig.CorsRule::anyHost));
+        javalinConfig.bundledPlugins.enableCors(
+                cors -> cors.addRule(CorsPluginConfig.CorsRule::anyHost)
+        );
     }
-
 
         void configureServer(Server server)
         {
