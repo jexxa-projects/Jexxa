@@ -3,6 +3,7 @@
 ### 🐛 Bug Fixes
 
 - *(web)* Use JavalinStaticResourceHandler for static files. - ([8ebd88d](https://github.com/jexxa-projects/Jexxa/commit/8ebd88dbe4d9cfdf9d46b31b67ee0a25db87bc4d))
+- *(web)* Disabled annotation scanning because it is not required - ([fd1c392](https://github.com/jexxa-projects/Jexxa/commit/fd1c3927a74a6fe0f2e1aeda10108604dffbf48f))
 
 ### ⚙️ Miscellaneous Tasks
 
