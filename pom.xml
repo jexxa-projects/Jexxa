@@ -87,7 +87,7 @@
     <smallrye.openapi.core.version>4.3.5</smallrye.openapi.core.version>
     <smallrye.config.core.version>4.1.0</smallrye.config.core.version>
     <jetty.version>12.1.14</jetty.version>
-    <swagger.core.version>2.2.55</swagger.core.version>
+    <swagger.core.version>3.0.0</swagger.core.version>
 
 
     <!-- version of test dependencies -->
