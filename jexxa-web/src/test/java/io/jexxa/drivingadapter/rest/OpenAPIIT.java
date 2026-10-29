@@ -105,7 +105,7 @@ class OpenAPIIT
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
 
-        var result = response
+           var result = response
                 .get("components").getAsJsonObject()
                 .get("schemas").getAsJsonObject()
                 .get(SpecialCasesValueObject.class.getSimpleName()).getAsJsonObject();
@@ -119,25 +119,32 @@ class OpenAPIIT
     @Test
     void testEnum()
     {
-        //Arrange -> Nothing to do
         //Arrange
         objectUnderTest.register(new SimpleApplicationService());
         objectUnderTest.start();
+
         //Act
         JsonObject response = Unirest.get(OPENAPI_PATH)
                 .header(CONTENT_TYPE, APPLICATION_TYPE)
                 .asObject(JsonObject.class).getBody();
 
         var result = response
-                .get("components").getAsJsonObject()
-                .get("schemas").getAsJsonObject()
-                .get(JexxaEnum.class.getSimpleName()).getAsJsonObject();
+                .getAsJsonObject("components")
+                .getAsJsonObject("schemas")
+                .getAsJsonObject(JexxaEnum.class.getSimpleName());
 
-        //Assert - Fields of basic openAPI structure
+        //Assert
         assertNotNull(result);
-        assertTrue(result.toString().contains(JexxaEnum.ENUM_VALUE1.name()));
-        assertTrue(result.toString().contains(JexxaEnum.ENUM_VALUE2.name()));
-        assertTrue(result.toString().contains(JexxaEnum.ENUM_VALUE3.name()));
+        assertEquals("string", result.get("type").getAsString());
+
+        var enumValues = result.getAsJsonArray("enum");
+
+        assertEquals(JexxaEnum.values().length, enumValues.size());
+
+        for (var value : JexxaEnum.values()) {
+            assertTrue(enumValues.asList().stream()
+                    .anyMatch(element -> element.getAsString().equals(value.name())));
+        }
     }
 
     @Test

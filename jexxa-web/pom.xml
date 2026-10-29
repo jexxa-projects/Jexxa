@@ -68,37 +68,11 @@
     </dependency>
 
     <dependency>
-      <groupId>org.eclipse.jetty.ee10.websocket</groupId>
-      <artifactId>jetty-ee10-websocket-jetty-server</artifactId>
-      <version>${jetty.version}</version>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-core</artifactId>
+      <version>${swagger.core.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>io.smallrye.config</groupId>
-      <artifactId>smallrye-config-core</artifactId>
-      <version>${smallrye.config.core.version}</version>
-    </dependency>
-
-
-    <dependency>
-      <groupId>io.smallrye</groupId>
-      <artifactId>smallrye-open-api-core</artifactId>
-      <version>${smallrye.openapi.core.version}</version>
-    <exclusions>
-      <exclusion>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-      </exclusion>
-
-    </exclusions>
-  </dependency>
-
-  <dependency>
-    <groupId>com.fasterxml.jackson.core</groupId>
-    <artifactId>jackson-core</artifactId>
-    <version>${jackson.core.version}</version>
-    <scope>compile</scope>
-  </dependency>
 
 
     <!-- dependencies for tests -->
