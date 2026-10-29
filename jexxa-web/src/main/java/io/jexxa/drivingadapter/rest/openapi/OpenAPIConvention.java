@@ -1,9 +1,9 @@
 package io.jexxa.drivingadapter.rest.openapi;
 
 
-import io.smallrye.config.SmallRyeConfig;
+import io.smallrye.config.PropertiesConfigSource;
+import io.smallrye.config.SmallRyeConfigBuilder;
 import io.smallrye.openapi.api.SmallRyeOpenAPI;
-import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.openapi.OASFactory;
 import org.eclipse.microprofile.openapi.models.Components;
 import org.eclipse.microprofile.openapi.models.OpenAPI;
@@ -40,7 +40,6 @@ public class OpenAPIConvention
     {
         this.properties = properties;
         components = createComponents();
-
 
         openAPI = createOpenAPI()
                 .openapi("3.0.1")
@@ -125,13 +124,35 @@ public class OpenAPIConvention
     }
 
 
-    public String getOpenAPI() {
+   /* public String getOpenAPI() {
         try {
             return SmallRyeOpenAPI.builder()
                     .withInitialModel(openAPI)
                     .withConfig(ConfigProvider.getConfig().unwrap(SmallRyeConfig.class))
                     .build()
                     .toJSON();
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+*/
+    public String getOpenAPI() {
+        try {
+            var config = new SmallRyeConfigBuilder()
+                    .withSources(new PropertiesConfigSource(
+                            Map.of("mp.openapi.scan.disable", "true"),
+                            "JexxaOpenAPI",
+                            500))
+                    //.getDefaultSources()
+                    .build();
+
+            return SmallRyeOpenAPI.builder()
+                    .withInitialModel(openAPI)
+                    .withConfig(config)
+                    .build()
+                    .toJSON();
+
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
