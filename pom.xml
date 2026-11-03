@@ -78,7 +78,7 @@
     <!-- version of compile dependencies -->
     <classgraph.version>6.0.1</classgraph.version>
     <jexxa.common.adapters.version>4.2.0</jexxa.common.adapters.version>
-    <netty.bom.version>4.2.19.Final</netty.bom.version>
+    <netty.bom.version>4.2.20.Final</netty.bom.version>
     <netty.bom.version>4.2.19.Final</netty.bom.version>
     <javalin.version>7.2.4</javalin.version>
     <javax.jms.version>2.0.1</javax.jms.version>
