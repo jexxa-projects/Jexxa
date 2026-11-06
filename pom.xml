@@ -76,7 +76,7 @@
 
 
     <!-- version of compile dependencies -->
-    <classgraph.version>6.0.1</classgraph.version>
+    <classgraph.version>6.0.2</classgraph.version>
     <jexxa.common.adapters.version>4.2.0</jexxa.common.adapters.version>
     <netty.bom.version>4.2.20.Final</netty.bom.version>
     <netty.bom.version>4.2.20.Final</netty.bom.version>
