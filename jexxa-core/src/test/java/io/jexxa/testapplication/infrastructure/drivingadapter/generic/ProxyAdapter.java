@@ -1,10 +1,11 @@
 package io.jexxa.testapplication.infrastructure.drivingadapter.generic;
 
-import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
-import io.jexxa.adapterapi.invocation.InvocationManager;
-import io.jexxa.adapterapi.invocation.function.SerializableConsumer;
-import io.jexxa.adapterapi.invocation.function.SerializableFunction;
-import io.jexxa.adapterapi.invocation.function.SerializableSupplier;
+
+import io.jexxa.adapters.api.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapters.api.invocation.InvocationManager;
+import io.jexxa.adapters.api.invocation.function.SerializableConsumer;
+import io.jexxa.adapters.api.invocation.function.SerializableFunction;
+import io.jexxa.adapters.api.invocation.function.SerializableSupplier;
 
 public class ProxyAdapter implements IDrivingAdapter
 {

@@ -1,9 +1,10 @@
 package io.jexxa.core;
 
-import io.jexxa.adapterapi.invocation.InvocationManager;
-import io.jexxa.adapterapi.invocation.monitor.AfterMonitor;
-import io.jexxa.adapterapi.invocation.monitor.AroundMonitor;
-import io.jexxa.adapterapi.invocation.monitor.BeforeMonitor;
+
+import io.jexxa.adapters.api.invocation.InvocationManager;
+import io.jexxa.adapters.api.invocation.monitor.AfterMonitor;
+import io.jexxa.adapters.api.invocation.monitor.AroundMonitor;
+import io.jexxa.adapters.api.invocation.monitor.BeforeMonitor;
 
 import java.util.Objects;
 

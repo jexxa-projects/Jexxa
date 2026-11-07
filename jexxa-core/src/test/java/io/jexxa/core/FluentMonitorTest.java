@@ -1,7 +1,7 @@
 package io.jexxa.core;
 
-import io.jexxa.adapterapi.invocation.InvocationContext;
-import io.jexxa.adapterapi.invocation.monitor.AroundMonitor;
+import io.jexxa.adapters.api.invocation.InvocationContext;
+import io.jexxa.adapters.api.invocation.monitor.AroundMonitor;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 import io.jexxa.testapplication.infrastructure.drivingadapter.generic.ProxyAdapter;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-import static io.jexxa.common.healthcheck.HealthIndicators.timeoutIndicator;
+import static io.jexxa.adapters.core.healthcheck.HealthIndicators.timeoutIndicator;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;

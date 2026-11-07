@@ -1,7 +1,7 @@
 package io.jexxa.core;
 
-import io.jexxa.adapterapi.invocation.InvocationContext;
-import io.jexxa.adapterapi.invocation.InvocationManager;
+import io.jexxa.adapters.api.invocation.InvocationContext;
+import io.jexxa.adapters.api.invocation.InvocationManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;

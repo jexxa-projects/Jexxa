@@ -1,7 +1,8 @@
 package io.jexxa.core.factory;
 
 
-import io.jexxa.common.facade.factory.ClassFactory;
+
+import io.jexxa.adapters.core.facade.factory.ClassFactory;
 
 import java.lang.reflect.Modifier;
 import java.util.List;

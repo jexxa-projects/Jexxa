@@ -1,13 +1,15 @@
 package io.jexxa.core;
 
-import io.jexxa.adapterapi.JexxaContext;
-import io.jexxa.adapterapi.drivingadapter.HealthCheck;
-import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
-import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
-import io.jexxa.common.facade.jdbc.JDBCConnectionPool;
-import io.jexxa.common.facade.logger.ApplicationBanner;
-import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
-import io.jexxa.common.facade.utils.function.ThrowingConsumer;
+
+import io.jexxa.adapters.api.JexxaContext;
+import io.jexxa.adapters.api.drivingadapter.HealthCheck;
+import io.jexxa.adapters.api.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapters.api.invocation.InvocationManager;
+import io.jexxa.adapters.api.invocation.transaction.TransactionManager;
+import io.jexxa.adapters.core.facade.logger.ApplicationBanner;
+import io.jexxa.adapters.core.facade.utils.annotation.CheckReturnValue;
+import io.jexxa.adapters.core.facade.utils.function.ThrowingConsumer;
+import io.jexxa.adapters.jdbc.facade.JDBCConnectionPool;
 import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
@@ -28,9 +30,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
-import static io.jexxa.adapterapi.invocation.InvocationManager.getInvocationHandler;
-import static io.jexxa.common.facade.logger.ApplicationBanner.addConfigBanner;
-import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
+import static io.jexxa.adapters.core.facade.logger.ApplicationBanner.addConfigBanner;
+import static io.jexxa.adapters.core.facade.logger.SLF4jLogger.getLogger;
+
 
 /**
  * JexxaMain is the main entry point for your application to use Jexxa. Within each application only a single instance
@@ -348,7 +350,7 @@ public final class JexxaMain
     @SuppressWarnings("java:S2629")
     public void stop()
     {
-        getInvocationHandler(this).invoke(this, this::synchronizedStop);
+        InvocationManager.getInvocationHandler(this).invoke(this, this::synchronizedStop);
     }
 
     private void synchronizedStop(){

@@ -1,9 +1,9 @@
 package io.jexxa.jexxatest;
 
-import io.jexxa.common.drivenadapter.persistence.objectstore.imdb.IMDBObjectStore;
-import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
-import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
-import io.jexxa.common.facade.utils.function.ThrowingConsumer;
+import io.jexxa.adapters.core.drivenadapter.persistence.objectstore.imdb.IMDBObjectStore;
+import io.jexxa.adapters.core.drivenadapter.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.adapters.core.facade.utils.annotation.CheckReturnValue;
+import io.jexxa.adapters.core.facade.utils.function.ThrowingConsumer;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorderManager;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
@@ -14,11 +14,11 @@ import java.util.Properties;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import static io.jexxa.common.drivenadapter.messaging.MessageSenderFactory.setDefaultMessageSender;
-import static io.jexxa.common.drivenadapter.outbox.TransactionalOutboxProperties.outboxTable;
-import static io.jexxa.common.drivenadapter.persistence.ObjectStoreFactory.setDefaultObjectStore;
-import static io.jexxa.common.drivenadapter.persistence.RepositoryFactory.setDefaultRepository;
-import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
+import static io.jexxa.adapters.core.drivenadapter.messaging.MessageSenderFactory.setDefaultMessageSender;
+import static io.jexxa.adapters.core.drivenadapter.persistence.ObjectStoreFactory.setDefaultObjectStore;
+import static io.jexxa.adapters.core.drivenadapter.persistence.RepositoryFactory.setDefaultRepository;
+import static io.jexxa.adapters.jms.drivenadapter.TransactionalOutboxProperties.outboxTable;
+import static org.slf4j.LoggerFactory.getLogger;
 
 
 /**

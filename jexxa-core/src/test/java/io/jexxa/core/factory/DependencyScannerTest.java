@@ -1,7 +1,7 @@
 package io.jexxa.core.factory;
 
 import io.jexxa.TestConstants;
-import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapters.api.drivingadapter.IDrivingAdapter;
 import io.jexxa.testapplication.annotation.UnavailableDuringRuntime;
 import io.jexxa.testapplication.annotation.ValidApplicationService;
 import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
@@ -76,7 +76,7 @@ class DependencyScannerTest
     void getClassesImplementingInterfaceInSpecificPackage() {
         //Arrange
         var objectUnderTest = new DependencyScanner();
-        var packageName = "io.jexxa.common.drivingadapter.messaging";
+        var packageName = "io.jexxa.adapters.core.drivingadapter";
 
         //Act
         List<Class<?>> drivingAdapters = objectUnderTest.

@@ -2,7 +2,8 @@ package io.jexxa.properties;
 
 
 
-import io.jexxa.common.facade.utils.properties.PropertiesPrefix;
+
+import io.jexxa.adapters.core.facade.utils.properties.PropertiesPrefix;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,8 +15,9 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import static io.jexxa.common.drivenadapter.outbox.TransactionalOutboxProperties.outboxTable;
-import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
+import static io.jexxa.adapters.core.facade.logger.SLF4jLogger.getLogger;
+import static io.jexxa.adapters.jms.drivenadapter.TransactionalOutboxProperties.outboxTable;
+
 
 public class PropertiesLoader {
     private static final String JEXXA_PREFIX = "io.jexxa.";
@@ -64,6 +66,7 @@ public class PropertiesLoader {
         }
     }
 
+    // TODO !! Check if this is required at all ...
     private void setOutboxSenderTable(Properties properties) {
         if (!properties.containsKey(outboxTable())) {
             properties.put(outboxTable(),"jexxaoutboxmessage");

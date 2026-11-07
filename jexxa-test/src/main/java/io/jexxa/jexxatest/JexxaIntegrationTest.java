@@ -1,6 +1,6 @@
 package io.jexxa.jexxatest;
 
-import io.jexxa.common.facade.logger.SLF4jLogger;
+import io.jexxa.adapters.core.facade.logger.SLF4jLogger;
 import io.jexxa.core.JexxaMain;
 import kong.unirest.Unirest;
 
