@@ -33,6 +33,7 @@
   </scm>
 
   <properties>
+    <jexxa.adapters.version>5.0.0-SNAPSHOT</jexxa.adapters.version>
     <!--version of  maven plugins  -->
     <gpg.plugin.version>3.2.8</gpg.plugin.version>
     <maven.clean.plugin>3.5.0</maven.clean.plugin>
@@ -107,7 +108,7 @@
       <dependency>
         <groupId>io.jexxa.adapters</groupId>
         <artifactId>jexxa-adapters-bom</artifactId>
-        <version>5.0.0-SNAPSHOT</version>
+        <version>${jexxa.adapters.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -574,6 +575,7 @@
   <modules>
     <module>jexxa-core</module>
     <module>jexxa-test</module>
+    <module>jexxa-bom</module>
   </modules>
 
 </project>

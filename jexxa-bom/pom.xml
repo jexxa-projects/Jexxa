@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>jexxa</artifactId>
+        <groupId>io.jexxa</groupId>
+        <version>10.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>jexxa-bom</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Jexxa BOM</name>
+    <description>
+        Dependency management for Jexxa and Jexxa Adapters.
+    </description>
+
+
+
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- Jexxa Core -->
+            <dependency>
+                <groupId>io.jexxa</groupId>
+                <artifactId>jexxa-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- Jexxa Test -->
+            <dependency>
+                <groupId>io.jexxa</groupId>
+                <artifactId>jexxa-test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.jexxa.addend</groupId>
+                <artifactId>Addend</artifactId>
+                <version>${addend.version}</version>
+            </dependency>
+            <!-- Jexxa Adapters -->
+            <dependency>
+                <groupId>io.jexxa.adapters</groupId>
+                <artifactId>jexxa-adapters-bom</artifactId>
+                <version>${jexxa.adapters.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+</project>
