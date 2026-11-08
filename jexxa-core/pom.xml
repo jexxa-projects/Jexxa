@@ -20,7 +20,6 @@
   </licenses>
 
   <properties>
-    <jexxa.adapter.api.version>4.2.4-SNAPSHOT</jexxa.adapter.api.version>
     <sonar.projectKey>repplix_Jexxa</sonar.projectKey>
   </properties>
 
@@ -39,10 +38,6 @@
       <artifactId>adapter-core</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>io.jexxa.adapters</groupId>
-      <artifactId>adapter-jms</artifactId>
-    </dependency>
 
     <!-- dependencies for tests -->
     <dependency>

@@ -58,6 +58,7 @@
             <groupId>io.jexxa.adapters</groupId>
             <artifactId>adapter-rest</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.jexxa.adapters</groupId>
             <artifactId>adapter-jms</artifactId>

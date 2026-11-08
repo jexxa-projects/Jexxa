@@ -35,9 +35,10 @@ Maven:
 ```xml
 <dependency>
     <groupId>io.jexxa</groupId>
-    <artifactId>jexxa-web</artifactId>
-    <version>9.1.1</version> 
+    <artifactId>jexxa-starter-business</artifactId>
+    <version>10.0.0</version>
 </dependency>
+
 <dependency>
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-simple</artifactId>
@@ -48,7 +49,7 @@ Maven:
 Gradle:
 
 ```groovy
-implementation "io.jexxa:jexxa-web:9.1.1"
+implementation "io.jexxa:jexxa-starter-business:10.0.0"
 implementation "org.slf4j:slf4j-simple:2.0.20"
 ```
 

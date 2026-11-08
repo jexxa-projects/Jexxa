@@ -23,6 +23,7 @@ public final class JexxaCoreProperties
 
     /** Configures connection sharing */
     public static final String JDBC_CONNECTION_SHARING = "io.jexxa.jdbc.connection.sharing";
+    public static final String OUTBOX_TABLE = "io.jexxa.outbox.table";
 
     /** Defines the default properties file which is /jexxa-application.properties */
     public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";

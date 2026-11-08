@@ -1,8 +1,6 @@
 package io.jexxa.properties;
 
 
-
-
 import io.jexxa.adapters.core.facade.utils.properties.PropertiesPrefix;
 
 import java.io.FileInputStream;
@@ -16,7 +14,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 import static io.jexxa.adapters.core.facade.logger.SLF4jLogger.getLogger;
-import static io.jexxa.adapters.jms.drivenadapter.TransactionalOutboxProperties.outboxTable;
+import static io.jexxa.properties.JexxaCoreProperties.OUTBOX_TABLE;
 
 
 public class PropertiesLoader {
@@ -68,15 +66,11 @@ public class PropertiesLoader {
     }
 
     private void enableConnectionSharing(Properties properties) {
-        if (!properties.containsKey(JexxaCoreProperties.JDBC_CONNECTION_SHARING)) {
-            properties.setProperty(JexxaCoreProperties.JDBC_CONNECTION_SHARING, "true");
-        }
+        properties.putIfAbsent(JexxaCoreProperties.JDBC_CONNECTION_SHARING, "true");
     }
 
     private void setOutboxSenderTable(Properties properties) {
-        if (!properties.containsKey(outboxTable())) {
-            properties.put(outboxTable(),"jexxaoutboxmessage");
-        }
+        properties.putIfAbsent(OUTBOX_TABLE, "jexxaoutboxmessage");
     }
 
     public List<String> getPropertiesFiles() {
