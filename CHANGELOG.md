@@ -5,9 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[9.2.0] - 2026-xx-xx
+### 10.0.0 – Modular Dependency Management and Starters
 
-- Jexxa-Test: Extended Onion Architecture validation to explicitly support bootstrap services as a separate
+**Added**
+- Introduced `jexxa-bom` for centralized dependency management of Jexxa and JexxaAdapters.
+- Added `jexxa-starter-business`, providing Jexxa Core with JDBC and JMS adapters.
+- Added `jexxa-starter-streaming`, intended to provide Jexxa Core with S3 and ESP/Kafka integration.
+
+**Changed**
+- Integrated the modular JexxaAdapters 5.0.0 dependency structure.
+- Simplified application setup through scenario-specific starters.
+- Enabled independent versioning of Jexxa and JexxaAdapters while maintaining compatible dependency combinations through the BOM.
+
+**Migration**
+- Only the application's infrastructure layer is affected; the application core remains unchanged.
+- To update, remove unresolved imports in the infrastructure code and re-import the corresponding classes from the new adapter packages.
+- Applications can use a single starter dependency instead of declaring Jexxa Core and individual adapters separately.
+- Alternatively, import `jexxa-bom` and select the required modules individually.
+- Update existing adapter dependencies to the new modular artifacts.
+
+**Note:** The streaming starter's ESP/Kafka integration depends on the corresponding ESPAdapters artifact being included.
+
+#### Additional Changes 
+- **Jexxa-Test**: Extended Onion Architecture validation to explicitly support bootstrap services as a separate
   infrastructure adapter layer.
     - Bootstrap services can now depend on application services and domain abstractions, including repositories, without
       violating the architecture rules.
