@@ -1,5 +1,6 @@
 package io.jexxa.properties;
 
+
 public final class JexxaCoreProperties
 {
     /** Define an additional import file that is loaded. The Default value is empty.  */
@@ -19,6 +20,9 @@ public final class JexxaCoreProperties
 
     /** Configures the global system property `user.timezone` to define the timezone used by the application */
     public static final String JEXXA_USER_TIMEZONE = "io.jexxa.user.timezone";
+
+    /** Configures connection sharing */
+    public static final String JDBC_CONNECTION_SHARING = "io.jexxa.jdbc.connection.sharing";
 
     /** Defines the default properties file which is /jexxa-application.properties */
     public static final String JEXXA_APPLICATION_PROPERTIES = "/jexxa-application.properties";

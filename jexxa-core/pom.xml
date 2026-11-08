@@ -38,10 +38,7 @@
       <groupId>io.jexxa.adapters</groupId>
       <artifactId>adapter-core</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.jexxa.adapters</groupId>
-      <artifactId>adapter-jdbc</artifactId>
-    </dependency>
+
     <dependency>
       <groupId>io.jexxa.adapters</groupId>
       <artifactId>adapter-jms</artifactId>

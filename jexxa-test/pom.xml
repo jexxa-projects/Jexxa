@@ -71,6 +71,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>io.jexxa.adapters</groupId>
+            <artifactId>adapter-jdbc</artifactId>
+            <version>${jexxa.adapters.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgres.version}</version>

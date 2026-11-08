@@ -35,7 +35,7 @@ public class PropertiesLoader {
         properties.clear();
         propertiesFiles.clear();
 
-        // Handle properties in the following forder:
+        // Handle properties in the following order:
         // 0. Add default JEXXA_CONTEXT_MAIN
         this.properties.put(JexxaCoreProperties.JEXXA_CONTEXT_NAME, context.getSimpleName());
 
@@ -53,8 +53,9 @@ public class PropertiesLoader {
         //5. set system properties
         setSystemProperties(properties);
 
-        //6. set outbox sender table
+        //6. set default values for JDBC connections
         setOutboxSenderTable(properties);
+        enableConnectionSharing(properties);
 
         return removeEmptyValues(properties);
     }
@@ -66,7 +67,12 @@ public class PropertiesLoader {
         }
     }
 
-    // TODO !! Check if this is required at all ...
+    private void enableConnectionSharing(Properties properties) {
+        if (!properties.containsKey(JexxaCoreProperties.JDBC_CONNECTION_SHARING)) {
+            properties.setProperty(JexxaCoreProperties.JDBC_CONNECTION_SHARING, "true");
+        }
+    }
+
     private void setOutboxSenderTable(Properties properties) {
         if (!properties.containsKey(outboxTable())) {
             properties.put(outboxTable(),"jexxaoutboxmessage");

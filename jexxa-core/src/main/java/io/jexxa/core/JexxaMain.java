@@ -9,7 +9,6 @@ import io.jexxa.adapters.api.invocation.transaction.TransactionManager;
 import io.jexxa.adapters.core.facade.logger.ApplicationBanner;
 import io.jexxa.adapters.core.facade.utils.annotation.CheckReturnValue;
 import io.jexxa.adapters.core.facade.utils.function.ThrowingConsumer;
-import io.jexxa.adapters.jdbc.facade.JDBCConnectionPool;
 import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
@@ -91,9 +90,6 @@ public final class JexxaMain
         Objects.requireNonNull(applicationProperties);
         Objects.requireNonNull(context);
         JexxaContext.init();
-
-        //We enable connection sharing since Jexxa allows only a single thread in the backend
-        JDBCConnectionPool.enableConnectionSharing();
 
         // Handle properties in the following order:
         // 0. Add default JEXXA_CONTEXT_MAIN
