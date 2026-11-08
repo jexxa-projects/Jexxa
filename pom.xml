@@ -121,7 +121,7 @@
 
       <dependency>
         <groupId>io.jexxa.addend</groupId>
-        <artifactId>addend</artifactId>
+        <artifactId>Addend</artifactId>
         <version>${addend.version}</version>
       </dependency>
 
