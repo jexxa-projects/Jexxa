@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-### 10.0.0 – Modular Dependency Management and Starters
+## \[10.0.0 - RC1] – Modular Dependency Management and Starters
 
 **Added**
 - Introduced `jexxa-bom` for centralized dependency management of Jexxa and JexxaAdapters.

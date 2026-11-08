@@ -36,7 +36,7 @@ Maven:
 <dependency>
     <groupId>io.jexxa</groupId>
     <artifactId>jexxa-starter-business</artifactId>
-    <version>10.0.0</version>
+    <version>10.0.0-RC1</version>
 </dependency>
 
 <dependency>
