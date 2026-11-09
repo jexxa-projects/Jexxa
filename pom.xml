@@ -88,7 +88,7 @@
     <smallrye.config.core.version>4.1.0</smallrye.config.core.version>
     <jetty.version>12.1.14</jetty.version>
     <swagger.core.version>3.0.0</swagger.core.version>
-    <jackson.bom.version>3.2.4</jackson.bom.version>
+    <jackson.bom.version>3.3.0</jackson.bom.version>
 
 
     <!-- version of test dependencies -->
