@@ -17,6 +17,17 @@
         Jexxa with S3, REST and ESP adapters
     </description>
 
+    <dependencyManagement>
+      <dependencies>
+        <dependency>
+            <groupId>io.jexxa.adapters</groupId>
+            <artifactId>jexxa-adapters-bom</artifactId>
+            <version>${jexxa.adapters.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+      </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>io.jexxa</groupId>
@@ -36,6 +47,12 @@
         <dependency>
             <groupId>io.jexxa.adapters</groupId>
             <artifactId>adapter-rest</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jexxa.jexxatest</groupId>
+            <artifactId>jexxa-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>

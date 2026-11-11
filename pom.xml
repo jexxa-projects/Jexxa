@@ -33,7 +33,7 @@
   </scm>
 
   <properties>
-    <jexxa.adapters.version>5.0.0-RC1</jexxa.adapters.version>
+    <jexxa.adapters.version>5.0.0-RC2-SNAPSHOT</jexxa.adapters.version>
     <!--version of  maven plugins  -->
     <gpg.plugin.version>3.2.8</gpg.plugin.version>
     <maven.clean.plugin>3.5.0</maven.clean.plugin>
@@ -112,6 +112,7 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+
 
       <dependency>
         <groupId>io.jexxa</groupId>

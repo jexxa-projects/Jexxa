@@ -42,12 +42,6 @@
             <artifactId>Addend</artifactId>
             <version>${addend.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>io.jexxa.jexxatest</groupId>
-            <artifactId>jexxa-test</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>
