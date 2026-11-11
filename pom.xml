@@ -50,8 +50,8 @@
     <maven.reports.plugin>3.9.0</maven.reports.plugin>
     <maven.enforcer.plugin>3.7.0</maven.enforcer.plugin>
     <maven.javadoc.plugin>3.12.0</maven.javadoc.plugin>
-    <maven.templating.plugin>3.1.1</maven.templating.plugin>
-    <maven.versions.plugin>2.24.0</maven.versions.plugin>
+    <maven.templating.plugin>3.2.0</maven.templating.plugin>
+    <maven.versions.plugin>2.25.1</maven.versions.plugin>
     <project.scm.id>github-Jexxa</project.scm.id>
     <maven.central.publishing.plugin>0.12.0</maven.central.publishing.plugin>
     <maven.sonar.plugin>5.8.0.7211</maven.sonar.plugin>
@@ -87,9 +87,9 @@
     <commons.lang3.version>3.14.0</commons.lang3.version>
     <smallrye.openapi.core.version>4.3.5</smallrye.openapi.core.version>
     <smallrye.config.core.version>4.1.0</smallrye.config.core.version>
-    <jetty.version>12.1.14</jetty.version>
+    <jetty.version>12.1.15</jetty.version>
     <swagger.core.version>3.0.0</swagger.core.version>
-    <jackson.bom.version>3.2.4</jackson.bom.version>
+    <jackson.bom.version>3.3.0</jackson.bom.version>
 
 
     <!-- version of test dependencies -->
