@@ -63,6 +63,11 @@
             <groupId>io.jexxa.adapters</groupId>
             <artifactId>adapter-jms</artifactId>
         </dependency>
+        <dependency>
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>3.3.0</version>
+        </dependency>
 
         <!-- dependencies for tests -->
         <dependency>

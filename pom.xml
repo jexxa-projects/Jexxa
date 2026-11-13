@@ -33,7 +33,7 @@
   </scm>
 
   <properties>
-    <jexxa.adapters.version>5.0.0-RC2-SNAPSHOT</jexxa.adapters.version>
+    <jexxa.adapters.version>5.0.0-RC3-SNAPSHOT</jexxa.adapters.version>
     <!--version of  maven plugins  -->
     <gpg.plugin.version>3.2.8</gpg.plugin.version>
     <maven.clean.plugin>3.5.0</maven.clean.plugin>
