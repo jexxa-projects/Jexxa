@@ -46,6 +46,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '25'
+      - name: Setup Maven 3.9.9
+        run: |
+          curl --proto "=https" -fsSL https://apache.org | tar -xz -C /opt 
+          echo "/opt/apache-maven-3.9.9/bin" >> $GITHUB_PATH
+          /opt/apache-maven-3.9.9/bin/mvn -version
 
       # Neu: Aktuelles Maven installieren
       - name: Setup Maven
