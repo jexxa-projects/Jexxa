@@ -49,8 +49,8 @@ jobs:
       - name: Setup Maven 3.9.9
         run: |
           curl --proto "=https" -fsSL https://dlcdn.apache.org/maven/maven-3/3.10.0/binaries/apache-maven-3.10.0-bin.tar.gz | tar -xz -C /opt 
-          echo "/opt/apache-maven-3.9.9/bin" >> $GITHUB_PATH
-          /opt/apache-maven-3.9.9/bin/mvn -version
+          echo "/opt/apache-maven-3.10.0/bin" >> $GITHUB_PATH
+          /opt/apache-maven-3.10.0/bin/mvn -version
 
       # Neu: Aktuelles Maven installieren
       - name: Setup Maven
