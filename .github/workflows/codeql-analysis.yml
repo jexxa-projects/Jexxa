@@ -52,12 +52,6 @@ jobs:
           echo "/opt/apache-maven-3.10.0/bin" >> $GITHUB_PATH
           /opt/apache-maven-3.10.0/bin/mvn -version
 
-      # Neu: Aktuelles Maven installieren
-      - name: Setup Maven
-        uses: stCarolas/setup-maven@12eb41b233df95d49b0c11fc1b5bc8312e5d4ce0
-        with:
-          maven-version: 3.9.9
-
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4.39.3
         with:
