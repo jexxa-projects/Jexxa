@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[9.2.0] - 2026-xx-xx
+## \[9.2.0] - 2026-11-14
 
 - Jexxa-Test: Extended Onion Architecture validation to explicitly support bootstrap services as a separate
   infrastructure adapter layer.
