@@ -48,7 +48,7 @@ jobs:
           java-version: '25'
 
       - name: Setup Maven
-        uses: s4u/setup-maven-action@v1.22.0
+        uses: s4u/setup-maven-action@5d4481650d2563723ad6c5e8f009ac8fd746e3e8
         with:
           maven-version: '3.10.0'
 
