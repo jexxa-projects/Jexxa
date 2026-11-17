@@ -48,9 +48,9 @@ jobs:
           java-version: '25'
 
       - name: Setup Maven
-        uses: batmahdi/setup-maven@v2
+        uses: s4u/setup-maven-action@v1
         with:
-          maven-version: '3.10.0' # Hier gewünschte Version (>3.9) angeben
+          maven-version: '3.10.0' # Nur Maven angeben, java-version weglassen
 
       - name: Maven-Version prüfen & Build starten
         run: |
