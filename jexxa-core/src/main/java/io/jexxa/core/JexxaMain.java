@@ -6,6 +6,7 @@ import io.jexxa.adapters.api.drivingadapter.HealthCheck;
 import io.jexxa.adapters.api.drivingadapter.IDrivingAdapter;
 import io.jexxa.adapters.api.invocation.InvocationManager;
 import io.jexxa.adapters.api.invocation.transaction.TransactionManager;
+import io.jexxa.adapters.api.service.ManagedService;
 import io.jexxa.adapters.core.facade.logger.ApplicationBanner;
 import io.jexxa.adapters.core.facade.utils.annotation.CheckReturnValue;
 import io.jexxa.adapters.core.facade.utils.function.ThrowingConsumer;
@@ -17,17 +18,13 @@ import io.jexxa.properties.JexxaCoreProperties;
 import io.jexxa.properties.PropertiesLoader;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static io.jexxa.adapters.core.facade.logger.ApplicationBanner.addConfigBanner;
 import static io.jexxa.adapters.core.facade.logger.SLF4jLogger.getLogger;
@@ -56,6 +53,7 @@ public final class JexxaMain
     private final AdapterFactory drivenAdapterFactory   = new AdapterFactory();
     private final PortFactory portFactory               = new PortFactory(drivenAdapterFactory);
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private final List<ManagedService> managedServices = new ArrayList<>();
 
     private final BoundedContext boundedContext;
 
@@ -160,6 +158,16 @@ public final class JexxaMain
         portFactory.acceptPackage(packageName);
         return this;
     }
+
+    public JexxaMain registerService(ManagedService service) {
+        managedServices.add(service);
+        return this;
+    }
+
+    public JexxaMain registerService(Function<JexxaMain, ManagedService> service) {
+        return registerService(service.apply(this));
+    }
+
 
     @CheckReturnValue
     public <T> BootstrapService<T> bootstrap(Class<T> bootstrapService)
@@ -320,6 +328,7 @@ public final class JexxaMain
 
         compositeDrivingAdapter.start();
         boundedContext.start();
+        managedServices.forEach(ManagedService::start);
 
         printStartupDuration();
 
@@ -346,6 +355,7 @@ public final class JexxaMain
     @SuppressWarnings("java:S2629")
     public void stop()
     {
+        managedServices.forEach(ManagedService::stop);
         InvocationManager.getInvocationHandler(this).invoke(this, this::synchronizedStop);
     }
 
