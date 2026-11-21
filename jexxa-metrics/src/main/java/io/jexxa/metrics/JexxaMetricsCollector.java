@@ -28,7 +28,7 @@ public class JexxaMetricsCollector extends MicrometerMetricsCollector {
 
         registerVersionInfo(registry, "jexxa.build", boundedContext.jexxaVersion());
         registerVersionInfo(registry, "jexxa.context.build", boundedContext.contextVersion());
-        registerAll(registry, () -> jexxaMain.getBoundedContext().diagnostics());
+        registerAll( () -> jexxaMain.getBoundedContext().diagnostics());
     }
 
     private void registerVersionInfo(MeterRegistry registry, String metricPrefix, VersionInfo info) {
@@ -59,12 +59,12 @@ public class JexxaMetricsCollector extends MicrometerMetricsCollector {
         }
         try {
             return java.util.Optional.of(Instant.parse(timestamp).getEpochSecond());
-        } catch (DateTimeParseException e) {
+        } catch (DateTimeParseException _) {
             return java.util.Optional.empty();
         }
     }
 
-    private String nullSafe(String value) {
+    private static String nullSafe(String value) {
         return value != null ? value : "";
     }
 
