@@ -23,35 +23,124 @@ Jexxa helps teams build applications where:
 - Infrastructure can evolve without impacting core business code
 - Architectural boundaries remain visible and enforceable
 - Development teams can collaborate effectively using DDD principles
-
 ## Quickstart
 
 **Requirements:** Java 25 or higher, and Maven or Gradle.
 
 ### Add dependencies
 
-Maven:
+Jexxa offers two ways to manage dependencies:
+
+- **Starter (recommended):** Get started quickly with a predefined set of dependencies.
+- **BOM (Bill of Materials):** Select individual modules while keeping their versions consistent.
+
+#### Option 1: Use a Starter (recommended)
+
+The `jexxa-starter-business` provides a convenient starting point for building business applications with Jexxa.
+
+<summary><b>Maven</b></summary>
 
 ```xml
-<dependency>
-    <groupId>io.jexxa</groupId>
-    <artifactId>jexxa-starter-business</artifactId>
-    <version>10.0.0-RC2</version>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>io.jexxa</groupId>
+        <artifactId>jexxa-starter-business</artifactId>
+        <version>10.0.0-RC2</version>
+    </dependency>
 
-<dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-simple</artifactId>
-    <version>2.0.20</version>
-</dependency>
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>2.0.20</version>
+        <scope>runtime</scope>
+    </dependency>
+</dependencies>
 ```
 
-Gradle:
+
+<summary><b>Gradle (Groovy DSL)</b></summary>
 
 ```groovy
-implementation "io.jexxa:jexxa-starter-business:10.0.0"
-implementation "org.slf4j:slf4j-simple:2.0.20"
+dependencies {
+    implementation 'io.jexxa:jexxa-starter-business:10.0.0-RC2'
+    runtimeOnly 'org.slf4j:slf4j-simple:2.0.20'
+}
 ```
+
+
+#### Option 2: Select individual modules using the BOM
+
+For more control over your application's dependencies, use the Jexxa BOM to manage compatible versions and include only the modules you need.
+
+<details>
+<summary><b>Maven</b></summary>
+
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.jexxa</groupId>
+            <artifactId>jexxa-bom</artifactId>
+            <version>10.0.0-RC2</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
+<dependencies>
+    <dependency>
+        <groupId>io.jexxa</groupId>
+        <artifactId>jexxa-core</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>io.jexxa.adapters</groupId>
+        <artifactId>adapter-rest</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>io.jexxa.adapters</groupId>
+        <artifactId>adapter-jdbc</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>io.jexxa.addend</groupId>
+        <artifactId>Addend</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>2.0.20</version>
+        <scope>runtime</scope>
+    </dependency>
+</dependencies>
+```
+
+</details>
+
+<details>
+<summary><b>Gradle (Groovy DSL)</b></summary>
+
+```groovy
+dependencies {
+    implementation platform('io.jexxa:jexxa-bom:10.0.0-RC2')
+
+    implementation 'io.jexxa:jexxa-core'
+    implementation 'io.jexxa.adapters:adapter-rest'
+    implementation 'io.jexxa.adapters:adapter-jdbc'
+    implementation 'io.jexxa.addend:Addend'
+
+    runtimeOnly 'org.slf4j:slf4j-simple:2.0.20'
+}
+```
+
+</details>
+
+**Available adapters:** Jexxa provides optional adapters for REST, JDBC, JMS, S3, and other integrations. See [JexxaAdapters](https://github.com/jexxa-projects/JexxaAdapters) for the complete list of available modules and their documentation.
+
+**Note:** The Starter includes a predefined set of modules, while the BOM only manages dependency versions. Use the Starter for convenience or the BOM for a tailored setup.
 
 ### Hello World
 
