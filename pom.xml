@@ -93,7 +93,7 @@
 
     <!-- version of test dependencies -->
     <activemq.artemis.client.version>2.57.0</activemq.artemis.client.version>
-    <postgres.version>42.7.14</postgres.version>
+    <postgres.version>42.7.15</postgres.version>
     <unirest.java.version>3.14.5</unirest.java.version>
     <junit.bom.version>6.1.3</junit.bom.version>
     <slf4j.simple.version>2.0.20</slf4j.simple.version>
