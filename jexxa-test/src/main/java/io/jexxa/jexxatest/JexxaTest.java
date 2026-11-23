@@ -8,7 +8,6 @@ import io.jexxa.core.JexxaMain;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorderManager;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.BiConsumer;
@@ -93,30 +92,6 @@ public class JexxaTest
         return jexxaMain;
     }
 
-
-    /**
-     * @deprecated for removal, use resetStubsTo instead
-     */
-    @SuppressWarnings({"unused","java:S2696"} )
-    @Deprecated(forRemoval = true)
-    public <T> void registerStub(Class<T> outboundPort)
-    {
-        jexxaMain.clearObjectPools();
-        jexxaMain.registerDrivenAdapter(outboundPort);
-        reinitJexxaMain = true;
-    }
-
-    /**
-     *  @deprecated for removal, use registerSubs instead
-     */
-    @SuppressWarnings({"unused","java:S2696"} )
-    @Deprecated(forRemoval = true)
-    public <T> void registerStubs(List<Class<T>> outboundPorts)
-    {
-        jexxaMain.clearObjectPools();
-        outboundPorts.forEach(jexxaMain::registerDrivenAdapter);
-        reinitJexxaMain = true;
-    }
 
     @SuppressWarnings({"unused", "java:S2696"})
     public final void resetStubsTo(Class<?>... outboundPorts) {
