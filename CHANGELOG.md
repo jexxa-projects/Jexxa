@@ -7,32 +7,30 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## \[10.0.0 - RC1] – Modular Dependency Management and Starters
 
+> **Breaking Changes & Migration:** Starting with Jexxa 10.0.0, infrastructure adapters have been extracted into the modular **JexxaAdapters** project and transitive JDBC/JMS dependencies were removed from `jexxa-core`. See the **[Migration Guide](docs/MIGRATION.md#migration-guide-upgrading-from-to-jexxa-9-to-10)** for step-by-step upgrade instructions.
+
+
 **Added**
 - Introduced `jexxa-bom` for centralized dependency management of Jexxa and JexxaAdapters.
 - Added `jexxa-starter-business`, providing Jexxa Core with JDBC and JMS adapters.
 - Added `jexxa-starter-streaming`, intended to provide Jexxa Core with S3 and ESP/Kafka integration.
+- Added `jexxa-metrics` for application metrics collection and Micrometer monitoring adapters for Prometheus
 
 **Changed**
-- Integrated the modular JexxaAdapters 5.0.0 dependency structure.
-- Simplified application setup through scenario-specific starters.
-- Enabled independent versioning of Jexxa and JexxaAdapters while maintaining compatible dependency combinations through the BOM.
+- **Jexxa-Core**
+  - Integrated the modular JexxaAdapters 5.0.0 dependency structure.
+  - Simplified application setup through scenario-specific starters.
+  - Enabled independent versioning of Jexxa and JexxaAdapters while maintaining compatible dependency combinations through the BOM.
 
-**Migration**
-- Only the application's infrastructure layer is affected; the application core remains unchanged.
-- To update, remove unresolved imports in the infrastructure code and re-import the corresponding classes from the new adapter packages.
-- Applications can use a single starter dependency instead of declaring Jexxa Core and individual adapters separately.
-- Alternatively, import `jexxa-bom` and select the required modules individually.
-- Update existing adapter dependencies to the new modular artifacts.
-
-**Note:** The streaming starter's ESP/Kafka integration depends on the corresponding ESPAdapters artifact being included.
-
-#### Additional Changes 
 - **Jexxa-Test**: Extended Onion Architecture validation to explicitly support bootstrap services as a separate
   infrastructure adapter layer.
     - Bootstrap services can now depend on application services and domain abstractions, including repositories, without
       violating the architecture rules.
     - Added support for validating bootstrap components located in infrastructure.bootstrap, keeping them separate from
       driving and driven adapters.
+### Removed
+- **Breaking:** Removed automatic transitive JDBC and JMS dependencies from `jexxa-core` (use `jexxa-starter-business` or declare the required adapters explicitly via `jexxa-bom`; see [Migration Guide](MIGRATION.md#upgrading-to-jexxa-1000)).
+- **jexxa-web**: Driving adapter is now provided via `adapter-rest`
 
 ### Fixed
 
