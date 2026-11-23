@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 - **Breaking:** Removed automatic transitive JDBC and JMS dependencies from `jexxa-core` (use `jexxa-starter-business` or declare the required adapters explicitly via `jexxa-bom`; see [Migration Guide](MIGRATION.md#upgrading-to-jexxa-1000)).
 - **jexxa-web**: Driving adapter is now provided via `adapter-rest`
+- **jexxa-test**: All deprecated methods 
 
 ### Fixed
 
