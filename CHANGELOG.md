@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[10.0.0 - RC1] – Modular Dependency Management and Starters
+## \[10.0.0 - RC2] – Modular Dependency Management and Starters
 
 > **Breaking Changes & Migration:** Starting with Jexxa 10.0.0, infrastructure adapters have been extracted into the modular **JexxaAdapters** project and transitive JDBC/JMS dependencies were removed from `jexxa-core`. See the **[Migration Guide](docs/MIGRATION.md#migration-guide-upgrading-from-to-jexxa-9-to-10)** for step-by-step upgrade instructions.
 
