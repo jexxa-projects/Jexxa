@@ -597,6 +597,7 @@
     <module>jexxa-bom</module>
     <module>jexxa-starter-business</module>
     <module>jexxa-starter-streaming</module>
+    <module>jexxa-starter-test</module>
   </modules>
 
 </project>
