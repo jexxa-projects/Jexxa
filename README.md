@@ -23,6 +23,7 @@ Jexxa helps teams build applications where:
 - Infrastructure can evolve without impacting core business code
 - Architectural boundaries remain visible and enforceable
 - Development teams can collaborate effectively using DDD principles
+
 ## Quickstart
 
 **Requirements:** Java 25 or higher, and Maven or Gradle.
