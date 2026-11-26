@@ -27,7 +27,7 @@ If you previously relied on Jexxa's built-in JDBC and JMS support, switch to `je
     <dependency>
         <groupId>io.jexxa</groupId>
         <artifactId>jexxa-starter-business</artifactId>
-        <version>10.0.0</version>
+        <version>10.0.0-RC3</version>
     </dependency>
 </dependencies>
 ```
@@ -35,7 +35,7 @@ If you previously relied on Jexxa's built-in JDBC and JMS support, switch to `je
 #### Gradle (Groovy DSL)
 ```groovy
 dependencies {
-    implementation 'io.jexxa:jexxa-starter-business:10.0.0'
+    implementation 'io.jexxa:jexxa-starter-business:10.0.0-RC3'
 }
 ```
 
@@ -52,7 +52,7 @@ If you only need specific adapters (e.g., only REST or JDBC without JMS), import
         <dependency>
             <groupId>io.jexxa</groupId>
             <artifactId>jexxa-bom</artifactId>
-            <version>10.0.0</version>
+            <version>10.0.0-RC3</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -81,7 +81,7 @@ If you only need specific adapters (e.g., only REST or JDBC without JMS), import
 #### Gradle (Groovy DSL)
 ```groovy
 dependencies {
-    implementation platform('io.jexxa:jexxa-bom:10.0.0')
+    implementation platform('io.jexxa:jexxa-bom:10.0.0-RC3')
     implementation 'io.jexxa:jexxa-core'
     implementation 'io.jexxa.adapters:adapter-jdbc'
     implementation 'io.jexxa.adapters:adapter-jms'
