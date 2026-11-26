@@ -31,8 +31,14 @@
 
             <!-- Jexxa Test -->
             <dependency>
-                <groupId>io.jexxa</groupId>
+                <groupId>io.jexxa.jexxatest</groupId>
                 <artifactId>jexxa-test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.jexxa</groupId>
+                <artifactId>jexxa-metrics</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
