@@ -46,7 +46,7 @@ The `jexxa-starter-business` provides a convenient starting point for building b
     <dependency>
         <groupId>io.jexxa</groupId>
         <artifactId>jexxa-starter-business</artifactId>
-        <version>10.0.0-RC2</version>
+        <version>10.0.0-RC3</version>
     </dependency>
 
     <dependency>
@@ -63,7 +63,7 @@ The `jexxa-starter-business` provides a convenient starting point for building b
 
 ```groovy
 dependencies {
-    implementation 'io.jexxa:jexxa-starter-business:10.0.0-RC2'
+    implementation 'io.jexxa:jexxa-starter-business:10.0.0-RC3'
     runtimeOnly 'org.slf4j:slf4j-simple:2.0.20'
 }
 ```
@@ -126,7 +126,7 @@ For more control over your application's dependencies, use the Jexxa BOM to mana
 
 ```groovy
 dependencies {
-    implementation platform('io.jexxa:jexxa-bom:10.0.0-RC2')
+    implementation platform('io.jexxa:jexxa-bom:10.0.0-RC3')
 
     implementation 'io.jexxa:jexxa-core'
     implementation 'io.jexxa.adapters:adapter-rest'
