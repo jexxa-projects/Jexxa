@@ -82,7 +82,7 @@ For more control over your application's dependencies, use the Jexxa BOM to mana
         <dependency>
             <groupId>io.jexxa</groupId>
             <artifactId>jexxa-bom</artifactId>
-            <version>10.0.0-RC2</version>
+            <version>10.0.0-RC3</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
