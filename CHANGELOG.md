@@ -5,12 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## \[10.0.0 - RC3] – Modular Dependency Management and Starters
+## \[10.0.0] – Modular Dependency Management and Starters
 
-> **Breaking Changes & Migration:** Starting with Jexxa 10.0.0, infrastructure adapters have been extracted into the modular **JexxaAdapters** project and transitive JDBC/JMS dependencies were removed from `jexxa-core`. See the **[Migration Guide](docs/MIGRATION.md#migration-guide-upgrading-from-to-jexxa-9-to-10)** for step-by-step upgrade instructions.
+> **Breaking Changes & Migration:** Starting with Jexxa 10.0.0, infrastructure adapters have been extracted into the modular **JexxaAdapters** project and transitive JDBC/JMS dependencies were removed from `jexxa-core`. See the **[Migration Guide](docs/MIGRATION.md#migration-guide-upgrading-from-jexxa-9-to-10)** for step-by-step upgrade instructions.
 
 
 **Added**
+- Official Support for Java26 and Java27
 - Introduced `jexxa-bom` for centralized dependency management of Jexxa and JexxaAdapters.
 - Added `jexxa-starter-business`, providing Jexxa Core with JDBC and JMS adapters.
 - Added `jexxa-starter-streaming`, intended to provide Jexxa Core with S3 and ESP/Kafka integration.
@@ -29,7 +30,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     - Added support for validating bootstrap components located in infrastructure.
   
 ### Removed
-- **Breaking:** Removed automatic transitive JDBC and JMS dependencies from `jexxa-core` (use `jexxa-starter-business` or declare the required adapters explicitly via `jexxa-bom`; see [Migration Guide](docs/MIGRATION.md#migration-guide-upgrading-from-to-jexxa-9-to-10).
+- **Breaking:** Removed automatic transitive JDBC and JMS dependencies from `jexxa-core` (use `jexxa-starter-business` or declare the required adapters explicitly via `jexxa-bom`; see [Migration Guide](docs/MIGRATION.md#migration-guide-upgrading-from-jexxa-9-to-10).
 - **jexxa-web**: Driving adapter is now provided via `adapter-rest`
 - **jexxa-test**: All deprecated methods 
 
@@ -965,8 +966,8 @@ To simplify migration, you have to adjust the following imports:
 
 - Jexxa-Core/Jexxa-Web: Added files that provide all properties used by Jexxa:
     - [JexxaCoreProperties](./jexxa-core/src/main/java/io/jexxa/properties/JexxaCoreProperties.java)
-    - [JexxaJDBCProperties](./jexxa-core/src/main/java/io/jexxa/properties/JexxaJDBCProperties.java)
-    - [JexxaWebProperties](./jexxa-web/src/main/java/io/jexxa/drivingadapter/rest/JexxaWebProperties.java)
+    - [JexxaJDBCProperties](https://github.com/jexxa-projects/JexxaAdapters/blob/main/adapter-jdbc/src/main/java/io/jexxa/adapters/jdbc/facade/JDBCProperties.java)
+    - [JexxaRestProperties](https://github.com/jexxa-projects/JexxaAdapters/blob/main/adapter-rest/src/main/java/io/jexxa/adapters/rest/JexxaWebProperties.java)
 
 - Jexxa-Adapter-API: Added possibility to set interceptor between `DrivingAdapters` and `InboundPorts`
 
