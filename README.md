@@ -46,7 +46,7 @@ The `jexxa-starter-business` provides a convenient starting point for building b
     <dependency>
         <groupId>io.jexxa</groupId>
         <artifactId>jexxa-starter-business</artifactId>
-        <version>10.0.0-RC3</version>
+        <version>10.0.0</version>
     </dependency>
 
     <dependency>
@@ -63,7 +63,7 @@ The `jexxa-starter-business` provides a convenient starting point for building b
 
 ```groovy
 dependencies {
-    implementation 'io.jexxa:jexxa-starter-business:10.0.0-RC3'
+    implementation 'io.jexxa:jexxa-starter-business:10.0.0'
     runtimeOnly 'org.slf4j:slf4j-simple:2.0.20'
 }
 ```
@@ -71,7 +71,7 @@ dependencies {
 
 #### Option 2: Select individual modules using the BOM
 
-For more control over your application's dependencies, use the Jexxa BOM to manage compatible versions and include only the modules you need.
+For more control over your application's dependencies, use the Jexxa BOM to manage compatible versions and include only the modules you need. In addition to `jexxa-core` and `Addend`, the BOM also manages the versions of all plugins and adapters provided by [JexxaAdapters](https://github.com/jexxa-projects/JexxaAdapters#modules).
 
 <details>
 <summary><b>Maven</b></summary>
@@ -82,7 +82,7 @@ For more control over your application's dependencies, use the Jexxa BOM to mana
         <dependency>
             <groupId>io.jexxa</groupId>
             <artifactId>jexxa-bom</artifactId>
-            <version>10.0.0-RC3</version>
+            <version>10.0.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -126,7 +126,7 @@ For more control over your application's dependencies, use the Jexxa BOM to mana
 
 ```groovy
 dependencies {
-    implementation platform('io.jexxa:jexxa-bom:10.0.0-RC3')
+    implementation platform('io.jexxa:jexxa-bom:10.0.0')
 
     implementation 'io.jexxa:jexxa-core'
     implementation 'io.jexxa.adapters:adapter-rest'

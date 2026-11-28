@@ -33,7 +33,7 @@ If you previously relied on Jexxa's built-in JDBC and JMS support, switch to `je
     <dependency>
         <groupId>io.jexxa</groupId>
         <artifactId>jexxa-starter-business</artifactId>
-        <version>10.0.0-RC3</version>
+        <version>10.0.0</version>
     </dependency>
 </dependencies>
 ```
@@ -41,7 +41,7 @@ If you previously relied on Jexxa's built-in JDBC and JMS support, switch to `je
 #### Business starter — Gradle (Groovy DSL)
 ```groovy
 dependencies {
-    implementation 'io.jexxa:jexxa-starter-business:10.0.0-RC3'
+    implementation 'io.jexxa:jexxa-starter-business:10.0.0'
 }
 ```
 
@@ -51,7 +51,7 @@ dependencies {
 <dependency>
     <groupId>io.jexxa</groupId>
     <artifactId>jexxa-starter-streaming</artifactId>
-    <version>10.0.0-RC3</version>
+    <version>10.0.0</version>
 </dependency>
 ```
 
@@ -59,7 +59,7 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation 'io.jexxa:jexxa-starter-streaming:10.0.0-RC3'
+    implementation 'io.jexxa:jexxa-starter-streaming:10.0.0'
 }
 ```
 
@@ -69,7 +69,7 @@ dependencies {
 
 If you only need specific adapters (e.g., only REST or JDBC without JMS), import `jexxa-bom` to manage compatible versions across both **Jexxa** and **JexxaAdapters**, and declare only the modules you need:
 
-**Version management:** Jexxa and JexxaAdapters have independent release cycles and version numbers. The `jexxa-bom` follows the Jexxa version (e.g., `10.0.0-RC3`) and manages compatible adapter versions (e.g., `5.0.0-RC4` for REST, JDBC, and JMS in this release candidate). Do not assign the Jexxa version to individual adapter artifacts. Starters already provide their corresponding dependency versions.
+**Version management:** Jexxa and JexxaAdapters have independent release cycles and version numbers. The `jexxa-bom` follows the Jexxa version (e.g., `10.0.0`) and manages compatible adapter versions (e.g., `5.0.0` for REST, JDBC, and JMS in this release candidate). Do not assign the Jexxa version to individual adapter artifacts. Starters already provide their corresponding dependency versions.
 
 #### Maven
 ```xml
@@ -78,7 +78,7 @@ If you only need specific adapters (e.g., only REST or JDBC without JMS), import
         <dependency>
             <groupId>io.jexxa</groupId>
             <artifactId>jexxa-bom</artifactId>
-            <version>10.0.0-RC3</version>
+            <version>10.0.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -112,7 +112,7 @@ If you only need specific adapters (e.g., only REST or JDBC without JMS), import
 #### Gradle (Groovy DSL)
 ```groovy
 dependencies {
-    implementation platform('io.jexxa:jexxa-bom:10.0.0-RC3')
+    implementation platform('io.jexxa:jexxa-bom:10.0.0')
     implementation 'io.jexxa:jexxa-core'
     implementation 'io.jexxa.adapters:adapter-rest'
     implementation 'io.jexxa.adapters:adapter-jdbc'
@@ -153,7 +153,7 @@ Use `jexxa-starter-test` for a starter-based test setup.
 <dependency>
     <groupId>io.jexxa</groupId>
     <artifactId>jexxa-starter-test</artifactId>
-    <version>10.0.0-RC3</version>
+    <version>10.0.0</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -162,7 +162,7 @@ Use `jexxa-starter-test` for a starter-based test setup.
 
 ```groovy
 dependencies {
-    testImplementation 'io.jexxa:jexxa-starter-test:10.0.0-RC3'
+    testImplementation 'io.jexxa:jexxa-starter-test:10.0.0'
 }
 ```
 
@@ -186,7 +186,7 @@ Keep your existing properties files and verify any adapter-specific configuratio
 
 ### Migration validation
 
-The migration from Jexxa 9.2.0 to 10.0.0-RC3 has been successfully validated with a Java 25 application using REST with a web UI, JDBC with PostgreSQL, and JMS with ActiveMQ Artemis.
+The migration from Jexxa 9.2.0 to 10.0.0 has been successfully validated with a Java 25 application using REST with a web UI, JDBC with PostgreSQL, and JMS with ActiveMQ Artemis.
 
 Only Maven dependencies and Java imports needed to be updated. No changes to business logic or configuration properties were required. All unit, integration, and UI tests passed, and the application ran successfully in a production-like test environment.
 
