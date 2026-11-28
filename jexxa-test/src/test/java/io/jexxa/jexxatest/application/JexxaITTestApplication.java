@@ -1,7 +1,7 @@
 package io.jexxa.jexxatest.application;
 
+import io.jexxa.adapters.rest.RESTfulRPCAdapter;
 import io.jexxa.core.JexxaMain;
-import io.jexxa.drivingadapter.rest.RESTfulRPCAdapter;
 import io.jexxa.testapplication.applicationservice.SimpleApplicationService;
 
 import java.util.Properties;

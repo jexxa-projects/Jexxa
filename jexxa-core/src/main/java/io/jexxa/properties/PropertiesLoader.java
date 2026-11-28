@@ -1,8 +1,7 @@
 package io.jexxa.properties;
 
 
-
-import io.jexxa.common.facade.utils.properties.PropertiesPrefix;
+import io.jexxa.adapters.core.facade.utils.properties.PropertiesPrefix;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,8 +13,9 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import static io.jexxa.common.drivenadapter.outbox.TransactionalOutboxProperties.outboxTable;
-import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
+import static io.jexxa.adapters.core.facade.logger.SLF4jLogger.getLogger;
+import static io.jexxa.properties.JexxaCoreProperties.OUTBOX_TABLE;
+
 
 public class PropertiesLoader {
     private static final String JEXXA_PREFIX = "io.jexxa.";
@@ -33,7 +33,7 @@ public class PropertiesLoader {
         properties.clear();
         propertiesFiles.clear();
 
-        // Handle properties in the following forder:
+        // Handle properties in the following order:
         // 0. Add default JEXXA_CONTEXT_MAIN
         this.properties.put(JexxaCoreProperties.JEXXA_CONTEXT_NAME, context.getSimpleName());
 
@@ -51,8 +51,9 @@ public class PropertiesLoader {
         //5. set system properties
         setSystemProperties(properties);
 
-        //6. set outbox sender table
+        //6. set default values for JDBC connections
         setOutboxSenderTable(properties);
+        enableConnectionSharing(properties);
 
         return removeEmptyValues(properties);
     }
@@ -64,10 +65,12 @@ public class PropertiesLoader {
         }
     }
 
+    private void enableConnectionSharing(Properties properties) {
+        properties.putIfAbsent(JexxaCoreProperties.JDBC_CONNECTION_SHARING, "true");
+    }
+
     private void setOutboxSenderTable(Properties properties) {
-        if (!properties.containsKey(outboxTable())) {
-            properties.put(outboxTable(),"jexxaoutboxmessage");
-        }
+        properties.putIfAbsent(OUTBOX_TABLE, "jexxaoutboxmessage");
     }
 
     public List<String> getPropertiesFiles() {

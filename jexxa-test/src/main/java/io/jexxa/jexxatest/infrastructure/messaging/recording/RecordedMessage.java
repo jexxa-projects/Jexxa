@@ -1,7 +1,9 @@
 package io.jexxa.jexxatest.infrastructure.messaging.recording;
 
-import io.jexxa.common.drivenadapter.messaging.DestinationType;
-import io.jexxa.common.drivenadapter.messaging.MessageSender;
+
+
+import io.jexxa.adapters.core.drivenadapter.messaging.DestinationType;
+import io.jexxa.adapters.core.drivenadapter.messaging.MessageSender;
 
 import java.util.Properties;
 

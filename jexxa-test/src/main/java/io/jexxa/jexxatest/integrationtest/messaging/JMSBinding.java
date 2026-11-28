@@ -1,18 +1,20 @@
 package io.jexxa.jexxatest.integrationtest.messaging;
 
 
-import io.jexxa.common.drivenadapter.messaging.MessageSender;
-import io.jexxa.common.drivenadapter.messaging.MessageSenderFactory;
-import io.jexxa.common.drivenadapter.messaging.jms.JMSSender;
-import io.jexxa.common.drivingadapter.messaging.jms.JMSAdapter;
-import io.jexxa.common.drivingadapter.messaging.jms.JMSConfiguration;
+
+import io.jexxa.adapters.core.drivenadapter.messaging.MessageSender;
+import io.jexxa.adapters.core.drivenadapter.messaging.MessageSenderFactory;
+import io.jexxa.adapters.jms.drivenadapter.JMSSender;
+import io.jexxa.adapters.jms.drivingadapter.JMSAdapter;
+import io.jexxa.adapters.jms.drivingadapter.JMSConfiguration;
 import io.jexxa.jexxatest.integrationtest.Listener;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import static io.jexxa.common.drivenadapter.messaging.MessageSenderFactory.createMessageSender;
+import static io.jexxa.adapters.core.drivenadapter.messaging.MessageSenderFactory.createMessageSender;
+
 
 public class JMSBinding implements AutoCloseable
 {

@@ -1,24 +1,23 @@
 package io.jexxa.jexxatest;
 
-import io.jexxa.common.drivenadapter.persistence.objectstore.imdb.IMDBObjectStore;
-import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
-import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
-import io.jexxa.common.facade.utils.function.ThrowingConsumer;
+import io.jexxa.adapters.core.drivenadapter.persistence.objectstore.imdb.IMDBObjectStore;
+import io.jexxa.adapters.core.drivenadapter.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.adapters.core.facade.utils.annotation.CheckReturnValue;
+import io.jexxa.adapters.core.facade.utils.function.ThrowingConsumer;
 import io.jexxa.core.JexxaMain;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecorderManager;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import static io.jexxa.common.drivenadapter.messaging.MessageSenderFactory.setDefaultMessageSender;
-import static io.jexxa.common.drivenadapter.outbox.TransactionalOutboxProperties.outboxTable;
-import static io.jexxa.common.drivenadapter.persistence.ObjectStoreFactory.setDefaultObjectStore;
-import static io.jexxa.common.drivenadapter.persistence.RepositoryFactory.setDefaultRepository;
-import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
+import static io.jexxa.adapters.core.drivenadapter.messaging.MessageSenderFactory.setDefaultMessageSender;
+import static io.jexxa.adapters.core.drivenadapter.persistence.ObjectStoreFactory.setDefaultObjectStore;
+import static io.jexxa.adapters.core.drivenadapter.persistence.RepositoryFactory.setDefaultRepository;
+import static io.jexxa.properties.JexxaCoreProperties.OUTBOX_TABLE;
+import static org.slf4j.LoggerFactory.getLogger;
 
 
 /**
@@ -94,30 +93,6 @@ public class JexxaTest
     }
 
 
-    /**
-     * @deprecated for removal, use resetStubsTo instead
-     */
-    @SuppressWarnings({"unused","java:S2696"} )
-    @Deprecated(forRemoval = true)
-    public <T> void registerStub(Class<T> outboundPort)
-    {
-        jexxaMain.clearObjectPools();
-        jexxaMain.registerDrivenAdapter(outboundPort);
-        reinitJexxaMain = true;
-    }
-
-    /**
-     *  @deprecated for removal, use registerSubs instead
-     */
-    @SuppressWarnings({"unused","java:S2696"} )
-    @Deprecated(forRemoval = true)
-    public <T> void registerStubs(List<Class<T>> outboundPorts)
-    {
-        jexxaMain.clearObjectPools();
-        outboundPorts.forEach(jexxaMain::registerDrivenAdapter);
-        reinitJexxaMain = true;
-    }
-
     @SuppressWarnings({"unused", "java:S2696"})
     public final void resetStubsTo(Class<?>... outboundPorts) {
         jexxaMain.clearObjectPools();
@@ -154,9 +129,8 @@ public class JexxaTest
                         ThrowingConsumer.exceptionLogger(properties::load, getLogger(JexxaTest.class)),
                         () -> getLogger(JexxaTest.class).warn("Properties file '{}' not found", JEXXA_TEST_PROPERTIES)
                 );
-        if (!properties.containsKey(outboxTable())) {
-            properties.put(outboxTable(),"jexxaoutboxmessage_test");
-        }
+
+        properties.putIfAbsent(OUTBOX_TABLE, "jexxaoutboxmessage_test");
 
         return properties;
     }

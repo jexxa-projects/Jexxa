@@ -1,6 +1,6 @@
 package io.jexxa.jexxatest.integrationtest.rest;
 
-import io.jexxa.adapterapi.drivingadapter.Diagnostics;
+import io.jexxa.adapters.api.drivingadapter.Diagnostics;
 import io.jexxa.core.VersionInfo;
 import kong.unirest.GenericType;
 

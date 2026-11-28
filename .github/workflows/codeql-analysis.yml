@@ -47,6 +47,21 @@ jobs:
           distribution: 'temurin'
           java-version: '25'
 
+      # Neu: Aktuelles Maven installieren
+      - name: Setup Maven
+        uses: stCarolas/setup-maven@12eb41b233df95d49b0c11fc1b5bc8312e5d4ce0
+        with:
+          maven-version: 3.9.9
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4.39.3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-and-quality
+
+      - name: Build with Maven 3.10.0
+        run: mvn clean compile -DskipTests
+
       - name: Setup Maven
         uses: s4u/setup-maven-action@5d4481650d2563723ad6c5e8f009ac8fd746e3e8
         with:
@@ -62,6 +77,8 @@ jobs:
           languages: ${{ matrix.language }}
           queries: security-and-quality
 
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4.39.3
       - name: Build with Maven 3.10.0
         run: mvn clean compile -DskipTests
 

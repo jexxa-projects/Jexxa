@@ -1,6 +1,5 @@
 package io.jexxa.jexxatest.application;
 
-import io.jexxa.addend.applicationcore.Observer;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -8,7 +7,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-@Observer
 public final class DomainEventPublisher {
     private final Map<Class<?>, Set<Consumer<?>>> subscribers = new ConcurrentHashMap<>();
     private static final DomainEventPublisher DOMAIN_EVENT_PUBLISHER = new DomainEventPublisher();

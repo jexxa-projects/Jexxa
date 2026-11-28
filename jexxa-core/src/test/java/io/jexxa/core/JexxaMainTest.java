@@ -1,7 +1,7 @@
 package io.jexxa.core;
 
 
-import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
+import io.jexxa.adapters.core.drivenadapter.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.core.convention.PortConventionViolation;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.annotation.InvalidApplicationService;
@@ -26,7 +26,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.util.concurrent.TimeUnit;
 
 import static io.jexxa.TestConstants.UNIT_TEST;
-import static io.jexxa.common.drivenadapter.persistence.RepositoryFactory.setDefaultRepository;
+import static io.jexxa.adapters.core.drivenadapter.persistence.RepositoryFactory.setDefaultRepository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

@@ -5,7 +5,7 @@
 
   <groupId>io.jexxa</groupId>
   <artifactId>jexxa</artifactId>
-  <version>9.2.1-SNAPSHOT</version>
+  <version>10.0.0-RC4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <!-- Project Information -->
@@ -33,6 +33,7 @@
   </scm>
 
   <properties>
+    <jexxa.adapters.version>5.0.0-RC4</jexxa.adapters.version>
     <!--version of  maven plugins  -->
     <gpg.plugin.version>3.2.8</gpg.plugin.version>
     <maven.clean.plugin>3.5.0</maven.clean.plugin>
@@ -104,6 +105,33 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>io.jexxa.adapters</groupId>
+        <artifactId>jexxa-adapters-bom</artifactId>
+        <version>${jexxa.adapters.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+
+      <dependency>
+        <groupId>io.jexxa</groupId>
+        <artifactId>jexxa-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.jexxa.addend</groupId>
+        <artifactId>Addend</artifactId>
+        <version>${addend.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.jexxa.jexxatest</groupId>
+        <artifactId>jexxa-test</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>tools.jackson</groupId>
         <artifactId>jackson-bom</artifactId>
@@ -565,8 +593,12 @@
 
   <modules>
     <module>jexxa-core</module>
-    <module>jexxa-web</module>
     <module>jexxa-test</module>
+    <module>jexxa-metrics</module>
+    <module>jexxa-bom</module>
+    <module>jexxa-starter-business</module>
+    <module>jexxa-starter-streaming</module>
+    <module>jexxa-starter-test</module>
   </modules>
 
 </project>

@@ -3,7 +3,7 @@
     <parent>
         <artifactId>jexxa</artifactId>
         <groupId>io.jexxa</groupId>
-        <version>9.2.1-SNAPSHOT</version>
+        <version>10.0.0-RC4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -54,12 +54,36 @@
             <version>${awaitility.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.jexxa.adapters</groupId>
+            <artifactId>adapter-rest</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jexxa.adapters</groupId>
+            <artifactId>adapter-jms</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
 
         <!-- dependencies for tests -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.simple.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jexxa.adapters</groupId>
+            <artifactId>adapter-jdbc</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -81,12 +105,6 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.jexxa</groupId>
-            <artifactId>jexxa-web</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

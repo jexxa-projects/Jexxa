@@ -1,6 +1,7 @@
 package io.jexxa.testapplication.infrastructure.drivingadapter.generic;
 
-import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
+
+import io.jexxa.adapters.api.drivingadapter.IDrivingAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

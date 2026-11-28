@@ -1,9 +1,10 @@
 package io.jexxa.jexxatest;
 
-import io.jexxa.common.drivenadapter.persistence.objectstore.imdb.IMDBObjectStore;
-import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTag;
-import io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetadataSchema;
-import io.jexxa.common.drivenadapter.persistence.repository.imdb.IMDBRepository;
+
+import io.jexxa.adapters.core.drivenadapter.persistence.objectstore.imdb.IMDBObjectStore;
+import io.jexxa.adapters.core.drivenadapter.persistence.objectstore.metadata.MetaTag;
+import io.jexxa.adapters.core.drivenadapter.persistence.objectstore.metadata.MetadataSchema;
+import io.jexxa.adapters.core.drivenadapter.persistence.repository.imdb.IMDBRepository;
 import io.jexxa.jexxatest.infrastructure.messaging.recording.MessageRecordingStrategy;
 import io.jexxa.testapplication.JexxaTestApplication;
 import io.jexxa.testapplication.domain.model.JexxaAggregate;
@@ -14,20 +15,20 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import static io.jexxa.common.drivenadapter.messaging.MessageSenderFactory.createMessageSender;
-import static io.jexxa.common.drivenadapter.persistence.ObjectStoreFactory.createObjectStore;
-import static io.jexxa.common.drivenadapter.persistence.RepositoryFactory.createRepository;
-import static io.jexxa.common.drivenadapter.persistence.objectstore.metadata.MetaTags.numericTag;
-import static io.jexxa.common.facade.jdbc.JDBCProperties.jdbcAutocreateDatabase;
-import static io.jexxa.common.facade.jdbc.JDBCProperties.jdbcAutocreateTable;
-import static io.jexxa.common.facade.jdbc.JDBCProperties.jdbcDriver;
-import static io.jexxa.common.facade.jdbc.JDBCProperties.jdbcPassword;
-import static io.jexxa.common.facade.jdbc.JDBCProperties.jdbcUrl;
-import static io.jexxa.common.facade.jdbc.JDBCProperties.jdbcUsername;
-import static io.jexxa.common.facade.jms.JMSProperties.jndiFactoryKey;
-import static io.jexxa.common.facade.jms.JMSProperties.jndiPasswordKey;
-import static io.jexxa.common.facade.jms.JMSProperties.jndiProviderUrlKey;
-import static io.jexxa.common.facade.jms.JMSProperties.jndiUserKey;
+import static io.jexxa.adapters.core.drivenadapter.messaging.MessageSenderFactory.createMessageSender;
+import static io.jexxa.adapters.core.drivenadapter.persistence.ObjectStoreFactory.createObjectStore;
+import static io.jexxa.adapters.core.drivenadapter.persistence.RepositoryFactory.createRepository;
+import static io.jexxa.adapters.core.drivenadapter.persistence.objectstore.metadata.MetaTags.numericTag;
+import static io.jexxa.adapters.jdbc.facade.JDBCProperties.jdbcAutocreateDatabase;
+import static io.jexxa.adapters.jdbc.facade.JDBCProperties.jdbcAutocreateTable;
+import static io.jexxa.adapters.jdbc.facade.JDBCProperties.jdbcDriver;
+import static io.jexxa.adapters.jdbc.facade.JDBCProperties.jdbcPassword;
+import static io.jexxa.adapters.jdbc.facade.JDBCProperties.jdbcUrl;
+import static io.jexxa.adapters.jdbc.facade.JDBCProperties.jdbcUsername;
+import static io.jexxa.adapters.jms.facade.JMSProperties.jndiFactoryKey;
+import static io.jexxa.adapters.jms.facade.JMSProperties.jndiPasswordKey;
+import static io.jexxa.adapters.jms.facade.JMSProperties.jndiProviderUrlKey;
+import static io.jexxa.adapters.jms.facade.JMSProperties.jndiUserKey;
 import static io.jexxa.jexxatest.JexxaTest.getJexxaTest;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

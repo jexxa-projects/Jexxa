@@ -1,12 +1,12 @@
 package io.jexxa.core.factory;
 
 
-import io.jexxa.common.facade.factory.ClassFactory;
+
+import io.jexxa.adapters.core.facade.factory.ClassFactory;
 
 import java.io.Serial;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -207,21 +207,24 @@ public class PortFactory
 
     private Object[] createDependencies(Constructor<?> portConstructor, Properties adapterProperties)
     {
-        var objectList = new ArrayList<>();
+        return Arrays.stream(portConstructor.getParameterTypes())
+                .map(parameterType -> {
+                    // 1. If parameter is not an interface, we have an inbound port and "get" the instance
+                    if (!parameterType.isInterface())
+                    {
+                        return getInstanceOf(parameterType, adapterProperties);
+                    }
 
-        for ( var i = 0; i < portConstructor.getParameterTypes().length; ++i )
-        {
-            //Depending on creation policy we create a new instance or try to reuse existing instance
-            if ( drivenAdapterPolicy == CreationPolicy.NEW_INSTANCE) {
-                objectList.add( adapterFactory.newInstanceOf(portConstructor.getParameterTypes()[i], adapterProperties) );
-            }
-            else
-            {
-                objectList.add( adapterFactory.getInstanceOf(portConstructor.getParameterTypes()[i], adapterProperties) );
-            }
-        }
+                    // 2. If parameter IS an interface, we request a new instance ...
+                    if (drivenAdapterPolicy == CreationPolicy.NEW_INSTANCE)
+                    {
+                        return adapterFactory.newInstanceOf(parameterType, adapterProperties);
+                    }
 
-        return objectList.toArray();
+                    // 3. ... or reuse it, if available
+                    return adapterFactory.getInstanceOf(parameterType, adapterProperties);
+                })
+                .toArray();
     }
 
     /**

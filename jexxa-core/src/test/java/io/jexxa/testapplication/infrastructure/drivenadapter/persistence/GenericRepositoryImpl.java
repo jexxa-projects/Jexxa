@@ -1,13 +1,15 @@
 package io.jexxa.testapplication.infrastructure.drivenadapter.persistence;
 
-import io.jexxa.common.drivenadapter.persistence.repository.IRepository;
+
+import io.jexxa.adapters.core.drivenadapter.persistence.repository.IRepository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Function;
 
-import static io.jexxa.common.drivenadapter.persistence.RepositoryFactory.createRepository;
+import static io.jexxa.adapters.core.drivenadapter.persistence.RepositoryFactory.createRepository;
+
 
 /**
  * Generic implementation of a Repository including typical methods

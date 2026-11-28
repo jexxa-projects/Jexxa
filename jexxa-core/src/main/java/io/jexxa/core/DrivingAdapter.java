@@ -1,6 +1,6 @@
 package io.jexxa.core;
 
-import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapters.api.drivingadapter.IDrivingAdapter;
 import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 

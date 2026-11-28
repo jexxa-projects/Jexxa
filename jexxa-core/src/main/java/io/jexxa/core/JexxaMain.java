@@ -1,13 +1,15 @@
 package io.jexxa.core;
 
-import io.jexxa.adapterapi.JexxaContext;
-import io.jexxa.adapterapi.drivingadapter.HealthCheck;
-import io.jexxa.adapterapi.drivingadapter.IDrivingAdapter;
-import io.jexxa.adapterapi.invocation.transaction.TransactionManager;
-import io.jexxa.common.facade.jdbc.JDBCConnectionPool;
-import io.jexxa.common.facade.logger.ApplicationBanner;
-import io.jexxa.common.facade.utils.annotation.CheckReturnValue;
-import io.jexxa.common.facade.utils.function.ThrowingConsumer;
+
+import io.jexxa.adapters.api.JexxaContext;
+import io.jexxa.adapters.api.drivingadapter.HealthCheck;
+import io.jexxa.adapters.api.drivingadapter.IDrivingAdapter;
+import io.jexxa.adapters.api.invocation.InvocationManager;
+import io.jexxa.adapters.api.invocation.transaction.TransactionManager;
+import io.jexxa.adapters.api.service.ManagedService;
+import io.jexxa.adapters.core.facade.logger.ApplicationBanner;
+import io.jexxa.adapters.core.facade.utils.annotation.CheckReturnValue;
+import io.jexxa.adapters.core.facade.utils.function.ThrowingConsumer;
 import io.jexxa.core.convention.AdapterConvention;
 import io.jexxa.core.convention.PortConvention;
 import io.jexxa.core.factory.AdapterFactory;
@@ -16,21 +18,17 @@ import io.jexxa.properties.JexxaCoreProperties;
 import io.jexxa.properties.PropertiesLoader;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
-import static io.jexxa.adapterapi.invocation.InvocationManager.getInvocationHandler;
-import static io.jexxa.common.facade.logger.ApplicationBanner.addConfigBanner;
-import static io.jexxa.common.facade.logger.SLF4jLogger.getLogger;
+import static io.jexxa.adapters.core.facade.logger.ApplicationBanner.addConfigBanner;
+import static io.jexxa.adapters.core.facade.logger.SLF4jLogger.getLogger;
+
 
 /**
  * JexxaMain is the main entry point for your application to use Jexxa. Within each application only a single instance
@@ -55,6 +53,7 @@ public final class JexxaMain
     private final AdapterFactory drivenAdapterFactory   = new AdapterFactory();
     private final PortFactory portFactory               = new PortFactory(drivenAdapterFactory);
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private final List<ManagedService> managedServices = new ArrayList<>();
 
     private final BoundedContext boundedContext;
 
@@ -89,9 +88,6 @@ public final class JexxaMain
         Objects.requireNonNull(applicationProperties);
         Objects.requireNonNull(context);
         JexxaContext.init();
-
-        //We enable connection sharing since Jexxa allows only a single thread in the backend
-        JDBCConnectionPool.enableConnectionSharing();
 
         // Handle properties in the following order:
         // 0. Add default JEXXA_CONTEXT_MAIN
@@ -162,6 +158,16 @@ public final class JexxaMain
         portFactory.acceptPackage(packageName);
         return this;
     }
+
+    public JexxaMain registerService(ManagedService service) {
+        managedServices.add(service);
+        return this;
+    }
+
+    public JexxaMain registerService(Function<JexxaMain, ManagedService> service) {
+        return registerService(service.apply(this));
+    }
+
 
     @CheckReturnValue
     public <T> BootstrapService<T> bootstrap(Class<T> bootstrapService)
@@ -322,6 +328,7 @@ public final class JexxaMain
 
         compositeDrivingAdapter.start();
         boundedContext.start();
+        managedServices.forEach(ManagedService::start);
 
         printStartupDuration();
 
@@ -348,7 +355,8 @@ public final class JexxaMain
     @SuppressWarnings("java:S2629")
     public void stop()
     {
-        getInvocationHandler(this).invoke(this, this::synchronizedStop);
+        managedServices.forEach(ManagedService::stop);
+        InvocationManager.getInvocationHandler(this).invoke(this, this::synchronizedStop);
     }
 
     private void synchronizedStop(){
