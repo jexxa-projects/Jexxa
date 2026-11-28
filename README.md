@@ -1,4 +1,4 @@
-[![Maven Central](https://img.shields.io/maven-central/v/io.jexxa/jexxa-web)](https://central.sonatype.com/artifact/io.jexxa/jexxa-web)
+[![Maven Central](https://img.shields.io/maven-central/v/io.jexxa/jexxa-core)](https://central.sonatype.com/artifact/io.jexxa/jexxa-core)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![CodeQL](https://github.com/jexxa-projects/Jexxa/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jexxa-projects/Jexxa/actions/workflows/codeql-analysis.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jexxa-projects_Jexxa&metric=alert_status)](https://sonarcloud.io/summary/overall?id=jexxa-projects_Jexxa)
